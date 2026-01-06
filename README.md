@@ -30,32 +30,32 @@ pip install pyrevealed[viz]
 ## Quick Start
 
 ```python
-from pyrevealed import ConsumerSession, check_garp, compute_aei, compute_mpi
+from pyrevealed import BehaviorLog, validate_consistency, compute_integrity_score, compute_confusion_metric
 import numpy as np
 
-# Create a consumer session from observed choices
-session = ConsumerSession(
-    prices=np.array([         # Prices at each observation (T x N)
-        [1.0, 2.0],           # Observation 0: price of good A=1, B=2
-        [2.0, 1.0],           # Observation 1: price of good A=2, B=1
+# Create a behavior log from observed choices
+log = BehaviorLog(
+    cost_vectors=np.array([      # Prices at each observation (T x N)
+        [1.0, 2.0],              # Observation 0: price of good A=1, B=2
+        [2.0, 1.0],              # Observation 1: price of good A=2, B=1
     ]),
-    quantities=np.array([     # Quantities chosen (T x N)
-        [3.0, 1.0],           # Observation 0: bought 3 of A, 1 of B
-        [1.0, 3.0],           # Observation 1: bought 1 of A, 3 of B
+    action_vectors=np.array([    # Quantities chosen (T x N)
+        [3.0, 1.0],              # Observation 0: bought 3 of A, 1 of B
+        [1.0, 3.0],              # Observation 1: bought 1 of A, 3 of B
     ])
 )
 
-# Test GARP consistency
-is_consistent = check_garp(session)
-print(f"GARP consistent: {is_consistent}")
+# Test consistency (GARP)
+is_consistent = validate_consistency(log)
+print(f"Consistent: {is_consistent}")
 
-# Compute Afriat Efficiency Index (integrity score)
-aei = compute_aei(session)
-print(f"Afriat Efficiency Index: {aei:.3f}")
+# Compute integrity score (Afriat Efficiency Index)
+integrity = compute_integrity_score(log)
+print(f"Integrity Score: {integrity:.3f}")
 
-# Compute Money Pump Index (exploitability)
-mpi = compute_mpi(session)
-print(f"Money Pump Index: {mpi:.3f}")
+# Compute confusion metric (Money Pump Index)
+confusion = compute_confusion_metric(log)
+print(f"Confusion Metric: {confusion:.3f}")
 ```
 
 ## How It Works
@@ -160,28 +160,6 @@ python3 dunnhumby/run_all.py --quick
 ```
 
 ---
-
-## Backward Compatibility
-
-PyRevealed v0.3.0 introduces new tech-friendly names. The old economics names still work:
-
-```python
-# New names (recommended)
-from pyrevealed import BehaviorLog, validate_consistency, compute_integrity_score
-
-# Old names (still supported)
-from pyrevealed import ConsumerSession, check_garp, compute_aei
-```
-
-| Old Name | New Name |
-|----------|----------|
-| `ConsumerSession` | `BehaviorLog` |
-| `check_garp` | `validate_consistency` |
-| `compute_aei` | `compute_integrity_score` |
-| `compute_mpi` | `compute_confusion_metric` |
-| `recover_utility` | `fit_latent_values` |
-| `find_ideal_point` | `find_preference_anchor` |
-| `check_separability` | `test_feature_independence` |
 
 ## Project Structure
 
