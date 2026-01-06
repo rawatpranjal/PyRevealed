@@ -1,0 +1,640 @@
+--- Page 1 ---
+CHAPTER 6
+Production
+Production theory is another classical environment in which revealed pref-
+erence theory is applied. The case of production is simpler than the case
+of demand treated in the previous chapters, mainly because ﬁrm output is
+a cardinally measurable and observable concept, whereas utility is not. In
+the case of production, we shall assume that ﬁrm output and prices are both
+observed, while the set of all feasible production vectors, that is the ﬁrm’s
+technology, is not.
+We will consider two approaches to production theory: the cost minimiza-
+tion model and the proﬁt maximization model. In the ﬁrst model, factor prices
+and factor demands are observed, and (single-dimensional) output is observed
+as well. This environment is very similar to the consumer case, but, as we have
+noted, simpler. We want to know whether the model is consistent with the cost
+minimization hypothesis, meaning that the cost of production is minimized for
+a given level of output.
+In the second model, the model of proﬁt maximization, we want to test the
+hypothesis that producers maximize proﬁt. This model is in a sense “dual” to
+the consumer case. In the consumer case, we needed to solve for the function
+being maximized, but we know the budget set. In contrast, in the producer case,
+we know the function being maximized: it is a linear proﬁt function; but we do
+not necessarily know the available technology (the constraint set faced by the
+ﬁrm).
+6.1
+COST MINIMIZATION
+We take as primitive a dataset comprising the input–output decisions of a ﬁrm.
+The ﬁrm uses n factors, and produces a single good. An input–output dataset
+D consists of a collection (yk,xk,pk), k = 1,...,K, where yk ∈R, xk ∈Rn
++, and
+pk ∈Rn
+++. Each observation k consists of a quantity of output yk, a vector of
+factor demands xk, and factor prices pk. Note that output can be negative, but
+inputs are always positive.
+A production function is a mapping f : Rn
++ →R. We say that a production
+function f cost rationalizes input–output dataset D if f(xk) = yk for all k, and
+
+
+--- Page 2 ---
+84
+Production
+f(x) ≥f(xk) implies that pk · x ≥pk · xk. In other words, given prices pk, xk is a
+cost-minimizing bundle across all bundles which can, according to f, produce
+at least yk.
+Theorem 6.1
+The following statements are equivalent:
+I) There is a continuous production function that cost rationalizes D.
+II) yj ≤yk implies pj · xj ≤pj · xk and yj < yk implies pj · xj < pj · xk.
+III) There are real numbers Uk,λk > 0 for which yj ≤yk implies Uj ≤Uk
+and yj < yk implies Uj < Uk, and for all j,k,
+Uj ≤Uk + λkpk · (xj −xk).
+IV) There is a continuous, monotonic, and quasiconcave production
+function that cost rationalizes D.
+Equation (II) plays the role of GARP in this context. If we were to deﬁne the
+revealed preference by xk ⪰R xj if pk ·xj ≤pk ·xk, and xk ≻R xj if pk ·xj < pk ·xk,
+then (II) guarantees that ⟨⪰R,≻R⟩is acyclic.
+The equivalence between (III) and (IV) in Theorem 6.1 is reminiscent
+of Afriat’s Theorem. The statement in (III) gives the “Afriat inequalities”
+corresponding to the problem under consideration. Note, however, that (III)
+says more than in Afriat’s Theorem. The reason is that we observe production
+output, the analogue of utility in demand theory, while utility is not observable.
+Proof. To see that (I) implies (II), we ﬁrst note that if yj ≤yk then since f cost
+rationalizes D, we have pj·xj ≤pj·xk. If yj < yk, then we know that pj·xj ≤pj·xk,
+and if in fact pj · xj = pj · xk, we cannot have xk = 0, as otherwise, xk = xj = 0,
+which would imply yk = f(xk) = f(xj) = yj, a contradiction. Since f(xk) =
+yk > yj = f(xj), and f is continuous, there is x < xk for which f(x) > f(xj),
+yet pj · x < pj · xj, a contradiction to the fact that f cost rationalizes D.
+To see that (II) implies (III), we refer to Afriat’s Theorem. We may deﬁne
+the revealed preference relations ⪰R and ≻R in the same way they are deﬁned
+in Chapter 3, so that xj ⪰R xk if pj · xk ≤pj · xj, and xj ≻R xk if pj · xk < pj · xj.
+By (II), xj ⪰R xk implies yj ≥yk and xj ≻R xk implies yj > yk. It follows that
+the preference relation ⪰on X0 = {xk : k = 1,...,K} deﬁned by xj ⪰xk iff
+yj ≥yk is such that xj ⪰R xk implies xj ⪰xk and xj ≻R xk implies xj ≻xk. The
+result then follows by the constructive proof of Afriat’s Theorem, so that the
+desired numbers exist. It is easily veriﬁed that yj ≤yk implies Uj ≤Uk and
+yj < yk implies Uj < Uk.
+Finally, to see that (III) implies (IV), let u : Rn
++ →R be the utility function as
+constructed in Afriat’s Theorem. Recall that u is strictly increasing and concave
+and that u(xk) = Uk. Observe ﬁrst that if u(x) ≥u(xk), then it follows that
+Uk + λkpk · (x −xk) ≥u(x) ≥Uk, so that pk · xk ≤pk · x.
+We now let ϕ be any strictly increasing transformation of u for which
+ϕ(u(xk)) = yk (that this is possible follows as yj ≤yk implies uj ≤uk and yj < yk
+implies uj < uk). Then let f = ϕ ◦u, and note that f is strictly increasing and
+
+
+--- Page 3 ---
+6.1 Cost minimization
+85
+quasiconcave. Finally, it cost rationalizes the data: f(x) ≥f(xk) implies that
+u(x) ≥u(xk), which we have shown implies pk · xk ≤pk · x.
+Theorem 6.1 describes the datasets that are rationalizable by a quasiconcave
+production function. Unlike the demand context, concavity here will impose
+additional testable restrictions. For example, consider an environment with
+one input. Suppose three observations are given in D: (y1,x1,p1) = (0,0,1),
+(y2,x2,p1) = (1,1,1), and (y3,x3,p3) = (3,2,1). Note that D is cost rationaliz-
+able by a quasiconcave production function; for example, f(x) = max{x,2x−1}
+cost rationalizes the data. However, any f which cost rationalizes D must
+satisfy f(0) = 0, f(1) = 1, and f(2) = 3. No such function can be concave.
+To this end, we can also test when an input–output dataset can be cost
+rationalized by a concave production function.
+Theorem 6.2
+The following are equivalent:
+I) There is a concave production function that cost rationalizes D.
+II) For each k, and all αj ≥0 for which 
+j̸=k αj = 1, if pk ·(
+j̸=k αjxj) ≤
+pk · xk, then 
+j̸=k αjyj ≤yk, and if pk · (
+j̸=k αjxj) < pk · xk, then
+
+j̸=k αjyj < yk.
+III) There is a concave, monotonic, and continuous production function
+that cost rationalizes D.
+Proof. We ﬁrst show that (I) implies (II). Suppose D can be cost rationalized
+by a concave production function f, and suppose that pk ·xk ≥pk ·
+#
+j̸=k αjxj$
+for some αj as in statement (II). Then suppose by way of contradiction
+that 
+j̸=k αjyj > yk. In particular this implies that 
+j̸=k αjf(xj) > f(xk). By
+concavity, we know that f
+#
+j̸=k αjxj$
+≥
+j̸=k αjf(xj) > f(xk). First, we show
+that 
+j̸=k αjxj ̸= 0. Suppose, toward a contradiction, that 
+j̸=k αjxj = 0.
+Choose some j for which αj > 0 and yj > yk. We must have xj = 0, as
+
+j̸=k αjxj = 0, which allows us to conclude that yj = f(0) > f(xk). By cost
+rationalization, we then have that 0 = pk ·0 ≥pk ·xk, which implies that xk = 0,
+contradicting f(0) > f(xk). This shows that 
+j̸=k αjxj > 0.
+Next, on the interior of any one-dimensional subset of Rn, f is continuous
+(as it is concave). In particular, except possibly at the origin, f is continuous
+on the ray passing through the origin and 
+j̸=k αjxj. So, consider β < 1 for
+which f
+#
+β
+#
+j̸=k αjxj$$
+> f(xk). Then since pk ∈Rn
+++, we know that pk ·
+#
+β
+#
+j̸=k αjxj$$
+< pk·xk, a contradiction to the cost rationalization hypothesis.
+This establishes that 
+j̸=k αjyj ≤yk.
+To complete the proof of (II), suppose that that pk·xk > pk·
+#
+j̸=k αjxj$
+. Sup-
+pose, toward a contradiction, that 
+j̸=k αjyj ≥yk. Then f(xk) ≤
+j̸=k αjf(xj) ≤
+f
+#
+j̸=k αjxj$
+, where the inequality follows by concavity. This is a direct
+
+
+--- Page 4 ---
+86
+Production
+contradiction to the cost rationalization hypothesis, as 
+j̸=k αjxj can produce
+yk at a lower cost than xk.
+Second, we prove that (II) implies (III). To that end, we show the existence
+of λk > 0 such that for all j,k,
+yk ≤yj + λjpj · (xk −xj).
+(6.1)
+The existence of such λk is equivalent to the existence of λk > 0 and μ > 0
+such that for all j,k,
+μ(yj −yk) + λjpj · (xk −xj) ≥0.
+If we can solve these inequalities, we can renormalize, setting μ = 1, and
+obtain a solution to (6.1). Now, by Lemma 1.12, there is no solution exactly
+when, for each (j,k) where j ̸= k, there is α(j,k) ≥0 for which 
+(j,k) α(j,k)(yj −
+yk) ≤0 and for all j, 
+k̸=j α(j,k)pj · (xk −xj) ≤0, and at least one of these
+inequalities is strict. Since for all j, 
+k̸=j α(j,k)pj · (xk −xj) ≤0, we get by (II)
+that for every j, 
+k̸=j α(j,k)(yk −yj) ≤0, with a strict inequality if the original
+inequality is strict. By summing across j, we have 
+(j,k) α(j,k)(yk −yj) ≤0, with
+a strict inequality if any of the inequalities corresponding to some j is strict, a
+contradiction.
+The construction of a production function is the same as in Afriat’s Theorem.
+Let f(x) = mink yk + λkpk · (x −xk), a concave, continuous, and strictly
+monotonic function. Cost rationalization is veriﬁed as in Theorem 6.1. Finally,
+for all k, f(xk) = yk.
+Often we want to ensure that f(x) ≥0 for all x. A test for this is provided by
+weakening the equality 
+j̸=k αj = 1 in Theorem 6.2.
+Theorem 6.3
+The following are equivalent:
+I) There is a non-negative concave production function that cost
+rationalizes D.
+II) For each k, and all αj ≥0 for which 
+j̸=k αj ≤1, if pk ·(
+j̸=k αjxj) ≤
+pk · xk, then 
+j̸=k αjyj ≤yk, and if pk · (
+j̸=k αjxj) < pk · xk, then
+
+j̸=k αjyj < yk.
+III) There is a non-negative, concave, monotonic, and continuous produc-
+tion function that cost rationalizes D.
+Proof. We ﬁrst establish that (I) implies (II). The only difference from the
+proof of Theorem 6.2 is that the equation f
+#
+j̸=k αjxj$
+> f(xk) is established
+by observing that f
+#
+j̸=k αjxj$
+= f
+#
+(1 −
+j̸=k αjxj)0 + 
+j̸=k αjxj$
+≥(1 −
+
+j̸=k αj)0 + 
+j̸=k αjf(xj) follows from non-negativity and concavity instead
+of concavity alone.
+
+
+--- Page 5 ---
+6.2 Proﬁt maximization
+87
+To see that (II) implies (III), we add, for every j, an inequality of the
+form: yj + λjpj · (−xj) ≥0 to the list of inequalities described in Theorem 6.2.
+Equivalently, in terms of the expression involving μ, this adds, for every j, an
+inequality of the form:
+μyj + λjpj · (−xj) ≥0.
+Again, by Lemma 1.12, there is no solution exactly when, for each j,
+there is ηj and for each (j,k) where j ̸= k, there is α(j,k) ≥0 for which
+#
+j ηjyj$
++
+#
+(j,k) α(j,k)(yj −yk)
+$
+≤0 and for all j, ηjpj ·(−xj)+
+k̸=j α(j,k)pj ·
+(xk −xj) ≤0, and at least one of these inequalities is strict. Since for all j,
+ηjpj·(−xj)+
+k̸=j α(j,k)pj·(xk−xj) ≤0, we get by (II) that for every j, ηj(−yj)+
+
+k̸=j α(j,k)(yk−yj) ≤0, with a strict inequality if the original inequality is strict.
+By summing across j, we have
+#
+j ηj$
++
+#
+yj 
+(j,k) α(j,k)(yk −yj)
+$
+≤0, with a
+strict inequality if any of the inequalities corresponding to some j is strict, a
+contradiction.
+The construction of f
+used in the proof of Theorem 6.2 ensures
+non-negativity; indeed, observe that f(0) = mink yk + λkpk · (−xk) ≥0.
+Non-negativity then follows from monotonicity.
+6.2
+PROFIT MAXIMIZATION
+The previous section assumed a ﬁrm with a single output y using n factors
+of production. We now turn to a more ﬂexible formulation in which a ﬁrm
+operates in n goods, choosing a net production vector y ∈Rn. If yi > 0 then
+good i is produced in quantity yi by the ﬁrm. If yi < 0 then the ﬁrm uses good
+i as an input.
+A production dataset D is a collection (yk,pk), k = 1,...K, with yk ∈Rn and
+pk ∈Rn
+++.
+We are interested in when a production dataset D is consistent with the
+hypothesis of proﬁt maximization. A production set Y is a subset of Rn.
+Production sets consist of all potential combinations of inputs and outputs
+which are feasible. We say that production set Y rationalizes production dataset
+D if for all k, yk ∈Y and pk ·yk ≥pk ·y for all y ∈Y. We say a production dataset
+D is rationalizable if it is rationalizable by a production set. We will say that Y
+is comprehensive if whenever y ∈Y and y′ ≤y, then y′ ∈Y.
+Given is a production dataset D.
+Theorem 6.4
+The following statements are equivalent:
+I) For all j,k, pk · yk ≥pk · yj.
+II) D is rationalizable.
+III) D is rationalizable by a closed, convex, and comprehensive produc-
+tion set.
+
+
+--- Page 6 ---
+88
+Production
+Proof. That (III) implies (II) and (II) implies (I) are obvious. To see that (I)
+implies (III), let Y be the convex and comprehensive hull of {yk}K
+k=1.1 Y is
+obviously closed, convex, and comprehensive. We claim that Y rationalizes D.
+To see this, it is ﬁrst clear that yk ∈Y for all k, by deﬁnition. Second, suppose
+that y ∈Y. We want to show that for any j, pj · yk ≥pk · y. By deﬁnition of the
+convex and comprehensive hull, there exists y′ = K
+k=1 λkyk, where λk ≥0 for
+all k and K
+k=1 λk = 1, where y ≤y′ (this is an easy set-theoretic argument).
+Consequently,
+pj · y ≤pj · y′ =
+K
+
+k=1
+λk(pj · yk) ≤
+K
+
+k=1
+λk(pj · yj) = pj · yj,
+where the last inequality follows from (I).
+It is usually assumed that 0 ∈Y, because a ﬁrm can always choose to do
+nothing. This adds the additional implication that proﬁts must be non-negative.
+Corollary 6.5
+Given is a production dataset D. Then the following are
+equivalent:
+I) For all j,k, pk · yk ≥0 and pk · yk ≥pk · yj.
+II) D is rationalizable by a production set containing 0.
+III) D is rationalizable by a closed, convex, and comprehensive produc-
+tion set containing 0.
+Proof. Let Y be the convex hull of the elements of D and the origin, and
+proceed as above.
+Theorem 6.4 illustrates an important distinction between the cases of
+production and demand. We can say that a dataset D satisﬁes the weak axiom of
+production if for all j,k, pk ·yk ≥pk ·yj; that is, if condition (I) in Theorem 6.4 is
+satisﬁed. The weak axiom of production is also called the weak axiom of proﬁt
+maximization. Note that the weak axiom of production is a binary condition –
+that is, we only need to check pairs of data points to verify its satisfaction. In
+our analysis of rational demand, we found that WARP was too weak, and that
+rationalizability instead required GARP. The reason behind the sufﬁciency of
+the weak axiom of production lies in the simpler structure of the problem of
+production. In the case of demand, utility and the “shadow price” on utility
+are unknowns. The Afriat inequalities of Chapter 3 state that such unknowns
+must be extracted from the data. In contrast, in the case of production, proﬁt is
+directly observable from the data.
+An interesting and simple result on identiﬁcation of production sets is
+possible. Given a rationalizable dataset D, we can deﬁne the lower production
+set Y(D) to be the set deﬁned in the proof of Theorem 6.4: Let Y(D) be the
+1 This is the smallest convex and comprehensive set containing these points. See Figure 6.2(a)
+for an example.
+
+
+--- Page 7 ---
+6.2 Proﬁt maximization
+89
+p1
+y1
+y2
+p2
+p3
+y3
+Fig. 6.1 A rationalizable production dataset.
+p1
+p1
+y1
+y1
+y2
+y2
+p2
+p2
+p3
+p3
+The lower production set, Y(D).
+y3
+y3
+The upper production set, Y(D).
+(a)
+(b)
+Fig. 6.2 Range of rationalizing production sets.
+convex and comprehensive hull of the elements yk of D. We can deﬁne the
+upper production set Y(D) to be the polyhedron generated by data D; that is,
+let
+Y(D) = {y ∈Rn : pj · y ≤pj · yj for all j}.
+These rationalizing production sets are illustrated in Figure 6.2, based on the
+example from Figure 6.1.
+Theorem 6.6
+Let D be a rationalizable production dataset, and Y ⊆Rn be
+convex and comprehensive. Then Y rationalizes D iff Y(D) ⊆Y ⊆Y(D).
+
+
+--- Page 8 ---
+90
+Production
+Proof. It is clear that if Y rationalizes D, then the set inclusions must hold.
+Conversely, suppose that Y is convex and comprehensive and that the set
+inclusions hold. Let y ∈Y. Because Y(D) ⊆Y, we know that yk ∈Y for all
+k. And because Y ⊆Y(D), we know that pk · y ≤pk · yk for all k.
+As in the case of demand theory, if one wishes to place additional assumptions
+on Y, these may add restrictions on the rationalizable datasets. One assumption
+of interest is constant returns to scale: A production set Y exhibits constant
+returns to scale if for all y ∈Y and all λ ∈R+, λy ∈Y. It turns out that the
+only additional implication imposed by this restriction is that the observed
+ﬁrm always earns zero proﬁts (contrast with the discussion of homotheticity in
+4.2.1).
+Theorem 6.7
+The following statements are equivalent:
+I) For all j,k, 0 = pk · yk ≥pk · yj.
+II) D is rationalizable by a production set satisfying constant returns to
+scale.
+III) D is rationalizable by a closed, convex, and comprehensive produc-
+tion set satisfying constant returns to scale.
+Proof. That (III) implies (II) is obvious. To see that (II) implies (I), we must
+have 0 = pj · yj for all j, otherwise, if pj · yj > 0, then yj could not maximize
+proﬁts. And because a ﬁrm can always choose 0 ∈Y as production, proﬁts
+must be non-negative.
+To see that (I) implies (III), deﬁne Y to be the convex, comprehensive
+cone generated by the vectors yk of D; that is, the smallest convex and
+comprehensive cone containing {yk : k = 1,...,K}. Note that Y satisﬁes the
+required properties. It is clear that yk ∈Y for all k. Now, let y ∈Y. We will
+show that pj · yj ≥pj · y. There exists λ ∈Rn
++ for which y ≤K
+k=1 λkyk. Now,
+pj · y ≤K
+k=1 λk(pj · yk) ≤K
+k=1 λk(pj · yj) = 0 = pj · yj.
+Remark 6.8
+An interesting distinction from the consumer case is that each
+of the results of this section could be proved with inﬁnite datasets.
+6.2.0.1 Nonlinear pricing
+Just as in demand theory, we can consider an environment of nonlinear pricing.
+To this end, for each k, we suppose we have a proﬁt function gk : Rn →R which
+is weakly increasing (so that x ≤y implies g(x) ≤g(y)) and continuous. In this
+context, we say that D is rationalizable if there exists Y for which yk ∈Y for all
+k, and for all y ∈Y, gk(yk) ≥gk(y).
+Theorem 6.9
+For a given production dataset D, the following are
+equivalent:
+I) For all j,k, gk(yk) ≥gk(yj).
+II) D is rationalizable.
+III) D is rationalizable by a closed and comprehensive production set.
+
+
+--- Page 9 ---
+6.2 Proﬁt maximization
+91
+Proof. That (III) implies (II) and (II) implies (I) are again obvious. To see
+that (I) implies (III), deﬁne Y = {x ∈Rn : gk(x) ≤gk(yk) for all k}. Note
+that Y is closed, as the intersection of a collection of closed sets (that is,
+Y = %K
+k=1{x ∈Rn : gk(x) ≤gk(yk)}, each of which is closed by continuity).
+Further, it is comprehensive since each gk is weakly increasing. By (I), for all
+k, yk ∈Y. And if y ∈Y, then by deﬁnition, gk(yk) ≥gk(y).
+Theorem 6.9 has an interesting connection with the theory of fairness. If each
+gk is a utility function, and yk is agent k’s consumption, then the inequality
+gk(yk) ≥gk(yj) states that the allocation (y1,...,yK) is envy-free. The result
+characterizes envy-free allocations as those for which there is some set Y from
+which each agent is allowed to maximize preference.
+6.2.1
+Unobserved factors of production
+In contrast with demand theory (see 3.2.3), we can obtain restrictions from
+proﬁt maximization even when the choices of some goods are unobserved.
+Assume that production takes place in Rm+n; prices and output of the ﬁrst
+m goods are observed, while of the last n goods, only prices are observed.
+We shall deﬁne a partial production dataset to be a collection D of vectors
+(yk,(pk,πk)), k = 1,...K, with yk ∈Rm and (pk,πk) ∈Rm+n
+++ . Say that partial
+production dataset D is rationalizable if there exists Y ⊆Rm+n and, for each k,
+xk ∈Rn such that for all k, (yk,xk) ∈Y and (pk,πk)·(yk,xk) ≥(pk,πk)·(y,x) for
+all (y,x) ∈Y.
+By Theorem 6.4, we know that a partial production dataset is rationalizable
+iff it is rationalizable by a closed, convex, and comprehensive production set.
+Theorem 6.10
+A partial production dataset is rationalizable iff for all
+ = (λj,k) ∈RK×K
++
+such that for all k,
+
+j∈K
+λ(j,k)πk =
+
+j∈K
+λ(k,j)πj
+and λ(k,k) = 0, we have
+
+(j,k)∈K×K
+λ(j,k)pk · (yj −yk) ≤0.
+Proof. By Theorem 6.4, rationalizability is equivalent to the existence of xk
+solving the following inequalities, one for each pair j,k where j ̸= k:
+πk · xk −πk · xj ≥pk · (yj −yk).
+By Lemma 1.14, this inequality has no solution iff there are non-negative
+real numbers λ(j,k) such that for all k,
+
+{j∈K:j̸=k}
+λ(j,k)πk −
+
+{j∈K:j̸=k}
+λ(k,j)πj = 0
+
+
+--- Page 10 ---
+92
+Production
+and
+
+{(j,k)∈K×K:j̸=k}
+λ(j,k)pk · (yj −yk) > 0.
+This is exactly what the statement of the theorem precludes (note that λ(k,k) is
+unconstrained so we can take λ(k,k) = 0).
+Theorem 6.10 has two immediate important corollaries. The ﬁrst is the
+following negative result, which concerns prices of unobserved commodities
+that are conically independent across observations, in the sense that no such
+price vector is in the convex cone spanned by the remaining price vectors. For
+example, every linearly independent set of vectors is conically independent,
+but not conversely. In the case of conic independence, there are no testable
+implications to the proﬁt maximization hypothesis. This is problematic if we
+do not know which factors may not be observed. As a practical matter, it seems
+likely that the larger the number of unobserved commodities, the more likely
+the price vectors are to be conically independent. In such an environment, the
+hypothesis of proﬁt maximization is not falsiﬁable.
+Corollary 6.11
+Suppose that the vectors {πk}K
+k=1 have the property that for
+each j, πj is not in the convex cone spanned by {πk}k̸=j. Then (yk,(pk,πk)) is
+rationalizable.
+The second is the case in which for all j,k, we have πj = πk. The matrix 
+in Theorem 6.10 then satisﬁes the condition that, for all k, 
+{j:j̸=k} λ(j,k) =
+
+{j:j̸=k} λ(k,j). The diagonal of  is identically zero. Consider a modiﬁed matrix
+′ which differs only from  on the diagonals, and the diagonals are chosen to
+be non-negative and so that for all j,k, 
+{i∈K} λ(i,j) = 
+{i∈K} λ(i,k). The matrix
+′ now has the feature that all columns and rows sum to the same number.
+In combinatorics, such a matrix is a non-negative multiple of a bistochastic
+matrix.2 The reason this is of interest is that, by a theorem of Birkhoff and
+von Neumann (which can be found in Berge 1963, for example), a bistochastic
+matrix is known to be a convex combination of permutation matrices.3
+It therefore follows that ′ is a non-negative linear combination of
+permutation matrices. As a result of this, it is easily seen that the condition in
+Theorem 6.10 reverts to a cyclic monotonicity condition as in Theorem 1.9.
+However, the inequality here is of the opposite sign as the version in
+Theorem 1.9. This should not be a surprise, as the following corollary relates to
+proﬁt maximization, and the proﬁt function is well known to be convex, rather
+than concave.
+2 A matrix is bistochastic if it consists of only non-negative entries, and the row and column
+sums are equal to one.
+3 A permutation matrix is a matrix of ones and zeroes, with exactly one 1 in each row and each
+column.
+
+
+--- Page 11 ---
+6.3 Chapter references
+93
+Corollary 6.12
+Suppose that for all j,k, πj = πk. Then D is rationalizable iff
+for all sequences i1,...,ik,
+k
+
+j=1
+pij · (yij+1 −yij) ≤0.
+It is possible to give a “cyclic” version (one ruling out certain cycles, that
+is) of Theorem 6.10 in the general case, but this condition does not seem to be
+any more illuminating than the one stated in the theorem.
+Similar exercises can be undertaken with partial production datasets, which
+can derive the testable implications of constant returns to scale and other such
+hypotheses. We shall not undertake such an exercise here.
+6.2.2
+Measuring violations from rationalizability
+The most common approach to measuring deviations from rationalizability is
+to ﬁnd an approximate technology which would have generated the observed
+data. There are generally two approaches: a most conservative, and a least
+conservative, corresponding to the ideas in Theorem 6.6. Given an approximate
+production set, a measure of efﬁciency as in Debreu (1951) or Farrell (1957)
+can be applied to the observed data given this production set.
+Banker and Maindiratta (1988) suggest that one should construct a
+technology so that as many data points as possible are consistent with
+proﬁt maximization. So, they ask that all observed vectors are feasible for
+the technology, and as many of possible maximize proﬁts. They establish
+that Y(D) generates such a technology. The axiomatic approach of Banker,
+Charnes, and Cooper (1984) justiﬁes Y(D).4
+Varian (1990) describes a very similar idea. That is, if there is a pair (pk,yk)
+(pj,yj) for which pk · yk < pk · yj, Varian recommends that the measure of
+inefﬁciency for this violation should be pk·yj
+pk·yk −1. This measure is economically
+meaningful, in that it represents the percentage gain in proﬁt that the ﬁrm could
+have obtained by producing yj instead of yk.
+6.3
+CHAPTER REFERENCES
+Theorem 6.1 can be found in Hanoch and Rothschild (1972) and Varian (1984).
+Hanoch and Rothschild (1972) considers the case when the rationalizing
+production function is only required to be weakly monotonic.
+Theorems 6.4 and 6.7 and Corollary 6.5 are also found in Hanoch and
+Rothschild (1972). Again, Varian (1984) also discusses this result.
+4 Their axioms are convexity, comprehensivity, yk ∈Y for all k, and minimality with respect
+to set inclusion while satisfying these properties. That is, their axioms deﬁne the convex,
+comprehensive hull of yk.
+
+
+--- Page 12 ---
+94
+Production
+Theorems 6.2 and 6.3 are basically due to Afriat (1972) and Diewert and
+Parkan (1983). The idea behind Theorem 6.6 is due to Diewert and Parkan
+(1983) and Varian (1984).
+The ideas of this section ﬁrst appear in Afriat (1972) and Hanoch and
+Rothschild (1972). These papers also consider the case where no price data
+are observed; and the goal is simply to test whether there is a production
+function or production set consistent with the observed inputs and outputs
+being produced efﬁciently. Tests where there are data only on certain of the
+variables are considered in detail in Afriat (1972), Hanoch and Rothschild
+(1972), and Diewert and Parkan (1983). Theorem 6.10 is based on the linear
+programming ideas found in these works. Issues we have not discussed, which
+are discussed in detail in these papers, are the implications of assumptions on
+production when proﬁts may be observable, or when no prices are observable,
+and so on. F¨are, Grosskopf, and Lovell (1987), for example, talks about tests
+for non-monotonicity.
+Many of the early results described in this chapter have evolved into the
+ﬁeld of data envelopment analysis (DEA), which seeks to measure and test
+efﬁciency of productive units via linear programming and convex analytic
+techniques. See, for example, Cooper, Seiford, and Tone (2007). Stochastic
+frontier analysis studies similar questions from a stochastic production
+standpoint; see Kumbhakar and Lovell (2003) for an exposition.
+The ideas on which production set to use for efﬁciency measurement are due
+to Banker, Charnes, and Cooper (1984) and Banker and Maindiratta (1988).
+These ideas are fundamental in DEA. The measure of inefﬁciency of observed
+data brieﬂy discussed is due to Varian (1990).
+One may be interested in studying particular properties of the unobserved
+technologies: The papers by Chambers and Echenique (2009a) and Dziewulski
+and Quah (2014) focus on supermodularity of the production function.
+There is a large empirical literature testing the ideas in this chapter in a
+nonparametric fashion. A few such works which test the ideas in agricultural
+settings include Fawson and Shumway (1988), F¨are, Grosskopf, and Lee
+(1990), Ray and Bhadra (1993), Featherstone, Moghnieh, and Goodwin
+(1995), and Tauer (1995).
+The Birkhoff–von Neumann Theorem is an important result in graph theory,
+and is attributed to Birkhoff (1946) and Von Neumann (1953).

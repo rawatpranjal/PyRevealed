@@ -1,0 +1,685 @@
+--- Page 1 ---
+CHAPTER 12
+Revealed Preference and Systems of
+Polynomial Inequalities
+It should be apparent by now that systems of linear inequalities emerge
+naturally in revealed preference theory. They constitute the essence of Afriat’s
+Theorem, for example; and we formulated revealed preference problems using
+systems of linear inequalities in Chapters 3, 6, 7, and 8. In this chapter, we
+describe how revealed preference problems can generally be understood as
+a system of inequalities. From a purely computational perspective, one can
+very often solve a revealed preference problem by algorithmically solving the
+corresponding system of inequalities.
+When the system of inequalities is linear, the problem is easy to solve both
+computationally and analytically. Here we develop a GARP-like acyclicity test
+(similar to the ones in Chapters 2 and 3). The test will follow from the linearity
+of the system of inequalities embodied in the revealed preference question.
+We shall discuss an extension of the linear theory to systems of polynomial
+inequalities. The theory of polynomial inequalities will be seen to be very
+relevant for revealed preference theory (but harder to work with compared to
+the theory of linear inequalities).
+12.1
+LINEAR INEQUALITIES: THE THEOREM OF THE
+ALTERNATIVE AND REVEALED PREFERENCE
+We start by revisiting the Theorem of the Alternative, or Farkas’ Lemma
+from Chapter 1. It is easy to see why it is useful in revealed preference
+theory. We then discuss some sources of linear systems for popular models
+in economics. The following is a bit weaker than Lemma 1.13. It is written so
+as to emphasize that the lemma can be used to “remove existential quantiﬁers;”
+it states that an existential statement (one that start with “there is. . . ”) is
+equivalent to a universal statement (one that starts with “for all. . . ”). Note that
+the discussion of the Tarski–Seidenberg Theorem in Chapter 9 is also about
+removing existential quantiﬁers.
+Lemma 1.13′
+(Integer–Real Farkas) Let {Ai}M
+i=1 be a ﬁnite collection of
+vectors in QK. The following statements are equivalent:
+
+
+--- Page 2 ---
+176
+Revealed Preference and Systems of Polynomial Inequalities
+I) There exists y ∈RK such that for all i = 1,...,M, Ai · y > 0.
+II) For all z ∈ZM
++ \ {0}, it holds that M
+i=1 ziAi ̸= 0.
+The vector y represents some unknown quantities. The vectors Ai encode
+some properties we want y to have. Typically, y is an unobservable theoretical
+object, such as a utility function. The properties in Ai can be theoretical (for
+example requiring utility to be monotonic) or come from the data, for example
+requiring the utility function to rationalize the data. In the example that we
+expand on below, M is the number of observations, and K is the number of
+possible alternatives from which an agent chooses. Then every observation
+corresponds to a vector Ai. For example, suppose that we observe object h
+chosen over object l. Then there is an Ai of the form 1h −1l. See Section 12.1.2
+below for more details. The existence of y ∈RK satisfying the inequalities then
+translates into the existence of a utility function rationalizing the data.
+System I corresponds to the revealed preference formulation of a problem:
+A dataset is “rationalizable” if there exists a value for the theoretical object
+y that satisﬁes the right properties and explains the data. We call this an
+existential formulation of a theory. As stated, it is not falsiﬁable: If one is given
+a candidate solution y, it is easy to check whether System I is satisﬁed. If the
+candidate is a solution then we are done, but if the candidate y fails to satisfy
+System I then we have essentially no clue as to whether System I is solvable
+because there are inﬁnitely many other potential solutions to the system. So
+when System I has no solution, and the dataset is “not rationalizable,” then
+there is no way that checking individual vectors y one by one can tell us that
+the system is not solvable.
+In contrast II is a universal statement. It says that something has to be true
+for all vectors z. Given a single z ∈ZM
++ \ {0} with M
+i=1 ziAi = 0, we know by
+Lemma 1.13′ that there cannot exist y solving System I. Despite the existential
+formulation of the theory, the theory is falsiﬁable. When System I has no
+solution, and the dataset is “not rationalizable,” then no single y can certify
+that the theory has been falsiﬁed, but thanks to Lemma 1.13′, a single z can do
+that.
+Lemma 1.13′ says a bit more about z. It says that it is a vector of integers.
+This is very often useful in ﬁnding a “combinatorial” revealed preference
+axiom, such as GARP or SARP.
+Note that veriﬁcation is, in some sense, a dual property to falsiﬁcation. The
+existential formulation System I means that an individual y cannot certify that
+the system has no solution. But when the system does have a solution, a single
+vector y is enough to certify that a solution exists.
+12.1.1
+Linear systems from ﬁrst-order conditions
+First-order conditions are a common source of systems of inequalities in
+revealed preference theory. For example, in the revealed preference problem
+of rational demand theory, we obtain the system described in Afriat’s Theorem
+
+
+--- Page 3 ---
+12.1 Linear inequalities: The Theorem of the Alternative
+177
+from the ﬁrst-order conditions in the consumer’s maximization problem. The
+following is a heuristic derivation of the system of linear inequalities in Afriat’s
+Theorem.
+Recall the setup in Chapter 3. We observe a dataset (xk,pk), k = 1,...,K. We
+want to know when there is a function u : Rn
++ →R such that xk is a maximizer
+of u in the budget set B(pk,mk) = {x ∈Rn
++ : pk · x ≤mk}, where mk = pk · xk.
+If such a u exists, and if it is smooth and concave, then the ﬁrst-order
+condition must be satisﬁed at the choices xk:
+∇u(xk) −λkpk = 0,
+(12.1)
+where ∇u(xk) denotes the gradient of u at xk, and λk is the Lagrange multiplier
+associated to this maximization problem. The unknowns here are the numbers
+∇u(xk) and λk.
+We need to ﬁnd values for these unknowns that are compatible with a
+concave u. Essentially we can solve for another set of numbers, utility values,
+Uk = u(xk), which can be extended to a function deﬁned on all of Rn
++.
+Concavity demands the following inequality be satisﬁed for all k and l:
+Ul −Uk ≤∇u(xk) · (xl −xk).
+(12.2)
+Putting the equations of type (12.1), which result from the ﬁrst-order
+conditions, together with inequalities of type (12.2) yields the linear system
+we solve for in Afriat’s Theorem. By using Lemma 1.13 with this system one
+obtains GARP: see 3.1.1.
+Another example can be obtained from Cournot oligopoly theory. Suppose
+that there are n ﬁrms in a market for a homogeneous good. The theory says that
+market price is determined as if each ﬁrm i has a cost function ci : R+ →R,
+with ci(0) = 0, and chooses quantity qi to maximize
+qiP
+⎛
+⎝
+n
+
+j=1
+qj
+⎞
+⎠−ci(qi),
+where P : R+ →R+ is the market inverse demand function. The quantity
+qiP
+#n
+j=1 qj
+$
+is the revenue of ﬁrm i, so the expression reﬂects that i
+maximizes proﬁts.
+Suppose that we observe K instances in which these ﬁrms were engaged in
+quantity competition. The data we observe are of the form:
+(qk
+1,...,qk
+n,pk) : k = 1,...K;
+where qk
+i ≥0 is the quantity chosen by ﬁrm i in instance k, and pk is the
+prevailing market price. The functions ci and P are not observable.
+Now, say that a dataset is Cournot rationalizable if there are convex
+functions ci and a smooth and decreasing function P such that qk
+i maximizes
+the proﬁts of ﬁrm i, given that all other ﬁrms choose the quantities in the
+vector (qk
+j ).
+
+
+--- Page 4 ---
+178
+Revealed Preference and Systems of Polynomial Inequalities
+Now, the ﬁrst-order condition for ﬁrm i is:
+qk
+i P′
+⎛
+⎝
+n
+
+j=1
+qk
+j
+⎞
+⎠+ P
+⎛
+⎝
+n
+
+j=1
+qk
+j
+⎞
+⎠−c′
+i(qk
+i ) = 0.
+Recall that price pk is observed as part of the data, so the unknowns are the
+numbers P′(n
+j=1 qk
+j ) and c′
+i(qk
+i ). One needs to ﬁnd cost and demand functions
+such that pk = P(n
+j=1 qk
+j ), and derivatives behave properly. As with Afriat’s
+Theorem, it is enough to do so by ﬁnding certain real numbers: in our case the
+numbers P′(n
+j=1 qk
+j ) and c′
+i(qk
+i ), such that certain inequalities are satisﬁed.
+We use the notation δk
+i for the number c′(qk
+i ). The ﬁrst-order condition
+implies that
+δk
+j −pk
+qk
+j
+= δk
+i −pk
+qk
+i
+< 0,
+(12.3)
+for all i, j, and k, as P′(
+j qk
+j ) does not depend on i and must be negative for
+demand to slope down.
+It is possible to show that data are Cournot rationalizable iff there are
+numbers δk
+i , i = 1,...,N, k = 1,...,K such that the linear inequalities (12.3)
+are satisﬁed, and such that when qk
+i < ql
+i then δk
+i < δk
+j ; the latter requirement
+captures that marginal cost must be monotone increasing for cost functions to
+be convex.
+12.1.2
+The existence of a rationalizing utility
+We shall illustrate the role of linear inequalities with a very basic example,
+dealing with the simplest version of revealed preference for individual decision
+making.
+Suppose that we are given a ﬁnite set X of alternatives. Suppose we are given
+a dataset in the form of an observed revealed preference relation ⪰R. That is,
+we observe a set of binary comparisons, where an agent has chosen x over y
+iff x ⪰R y. We want to know when R is rationalizable using a utility function
+u : X →R. Suppose that the relation R encompasses only strict comparisons,
+so x ⪰R y and x ̸= y implies that x ≻R y. Then a utility function u rationalizes
+⪰R if u(x) > u(y) whenever x ≻R y.
+The problem can be set up as follows. A utility function is a vector in
+Euclidean space RX. Deﬁne a matrix B with |X| columns. For every pair
+(x,y) ∈≻R, include a row in B which has zeroes in all entries except for a
+1 in the column for x and a −1 in the column for y. So the row is the vector
+1x −1y. Then there is a utility function that rationalizes the data if and only if
+there is a vector u ∈RX that solves the system B·u ≫0 of linear inequalities.1
+1 The matrix B is like the upper left submatrix of the matrix constructed in the proof of Afriat’s
+Theorem.
+
+
+--- Page 5 ---
+12.1 Linear inequalities: The Theorem of the Alternative
+179
+By Lemma 1.13′ there is no rationalizing u (that is, no u such that B·u ≫0)
+if and only if there is z > 0 such that z · B = 0. So suppose that that is the case,
+and let z be the vector promised by Lemma 1.13′. Let (x,y) ∈X ×X correspond
+to a row r for which zr > 0; so x ≻R y. There is at least one such pair because
+z > 0. There is a 1 in the column for x in row r. Now, no entry of z is negative,
+and z·B = 0, so there must be some row r′ with zr′ > 0 in which we have a −1
+in the column for x. So there must exist x′ with x′ ≻R x; the row r′ corresponds
+to (x′,x). Note that now x′ is in the position that x was in when we started to
+make this argument. So there must exist x′′ ∈X with
+x′′ ≻R x′ ≻R x ≻R y.
+Since X is a ﬁnite set, by repeating the argument we must reach a cycle of ⪰R.
+The argument shows that the order pair ⟨⪰R,≻R⟩is not acyclic.
+In conclusion, the non-existence of a solution to the system u · B ≫0 is
+equivalent to the existence of a cycle of ⪰R. The standard result on acyclicity
+therefore emerges as a consequence of Lemma 1.13.
+The same reasoning can be applied to many of the results in Chapter 2. We
+sketch proofs of Theorems 2.6, 2.8, 2.16, and 2.17 using this device. In fact, the
+Theorem of the Alternative is often a useful way of “guessing” the appropriate
+concept of rationalization speciﬁed by a particular choice-theoretic axiom.
+Consider Theorem 2.6. Suppose that X is a ﬁnite set. Rationalizability in the
+sense of Theorem 2.6 is equivalent to the existence of a function u : X →R
+for which x ⪰c y implies u(x) ≥u(y) and x ≻c y implies u(x) > u(y). One
+can then proceed almost exactly as we did in the previous paragraphs to
+obtain the acyclicity result. The only difference is that we now have weak
+revealed preference comparisons. Let the order pair ⟨⪰c,≻c⟩be as deﬁned in
+Chapter 2. Construct a matrix B with |X| columns, and a row for each ⪰c or
+≻c comparison. For comparisons of the type x ⪰c y, we add a row to the matrix
+of form 1x −1y; likewise for comparisons of type x ≻c y. We want to ﬁnd a
+solution u ∈RX such that for rows Bi of type ⪰c, we have Bi · u ≥0, and for
+rows of type ≻c, we have Bi · u > 0. Applying Lemma 1.13 and using similar
+techniques as in the preceding proof for removing cycles, we come up with
+congruence as the necessary and sufﬁcient condition.
+Theorem 2.8 is a bit different. We can no longer work with a utility function,
+as it is clear that not every complete binary relation can be so encoded (unless
+it is transitive, of course). Instead, we encode the preference via a function
+ϕ : X2 →R for which ϕ(x,y) = −ϕ(y,x). The interpretation here is that x ⪰y
+iff ϕ(x,y) ≥0. This suggests a matrix B, whose rows are indexed by X2, and
+for each pair x,y, there is a row 1(x,y) + 1(y,x). Now, we also add a row for each
+comparison of the type x ⪰c y; namely, this row consists of 1(x,y); likewise, we
+add a row for each comparison of the type x ≻c y, and again, this row consists
+of 1(x,y). We want to ﬁnd a solution ϕ ∈RX2 such that for rows Bi of the ﬁrst
+type, we have Bi ·ϕ = 0, for rows Bi of the second type, we have Bi ·ϕ ≥0, and
+for rows Bi of the third type, we have Bi ·ϕ > 0. Again, a simple application of
+the Theorem of the Alternative leads to the weak axiom of revealed preference.
+
+
+--- Page 6 ---
+180
+Revealed Preference and Systems of Polynomial Inequalities
+Theorems 2.16 and 2.17 can be proved using similar techniques to the
+preceding – the distinction is that in the case of Theorem 2.16, we search for
+a u ∈RX for which x ≻c y implies u(x) > u(y) (no requirement is made for
+x ⪰c y), and in the case of Theorem 2.17, we search for a ϕ ∈RX2 for which
+x ≻c y implies ϕ(x,y) > 0 (again no requirement is made for x ⪰c y).
+The general form of the requirement in these theorems is something along
+the following lines: “There exists some function such that for all pairs,
+the function is related to revealed preference in some way.” The existential
+statement quantiﬁes an unobservable object. The universal (for all) statement
+quantiﬁes observable objects. The Theorem of the Alternative is used to show
+that these statements are logically equivalent to a statement which is universal
+and stated only in terms of observable objects; for example, Theorem 2.6 states
+that existence of such a utility is equivalent to the statement: “For all x1,...,xn,
+it is not the case that for i = 1,...,n −1, xi ⪰c xi+1 and xn ≻c x1.” Though
+existential statements are in principle problematic from the viewpoint of
+falsiﬁability, we see that in general this might not be true when the existential
+operator quantiﬁes unobservable objects. Existential operators operating on
+unobservables can sometimes be “removed,” and turned into an equivalent
+universal statement involving only observables.
+12.2
+POLYNOMIAL INEQUALITIES: THE
+POSITIVSTELLENSATZ
+Some revealed preference problems give rise to nonlinear, speciﬁcally
+polynomial, systems of inequalities. Below we give a detailed example taken
+from Nash bargaining theory (see Chapter 10). For polynomial systems of
+inequalities, there is a result like the Theorem of the Alternative; it is called
+the Positivstellensatz.
+In order to state the Positivstellensatz, we need a bit of notation. Given is a
+collection of variables, say {x1,...,xn}. We assume that the notion of a polyno-
+mial is understood. We will describe one version of the Positivstellensatz.
+Given a collection of polynomials {f1,...,fm} over the variables {x1,...,xn},
+we deﬁne the ideal of {f1,...,fm} to be the collection of all polynomials which
+can be written in the form:
+m
+
+i=1
+gifi,
+where gi is a polynomial. We deﬁne the cone generated by f1,...,fm to be
+the smallest set of polynomials that (1) includes all sums of squares of
+polynomials, (2) includes all polynomials f1,...,fm, and (3) is closed under
+addition and multiplication. It is easy to see that any such element can be
+written as
+
+S⊆{1,...,m}
+1
+gS
+"
+i∈S
+fi
+2
+,
+
+
+--- Page 7 ---
+12.2 Polynomial inequalities: The Positivstellensatz
+181
+where gS is a sum of squares of polynomials. Finally, we deﬁne the
+multiplicative monoid generated by f1,...,fm to be the collection of polynomials
+of the form m
+i=1 f ai
+i , where each ai is a non-negative integer.
+Let fi, gj, and hl be polynomials over {x1,...,xn}, for i = 1,...,m, j = 1,...,k,
+and l = 1,...,q.
+Theorem 12.1 (Positivstellensatz).
+A collection of inequalities fi(x) = 0, i =
+1,...,m, gi(x) ≥0, i = 1,...,k, hl(x) ̸= 0, i = 1,...,q has no solution iff there exist
+polynomials f in the ideal of {f1,...,fm}, g in the cone generated by {g1,...,gk},
+and h in the multiplicative monoid generated by {h1,...,hq} for which f + g +
+h = 0.
+The Positivstellensatz thus provides an alternative system of polynomial
+inequalities, such that the ﬁrst system has no solution iff the second system has
+a solution. The statement is similar in spirit to the Theorem of the Alternative,
+but the unknowns in the second system are polynomials, not real numbers.
+From a computational perspective, the problem is clearly harder to deal with.
+Conceptually, the Positivstellensatz has implications that are similar to those
+we highlighted for the Theorem of the Alternative in Section 12.1: it turns
+an existential, veriﬁable theory into a universal, falsiﬁable statement. Thus,
+if a system of polynomial inequalities cannot be satisﬁed, it is possible to
+demonstrate, or certify, its infeasibility.
+To actually ﬁnd a falsiﬁcation is challenging computationally. One practical
+approach is to search for a solution to the second system of inequalities among
+polynomials of bounded degree. This approach is common in the engineering
+literature (see the references in Section 12.3). So one would look for f in
+the ideal of {f1,...,fm}, g in the cone generated by {g1,...,gk}, and h in the
+multiplicative monoid generated by {h1,...,hq} for which f + g + h = 0; but
+restricting such a search to polynomials of degree smaller than some given
+bound. The search for a solution among polynomials of bounded degree can
+be formulated as a semideﬁnite program, and thus there are efﬁcient algorithms
+for solving the problem.
+Of course, the approach only works when one ﬁnds a solution: when one
+ﬁnds polynomials certifying a solution f + g + h = 0, thus certifying that the
+ﬁrst system of inequalities (the one we are really interested in) has no solution.
+If one does not ﬁnd a solution among polynomials of bounded degree, then it
+is possible that there is a solution of a higher degree, or that the original system
+in fact has a solution.
+12.2.1
+Application: Nash bargaining
+To get a sense for how these ideas might be applied in economics, let us
+consider the problem of testing Nash bargaining theory, as in Section 10.3
+of Chapter 10. In Chapter 10, we assumed that the disagreement point was
+ﬁxed across observations, and that it was the same for all agents. If we relax
+that assumption then things get more complicated. We can still formulate the
+
+
+--- Page 8 ---
+182
+Revealed Preference and Systems of Polynomial Inequalities
+problem as a polynomial system of inequalities and use the Positivstellensatz
+to obtain an answer. The alternative, or dual, system from the Positivstellensatz
+gives a test for Nash bargaining theory.
+Assume a ﬁnite set N of agents is given. Generalizing the setup from
+Section 10.3, suppose that a dataset is a set D = {(xk,dk) : k = 1,...,K}; where
+for each k, xk and dk are vectors in RN
++ such that xk ≫dk ≥0. These are
+observations of K bargaining instances; in the kth instance, agent i received
+xk
+i dollars, while his disagreement outcome was dk
+i .
+A dataset is Nash bargaining rationalizable if there are concave and
+monotonic functions ui : R+ →R, i ∈N, such that
+n
+"
+i=1
+
+ui(xk
+i ) −ui(dk
+i )
+
+≥
+n
+"
+i=1
+
+ui(xi) −ui(dk
+i )
+
+,
+for all x ∈RN
++ such that xi ≥dk
+i and 
+i∈N xi ≤
+i∈N xk
+i .
+Proposition 12.2
+A dataset D is Nash rationalizable if and only if for all
+i ∈N, there are numbers Ui(dk
+i ),Ui(xk
+i ),Mi(dk
+i ), and Mi(xk
+i ) for k = 1,...,K
+which solve the following equations: for all z ∈{xk
+i }, z′ ∈{xk
+i ,dk
+i }, and all i, j,
+and k,
+Mi(xk
+i )
+Ui(xk
+i ) −Ui(dk
+i ) =
+Mj(xk
+j )
+Uj(xk
+j ) −Uj(dk
+j )
+and for all z,z′ ∈K
+i=1{dk
+i ,xk
+i }
+
+Ui(z) −Ui(z′) > 0
+if z < z′,
+Mi(z′)(z −z′) ≥Ui(z) −Ui(z′).
+Proposition 12.2 is straightforward. We simply ask for numbers Ui(z) to
+signify levels of utility, and Mi(z) for supergradients, or marginal utilities.
+The ﬁrst system of equalities ensures that the ﬁrst-order conditions for the
+maximization of the Nash product hold. The second set of inequalities make
+sure that utility is monotonic and that marginal utilities are a supergradient of
+the utility.
+Proof. We ﬁrst show that if we are given increasing and concave utility
+functions ui, then xk
+1,...,xk
+n is a solution to max
+i∈N xi=M
+
+i∈N[ui(xi) −ui(dk
+i )]
+if and only if for each i, there is a supergradient μi of ui at xk
+i for which
+μi
+Ui(xk
+i ) −Ui(dk
+i ) =
+μj
+Uj(xk
+j ) −Uj(dk
+j ).
+To this end, deﬁne U = {
+
+u1(x1) −u1(dk
+1),...,un(xn) −un(dk
+n)
+
+: 
+i∈N xi =
+M,xi ≥dk
+i }, and consider maximizing the function f(y) = 
+i∈N yi subject to
+y ∈U. A point u ∈U maximizes f if and only if
+#
+i̸=1 ui,...,
+i̸=n ui
+$
+supports
+U at u (by deﬁnition). Because f is strictly convex, and since U is convex and
+
+
+--- Page 9 ---
+12.2 Polynomial inequalities: The Positivstellensatz
+183
+compact, there is a unique such maximizer u∗. It is clear that u∗
+i > 0 for all
+i ∈N.
+This states that there is a unique solution xk
+1,...,xk
+n to the Nash problem
+for which ui(xk
+i ) −ui(dk
+i ) = u∗
+i . We deﬁne λj = 
+i̸=j[ui(xk
+i ) −ui(dk
+i )]. We
+know that 
+i∈N λiui(xi) is maximized at xk
+1,...,xk
+n across all xi for which
+
+i∈N xi = M. Our next step is to show that this can happen if and only if the
+vector (1/λ1,...,1/λn) is proportional to a vector of supergradients.
+Since the constraints xi ≥dk
+i are not binding, we can set up the Lagrangian
+for the problem, say L(x,μ) = 
+i∈N λiui(xi) + μ(M −
+i∈N xi), and note that
+it is equal to L(x,μ) = 
+i∈N[λiui(xi) −μxi] + μM. We know the constraint
+
+i∈N xi = M is binding, so that the solution to the maxmin problem features
+μ∗> 0. For μ∗, we know that maxx L(x,μ∗) is equal to the maximum Nash
+product subject to the constraint, and has the same solution. This is equivalent
+to saying that (λi/μ∗)ui(xk
+i ) −xk
+i ≥(λi/μ∗)ui(xi) −xi for all xi, or, rewriting:
+ui(xi) + (μ∗/λi)(xk
+i −xi) ≤ui(xk
+i ).
+This is equivalent to saying that μ∗/λi is a supergradient, or that the vector
+(1/λ1,...,1/λn) is proportional to a supergradient.
+Another way of saying that (1/λ1,...,1/λn) is proportional to a vector of
+supergradients is saying that for all i ∈N, there is a supergradient Mi(xk
+i ) of
+ui at xk
+i such that for all i,j, λi
+λj =
+Mj(xk
+j )
+Mi(xk
+i ). Writing out the explicit form of λ and
+eliminating terms, this is equivalent to saying that
+Mi(xk
+i )
+ui(xk
+i )−ui(dk
+i ) =
+Mj(xk
+j )
+uj(xk
+j )−uj(dk
+j ),
+which is precisely the condition in the theorem. The other conditions simply
+say that Mi is a supergradient, and that ui is strictly increasing.
+Conversely, the details of how to construct a utility function from these
+numbers essentially follow from Afriat, deﬁning ui(x) = infz∈K
+k=1{xk
+i ,dk
+i } Ui(z)+
+Mi(z)(x −z), where the inﬁmum is taken over all data points. It is then simple
+to verify by construction that for all z ∈K
+k=1{xk
+i ,dk
+i }, Mi(z) is a supergradient
+of ui at z. From this, the fact that the equality in the statement of the theorem is
+solved implies that the Nash product is maximized for this collection of utility
+functions (by the previous argument).
+From Proposition 12.2 and the Positivstellensatz we can obtain a test for Nash
+bargaining. The conditions in the proposition involve polynomials in 4|N|K
+variables, namely Ui(dk
+i ),Ui(xk
+i ),Mi(dk
+i ), and Mi(xk
+i ). We have the system of
+polynomial equalities
+Mi(xk
+i )
+Ui(xk
+i ) −Ui(dk
+i ) =
+Mj(xk
+j )
+Uj(xk
+j ) −Uj(dk
+j )
+and the inequalities for all z,z′ ∈K
+i=1{dk
+i ,xk
+i },
+
+Ui(z) −Ui(z′) > 0
+if z < z′,
+Mi(z′)(z −z′) ≥Ui(z) −Ui(z′).
+
+
+--- Page 10 ---
+184
+Revealed Preference and Systems of Polynomial Inequalities
+12.3
+CHAPTER REFERENCES
+In general, Lemma 1.13 allows us to ﬁnd the exact empirical content of many
+linear models. Scott (1964) is a classic reference. The issue with Lemma 1.13
+is that the universal quantiﬁer does not typically operate on observables (here, z
+is simply a vector – but in our example, observed data were revealed preference
+comparisons). It turns out though, that since z is integer-valued, this universal
+quantiﬁer can be translated directly into observables. For example, in the
+revealed preference example in Section 12.1.2, the fact that for all for all z ∈ZK
++
+with K
+i=L+1 zi > 0, we have K
+i=1 ziAi ̸= 0 is the same as saying there are no
+preference cycles. In fact, it is often the case that one can require the universal
+quantiﬁer on z to operate over a ﬁnite number of z.
+The discussion of the Cournot model in Section 12.1.1 borrows from the
+paper of Carvajal, Deb, Fenske, and Quah (2013). These authors prove that
+the condition we have stated (the existence of a solution to the system of
+inequalities) is equivalent to Cournot rationalizability.
+The discussion of existential and universal axioms is inspired by the work
+of Popper (1959). Popper claimed famously that existential theories are not
+falsiﬁable: consider the theory that claims that there is a black swan. No matter
+how many non-black swans one observes, they do not disprove the theory.
+Universal theories are falsiﬁable, for example the theory that claims that all
+swans are white. The observation of a single non-white swan would disprove
+the theory. The papers by Van Benthem (1976) and Chambers, Echenique,
+and Shmaya (2012) present a general result on how existential quantiﬁers over
+theoretical objects can be removed, and a theory may be shown to be falsiﬁable.
+See also Craig and Vaught (1958), Lemma 3.4 for a related result in a more
+restrictive environment.
+The Positivstellensatz as formulated in Theorem 12.1 can be found, for
+example, in Bochnak, Coste, and Roy (1998), Theorem 4.4.2. It is originally
+due to Krivine (1964) and rediscovered by Stengle (1974). It is interesting that,
+while many economists know and apply the Theorem of the Alternative, there
+are almost no applications of the Positivstellensatz (Richter, 1975 is a notable
+exception, which itself builds on the work of Tversky, 1967). The theorem
+is potentially useful to applied economists, who would use the algorithms in
+Parrilo (2004) to carry out tests on actual datasets.
+The Positivstellensatz is closely related to, but distinct from, the
+Tarski–Seidenberg Theorem; see our discussion in Chapter 9. Brown
+and Matzkin (1996) (see also Brown and Kubler (2008)) exploit this technique
+to ﬁnd testable implications of equilibrium behavior. They also explain how
+the well-known equivalence of the strong axiom of revealed preference and
+rationality is a special case of Tarski–Seidenberg.
+The approach of searching among polynomials of bounded degree is
+described in Parrilo (2003). Indeed, it can be shown to revert to a classical
+semideﬁnite programming problem. This approach is outlined in Parrilo
+(2003), a shorter introduction is provided in Parrilo (2004); see especially
+
+
+--- Page 11 ---
+12.3 Chapter references
+185
+Example 1 there. Marshall (2008), Chapter 10 provides a detailed explanation.
+Also see Sturmfels (2002).
+Proposition 12.2 is from Chambers and Echenique (2014b). There are
+similar results in Carvajal and Gonz´alez (2014) and Cherchye, Demuynck,
+and De Rock (2013). Cherchye, Demuynck, and De Rock (2013) propose
+a different computational approach than the one we have emphasized here.
+They propose instead using integer programming to obtain a test for Nash
+bargaining.

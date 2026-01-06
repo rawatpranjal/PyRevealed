@@ -1,0 +1,1031 @@
+--- Page 1 ---
+CHAPTER 10
+Game Theory
+In this chapter we continue the study of the testable implications of models of
+collective behavior. We focus here on game-theoretic models. Our ﬁrst results
+use a version of the abstract choice environments from Chapter 2, and discuss
+testing Nash equilibrium as the prediction of the choices made by a collection
+of agents. We then turn to models of bargaining and two-sided matching.
+10.1
+NASH EQUILIBRIUM
+Let N be a ﬁnite set of agents of cardinality n. For each i ∈N, consider some
+ﬁnite set ¯Si. The idea is that ¯Si is some “global” set of strategies that may be
+available to agent i. In a speciﬁc (observable) instance, player i is restricted to
+choosing a strategy from Si ⊆¯Si, a “budget” of possible strategies. Consider
+the nonempty product subsets of 
+i∈N ¯Si, denoted by S. A typical element of
+S has the form S1 × S2 × ··· × Sn; where each Si is a nonempty subset of ¯Si.
+These sets are called game forms.
+An element of 
+i∈N ¯Si is called a strategy proﬁle. As usual in game theory
+we use (si,s−i) to denote a strategy proﬁle in which si is i’s strategy and s−i ∈
+
+j∈N\{i} ¯Sj is a strategy proﬁle for players in N \ {i}.
+A joint choice function is a mapping c :  ⊆S →2
+
+i∈N ¯Si\{∅} satisfying
+c(S) ⊆S. Note that c(S) need not have a product structure, but it is required to
+be nonempty. In particular, every joint choice function is a choice function in
+the sense of Chapter 2. We will be interested in notions of rationalization that
+reﬂect the product structure of S.
+Let {⪰i}i∈N be a family of preference relations, each over 
+i∈N ¯Si. Note that
+these preferences deﬁne a (normal-form) game (N,(Si,⪰i|S)i∈N) for each S =
+S1 × S2 × ··· × Sn ∈S. By ⪰i|S we mean the restriction of preferences ⪰i to S.
+A strategy proﬁle s = (si)i∈N ∈S is a Nash equilibrium of (N,(Si,⪰i|S)i∈N) if
+(si,s−i) ⪰i (s′
+i,s−i) for all s′
+i ∈Si and all i ∈N.
+We say that the family of preference relations {⪰i}i∈N strongly Nash
+rationalize a choice function c if for all S = 
+i∈N Si ∈S, c(S) coincides with
+
+
+--- Page 2 ---
+144
+Game Theory
+the set of Nash equilibria of the game (N,(Si,⪰i|S)i∈N):
+c(S) = {(si)i∈N : for all j ∈N and all s′
+j ∈Sj,(sj,s−j) ⪰j (s′
+j,s−j)}.
+We say that c is strongly Nash rationalizable by a class of preference relations
+if there exist preference relations ⪰i in that class which strongly Nash
+rationalize c.
+We say that a family of binary relations ⪰i weakly Nash rationalize c
+if for all S ∈S, c(S) ⊆{(si)i∈N : for all j ∈N and all s′
+j ∈Sj,(sj,s−j) ⪰j
+(s′
+j,s−j)}. We will say c is weakly Nash rationalizable by a class of preference
+relations if there exist preference relations ⪰i in that class which weakly Nash
+rationalize c.
+Clearly, weak Nash rationalizability by weak orders has no empirical
+content; thus, when we speak of weak Nash rationalization, we shall take
+interest in weak Nash rationalization by strict preference relations.
+10.1.1
+Choice from all game forms
+We shall assume that we observe the outcomes of the strategic interaction of
+the agents in N for each possible game form. That is,  = S.1 The results in
+this subsection are due to Yves Sprumont.
+The set S forms a lattice under the set inclusion relation; its meet is given
+by S∧S′ = S∩S′. Writing S = 
+i∈N Si and S′ = 
+i∈N S′
+i, the join S∨S′ is given
+by S ∨S′ = 
+i∈N(Si ∪S′
+i).
+Say that a joint choice function c satisﬁes persistence under expansion if for
+all S,S′ ∈S, c(S) ∩c(S′) ⊆c(S ∨S′). It is obvious from the deﬁnition of Nash
+equilibrium that persistence under expansion is a necessary condition for c to
+be strongly Nash rationalizable.
+We will say that S ∈S is a line if there exists i ∈N such that for all j ̸= i,
+Si is a singleton. A line can be understood as a single-agent decision problem.
+We say that a joint choice function c satisﬁes persistence under contraction if
+the following two properties are satisﬁed:
+• for all S,S′ ∈S with S ⊆S′, c(S′) ∩S ⊆c(S).
+• If S′ is a line, S ⊆S′, and c(S′) ∩S ̸= ∅, then c(S) ⊆c(S′).
+Note that the ﬁrst property of persistence under contraction is condition α of
+Chapter 2. The second property, which is only required to hold for lines, is
+similar to condition β.
+The following theorem characterizes strongly Nash rationalizable joint
+choice functions.
+1 This assumption is analogous to assuming that the choices from all possible budgets are
+observed in Chapter 2.
+
+
+--- Page 3 ---
+10.1 Nash equilibrium
+145
+Theorem 10.1
+A joint choice function c is strongly Nash rationalizable by
+preference relations iff it satisﬁes persistence under expansion and persistence
+under contraction.
+Proof. It is easy to verify that if c is strongly Nash rationalizable by preference
+relations, then it satisﬁes persistence under expansion and persistence under
+contraction. Conversely, suppose c satisﬁes these two properties.
+We ﬁrst deﬁne a basic revealed preference, ⪰c
+i . For any pair (si,s−i) and
+(s′
+i,s−i), we deﬁne (si,s−i) ⪰c
+i (s′
+i,s−i) in the natural way; that is, (si,s−i) ⪰c
+i
+(s′
+i,s−i) iff (si,s−i) ∈c
+#
+{si,s′
+i} × 
+j̸=i{sj}
+$
+. Each ⪰c
+i is clearly reﬂexive.
+Transitivity is also straightforward and follows similarly to the proof of
+Theorem 2.9. Hence, each ⪰i
+c has an extension (by Theorem 1.5) to a weak
+order ⪰i.
+We claim that the orders ⪰i strongly Nash rationalize c. So, suppose we
+have given S ∈S and s ∈S such that for all i ∈N and all s′
+i ∈Si, (si,s−i) ⪰i
+(s′
+i,s−i). Hence, for all i ∈N and all s′
+i ∈Si, (si,s−i) ⪰c
+i (s′
+i,s−i), so that
+(si,s−i) ∈c
+#
+{si,s′
+i} × 
+j̸=i{sj}
+$
+. Now, S = 3
+i∈N
+3
+s′
+i∈Si
+#
+{si,s′
+i} × 
+j̸=i{sj}
+$
+, so
+that by persistence under expansion (applied inductively), we have s ∈c(S).
+Conversely, suppose that s ∈c(S). Then it follows by persistence under
+contraction that s ∈c
+#
+{si,s′
+i} × 
+j̸=i{sj}
+$
+for all i and all s′
+i, so that (si,s−i) ⪰c
+i
+(s′
+i,s−i), or (si,s−i) ⪰i (s′
+i,s−i).
+The following result characterizes weak rationalizability by strict preference
+relations. We omit its proof, which is simple.
+Theorem 10.2
+A joint choice function c is weakly rationalizable by strict
+preference relations iff for all S ∈S, all s ∈c(S), all i ∈N, and all s′
+i ∈Si,
+c
+#
+{s′
+i,si} × 
+j̸=i{sj}
+$
+= {s}.
+The notion of Nash rationalizability is based on individual agents’ incentives to
+choose strategies. We can instead consider what the group of agents N would
+jointly decide to do. One natural property is that the chosen strategy proﬁles
+should not be dominated: A joint choice function c is Pareto rationalizable by
+preference relations iff there are preference relations ⪰i on 
+i∈N ¯Si such that
+for all S ∈S, s ∈c(S) iff there is no s′ ∈S for which s′ ⪰i s for all i, with at least
+one preference strict. Say it is team rationalizable if there exists a preference
+⪰over 
+i∈N ¯Si such that for all S ∈S, c(S) is the set of ⪰-maximal elements
+of S.
+Theorem 10.3
+Suppose a joint choice function c satisﬁes |c(S)| = 1 for all
+S ∈S. Then c is Pareto rationalizable iff it is team rationalizable.
+Proof. If c is team rationalizable, it is clearly Pareto rationalizable. Conversely,
+suppose c is Pareto rationalizable, and let {⪰i}i∈N be the rationalizing relations.
+Deﬁne s ⪰∗s′ if it is not the case that s ⪰i s′ for all i ∈N with at least one
+
+
+--- Page 4 ---
+146
+Game Theory
+preference strict. Clearly then, s ≻∗s′ iff s ⪰i s′ for all i ∈N and there is j ∈N
+for which s ≻j s′. Hence, ⪰∗is quasitransitive. By deﬁnition, for every S, c(S)
+coincides with the ⪰∗maximal elements of S. The result now follows from
+Proposition 2.7.
+In fact, Theorem 10.3 does not rely on the product structure of S and could be
+proved more generally.
+The following theorem establishes that the implications of Nash rationaliz-
+ability are stronger than those of Pareto rationalizability. We omit its proof,
+which is technical.
+Theorem 10.4
+Suppose that |N| = 2, and that a joint choice function c
+satisﬁes |c(S)| = 1 for all S ∈S. Then if c is Nash rationalizable, it is Pareto
+rationalizable.
+10.1.2
+Choice from a subset of game forms
+We now discuss results in the revealed preference approach to game theory
+when not all possible game forms in S are observable.
+We will say a collection  ⊆S is line-closed if for all S ∈, all s ∈S,
+and all i ∈N, Si × 
+i̸=j∈N{sj} ∈. Line-closedness is enough to allow us to
+generate a meaningful revealed preference relation. A joint choice function can
+now be deﬁned on , and it is meaningful to discuss strong rationalizability
+by preferences.
+The following idea is due to Galambos. We deﬁne the following revealed
+preference pair. Deﬁne ⪰c
+i by s ⪰c
+i s′ if for all j ̸= i, sj = s′
+j, and there exists
+S ∈ for which s,s′ ∈S and s ∈c(S). We say a joint choice function c deﬁned
+on  satisﬁes N-congruence if for all i ∈N and all S, if for s ∈S we have
+s
+
+⪰c
+i
+T (s′
+i,s−i) for all i and all s′
+i ∈Si, then s ∈c(S).2
+Theorem 10.5
+Suppose that  is a line-closed domain. Then a joint
+choice function is strongly rationalizable by preference relations iff it satisﬁes
+N-congruence.
+Proof. Suppose a joint choice function is strongly Nash rationalizable by weak
+orders ⪰i. Clearly,
+
+⪰c
+i
+T ⊆⪰i. Consequently, if s ∈S satisﬁes s
+
+⪰c
+i
+T (s′
+i,s−i)
+for all s′
+i ∈Si, it follows that s ⪰i (s′
+i,s−i) for all s′
+i ∈Si, so that s ∈c(S), since
+the {⪰i}i∈N strongly Nash rationalize c.
+Conversely, suppose that choice function c satisﬁes N-congruence. If we
+deﬁne ≻c
+i by (si,s−i) ≻c
+i (s′
+i,s−i) if there exists S for which s,(s′
+i,s−i) ∈S and s ∈
+c(S) but (s′
+i,s−i) ̸∈c(S), then by N-congruence, order pair ⟨⪰c
+i ,≻c
+i ⟩is acyclic, so
+that by Theorem 1.5, there is a weak order ⪰i for which ⪰c
+i ⊆⪰i and ≻c
+i ⊆≻i.
+We claim that the {⪰i}i∈N strongly Nash rationalize c. Suppose that s ∈c(S).
+We claim that for all i and all s′
+i ∈Si, (si,s−i) ⪰i (s′
+i,s−i). This follows as
+2 Recall that for a binary relation ⪰, ⪰T denotes the transitive closure.
+
+
+--- Page 5 ---
+10.2 Bayesian Nash equilibrium
+147
+(si,s−i) ⪰c
+i (s′
+i,s−i) and ⪰c
+i ⊆⪰i. On the other hand, suppose that s ∈S satisﬁes
+(si,s−i) ⪰i (s′
+i,s−i) for all i and all s′
+i ∈Si. We claim that s ∈c(S). Since 
+is line-closed, it follows that Si × 
+j̸=i{sj} ∈. Then s ∈c
+#
+Si × 
+j̸=i{sj}
+$
+.
+Otherwise, since c is nonempty-valued, there exists s′
+i ∈Si for which (s′
+i,s−i) ∈
+#
+Si × 
+j̸=i{sj}
+$
+, from which it follows that (s′
+i,s−i) ≻c
+i s, contradicting the
+deﬁnition of ⪰i. Consequently, we know that s ⪰c
+i (s′
+i,s−i) for all i ∈N, so
+that by N-congruence, s ∈c(S).
+10.1.3
+Zero-sum games
+The preceding results impose no structure on the rationalizing games, but one
+may want to investigate the joint implications of Nash behavior and some
+properties of the strategic environment. One of the most natural restrictions
+is the property that the game be a zero-sum game. Zero-sum games are the
+subject of intense study in game theory; they also arise naturally if one believes
+that players care about relative, not absolute, payoffs.3
+Fix N = {1,2}. Suppose that  = S again, so that we are given choice from
+all possible game forms. A choice function c is strongly Nash rationalizable by
+a zero-sum game if there is a preference relation ⪰on ¯S1 × ¯S2 such that, for all
+S ∈S, c(S) is the set of Nash equilibria of ({1,2},(S1,⪰|S),(S2,⪯|S)); where
+we denote by ⪯the dual binary relation deﬁned from ⪰, i.e. x ⪯y iff y ⪰x.
+It turns out that to characterize strong zero-sum rationalizability, all we need
+is one additional restriction on c. Say that c is interchangeable if, for all S ∈S,
+and all s,s′ ∈c(S), {s} ∨{s′} ⊆c(S). Our next result is due to SangMok Lee.
+Theorem 10.6
+A choice function is strongly Nash rationalizable by a
+zero-sum game iff it satisﬁes persistence under expansion, persistence under
+contraction, and it is interchangeable.
+We omit the proof of Theorem 10.6, which is somewhat technical.
+10.2
+BAYESIAN NASH EQUILIBRIUM
+The next class of problems we tackle are motivated by mechanism design.
+Given a function from agents’ types to outcomes, we want to know if the
+function could be an incentive-compatible direct revelation mechanism, for
+some preferences of the agents.
+Formally, let N be a set of agents, and X a ﬁnite set of outcomes. For each
+agent i ∈N, suppose we are given a ﬁnite type space Ti. A direct revelation
+mechanism is a function g : T = 
+i∈N Ti →X. The question we ask here is
+simple. Suppose we observe N, T = 
+i∈N Ti, and g. Can we rationalize g
+as a strongly incentive-compatible direct revelation mechanism for some list
+3 For example, suppose that “material” payoffs are pi and there are two players; i = 1,2. If each
+player i cares about the difference pi −p3−i, then the sum of payoffs will be zero.
+
+
+--- Page 6 ---
+148
+Game Theory
+of preferences? In particular, is it possible that these mappings could be the
+unique Bayesian Nash equilibrium for some preferences in the direct revelation
+game? This answer and its question are due to John Ledyard.
+Formally, let us deﬁne a Bayesian environment to be a pair of functions, one
+for each agent, denoted by ui : X × T →R and pi : Ti →(T−i). The function
+ui is meant to be i’s utility function over outcomes. The function pi gives i’s
+beliefs about other agents’ types.
+Two points are worth mentioning here. First, we allow agent i’s utility
+to depend on the entire proﬁle of types. Second, pi carries each type to a
+probability measure over the others’ types. We denote the probability of type
+proﬁle t−i by pi(t−i|ti). Note, however, that we are not making any common
+prior assumption.
+A Bayesian environment strongly rationalizes direct revelation mechanism
+g if for all ti,t′
+i ∈Ti, if g(t) ̸= g(t′
+i,t−i) for some t−i, then
+
+t−i∈T−i
+ui(g(ti,t−i),t)p(t−i|ti) >
+
+t−i∈T−i
+ui(g(t′
+i,t−i),t)p(t−i|ti).
+(10.1)
+Theorem 10.7
+For any direct revelation mechanism, there exists a Bayesian
+environment strongly rationalizing it.
+Proof. Rewrite Equation (10.1), so that we have:
+
+t−i∈T−i
+
+x∈X
+ui(x,t)p(t−i|ti)1g(ti,t−i)=x >
+
+t−i∈T−i
+
+x∈X
+ui(x,t)p(t−i|ti)1g(t′
+i,t−i)=x;
+equivalently:
+
+t−i∈T−i
+
+x∈X
+ui(x,t)p(t−i|ti)[1g(ti,t−i)=x −1g(t′
+i,t−i)=x] > 0.
+(10.2)
+First, observe that given any ti, we can ﬁnd ui and pi (depending on ti) which
+satisfy equation (10.2) iff there is a function wti : X ×T−i →R such that for all
+t′
+i for which g(ti,t−i) ̸= g(t′
+i,t−i) for some t−i, then
+
+t−i∈T−i
+
+x∈X
+wti(x,t−i)[1g(ti,t−i)=x −1g(t′
+i,t−i)=x] > 0.
+(10.3)
+This follows because it is simple to then ﬁnd ui(x,t) and pi(t−i|ti) for which
+ui(x,t)pi(t−i|ti) = wti(x,t−i) (for example, deﬁne pi(t−i|ti) > 0 arbitrarily so
+that 
+t−i pi(t−i|ti) = 1, and then deﬁne ui(x,t) =
+wti(x,t−i)
+pi(t−i|ti) ). Hence, we turn to
+equation (10.3). For every ti, there is a list of such equations.
+If we can solve the corresponding list of equations for each ti, then we have
+proved that the direct revelation mechanism is strongly rationalizable. So, ﬁx
+ti. For each t′
+i for which there exists t−i such that g(ti,t−i) ̸= g(t′
+i,t−i), there is
+an equation of type (10.3). Denote the set of such t′
+i by T′
+i(ti).
+In equation (10.3), view w as a vector in RX×T−i. The quantities [1g(ti,t−i)=x −
+1g(t′
+i,t−i)=x] play the role of coefﬁcients. Applying Lemma 1.12, if for some ti,
+
+
+--- Page 7 ---
+10.3 Bargaining theory
+149
+a solution to the system described by equation (10.3) does not exist, then there
+exists, for each t′
+i ∈T′
+i(ti), ηt′
+i ≥0, not all of which are zero, such that for all
+t−i,x,
+
+t′
+i∈T′
+i(ti)
+ηt′
+i[1g(ti,t−i)=x −1g(t′
+i,t−i)=x] = 0.
+(10.4)
+By assumption, for any t′′
+i ∈T′
+i(ti), there are t−i and x for which g(ti,t−i) =
+x ̸= g(t′′
+i ,t−i). Pick such t−i and x. Because 1g(ti,t−i)=x = 1, we then have
+that [1g(ti,t−i)=x −1g(t′′
+i ,t−i)=x] = 1, and further, for any t′
+i ∈T′
+i(ti), we have
+[1g(ti,t−i)=x −1g(t′
+i,t−i)=x] ≥0. Hence, equation 10.4 implies ηt′
+i = 0. We conclude
+that η = 0, a contradiction.
+10.3
+BARGAINING THEORY
+We now turn to a formulation of the revealed preference problem for
+bargaining theory. We can work out the empirical consequences of the most
+commonly used cooperative theories of bargaining.
+Suppose n agents bargain over a ﬁxed quantity of a single-dimensional
+resource: think of bargaining over a ﬁxed monetary amount, which needs to
+be allocated among n agents. There is a given disagreement point, a point
+that speciﬁes monetary outcomes for all the agents in the event that there
+is no agreement. We imagine that we observe similar agents bargaining in
+different circumstances, for example workers and ﬁrms in wage bargaining.
+The question is when observed outcomes can be rationalized as consistent with
+standard bargaining theory.
+We shall ﬁrst describe the theories under consideration, then deﬁne the
+kinds of data we might use to test them. Then, we present a result that
+characterizes the observable implications of these theories in the case where
+the disagreement points are ﬁxed and the same for all agents. The surprising
+implication is that all of these theories are observationally equivalent. Each
+theory tries to capture a distinct economic phenomenon or criterion, but they
+turn out to have rather weak empirical consequences, to the point that they are
+all equivalent.
+In fact, we uncover a particularly striking form of observational equivalence.
+We ﬁnd preferences (utility functions) that serve to rationalize the data as
+coming from any of the theories. We might expect that two theories are
+observationally equivalent because a given dataset can be rationalized by
+one theory or by the other, but normally each rationalization will involve
+different values for the unobservable variables in the theories (preferences in
+our case). In the case of bargaining theory, it turns out that we can choose the
+unobservables so that they work for all rationalizations.
+
+
+--- Page 8 ---
+150
+Game Theory
+The model is as follows. We assume some quantity m ∈R+ of money, and a
+vector d = (d1,...,dn) that represents the disagreement point. The set
+B(m,d) = {(x1,...,xn) ∈Rn
++ :
+n
+
+i=1
+xi ≤m and, for all i,xi ≥di}
+is the set of all allocations of m amongst n agents, in which everyone gets at
+least their disagreement outcomes. The set B is therefore a set of feasible and
+“individually rational” allocations.
+A bargaining theory uses information on agents’ preferences to predict
+an outcome in B(m,d). Suppose that each agent i is described by a strictly
+increasing and concave utility function ui : R+ →R. We shall focus on three
+theories: utilitarianism, Nash bargaining, and egalitarianism.
+The utilitarian theory calls for maximizing the sum of agents’ utilities. It
+predicts that m is allocated so as to maximize the sum n
+i=1 ui(xi) over B(m,d).
+In fact, for reasons that will become clear later, we consider a generalization
+of the utilitarian theory, where for some function g : A ⊆R →R, the sum
+n
+i=1 g(ui(xi) −ui(di)) is maximized over B(m,d).
+The Nash bargaining theory predicts a choice in B(m,d) that maximizes
+n
+"
+i=1
+[ui(xi) −ui(di)].
+The expression being maximized is termed the Nash product. Note that the
+Nash bargaining theory is a special case of our generalization of the utilitarian
+theory, letting g = log.
+Finally, the egalitarian (or maxmin) theory says that x ∈B(m,d) should be
+chosen to maximize
+min
+i∈N [ui(xi) −ui(di)].
+We assume a set of K observations of bargaining outcomes. Each outcome
+represents a split of some monetary quantity. We assume that the disagreement
+points are ﬁxed and the same for all agents: we can, for all intents and purposes,
+take the disagreement outcome to be zero for all agents. A dataset is then a
+set D = {xk : k = 1,...,K}. Each observation k speciﬁes an allocation xk =
+(xk
+1,...,xk
+n) ∈Rn
++ of the total amount of money n
+i=1 xk
+i . Let N = {1,...,n}.
+Let g : R+ →R ∪{−∞} be a strictly increasing, smooth, and concave
+function. We say that data {xk}K
+k=1 are g-rationalizable if there exist strictly
+increasing, smooth, and strictly concave functions ui for which ui(0) = 0 and
+u′
+i(0) = ∞(Inada conditions), and for which 
+i∈N g(ui(xk
+i )) ≥
+i∈N g(ui(yi))
+for all allocations (y1,...,yn) ∈B(
+i xk
+i ,0) and k = 1,...,K. The utilitarian and
+Nash models are special cases of g-rationalizability. Note that the assumption
+of rationalizability already reﬂects our assumption that the disagreement point
+is ﬁxed and the same for all agents.
+On the other hand, data {xk}K
+k=1 are maxmin rationalizable if there exist
+strictly increasing and strictly concave ui, normalized so that ui(0) = 0, for
+
+
+--- Page 9 ---
+10.3 Bargaining theory
+151
+which mini∈N ui(xk
+i ) ≥mini∈N ui(yi) for all (y1,...,yn) ∈B(
+i xk
+i ,0) and k =
+1,...,K.
+We say that data {xk}K
+k=1 are comonotonic if for all i,j ∈N and all k,l,
+xk
+i < xl
+i implies xk
+j < xl
+j, and for all i,j ∈N, xk
+i = 0 iff xk
+j = 0. Comonotonicity
+requires that outcomes are perfectly strictly ordinally correlated (when 0 is also
+considered an outcome).
+The following result characterizes the data that are g-rationalizable or
+maxmin rationalizable.
+Theorem 10.8
+Given data {xk}K
+k=1 and a strictly increasing concave g, the
+following are equivalent:
+I) The data are comonotonic.
+II) The data are g-rationalizable.
+III) The data are maxmin rationalizable.
+The proof shows more than is stated here. In the proof we construct
+rationalizing utilities that work for any function g, as well as for the maxmin
+model. The resulting observational equivalence is therefore unusually strong.
+We can ﬁnd unobservable preferences that rationalize the data using any of the
+models under consideration.
+Proof. It follows from the ﬁrst-order conditions that if the data are either
+g-rationalizable or maxmin rationalizable, then they are comonotonic.
+For the other direction, we show something slightly stronger: If the data
+are comonotonic, then there exist strictly concave, continuous, and increasing
+functions ui such that, if ϕ : [0,∞) →R ∪{−∞} is an increasing, symmetric,
+and quasiconcave function, then ϕ(u1(xk
+1),...,un(xk
+n)) ≥ϕ(u1(y1),...,un(yn))
+for all allocations (y1,...,yn) satisfying 
+i∈N xk
+i = 
+i∈N yi.4 As a special case,
+we have ϕ(z1,...,zn) = n
+i=1 g(zi). Note the order of the quantiﬁers used
+above: the same proﬁle of utility functions u1,...,un works across all ϕ.
+To this end, we suppose the data are comonotonic, and ignore replications as
+well as points where every agent consumes 0. Without loss of generality, let us
+suppose that x1
+i < x2
+i < ... < xK
+i for all i ∈N (that this is possible follows from
+comonotonicity). Below we construct a proﬁle of utility functions u1,...,un
+with the property that for all k = 1,...,K, 
+i∈N ui(xk
+i ) is maximal across all
+allocations y1,...,yn for which 
+i∈N xk
+i = 
+i∈N yi, and mini∈N ui(xk
+i ) is also
+maximal across all such allocations; it follows that, since each ui is strictly
+increasing, ui(xk
+i ) = uj(xk
+j ) for all i,j ∈N.
+We ﬁrst argue that such a construction sufﬁces to establish the result: Let ϕ
+be as above, and suppose by way of contradiction that there is a k and a feasible
+allocation (y1,...,yn) for which ϕ(u1(y1),...,un(yn)) > ϕ(u1(xk
+1),...,un(xk
+n)).
+Note then, by symmetry of ϕ, that for any permutation of the agents σ : N →N,
+4 Symmetry means that if σ is a permutation on {1,...,n} then ϕ(xσ(1),...,xσ(n)) =
+ϕ(x1,...,xn). Increasing here means that if xi > yi for all i, then ϕ(x1,...,xn) > ϕ(y1,...,yn).
+
+
+--- Page 10 ---
+152
+Game Theory
+ϕ(uσ(1)(yσ(1)),...,uσ(n)(yσ(n))) = ϕ(u1(y1),...,un(yn)). Quasiconcavity of ϕ
+then implies that
+ϕ
+1
+i∈N
+ui(yi)
+n
+,...,
+
+i∈N
+ui(yi)
+n
+2
+> ϕ(u1(xk
+1),...,un(xk
+n)).
+By the strictly increasing property of ϕ, and using the fact that ui(xk
+i ) = uj(xk
+j )
+for all i,j ∈N, this implies that
+
+i∈N
+ui(yi)
+n
+>
+
+i∈N
+ui(xk
+i )
+n
+,
+contradicting
+
+i∈N
+ui(xk
+i ) ≥
+
+i∈N
+ui(yi)
+for all feasible allocations y1,...,yn.
+We ﬁnish the proof by constructing, for each i, a strictly decreasing,
+continuous, and positive function fi, with the property that if we set ui to be the
+integral of fi, then the proﬁle of utility functions (u1,...,un) works as required
+by the ﬁrst part of the proof.
+We proceed by induction. We ensure that, for each i ∈N and each k, the
+following are true:
+I)
+0 xk
+i
+0 fi(x)dx =
+0 xk
+j
+0 fj(x)dx
+II) fi(xk
+i ) = fj(xk
+j ).
+In the ﬁrst place, for k = 1, we deﬁne for each agent j, fj(0) = +∞. The
+construction is done in a series of steps, labeled (I) to (VI).
+I) For K, deﬁne fi(xK
+i ) = 1 for all i ∈N;
+II) for x > xK
+i , we deﬁne fi(x) to be any strictly decreasing function,
+taking values everywhere less than 1 and making fi continuous.
+III) We proceed by induction. Let k > 1 be arbitrary, and suppose that
+fi(x) has been deﬁned for all x ≥xk
+i . We assume that for all k′ ≥k,
+fi(xk′
+i ) = fj(xk′
+j ) and
+, xK
+i
+xk
+i
+fi(x)dx =
+, xK
+j
+xk
+j
+fj(x)dx for all i,j ∈N.
+Recall that we have x1
+i < x2
+i < ... < xK
+i . We choose a ﬁnite fj(xk−1
+j
+)
+but we must choose it to be sufﬁciently large. Speciﬁcally, let z be
+large enough so that there is ε > 0 for which z(xk
+j −xk−1
+j
+) −ε >
+maxi∈N fi(xk
+i )(xk
+i −xk−1
+i
+) + ε for all j. We can then set fj(xk−1
+j
+) = z for
+all j.
+IV) Observe that, given fj(xk−1
+j
+) and fj(xk
+j ), for any ε > 0 and any
+y ∈
+#
+fj(xk
+j )(xk
+j −xk−1
+j
+) + ε,fj(xk−1
+j
+)(xk
+j −xk−1
+j
+) −ε
+$
+,
+
+
+--- Page 11 ---
+10.4 Stable matching theory
+153
+we may deﬁne fj continuous and decreasing on x ∈(xk−1
+j
+,xk
+j ) so that
+, xk
+j
+xk−1
+j
+fj(x)dx = y.
+This follows as we may choose the integral as close as possible
+to fj(xk−1
+j
+)(xk
+j −xk−1
+j
+) by taking a sequence of decreasing continu-
+ous functions approaching the constant value fj(xk−1
+j
+) pointwise in
+(xk−1
+j
+,xk
+j ); likewise we may choose the integral as close as possible
+to fj(xk
+j )(xk
+j −xk−1
+j
+).
+V) Complete fj(x) on x ∈(xk−1
+j
+,xk
+j ) so that
+, xk
+j
+xk−1
+j
+fj(x)dx
+is equalized across all agents, by picking
+y ∈
+
+i∈N
+
+fi(xk
+i )(xk
+i −xk−1
+i
+) + ε,fi(xk−1
+i
+)(xk
+i −xk−1
+i
+) −ε
+
+and choosing fj(x) on x ∈(xk−1
+j
+,xk
+j ) so that
+, xk
+j
+xk−1
+j
+fj(x)dx = y.
+VI) In the case of k = 1, we must also maintain that
+, x1
+j
+0
+fj(x)dx < +∞.
+The functions fj so constructed satisfy the conditions we ask for: that for all k,
+fj(xk
+j ) is equalized across j, and
+, xk
+j
+0
+fj(x)dx
+is equalized across j. By setting
+uj(x) =
+, x
+0
+fj(x)dx,
+we have the required uj.
+10.4
+STABLE MATCHING THEORY
+We now turn to stable matching theory. Stable matchings ﬁnd very important
+normative applications in economics, but the theory provides a basic predictive
+framework as well. Many markets, such as labor markets and the marriage
+
+
+--- Page 12 ---
+154
+Game Theory
+“market,” have two sets of agents who pair up and who may have preferences
+over who they form a pair with. We describe the basic notion of a stable
+matching, and carry out a simple revealed preference exercise.
+Our version of the model assumes a set M of types of men and a set W of
+types of women. The sets M and W are ﬁnite and disjoint. We assume a number
+Km of men of type m, and Kw of women of type w. The primitives of the model
+are then given by a tuple ⟨M,W,P,K⟩, in which M and W denote sets as before,
+K = (Ki)i∈M∪W is a list of non-negative integers, and P is a preference proﬁle:
+a list of preferences >m for every m ∈M and >w for every w ∈W. Each >m is
+a linear order over W, and each >w is a linear order over M.5
+The standard prediction concept, or theory of which matchings to expect, is
+the notion of stable matching. A matching is an |M| × |W| matrix X = (xm,w)
+such that xm,w ∈Z+, 
+w xm,w = Km for all m, and 
+m xm,w = Kw for all
+w. The number xm,w is the number of men of type m matched to women of
+type w.
+Stability requires the deﬁnition of blocking. A pair (m,w) ∈M × W is a
+blocking pair for X if there are m′ and w′ such that m >w m′, w >m w′, xm,w′ >
+0, and xm′,w > 0. The matching X is stable if there are no blocking pairs for
+X. To keep the presentation simple, we ignore individual rationality and single
+(non-matched) agents.
+A matching X is stable-rationalizable if there exists a preference proﬁle
+P = ((>m)m∈M,(>w)w∈W) such that X is a stable matching in ⟨M,W,P,K⟩.
+A (undirected) graph is a pair G = (V,L), where V is a set and L ⊆V ×V is a
+non-reﬂexive and symmetric binary relation on V. Elements of V are referred
+to as vertices and elements of L as edges. A path in G is a sequence p =
+⟨v0,...,vN⟩such that (vn,vn+1) ∈L for all n ∈{0,...,N −1}. We denote by
+v ∈p that v is a vertex in p. A path ⟨v0,...,vN⟩connects the vertices v0 and vN.
+A path ⟨v0,...,vN⟩is minimal if there is no proper subsequence of ⟨v0,...,vN⟩
+which also connects v0 and vN.
+A cycle in G is a path c = ⟨v0,...,vN⟩with v0 = vN. A cycle is minimal if
+for any two vertices vn and vn′ in c, the paths in c from vn to vn′ and from vn′ to
+vn are distinct and minimal. If c and c′ are two cycles, and there is a path from
+a vertex in c to a vertex in c′, then we say that c and c′ are connected.
+For a matching X, we consider the graph deﬁned by letting the vertices be
+all the nonzero elements of X; and by letting there be an edge between two
+vertices when they lie on the same row or column of X. Formally, to each
+matching X we associate a graph (V,L) deﬁned as follows. The set of vertices V
+is {(m,w) : m ∈M,w ∈W such that xm,w > 0}, and an edge ((m,w),(m′,w′)) ∈L
+is formed for every pair of vertices (m,w) and (m′,w′) with m = m′ or w = w′
+(but not both).
+5 The most basic model assumes that there is only one agent of each type, but the revealed
+preference question is more interesting with many agents of each type.
+
+
+--- Page 13 ---
+10.4 Stable matching theory
+155
+Theorem 10.9
+A matching is stable-rationalizable iff its associated graph
+does not contain two connected distinct minimal cycles.
+We omit the proof of Theorem 10.9, but the intuition behind the necessity
+direction is simple, and worth conveying here. Consider for example the
+matching on the left below:
+11
+9
+10
+0
+22
+41
+13
+91
+0
+11
+9
+10
+0
+22
+41
+13
+91
+0
+The matching has three types of men and three types of women. There are 11
+men of type 1 matched to women of type 1, 9 men of type 1 are matched to
+women of type 2, and so on. The graph associated to this matching contains
+a cycle, shown on the right. In fact, it has more than one cycle, and they are
+connected, but focus now on the cycle depicted.
+If we are to ﬁnd rationalizing preferences, we need to decide how men of
+type 1 rank women of type 1 and 2. Say that women of type 2 are preferred
+to 1; we can denote this preference by orienting the horizontal edge on the
+graph as pointing from 11 to 9. Now consider the preferences of women of
+type 2. Is it possible for them to rank men of type 1 above men of type 3?
+The answer is negative, as there are type 2 women matched to type 3 men, and,
+simultaneously, type 1 men matched to type 2 women. If women of type 3 were
+to prefer type 1 men, then some of the latter would form blocking pairs with
+type 1 men who are matched to type 1 women. Thus the vertical edge from 9
+to 91 must point down, away from the direction of the ﬁrst edge, which points
+from 11 to 9. In fact, the important implication of stability is that for any two
+consecutive edges which form a right angle in the graph, one must be oriented
+to point away from the other.
+The reasoning above extends to the horizontal edge between 91 and 13, and
+then to the vertical edge between 13 and 11. The former must point to the left,
+and the latter must then point up. As a result, a cycle must be oriented as a
+“ﬂow.” If we start, as we did, by having type 1 men prefer type 2 to type 1
+women, then we obtain a clockwise ﬂow. If we instead had started with the
+opposite preference, then we would have obtained a counterclockwise ﬂow.
+Now, we can consider a path leaving the cycle, for example the horizontal
+edge between 11 and 10 in the graph. An orientation of this edge amounts to
+specifying type 1 men’s preferences between women of type 1 and 3. Recall
+that we have oriented the cycle in a clockwise fashion, so that the edge between
+13 and 11 points up. Then the edge leaving the cycle, and going from 11 to 10,
+cannot be oriented to the left. The reason is that we would then have a blocking
+pair using some of the 10 men of type 1 who are matched with women of type
+
+
+--- Page 14 ---
+156
+Game Theory
+3, and some women of type 1 who are matched to men of type 3. The general
+principle is that any path leaving a cycle must point away from the cycle.
+It should now be clear that we cannot have two cycles connected by a
+minimal path. Such a path would have to point away from both cycles. Then
+there would be two consecutive edges on the path, such that each edge point
+to their common vertex. This situation would imply the existence of some
+blocking pair, just as in the examples we discussed above.
+10.5
+CHAPTER REFERENCES
+Persistence under expansion was introduced by Yanovskaya (1980), while
+Theorem 10.1 is a generalization of her result due to Sprumont (2000).
+Persistence under expansion and persistence under contraction are closely
+related to the consistency concepts discussed by Peleg and Tijs (1996).
+Persistence under expansion is clearly related to condition γ from social
+choice theory (see, e.g., Sen, 1971). The ﬁrst part of persistence under
+contraction is similar to condition α for single-agent choice functions, while
+the second part is related to condition β. Theorems 10.2, 10.3, and 10.4 are
+also from Sprumont (2000). Ray and Zhou (2001) establishes related results
+for extensive-form games and subgame perfection. Xu and Zhou (2007),
+Bossert and Sprumont (2013), Rehbeck (2014), and Xiong (2013) study the
+extensive-form question when the game itself is not observable. Instead, the
+primitive is a classical choice function.
+Theorem 10.5 and the notion of N-congruence are due to Galambos (2010).
+Galambos (2010) describes a more sophisticated version of Theorem 10.5
+which appears in his dissertation. It need not rely on the assumption of a
+line-closed domain.
+Theorem 10.6 is due to Lee (2011). Interchangeability is a well-known
+property of the Nash equilibria of zero-sum games. The contribution in Lee’s
+work is to show that it is all that the property of zero-sum adds, from the
+revealed preference perspective.
+Theorem 10.7 is due to Ledyard (1986). More complicated theorems
+appear there, dealing with certain restrictions on the forms of the ui and pi
+functions. For example, he obtains the necessary and sufﬁcient conditions
+required for a direct revelation mechanism to be strongly rationalized by
+a Bayesian environment when the ordinal, but not cardinal, structure of
+each ui is known conditional on each type proﬁle t (as would be the case
+in standard private-valued single-dimensional consumption environments).
+Such characterizations are based on Lemma 1.12. However, a few important
+questions seem to remain unresolved. More importantly, the results described
+here consist of a single observation. It is not terribly surprising that anything is
+rationalizable in this case. For an analogy with choice theory, a choice function
+deﬁned only on one budget is always rationalizable, unless there is sufﬁcient
+structure on the class of rationalizing relations. An interesting idea would be
+
+
+--- Page 15 ---
+10.5 Chapter references
+157
+to understand what happens when multiple observations are possible, possibly
+when some parameters of the environment change, but others remain ﬁxed.
+In fact, a simple method of doing this would be to consider strategy spaces
+Si, one for each agent, and consider Bayesian strategies σi : Ti →Si. It is
+then meaningful to discuss notions of strict Bayesian Nash equilibrium, and
+by varying the spaces of strategies, one may come up with interesting testable
+implications.
+Section 10.3 is based on Chambers and Echenique (2014b). The paper
+includes results for the cases where disagreement points may vary in an
+observable way (when disagreement points are unobservable the theories
+become non-testable). The proof of Theorem 10.8 and the observation that
+the same list of utility functions works to rationalize each environment, taken
+here from Chambers and Echenique (2014b), were suggested to us by an
+anonymous referee. For a continuous version of the problem, see Chiappori,
+Donni, and Komunjer (2012). We discuss other approaches in Chapter 12.
+Theorem 10.9 and the discussion in Section 10.4 is taken from Echenique,
+Lee, Shum, and Yenmez (2013). That paper also includes results on which
+matchings are rationalizable as optimal for one side of the market, and
+rationalizable with transfers. These notions turn out to be observationally
+equivalent: a matching is rationalizable using monetary transfers iff it is
+rationalizable as stable and optimal for one side of the market (men or women).
+We have assumed that observed matches consist of matrices of non-negative
+integers. We can instead suppose that multiple matching among the same
+individuals (or types of individuals) are observed. Then we can insist on
+rationalizing preferences that make all of them stable. This exercise is carried
+out in Echenique (2008). The same problem for a model with transfers is
+worked out in Chambers and Echenique (2014a).

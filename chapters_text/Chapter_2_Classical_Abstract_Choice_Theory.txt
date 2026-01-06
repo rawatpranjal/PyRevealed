@@ -1,0 +1,934 @@
+--- Page 1 ---
+CHAPTER 2
+Classical Abstract Choice Theory
+We start our development of revealed preference theory by discussing
+the abstract model of choice. All revealed preference problems have two
+components: data, and theory. Given a family of possible data, and a particular
+theory, a revealed preference exercise seeks to describe the particular instances
+of data that are compatible with the theory. We shall illustrate the role of each
+component for the case of abstract choice. The data consist of observed choices
+made by an economic agent. A theory describes a criterion, or a mechanism,
+for making choices.
+Given is a set X of objects that can possibly be chosen. In principle, X
+can be anything; we do not place any structure on X. A collection of subsets
+ ⊆2X\{∅} is given, called the budget sets. Budget sets are potential sets of
+elements from which an economic agent might choose. A choice function is a
+mapping c :  →2X\{∅} such that for all B ∈, c(B) ⊆B. Importantly, choice
+from each budget is nonempty.
+For the present chapter, choice functions are going to be our notion of data.
+The interpretation of a choice function c is that we have access to the choices
+made by an individual agent when facing different sets of feasible alternatives.
+A particular choice function, then, embodies multiple observations.
+The main theory is that of the maximization of some binary relation on X.
+The theory postulates that the agent makes choices that are “better” than other
+feasible choices, where the notion of better is captured by a binary relation.
+The theory will be reﬁned by imposing assumptions on the binary relation: for
+example that the relation is a preference relation (i.e. a weak order).
+Given notions of data and theory, the problem is to understand when the
+former are consistent with the latter. We are mainly going to explore two ways
+of formulating this notion of consistency.
+We say that a binary relation ⪰on X strongly rationalizes c if for all B ∈,
+c(B) = {x ∈B : ∀y ∈B,x ⪰y}.
+When there is such a binary relation, we say that c is strongly rationalizable.
+The idea behind strong rationalizability is that c(B) should comprise all of
+the best elements of B according to ⪰.
+
+
+--- Page 2 ---
+16
+Classical Abstract Choice Theory
+In contrast, we may only want to require that c(B) be among the best
+elements in B: Say that a binary relation ⪰on X weakly rationalizes choice
+function c if for all B ∈,
+c(B) ⊆{x ∈B : ∀y ∈B,x ⪰y}.
+A utility function u weakly rationalizes the choice function c if the binary
+relation ⪰deﬁned by x ⪰y ⇔u(x) ≥u(y) weakly rationalizes c.
+Weak rationalizability allows for the existence of feasible alternatives that
+are equally as good as the chosen ones, but that were not observed to be chosen.
+It should be clear from the deﬁnitions that all choice functions are weakly
+rationalizable by the binary relation X × X – meaning the binary relation
+deﬁned by x ⪰y for all x and y (or, in other words, that x ∼y for all x,y ∈X). For
+the exercise to be interesting, one must impose constraints on the rationalizing
+⪰: such constraints can be thought of as a discipline on the revealed preference
+exercise. The need to impose various kinds of discipline shall emerge more
+than once in this book.
+In contrast with weak rationalizability, strong rationalizability does rule
+out some choice functions: There are choice functions that are not strongly
+rationalizable. We say that strong rationalizability is testable, or that it has
+observable implications. Our ﬁrst results, in Section 2.1 to follow, seek to
+describe precisely those choice functions that are strongly rationalizable, and
+to discuss rationalization by binary relations with particular properties.
+2.1
+STRONG RATIONALIZATION
+Given a choice function c, we can deﬁne its revealed preference pair ⟨⪰c,≻c⟩
+by x ⪰c y iff there exists B ∈ such that {x,y} ⊆B and x ∈c(B), and x ≻c y
+iff there exists B ∈ such that {x,y} ⊆B, x ∈c(B), and y ̸∈c(B). The binary
+relations in ⟨⪰c,≻c⟩give rise to the name “revealed preference theory.” The
+idea, of course, is that if an agent’s choices are guided by a preference relation,
+then x ∈c(B) and y ∈B when x is at least as good as y according to the agent’s
+preferences. Thus x ⪰c y captures those binary comparisons which are revealed
+by c to be part of the agent’s preferences.
+It is important to recognize that, in general, ≻c need not be asymmetric, and
+it need not be the strict part of ⪰c. In general, though, ≻c ⊆⪰c. Thus, it is an
+order pair according to our deﬁnition. In fact, the notion of an order pair is
+meant to capture precisely the pairs of orders arising in revealed preference
+theory.
+The theory developed here is based on the revealed preference pair. It
+is, however, important to caution that there may be relevant information
+in a choice function that is not contained in the revealed preference pair.
+The following example presents two choice functions that give rise to the
+same revealed preference pair. The ﬁrst is strongly rationalizable (by a
+quasitransitive relation), while the other is not.
+
+
+--- Page 3 ---
+2.1 Strong rationalization
+17
+Example 2.1
+Let X = {x,y,z,w}. Consider  = {{x,y,z,w},{y,z,w}}. Deﬁne
+a choice function c({x,y,z,w}) = {x,y} and c({y,z,w}) = {y,z}. This choice
+function is rationalizable by the reﬂexive binary relation which ranks x ∼y,
+x ≻z, y ∼z and each of x, y, and z above w. This relation is quasitransitive.
+Now, let ′ = {{x,y},{y,z},{x,z},{x,w},{y,z,w}} where c′({x,y}) = {x,y},
+c′({y,z}) = {y}, c′({x,z}) = {x}, c′({x,w}) = {x}, and c′({y,z,w}) = {y,z}. Note
+this generates exactly the same revealed preference pair as the preceding, but
+c′ is not rationalizable by any relation: The reason is that a rationalizing
+relation would have to have y ≻z (from c′({y,z}) = {y}) and y ∼z (from
+c′({y,z,w}) = {y,z}).
+We begin with a description of strongly rationalizable choice functions. The
+following observation, a direct consequence of the deﬁnition, almost gives us
+our ﬁrst answer.
+Proposition 2.2
+A choice function c is strongly rationalizable iff it is strongly
+rationalizable by ⪰c.
+Proof. Suppose c is strongly rationalizable. Then there exists ⪰which strongly
+rationalizes c. Let B ∈, and let x ∈c(B). By deﬁnition, for all y ∈B, x ⪰c y.
+On the other hand, suppose that x ⪰c y for all y ∈B. For any y ∈B, since x ⪰c y,
+there is By ∈ for which y ∈By and x ∈c(By). Since ⪰strongly rationalizes
+c, we conclude that x ⪰y and thus that for all y ∈B, x ⪰y. Then x ∈c(B) as ⪰
+strongly rationalizes c.
+Given Proposition 2.2, it is easy to formulate a condition that says that
+⪰c rationalizes c. The condition is called the V-axiom: A choice function c
+satisﬁes the V-axiom if for all B ∈ and all x ∈B, if x ⪰c y for all y ∈B, then
+x ∈c(B).
+Theorem 2.3
+A choice function is strongly rationalizable iff it satisﬁes the
+V-axiom.
+Proof. By Proposition 2.2, we need to show that the V-axiom is equivalent to
+strong rationalizability by ⪰c. But that x ∈c(B) and y ∈B implies x ⪰c y is
+just the deﬁnition of ⪰c, so strong rationalizability by ⪰c is the statement that
+x ∈c(B) iff for all y ∈B, x ⪰c y, which is just the V-axiom.
+Many revealed preference exercises boil down to an extension exercise; in
+which, given a revealed preference pair, we seek an order pair extension with
+particular properties. Recall that when we write the order pair ⟨⪰,≻⟩, then ≻
+is the strict part of ⪰. This may not be the case for ⟨⪰c,≻c⟩.
+Theorem 2.4
+A binary relation ⪰strongly rationalizes c if ⟨⪰,≻⟩is an order
+pair extension of ⟨⪰c,≻c⟩.
+Proof. Suppose that ⟨⪰,≻⟩is an order pair extension of ⟨⪰c,≻c⟩. We need to
+show that for all B ∈, x ∈c(B) if and only if x ⪰y for all y ∈B. So suppose
+
+
+--- Page 4 ---
+18
+Classical Abstract Choice Theory
+that x ∈c(B) and y ∈B. Then by deﬁnition, x ⪰c y. Consequently, x ⪰y. Now
+suppose that x ⪰y for all y ∈B. Since c(B) ̸= ∅, if x ̸∈c(B) then there is y ∈B
+for which y ≻c x. Then y ≻x, as ⟨⪰,≻⟩is an order pair extension of ⟨⪰c,≻c⟩,
+which would contradict that x ⪰y for all y ∈B. So x ∈c(B).
+A converse to Theorem 2.4 is available when ⪰is a preference relation:
+Theorem 2.5
+A preference relation ⪰strongly rationalizes c iff ⟨⪰,≻⟩is an
+order pair extension of ⟨⪰c,≻c⟩.
+Proof. Given Theorem 2.4, we shall only prove the necessity of order pair
+extension.
+Suppose that c is strongly rationalizable by some preference relation ⪰. The
+deﬁnition of strong rationalization implies that if x ⪰c y, then x ⪰y. Suppose
+that x ≻c y. Then there is B for which {x,y} ⊆B, x ∈c(B) and y ̸∈c(B). Since
+y ̸∈c(B), completeness of ⪰implies that there is z ∈B with z ≻y. Since x ∈
+c(B), we know x ⪰z. By transitivity of ⪰, x ≻y.
+We now turn to strong rationalization by a preference relation (a weak order).
+The condition should be familiar from our discussion in Chapter 1. Say that
+a choice function c is congruent if ⟨⪰c,≻c⟩is acyclic. Our next result is
+the fundamental characterization of rationalization by a preference relation;
+it follows quite directly from the results we have established in Chapter 1.
+Theorem 2.6
+A choice function is strongly rationalizable by a preference
+relation iff it is congruent.
+Proof. By Theorem 2.5, there is a preference relation ⪰rationalizing c iff
+there is a preference relation ⪰for which ⟨⪰,≻⟩is an order pair extension of
+⟨⪰c,≻c⟩. By Theorem 1.5, this is true iff ⟨⪰c,≻c⟩is acyclic.
+It is frequently convenient to work with single-valued choice functions, choice
+functions such that for every B ∈, c(B) is a singleton. The following result
+says that many natural assumptions one could want to place on such choice
+functions are equivalent: one could say observationally equivalent, in the sense
+that they strongly rationalize the same choice functions.
+Proposition 2.7
+Suppose for all B ∈, B is ﬁnite, and |c(B)| = 1. Then the
+following statements are equivalent:
+I) c is strongly rationalizable by a complete, quasitransitive relation.
+II) c is strongly rationalizable by a preference relation.
+III) c is strongly rationalizable by a strict preference relation.
+IV) ≻c is acyclic.
+Proof. That (III) implies (II) and (II) implies (I) are obvious, the latter because
+a transitive relation is always quasitransitive. We show that (I) implies (III).
+First, note that ⪰c = (≻c ∪=), because c is single-valued. We know that there
+is a complete and quasitransitive ⪰which rationalizes c. We will show that ≻c
+
+
+--- Page 5 ---
+2.1 Strong rationalization
+19
+⊆≻. So suppose that x ≻c y. This means that there is B ∈ for which {x,y} ⊆B,
+x ∈c(B) and y ̸∈c(B). Because y ̸∈c(B) and ⪰is complete, there exists y2 ∈B
+for which y2 ≻y1 = y. If y2 ̸∈c(B), there is y3 ∈B for which y3 ≻y2. We
+can inductively continue this construction, and because ⪰is quasitransitive, ≻
+is acyclic, and B is ﬁnite, there is yk such that yk ≻yk−1 ≻...y1 = y, where
+yk ∈c(B). By quasitransitivity, yk ≻y. But since c(B) is single-valued, yk = x,
+so that x ≻y, which is what we wanted to show.
+Now, we let ⪰∗be a strict preference relation for which x ≻y implies
+x ≻∗y, which exists by Theorem 1.4 (note that (≻∪=) is a partial order by
+quasitransitivity of ⪰). We claim that ⪰∗rationalizes c. So let x ∈c(B), which
+means that for all y ∈B where y ̸= x, x ≻c y, so that x ≻y and ﬁnally x ≻∗y.
+Conversely, suppose that x ⪰∗y for all y ∈B. Then it must be that x ⪰y for
+all y ∈B, as otherwise, there would exist y ∈B for which y ≻x, which would
+imply y ≻∗x. Consequently, as ⪰rationalizes c, we have x ∈c(B).
+Finally, (I) is equivalent to (IV). It is easy to see that if c is single-valued
+and quasitransitive rationalizable, then ≻c is acyclic. Conversely, suppose that
+≻c is acyclic. Since c is single-valued, ⪰c= (≻c ∪=). By Lemma 1.7, there is
+a quasitransitive ⪰for which ⪰c ⊆⪰and ≻c ⊆≻. The result now follows by
+Theorem 2.4.
+2.1.1
+Weak axiom of revealed preference
+Congruence in Theorem 2.6 requires one to rule out cycles of any length (using
+the terminology of Chapter 1). A weaker condition only rules out cycles of
+length two. We say that a choice function satisﬁes the weak axiom of revealed
+preference if whenever x ⪰c y, it is not the case that y ≻c x.1
+While the weak axiom of revealed preference has less bite than congruence,
+its weakness can be compensated for by a condition on , the domain of the
+choice function. Note that the larger is the collection , the more restrictive is
+the weak axiom. So one can make up for the weakness of the weak axiom
+by demanding a large collection . In particular, if  includes all sets of
+cardinality at most three, the weak axiom of revealed preference is equivalent
+to rationalizability by a preference relation.
+The following pair of results gives the implications of the weak axiom
+for choice on arbitrary domains. We then present a result which gives the
+implications of the weak axiom when  is rich, in a sense to be made precise.
+Theorem 2.8
+A choice function c satisﬁes the weak axiom of revealed
+preference iff there exists a complete binary relation ⪰which strongly
+rationalizes c such that ≻extends ≻c (i.e. ≻c ⊆≻).
+1 The weak axiom of revealed preference is an instance of the condition we termed asymmetry
+of an order pair in Chapter 1. Indeed, by Lemma 1.8, the weak axiom of revealed preference is
+the weakest hypothesis that establishes the existence of a complete relation ⪰such that ⟨⪰,≻⟩
+is a order pair extension of ⟨⪰c,≻c⟩.
+
+
+--- Page 6 ---
+20
+Classical Abstract Choice Theory
+Proof. First, let ⪰be a complete rationalizing relation such that ≻extends ≻c.
+Since ⪰strongly rationalizes c, ⪰c ⊆⪰. Therefore, if x ⪰c y and y ≻c x, we
+would have x ⪰y and y ≻x, a contradiction with the deﬁnition of ≻.
+On the other hand, suppose c satisﬁes the weak axiom of revealed
+preference. By Lemma 1.8, there is a complete ⪰for which ⪰c ⊆⪰and
+≻c ⊆≻. By Theorem 2.4, ⪰rationalizes c.
+Theorem 2.9
+Suppose that  contains all sets of cardinality at most three.
+Then c is strongly rationalizable by a preference relation iff it satisﬁes the weak
+axiom of revealed preference.
+Proof. That a choice function rationalizable by a preference relation satisﬁes
+the weak axiom of revealed preference is obvious, as the weak axiom is implied
+by congruence. Conversely, suppose that c satisﬁes the weak axiom of revealed
+preference. By assumption, for all x,y ∈X, {x,y} ∈. Since c({x,y}) ̸= ∅, this
+implies that ⪰c is complete. Next, we claim that it is transitive. For suppose
+that x ⪰c y and y ⪰c z. If either x = y, y = z, or x = z, then it is obvious that
+x ⪰c z. So suppose they are all distinct. To prove x ⪰c z, we will show that x ∈
+c({x,y,z}), for if not, either y ∈c({x,y,z}), in which case y ≻c x (contradicting
+the weak axiom); or y ̸∈c({x,y,z}) and z ∈c({x,y,z}), in which case z ≻c y,
+again contradicting the weak axiom. Thus x ∈c({x,y,z}), so that x ⪰c z, and ⪰c
+is transitive. This shows that ⪰c is a preference relation.
+Finally, ≻c is the strict part of ⪰c. Clearly, x ≻c y implies x ⪰c y, and, by the
+weak axiom, also implies that y ⪰c x is false. Conversely, if x ⪰c y and y ⪰c x is
+false, we know that x = c({x,y}), so that x ≻c y. By Theorem 2.4, c is strongly
+rationalizable by ⪰c.
+Note that, under the hypotheses of Theorem 2.9, the revealed preference
+relation ⪰c strongly rationalizes c (Proposition 2.2). By observing choice
+from all sets of cardinality two, one can identify uniquely the rationalizing
+preference. For all x and y, {x,y} ∈, so c({x,y}) is deﬁned and nonempty. So
+x and y must be ordered by ⪰c.
+There are two conditions that are well known to “decompose” the weak
+axiom of revealed preference. We give them the names ﬁrst used by Sen (1969),
+and we show that they are equivalent to the weak axiom.
+Say that c satisﬁes condition α if, for any B,B′ ∈ where B ⊆B′, c(B′) ∩
+B ⊆c(B). Say that c satisﬁes condition β if for all B,B′ ∈ where B ⊆B′, if
+{x,y} ⊆c(B), then x ∈c(B′) if and only if y ∈c(B′).
+The weak axiom refers implicitly to choice from two sets: the set at which x
+is chosen over y when we say that x ⪰c y, and the set at which y is chosen over
+x when we say that y ≻c x. Conditions α and β talk explicitly about these sets;
+α constrains choice from a smaller set, given what was chosen at a larger set,
+while condition β goes in the opposite direction. The following result explains
+that α and β can be said to decompose the weak axiom.
+
+
+--- Page 7 ---
+2.1 Strong rationalization
+21
+Theorem 2.10
+If a choice function satisﬁes the weak axiom, then it satisﬁes
+conditions α and β. Conversely, suppose that either of the two following
+properties is satisﬁed:
+I)  has the property that whenever B,B′ ∈ have nonempty intersec-
+tion, then B ∩B′ ∈
+II) For all x,y, {x,y} ∈.
+Then if a choice function satisﬁes conditions α and β, it satisﬁes the weak
+axiom.
+Proof. Let c be a choice function with domain . Suppose that c satisﬁes the
+weak axiom. We shall prove that it satisﬁes α and β. Let B,B′ ∈ with B ⊆B′.
+Consider ﬁrst condition α. Suppose that x ∈c(B′) ∩B. Then x ⪰c y for all
+y ∈B′. In particular, x ⪰c y for any y ∈c(B), as B ⊆B′. If x ̸∈c(B), then there
+is z ∈c(B) (which is assumed nonempty), so that z ≻c x, violating the weak
+axiom. Hence x ∈c(B).
+Second, consider condition β. Let {x,y} ⊆c(B) and B ⊆B′. Then x ⪰c y and
+y ⪰c x. Suppose x ∈c(B′). If y ̸∈c(B′), we have y ≻c x, contradicting the weak
+axiom. Hence y ∈c(B′). A symmetric argument establishes that if y ∈c(B′),
+then x ∈c(B′).
+Conversely, suppose c satisﬁes conditions α and β. Suppose, toward a
+contradiction, that there are x and y with x ⪰c y and y ≻c x. There are then
+A,A′ ∈ with {x,y} ⊆A ∩A′, x ∈c(A), y ∈c(A′) and x /∈c(A′). Let B = A ∩A′
+if condition (I) is satisﬁed, and let B = {x,y} if condition (II) is satisﬁed. Then
+by condition α, x ∈c(A) and y ∈c(A′) imply that x,y ∈c(B). Now condition β
+implies that we cannot have y ∈c(A′) and x /∈c(A′). Hence c satisﬁes the weak
+axiom.
+Corollary 2.11
+Suppose that  contains all sets of cardinality at most
+three. Then c is strongly rationalizable by a preference relation iff it satisﬁes
+conditions α and β.
+Proof. Follows from Theorem 2.9 and Theorem 2.10.
+When choice c(B) is a singleton for all B, then condition β has no bite. Our
+next result considers choice functions with singleton values. It explains why
+some authors reserve the phrase “weak axiom of revealed preference” for what
+we have called condition α.
+Theorem 2.12
+Suppose that  has the property that whenever B,B′ ∈ have
+nonempty intersection, then B ∩B′ ∈. Suppose further that for all B ∈,
+|c(B)| = 1. Then c satisﬁes the weak axiom of revealed preference iff it satisﬁes
+condition α.
+Proof. Note that condition β is vacuous under the single-valuedness hypothe-
+sis. The result therefore follows directly from Theorem 2.10.
+
+
+--- Page 8 ---
+22
+Classical Abstract Choice Theory
+2.1.2
+Maximal rationalizability
+Strong rationalizability requires that c(B) consist of the “best” alternatives in B
+for a binary relation. Instead, one can require that c(B) contain all the elements
+of B that cannot be “improved” upon. If the binary relation in question is
+complete, the two approaches will be equivalent. In general, however, they
+differ.
+Say that a binary relation ⪰maximally rationalizes c if
+c(B) = {x ∈B : ∄y ∈B,y ≻x}.
+That is, c(B) corresponds to a set of undominated elements.
+If there exists a binary relation ⪰that maximally rationalizes c, then there
+exists a binary relation ⪰′ which strongly rationalizes c. Namely, x ⪰′ y if y ≻x
+is false.2 When ⪰is complete, it is easy to see that ⪰′ = ⪰.
+The following example shows that there are choice functions that are
+strongly rationalizable but not maximal rationalizable.
+Example 2.13
+Let  = {{x,y},{x,z},{x,y,z}}, and c({x,y}) = {x,y}, c({x,z}) =
+{x,z}, and c({x,y,z}) = {x}. Then this choice function is strongly rationalizable,
+but is not maximal rationalizable. The relation ⪰that strongly rationalizes c
+is given by x ⪰y, y ⪰x, x ⪰z, z ⪰x, x ⪰x, y ⪰y, and z ⪰z. Note that ⪰is not
+complete.
+To see that c is not maximal rationalizable, suppose that ⪰maximally
+rationalizes c. Then because c({x,y,z}) = {x}, it must be that either x ≻y or
+z ≻y. But x ≻y is impossible, as c({x,y}) = {x,y}. On the other hand, suppose
+that z ≻y. Then it follows that x ≻z, or else z ∈c({x,y,z}). But this contradicts
+z ∈c({x,z}).
+2.1.3
+Quasitransitivity
+The previous analysis makes use of the property of transitivity of a preference
+relation. In contrast, a quasitransitive relation presents a challenge. In partic-
+ular, a version of Theorem 2.6 for strong rationalization by a quasitransitive
+relation is not available (see also Theorem 11.2). But one can easily prove a
+similar result in one direction:
+Proposition 2.14
+If ⟨⪰c,≻c⟩is quasi-acyclic, then there is a complete and
+quasitransitive relation strongly rationalizing c.
+Proof. Suppose ⟨⪰c,≻c⟩is quasi-acyclic. By Lemma 1.7, there is a complete
+and quasitransitive relation ⪰for which ⪰c ⊆⪰and ≻c ⊆≻. By Theorem 2.4,
+⪰strongly rationalizes c.
+But quasi-acyclicity of ⟨⪰c,≻c⟩is not necessary for strong rationalization
+by a quasitransitive relation, as shown by our next example.
+2 ⪰′ is then termed the canonical conjugate of ≻(Kim and Richter, 1986). This object appears
+often in revealed preference theory.
+
+
+--- Page 9 ---
+2.2 Satisﬁcing
+23
+Example 2.15
+Suppose X = {x,y,z}, and let  = {{x,y},{y,z},{x,z},{x,y,z}}.
+Deﬁne c({x,y}) = {x,y}, c({y,z}) = {y,z}, c({x,z}) = {x}, and c({x,y,z}) = {x,y}.
+Then c is strongly rationalizable by the relation ⪰given by
+⪰= {(x,y),(y,x),(y,z),(z,y),(x,z),(x,x),(y,y),(z,z)};
+that is, all pairs are indifferent except for x and z. The relation ⪰is
+quasitransitive. However, z ⪰c y and y ≻c z so that ⟨⪰c,≻c⟩is not quasi-acyclic.
+Proposition 2.7 presents a characterization of quasitransitive strong ratio-
+nalization in the case when c is singleton-valued. In general, however, it is
+difﬁcult to ﬁnd a simple characterization of quasitransitive rationalizability.
+The reasoning is simple. When we have a preference relation ⪰strongly
+rationalizing c, we know that if x ∈c(B) and y ∈B, but y ̸∈c(B), then x ≻y. The
+same cannot be said to hold for quasitransitive relations. In fact, suppose that
+⪰is a complete relation on a ﬁnite set X for which ≻is acyclic. A relatively
+easy proposition states that this ⪰is a preference relation iff for all ﬁnite B, if
+y ∈B but y ̸∈c(B), then for all x ∈c(B), x ≻y. On the other hand, it can be
+shown that ⪰is quasitransitive iff for all ﬁnite sets B, if y ∈B and y ̸∈c(B),
+then there exists x ∈c(B), x ≻y.
+2.2
+SATISFICING
+The notion of strong rationalization can be adapted to the study of a theory
+of “bounded rationality,” the theory of satisﬁcing behavior. The theory, which
+was ﬁrst proposed by Herbert Simon, claims that an individual always makes
+choices which are “good enough,” though not necessarily optimal. In our
+context, the assumption is that if an individual chooses an alternative, then
+she also chooses anything which is at least as good.
+We will say that a choice function c is satisﬁcing rationalizable by ⪰if for
+all B ∈ and all x,y ∈B, x ∈c(B) and y ⪰x imply y ∈c(B).
+The following two results characterize various notions of satisﬁcing
+rationalizability. They are essentially extension results, whereby instead of
+searching for ⪰for which ⪰c ⊆⪰and ≻c ⊆≻, we simply require ≻c ⊆≻.
+Theorem 2.16
+The following statements are equivalent:
+I) c is satisﬁcing rationalizable by a strict preference relation.
+II) c satisﬁcing rationalizable by a preference relation.
+III) ≻c is acyclic.
+Proof. First, note that if c is satisﬁcing rationalizable by a strict preference
+relation, then it is obviously satisﬁcing rationalizable by a preference relation.
+Second, we prove that (II) implies (III). So suppose that c is satisﬁcing
+rationalizable by a preference relation ⪰, but suppose that there is a cycle
+x1 ≻c x2 ... ≻c xK ≻c x1. We claim that xi ≻c xi+1 implies that xi ≻xi+1. Note
+that as xi ≻c xi+1, there exists B ∈ for which {xi,xi+1} ⊆B, xi ∈c(B), and
+
+
+--- Page 10 ---
+24
+Classical Abstract Choice Theory
+xi+1 ̸∈c(B). Because ⪰satisﬁcing rationalizes c, it follows that xi ≻xi+1;
+as otherwise, we must have xi+1 ∈c(B). This demonstrates that there is a ≻
+cycle, contradicting the fact that ⪰is a preference relation. This shows that (II)
+implies (III).
+Finally, we show that (III) implies (I). So suppose that ≻c admits no
+cycles. We can consider the transitive closure of the relation {(x,y) : x ≻c y or
+x = y}; denote it by ⪰′. By acyclicity of ≻c, ⪰′ is a partial order. By Szpilrajn’s
+Theorem (Theorem 1.4), it admits an extension to a strict preference relation
+⪰. We claim that ⪰satisﬁcing rationalizes c. To see this, suppose that B ∈,
+x ∈c(B), and y ⪰x. Then it must be the case that y ∈c(B), as otherwise, we
+would have x ≻c y, which would imply x ≻y, a contradiction.
+We say a choice function satisﬁes the weakened weak axiom of revealed
+preference if ≻c is asymmetric. The following theorem states that the
+weakened weak axiom is necessary and sufﬁcient for the existence of a
+complete binary relation ⪰for which ≻c ⊆≻.
+Theorem 2.17
+A choice function is satisﬁcing rationalizable by a complete
+binary relation iff it satisﬁes the weakened weak axiom of revealed preference.
+Proof. First, suppose that c is satisiﬁcing rationalizable by a complete binary
+relation ⪰, and suppose by way of contradiction that there exist x and y for
+which x ≻c y and y ≻c x. Then there exist B,B′ ∈ for which {x,y} ⊆B ∩B′,
+x ∈c(B), y ̸∈c(B), y ∈c(B′), x ̸∈c(B′). As ⪰satisﬁcing rationalizes c, we
+therefore conclude that x ≻y and y ≻x, a contradiction.
+On the other hand, suppose that c satisﬁes the weakened weak axiom of
+revealed preference. We deﬁne x ⪰y when y ≻c x is false. Note that by
+the weakened weak axiom of revealed preference, ⪰is complete. Further, ⪰
+satisﬁcing rationalizes c. To see this, suppose that {x,y} ∈B for some B ∈,
+and that x ∈c(B) and y ⪰x. Then if y ̸∈c(B), we know that x ≻c y. This implies
+that y ≻c x is false (by the weakened weak axiom), so that x ⪰y. And since
+x ≻c y, we know that y ⪰x is false (by deﬁnition of ⪰). We conclude that x ≻y,
+a contradiction.
+Note that there is an obvious parallel between Theorem 2.6 and Theo-
+rem 2.16 on the one hand, and between Theorem 2.8 and Theorem 2.17 on
+the other. However, there is no counterpart of Theorem 2.9 here. For example,
+a choice function c deﬁned on all ﬁnite subsets of {x,y,z} by c({x,y}) = {x},
+c({y,z}) = {y}, c({x,z}) = {z}, c({x,y,z}) = {x,y,z} satisﬁes the weakened
+weak axiom of revealed preference, but there is no transitive relation ⪰that
+satisﬁcing rationalizes c.
+2.3
+WEAK RATIONALIZATION
+The notion of strong rationalization is based on the assumption that c(B) could
+capture all the choices that an agent might potentially make from a set B. In
+
+
+--- Page 11 ---
+2.3 Weak rationalization
+25
+general, though, in an empirical environment, we have no reason to expect that
+we will be able to observe such an object. What we usually observe is a choice
+that an agent makes; but this does not preclude the possibility of other choices
+being reasonable for that agent. The notion of weak rationalization is intended
+to capture this idea.
+The following theorem is an analogue to Theorem 2.5. However, it does
+not require the hypothesis that ⪰be a preference relation. Thus, in general,
+the property of being weakly rationalizable by a relation ⪰is completely
+characterized by the revealed preference pair.
+Theorem 2.18
+A binary relation ⪰weakly rationalizes c iff the revealed
+preference pair ⟨⪰c,≻c⟩satisﬁes ⪰c ⊆⪰.
+Proof. Suppose c is weakly rationalizable by some ⪰. Note that if x ⪰c y, then
+by deﬁnition, x ⪰y. So ⪰c ⊆⪰.
+On the other hand, suppose that the revealed preference pair ⟨⪰c,≻c⟩
+satisﬁes ⪰c ⊆⪰. Then we claim that ⪰weakly rationalizes c. We need to show
+that for all B ∈, x ∈c(B) implies x ⪰y for all y ∈B. So suppose that x ∈c(B).
+Then by deﬁnition, x ⪰c y. Consequently, x ⪰y.
+Weak rationalization is trivial if we place no restrictions on the order which
+can weakly rationalize a choice function. This is because complete indifference
+weakly rationalizes anything. To this end, we will study rationalization by
+preference relations which have monotonicity properties. Monotonicity will
+be a discipline imposed on the revealed preference exercise.
+Let ⟨≥,>⟩be an acyclic order pair. Say that a binary relation ⪰is monotonic
+with respect to ⟨≥,>⟩if ⟨⪰,≻⟩is an order pair extension of ⟨≥,>⟩. The
+meaning of ⟨≥,>⟩is that ≥and > reﬂect some observable characteristics of
+the alternatives under consideration, and that we can require the unobservable
+rationalizing relations to somehow conform to ≥and >.
+The order pair ⟨≥,>⟩suggests a structure on budget sets. Say that B ⊆X is
+comprehensive with respect to order pair ⟨≥,>⟩if whenever x ∈B and x ≥y,
+y ∈B. The notion of a comprehensive budget is natural when budgets are
+deﬁned to be a set of objects that are “affordable.” Suppose that B is deﬁned by
+some notion of what the agent can purchase, like a budget deﬁned from prices
+and income (see Chapter 3). Then, if x ∈B because the cost of purchasing x
+is below the agent’s income, and x ≥y implies that the cost of purchasing y
+cannot exceed that of purchasing x, then of course we have that y ∈B.
+For a ﬁxed ⟨≥,>⟩, deﬁne the order pair ⟨⪰R,≻R⟩by x ⪰R y if x ⪰c y and
+deﬁne x ≻R y if there exists B ∈ and z ∈B where {x,y,z} ⊆B, x ∈c(B) and
+z > y.
+The following theorem shows that the order pair ⟨⪰R,≻R⟩is the proper tool
+for studying rationalization by a preference relation which is monotonic with
+respect to ⟨≥,>⟩. We say that a choice function satisﬁes the generalized axiom
+of revealed preference if the order pair ⟨⪰R,≻R⟩is acyclic. Theorem 2.19 is
+relevant to the issues we shall study in Chapter 3.
+
+
+--- Page 12 ---
+26
+Classical Abstract Choice Theory
+Theorem 2.19
+Suppose that the acyclic order pair ⟨≥,>⟩satisﬁes x > y ≥z
+implies x > z, and that all B ∈ are comprehensive. Then there exists a
+preference relation which is monotonic with respect to order pair ⟨≥,>⟩and
+which weakly rationalizes c iff ⟨⪰R,≻R⟩satisﬁes the generalized axiom of
+revealed preference. In addition, if there is a countable set Y = {y1,y2,...}
+such that for all x,z satisfying x > z, there is k such that x > yk > z, then the
+preference relation can be chosen to have a utility representation.
+Proof. Suppose preference relation ⪰is monotonic with respect to ⟨≥,>⟩and
+weakly rationalizes c. Suppose by way of contradiction that ⟨⪰R,≻R⟩is not an
+acyclic order pair. If it is not acyclic, there is x1,...,xL for which x1 ⪰R x2 ... ⪰R
+xL and xL ≻R x1. Since xL ≻R x1, there is z for which xL ⪰R z and z > x1. Since
+⪰weakly rationalizes c, we have x1 ⪰... ⪰xL ⪰z, and by monotonicity, we
+have z ≻x1, a contradiction to the fact that ⪰is a preference relation.
+Conversely, suppose that ⟨⪰R,≻R⟩is an acyclic order pair. We shall
+demonstrate that ⟨⪰R ∪≥,>⟩is also an acyclic order pair.3 It will therefore
+follow by Theorem 1.5 that there is a preference relation ⪰for which ⪰R ⊆⪰,
+≥⊆⪰, and >⊆≻. As a consequence, ⪰will be monotonic with respect to
+⟨≥,>⟩, and by Theorem 2.18, ⪰will weakly rationalize c (since ⪰R = ⪰c). So,
+suppose for a contradiction that ⟨⪰R ∪≥,>⟩is not an acyclic order pair. The
+key observations here are that for all x,y,z ∈X:
+• x ⪰R y ≥z implies x ⪰R z
+• x ⪰R y > z implies x ≻R z
+• x ≻R y ≥z implies x ≻R z
+Indeed, the ﬁrst implication follows because if x ⪰R y, there exists B ∈ for
+which {x,y} ⊆B and x ∈c(B). But if y ∈B, by comprehensivity, z ∈B as well, so
+that x ⪰R z. The second implication follows by deﬁnition. The third implication
+follows since, if x ≻R y, then there exist B ∈ and w ∈B for which x ∈c(B)
+and w > y. As B is comprehensive and y ≥z, z ∈B. Further, as w > y ≥z, we
+have by assumption that w > z. Consequently x ≻R z.
+Since ⟨⪰R ∪≥,>⟩is not acyclic, there is a ⟨⪰R ∪≥,>⟩-cycle. For simplicity,
+let Q =
+
+⪰R ∪≥
+
+. Let x1 Q ... Q xL > x1 be a ⟨⪰R ∪≥,>⟩-cycle, where L ≥2.
+By the preceding observations, we can, without loss of generality, assume that
+this cycle takes the form
+x1 ≥x2 ≥... ≥xK ⪰R ... ⪰R xL > x1
+(2.1)
+by converting all relations of the form xi ⪰R xi+1 ≥xi+2 to xi ⪰R xi+2.
+If K ̸= L, then we have xL−1 ⪰R xL > x1. Here, the second observation
+implies that xL−1 ≻R x1. But x1 ≥... ≥xK, so by repeatedly applying the third
+observation, we would have xL−1 ≻R xK. But then xK ⪰R ... ⪰R xL−1 ≻R xK,
+contradicting acyclicity of ⟨⪰R,≻R⟩.
+3 For future reference, note that this also implies that ⟨⪰R ∪≥,≻R ∪>⟩is an acyclic order pair.
+
+
+--- Page 13 ---
+2.3 Weak rationalization
+27
+On the other hand, if K = L, then the cycle in equation (2.1) is a ⟨≥,>⟩
+cycle, contradicting the acyclicity of ⟨≥,>⟩. We have therefore established
+that ⟨⪰R ∪≥,>⟩is acyclic.
+To see the statement about the utility representation, let S =
+
+⪰R ∪≥
+
+, and
+let T =
+
+≻R ∪>
+
+. Deﬁne the relation U by x U y if there are x1,...,xk with
+x = x1 V ... V xk = y, where each V ∈{S,T}, and at least one instance coincides
+with T. Note that U is transitive. Deﬁne u(x) = 
+{k:xUyk} 2−k.
+First, we claim that u represents ⪰which weakly rationalizes c. Thus,
+suppose that x ∈c(B), and that y ∈B. Now, if y U yk, then we have x ⪰R y U yk,
+whereby x U yk, so that u(x) ≥u(y). Second, we claim that ⪰is also monotonic
+with respect to ⟨≥,>⟩. Thus, suppose x ≥y. Again, if y U yk, then by deﬁnition
+x ≥y U yk, so that x U yk. Hence u(x) ≥u(y). Now, suppose that x > y. Then
+there is yk for which x > yk > y. We claim that y U yk is false (obviously x U yk).
+So, suppose by way of contradiction that y U yk holds, so that y U yk > y.
+This implies the existence of a ⟨⪰R ∪≥,>⟩cycle, which we previously
+demonstrated to be impossible.
+If one is willing to sacriﬁce the transitivity of indifference, nearly any choice
+function becomes weakly rationalizable by a monotonic binary relation. As we
+shall see, the relevant property of c is that for all x, x ≻R x is false. In fact,
+any choice function satisfying this property can be rationalized by the relation
+deﬁned as x ⪰y if y > x is false. Let us denote this relation as >−1.
+Proposition 2.20
+Suppose ⟨≥,>⟩is an acyclic order pair for which x > y ≥
+z implies x > z. Then >−1 is complete, quasitransitive, and monotonic with
+respect to ⟨≥,>⟩.
+Proof. To show that >−1 is complete, suppose that it is not. Then there are
+x,y for which x > y and y > x. But this contradicts the acyclicity of order
+pair ⟨≥,>⟩(as >⊆≥). Further, >−1 is quasitransitive. Suppose x >−1 y and
+y >−1 z, but that y >−1 x and z >−1 y are false. It follows that x > y and y > z
+must be true. As a consequence of our assumption that x > y ≥z implies x > z,
+this implies that x > z, which implies by acyclicity that x >−1 z, and of course
+z >−1 x is false. It is clear by acyclicity that >−1 is monotonic with respect to
+⟨≥,>⟩.
+Theorem 2.21
+Suppose that the acyclic order pair ⟨≥,>⟩satisﬁes x > y ≥z
+implies x > z, and that all B ∈ are comprehensive. Then the following
+statements are equivalent:
+I) There exists a complete binary relation which is monotonic with
+respect to order pair ⟨≥,>⟩and which weakly rationalizes c.
+II) For all x, x ≻R x is false.
+III) >−1 weakly rationalizes c.
+Proof. First, we show that (I) implies (II). So suppose that there is a complete
+order monotonic with respect to order pair ⟨≥,>⟩and weakly rationalizing c.
+
+
+--- Page 14 ---
+28
+Classical Abstract Choice Theory
+We claim that for all x, x ≻R x is false. Suppose by way of contradiction that
+there exists x for which x ≻R x. Then by deﬁnition there exists B ∈ and y ∈B
+for which x ∈c(B) and y > x. But since y > x and ⪰is monotonic with respect
+to order pair ⟨≥,>⟩, it follows that y ≻x. This implies that x ̸∈c(B), as ⪰
+weakly rationalizes c, a contradiction.
+To see that (II) implies (III), we need to show that >−1 weakly rationalizes
+c; suppose that x ∈c(B). Suppose by way of contradiction that there is y ∈B
+such that y >−1 x and x >−1 y is false. Then it follows that y > x. But since
+x ∈c(B), y ∈B, and y > x, it follows that x ≻R x, a contradiction.
+Finally, that (III) implies (I) is obvious.
+The theorem demonstrates that the only empirical content of quasitransitive
+choice is that for all B, if x ∈c(B), then x lies on the “boundary” of B.
+The equivalence of (I) and (III) establishes that, amongst binary relations
+monotonic with respect to ⟨≥,>⟩, the assumption of quasitransitivity adds
+no additional empirical content to the hypothesis of weak rationalization by a
+complete binary relation. This stands in strong contrast to weak rationalization
+by a preference relation.
+2.4
+SUBRATIONALIZABILITY
+A dual notion to the notion of weak rationalizability is what we will call
+subrationalizability. We will say that a choice function c is subrationalizable
+by ⪰if for all B ∈,
+∅̸= {x ∈B : x ⪰y for all y ∈B} ⊆c(B).
+Thus, a subrationalizable choice function admits all dominant elements of
+⪰, but may admit other alternatives. We might be interested in such a condition
+in an environment where an individual potentially makes mistakes.
+Fishburn introduces the following notions. For a ﬁnite collection ′ ⊆,
+we deﬁne
+C(′) =
+
+x ∈
+
+B∈′
+B : For all B ∈′,x ∈B ⇒x ∈c(B)
+
+.
+That is, C(′) is the set of all alternatives that are always chosen from ′
+when they are available. We will say that choice function c satisﬁes partial
+congruence if for all ′ ⊆ where 0 < |′| < +∞, C(′) ̸= ∅.
+As its name suggests, partial congruence is weaker than congruence.
+Proposition 2.22
+If c satisﬁes congruence, then it satisﬁes partial congru-
+ence.
+Proof. Suppose c violates partial congruence, and let ′ ⊆ for which
+0 < |′| < +∞and C(′) = ∅. Now, for each x ∈
+B∈′ c(B), there is
+y ∈
+B∈′ c(B) for which y ≻c x. Pick an arbitrary x ∈
+B∈′ c(B), and label
+
+
+--- Page 15 ---
+2.4 Subrationalizability
+29
+this x1. For each xi, ﬁnd xi+1 ∈
+B∈′ c(B) for which xi+1 ≻c xi. Since |′| < ∞,
+eventually there will be i > j for which there is B ∈′ so that {xi,xj} ⊆c(B).
+Observe that xi ≻c ... ≻c xj, and xj ⪰c xi, contradicting congruence.
+The following result characterizes subrationalizability by preference rela-
+tions.
+Theorem 2.23
+Suppose a choice function has the property that |c(B)| < +∞
+for all B ∈. Then the following are equivalent:
+I) c is subrationalizable by a preference relation.
+II) c is subrationalizable by a strict preference relation.
+III) c satisﬁes partial congruence.
+The requirement that |c(B)| < +∞for all B ∈ is necessary to
+complete a critical induction step in the proof. The general characterization
+of subrationalizable choice functions remains open. The condition of partial
+congruence may be problematic from a falsiﬁability perspective. The reason
+is that if 
+E∈′ E is an inﬁnite set, the statement that there exists x ∈C(′)
+is existential. This means that it postulates the existence of a certain object. If
+our process of scientiﬁc observation consists of observing chosen elements of
+choice sets one by one, and if we suppose that we can only observe ﬁnite data,
+we can never falsify the hypothesis that such an element exists.
+Proof. To see that (I) implies (II), suppose that c is subrationalizable by a
+preference relation. One simply needs to “break ties.” To see this, suppose that
+⪰is a preference relation subrationalizing c. Let ≥be a well-ordering of X.4
+We deﬁne ⪰′ by x ⪰′ y if x ≻y or x ∼y and y ≥x. First, for every B ∈, there
+exists a ⪰′-maximal element. To see this, consider the collection of ⪰-maximal
+elements, and pick the ≥-minimal element (this necessarily exists because ≥is
+a well-ordering). Then this element is clearly ⪰′-maximal. And further, every
+⪰′-maximal element of B is also ⪰-maximal. So ⪰′ subrationalizes c, and is a
+strict preference relation.
+To see that (II) implies (III), suppose c is subrationalizable by a strict
+preference relation ⪰. We need to show that it satisﬁes partial congruence.
+To this end, let ′ ⊆ be a ﬁnite subcollection of budgets. Then for each
+B ∈′, there exists a unique maximal element x(B) ∈B according to ⪰. By
+letting x∗be the maximal element of {x(B) : B ∈′} (this exists as ′ is a ﬁnite
+collection), we see that x∗∈C(′).
+To see that (III) implies (I), suppose that c satisﬁes partial congruence. We
+add to  all singleton and binary sets which are not originally present, and
+extend c to these sets by c({x,y}) = {x,y}. This new choice function is also
+clearly partially congruent, and we will show that it is subrationalizable (this
+4 A well-ordering of a set X is a strict preference relation for which every nonempty subset of X
+has a minimal element. Existence of well-orderings is guaranteed by the axiom of choice.
+
+
+--- Page 16 ---
+30
+Classical Abstract Choice Theory
+will establish that c is subrationalizable). So, without loss, we can assume that
+ includes all binary sets.
+Now, let E be the collection of ﬁnite subsets of . For a partial order ⪰and
+′ ∈E, we deﬁne C(′,⪰) = {x ∈
+E∈′ E : ∄y ∈
+E∈′ E,y ≻x}. That is,
+C(′,⪰) are the ⪰-maximal elements of 
+E∈′ E.
+We consider the collection R of all partial orders ⪰on X such that for all
+′ ∈E, C(′,⪰) ∩C(′) ̸= ∅. We know that R is nonempty, as the relation
+ = {(x,x) : x ∈X} satisﬁes  ∈R. We will show that R contains at least one
+strict preference relation ⪰; this will be enough to complete the proof. To see
+why, note that if ′ ∈E is ′ = {B}, C(′,⪰) is just the ⪰-maximal element
+of B. And C(′) = c(B), so that we conclude that the ⪰-maximal element of B
+is an element of c(B).
+So, we order R by set inclusion. For any chain {⪰λ}λ∈ ⊆R, we claim that
+⪰′=
+
+λ∈ ⪰λ
+
+∈R. We will thus be able to use Zorn’s Lemma to establish
+the existence of a maximal element. First, it is easy to verify that ⪰′ is a partial
+order; we will skip the details. We need to show that ⪰′ satisﬁes C(′,⪰′) ∩
+C(′) ̸= ∅for all ′ ∈E. For a contradiction, suppose that there exists some
+′ ∈E for which C(′,⪰′) ∩C(′) = ∅. In particular, this implies that for
+every x ∈C(′), there exists y ∈
+B∈′ B for which y ≻′ x. Now, note that as
+c(E) is ﬁnite for each E ∈, this necessarily implies that C(′) is also ﬁnite
+(since ′ is ﬁnite). This in particular implies that there exists ⪰λ such that for
+each x ∈C(′), there exists y ∈
+B∈′ B for which y ≻λ x. But this contradicts
+the fact that ⪰λ∈R. We conclude by Zorn’s Lemma that there exists a maximal
+⪰∗∈R. Our only task now is to show that ⪰∗is complete.
+Now, suppose conversely that ⪰∗is not complete. Then there exist x′,y′ ∈X
+for which x′ and y′ remain unranked according to ⪰∗. Recall from Chapter 1
+that T denotes transitive closure. We consider two possible extensions of ⪰∗:
+⪰1=
+
+⪰∗∪{(x′,y′)}
+T, and ⪰2=
+
+⪰∗∪{(y′,x′)}
+T. The two differ in how they
+rank x′ and y′. It is easy to verify that x ⪰1 y if x ⪰∗y or x ⪰∗x′ and y′ ⪰∗y,
+and that x ⪰2 y if x ⪰∗y or x ⪰∗y′ and x′ ⪰∗y.
+Because ⪰∗is maximal and each of ⪰1 and ⪰2 are partial orders
+(antisymmetry can be proved by supposing it to be false and establishing a
+contradiction that x′ and y′ were ranked according to ⪰∗), we conclude that
+there exist 1,2 ∈E for which C(1) ∩C(1,⪰1) = ∅and C(2) ∩C(2,
+⪰2) = ∅.
+This implies that
+w ∈C(1) ∩C(1,⪰∗) ⇒∃x ∈
+
+E∈1
+E such that x ⪰∗x′ and y′ ⪰∗w,
+(2.2)
+and that
+z ∈C(2) ∩C(2,⪰∗) ⇒∃x ∈
+
+E∈2
+E such that x ⪰∗y′ and x′ ⪰∗z.
+(2.3)
+Finally, let ∗= 1 ∪2 ∪{{x′,y′}}. Since  includes all singleton and
+binary sets, ∗∈E, so that C(∗) ∩C(∗,⪰∗) ̸= ∅. So pick b ∈C(∗) ∩
+
+
+--- Page 17 ---
+2.5 Experimental elicitation of choice
+31
+C(∗,⪰∗). We claim that b ∈{x′,y′}. Observe that
+C(∗) ∩C(∗,⪰∗) ⊆
+
+C(1) ∩C(1,⪰∗)
+
+∪
+
+C(2) ∩C(2,⪰∗)
+
+∪{x′,y′}.
+So, suppose that b ∈C(1) ∩C(1,⪰∗). By (2.2), we conclude that b =
+y′—otherwise, (2.2) tells us that y′ ≻∗b (recall ⪰∗is a partial order), so that
+b ̸∈C(∗) ∩C(∗,⪰∗). Analogously, by (2.3), if b ∈C(2) ∩C(2,⪰∗), we
+conclude that b = x′.
+This establishes that b ∈{x′,y′}. So, suppose without loss of generality that
+b = x′. Since C(1)∩C(1,⪰∗) ̸= ∅, we can conclude by (2.2) that there exists
+z ∈
+E∈1 E such that z ⪰∗x′. But unless we have z = x′, it would follow that
+x′ ̸∈C(∗,⪰∗), which we know to be false. So we must conclude that x′ = z ∈
+
+E∈1 E. But by deﬁnition of C, this implies that x′ ∈C(1), as x′ ∈C(∗).
+Finally, x′ ∈C(∗,⪰∗) implies x′ ∈C(1,⪰1), as z ≻1 x′ implies z ≻∗x′.
+So we have shown that C(1)∩C(1,⪰1) ̸= ∅, a contradiction. Similarly, if
+we assume that b = y′, we arrive at the conclusion that C(1)∩C(2,⪰2) ̸= ∅.
+As either possibility arrives at a contradiction, we have established that ⪰∗is
+complete, and hence a strict preference relation.
+2.5
+EXPERIMENTAL ELICITATION OF CHOICE
+Until now, we have abstained from assigning any concrete interpretation to the
+notion of a choice function. However, for choice to be an empirical concept, it
+must be observable. There are conceptual and practical issues that arise when
+we operationalize the idea that choice should be observable.
+Imagine a choice-theoretic experiment, the goal of which is to study a
+particular subject’s choice function. In the experiment, the subject may be
+presented with multiple budgets. If the goal of the experiment is to understand
+what the individual would choose from each of the budgets, we run into a
+basic problem. Imagine an individual presented with choices from the two
+budgets: {hat,left shoe}, {jacket,right shoe}. Suppose that, when presented
+with the budget {hat,left shoe}, the choice would be the hat, and when
+presented with the choice {jacket,right shoe}, the choice would be the jacket.
+If presented with both choices simultaneously, it is possible that the subject
+might choose the pair of shoes. The two shoes are complements. The presence
+of complementarities distorts choice.
+There is a classical solution to this problem. The idea is to ask the subject
+to announce which choice she would make from each budget, and then to
+randomly select a budget, paying the subject the announced choice from that
+budget. Suppose  is ﬁnite. Consider a ﬁnite set of states of the world , to
+be realized in the future, and associate each B ∈ with some state ωB ∈. If
+the subject is asked to report a single-valued choice function, and announces
+c, the subject is paid the random variable paying off the single element of c(B)
+in state ωB, which we can also call c with a slight abuse of notation. This
+mechanism is referred to as the random decision selection mechanism.
+
+
+--- Page 18 ---
+32
+Classical Abstract Choice Theory
+Note that under the random decision selection mechanism, the subject’s
+ultimate payoff is an element of X, rather than of X. Thus, what matters
+for her choices is her preference over X, rather than her preference over
+X. We would expect there to be some relation between preferences on X and
+preferences on X. We can say a preference ⪰∗over X is monotonic with
+respect to a preference ⪰over X if whenever f,g ∈X satisfy f(ω) ⪰g(ω) for
+all ω ∈, then f ⪰∗g, with a strict preference if in addition there is ω ∈ for
+which f(ω) ≻g(ω).5 Monotonicity is usually understood as the claim that, if
+the subject is made better off ex-post, regardless of which state obtains, then
+the subject is made better off ex-ante.6
+The punchline is that if ⪰is a complete and transitive relation over X,
+and ⪰∗over X is monotonic with respect to ⪰, then a single-valued choice
+function c ⪰∗dominates all elements of X iff for all B ∈, if c(B) = {y},
+then y ⪰x for all x ∈B. Thus, if we are willing to assume monotonicity, then
+the random decision selection mechanism is a good way of eliciting choice.
+Importantly, monotonicity requires no form of separability (such as Savage’s
+P2 “sure thing” principle), or an expected utility hypothesis.
+2.6
+CHAPTER REFERENCES
+Probably one of the ﬁrst works to mention abstract choice theory is Arrow
+(1951). The theory is mostly a generalization of the classical demand context,
+described in the next section. Uzawa (1956) is one of the ﬁrst papers to study
+the revealed preference approach in an abstract environment, followed shortly
+thereafter by Arrow (1959), to whom Theorem 2.9 is due. Corollary 2.11
+and Theorem 2.12 are due to Sen (1971), while condition α ﬁrst appears
+in Chernoff (1954). Theorem 2.6 is ﬁrst established in full generality in
+the independent works of Richter (1966) and Hansson (1968). The main
+contribution in those papers was to describe restrictions on budget sets; prior
+to this, most works in abstract choice assumed that every ﬁnite set could be a
+potential budget set.
+The term “congruence” is due to Richter. Theorem 2.3 on rationaliz-
+ability is due to Richter (1971). A related result, characterizing maximal
+rationalizability, is provided by Bossert, Sprumont, and Suzumura (2005).
+Theorem 2.8 on the class of choice functions satisfying the weak axiom of
+revealed preference is from Wilson (1970), see also Mariotti (2008). Wilson
+notes the connection between choice functions satisfying the weak axiom and
+those induced as von Neumann–Morgenstern stable sets. See also Plott (1974).
+The characterizations of satisﬁcing rationalizability by preference relation
+5 This assumes no state is null, so that we believe each state might possibly occur; see Chapter 8.
+6 This statement is compelling so long as the ex-post notion of “better off” coincides with the
+ex-ante notion. That is, in evaluating ex-post outcomes, the ex-ante preference ⪰over certain
+prospects is applied. There are classical examples (Diamond, 1967 or Machina, 1989) where
+we would not expect this relationship to hold.
+
+
+--- Page 19 ---
+2.6 Chapter references
+33
+and strict preference relations appear in Aleskerov, Bouyssou, and Monjardet
+(2007) and Tyson (2008). The notion of the weakened weak axiom of revealed
+preference is due to Ehlers and Sprumont (2008), Theorem 2.17 appears there,
+and the concept in that characterization appears in Wilson (1970) as the notion
+of a “Q cut.” Theorem 2.23 is due to Fishburn (1976).
+Theorem 2.19 is related to Afriat’s Theorem, discussed formally in the next
+chapter. A result along the lines of Theorem 2.19 appears in Quah, Nishimura,
+and Ok (2013).
+The theory of satisﬁcing behavior in Section 2.2 was proposed by Simon
+(1955). The observations on the distinction between rationalizability and
+dominant rationalizability are due to Suzumura (1976a). Kim (1987) studies
+generalized transitivity concepts which we have not discussed, all of which
+turn out to be empirically equivalent to the standard concept. Bossert and
+Suzumura (2010) is a detailed work devoted to studying the empirical content
+of many generalized choice models, some of which we describe here.
+A recent literature has used choice as a primitive to study various
+“behavioral” theories. Manzini and Mariotti (2007) consider choice by the
+successive application of different binary relations. Masatlioglu, Nakajima,
+and Ozbay (2012) study attention, and formalize the notion that a decision
+maker may only consider a subset of the available alternatives. Ok, Ortoleva,
+and Riella (2014) develop a model of reference-dependent choice. Green and
+Hojman (2007), de Clippel and Eliaz (2012), Cherepanov, Feddersen, and
+Sandroni (2013), and Ambrus and Rozen (2014) describe models of agents
+with multiple motivations. Finally, we should mention the paper by de Clippel
+and Rozen (2012), which studies some of these behavioral developments under
+the assumption of limited observability that is very relevant to the notion of
+empirical content.
+In a similar spirit, Green and Hojman (2007), Bernheim and Rangel (2007),
+Chambers and Hayashi (2012), and Bernheim and Rangel (2009) use choice
+theory to propose welfare criteria that remain valid when standard revealed
+preference axioms fail.
+The random decision selection mechanism is originally due to Allais
+(1953), and discussed also by Savage (1954) and his “hot man” example. The
+idea is also used in the famous elicitation mechanism of Becker, DeGroot,
+and Marschak (1964). The framework described here is taken from Azrieli,
+Chambers, and Healy (2012).

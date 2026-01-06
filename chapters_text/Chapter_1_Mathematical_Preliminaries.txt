@@ -1,0 +1,689 @@
+--- Page 1 ---
+CHAPTER 1
+Mathematical Preliminaries
+We begin by reviewing basic mathematical facts and notation that we shall use
+repeatedly in the book. The basic results we need relate to binary relations and
+their extensions and representations, and to solutions to systems of inequalities.
+1.1
+BASIC DEFINITIONS AND NOTATIONAL CONVENTIONS
+1.1.1
+Relations
+Let X be a set. An n-ary relation on X is a subset of Xn. A binary relation on
+X is a subset of X × X. When R is a binary relation on X, we write (x,y) ∈R
+as x R y. When R is an n-ary relation, we also write R(x1,...,xn) instead of
+(x1,...,xn) ∈R.
+Given a binary relation R, deﬁne its strict part, or asymmetric part, PR by
+(x,y) ∈PR iff (x,y) ∈R and (y,x) ̸∈R. Deﬁne its symmetric part, or indifference
+relation, IR by (x,y) ∈IR iff (x,y) ∈R and (y,x) ∈R.
+Two elements x,y ∈X are unordered by R if (x,y) /∈R and (y,x) /∈R. Two
+elements are ordered by R when they are not unordered by R. We say that a
+binary relation B is an extension of R if R ⊆B and PR ⊆PB. A binary relation
+B is a strict extension of R if it is an extension, and in addition there is a pair
+that is unordered by R but ordered by B. Finally, a binary relation is complete
+if it leaves no pair of elements unordered. That is, R is complete if for all x and
+y, x R y or y R x (or both).
+The following are standard properties of binary relations. A binary relation
+R is:
+• transitive if, for all x, y, and z, x R y and y R z imply that x R z;
+• quasitransitive if, for all x, y, and z, x PR y and y PR z imply that x PR z;
+• reﬂexive if x R x for all x;
+• irreﬂexive if (x,x) /∈R for all x;
+• symmetric if, for all x and y, (x,y) ∈R implies that (y,x) ∈R;
+• antisymmetric if, for all x and y with x ̸= y, (x,y) ∈R implies that
+(y,x) /∈R.
+Observe that if a binary relation is complete, then it is reﬂexive.
+
+
+--- Page 2 ---
+2
+Mathematical Preliminaries
+The following are types of binary relations: A binary relation is a(n)
+• weak order if it is complete and transitive;
+• linear order if it is complete, transitive, and antisymmetric;
+• equivalence relation if it is reﬂexive, symmetric, and transitive;
+• partial order if it is reﬂexive, transitive, and antisymmetric.
+1.1.2
+Partially ordered sets
+If ≥is a partial order on X, an upper bound on A ⊆X (with respect to ≥) is
+an element x ∈X such that x ≥y for all y ∈A; a lower bound on A ⊆X is an
+element x ∈X such that y ≥x for all y ∈A. A least upper bound on A is an
+upper bound x on A such that if y is an upper bound on A then y ≥x. A greatest
+lower bound on A is a lower bound x on A such that if y is a lower bound on A
+then x ≥y. We write x ∨y, called the join of x and y, for the least upper bound
+on the set {x,y}; and x ∧y, called the meet of x and y, for the greatest lower
+bound on the set {x,y}. A set X, with a partial order ≥on X, is a lattice if, for
+all x and y in X, x ∨y and x ∧y are deﬁned in X with respect to ≥.
+Let X, with the partial order ≥, be a lattice. A function u : X →R is
+supermodular if for all x,y ∈X,
+u(x) + u(y) ≤u(x ∨y) + u(x ∧y),
+and submodular if −u is supermodular.
+If ≥is a partial order on X, a chain is a subset Y ⊆X such that for all x,y ∈Y,
+either x ≥y or y ≥x. The following result, known as Zorn’s Lemma, is one of
+the many equivalents of the axiom of choice in set theory. It allows one to
+extend many induction-style proofs to sets of arbitrary cardinality. We shall
+use it several times.
+Zorn’s Lemma
+Let ≥be a partial order on a set X, and suppose that for
+every chain Y ⊆X there is an upper bound of Y in X (with respect to ≥). Then
+there exists x∗∈X such that, for all x ∈X, x ≥x∗implies x = x∗.
+An element like x∗in the statement of Zorn’s Lemma, with the property that
+x ≥x∗implies x = x∗, is a maximal element for ≥in X.
+1.1.3
+Euclidean spaces
+We use R to denote the real numbers, Q to denote the rational numbers, and
+Z to denote the integers. When X = R, we have the following familiar binary
+relation: > ⊆R2 deﬁned as x > y if there is some z ̸= 0 such that x = y + z2.
+The relation ≥is deﬁned by x ≥y if either x = y or x > y. We often write x > y
+as y < x, and x ≥y as y ≤x. For any x,y ∈R with x < y, the open interval
+{z ∈R : x < z < y} is denoted by (x,y).
+Let X = Rn; xi ∈R is the ith component of the vector x, for i = 1,...,n.
+The inner product of two vectors x and y is x · y = n
+i=1 xiyi. Deﬁne the binary
+
+
+--- Page 3 ---
+1.2 Preference and utility
+3
+relation ≥by x ≥y if xi ≥yi for i = 1,...,n. Deﬁne > and ≫by x > y if x ≥y
+and x ̸= y; and x ≫y if xi > yi for i = 1,...,n. Denote by Rn
++ the set of x ∈Rn
+with x ≥0; and by Rn
+++ the set of x ∈Rn with x ≫0.
+Note that ≥on Rn is a partial order, while ≥on R is a linear order. The set
+Rn with the order ≥is a lattice, and for any x = (xi)n
+i=1 and y = (yi)n
+i=1 we have
+x ∨y = (max{xi,yi})n
+i=1 and x ∧y = (min{xi,yi})n
+i=1.
+The usual (Euclidean) norm on Rn is ∥x∥=
+n
+i=1 x2
+i . The interior of a set
+A ⊆Rn is the set of x ∈A for which there is ε > 0 such that if ∥x−y∥< ε then
+y ∈A. The interior of A is denoted by int A. We say that x is interior to A if
+x ∈int A.
+We use standard notational conventions for functions and correspondences.
+Let X and Y be sets. We denote by u : X →Y a function with domain X
+and range a subset of Y. A correspondence is a function ϕ : X →2Y, which
+we denote by ϕ : X ⇒Y. When X ⊆Rn, Y = R, x ∈X, and u : X →Y
+is differentiable (the deﬁnition of which is omitted), then ∇u(x) denotes the
+gradient of u at x.
+We use 1 to denote an indicator function: for E ⊆X, 1E : X →R is the
+function 1E(x) = 1 if x ∈E and 1E(x) = 0 if x /∈E; 1x denotes 1{x}.
+The notation for indicator functions is also used as an indicator vector.
+When E ⊆{1,...,n}, 1E is the vector in Rn that has a 1 in the ith component if
+i ∈E, and has a 0 in the ith component if i /∈E. The vector 1i is called the ith
+unit vector. Finally, we write 1 for 1{1,...,n}, the vector all of whose components
+are 1.
+1.2
+PREFERENCE AND UTILITY
+A (rational) preference relation on X is a binary relation ⪰⊆X × X that is
+a weak order. A preference relation that is a linear order is called a strict
+preference or a strict preference relation.
+When we use the ⪰notation for a binary relation, we write ≻for P⪰, its
+strict part, and ∼for its symmetric part I⪰. Note that when ⪰is a preference
+relation then ≻is asymmetric and transitive, while ∼is an equivalence relation.
+1.2.1
+Properties of preferences
+For a preference relation ⪰on X ⊆Rn, we can deﬁne the following standard
+properties. We say that ⪰is:
+• locally nonsatiated if for all x and ε > 0, there is some y ∈X such that
+∥x −y∥< ε and y ≻x;
+• monotonic if x ≫y implies x ≻y;
+• strictly monotonic if x > y implies x ≻y;
+• continuous if the sets {z ∈X : z ⪰x} and {z ∈X : x ⪰z} are relatively
+closed in X for every x.
+
+
+--- Page 4 ---
+4
+Mathematical Preliminaries
+The set {z ∈X : z ⪰x} is the upper contour set of ⪰at x: the set of elements
+that are at least as good as x. The strict upper contour set of ⪰at x is {z ∈X :
+z ≻x}. And the set {z ∈X : x ⪰z} is the lower contour set of ⪰at x.
+In the case when X ⊆Rn is a convex set, it is often useful to understand the
+relation between a preference and convex combinations of elements in X. Say
+that a binary relation ⪰is
+• convex if λ ∈(0,1), y ⪰x, and z ⪰x implies that λy + (1 −λ)z ⪰x;
+• strictly convex if λ ∈(0,1), y ⪰x, z ⪰x, and y ̸= z implies that λy +
+(1 −λ)z ≻x.
+So a preference relation ⪰is convex if the upper contour set of ⪰at x is a
+convex set, for all x ∈X.
+1.2.2
+Utility
+Preference relations are often described through a utility function u : X →R by
+x ⪰y iff u(x) ≥u(y). We say that u represents ⪰. In that case we say that
+u is locally nonsatiated, monotonic, or strictly monotonic if the preference
+relation it represents has those properties. A utility function is quasiconcave
+if the preference relation it represents is convex; and strictly quasiconcave if
+the preference relation it represents is strictly convex. Additionally, we say
+that u is continuous or concave if it satisﬁes those properties according to its
+ordinary deﬁnitions. A smooth utility is one for which all partial derivatives of
+all orders exist.
+We have the following general theorem.
+Theorem 1.1
+A preference relation has a utility function that represents it iff
+there exists an (at most) countable set Z ⊆X with the following property: for
+all x,y ∈X for which x ≻y, there exists z ∈Z for which x ⪰z ⪰y.
+Proof. First, we show that if there exists such a utility representation, then
+there exists a countable set Z ⊆X satisfying the property in the statement of
+the theorem.
+We shall exhibit a two-part construction. Let A = u(X) ⊆R, a nonempty
+set of real numbers. Consider two countable sets of open intervals. The ﬁrst,
+denoted by I, is the set of all open intervals with rational endpoints. The
+second, denoted by I′, is the set of open intervals (x,y) with x,y ∈A and
+(x,y) ∩A = ∅. We show that I′ is countable by the following argument: For
+(x,y) ∈I′, choose q(x,y) ∈Q such that x < q(x,y) < y.1 Note that, since any two
+intervals in I′ are disjoint, the mapping (x,y) →q(x,y) is one-to-one. Since Q
+is countable, I′ is countable.
+Now, for each I ∈I, if I∩A ̸= ∅, pick a ∈I∩A and denote this by aI. Denote
+the set A = {aI : I ∈I,I ∩A ̸= ∅}, and note that this set is at most countable
+1 This does not require the axiom of choice. Enumerate Q = {q1,q2,...}, and choose q(x,y) to be
+the element of Q for which x < q(x,y) < y associated with the lowest index in the enumeration.
+
+
+--- Page 5 ---
+1.3 Order pairs, acyclicity, and extension theorems
+5
+because I is countable. Deﬁne A′ to be the set of all x for which (x,y) ∈I′, for
+some y. Note that A′ is at most countable because I′ is.
+Using the axiom of choice, for each a ∈A∪A′, choose one element x(a) ∈X
+such that u(x(a)) = a. Let Z = {x(a) : a ∈A ∪A′}. It is clear that Z is at most
+countable and satisﬁes the requisite property.
+Conversely, suppose that there exists an at most countable set Z satisfying
+the property in the hypothesis. Suppose that Z is countable, and label it
+as {zk}∞
+k=1. Deﬁne the number uk = 1/2k. Clearly, ∞
+k=1 uk < ∞. For all
+x ∈X, deﬁne u(x) = 
+{k:x≻zk} uk −
+{k:zk≻x} uk. To verify that it is indeed a
+utility representation, ﬁrst suppose that x ⪰y. Then {k : y ≻zk} ⊆{k : x ≻
+zk}, so that 
+{k:y≻zk} uk ≤
+{k:x≻zk} uk, and {k : zk ≻x} ⊆{k : zk ≻y}, so
+that 
+{k:zk≻x} uk ≤
+{k:zk≻y} uk. We conclude that 
+{k:y≻zk} uk −
+{k:zk≻y} uk ≤
+
+{k:x≻zk} uk −
+{k:zk≻x} uk, or u(y) ≤u(x).
+For the strict preference, suppose that x ≻y. By the property of Z, there
+exists some zk such that x ⪰zk ⪰y. Then by completeness and transitivity,
+either x ≻zk or zk ≻y. If the former, then {j : y ≻zj} ⊊{j : x ≻zj}, so
+that 
+{j:y≻zj} uj < 
+{j:x≻zj} uj. If the latter, then {j : zj ≻x} ⊊{j : x ≻zj}, so
+that 
+{j:zj≻x} uj < 
+{j:zj≻y} uj. In either case, we conclude that 
+{j:y≻zj} uj −
+
+{j:zj≻y} uj < 
+{j:x≻zj} uj −
+{j:zj≻x} uj, or u(x) > u(y).
+The proof is similar in the case where Z is ﬁnite.
+1.3
+ORDER PAIRS, ACYCLICITY, AND EXTENSION THEOREMS
+An order pair on X is a pair of binary relations ⟨R,P⟩such that P ⊆R. If R is a
+binary relation, then ⟨R,PR⟩is an order pair, but we shall encounter order pairs
+⟨R,P⟩in which P may not be the strict part of R. An order pair ⟨R′,P′⟩is an
+order pair extension of ⟨R,P⟩if R ⊆R′ and P ⊆P′. (Our previous deﬁnition of
+when a binary relation B is an extension of R corresponds to ⟨R,PR⟩being an
+order pair extension of ⟨B,PB⟩.)
+An order pair ⟨R,P⟩is acyclic if there is no sequence x1,x2,...,xL such that
+x1 R x2 R ... R xL,
+and xL P x1. A sequence in the situation above is called a cycle of ⟨R,P⟩, and L
+is the length of the cycle. A single binary relation R is acyclic if the order pair
+⟨R,R⟩is acyclic.
+Observation 1.2
+If ⟨R,P⟩is acyclic, then ⟨R ∪(x,x),P⟩is acyclic for any
+x ∈X. Hence, any acyclic ⟨R,P⟩has an acyclic extension ⟨R′,P′⟩in which R′ is
+reﬂexive.
+The transitive closure of a binary relation R is the binary relation RT deﬁned
+by x RT y if there is a sequence x1,x2,...,xL such that
+x = x1 R x2 R ... R xL = y.
+
+
+--- Page 6 ---
+6
+Mathematical Preliminaries
+Equivalently, RT is the smallest transitive relation containing R, or
+RT=
+
+{R′ : R′ is transitive and R ⊆R′}.
+Thus, ⟨R,P⟩is acyclic iff there is no x and y with x RT y and y P x. Note also
+that ⟨R,P⟩is acyclic iff ⟨RT,P⟩is acyclic.
+Acyclicity captures a basic property of rational preference. If a binary
+relation ⪰is complete and ≻is the strict part of ⪰, then ⪰is transitive (and
+hence a rational preference relation) iff ⟨⪰,≻⟩is acyclic. As we shall see,
+acyclicity is essentially what is left of rationality when ⪰is only partially
+observed, in the sense that we observe some R ⊊⪰.
+Many problems in revealed preference theory are extension exercises, in
+the sense that we are given an order pair ⟨R,P⟩and we need to ﬁnd some
+well-behaved order pair extension of ⟨R,P⟩. The problem then amounts to
+comparing elements that are left uncompared in R; the following lemma is
+a basic result on adding comparisons.
+Lemma 1.3 (Extension Lemma).
+Let ⟨R,P⟩be an acyclic order pair, and
+x,y ∈X be two distinct elements, unordered by R. Then one of the following
+statements holds true:
+I) ⟨R ∪{(x,y)},P ∪{(x,y)}⟩is acyclic.
+II) ⟨R ∪{(y,x)},P ∪{(y,x)}⟩is acyclic.
+III) ⟨R ∪{(x,y),(y,x)},P⟩is acyclic.
+Proof. Deﬁne a binary relation S by letting w S z if there is a sequence
+x1,x2,...,xL such that
+w = x1 R x2 R ... R xL = z,
+and for which xl P xl+1 for some l = 1,...,L−1. Note that if x S y, then none of
+the pairs (xl,xl+1) can equal (x,y) or (y,x) because x and y are unordered by R.
+Suppose that (III) is not true: we show that one of the other statements
+must hold. Because ⟨R,P⟩is acyclic, if ⟨R∪{(x,y),(y,x)},P⟩has a cycle, either
+⟨R ∪{(x,y)},P⟩has a cycle, or ⟨R ∪{(y,x)},P⟩has a cycle. Note that if ⟨R ∪
+{(x,y)},P⟩has a cycle, then y S x; and if ⟨R ∪{(y,x)},P⟩has a cycle, then x S y.
+This implies that if (III) is not true then x S y or y S x.
+Suppose that x S y. We show that (I) follows. Since ⟨R,P⟩is acyclic, any
+cycle of ⟨R ∪{(x,y)},P ∪{(x,y)}⟩must involve (x,y). But x S y implies that a
+cycle with the same initial and terminal points could be constructed in ⟨R,P⟩.
+So there can be no cycles in ⟨R ∪{(x,y)},P ∪{(x,y)}⟩.
+Similarly, y S x implies (II).
+We present two fundamental results on extending a binary relation. The ﬁrst is
+called Szpilrajn’s Theorem, and deals with extending a partial order to a linear
+order. The second is a basic and useful result on extensions of acyclic order
+pairs to preference relation.
+
+
+--- Page 7 ---
+1.3 Order pairs, acyclicity, and extension theorems
+7
+Theorem 1.4 (Szpilrajn).
+Suppose that ⪰is a partial order. Then there is a
+linear order ⪰′ which extends ⪰.
+Proof. We present a proof for the case when X is ﬁnite. The general result
+relies on Zorn’s Lemma: see the proof of Theorem 1.5. We shall use the
+notation from the proof of Lemma 1.3.
+Since ⪰is a partial order, it is antisymmetric. Consider any antisymmetric
+order R and its strict part P. Suppose x and y are unordered according to R. If
+we apply Lemma 1.3 to ⟨R,P⟩, then in fact (I) or (II) must hold. The reason is
+that if x and y are distinct elements, and there is a sequence x1,x2,...,xL such
+that
+x = x1 R x2 R ... R xL = y,
+then antisymmetry implies that some R may be replaced by P, and hence
+x S y. As a consequence, if (II) does not hold, there must exist a sequence
+x1,x2,...,xL as above, which means that x S y. In turn, x S y implies (I), by the
+argument in the proof of Lemma 1.3.
+The proof is completed by induction. We can deﬁne a sequence (⪰n)N
+n=0 of
+binary relations as follows. Let ⪰0 = ⪰. Now suppose we have given ⪰n−1 such
+that ⟨⪰n−1,≻n−1⟩is acyclic and ⪰n−1 is antisymmetric. Suppose there is a pair
+x,y unordered according to ⪰n−1. Applying Lemma 1.3, either (I) or (II) must
+hold. Without loss, suppose ⟨⪰n−1 ∪{(x,y)},≻n−1 ∪{(x,y)}⟩is acyclic. Deﬁne
+⪰n = ⪰n−1 ∪{(x,y)} and note that ≻n−1 ∪{(x,y)} is its strict part. Further, ⪰n
+retains antisymmetry. Since X is ﬁnite, there is N such that ⪰N is complete,
+and by construction transitive since ⟨⪰N,≻N⟩is acyclic.
+The following result is perhaps the ﬁrst “revealed preference theorem” in the
+book. Its signiﬁcance will become clear in the next few chapters.
+Theorem 1.5
+Let ⟨R,P⟩be an order pair. There is a preference relation ⪰
+such that ⟨⪰,≻⟩is an order pair extension of ⟨R,P⟩iff ⟨R,P⟩is acyclic.
+Proof. It is obvious that if ⪰exists, then ⟨R,P⟩is acyclic. We proceed to
+prove the converse. Suppose that ⟨R,P⟩is acyclic. By Observation 1.2, we
+can assume without loss of generality that R is reﬂexive.
+The proof proceeds by ﬁrst showing that there is a transitive, though not
+necessarily complete, relation ˆR for which ⟨ˆR,PˆR⟩is an order pair extension
+of ⟨R,P⟩. Then we use Lemma 1.3 in an induction argument to show that the
+relation ˆR can be completed.
+In the ﬁrst step, deﬁne ˆR = (R)T, the transitive closure of R. It is obvious that
+R ⊆ˆR. Further, suppose that x P y. Then, by acyclicity of ⟨R,P⟩, it follows that
+y (R)T x is impossible, so that x PˆR y.
+Now, let W be the collection of all acyclic order pairs ⟨R∗,P∗⟩that satisfy
+(a) that ⟨R∗,P∗⟩is an order pair extension of ⟨R,P⟩, and (b) that P∗is the strict
+part of R∗, P∗= PR∗. By the ﬁrst step of the proof, W ̸= ∅. Order W by
+pointwise set inclusion; so that ⟨R1,P1⟩≤⟨R2,P2⟩if R1 ⊆R2 and P1 ⊆P2.
+That is, ⟨R1,P1⟩≤⟨R2,P2⟩if ⟨R2,P2⟩is an order pair extension of ⟨R1,P1⟩.
+
+
+--- Page 8 ---
+8
+Mathematical Preliminaries
+We shall use Zorn’s Lemma. Let ⟨Rλ,Pλ⟩λ∈ be a chain in W. We claim that
+⟨
+λ∈ Rλ,
+λ∈ Pλ⟩∈W. Clearly it is an extension of ⟨R,P⟩. It is also clearly
+acyclic; for, suppose that there is a cycle x1
+
+λ∈ Rλ
+
+x2 ...xn
+
+λ∈ Rλ
+
+x1,
+with at least one instance of 
+λ∈ Pλ. Then by deﬁnition, there is λ ∈
+for which x1Rλx2 ...xnRλx1, with at least one instance of Pλ. Finally, it is
+clear that 
+λ∈ Pλ is the strict part of 
+λ∈ Rλ, for if (x,y) ∈
+λ∈ Pλ and
+(y,x) ∈
+λ∈ Rλ, there is λ ∈ for which x Pλ y and y Rλ x, contradicting our
+hypothesis. And if (x,y) ∈
+λ∈ Rλ but (y,x) ̸∈
+λ∈ Rλ, then there is λ ∈
+for which x Rλ y but not y Rλ x, so that x Pλ y.
+By Zorn’s Lemma, there exists a maximal acyclic order pair ⟨˜R, ˜P⟩for which
+˜P is the strict part of ˜R and which extends ⟨R,P⟩. Since R is reﬂexive, so
+is ˜R. We claim that ˜R is complete. If not, then there are x,y ∈X with x ̸= y
+which are unranked. By Lemma 1.3, there is an acyclic order pair extension of
+⟨˜R, ˜P⟩and satisfying the relevant property, which also clearly extends ⟨R,P⟩,
+contradicting maximality of ⟨˜R, ˜P⟩. The desired relation is then ˜R.
+Theorem 1.5 has a direct application to a family (⟨Rλ,Pλ⟩)λ∈ of order pairs.
+Corollary 1.6
+There is a preference relation ⪰such that for all λ ∈, ⟨⪰,≻⟩
+is an order pair extension of ⟨Rλ,Pλ⟩iff ⟨
+λ∈ Rλ,
+λ∈ Pλ⟩is an acyclic order
+pair.
+We will say that an order pair ⟨R,P⟩is quasi-acyclic if there is no sequence
+x1,x2,...,xL such that
+x1 P x2 P ... P xL,
+and xL R x1.
+The following provides a result related to Theorem 1.5, but guaranteeing
+quasitransitive preference instead of transitive preference.
+Lemma 1.7
+There is a complete, quasitransitive relation ⪰such that ⟨⪰,≻⟩
+is an order pair extension of ⟨R,P⟩iff ⟨R,P⟩is quasi-acyclic.
+Proof. As in the proof of Theorem 1.5, one direction is obvious. Suppose
+instead that ⟨R,P⟩is quasi-acyclic. Deﬁne x ⪰y iff it is not the case that y PT x.
+We claim that ⪰is the appropriate relation.
+We ﬁrst show that x ≻y iff x PT y. If x ≻y, then since y ⪰x is false, it follows
+that x PT y is true. If, instead, x PT y is true, then by acyclicity, y PT x is false
+(this uses the property that P ⊆R). As a consequence, we obtain x ⪰y. And
+since x PT y, we know that y ⪰x is false, so that x ≻y.
+Now, note that if x R y, it follows that y PT x is false (by quasi-acyclicity),
+so that x ⪰y. Further, if x P y, then by the preceding paragraph, we know that
+x ≻y. This proves that ⟨⪰,≻⟩is an extension of ⟨R,P⟩.
+Further, ⪰is complete. Suppose by means of contradiction that it is not: then
+there is a pair x,y which are unordered according to ⪰. By deﬁnition, it must be
+that x PT y and y PT x. But then we have x PT x, contradicting quasi-acyclicity
+(this uses the hypothesis that P ⊆R). And ≻is transitive as ≻= PT, which is
+by deﬁnition transitive.
+
+
+--- Page 9 ---
+1.4 Cyclic monotonicity
+9
+Finally, we establish one more result. It should be clear by now that, in
+an order pair ⟨R,P⟩, P might not equal PR, the strict part of R. Starting from
+Theorem 1.5, however, we have established extensions to pairs in which the
+second order indeed equals the strict part of the ﬁrst order. This motivates the
+question of when such extensions are possible.
+Say that an order pair ⟨R,P⟩is asymmetric if there are no x,y for which x P y
+and y R x. An asymmetric order pair may have cycles, but it has no cycles of
+length 2.
+Lemma 1.8
+There is a complete relation ⪰such that ⟨⪰,≻⟩is an order pair
+extension of ⟨R,P⟩iff ⟨R,P⟩is asymmetric.
+Proof. One direction is obvious. For the other direction, deﬁne x ⪰y iff it is
+not the case that y P x. Then it is clear that this relation is complete, as P ⊆R
+and ⟨R,P⟩is asymmetric (so that it is impossible that x P y and y P x). To see
+that ⟨⪰,≻⟩is an extension of ⟨R,P⟩: whenever x R y, we have y P x is false,
+and consequently that x ⪰y. And whenever x P y, then x R y, so that x ⪰y. And
+since x P y, by deﬁnition, (y,x) /∈⪰. Thus x ≻y.
+1.4
+CYCLIC MONOTONICITY
+Let X ⊆Rn be nonempty, and ρ : X ⇒Rn be a correspondence. Say that ρ is
+cyclically monotone (or that it satisﬁes cyclic monotonicity) if, for every ﬁnite
+sequence x1,...,xL, with L > 1 and xL = x1, and every choice of zi ∈ρ(xi) for
+i = 1,...,L −1, it holds that
+L−1
+
+i=1
+zi · (xi+1 −xi) ≥0.
+The property of cyclic monotonicity is important in revealed preference
+theory. It is a multidimensional generalization of monotonicity: suppose that
+n = 1. Then a function ρ : X →R is monotone decreasing if (y −x) and
+(ρ(y) −ρ(x)) are of opposite signs; put differently, if
+0 ≤(y −x)(ρ(x) −ρ(y)) = ρ(x)(y −x) + ρ(y)(x −y).
+By analogy with the case when n = 1, we can say that a correspondence ρ :
+X ⇒Rn is monotone when for all x,y ∈X and all zx ∈ρ(x), zy ∈ρ(y),
+0 ≤zx · (y −x) + zy · (x −y).
+The notion of cyclic monotonicity generalizes the idea of monotonicity to
+account for all ﬁnite cycles in X, not only cycles of length two.
+Theorem 1.9
+Suppose that one of the following two hypotheses is satisﬁed:
+• For all x ∈X, ρ(x) ̸= ∅.
+• |{x ∈X : ρ(x) ̸= ∅}| < +∞and 0 <
+		
+x∈X ρ(x)
+		 < +∞.
+
+
+--- Page 10 ---
+10
+Mathematical Preliminaries
+Then the following statements are equivalent:
+I) ρ is cyclically monotone.
+II) There is a function u : X →R such that for all x,y ∈X and all zx ∈
+ρ(x),
+u(y) −u(x) ≤zx · (y −x).
+III) There is a function u : X →R such that for all y ∈X,
+u(y) = inf{u(x) + zx · (y −x) : x ∈X,zx ∈ρ(x)}.
+Proof. It is obvious that (III) implies (II). To show that (II) implies (I), note
+that for any sequence x1,...,xL, with xL = x1, it holds that 0 = L−1
+l=1 (u(xl+1)−
+u(xl)).
+To prove the theorem, we shall prove that (I) implies the existence of a
+function u that satisﬁes the properties stated in (II) and in (III). Let ρ : X ⇒Rn
+be cyclically monotone. Fix an arbitrary x∗∈X for which ρ(x∗) ̸= ∅(this exists
+under either of the two hypotheses). Fix z∗∈ρ(x∗).
+Let x ∈X. Here is how we deﬁne u(x). Denote by x the set
+of
+all
+ﬁnite
+sequences
+((x1,z1),(x2,z2),...,(xM−1,zM−1),(xM)),
+with
+M ≥1, x1 = x∗, xM = x, zi ∈ρ(xi) and z1 = z∗. Think of sequences
+((x1,z1),(x2,z2),...,(xM−1,zM−1),(xM)) as paths connecting x∗and x = xM for
+which there is zi ∈ρ(xi) for all xi, except for xM. Deﬁne u(x) as follows:
+u(x) = inf{
+M−1
+
+m=1
+zm · (xm+1 −xm) : ((x1,z1),...,(xM)) ∈x}.
+The function u : X →R is then well deﬁned under either of the two
+hypotheses. Under the ﬁrst hypothesis, for any sequence ending in xM, we may
+ﬁx zM ∈ρ(xM) and note that for ((x1,z1),...,(xM))M
+m=1 ∈x,
+M−1
+
+m=1
+zm · (xm+1 −xm) + zM · (x∗−xM) ≥0,
+as ρ is cyclically monotone. Therefore, zM · (x −x∗) is a lower bound on
+M−1
+m=1 zm ·(xm+1 −xm) for ((x1,z1),...,(xM))M
+m=1 ∈x, and thus the inﬁmum in
+the deﬁnition of u(x) is deﬁned in R. Under the second hypothesis, it is enough
+to observe that by cyclic monotonicity we may without loss of generality
+restrict to the subset of x which has no repetitions of elements, which by
+assumption is ﬁnite. Hence, the inﬁmum becomes a minimum. Note that, under
+either case, u(x∗) = 0.
+We ﬁnish the proof by showing that the function u satisﬁes the properties in
+(II) and (III). Fix x,y ∈X and zx ∈ρ(x). For any ((x1,z1),...,(xM)) ∈x, by
+deﬁnition of u(y),
+u(y) ≤zx · (y −x) +
+M−1
+
+m=1
+zm · (xm+1 −xm);
+
+
+--- Page 11 ---
+1.4 Cyclic monotonicity
+11
+and hence u(y) −zx · (y −x) is a lower bound on the set in the right hand side
+of the deﬁnition of u(x). Thus u(y) −zx · (y −x) ≤u(x). This establishes (II).
+To prove (III), note that (II) implies that u(y) is a lower bound on {u(x) +
+z · (y −x) : x ∈X,z ∈ρ(x)}. Fix ε > 0. By deﬁnition of u(y) there is some
+((x1,z1),...,(xM)) ∈y such that u(y) + ε > M−1
+m=1 zm · (xm+1 −xm). Let ˆx =
+xM−1 and ˆz = zM−1. Then
+u(y) + ε > ˆz · (y −ˆx) +
+M−2
+
+m=1
+zm · (xm+1 −xm) ≥ˆz · (y −ˆx) + u(ˆx);
+which ﬁnishes the proof.
+When X is convex, the theorem has the important implication that the
+function u is concave. We record this fact as follows:
+Corollary 1.10
+Let X ⊆Rn be a convex set. Under either of the hypotheses
+of Theorem 1.9, the following statements are equivalent:
+I) ρ is cyclically monotone.
+II) There is a concave function u : X →R such that for all x,y ∈X and
+zx ∈ρ(x)
+u(y) −u(x) ≤zx · (y −x).
+III) There is a concave function u : X →R such that for all y ∈X,
+u(y) = inf{u(x) + z · (y −x) : x ∈X,z ∈ρ(x)}.
+Proof. The deﬁnition u(y) = inf{u(x)+z·(y−x) : x ∈X,z ∈ρ(x)} in statement
+(III) implies that u is concave, as it is the lower envelope of afﬁne functions.
+The result follows because the function constructed in the proof of statements
+(II) and (III) of Theorem 1.9 is the same.
+Versions of these results exist even without either of the hypotheses of
+Theorem 1.9. However, one must allow for the possibility that u is no longer
+real-valued.
+The importance of (II) in Corollary 1.10 should be clear from the following
+result.
+Proposition 1.11
+Let X ⊆Rn be convex, and u : X →R be a concave
+function. Then, for all x ∈int (X) there is p ∈Rn such that
+u(y) ≤u(x) + p · (y −x),
+for all y ∈X.
+The proof of Proposition 1.11 is an application of the separating hyperplane
+theorem, and is omitted.
+For any function u : X →R and x ∈X, if p ∈Rn has the property that
+u(y) ≤u(x) + p · (y −x), for all y ∈X, then p is a supergradient of u at x.
+Proposition 1.11 says that if u is concave then it has a supergradient at any
+
+
+--- Page 12 ---
+12
+Mathematical Preliminaries
+interior point of its domain. The set of all supergradients of u at x is called the
+superdifferential of u at x.
+When u is concave and differentiable at x the only supergradient at x is the
+gradient of u at x. So the superdifferential of u at x is ρ(x) = {∇u(x)}.
+1.5
+THEOREM OF THE ALTERNATIVE
+Many results in revealed preference theory can be formulated using some
+version of the Theorem of the Alternative, or Farkas’ Lemma. We state a
+version (Lemma 1.12) that may involve either real or rational coefﬁcients and
+solutions. The usefulness of such a result is that it allows one to state a problem
+involving real solutions to a system of linear inequalities, and ﬁnd a revealed
+preference axiom from the rational solution to the alternative linear system.
+For a matrix B, we denote by Bi its ith row.
+Lemma 1.12
+Let F be either the set of real numbers R, or the set of rational
+numbers Q. Let B be a (M1 + M2) × K matrix with entries in F. Consider the
+systems of inequalities S1 and S2:
+S1 :
+
+Bi · θ ≥0,i = 1,...,M1
+Bi · θ > 0,i = M1 + 1,...,M1 + M2
+S2 :
+
+η · B = 0
+η ≥0,
+where θ is the K-dimensional unknown in S1 and η, of dimension (M1 + M2),
+is the unknown in S2. Then S1 has a solution θ ∈FK iff S2 has no solution
+η ∈FM1+M2 with ηi > 0 for some i ∈{M1 + 1,...,M1 + M2}.
+Lemma 1.13
+(Integer–Real Farkas) Let {Ai}M
+i=1 be a ﬁnite collection of
+vectors in QK. Then one and only one of the following statements is true:
+I) There exists y ∈RK such that for all i = 1,...,L, Ai · y ≥0 and for all
+i = L + 1,...,M, Ai · y > 0.
+II) There exists z ∈ZM
++ such that M
+i=1 ziAi = 0, where M
+i=L+1 zi > 0.
+Proof. Both (I) and (II) cannot simultaneously hold. To see why, suppose that
+there exist y and z as stated in (I) and (II). Then Ai ·y ≥0 for all i = 1,...,L and
+Ai·y > 0 for all i = L+1,...,M. Consider M
+i=1 ziAi·y. Since M
+i=1 ziAi = 0, we
+know that M
+i=1 ziAi ·y = 0. Furthermore, since there is some j ∈{L+1,...,M}
+for which zjAj·y > 0, and for all i, ziAi·y ≥0, we conclude that M
+i=1 ziAi·y > 0,
+a contradiction.
+We now establish that if (II) does not hold, (I) holds. Note that (II) holds
+iff there is z ∈QM
++ satisfying the statement in (II). (The reason being that M is
+ﬁnite and that z satisﬁes the statement in (II) iff Nz satisﬁes it, for any positive
+integer N.) By Lemma 1.12 if (II) does not hold, there exists y ∈QK such that
+
+
+--- Page 13 ---
+1.6 Chapter references
+13
+for all i = 1,...,L, Ai·y ≥0 and for all i = L+1,...,M, Ai·q > 0. Since QK ⊆RK,
+y ∈RK.
+Finally, the following nonhomogeneous version, which is easily proved
+using Lemma 1.12, often comes in useful.
+Lemma 1.14
+Let B be an M × K matrix with real entries and let γ be an
+M-vector with real entries. Consider the systems of inequalities S1 and S2:
+S1 : Bi · θ ≥γi,i = 1,...,M
+S2 :
+⎧
+⎪⎨
+⎪⎩
+η · B = 0
+η ≥0
+η · γ > 0
+where θ is the K-dimensional unknown in S1 and η, of dimension M, is the
+unknown in S2. Then S1 has a solution θ ∈RK iff S2 has no solution η ∈RM.
+1.6
+CHAPTER REFERENCES
+Szpilrajn’s Theorem (Theorem 1.4) is due to Szpilrajn (1930). Theorem 1.5
+generalizes Szpilrajn’s Theorem, and is due to Richter (1966) and Hansson
+(1968). It appears in the form stated here in Suzumura (1976b). Sen (1969)
+popularized the notion of quasitransitivity. The original proofs of Theorem 1.1
+were based on a construction due to Cantor (1895), which shows that any two
+countable dense linearly ordered sets without endpoints are order-isomorphic,
+and ﬁrst appears in economics in Debreu (1954).
+Theorem 1.9 and Corollary 1.10 are standard results in convex analysis:
+see Rockafellar (1997). The idea of cyclic monotonicity and the fact that
+it characterizes subsets of superdifferentials ﬁrst appears in Rockafellar
+(1966). Rockafellar also observes that monotonicity is equivalent to cyclic
+monotonicity for X = R. The condition of cyclic monotonicity appears
+frequently in the mechanism design literature as well. Rochet (1987) is a
+direct generalization of Rockafellar’s result. Since monotonicity is necessary
+and sufﬁcient for cyclic monotonicity in one dimension, one might conjecture
+that eliminating cycles of length n is necessary and sufﬁcient for cyclic
+monotonicity in n −1 dimensions. This turns out to be false. An example
+appears in Asplund (1970) (a mapping which rotates every x ∈R2 by π
+n is
+cyclically monotonic of order n but not n + 1). See also Bartz, Bauschke,
+Borwein, Reich, and Wang (2007). However, there are characterizations of
+monotonic correspondences which naturally generalize the Rockafellar result;
+see Krauss (1985) or Fitzpatrick (1988).
+Theorems of the Alternative, such as Lemma 1.12, make an early appearance
+in Farkas (1902); classic references in economics are Kuhn and Tucker (1956)
+and Gale (1960b). The version here for the real numbers appears ﬁrst in
+
+
+--- Page 14 ---
+14
+Mathematical Preliminaries
+Motzkin (1936), and can be derived from the more general formulation
+due to Slater (1951). The rational version is essentially Theorem 3.2 of
+Fishburn (1973b). A general result along these lines is Theorem 1.6.1 in Stoer
+and Witzgall (1970). A more recent general reference is Schrijver (1998).
+Lemma 1.14 can be found, for example, in Gale (1960b), and Lemma 1.13
+in Chambers and Echenique (2014b).

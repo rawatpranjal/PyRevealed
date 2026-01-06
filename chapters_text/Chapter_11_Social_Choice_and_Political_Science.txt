@@ -1,0 +1,901 @@
+--- Page 1 ---
+CHAPTER 11
+Social Choice and Political Science
+This chapter deals with models of collective choice in which individual
+agents’ preferences are aggregated into collective behavior. The ﬁrst class
+of models use some ﬁxed method to aggregate preferences. We assume that
+collective choices can be observed, but that individual agents’ preferences are
+unobserved. The second class of models are more structured models of voting
+in political economy and political science. A common idea in political science
+is that voters’ preferences are “Euclidean”; we present the testable implications
+of this notion. Finally, we consider models of individual voter behavior and
+work out the corresponding observable implications.
+11.1
+TESTABLE IMPLICATIONS OF PREFERENCE
+AGGREGATION FUNCTIONS
+The main questions in this section take the following form. Suppose that a
+group preference (or choice) is observable. Is this group preference consistent
+with a collection of rational agents whose preferences are aggregated
+according to some rule? We may, for example, wonder when a group’s
+collective behavior is consistent with majority rule.
+There are three ways to interpret the material that we are about to present.
+First, if we know the aggregation rule that the agents use, we may want to
+test the hypothesis that a society of agents behave rationally as individuals,
+when the only observable data come in the form of aggregate preference.
+Second, when the aggregation rule is unknown, we may want to test the joint
+hypotheses that a group of agents use a certain aggregation rule, and that they
+each behave rationally as individuals. Finally, a different interpretation of these
+results is that we might want to characterize all possible “paradoxes” that we
+might expect from using a given aggregation rule. Condorcet’s paradox (a cycle
+on three alternatives) illustrates the problems that can arise from using majority
+rule. The results in this section describe all possible paradoxes of this type.
+The model is as follows. Let X be a set of possible alternatives. We shall
+assume that we observe all possible binary comparisons of elements in X; that
+is, we observe a complete binary relation ⪰on X. This assumption is similar in
+
+
+--- Page 2 ---
+11.1 Preference aggregation
+159
+spirit to our assumption in Chapter 2 that all choice behavior is observable. The
+set of all complete binary relations will be denoted C(X). Individual agents’
+preferences will be strict preferences (linear orders) over X. Denote the set of
+linear orders over X by L(X).
+We now describe two classical aggregation methods. We ﬁx a ﬁnite set N,
+which we interpret as a set of agents. An aggregation rule is a function f :
+L(X)N →C(X) mapping proﬁles of strict preferences (⪰i)i∈N into a complete
+binary relation f((⪰i)i∈N).
+The majority rule is the aggregation rule fm deﬁned by
+(x,y) ∈fm((⪰i)i∈N) iff |{i ∈N : (x,y) ∈⪰i}| ≥|N|
+2 .
+Note that, if we let ⪰= fm((⪰i)i∈N), then x ≻y iff there is a strict majority of
+agents who strictly prefer x over y (deﬁning the strict part of ⪰in the usual
+way).
+The unanimity rule is the function fu deﬁned by (x,y) ∈fu((⪰i)i∈N) if there
+is i ∈N for which x ⪰i y. Note that, if we let ⪰= fu((⪰i)i∈N), then x ≻y iff all
+agents strictly prefer x over y (deﬁning the strict part of ⪰in the usual way).
+We can now turn the above deﬁnitions into a revealed-preference exercise.
+Assuming that a complete binary relation ⪰is observed, and given a rule f,
+we want to know when there is a set of agents N and a preference proﬁle
+for the agents in N such that ⪰is the image of the proﬁle under f. Say that
+⪰0 ∈C(X) is majority rationalizable if there exist a ﬁnite N and (⪰i)i∈N for
+which fm((⪰i)i∈N) =⪰0. Similarly, we will say that ⪰0 ∈C(X) is unanimity
+rationalizable (or Pareto rationalizable) if there exist a ﬁnite N and (⪰i)i∈N for
+which fu((⪰i)i∈N) =⪰0.
+Remark 11.1
+Note that we allow the freedom of choosing the cardinality of
+N when we construct a rationalization. Below we turn to problems in which
+the cardinality of N is ﬁxed.
+The ﬁrst and most important result here is a negative result stating that any
+⪰0 ∈C(X) is majority rationalizable. Therefore, the hypothesis that a social
+preference arises from application of majority rule to some unknown society
+is untestable.
+McGarvey’s Theorem
+Any ⪰0 ∈C(X) is majority rationalizable.
+The negative message in McGarvey’s Theorem is not affected by our
+assumption that all binary comparisons are observable. If one’s observations
+were less complete, then, of course, majority rule would remain non-testable.
+The conclusion in McGarvey’s Theorem carries over to cases in which our
+observations are poorer than a complete binary relation.
+Proof. The proof is constructive. Let ⪰0 ∈C(X). If ⪰0 is complete indifference,
+simply let N consist of two agents with exactly opposed preferences. Suppose
+then that there is at least one pair x,y ∈X with x ≻0 y.
+
+
+--- Page 3 ---
+160
+Social Choice and Political Science
+First, let us write X = {x1,...,xm} (this is possible as X is ﬁnite). Given
+any pair x,y ∈X for which x ≻0 y, we deﬁne two linear-order relations. The
+ﬁrst, ⪰0
+(x,y) ranks x ≻0
+(x,y) y, and ranks x and y (strictly) above every element of
+X\{x,y}; otherwise, for xi,xk ∈X\{x,y}, xi ≻0
+(x,y) xk iff i > k. The second, ⪰1
+(x,y),
+ranks x ≻1
+(x,y) y, and ranks x and y (strictly) below every element of X\{x,y};
+otherwise, for xi,xk ∈X\{x,y}, xk ≻1
+(x,y) xi iff i > k. By deﬁning N to be a set of
+cardinality 2|{(x,y) ∈X2 : x ≻0 y}| and assigning, for each (x,y) ∈≻0, one agent
+with preference ⪰0
+(x,y) and one with preference ⪰1
+(x,y), we arrive at (⪰i)i∈N for
+which fm((⪰i)i∈N) =⪰0.
+We now turn to a revealed preference question for the unanimity rule. Our
+second result states that any quasitransitive relation is unanimity rationalizable.
+Theorem 11.2
+A binary relation ⪰0 ∈C(X) is unanimity rationalizable iff it
+is quasitransitive.
+Proof. It is easy to see that any unanimity rationalizable relation is quasitran-
+sitive. Conversely, let ⪰0 ∈C(X) be quasitransitive.
+We shall show that, for every x,y which are unranked in ≻0, there is a linear
+order extending (≻0∪{(x,y)}). Then let N have a cardinality of
+2 × |{(x,y) ∈X2 : x,yare unranked}|.
+Assign, for each such pair, one agent with a linear order extending ≻0∪{(x,y)}
+and one with a linear order extending ≻0∪{(y,x)}. Then it is easy to see that
+fu((⪰i)i∈N) =⪰0.
+Let, then, x,y ∈X be unranked according to (≻0∪=). That is, x ∼0 y
+and x ̸= y. The relation (≻0∪=) is a partial order. Let ⪰′ be the transitive
+closure of (≻0∪=∪{(x,y)}). We claim that ⪰′ is also a partial order. It is
+clearly antisymmetric and reﬂexive; it remains to show that it is transitive.
+But this kind of argument is familiar from Theorem 1.5, so we omit it here. By
+Theorem 1.4, we know that there is a linear order which extends ⪰′.
+The previous results deal with groups of unknown size: the size of the group
+is as unknown as the agents’ preferences (see Remark 11.1). Therefore, in
+constructing a rationalization, one has the freedom of using a group of any
+size. The construction in each of the proofs illustrates that the groups can be
+quite large.
+It so happens, though, that we frequently know the size of the group, or at
+least an upper bound. For example one may want to rationalize the behavior of
+a given committee (such as a faculty meeting, Congress, or the United Nations)
+when the number of members is known, but not their individual preferences.
+It turns out that when we restrict the cardinality of the set of agents, the
+problem of determining whether a binary relation is majority (or unanimity)
+rationalizable is much more difﬁcult, and there are far fewer known results.
+For an integer n, we say that ⪰0 is n-unanimity rationalizable if there exists
+a set N of cardinality n for which there are (⪰i)i∈N such that fu((⪰i)i∈N) =⪰0.
+
+
+--- Page 4 ---
+11.1 Preference aggregation
+161
+We could similarly deﬁne a related concept for majority rule, but as far as we
+know there are no results in this direction.
+Almost all results for n-unanimity rationalization concern n = 2. The next
+result is due to Dushnik and Miller.
+Theorem 11.3
+A binary relation ⪰0 ∈C(X) is 2-unanimity rationalizable iff
+⪰0 is quasitransitive, and there exists a partial order ⪰∗such that x ∼0 y iff
+either x ⪰∗y or y ⪰∗x.
+Proof. Suppose that ⪰0 is 2-unanimity rationalizable, say by (⪰1,⪰2). Clearly
+≻0 is quasitransitive. Now, deﬁne x ⪰∗y if x ⪰1 y and y ⪰2 x. Note that ⪰∗is a
+partial order which satisﬁes the property in the statement of the theorem.
+Conversely, suppose that ⪰∗satisfying the property in the statement of the
+theorem exists. Deﬁne a binary relation ⪰1 as follows. Let x ⪰1 y if either
+x ≻0 y, or if x ∼0 y and x ⪰∗y. We claim that ⪰1 is a linear order. Completeness
+is a consequence of the completeness of ⪰0 and the property of ⪰∗. To see that
+it is antisymmetric, suppose that x ⪰1 y and y ⪰1 x. It cannot be that x ≻0 y, as
+that would rule out y ⪰1 x. Thus we can assume that x ∼0 y; then x ⪰1 y implies
+x ⪰∗y, and y ⪰1 x implies y ⪰∗x. It follows that x = y, as ⪰∗is a partial order.
+Finally, ⪰1 is transitive. Let x ⪰1 y and y ⪰1 z. There is only something to
+show when one of these comparisons is due to ⪰0 and the other to ⪰∗. These
+cases are x ≻0 y ⪰∗z and x ⪰∗y ≻0 z. In the ﬁrst case, by completeness, if we
+do not have x ⪰1 z, then we must have z ⪰1 x: (a) If z ⪰1 x is due to z ≻0 x, we
+have a contradiction because the transitivity of ≻0 implies that z ≻0 y, which
+contradicts y ⪰∗z; (b) If z ⪰1 x is due to z ⪰∗x, we have a contradiction because
+the transitivity of ⪰∗implies that y ⪰∗x, a contradiction of x ≻0 y. We can
+derive a similar contradiction in the case x ⪰∗y ≻0 z.
+Similarly, we can deﬁne the binary relation ⪰2 by x ⪰2 y if x ≻0 y or y ⪰∗x.
+Then ⪰2 is a linear order as well.
+The linear orders ⪰1 and ⪰2 thus deﬁned provide a rationalization of ≻0. If
+x ̸= y, then x ≻0 y iff x ≻1 y and x ≻2 y; and x ∼0 y iff ⪰1 and ⪰2 disagree in
+how they compare x and y.
+In light of Theorem 11.2, Theorem 11.3 gives the property of ⪰0 that, in
+addition to being unanimity rationalizable, it is rationalizable by a group of
+two agents. This condition, that ∼0 can be “oriented” to form a transitive ⪰∗,
+is difﬁcult to falsify. One would need to check all possible orientations of ∼0. A
+falsiﬁable characterization of when such an orientation is possible is provided
+in the next result.
+We ﬁrst need a simple deﬁnition. We will say x1,...,xk is an odd ∼0 cycle if
+k is odd, and for all i, xi ∼0 xi+1 (as usual, addition is modulo k, and we allow
+repetitions of vertices). We say the cycle is triangulated if there is i ∈{1,...,k}
+for which xi ∼0 xi+2.
+Theorem 11.4
+A binary relation ⪰0∈C(X) is 2-unanimity rationalizable iff
+it is quasitransitive and every odd ∼0 cycle is triangulated.
+
+
+--- Page 5 ---
+162
+Social Choice and Political Science
+Proof. We will establish necessity of the condition only. Sufﬁciency, while not
+conceptually difﬁcult, is tedious. Therefore, let us suppose that ⪰1 and ⪰2 are
+linear orders which 2-unanimity rationalize ⪰0.
+To see that any odd ∼0 cycle is triangulated, suppose, by way of contradic-
+tion, that there exists an odd ∼0 cycle x1,...,xk which is not triangulated. First,
+it is the case that for all i, xi ̸= xi+1; otherwise since xi−1 ∼0 xi = xi+1, we have
+xi−1 ∼0 xi+1, contradicting the fact that the cycle is not triangulated.
+Suppose, without loss of generality, that x1 ≻1 x2 and x2 ≻2 x1. Now, because
+x1,...,xk is not triangulated, it follows that x2 ≻2 x3 and x3 ≻1 x2; because,
+if instead x2 ≻1 x3 and x3 ≻2 x2, we would have x1 ≻1 x3 and x3 ≻2 x1,
+contradicting the fact that x1,...,xk is not triangulated. By continuing this
+argument and using the fact that k is odd, we establish that x2 ≻1 x1 and
+x1 ≻2 x2, a contradiction.
+These results more or less exhaust the known characterizations of unanimity
+rationalizable relations for ﬁxed and ﬁnite numbers of agents in abstract
+environments. As far as we know, there are no such results for majority
+rationalizable relations (or for other simple voting rules). Characterizing such
+relations should be an important goal for future research. There is reason to
+believe that such characterizations will be, in general, difﬁcult to come by. A
+classical result in computer science states that, given a quasitransitive relation,
+determining whether or not n agents sufﬁce to rationalize that relation by
+unanimity rule is NP-complete for any n ≥3.
+11.1.1
+Utilitarian rationalizability
+Suppose we have given a family of preference relations ⪰1,...,⪰n on a ﬁnite
+set X. Further, let ⪰0 be an arbitrary transitive relation on X. We will say that
+⪰0 is utilitarian rationalizable by ⪰1,...,⪰n if there exists, for each i, a utility
+representation ui : X →R for which x ⪰i y ↔ui(x) ≥ui(y) such that
+• x ≻0 y implies n
+i=1 ui(x) > n
+i=1 ui(y)
+• x ∼0 y implies n
+i=1 ui(x) = n
+i=1 ui(y).1
+If ⪰0 is complete, these conditions are equivalent to the function u0 =
+n
+i=1 ui being a utility representation for ⪰0.
+Our goal is to characterize utilitarian rationalizable relations ⪰0. That is,
+we want to test the hypothesis that society ranks alternatives according to
+a utilitarian criterion, where the ordinal content of individual preference is
+known, but not the cardinal content. The next result is due to Peter Fishburn.
+Theorem 11.5
+A transitive relation ⪰0 is utilitarian rationalizable by ⪰1
+,...,⪰n iff for all ﬁnite disjoint sequences x1,...,xK and y1,...,yK (i.e. there is no
+k,l for which xk = yl, but possibly allowing repetitions), and for all collections
+1 See our discussion in 10.3 of utilitarianism in the context of bargaining.
+
+
+--- Page 6 ---
+11.1 Preference aggregation
+163
+of permutations σi : K →K (one for each i = 1,...,n), such that for all
+j = 1,...,K, xj ⪰0 yj and for all i = 1,...,n, yj ⪰i xσi(j), it follows that for all
+j = 1,...,K, xj ∼0 yj and for all i = 1,...,n, yj ∼i xσi(j).
+Proof. The relation ⪰0 is utilitarian rationalizable iff there exists, for each i and
+each x ∈X a number ux
+i ∈R, for which the following inequalities are satisﬁed:
+I) If x ⪰0 y, then 
+i ux
+i ≥
+i uy
+i .
+II) If x ≻0 y, then 
+i ux
+i > 
+i uy
+i .
+III) If x ⪰i y, then ux
+i ≥uy
+i .
+IV) If x ≻i y, then ux
+i > uy
+i .
+We can easily write this in matrix form. Let B be a matrix with |X × N|
+columns, and with one row for each constraint listed above. Rows of type (I)
+and (II) will be speciﬁed by the vector 1N×{x} −1N×{y}, while rows of type (III)
+and (IV) will be of the form 1(i,x) −1(i,y). We search for the existence of a
+real-valued vector u ∈RX×N with the property that for rows m of type (I) or
+(III), Bm ·u ≥0, and for rows m of type (II) or (IV), Bm ·u > 0. By Lemma 1.13,
+the non-existence of such a u is equivalent to the existence of an integer-valued
+vector η ≥0, such that for some row m of either type (II) or (IV), ηm > 0, and
+η · B = 0. Rows are indexed by their associated relation; so a row of type (I)
+will be written Bx⪰0y, for example.
+It cannot be that only constraints of type (III) or (IV) are associated
+with ηm > 0, as we know there always exists a utility representation for a
+weak order on a ﬁnite set. So, let us consider two sequences of length K =
+
+{m:m is of type (I) or (II)}
+ηm, say x1,...,xK and y1,...,yK, where for ﬁxed (x,y) ∈X ×X,
+|{k : xk = x,yk = y}| = ηx⪰0y + ηx≻0y.
+Since ⪰0 is transitive, we may assume these two sequences are disjoint (that
+is, there is no j,k for which xj = yk), as the rows can be canceled to remove
+overlapping elements. Similarly, since each ⪰i is transitive, we can assume
+that there is no triple x,y,z and i ∈N for which the rows corresponding to x Ri y
+and y Qi z each have positive weight, where R and Q can be either ⪰or ≻.
+Similarly, we may also assume that for any i = 1,...,n, and any x, it cannot
+be the case that there are y,z for which both a row corresponding to y ⪰i x or
+y ≻i x and a row corresponding to x ⪰i z or x ≻i z each have positive weight.
+This we may assure by simply summing such rows to get a row involving only
+y and z. We will call this assumption (*).
+Now, it follows that since η · B = 0, and since the x1,...,xK and y1,...,yK
+sequences are disjoint, it must be that rows of type (I) or (II) can only be
+eliminated by a collection of rows of type (III) or (IV). That is, every instance
+of xj contributes a positive term 1(i,xj), so in order for η · B = 0, this positive
+term must be canceled by a negative term. This negative term must come from
+a constraint of type (III) or type (IV), so there must exist, for agent i, a row of
+type y ⪰i x or a row of type y ≻i x with positive weight. And by our assumption
+(*), this introduces a positive term on 1(y,i), which must be matched by
+some yk.
+
+
+--- Page 7 ---
+164
+Social Choice and Political Science
+What we have shown is that there exists, for each agent, a bijection σi :
+K →K such that yj ⪰i xσi(j). And since one of the rows corresponds to type (II)
+or (IV), ηm > 0, it follows that either there exists xj ≻0 yj, or there exists i ∈
+1,...,n such that yj ≻i xσi(j). This is exactly what is precluded by the statement
+of the theorem.
+11.2
+MODELS IN FORMAL POLITICAL SCIENCE
+It is interesting and fruitful to analyze formal models in political science
+from the perspective of revealed preference theory. There is a wealth of data
+on which to test theories of political competition and voters’ behavior. Here
+we shall discuss two different models, and investigate their empirical content
+under different assumptions about what can be observed.
+We ﬁrst discuss the standard model of “spatial” preference and investigate
+circumstances where it lacks testable implications, even when we have rich
+data (we observe a full preference relation). We then turn to more general
+models of voter behavior, and consider more limited data.
+11.2.1
+Refuting Euclidean preferences
+Many models in political science are based on voters having a special kind of
+“spatial” preference. We consider here the testable implications of such models
+of voter behavior. The idea is that policy positions can be represented as points
+in some Euclidean space, Rd. We can view a vector x ∈Rd as representing
+a position in each of d issues. We can then model a voter’s behavior using a
+preference relation on Rd.
+The standard benchmark model in political science is that of Euclidean
+preferences, where each agent is endowed with an ideal point, and a vector
+of policy positions is preferred to another iff it is closer to the voter’s ideal
+point. Formally, for each agent i, let yi ∈Rd be i’s ideal point. Then i’s
+preference relation, ⪰i, is deﬁned by x ⪰i z iff ∥x −yi∥≤∥z −yi∥, where
+∥x∥= (d
+i=1 x2
+i )1/2 is the Euclidean norm on Rd (hence the term Euclidean
+preferences).
+The theory is simple, but when we observe data on voter behavior, we do not
+observe choices among vectors in Rd. One basic problem is then to identify
+alternatives with vectors in some Euclidean space, in a way that is consistent
+with the theory.
+Given are a ﬁnite set X of alternatives and a ﬁnite set of agents N. Agents are
+endowed with preference relations over X, ⪰i, one for each i ∈N. A preference
+proﬁle (⪰i)i∈N is Euclidean rationalizable if there exist a mapping ρ : X →Rd,
+and ideal points yi ∈Rd, so that for all x,z,∈X and all i ∈N, x ⪰i z iff ∥ρ(x) −
+yi∥≤∥ρ(z) −yi∥. Note that we make no requirement that ρ be one-to-one.
+In revealed preference theory, we often try to understand the properties of
+data that refute a given theory. Here we shall instead ask if the theory is at all
+
+
+--- Page 8 ---
+11.2 Models in formal political science
+165
+refutable, without trying to understand the morphology of refutations. So we
+ask, when is it the case that all preference proﬁles are Euclidean rationalizable?
+The answer to this question will clearly depend on at least three things:
+|X|, |N|, and d. If, for some triple (|X|,|N|,d), all preference proﬁles are
+Euclidean rationalizable, then the model has, in some sense, no empirical
+content. If instead there are proﬁles that are not Euclidean rationalizable, then
+the theory may have some empirical bite. The following two results are due to
+Bogomolnaia and Laslier.
+Theorem 11.6
+All proﬁles (⪰i)i∈N of preference relations are Euclidean
+rationalizable iff d ≥min{|X| −1,|N|}.
+Proof. We ﬁrst demonstrate that if d ≥min{|X| −1,|N|}, then the Euclidean
+model has no empirical content. To this end, ﬁrst suppose that d ≥|X| −1. In
+particular, let us consider the case d = |X| −1; the other cases follow trivially
+from this. We shall carry out a construction for which we do not actually need
+to know the proﬁle of preferences ⪰i.
+We let the set of policy alternatives be the set in Rd+1 given by {x ∈
+Rd+1 : d+1
+j=1 xi = 1}. This set is isomorphic to Rd. Now, we can write X =
+{1,...,d + 1}. Consider the mapping ρ which carries each m to the vector 1m
+(as usual, 1m denotes the unit vector with a 1 in entry m, and zeros in all other
+entries). The simplex deﬁned by (d) = {x ∈Rd+1 : x ≥0 and d+1
+j=1 = x}
+can be used to choose the ideal points, yi. In particular, for m,l ∈X, we can
+consider the set H(m,l) = {x ∈(d) : xm ≥xl}, and the set H+(m,l) = {x ∈
+(d) : xm > xl}. If y ∈H(m,l), then ∥1m −y∥≤∥1l −y∥, and if y ∈H+(m,l),
+then ∥1m −y∥< ∥1l −y∥. So, given a preference ⪰i, we need yi ∈H(m,l)
+for all m ⪰i l and yi ∈H+(m,l) for all m ≻i l. It is easy to see that this can
+always be done. For example, take any utility representation ui : X →R of ⪰i
+and consider −ui. Consider the function vi(x) = −ui(x) + λ, where λ > 0 is
+chosen large enough so that vi(x) > 0 for all x. Then renormalize by α > 0
+so that 
+x∈X α(−ui(x) + λ) = 1. Then the vector yi ∈Rd+1 deﬁned by letting
+yil = α(−ui(l) + λ) for each l satisﬁes the desired property.
+On the other hand, suppose that d ≥|N|. We can suppose that d = |N|. The
+case where d > |N| will easily follow from the argument given here. For each
+i ∈N, let ui : X →R be a utility function representing ⪰i. Consider the point
+ρ∗(x) ∈Rd whose ith coordinate is given by ρ∗(x)i = ui(x). Now, consider the
+function F : Rd+1 →Rd given by
+Fi(α,z) = −α(z · z) + zi;
+with α ∈R and z ∈Rd.
+Note that ∇zF(0,z) = I for all z (where ∇zF here stands for the Jacobian
+matrix), and that Fi(0,ρ∗(x)) = ui(x) for x ∈X. By the implicit function
+theorem (for example, see Rudin, 1976), for each x ∈X, there is a neighborhood
+Ux of 0 such that for all α ∈Ux, there is a point ρα(x) for which Fi(α,ρα(x)) =
+ui(x). By choosing α such that α ∈%
+x∈X Ux and α > 0, we have for each x a
+
+
+--- Page 9 ---
+166
+Social Choice and Political Science
+point ρα(x) for which Fi(α,ρα(x)) = ui(x). Thus, x →Fi(α,ρα(x)) represents
+⪰i on X. Finally, we claim that for each i ∈N, z →Fi(α,z) represents a
+Euclidean preference. We have
+Fi(α,z) = −(α(z · z) −zi),
+which is ordinally equivalent to
+−
+ 
+z −1i
+2α
+!
+·
+ 
+z −1i
+2α
+!
+,
+which represents a Euclidean preference with ideal point 1i
+2α. Let ρ(x) = ρα(x),
+and we are done.
+To show the converse, for every d, we will consider an environment with
+d + 1 individuals and d + 2 alternatives which is not consistent with the
+Euclidean model. We will demonstrate a list of preferences which cannot be
+represented. Let us write out the alternatives as {x0,x1,...,xd+1}. Individual i ∈
+N will have a preference which ranks xi strictly above all other alternatives, and
+ranks the remaining alternatives as indifferent. We will argue by contradiction.
+The ﬁrst point to mention is that, by virtue of the preference proﬁle under
+consideration, it follows that for all j ̸= k, ρ(xj) ̸= ρ(xk). That is, ρ is
+one-to-one.
+Though the following proof will hold for arbitrary d, it helps to establish it
+ﬁrst in the special case of d = 1.
+First, for d = 1, it is simple to show that there is no representation of this
+environment. We have two individuals, and ρ(x0),ρ(x1), and ρ(x2) all lie on a
+straight line. Since i = 1 is indifferent between ρ(x0) and ρ(x2), ρ(x1) must be
+in between ρ(x0) and ρ(x2). And since i = 2 is indifferent between ρ(x0) and
+ρ(x1), it follows that ρ(x1) must be in between ρ(x0) and ρ(x1). This is clearly
+impossible.
+The proof for d ≥2 relies on an interesting geometric fact. Consider the
+function ψ : Rd\{0} →Rd given by
+ψ(x) =
+x
+∥x∥2 .
+This function, known as an inversion function in geometry, has two very
+interesting properties. First, it satisﬁes ψ(ψ(x)) = x for all x ∈Rd\{0}. Second,
+it maps every sphere containing the origin (on its boundary, and of course
+excluding the origin) to a hyperplane which does not intersect the origin,
+and of course, therefore maps every hyperplane not containing the origin to a
+sphere containing the origin (on its boundary). Every hyperplane which passes
+through the origin is mapped to itself. Lastly, for any point in the interior of
+any sphere containing the origin, this point is mapped to the opposite side of
+the origin from the hyperplane which is the image of this sphere. For more
+on the interesting geometry behind this function, one should consult Coxeter
+(1969), Chapter 6.
+
+
+--- Page 10 ---
+11.2 Models in formal political science
+167
+So, now suppose that d ≥2. It is clear that without loss of generality, we
+may assume that ρ(x0) = 0.
+We know that any (d + 1)-tuple of elements of {0,ρ(x1),ρ(x2),...,ρ(xd+1)}
+containing 0 must lie on some sphere (as there is some agent who is
+indifferent between them all and 0). As a consequence, any set of
+{ψ(ρ(x1)),...,ψ(ρ(xd+1))}\{ψ(ρ(xi))}
+lies
+on
+some
+hyperplane
+which
+does not intersect the origin (the image of i’s indifference surface), and having
+the property that ψ(ρ(xi)) lies on the opposite side of the origin from this
+hyperplane.
+We
+will
+study
+the
+intersection
+of
+all
+hyperplanes
+containing
+{ψ(ρ(x1)),...,ψ(ρ(xd+1))}, namely H = {d+1
+i=1 λiψ(ρ(xi)) : 
+i λi = 1}.2
+We
+will
+also
+make
+use
+of
+the
+afﬁne
+set
+generated
+by
+the
+set
+{ψ(ρ(x1)),...,ψ(ρ(xd+1))}\{ψ(ρ(xi))}, call this Hi. Hi lies in a hyperplane
+which does not pass through the origin, on the other side of which is ψ(ρ(xi)).
+We have two possibilities: either H = Hi for some i, or not.
+Suppose H = Hi for some i. Without loss of generality, assume that H =
+Hd+1. This implies that on any sphere on which 0,ρ(x1),...,ρ(xd) all lie,
+ρ(xd+1) must also lie, so that the preference ⪰d+1 cannot be represented. This
+is a contradiction.
+For the second case, we note that we may conclude that 0 ∈H.3 In particular,
+there are λi for which d+1
+i=1 λi = 1 such that 0 = d+1
+i=1 λiψ(ρ(xi)). We claim
+that each λi ≤0, which will be a contradiction.
+We illustrate the case of i = d + 1. To see this, remember we said that each
+Hd+1 lies on a hyperplane (the image of the indifference surface for agent
+d+1), the other side of the origin from which is ψ(ρ(xd+1)). Let the normal of
+this hyperplane be pd+1. Formally, we have that there is αd+1 > 0 such that for
+all j = 1,...,d, pd+1 · ψ(ρ(xj)) = αd+1 > 0, and pd+1 · ψ(ρ(xd+1)) > αd+1. We
+know that d+1
+j=1 λjψ(ρ(xj)) = 0; consequently, d+1
+j=1 λjpd+1 · ψ(ρ(xj)) = 0.
+However, d+1
+j=1 λjpd+1 · ψ(ρ(xj)) = αd+1(d
+j=1 λj) + λd+1pd+1 · ψ(ρ(xd+1)).
+If λd+1 ≥0, then we have αd+1(d
+j=1 λj) + λd+1pd+1 · ψ(ρ(xd+1)) ≥
+αd+1
+d+1
+j=1 λj = αd+1 > 0, a contradiction. Consequently, λd+1 ≤0.
+2 That all hyperplanes containing {ψ(ρ(xi)),...,ψ(ρ(xd+1))} also contain H is obvious. That
+each w ∈H is contained in all such hyperplanes can be proved via Lemma 1.12. That is,
+for vectors y1,...,ym, p · y = 0 is a consequence of p · yi = 0 for all i iff there is λ ∈Rm
+for which y = m
+i=1 yi. Now w is in every hyperplane containing each ψ(ρ(xi)) if for all
+p ∈Rd+1 and α ∈R, p · ψ(ρ(xi)) −α(1) = 0 implies p · w −α(1) = 0. So apply this result to
+the vectors (ψ(ρ(xi)),−1) and (w,−1), so that there is λ ∈Rd+1 for which d+1
+i=1 λi = 1 and
+w = d+1
+i=1 λiψ(ρ(xi)).
+3 To see this, note that by dimensionality of the space, there is μ ∈Rd+1\{0} for which
+d+1
+i=1 μiψ(ρ(xi)) = 0 (the vectors ψ(ρ(xi)) cannot be linearly independent). We must show
+that d+1
+i=1 μi ̸= 0. But, since μ ̸= 0, the converse would imply that there exists some i for
+which μi ̸= 0 and −μi = 
+j̸=i μj. Then −μiψ(ρ(xi)) = 
+j̸=i μjψ(ρ(xj)). Dividing each
+side by −μi now results in ψ(ρ(xi)) ∈Hi, a contradiction.
+
+
+--- Page 11 ---
+168
+Social Choice and Political Science
+Theorem 11.6 says that rationalization by Euclidean preferences may
+require many dimensions. Our next result deals with a weaker theory: voters
+have convex preferences over policies, but they do not need to be Euclidean. It
+turns out that two dimensions sufﬁce in this case.
+Formally, we say that a proﬁle (⪰i)i∈N is convex rationalizable if there exists
+a mapping ρ : X →Rd, and a convex preference relation ⪰∗
+i on Rd for all i ∈N,
+such that for all x,y ∈X, x ⪰i y iff ρ(x) ⪰∗
+i ρ(y).
+Theorem 11.7
+If d > 1, |X| = 2, or |N| = 1, then any proﬁle (⪰i)i∈N of
+preference relations is convex rationalizable.
+We omit the proof of Theorem 11.7, but the basic idea is to let ρ : X →Rd be
+any mapping carrying each X to a distinct vertex of some regular polytope.
+Then, for each preference ⪰i, we let U(x) = conv{ρ(y) : y ⪰i x}, where
+conv denotes the convex hull. These are nested. The preferences ⪰∗
+i to be
+constructed must be such that their upper contour sets at x contain U(x). It
+is always possible to construct such ⪰∗.
+11.2.2
+Rational voting when policy positions are known
+We now turn to the case when policy alternatives are already given by vectors
+in Rd. A voter has preferences over Rd; we are going to consider convex and
+Euclidean preferences.
+Suppose that we observe the behavior of a single voter. A voting record V
+is a ﬁnite collection of pairs, {(yk,nk)}K
+k=1, where each yk,nk ∈Rd and yk ̸= nk.
+The interpretation is that out of the pair (yk,nk), yk ∈Rd was chosen (voted
+“yes”) while nk ∈Rd was not.
+The environment is a special case of choice theory, as described in Chapter 2.
+For each k, yk is chosen over (or “revealed preferred” to) nk. The set of
+“budgets” consist of pairs; and we assume that we observe the entire choice
+function over those budgets (which happens to be single-valued).
+By our results in Chapters 2 and 3, we know that any voting record is weakly
+rationalizable by some utility function (namely, complete indifference). And a
+voting record is strongly rationalizable iff its revealed preference pair admits
+no cycles. In this case, we know the revealed preference pair is given by
+yk ⪰c nk for all k, and yk ≻c nk for all k; that is, ⪰c = (≻c∪=), so acyclicity
+of the order pair is the same as acyclicity of ≻c.4 The ﬁrst result highlights a
+reformulation of acyclicity.
+A voting record is strongly pair rationalizable if there is a utility function
+u : Rd →R such that, for all k, u(yk) > u(nk). The word “pair” in “strongly pair
+rationalizable” is meant to remind us that data come in the form of pairwise
+comparisons.
+4 Of course, we also have yk ⪰c yk for all k.
+
+
+--- Page 12 ---
+11.2 Models in formal political science
+169
+For any V′ ⊆V, we deﬁne Y(V′) = {yk : (yk,nk) ∈V′} and N(V′) = {nk :
+(yk,nk) ∈V′}. These are the sets of elements that were chosen from V′ and
+rejected from V′ respectively. Finally, X(V′) = Y(V′) ∪N(V′).
+Proposition 11.8
+A voting record V is strongly pair rationalizable iff for all
+nonempty V′ ⊆V, Y(V′) ̸= N(V′).
+Proof. Suppose that V is strongly rationalizable, and suppose, toward a
+contradiction, that there is some V′ ⊆V for which Y(V′) = N(V′). We will
+show how to construct a ≻c cycle. Let nk1 ∈N(V′) be arbitrary; we know that
+yk1 ≻c nk1. Moreover, yk1 ∈N(V′), so there is (yk2,nk2) ∈V′ for which nk2 = yk1.
+But then we have yn2 ≻c nk2 = yk1 ≻c nk1. By continuing this construction
+inductively, and since V′ is ﬁnite, we must eventually construct a cycle.
+Conversely, suppose that we have Y(V′) ̸= N(V′) for all nonempty V′ ⊆V,
+but that V is not strongly rationalizable. Then we know there is a cycle
+ykl ≻c nkl = ykl−1 ≻c nkl−1 ...nk1 = ykl.
+By setting V′ = {(yki,nki)}, we have Y(V′) = N(V′), a contradiction.
+An extreme point of a set X ⊆Rd is a point x ∈X which cannot be written as
+a convex combination of points in X\{x}. The set of extreme points of X will
+be denoted E(X). The following theorem is due to Tasos Kalandrakis (as was
+Proposition 11.8).
+Theorem 11.9
+Let V be a voting record. The following conditions are
+equivalent:
+I) For all nonempty V′ ⊆V, there is x ∈E(X(V′))\Y(V′).
+II) There exists a concave utility function strongly pair rationalizing V.
+III) There exists a strictly concave utility function strongly pair rational-
+izing V.
+IV) There exists a quasiconcave utility function strongly pair rationaliz-
+ing V.
+The main interest is in condition (I). Notice that it is a stronger condition than
+acyclicity. In fact, we included Proposition 11.8 to highlight the difference
+between Condition (I) and acyclicity as formulated in Proposition 11.8. If
+for all nonempty V′ ⊆V there is x ∈E(X(V′))\Y(V′), then, of course, it is
+impossible that Y(V′) = N(V′). The following is a simple example of a strongly
+pair rationalizable voting record which is not rationalizable by a concave, or a
+quasiconcave, utility function.
+Example 11.10
+Suppose X = R, and that the voting record consists of V =
+{(0,1),(2,1)}. Then this voting record can never be strongly rationalized by a
+concave utility function. This is obvious, but to see this via Theorem 11.9, note
+that E(X(V)) = {0,2}, and Y(V) = {0,2}, a contradiction to condition (I).
+
+
+--- Page 13 ---
+170
+Social Choice and Political Science
+Hence, in the voting model, concavity imposes testable restrictions over and
+above the restrictions contained in strong rationalizability by a utility function.
+Contrast this with Afriat’s Theorem of Chapter 3, which says that concavity
+has no testable implications above rationality alone. The difference arises from
+the kind of data we have assumed here. In the demand theory environment
+of Chapter 3, we could never directly compare two arbitrary consumption
+bundles. In the present environment, such comparisons are not only possible,
+they are the only types of comparisons allowed.
+Proof. That the existence of a concave strict rationalization implies
+Equation (I) is well known, as at least one minimizer of a concave function
+always occurs at an extreme point. And the minimizer cannot occur at a point
+yk ∈Y(V′), as the corresponding point nk ∈N(V′) is ranked strictly lower.
+We will show that Equation (I) implies the existence of a concave utility
+function strictly rationalizing V. To see this, consider the set X. We will show
+that for each x ∈X(V), there is ux ∈R and px ∈Rd such that for all (x,y) ∈V,
+ux > uy, and for all x,y ∈X(V), uy ≤ux + px · (y −x). By deﬁning u : Rd →R
+by u(z) = minx∈X(V) ux + px · (z −x), we will have a rationalization. This is the
+typical Afriat construction; see Chapter 3.
+In fact, we shall set up a system like that in the proof of Afriat’s Theorem.
+Deﬁne a matrix B as follows. The matrix has |X(V)| + d|X(V)| columns. First
+are |X(V)| columns, one labeled with each element of X(V). Then a second
+collection of d|X(V)| columns, these come in groups of d columns, each group
+is labeled with an element of X(V).
+For each pair (x,y) ∈V, we have a row with a zero in each entry, with the
+exception of a 1 in the ﬁrst column labeled with x and a −1 in the ﬁrst column
+devoted to y. For each distinct pair (x,y) ∈X(V) × X(V), we have a row with
+a zero in each entry, with the exception of 1 in the ﬁrst column labeled with x,
+−1 in the ﬁrst column devoted to y, and in the second set of d columns labeled
+with x we include the vector (y −x). That is, in the ﬁrst such column we write
+y1 −x1; in the second column y2 −x2, and so on.
+We are looking for a utility function u : X →R and vector px for each x ∈X
+that solve the system of inequalities we described above. We can view a utility
+function as a vector u ∈RX(V), and stack the d-dimensional vectors px in a way
+that is congruent with the columns of B. Let P be the vector (px)x∈X stacked in
+a manner congruent with the columns of B. Then we can write the system of
+linear inequalities as
+B ·
+4 u
+P
+5
+≥0,
+where the ﬁrst V inequalities corresponding to u must be strict.
+Now suppose that there is no solution to the system of inequalities. By
+Lemma 1.12, we conclude that for each (x,y) ∈V, there exists λ(x,y) ≥0 and
+for each (x,y) ∈X(V)×X(V), there is μ(x,y) ≥0, where at least one λ is strictly
+
+
+--- Page 14 ---
+11.2 Models in formal political science
+171
+positive, and such that for each x ∈X(V),
+
+y∈X(V):(x,y)∈V
+λ(x,y) −
+
+y∈X(V):(y,x)∈V
+λ(y,x) +
+
+y∈X(V)
+μ(x,y) −
+
+y∈X(V)
+μ(y,x) = 0 (11.1)
+and
+
+y∈X(V)
+μ(x,y)(y −x) = 0.
+(11.2)
+Consider all pairs (x,y) for which either λ(x,y) > 0 or μ(x,y) > 0. Call this set
+M, and consider X(M). The set M is nonempty; it is not necessarily a subset
+of V. Note that Equation (11.1) implies that, for any x ∈X(M), there is y with
+λ(z,y) > 0 or μ(z,y) > 0 (or both).
+Next, consider an extreme point z of the set X(M). There is at least one
+extreme point because X(M) is ﬁnite. As z ∈X(M), there is y with λ(z,y) > 0 or
+μ(z,y) > 0. Now, we cannot have μ(z,y) > 0 for any y because equation (11.2)
+would imply that z is not an extreme point of X(M).
+Therefore, z is associated with a positive λ(z,y), for some y. But this implies,
+in fact, that (z,y) ∈V. Deﬁne V′ ⊆V by (x,y) ∈V′ iff λ(x,y) > 0. We know
+that all extreme points of X(M) are therefore elements of Y(V′). But as a
+consequence, all extreme points of X(V′) are also elements of Y(V′), which is a
+contradiction.
+Going back to the model discussed in Section 11.2.1, we can ask when a voting
+record V is rationalizable by a preference relation that is not only convex, but
+Euclidean. Data V = {(yk,nk)}K
+k=1 are rationalizable by the Euclidean model if
+there is y ∈Rd such that, for all k, ∥yk −y∥< ∥nk −y∥.
+The following result provides an answer. It states that whenever a weighted
+average of the yk vectors and the nk vectors coincide, it must be the case that
+the weighted average of the squared lengths of the yk vectors is strictly less
+than the weighted average of squared lengths of the nk vectors.
+Theorem 11.11
+Let V = {(yk,nk)}K
+k=1 be a voting record. Then there is a
+Euclidean preference strongly rationalizing V iff for all λ ∈Rk for which
+λ ≥0 and K
+k=1 λk = 1, if 
+k λkyk = 
+k λknk, then 
+k λk
+
+yk · yk
+< 
+k λk
+
+nk · nk
+.
+Proof. The proof is based on an application of a lemma related to Lemma 1.14.
+V is rationalizable by a Euclidean preference iff there exists b ∈Rd such that
+for all (yk,nk) ∈V,
+−(yk −b) · (yk −b) > −(nk −b) · (nk −b).
+Rewriting this equation, we seek the existence of b ∈Rd such that for all k,
+b ·
+
+yk −nk
+> (yk · yk) −(nk · nk)
+2
+.
+
+
+--- Page 15 ---
+172
+Social Choice and Political Science
+By introducing a variable α ∈R, we see that there exists such a b ∈Rd iff there
+exists (b,α) ∈Rd+1 for which
+b ·
+
+yk −nk
+−α
+4(yk · yk) −(nk · nk)
+2
+5
+> 0
+and α > 0. By Lemma 1.12, it can be shown that there is a solution to
+these inequalities iff for all λ ∈Rk where λ ≥0 and K
+k=1 λk > 0, we have
+K
+k=1 λk(yk −nk) = 0 implies K
+k=1 λk
+
+(yk · yk) −(nk · nk)
+
+< 0. Note that we
+may simply renormalize so that 
+k λk = 1.
+Remark 11.12
+It can be similarly shown that a voting record V is strongly
+rationalizable by a linear preference iff for all λ ∈Rk for which λ ≥0
+and K
+k=1 λk = 1, we have K
+k=1 λkyk ̸= K
+k=1 λknk. Thus, the condition
+of Euclidean rationalizability is strictly weaker than the condition of linear
+rationalizability. This should not be surprising, as a linear preference is like a
+Euclidean preference with an ideal point “at inﬁnity.” The situation would, of
+course, change if we allowed indifference into a voting record.
+Section 11.2.1 also addressed the question of when the Euclidean model
+has no testable implications whatsoever. Instead of trying to describe the
+rationalizable datasets, we found properties on the parameters of the problems
+such that no data could refute the Euclidean model.
+In the present context, we can ask a similar question. The difference
+compared to the environment in 11.2.1 is that now the policy positions are
+observed as vectors in Rd. Let us deﬁne an election to be a binary set E =
+{x,z} ⊆Rd, where x ̸= z. For any ﬁnite collection of elections E1,...,Ek, a voting
+record V is consistent with this collection if for all (x,z) ∈V, {x,z} ∈Ei for some
+i, and for all i, if {x,z} = Ei, then either (x,z) ∈V or (z,x) ∈V. That is, a voting
+record is consistent with a sequence of elections iff it describes a sequence of
+possible votes over those elections. The next result is due to Degan and Merlo.
+Theorem 11.13
+Suppose k ≤d. Then there is an open and dense set
+of election sequences of length k such that any consistent voting record
+is rationalizable by Euclidean preferences. If d < k, then for all election
+sequences there are voting records that are not rationalizable by Euclidean
+preferences.
+Proof. Let E be an election {x,z}. Let λ ∈Rd be deﬁned by λ = x −z and let
+c ∈R be deﬁned by c = (x·x−z·z)
+2
+. A simple calculation reveals that a Euclidean
+preference with ideal point y ranks x ≻z if and only if λ·y > c and ranks z ≻x
+iff λ · y < c.
+Each election Ei = {xi,zi} is identiﬁed with a pair (λi,ci), deﬁned as above.
+Given a voting record V, there is y such that the Euclidean preferences with
+ideal point y rationalize V iff there is y ∈Rd such that λi · y > ci if (xi,zi) ∈V,
+and λi · y < ci if (zi,xi) ∈V. We may write in matrix form  ∈Rk×d, where 
+collects the vectors λi, and c ∈Rk.
+
+
+--- Page 16 ---
+11.3 Chapter references
+173
+Now, with k ≤d, for an open and dense set of , the range of the function
+y → · y −c is k-dimensional. And by the preceding discussion, for any such
+ and c, and any V, there is y rationalizing V.
+Suppose instead that d < k. We know then that λ1,...,λk cannot be linearly
+independent; without loss of generality, let us suppose that λk = k−1
+i=1 αiλi, and
+let us suppose again without loss that αi ≥0 for all i (we can always relabel xi
+as zi and zi as xi). Now consider the value c = k−1
+i=1 αici. There are two cases.
+Either c ≤ck or c > ck. In the ﬁrst case, whenever λi · y ≤ci for all i ≤k −1, it
+follows that λk ·y ≤ck. In the second case, whenever λi ·y ≥ci for all i ≤k−1,
+it follows that λk · y > ck. Either way, there are voting records that cannot be
+rationalized.
+The message of Theorem 11.13 is similar to that of Theorem 11.6; it
+characterizes the environments where the Euclidean model is empirically
+vacuous.
+11.3
+CHAPTER REFERENCES
+Theorem 11.1 is due to McGarvey (1953). Theorems 11.2 and 11.3 are
+due to Dushnik and Miller (1941). Theorem 11.4 is due to Ghouila-Houri
+(1962) and Gilmore and Hoffman (1964). The NP-completeness result is due
+to Yannakakis (1982). Results generalizing McGarvey’s Theorem for other
+choice rules include Deb (1976) and Kalai (2004). Sprumont (2001) describes
+necessary and sufﬁcient conditions for 2-unanimity rationalization by weak
+orders in certain economic environments. Theorem 11.5 appears in Fishburn
+(1969) without proof; a much more general statement can be found in Fishburn
+(1973a). Related to these results is the paper of Knoblauch (2005), which
+implicitly uses model-theoretic ideas (see Chapter 13) to describe the length
+of potential axiomatizations of Pareto rationalizability.
+The results and proofs in Section 11.2.1 are due to Bogomolnaia and Laslier
+(2007). Bogomolnaia and Laslier (2007) actually establish a slightly different
+result than Theorem 11.6, that even when one admits linear preferences
+(preferences represented by a linear function), the result does not change.
+Note that the function ρ described in the proof of Theorem 11.6 is allowed
+to depend on the proﬁle ⪰1,...,⪰n. In general, we may not wish this to be the
+case. Bogomolnaia and Laslier (2007) discuss this issue.
+As for a proof of Theorem 11.7, the construction of preferences ⪰∗we
+suggest can be established as in Richter and Wong (2004).
+Some related papers are useful to mention. Knoblauch (2010) provides
+a polynomial-time algorithm (and construction) for understanding when a
+proﬁle is Euclidean rationalizable for d = 1. Azrieli (2011) studies Euclidean
+preferences with a “valence” dimension. Ballester and Haeringer (2011)
+describes conditions ensuring that a preference proﬁle is rationalizable as a
+single-peaked proﬁle for some ordering of the alternatives.
+
+
+--- Page 17 ---
+174
+Social Choice and Political Science
+The discussion in Section 11.2.2 draws on Kalandrakis (2010) and Degan
+and Merlo (2009). Most of the technical ideas in this section can be ascribed
+to Richter and Wong (2004); we have followed Richter and Wong in the proof
+of Theorem 11.9, which appears in Kalandrakis (2010) with a different proof.
+Theorem 11.13 is due to Degan and Merlo (2009).
+Richter and Wong (2004) deal with the following problem. Suppose we have
+a ﬁnite subset K ⊆Rd, and a complete and transitive binary relation ⪰on K.
+When is it the case that there exists a complete, transitive, extension of ⪰
+which can be represented by a concave utility function? (One difference with
+Kalandrakis (2010) is that he discards the completeness condition.)
+Finally, Gomberg (2011, 2014) presents the testable implications of group
+behavior when the group can vary, and is assumed to be composed of rational
+individuals choosing according to a scoring rule.

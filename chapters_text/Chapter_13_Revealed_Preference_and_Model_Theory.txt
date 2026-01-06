@@ -1,0 +1,1824 @@
+--- Page 1 ---
+CHAPTER 13
+Revealed Preference and Model Theory
+In this book, we have studied the concept of empirical content in disparate
+environments. To conclude our study, we wish to suggest that there is a
+unifying theme behind these exercises. The idea of the empirical content of
+a theory as the set of all falsiﬁable predictions of the theory is generally
+applicable, and subject to formal study.
+A theory can make predictions which are non-falsiﬁable. A case in point
+is the theory of representation by a utility function. Recall Theorem 1.1. The
+theorem implies that if a preference relation ⪰over Rn
++ possesses a utility
+representation, then there is a countable set Z ⊆Rn
++ such that for all x,y ∈X
+for which x ≻y, there exists z ∈Z for which x ⪰z ⪰y. This implication of
+the theory of utility is not falsiﬁable. To demonstrate that the theory has been
+falsiﬁed, one would need to establish the non-existence of such a set Z. Doing
+so involves checking, one-by-one, every possible countable subset Z of Rn
++, a
+task which can never be completed.
+A ﬁrst and basic issue in understanding empirical content has to do with
+universal vs. existential axiomatizations. The idea was already introduced in
+Chapters 9 and 12, where we saw the removal of existential quantiﬁers as a
+source of testable implications. The issue of universal and existential axioms
+goes back to Popper (1959), who thought that a theory with a universal
+description is falsiﬁable, while an existential theory is not.
+Popper offers the example of the theory that claims “all swans are white.”
+This theory is universal, in the sense that it states a property of all swans, or
+“universally quantiﬁes over swans.” It is easy to see that, in principle, such a
+theory can be falsiﬁed by ﬁnding a single swan that is not white. Contrast with
+Popper’s example of an existential theory: that “there exists a black swan.”
+The existential theory cannot be falsiﬁed. Falsifying the theory would involve
+collecting all possible swans and verifying that each one is not black. We could
+only do this if we could somehow be sure to have exhaustively checked all the
+swans in the universe.
+Universality is clearly important for falsiﬁability, but there is a second
+component that is particularly relevant for the subject of this book. Popper’s
+
+
+--- Page 2 ---
+Revealed Preference and Model Theory
+187
+idea captures the notion of empirical content and falsiﬁability very well in
+many environments. However, economic theories and data are often burdened
+by partial observability. Implicit in Popper’s examples is the idea that when we
+observe a swan, we observe its color. And indeed, in the swans example, this is
+entirely natural. With economic choice data, on the other hand, it is perfectly
+reasonable to observe objects but not all their properties. It is common, for
+example, to observe a pair of alternatives and not be able to observe which of
+the pair an individual chooses, or would choose. Think of choice from a budget
+B. When x ∈B is chosen this reveals something about the pairs (x,y) for y ∈B,
+but nothing about the pairs (z,y) for z ̸= x. This issue has been important in
+many of the results we have established. It lies behind the non-testability of
+concave utility in Afriat’s Theorem, for example.1
+Thus, in contrast to the theories that Popper had in mind, economic theories
+have the feature that we may be able to observe objects without observing the
+properties these objects enjoy. The phenomenon of partial observability will
+be very important for our discussion.
+The considerations of universality and partial observability will be reﬂected
+in the kinds of axioms that capture the empirical content of a theory. Recall
+GARP, which states that the revealed preference pair ⟨⪰R,≻R⟩is acyclic.
+Acyclicity of a revealed preference pair is a universal theory, but it is more.
+Using the universal quantiﬁer ∀and the negation symbol ¬, we can write
+acyclicity succinctly as for all n,
+∀x1...∀xn¬
+1n−1
+6
+i=1
+(xi ⪰R xi+1) ∧(xn ≻R x1)
+2
+.
+(13.1)
+The structure of Equation (13.1) explains its falsiﬁability: it begins with
+universal quantiﬁcation, followed by a negation, followed by a conjunction ∧
+(meaning “and”), followed by basic properties about observables. Speciﬁcally,
+such “basic” properties amount to observable relations among observables.
+This mathematical equation is therefore a Universal Negation of Conjunction
+of Atomic Formulas: it is an UNCAF formula.
+Negating atomic formulas
+means that one rules out that a particular (observable) relation holds among
+observable entities or quantities.
+Contrast GARP with the hypothesis that ⪰R is a preference relation (a weak
+order) and ≻R is its strict part. This hypothesis has a universal axiomatization,
+but not of the UNCAF form. We shall see that this distinction matters. The
+hypothesis that ⪰R is a weak order and ≻R is its strict part has the following
+axiomatization:
+I) ∀x∀y(x ⪰R y) ∨(y ⪰R x)
+II) ∀x∀y∀z(x ⪰R y) ∧(y ⪰R z) →(x ⪰R z)
+III) ∀x∀y(x ≻R y) ↔(x ⪰R y) ∧¬(y ⪰R x).
+1 If one could observe comparisons between all pairs of alternatives, then concavity would
+clearly be testable.
+
+
+--- Page 3 ---
+188
+Revealed Preference and Model Theory
+Some claims made by this theory are falsiﬁable. For example if we observe
+that x ≻R y, y ≻R z, and z ≻R x (a violation of transitivity), then obviously
+we have falsiﬁed the theory. But not all claims made by the theory are
+falsiﬁable. A pair x,y could be observed without observing any relation
+between them for example: this is common in the consumption datasets
+analyzed in Chapters 3–5. Therefore, in the presence of partial observability,
+completeness cannot be falsiﬁed.2 Interestingly, GARP is usually understood
+as forming the empirical content of axioms (I), (II), and (III). We demonstrate
+below the formal sense in which this is true.
+13.1
+A MODEL FOR OBSERVABLES, DATA, AND THEORIES
+There are three important concepts we need to explain. The ﬁrst is the primitive
+of the model: the things we can observe are the primitive, and these things will
+be speciﬁed through a language. The second is what we mean by a dataset:
+datasets are ﬁnite and consist of partial observations. The third is our notion of
+a theory: a theory is a formal way of hypothesizing that certain relationships
+hold between objects of interest.
+A ﬁrst-order language L is given by a ﬁnite set of relation symbols and, for
+each relation symbol R, a positive integer nR, the arity of R.
+Let L be a language. An L-dataset D is given by:
+I) A ﬁnite non-empty set D (the domain of D).
+II) An n-ary relation RD over D for every n-ary relation symbol R of L.
+Each element (x∗
+1,...,x∗
+nR) ∈RD is intended to represent the observation that
+(x∗
+1,...,x∗
+n) stand in relation R. The notion of a dataset is intended to capture
+the idea that there can only be a ﬁnite number of observations.
+As an example, consider the language L that has two binary relation
+symbols, ⪰and ≻. We mean the former to signify revealed weak preference
+observations, and the latter to signify revealed strict preference observations.
+Consider a dataset D1, with domain D1 = {a,b,c}, and where we observe
+that a is revealed weakly preferred to b, and b to c, but we do not observe
+any strict comparisons. In symbols, D1 = (D1,⪰D1,≻D1); ⪰D1 is the relation
+given by a ⪰D1 b and b ⪰D1 c, while ≻D1 is empty. The example illustrates
+partial observability: We might theorize that a ⪰D1 b implies either b ⪰D1 a or
+a ≻D1 b, but often data will not contain this kind of information. In fact partial
+observability is very prominent in economics, for example in the consumption
+datasets used by the papers described in Chapter 5.
+2 In an environment of full observability (meaning, not partial) and strong rationalization,
+Eliaz and Ok (2006) investigate choice functions based on maximization of a relation that
+retains transitivity, but which need not be complete. In such a context, they show that
+completeness adds real content. They also show how indifference can often be distinguished
+from incompleteness in such an environment.
+
+
+--- Page 4 ---
+13.1 A model for observables, data, and theories
+189
+We will now deﬁne a notion of theory. We are interested in investigating a
+notion of empirical content, so from this perspective, we imagine that all of
+the relevant aspects of a theory can be captured by describing the relations
+among potential observables that we hypothesize hold. To this end, deﬁne an
+L-structure M to consist of the following objects:
+I) A nonempty set M (the domain of M).
+II) An n-ary relation RM over M for every n-ary relation symbol R of L.
+A structure forms a hypothesis about the relations which we might expect to
+observe, but we never expect to see the entire structure. Rather, we imagine
+that a dataset is consistent with a structure when all of the observations are
+members of the structure.
+With this in mind, we say that an L-structure M rationalizes an L-dataset
+D if the following conditions are satisﬁed:
+I) D ⊆M, where D and M are the domains of D and M.
+II) RD ⊆RM.
+The deﬁnition of rationalization requires that RD ⊆RM rather than that RD is
+the restriction of RM to D. The idea is again simply that we do not imagine
+that all existing relations are necessarily observed. This is the nature of partial
+observability: observing only a weak preference for coffee over tea does not
+refute the possibility that coffee is strictly preferred to tea.
+We say that two structures are isomorphic if we can relabel the objects
+across the two structures so that all relations are maintained. Let M and N
+be L-structures with domains M and N respectively. Formally, an isomorphism
+from M to N is a bijective map η : M →N that preserves the interpretations
+of all symbols of L: (a1,...,anR) ∈RM iff (η(a1),...,η(anR)) ∈RN for every
+relation symbol R of L and a1,...,anR ∈M.
+Informally, two structures are isomorphic if there is no way to use our
+language to distinguish between them.
+Finally, we deﬁne a theory to be a class of structures. Formally, an L-theory
+T is a class of structures that is closed under isomorphism. A dataset D is
+T-rationalizable if there is a structure in T that rationalizes D. Otherwise, D
+falsiﬁes T.
+As an example, consider again the language with two binary symbols, ⪰
+and ≻. We have the theory Two consisting of the class of triples (M,⪰M,≻M)
+such that ⪰M is a preference relation on M (a weak order), and ≻M is the strict
+preference derived from ⪰M. The theory Two can be thought of as the theory of
+rational choice. Note that Two rationalizes the dataset D1 described above: D1
+has observed objects D1 = {a,b,c}, where a is revealed weakly preferred to b,
+and b to c. The data D1 is Two-rationalizable because it can be rationalized, for
+example, by the set M of all letters in the English alphabet, with ⪰M being the
+lexicographic order on M. Of course, there are many other structures in Two
+that could rationalize D1.
+
+
+--- Page 5 ---
+190
+Revealed Preference and Model Theory
+We emphasized that D1 is silent on some aspects of the relationship between
+a, b, and c; these aspects are not observed, but we do not view this partial
+observability as a conﬂict with Two. Some “theoretically true” relations are
+simply not observed in the dataset. The structure of all the letters in the English
+alphabet is a possible rationalization of D1 in Two. In this structure a is strictly
+preferred to c, a property that has not been observed in D1.
+In contrast with data D1, consider the dataset D2; where D2 = {a,b,c} (the
+same as D1), but where we observe no weak comparisons, and instead observe
+that
+a ≻D2 b ≻D2 c ≻D2 a.
+No structure in Two could rationalize D2 because the “theoretical” strict
+preference ≻M in such a structure would need to exhibit the cyclic comparisons
+a ≻M b ≻M c ≻M a. This is impossible for a weak order.
+Another example of a theory is the theory of utility maximization, denoted
+Tu, which is the set of triples (M,⪰M,≻M) in Two such that there is u : M →R
+with x ⪰M y iff u(x) ≥u(y). Note that
+Tu ⊊Two.
+The theory of utility maximization is more stringent than Two. But Tu can
+also rationalize D1 (but not D2). In fact, it is easy to see that any dataset that is
+Two-rationalizable is also Tu-rationalizable, even though utility maximization
+is more stringent than rational choice. Put differently, one can weaken Tu to
+Two without observable consequences. When that happens we shall say that
+the two theories have the same empirical content.
+13.1.1
+Empirical content
+We want the empirical content of a theory to capture all of the observable
+consequences of that theory, but no other consequences. To this end, we want
+to weaken the theory as much as possible without changing the observable
+consequences of the theory, removing all non-observable consequences. For
+example, we can obtain a new theory by adding structures to Tu (thus
+weakening Tu) without changing the datasets that falsify the new theory. The
+empirical content of Tu is the most one can weaken Tu in this fashion.
+Hence we deﬁne the empirical content of a theory T, denoted ec(T), to be
+the class of all structures M that do not rationalize any dataset that falsiﬁes
+T. The main result of this chapter is that the empirical content of a theory is
+captured by the UNCAF axioms that are true in that theory.
+Given a language L, we can write formulas using the symbols in L. In
+addition to the relation symbols speciﬁed by L, we shall use standard logical
+symbols: the quantiﬁers “exists” (∃) and “for all” (∀); “not” (¬); the logical
+connectives “and” (∧) and “or” (∨); a countable set of variable symbols
+x,y,z,u,v,w,...; parentheses “(” and “)”; and equality and inequality symbols
+“=” and “̸=”.
+
+
+--- Page 6 ---
+13.1 A model for observables, data, and theories
+191
+Strings of symbols are put together to form axioms. Rules for the formation
+of axioms can be found, for example, in Marker (2002).
+We are primarily concerned with a special class of axioms, the UNCAF
+axioms. These are deﬁned as follows. First we must deﬁne the notion of an
+atomic formula.
+An atomic formula ϕ of a language L consists of either
+I) t1 = t2 or t1 ̸= t2, where t1,t2 are variable symbols or
+II) R(t1,...,tnR) where R is a relation symbol of L and t1,...,tnR are
+variable symbols.
+Atomic formulas are closely related to the notion of observation discussed
+above. Let us consider again the language with two binary relation symbols, ⪰
+and ≻. In this example, all atomic formulas use at most two variable symbols.
+For example, the string x ⪰y is an atomic formula, as is x ≻y. These strings
+are unquantiﬁed and as such do not yet form axioms. But one can imagine that
+an observation might consist of some pair a and b for which a is observed to
+stand in relation ⪰to b.
+We will form axioms out of the atomic formulas. The axioms are intended
+to be statements precluding the existence of certain ﬁnite collections of
+observations from holding. To this end, let L be a language. A universal
+negation of a conjunction of atomic formulas (UNCAF) axiom is a string of
+the form
+∀v1∀v2 ...∀vn¬(ϕ1 ∧ϕ2 ··· ∧ϕm)
+where ϕ1,ϕ2,...,ϕm are atomic formulas with variables from v1,...,vn.
+As an example, consider again the language that has two binary relation
+symbols, ⪰and ≻. An example of an UNCAF axiom in this language is:
+∀x∀y¬(x ⪰y ∧y ≻x);
+which we might call the weak axiom of revealed preference (WARP).
+Similarly, GARP can be seen to be an UNCAF axiom. In a different language,
+congruence (recall Chapter 2) is UNCAF.
+Let  be a set of UNCAF axioms of L. Let T () consist of the structures
+for which all axioms in  are true; thus, T () is a theory. If T = T () for
+some set  of axioms, we say that  is an UNCAF axiomatization of T.
+Given a theory T, let uncaf(T) be the set of UNCAF axioms that are true in
+all members of T. The following result establishes that the empirical content
+of a theory always has an UNCAF axiomatization. This is true whether or not
+the theory itself does. Moreover, one such UNCAF axiomatization consists of
+the UNCAF axioms true for every structure in the theory.
+Theorem 13.1
+For every theory T, ec(T) is the theory axiomatized by the
+UNCAF axioms that are true in T: ec(T) = T (uncaf(T)).
+Thus, in the presence of partial observability, UNCAF axioms, not universal
+ones, properly describe the empirical content of the model. In the context of
+
+
+--- Page 7 ---
+192
+Revealed Preference and Model Theory
+the examples we have been using, Theorem 13.1 presents the formal sense in
+which GARP is the empirical content of completeness and transitivity.
+Theories that coincide with their empirical content are in some sense special.
+They cannot be weakened in any way without adding falsifying datasets. We
+shall see in 13.2 an example of a theory with T = ec(T).
+13.1.2
+Relative theories
+In economics, a researcher often wants to take certain hypotheses as being
+given. For example, economic theorists often view continuity axioms as a
+technical assumption. By itself, continuity has no empirical content. Hence,
+they are not interested in testing for this property, though it is often useful
+for providing a representation. Even though continuity by itself usually has no
+empirical content, the axiom may have empirical content when imposed with
+other axioms. So what we really care about are the empirical implications of a
+preference in the presence of the hypothesized continuity.
+Moreover, there are often obvious constraints imposed on us by the structure
+of the model. We can imagine an individual with preferences over bundles
+of coffee and tea. Bundles of coffee and tea are elements in a linear space.
+It would not be interesting to “test” the axioms for a vector space. One can
+then talk about the empirical content of the economically meaningful theory,
+relative to the theory of linear spaces.
+Consider two theories, T and T′, where T ⊆T′. We can deﬁne the empirical
+content of T relative to T′, written ecT′(T), as the class of all structures M ∈T′
+that do not rationalize any dataset that falsiﬁes T, i.e.,
+ecT′(T) = ec(T) ∩T′.
+(13.2)
+The following is an immediate consequence of Theorem 13.1.
+Corollary 13.2
+For any theories T and T′ such that T ⊆T′, ecT′(T) =
+T (uncaf(T)) ∩T′.
+We say that a collection of UNCAF axioms  is an UNCAF axiomatization
+of T relative to T′ if T = T () ∩T′. Corollary 13.2 implies that the empirical
+content of T relative to T′ admits an UNCAF axiomatization relative to T′.
+13.2
+APPLICATION: STATUS QUO PREFERENCES
+As mentioned above, theories that satisfy T = ec(T) are particularly interest-
+ing. As an application, we discuss a recent theory of choice in the presence of
+status quo due to Masatlioglu and Ok. There is a sense in which their theory
+makes no non-falsiﬁable claims.
+Let L be a language including the binary relation ∈and the ternary relations
+c, ˜c. The latter two are meant to express “chosen” and “not chosen.” We deﬁne
+the theory of choice with status quo Tcsq to be the class of structures (M,∈M,
+
+
+--- Page 8 ---
+13.2 Application: Status quo preferences
+193
+cM, ˜cM) whereby there is some set X, a collection  ⊆2X\{∅}×X satisfying
+(E,b) ∈ implies b ∈E, and a nonempty valued function c∗:  →2M\{∅}
+for which c∗(E,b) ⊆E for all (E,b) ∈ for which the following are satisﬁed:
+I) M = X ∪
+II) ∈M is the usual set theoretic relation
+III) cM(a,b,E) if and only if a ∈c∗(E,b)
+IV) ˜cM(a,b,E) if and only if a ̸∈c∗(E,b);
+as well as all structures isomorphic to these. The idea here is that each budget
+set E possesses a status quo b. We observe the choices made (and not made)
+from budget sets.
+The theory of status quo rationalizable choice is the subtheory Tsq ⊆Tcsq
+whereby there exists a function Q : X →2X\{∅} such that for all x ∈X,
+x ∈Q(x), and a complete and transitive binary relation ⪰for which the
+corresponding function c∗can be expressed as c∗(E,b) = argmax⪰Q(b) ∩E.
+The idea is that the status quo alternative determines a “reference set” from
+which the agent will choose.3
+Theorem 13.3
+ecTcsq(Tsq) = Tcsq.
+Proof. We provide an explicit syntactic characterization. The formula
+(x ∈E) ∧(y ∈E) ∧c(x,d,E)
+is abbreviated x ⪰(E)d y, and the formula
+(x ∈E) ∧(y ∈E) ∧c(x,d,E) ∧˜c(y,d,E)
+is abbreviated x ≻(E)d y. Note that each of these formulas is a conjunction of
+atomic formulas.
+Similarly, we deﬁne, for a structure (M,∈M,cM, ˜cM) ∈Tcsq, the ternary
+relations x ⪰M
+d
+y to mean that there is E for which x,y ∈E and x ∈c∗(d,E),
+and x ≻M
+d
+y means there is E for which x,y ∈E and x ∈c∗(d,E) and y ̸∈c∗(d,E)
+(here, we suppress the dependence of the relation on E as it is not needed).
+Now, a cycle for a structure M ∈Tcsq is a collection x1,...,xn, y1,...,yn,
+and z1,...,zn all in M such that xi+1 ̸= yi and xi ⪰M
+zi xi+1 with at least one strict
+part, and for each zi, xi+1 ⪰M
+zi yi or xi+1 = zi.
+Note that the collection of axioms which rule out all cycles is UNCAF, as
+each formula x ⪰(E)d y is a conjunction of atomic formulas, as is the formula
+x ≻(E)d y. In other words, the UNCAF list of axioms given by
+∀x1 ...∀zn∀E1 ...∀En∀F1 ...∀Fn¬
+1 n6
+i=1
+(xiRi(Ei)zixi+1) ∧(Qi(xi+1,yi,zi,Fi))
+2
+,
+3 Masatlioglu and Ok (2014) also allow there to be no status quo, which they represent with
+a status quo “alternative” of ♦. We could accommodate this easily by introducing a constant
+symbol for ♦, and none of the results would change. However, the analysis would become
+notationally much more burdensome.
+
+
+--- Page 9 ---
+194
+Revealed Preference and Model Theory
+where each Ri is either ≻or ⪰and at least one is ≻, and each Qi(xi+1,yi,zi,Fi)
+is either the expression xi+1 ⪰(Fi)zi yi or the expression xi+1 = zi, is the
+appropriate collection of sentences.
+Finally, given M ∈Tcsq, we have its associated ternary relations ⪰M and
+≻M. We claim that M ∈Tsq if and only if it has no cycles.
+To this end, suppose that M ∈Tsq. Then M is isomorphic to a triple
+(X,,c∗). There is a binary relation R and a function Q as stated in the
+deﬁnition. Suppose for a contradiction that there is a cycle. Each xi+1 ∈Q(zi),
+since xi+1 ⪰M
+zi
+yi (implying it is chosen at some point when zi is the status
+quo) or xi+1 = zi, which again implies that xi+1 ∈Q(zi). Therefore, xi ⪰M
+zi xi+1
+implies xi R xi+1 and xi ≻M
+zi xi+1 implies xi R xi+1 but not xi+1 R xi, contradicting
+transitivity.
+Conversely, suppose M ∈Tcsq and that there are no cycles. Without loss
+of generality, we may assume that M is speciﬁed by a triple (X,,c∗). We
+deﬁne Q(d) = {y : ∃E ∈ such that y ∈c∗(d,E)}. Deﬁne ⪰d = {(x,y) ∈⪰d:
+y ∈Q(d)} and ≻d = {(x,y) ∈≻d: y ∈Q(d)}. Finally, deﬁne ⪰= 
+d∈X ⪰d and
+≻= 
+d∈X ⪰d. Then because there are no cycles, there exist no x1,...,xn for
+which x1 ⪰...⪰xn, where at least one ⪰is ≻. By Theorem 1.5, there is a
+complete and transitive R for which x⪰y implies x R y and x≻y implies x R y.
+The pair Q,R then status quo rationalizes c∗.
+13.3
+CHOICE THEORY AND EMPIRICAL CONTENT
+As mentioned earlier in the chapter, theories that coincide with their empirical
+content are in some sense special. We shall here consider the structure of such
+theories relative to a theory of choice.
+The theory of rationalizable choice functions enjoys a very interesting
+property. Recall Chapter 2 and, in particular, Theorem 2.6. The theorem
+characterizes the empirical content of a preference relation by the congruence
+axiom. Congruence is a collection of ﬁrst-order axioms precluding the exis-
+tence of certain types of revealed preference cycles. Importantly, congruence
+can be described in a very parsimonious language: the language is able to
+express the relations ∈, ̸∈, as well as the properties of being chosen or not.
+This means that the data the economist must possess in order to falsify the
+model are quite simple.
+In this section, we demonstrate a very simple result claiming that most
+choice theories do not share this property. As motivation, consider the
+following simple example.
+Example 13.4
+An economist asks whether a given individual maximizes a
+preference relation (a weak order). She observes three budget sets, A, B, and
+D, and three potential choices, x, y, and z. She sees that each of x and y are
+feasible in A, y and z are feasible in B, and x and z are feasible in D. She also
+sees that x is chosen from A, y is chosen from B, and z is chosen from D, while x
+
+
+--- Page 10 ---
+13.3 Choice theory and empirical content
+195
+is never chosen from D. These data clearly refute the hypothesis of preference
+maximization.
+To establish this refutation, the economist did not see every feasible option
+from each of the three budget sets or any “global set” on which the choice
+function might potentially be deﬁned, nor did she need to see what the
+individual would choose from an unrelated budget E.
+Consider two languages. The ﬁrst, L = {∈,̸∈,c, ˜c}, includes four binary
+predicates. The predicates ∈and ̸∈are to be understood in their usual way,
+while c(a,B) means a is chosen from B, and ˜c(a,B) means a is not chosen
+from B. The second language is more expressive: L′ = {∈,̸∈,c, ˜c,⊆,̸⊆}. The
+binary relations ⊆and ̸⊆are given their usual interpretation.
+A choice function consists of a triple (X,,c), where X is a set,  ⊆2X\{∅},
+and c :  →2X\{∅}, so that for all E ∈, c(E) ⊆E. Each choice function is
+naturally identiﬁed with a structure in either language.
+In either language, L or L′, a choice theory T is a class of choice functions
+and all structures isomorphic to an element of this class. The choice theory
+which consists of all choice functions is written Tchoice in language L and T′
+choice
+in language L′, respectively.
+Say that the L-theory T is rich if for all (X,,c) in T, there is z ̸∈X and
+a choice function (X ∪{z},′,c′) ∈T, where  = {E ∩X : E ∈′} and for
+all E ∈′, c′(E) = c(E ∩X). Intuitively, a rich choice theory is one with the
+property that, for any of its structures, we can add an alternative that is never
+chosen to the domain. Say that a choice theory satisﬁes condition α if all choice
+functions in the theory satisfy condition α.
+When a theory satisﬁes ec(T) ∩Tchoice = T, then we say that it makes no
+non-falsiﬁable claims relative to the theory of choice. We are now in a position
+to show that, under some conditions, the property of not making non-falsiﬁable
+claims can imply WARP.
+Theorem 13.5
+Suppose that T is rich, satisﬁes condition α, and that ec(T)∩
+Tchoice = T. Then every (X,,c) ∈T satisﬁes WARP. Further, the class of choice
+functions satisfying WARP is the maximal T which is rich, satisﬁes condition
+α, and ec(T) ∩Tchoice = T.
+Proof. Suppose by way of contradiction that (X,,c) ∈T violates WARP.
+Thus, there are x,y ∈X and E,F ∈ for which x,y ∈E ∩F, x ∈c(E), y ∈c(F),
+and x ̸∈c(F). Appeal to richness and consider z ̸∈X. Let ∗consist of all
+budgets of , with the exception that z has been added to E. The choice
+function c∗then coincides with c, and c∗(E ∪{z}) = c(E).
+Now consider the following choice function: X′ = {x,y,z}, ′ = {E′ =
+{x,y,z},F′ = {x,y}}, and c′({x,y,z}) = c(E) ∩{x,y,z}, c′({x,y}) = {y}. This
+choice function is clearly not a member of T as it violates condition α: x ∈
+c′({x,y,z}), but x ̸∈c′({x,y}). However, every dataset consistent with (X′,′,c′)
+can be rationalized by (X ∪{z},∗,c∗). This is a contradiction.
+
+
+--- Page 11 ---
+196
+Revealed Preference and Model Theory
+Clearly, the class of choice functions satisfying WARP has the desired prop-
+erty (WARP is an UNCAF axiom, so the result follows from Corollary 13.2).
+A special example of choice theories are choice theories rationalizable by
+some binary relation. Let R be a class of complete binary relations. We
+deﬁne the theory of R-rationalizable choice, TR, to be the class of choice
+functions (X,,c) for which there exists R∈R such that for all E ∈,
+c(E) = {x ∈E : x R y for all y ∈E}.
+Let the relation ⪰∗on Z+ ∪{ω} be deﬁned so that for all n,m ∈Z+, we have
+n ⪰∗m if and only if n ≥m, and otherwise, ω ∼∗n for all n ∈Z+.
+A simple corollary follows.
+Corollary 13.6
+For the following R, ec(TR) ∩Tchoice ̸= TR:
+• R is the set of all complete binary relations.
+• R is the set of all quasitransitive and complete binary relations.
+• R is the set of all complete binary relations for which there exists a
+pair of linear orders ⪰1 and ⪰2 for which ≻=≻1 ∩≻2. These are the
+set of 2-Pareto rationalizable choice functions.
+Proposition 13.7
+If ⪰∗∈R, then ec(TR) ∩T′
+choice ̸= ec(TR).
+Proof. Let X = Z+ ∪{ω} and let us consider the collection  which includes
+all binary subsets, as well as the set X itself. The choice function is speciﬁed
+by c(X) = {ω}, c({i,ω}) = {i,ω} for all i ∈Z+, and ﬁnally, c({i,j}) = {j} when
+j > i. Then (X,,c) ∈TR, and has the feature that ω is uniquely chosen from
+X, but it beats no i ∈Z+.
+Consider the following choice function: (X′,′,c′), where X′ = {1,2,ω},
+′ = {{1,2},{2,ω},{1,2,ω}}, and c′({1,2}) = {2}, c′({2,ω}) = {2,ω}, and
+c′({1,2,ω}) = {ω}. Clearly (X′,′,c′) ̸∈TR as if it were, any R which
+rationalizes c′ must have that 2 R 1 and 2 R ω, which would imply that
+2 ∈c′({1,2,ω}), a contradiction.
+However any dataset contained in (X′,′,c′) can be rationalized by (X,,c),
+a contradiction.
+Proposition 13.7 demonstrates that none of the choice theories mentioned in
+Corollary 13.6 are equivalent to their empirical content, even when we can
+express set containment.
+13.4
+CHAPTER REFERENCES
+Theorem 13.1 and Corollary 13.2 are due to Chambers, Echenique, and
+Shmaya (2014). This result is related to a theorem of Tarski (1954), which
+characterizes those theories that are universally axiomatizable. Tarski’s result
+relies on the axiom of choice, while Theorem 13.1 does not. The working paper
+version of Chambers, Echenique, and Shmaya (2014) has results for languages
+
+
+--- Page 12 ---
+13.4 Chapter references
+197
+with constants and function symbols. A collection of papers apply Tarski’s
+result to the issue of falsiﬁability; see Simon and Groen (1973); Simon (1979,
+1983); Rynasiewicz (1983); Simon (1985); Shen and Simon (1993).
+Popper (1959) is a seminal reference in the philosophy of science, viewing
+falsiﬁable theories as those that admit universal axiomatizations. Much early
+literature in philosophy of science was concerned with whether the restrictions
+on observable relations imposed by axioms involving unobservable relations
+could be expressed in terms of observable relations alone. Craig (1956)
+provides a seminal result in this direction.
+Adams, Fagot, and Robinson (1970) seem to be the ﬁrst social scientists
+to discuss empirical content in a formal sense (see also Pfanzagl, Baumann,
+and Huber, 1971, and Adams, 1992). This work deﬁnes two theories to be
+empirically equivalent if the set of all axioms (of a certain type) consistent with
+one theory is equivalent to the set of all axioms consistent with the other. These
+works do not provide a general characterization of the axiomatic structure of
+empirical content, but rather focus on characterizing the empirical content of
+speciﬁc theories. Finally, there is an approach in philosophy of science called
+structuralism, which also comes close to the approach we have taken here.
+These works also adopt a model-theoretic perspective to investigating theories.
+Sneed (1971) is a classic reference as applied to physics. Stegm¨uller, Balzer,
+and Spohn (1982) present a collection applications of these ideas to economics.
+Schipper (2009) has a notion of theory that is similar to ours.
+The theory discussed in Section 13.2 is due to Masatlioglu and Ok (2014).
+The analysis of this section appeared in a working version of Chambers,
+Echenique, and Shmaya (2014).
+
+
+--- Page 13 ---
+References
+Adams, E. (1992). “On the Empirical Status of Measurement Axioms: The Case of
+Subjective Probability,” in Philosophical and Foundational Issues in Measurement
+Theory, edited by C. W. Savage and P. Erlich, pp. 53–73. Hillsdale, NJ: Lawrence
+Erlbaum Associates.
+Adams, E., R. Fagot, and R. Robinson (1970). “On the Empirical Status of Axioms in
+Theories of Fundamental Measurement,” Journal of Mathematical Psychology, 7(3),
+379–409.
+Afriat, S. N. (1967). “The Construction of Utility Functions from Expenditure Data,”
+International Economic Review, 8(1), 67–77.
+(1972). “Efﬁciency Estimation of Production Functions,” International
+Economic Review, 13(3), 568–598.
+Agranov, M., and P. Ortoleva (2013). “Stochastic Choice and Hedging,” Discussion
+paper, California Institute of Technology.
+Ahn, D., S. Choi, D. Gale, and S. Kariv (2014). “Estimating Ambiguity Aversion in a
+Portfolio Choice Experiment,” Quantitative Economics, 5(2), 195–223.
+Aleskerov, F., D. Bouyssou, and B. Monjardet (2007). Utility Maximization, Choice
+and Preference. Berlin et al.: Springer-Verlag.
+Allais, M. (1953). “Le Comportement de l’Homme Rationnel Devant le Risque:
+Critique des Postulats et Axiomes de l’´Ecole Am´ericaine,” Econometrica, 21(4),
+503–546.
+Ambrus, A., and K. Rozen (2014). “Rationalising Choice with Multi-Self Models,” The
+Economic Journal, forthcoming.
+Andreoni, J., B. J. Gillen, and W. T. Harbaugh (2013). “Power Indices for Revealed
+Preference Tests,” working paper, UC San Diego.
+Andreoni, J., and J. Miller (2002). “Giving According to GARP: An Experimental Test
+of the Consistency of Preferences for Altruism,” Econometrica, 70(2), 737–753.
+Anscombe, F. J., and R. J. Aumann (1963). “A Deﬁnition of Subjective Probability,”
+Annals of Mathematical Statistics, 34(1), 199–205.
+Arrow, K. (1951). Social Choice and Individual Values. New Haven, CT: Yale
+University Press.
+(1959). “Rational Choice Functions and Orderings,” Economica, 26(102),
+121–127.
+
+
+--- Page 14 ---
+References
+199
+Asplund, E. (1970). “A Monotone Convergence Theorem for Sequences of Nonlinear
+Mappings,” in Proceedings of Symposia in Pure Mathematics, Vol. 18, pp. 1–9.
+Azrieli, Y. (2011). “Axioms for Euclidean Preferences with a Valence Dimension,”
+Journal of Mathematical Economics, 47(4–5), 545–553.
+Azrieli, Y., C. P. Chambers, and P. J. Healy (2012). “Incentives in Experiments: A
+Theoretical Analysis,” working paper.
+Ballester, M. A., and G. Haeringer (2011). “A Characterization of the Single-Peaked
+Domain,” Social Choice and Welfare, 36(2), 305–322.
+Bandyopadhyay, T., I. Dasgupta, and P. Pattanaik (1999). “Stochastic Revealed
+Preference and the Theory of Demand,” Journal of Economic Theory, 84(1), 95–110.
+(2004). “A General Revealed Preference Theorem for Stochastic Demand
+Behavior,” Economic Theory, 23(3), 589–599.
+Banerjee, S., and J. H. Murphy (2006). “A Simpliﬁed Test for Preference Rationality of
+Two-Commodity Choice,” Experimental Economics, 9(1), 67–75.
+Banker, R., A. Charnes, and W. Cooper (1984). “Some Models for Estimating Technical
+and Scale Inefﬁciencies in Data Envelopment Analysis,” Management Science,
+30(9), 1078–1092.
+Banker, R., and A. Maindiratta (1988). “Nonparametric Analysis of Technical and
+Allocative Efﬁciencies in Production,” Econometrica, 56(6), 1315–1332.
+Bar-Shira, Z. (1992). “Nonparametric Test of the Expected Utility Hypothesis,”
+American Journal of Agricultural Economics, 74(3), 523–533.
+Barber´a, S., and P. K. Pattanaik (1986). “Falmagne and the Rationalizability of
+Stochastic Choices in Terms of Random Orderings,” Econometrica, 54(3), 707–715.
+Bartz, S., H. Bauschke, J. Borwein, S. Reich, and X. Wang (2007). “Fitzpatrick Func-
+tions, Cyclic Monotonicity and Rockafellar’s Antiderivative,” Nonlinear Analysis,
+66(5), 1198–1223.
+Basu, K. (1984). “Fuzzy Revealed Preference Theory”, Journal of Economic Theory,
+32(2), 212–227.
+Battalio, R., J. Kagel, W. Winkler, E. Fischer, R. Basmann, and L. Krasner (1973).
+“A Test of Consumer Demand Theory Using Observations of Individual Consumer
+Purchases,” Western Economic Journal, 11(4), 411–428.
+Bayer, R., S. Bose, M. Polisson, L. Renou, and J. Quah (2012). “Ambiguity Revealed,”
+Mimeo, University of Essex.
+Beatty, T. K. M., and I. A. Crawford (2011). “How Demanding Is the Revealed
+Preference Approach to Demand?” The American Economic Review, 101(6),
+2782–2795.
+Becker, G. M., M. H. DeGroot, and J. Marschak (1964). “Measuring Utility by a
+Single-Response Sequential Method,” Behavioral Science, 9(3), 226–232.
+Becker, G. S. (1962). “Irrational Behavior and Economic Theory,” The Journal of
+Political Economy, 70(1), 1–13.
+Berge, C. (1963). Topological Spaces. Edinburgh and London: Oliver & Boyd.
+Berge, C. (2001). Theory of Graphs. Mineola, NY: Dover.
+Bernheim, B. D., and A. Rangel (2007). “Toward Choice-Theoretic Foundations for
+Behavioral Welfare Economics,” The American Economic Review, 97(2), 464–470.
+
+
+--- Page 15 ---
+200
+References
+(2009). “Beyond Revealed Preference: Choice-Theoretic Foundations for
+Behavioral Welfare Economics,” The Quarterly Journal of Economics, 124(1),
+51–104.
+Billot, A., and J.-F. Thisse (2005). “Stochastic Rationality and M¨obius Inverse,”
+International Journal of Economic Theory, 1(3), 211–217.
+Birkhoff, G. (1946). “Tres Observaciones Sobre el ´Algebra Lineal,” Univ. Nac.
+Tucum´an Rev. Ser. A, 5, 147–151.
+Blackorby, C., W. Bossert, and D. Donaldson (1995). “Multi-Valued Demand and
+Rational Choice in the Two-Commodity Case,” Economics Letters, 47(1), 5–10.
+Block, H., and J. Marschak (1960). “Random Orderings and Stochastic Theories
+of Responses,” in Contributions to Probability and Statistics, edited by I. Olkin,
+S. Ghurye, W. Hoeffding, W. G. Madow, and H. B. Mann, Vol. 2, pp. 97–132. Palo
+Alto, CA: Stanford University Press.
+Blundell, R. W., M. Browning, and I. A. Crawford (2003). “Nonparametric Engel
+Curves and Revealed Preference,” Econometrica, 71(1), 205–240.
+(2008). “Best Nonparametric Bounds on Demand Responses,” Econometrica,
+76(6), 1227–1262.
+Bochnak, J., M. Coste, and M. Roy (1998). Real Algebraic Geometry. Berlin et al.:
+Springer-Verlag.
+Bogomolnaia, A., and J. Laslier (2007). “Euclidean Preferences,” Journal of Mathe-
+matical Economics, 43(2), 87–98.
+Border, K. C. (1992). “Revealed Preference, Stochastic Dominance, and the Expected
+Utility Hypothesis,” Journal of Economic Theory, 56(1), 20–42.
+B¨orgers, T. (1993). “Pure Strategy Dominance,” Econometrica, 61(2), 423–430.
+Bossert, W. (1993). “Continuous Choice Functions and the Strong Axiom of Revealed
+Preference,” Economic Theory, 3(2), 379–385.
+Bossert, W., and Y. Sprumont (2002). “Core Rationalizability in Two-Agent Exchange
+Economies,” Economic Theory, 20(4), 777–791.
+(2013). “Every Choice Function is Backwards-Induction Rationalizable,”
+Econometrica, 81(6), 2521–2534.
+Bossert, W., Y. Sprumont, and K. Suzumura (2005). “Maximal-Element Rationalizabil-
+ity,” Theory and Decision, 58(4), 325–350.
+Bossert, W., and K. Suzumura (2010). Consistency, Choice, and Rationality. Harvard
+University Press.
+(2012). “Revealed Preference and Choice Under Uncertainty,” SERIEs:
+Journal of the Spanish Economic Association, 3(1), 247–258.
+Bronars, S. G. (1987). “The Power of Nonparametric Tests of Preference Maximiza-
+tion,” Econometrica, 55(3), 693–698.
+Brown, D., and F. Kubler (2008). Computational Aspects of General Equilibrium
+Theory: Refutable Theories of Value. New York et al.: Springer.
+Brown, D. J., and C. Calsamiglia (2007). “The Nonparametric Approach to Applied
+Welfare Analysis,” Economic Theory, 31(1), 183–188.
+Brown, D. J., and R. L. Matzkin (1996). “Testable Restrictions on the Equilibrium
+Manifold,” Econometrica, 64(6), 1249–1262.
+Brown, D. J., and C. Shannon (2000). “Uniqueness, Stability, and Comparative Statics
+in Rationalizable Walrasian Markets,” Econometrica, 68(6), 1529–1539.
+
+
+--- Page 16 ---
+References
+201
+Browning, M. (1989). “A Nonparametric Test of the Life-Cycle Rational Expectations
+Hypothesis,” International Economic Review, 30(4), 979–992.
+Browning, M., and P. A. Chiappori (1998). “Efﬁcient Intra-Household Allocations: A
+General Characterization and Empirical Tests,” Econometrica, 66(6), 1241–1278.
+Burghart, D. R., P. W. Glimcher, and S. C. Lazzaro (2013). “An Expected Utility
+Maximizer Walks into a Bar...,” Journal of Risk and Uncertainty, 46(3), 215–246.
+Cantor, G. (1895). “Beitr¨age zur Begr¨undung der transﬁniten Mengenlehre,” Mathema-
+tische Annalen, 46(4), 481–512.
+Carvajal, A., R. Deb, J. Fenske, and J. K.-H. Quah (2013). “Revealed Preference Tests
+of the Cournot Model,” Econometrica, 81(6), 2351–2379.
+Carvajal, A., and N. Gonz´alez (2014). “On Refutability of the Nash Bargaining
+Solution,” Journal of Mathematical Economics, 50, 177–186.
+Carvajal, A., I. Ray, and S. Snyder (2004). “Equilibrium Behavior in Markets
+and Games: Testable Restrictions and Identiﬁcation,” Journal of Mathematical
+Economics, 40(1–2), 1–40, Aggregation, Equilibrium and Observability in Honor
+of Werner Hildenbrand.
+Castillo, M., D. Dickinson, and R. Petrie (2014). “Sleepiness, Choice Consistency, and
+Risk Preferences,” Mimeo, George Mason University.
+Chalfant, J. A., and J. M. Alston (1988). “Accounting for Changes in Tastes,” Journal
+of Political Economy, 96(2), 391–410.
+Chambers, C. P., and F. Echenique (2009a). “Proﬁt Maximization and Supermodular
+Technology,” Economic Theory, 40(2), 173–183.
+(2009b). “Supermodularity and Preferences,” Journal of Economic Theory,
+144(3), 1004–1014.
+(2014a). “Core Matchings of Markets with Transfers,” AEJ Microeconomics,
+forthcoming.
+(2014b). “On the Consistency of Data with Bargaining Theories,” Theoretical
+Economics, 9(1), 137–162.
+Chambers, C. P., F. Echenique, and K. Saito (2015). “Testable Implications of
+Translation Invariance and Homotheticity: Variational, Maxmin, CARA and CRRA
+Preferences,” working paper, California Institute of Technology.
+Chambers, C. P., F. Echenique, and E. Shmaya (2010). “On Behavioral Complementar-
+ity and its Implications,” Journal of Economic Theory, 145, 2332–2355.
+(2011). “Testable Implications of Gross Substitutes in Demand for Two
+Goods,” American Economic Journal: Microeconomics, 3(1), 129–136.
+(2012). “General Revealed Preference Theory,” working paper.
+(2014). “The Axiomatic Structure of Empirical Content,” American Economic
+Review, 104(8), 2303–2319.
+Chambers, C. P., and T. Hayashi (2012). “Choice and Individual Welfare,” Journal of
+Economic Theory, 147(5), 1818–1849.
+Chambers, C. P., C. Liu, and S.-K. Martinez (2014). “A Test for Risk-Averse Expected
+Utility,” Mimeo, UC San Diego.
+Cherchye, L., I. Crawford, B. De Rock, and F. Vermeulen (2009). “The Revealed
+Preference Approach to Demand,” in Quantifying Consumer Preferences: Estimating
+Demand Systems, edited by D. Slottje, Contributions to Economic Analysis. Bingley,
+UK: Emerald Group Publishing.
+
+
+--- Page 17 ---
+202
+References
+Cherchye, L., T. Demuynck, and B. De Rock (2013). “Nash Bargained Consumption
+Decisions: A Revealed Preference Analysis,” Economic Journal, 123(567), 195–235.
+(2014). “Revealed Preference Analysis for Convex Rationalizations on
+Nonlinear Budget Sets,” Journal of Economic Theory, 152, 224–236.
+Cherchye, L., T. Demuynck, P. Hjertstrand, and B. De Rock (2014). “Revealed
+Preference Tests for Weak Separability: An Integer Programming Approach,”
+Journal of Econometrics, forthcoming.
+Cherchye, L., B. De Rock, and F. Vermeulen (2007). “The Collective Model of
+Household Consumption: A Nonparametric Characterization,” Econometrica, 75(2),
+553–574.
+(2009). “Opening the Black Box of Intrahousehold Decision Making: Theory
+and Nonparametric Empirical Tests of General Collective Consumption Models,”
+Journal of Political Economy, 117(6), 1074–1104.
+Cherepanov, V., T. Feddersen, and A. Sandroni (2013). “Rationalization,” Theoretical
+Economics, 8(3), 775–800.
+Chernoff, H. (1954). “Rational Selection of Decision Functions,” Econometrica, 22(4),
+422–443.
+Chiappori, P.-A. (1988). “Rational Household Labor Supply,” Econometrica, 56(1),
+63–90.
+Chiappori, P.-A., O. Donni, and I. Komunjer (2012). “Learning from a Piece of Pie,”
+The Review of Economic Studies, 79(1), 162–195.
+Chiappori, P.-A., and J.-C. Rochet (1987). “Revealed Preferences and Differentiable
+Demand,” Econometrica, 55(3), 687–691.
+Chipman, J. S. (1960). “Stochastic Choice and Subjective Probability,” in Decisions,
+Values and Groups, edited by D. Willner, pp. 70–95. Symposium Publications
+Division, New York: Pergamon Press.
+Choi, S., R. Fisman, D. Gale, and S. Kariv (2007). “Consistency and Heterogeneity
+of Individual Behavior under Uncertainty,” American Economic Review, 97(5),
+1921–1938.
+Choi, S., S. Kariv, W. M¨uller, and D. Silverman (2014). “Who Is (More) Rational?”
+American Economic Review, 104(6), 1518–50.
+Chung-Piaw, T., and R. Vohra (2003). “Afriat’s Theorem and Negative Cycles,” Mimeo,
+Northwestern University.
+Colonius, H. (1984). Stochastische Theorien individuellen Wahlverhaltens. Berlin
+et al.: Springer.
+Cooper, W. W., L. M. Seiford, and K. Tone (2007). Data Envelopment Analysis:
+A Comprehensive Text with Models, Applications, References and DEA-Solver
+Software, 2nd ed. Berlin et al.: Springer.
+Coxeter, H. (1969). Introduction to Geometry, 2nd ed. New York: John Wiley & Sons,
+Inc.
+Craig, W. (1956). “Replacement of Auxiliary Expressions,” Philosophical Review,
+65(1), 38–55.
+Craig, W., and R. L. Vaught (1958). “Finite Axiomatizability Using Additional
+Predicates,” The Journal of Symbolic Logic, 23(3), 289–308.
+Crawford, I., and B. De Rock (2014). “Empirical Revealed Preference,” Annual Review
+of Economics, 6, 503–524.
+
+
+--- Page 18 ---
+References
+203
+Davenport, J. H., and J. Heintz (1988). “Real Quantiﬁer Elimination is Doubly
+Exponential,” Journal of Symbolic Computation, 5(1), 29–35.
+de Clippel, G., and K. Eliaz (2012). “Reason-Based Choice: A Bargaining Rationale
+for the Attraction and Compromise Effects,” Theoretical Economics, 7(1), 125–162.
+de Clippel, G., and K. Rozen (2012). “Bounded Rationality and Limited Datasets,”
+working paper.
+Dean, M., and D. Martin (2013). “Measuring Rationality with the Minimum Cost of
+Revealed Preference Violations?” Working paper, Brown University.
+Deaton, A. S. (1974). “The Analysis of Consumer Demand in the United Kingdom,
+1900-1970,” Econometrica, 42(2), 341–367.
+Deb, R. (1976). “On Constructing Generalized Voting Paradoxes,” The Review of
+Economic Studies, 43(2), 347–351.
+Deb, R., and M. M. Pai (2014). “The Geometry of Revealed Preference,” Journal of
+Mathematical Economics, 50, 203–207.
+Debreu, G. (1951). “The Coefﬁcient of Resource Utilization,” Econometrica, 19(3),
+273–292.
+Debreu, G. (1954). “Representation of a Preference Ordering by a Numerical Function,”
+in Decision Processes, edited by R. Thrall, C. Coombs, and R. Davis, pp. 159–165.
+New York: John Wiley & Sons.
+(1960a). “On An Identity in Arithmetic,” Proceedings of the American
+Mathematical Society, 11(2), 220–221.
+(1960b). “Review of RD Luce, Individual Choice Behavior: A Theoretical
+Analysis,” American Economic Review, 50(1), 186–188.
+(1974). “Excess Demand Functions,” Journal of Mathematical Economics,
+1(1), 15–21.
+Degan, A., and A. Merlo (2009). “Do Voters Vote Ideologically?” Journal of Economic
+Theory, 144, 1868–1894.
+Diamond, P. A. (1967). “Cardinal Welfare, Individualistic Ethics, and Interpersonal
+Comparison of Utility: Comment,” The Journal of Political Economy, 75(5), 765.
+Diewert, W. E. (1973). “Afriat and Revealed Preference Theory,” The Review of
+Economic Studies, 40(3), 419–425.
+(2012). “Afriat’s Theorem and some Extensions to Choice under Uncer-
+tainty*,” The Economic Journal, 122(560), 305–331.
+Diewert, W. E., and C. Parkan (1983). “Linear Programming Tests of Regularity
+Conditions for Production Functions,” in Quantitative Studies on Production and
+Prices, edited by W. Eichhorn, R. Henn, K. Neumann, and R. W. Shephard. Berlin
+et al.: Springer Verlag.
+Dobell, A. R. (1965). “A Comment on A. Y. C. Koo’s ‘An Empirical Test of Revealed
+Preference Theory,’ ” Econometrica, 33(2), 451–455.
+Dowrick, S., and J. Quiggin (1994). “International Comparisons of Living Standards
+and Tastes: A Revealed-Preference Analysis,” The American Economic Review,
+84(1), 332–341.
+Dushnik, B., and E. W. Miller (1941). “Partially Ordered Sets,” American Journal of
+Mathematics, 63(3), 600–610.
+Dvoretzky, A., A. Wald, and J. Wolfowitz (1951). “Elimination of Randomization in
+Certain Statistical Decision Procedures and Zero-Sum Two-Person Games,” The
+Annals of Mathematical Statistics, 22(1), 1–21.
+
+
+--- Page 19 ---
+204
+References
+Dziewulski, P., and J. Quah (2014). “Testing for Production with Complementarities,”
+Mimeo, University of Oxford.
+Echenique, F. (2008). “What Matchings Can Be Stable? The Testable Implications of
+Matching Theory,” Mathematics of Operations Research, 33(3), 757–768.
+(2013). “Testing for Separability is Hard,” Mimeo, California Institute of
+Technology.
+Echenique, F., T. Imai, and K. Saito (2013). “Testable Implications of Models of
+Intertemporal Choice: Exponential Discounting and Its Generalizations,” SS working
+paper 1388, California Institiute of Technology.
+Echenique, F., S. Lee, and M. Shum (2011). “The Money Pump as a Measure of
+Revealed Preference Violations,” Journal of Political Economy, 119(6), 1201–1223.
+Echenique, F., S. Lee, M. Shum, and M. B. Yenmez (2013). “The Revealed Preference
+Theory of Stable and Extremal Stable Matchings,” Econometrica, 81(1), 153–171.
+Echenique, F., and K. Saito (2013). “Savage in the Market,” Econometrica, 83(4),
+1467–9.
+Ehlers, L., and Y. Sprumont (2008). “Weakened WARP and Top-Cycle Choice Rules,”
+Journal of Mathematical Economics, 44(1), 87–94.
+Eliaz, K., and E. A. Ok (2006). “Indifference or Indecisiveness? Choice-Theoretic
+Foundations of Incomplete Preferences,” Games and Economic Behavior, 56(1),
+61–86.
+Ellsberg, D. (1961). “Risk, Ambiguity, and the Savage Axioms,” The Quarterly Journal
+of Economics, 75(4), 643–669.
+Epstein, L. G. (2000). “Are Probabilities Used in Markets?” Journal of Economic
+Theory, 91(1), 86–90.
+Epstein, L. G., and A. J. Yatchew (1985). “Non-Parametric Hypothesis Testing
+Procedures and Applications to Demand Analysis,” Journal of Econometrics, 30(1),
+149–169.
+Falmagne, J. (1978). “A Representation Theorem for Finite Random Scale Systems,”
+Journal of Mathematical Psychology, 18(1), 52–72.
+Famulari, M. (1995). “A Household-Based, Nonparametric Test of Demand Theory,”
+The Review of Economics and Statistics, 77(2), 372–382.
+(2006). “Household Labor Supply and Taxes: A Nonparametric, Revealed
+Preference Approach,” Mimeo, UC San Diego.
+F¨are, R., S. Grosskopf, and H. Lee (1990). “A Nonparametric Approach to
+Expenditure-Constrained Proﬁt Maximization,” American Journal of Agricultural
+Economics, 72(3), 574–581.
+F¨are, R., S. Grosskopf, and C. K. Lovell (1987). “Nonparametric Disposability Tests,”
+Journal of Economics, 47(1), 77–85.
+Farkas, J. (1902). “Theorie der einfachen Ungleichungen,” Journal f¨ur die Reine und
+Angewandte Mathematik, 124(124), 1–24.
+Farrell, M. (1957). “The Measurement of Productive Efﬁciency,” Journal of the Royal
+Statistical Society. Series A (General), 120(3), 253–290.
+Fawson, C., and C. R. Shumway (1988). “A Nonparametric Investigation of Agricul-
+tural Production Behavior for US Subregions,” American Journal of Agricultural
+Economics, 70(2), 311–317.
+
+
+--- Page 20 ---
+References
+205
+Featherstone, A. M., G. A. Moghnieh, and B. K. Goodwin (1995). “Farm-Level
+Nonparametric Analysis of Cost-Minimization and Proﬁt-Maximization Behavior,”
+Agricultural Economics, 13(2), 109–117.
+Ferguson, T. S. (1967). Mathematical Statistics: A Decision Theoretic Approach, Vol. 7.
+New York: Academic Press.
+Fiorini, S. (2004). “A Short Proof of a Theorem of Falmagne,” Journal of Mathematical
+Psychology, 48(1), 80–82.
+Fishburn, P. C. (1969). “Preferences, Summation, and Social Welfare Functions,”
+Management Science, 16(3), 179–186.
+(1973a). “Summation Social Choice Functions,” Econometrica, 41(6),
+1183–1196.
+(1973b). The Theory of Social Choice. Princeton University Press.
+(1974). “Separation Theorems and Expected Utilities,” Journal of Economic
+Theory, 11, 16–34.
+(1976). “Representable Choice Functions,” Econometrica, 44(5), 1033–1043.
+Fitzpatrick, S. (1988). “Representing Monotone Operators by Convex Functions,”
+in Workshop/Miniconference on Functional Analysis and Optimization (Canberra
+1988), Proceedings of the Centre for Mathematical Analysis, Australian National
+University, Vol. 20, pp. 59–65.
+Forges, F., and E. Minelli (2009). “Afriat’s Theorem for General Budget Sets,” Journal
+of Economic Theory, 144(1), 135–145.
+Fostel, A., H. Scarf, and M. Todd (2004). “Two New Proofs of Afriat‘s Theorem,”
+Economic Theory, 24(1), 211–219.
+Galambos, A. (2010). “Revealed Preference in Game Theory,” working paper.
+Gale, D. (1960a). “A Note on Revealed Preference,” Economica, 27(108), 348–354.
+(1960b). The Theory of Linear Economic Models. University of Chicago press.
+Geanakoplos, J. (1984). “Utility Functions for Debreu’s ‘Excess Demands,’ ” Journal
+of Mathematical Economics, 13(1), 1–9.
+Ghouila-Houri, A. (1962). “Caract´erisation des Graphes Non Orient´es dont on Peut
+Orienter les Arˆetes de Mani`ere `a Obtenir le Graphe d’une Relation d’Ordre,” CR
+Acad. Sci. Paris, 254, 1370–1371.
+Gilboa, I., and D. Schmeidler (1989). “Maxmin Expected Utility with Non-Unique
+Prior,” Journal of Mathematical Economics, 18(2), 141–153.
+Gilmore, P., and A. Hoffman (1964). “A Characterization of Comparability Graphs and
+of Interval Graphs,” The Canadian Journal of Mathematics, 16, 539–548.
+Gomberg, A. (2011). “Vote Revelation: Empirical Content of Scoring Rules,” in
+Political Economy of Institutions, Democracy and Voting, edited by N. Schoﬁeld,
+and G. Caballero, pp. 411–417. Berlin et al.: Springer-Verlag.
+(2014). “Revealed Votes,” Manuscript.
+Green, E., and K. Osband (1991). “A Revealed Preference Theory for Expected Utility,”
+The Review of Economic Studies, 58(4), 677–695.
+Green, J., and D. Hojman (2007). “Choice, Rationality, and Welfare Measurement,”
+working paper.
+Green, R. C., and S. Srivastava (1986). “Expected Utility Maximization and Demand
+Behavior,” Journal of Economic Theory, 38(2), 313–323.
+
+
+--- Page 21 ---
+206
+References
+Gul, F., P. Natenzon, and W. Pesendorfer (2014). “Random Choice as Behavioral
+Optimization,” Econometrica, 82(5), 1873–1912.
+Gul, F., and W. Pesendorfer (2006). “Random Expected Utility,” Econometrica, 74(1),
+121–146.
+Hanoch, G., and M. Rothschild (1972). “Testing the Assumptions of Production
+Theory: A Nonparametric Approach,” Journal of Political Economy, 80(2), 256–275.
+Hansson, B. (1968). “Choice Structures and Preference Relations,” Synthese, 18(4),
+443–458.
+Harbaugh, W., K. Krause, and T. Berry (2001). “GARP for Kids: On the Development
+of Rational Choice Behavior,” American Economic Review, 91(5), 1539–1545.
+Hausman, J. A., and D. A. Wise (1978). “A Conditional Probit Model for Qualita-
+tive Choice: Discrete Decisions Recognizing Interdependence and Heterogeneous
+Preferences,” Econometrica, 46(2), 403–426.
+Heufer, J. (2007). “Revealed Preference and the Number of Commodities,” working
+paper.
+Hey, J., and N. Pace (2014). “The Explanatory and Predictive Power of Non
+Two-Stage-Probability Theories of Decision Making Under Ambiguity,” Journal of
+Risk and Uncertainty, 49(1), 1–29.
+Hicks, J. R. (1956). A Revision of Demand Theory. Oxford University Press.
+Hoderlein, S. (2011). “How Many Consumers are Rational?” Journal of Econometrics,
+164(2), 294–309.
+Hoderlein, S., and J. Stoye (2014). “Revealed Preferences in a Heterogeneous
+Population,” Review of Economics and Statistics, 96(2), 197–213.
+Hong, C. S. (1983). “A Generalization of the Quasilinear Mean with Applications to
+the Measurement of Income Inequality and Decision Theory Resolving the Allais
+Paradox,” Econometrica, 51(4), 1065–1092.
+Houthakker, H. S. (1950). “Revealed Preference and the Utility Function,” Economica,
+17(66), 159–174.
+(1957). “Mr. Newman on Revealed Preference,” Oxford Economic Papers,
+9(2), 234.
+Houtman, M., and J. Maks (1985). “Determining All Maximal Data Subsets Consistent
+with Revealed Preference,” Kwantitatieve Methoden, 19, 89–104.
+Huber, J., J. W. Payne, and C. Puto (1982). “Adding Asymmetrically Dominated
+Alternatives: Violations of Regularity and the Similarity Hypothesis,” Journal of
+Consumer Research, 9(1), 90–98.
+Hurwicz, L., and M. K. Richter (1979). “Ville Axioms and Consumer Theory,”
+Econometrica, 47(3), 603–619.
+John, R. (1997). “A Simple Cycle Preserving Extension of a Demand Function,”
+Journal of Economic Theory, 72(2), 442–445.
+(2001). “The Concave Nontransitive Consumer,” Journal of Global Optimiza-
+tion, 20(3–4), 297–308.
+Kalai, G. (2004). “Social Indeterminacy,” Econometrica, 72(5), 1565–1581.
+Kalandrakis, T. (2010). “Rationalizable Voting,” Theoretical Economics, 5, 93–125.
+Kamiya, D. (1963). “A Note on the Strong Axiom of Revealed Preference,” Economica,
+30(117), 83–84.
+
+
+--- Page 22 ---
+References
+207
+Kehoe, T., and A. Mas-Colell (1984). “An Observation on Gross Substitutability and
+the Weak Axiom of Revealed Preference,” Economics Letters, 15(3), 241–243.
+Kehoe, T. J. (1992). “Gross Substitutability and the Weak Axiom of Revealed
+Preference,” Journal of Mathematical Economics, 21(1), 37–50.
+Kihlstrom, R., A. Mas-Colell, and H. Sonnenschein (1976). “The Demand Theory
+of the Weak Axiom of Revealed Preference,” Econometrica: Journal of the
+Econometric Society, 44(5), 971–978.
+Kim, T. (1987). “Intransitive Indifference and Revealed Preference,” Econometrica,
+55(1), 163–167.
+(1991). “The Subjective Expected Utility Hypothesis and Revealed Prefer-
+ence,” Economic Theory, 1(1), 251–263.
+(1996). “Revealed Preference Theory on the Choice of Lotteries,” Journal of
+Mathematical Economics, 26(4), 463–477.
+Kim, T., and M. K. Richter (1986). “Nontransitive-Nontotal Consumer Theory,”
+Journal of Economic Theory, 38(2), 324–363.
+Kitamura, Y., and J. Stoye (2013). “Nonparametric Analysis of Random Utility
+Models,” Mimeo, Yale University.
+Knoblauch, V. (1992). “A Tight Upper Bound on the Money Metric Utility Function,”
+The American Economic Review, 82(3), 660–663.
+(1993). “Recovering Homothetic Preferences,” Economics Letters, 43(1),
+41–45.
+(2005). “Characterizing Paretian Preferences,” Social Choice and Welfare,
+25(1), 179–186.
+(2010). “Recognizing One-Dimensional Euclidean Preference Proﬁles,”
+Journal of Mathematical Economics, 46(1), 1–5.
+Koo, A. Y. C. (1963). “An Empirical Test of Revealed Preference Theory,” Economet-
+rica, 31(4), 646–664.
+Krauss, E. (1985). “A Representation of Arbitrary Maximal Monotone Operators via
+Subgradients of Skew-Symmetric Saddle Functions,” Nonlinear Analysis: Theory,
+Methods & Applications, 9(12), 1381–1399.
+Krivine, J.-L. (1964). “Anneaux Pr´eordonn´es,” Journal d’Analyse Math´ematique,
+12(1), 307–326.
+Kubler, F., L. Selden, and X. Wei (2014). “Asset Demand Based Tests of Expected
+Utility Maximization,” American Economic Review, 104(11), 3459–3480.
+Kuhn, H., and A. Tucker (1956). Linear Inequalities and Related Systems.(AM-38),
+Vol. 38. Princeton University Press.
+Kumbhakar, S. C., and C. K. Lovell (2003). Stochastic Frontier Analysis. Cambridge
+University Press.
+Landsburg, S. E. (1981). “Taste Change in the United Kingdom, 1900–1955,” Journal
+of Political Economy, 89(1), 92–104.
+Ledyard, J. O. (1986). “The Scope of the Hypothesis of Bayesian Equilibrium,” Journal
+of Economic Theory, 39(1), 59–82.
+Lee, S. (2011). “The Testable Implications of Zero-Sum Games,” Journal of Mathemat-
+ical Economics, 48(1), 39–46.
+Little, I. M. (1949). “A Reformulation of the Theory of Consumer’s Behaviour,” Oxford
+Economic Papers, 1(1), 90–99.
+
+
+--- Page 23 ---
+208
+References
+Lo, K. C. (2000). “Rationalizability and the Savage Axioms,” Economic Theory, 15(3),
+727–733.
+Luce, R. D. (1959). Individual Choice Behavior: A Theoretical Analysis. New York:
+John Wiley and Sons.
+Luce, R. D., and P. Suppes (1965). “Preference, Utility, and Subjective Probability,”
+in Handbook of Mathematical Psychology, edited by R. D. Luce, R. R. Bush, and
+E. Galanter, Vol. 3, pp. 249–410. New York: John Wiley and Sons.
+Machina, M. J. (1985). “Stochastic Choice Functions Generated from Deterministic
+Preferences over Lotteries,” The Economic Journal, 95(379), 575–594.
+(1989). “Dynamic Consistency and Non-Expected Utility Models of Choice
+Under Uncertainty,” Journal of Economic Literature, 27(4), 1622–1668.
+Machina, M. J., and D. Schmeidler (1992). “A More Robust Deﬁnition of Subjective
+Probability,” Econometrica, 60(4), 745–780.
+Mantel, R. (1974). “On the Characterization of Aggregate Excess Demand,” Journal of
+Economic Theory, 7(3), 348–353.
+(1976). “Homothetic Preferences and Community Excess Demand Functions,”
+Journal of Economic Theory, 12(2), 197–201.
+(1977). “Implications of Microeconomic Theory for Community Excess
+Demand Functions,” Frontiers of Quantitative Economics, 3, 111–126.
+Manzini, P., and M. Mariotti (2007). “Sequentially Rationalizable Choice,” American
+Economic Review, 97(5), 1824–1839.
+Mariotti, M. (2008). “What Kind of Preference Maximization Does the Weak Axiom
+of Revealed Preference Characterize?,” Economic Theory, 35(2), 403–406.
+Marker, D. (2002). Model Theory: An Introduction. New York et al.: Springer.
+Marshall, M. (2008). Positive Polynomials and Sums of Squares. Providence, RI:
+American Mathematical Society.
+Mas-Colell, A. (1977). “On the Equilibrium Price Set of an Exchange Economy,”
+Journal of Mathematical Economics, 4(2), 117–126.
+(1978). “On Revealed Preference Analysis,” Review of Economic Studies,
+45(1), 121–131.
+(1982). “Revealed Preference after Samuelson,” in Samuelson and Neoclassi-
+cal Economics, edited by G. R. Feiwel, pp. 72–82. New York et al.: Springer.
+Mas-Colell, A., M. Whinston, and J. Green (1995). Microeconomic Theory, Vol. 1. New
+York: Oxford University Press.
+Masatlioglu, Y., D. Nakajima, and E. Y. Ozbay (2012). “Revealed Attention,” American
+Economic Review, 102(5), 2183–2205.
+Masatlioglu, Y., and E. A. Ok (2014). “A Canonical Model of Choice with Initial
+Endowments,” The Review of Economic Studies, 81(2), 851–883.
+Matzkin, R. L. (1991). “Axioms of Revealed Preference for Nonlinear Choice Sets,”
+Econometrica, 59(6), 1779–1786.
+Matzkin, R. L., and M. K. Richter (1991). “Testing Strictly Concave Rationality,”
+Journal of Economic Theory, 53(2), 287–303.
+McFadden, D. (1974). “Conditional Logit Analysis of Qualitative Choice Behavior,”
+in Frontiers in Econometrics, edited by P. Zarembka, p. 105. New York: Academic
+Press.
+
+
+--- Page 24 ---
+References
+209
+McFadden, D., A. Mas-Colell, R. Mantel, and M. K. Richter (1974). “A Characteriza-
+tion of Community Excess Demand Functions,” Journal of Economic Theory, 9(4),
+361–374.
+McFadden, D., and M. Richter (1971). “On the Extension of a Set Function on a Set of
+Events to a Probability on the Generated Boolean σ-Algebra,” UC Berkeley, working
+paper.
+(1990). “Stochastic Rationality and Revealed Stochastic Preference,” in
+Preferences, Uncertainty, and Optimality, Essays in Honor of Leo Hurwicz, edited
+by J. S. Chipman, D. McFadden, and M. K. Richter, pp. 161–186. Boulder, CO:
+Westview Press Inc.
+McGarvey, D. C. (1953). “A Theorem on the Construction of Voting Paradoxes,”
+Econometrica, 21(4), 608–610.
+Mosteller, F., and P. Nogee (1951). “An Experimental Measurement of Utility,” Journal
+of Political Economy, 59(5), 371–404.
+Motzkin, T. S. (1936). “Beitr¨age zur Theorie der linearen Ungleichungen,” Dissertation.
+Newman, P. (1955). “The Foundations of Revealed Preference Theory,” Oxford
+Economic Papers, 7, 151–169.
+(1960). “Complete Ordering and Revealed Preference,” The Review of
+Economic Studies, 27(2), 65–77.
+Ok, E. A., P. Ortoleva, and G. Riella (2014). “Revealed (P)reference Theory,” American
+Economic Review, forthcoming.
+Papadimitriou, C. H., and M. Yannakakis (2010). “An Impossibility Theorem for
+Price-Adjustment Mechanisms,” Proceedings of the National Academy of Sciences,
+107(5), 1854–1859.
+Papandreou, A. G. (1953). “An Experimental Test of an Axiom in the Theory of
+Choice,” Econometrica, 21, 477.
+Pareto, V. (1906). Manuale di Economia Politica. Societa Editrice.
+Park, I.-U. (1998). “A Revealed-Preference Implication of Weighted Utility Decisions
+under Uncertainty,” Economic Theory, 11, 413–426.
+Parrilo, P. A. (2003). “Semideﬁnite Programming Relaxations for Semialgebraic
+Problems,” Mathematical Programming, 96(2), 293–320.
+(2004). “Sum of Squares Programs and Polynomial Inequalities,” in SIAG/OPT
+Views-and-News: A Forum for the SIAM Activity Group on Optimization, Vol. 15, pp.
+7–15.
+Peleg, B., and S. Tijs (1996). “The Consistency Principle for Games in Strategic Form,”
+International Journal of Game Theory, 25(1), 13–34.
+Peters, H. J., and P. Wakker (1994). “WARP Does not Imply SARP for More than Two
+Commodities,” Journal of Economic Theory, 62(1), 152–160.
+(1996). “Cycle-Preserving Extension of Demand Functions to New Commodi-
+ties,” Journal of Mathematical Economics, 25(3), 281–290.
+Pfanzagl, J., V. Baumann, and H. Huber (1971). Theory of Measurement. Heidelberg,
+Germany: Physica-Verlag.
+Plott, C. R. (1974). “On Game Solutions and Revealed Preference Theory,” working
+paper.
+Poincar´e, H. (1895). “Compl´ement a l’Analysis Situs,” Rendiconti del Circolo
+Matematico di Palermo, 13, 285–343.
+
+
+--- Page 25 ---
+210
+References
+Polisson, M., and J. Quah (2013). “Revealed Preference in a Discrete Consumption
+Space,” American Economic Journal: Microeconomics, 5(1), 28–34.
+Polisson, M., L. Renou, and J. Quah (2013). “Revealed Preference Tests under Risk and
+Uncertainty,” working paper 13/24, University of Leicester.
+Popper, K. R. (1959). The Logic of Scientiﬁc Discovery. London: Hutchinson.
+Quah, J. K.-H. (2013). “A Revealed Preference Test for Weakly Separable Preferences,”
+working paper, University of Oxford.
+Quah, J. K.-H., H. Nishimura, and E. A. Ok (2013). “A Uniﬁed Approach to Revealed
+Preference Theory: The Case of Rational Choice,” Mimeo, University of Oxford.
+Rader, T. (1963). “The Existence of a Utility Function to Represent Preferences,” The
+Review of Economic Studies, 30(3), 229–232.
+Ray, I., and L. Zhou (2001). “Game Theory via Revealed Preferences,” Games and
+Economic Behavior, 37(2), 415–424.
+Ray, S. C., and D. Bhadra (1993). “Nonparametric Tests of Cost Minimizing Behavior:
+A Study of Indian Farms,” American Journal of Agricultural Economics, 75(4),
+990–999.
+Rehbeck, J. (2014). “Every Choice Correspondence is Backwards-Induction Rational-
+izable,” Games and Economic Behavior, 88, 207–210.
+Reny, P. (2014). “A Characterization of Rationalizable Consumer Behavior,” Econo-
+metrica, forthcoming.
+Richter, M. K. (1966). “Revealed Preference Theory,” Econometrica, 34(3), 635–645.
+(1971). “Rational Choice,” in Preferences, Utility and Demand, edited by J. S.
+Chipman, L. Hurwicz, M. K. Richter, and H. F. Sonnenschein, pp. 29–58. Orlando,
+FL: Harcourt Brace Jovanivic Inc.
+(1975). “Rational Choice and Polynomial Measurement Models,” Journal of
+Mathematical Psychology, 12(1), 99–113.
+Richter, M. K. (1979). “Duality and Rationality,” Journal of Economic Theory, 20(2),
+131–181.
+Richter, M. K., and L. Shapiro (1978). “Revelations of a Gambler,” Journal of
+Mathematical Economics, 5(3), 229–244.
+Richter, M. K., and K.-C. Wong (2004). “Concave Utility on Finite Sets,” Journal of
+Economic Theory, 115(2), 341–357.
+Rochet, J. (1987). “A Necessary and Sufﬁcient Condition for Rationalizability in a
+Quasi-Linear Context,” Journal of Mathematical Economics, 16, 191–200.
+Rockafellar, R. T. (1966). “Characterization of the Subdifferentials of Convex
+Functions,” Paciﬁc Journal of Mathematics, 17(3), 497–510.
+(1997). Convex Analysis. Princeton University Press.
+Rose, H. (1958). “Consistency of Preference: The Two-Commodity Case,” The Review
+of Economic Studies, 25(2), 124–125.
+Rota, G.-C. (1964). “On the Foundations of Combinatorial Theory I. Theory of M¨obius
+Functions,” Probability Theory and Related Fields, 2(4), 340–368.
+Rubin, D. B. (1973). “Matching to Remove Bias in Observational Studies,” Biometrics,
+29(1), 159–183.
+Rudin, W. (1976). Principles of Mathematical Analysis. New York: McGraw-Hill.
+Rynasiewicz, R. A. (1983). “Falsiﬁability and the Semantic Eliminability of Theoretical
+Languages,” The British Journal for the Philosophy of Science, 34(3), 225–241.
+
+
+--- Page 26 ---
+References
+211
+Samuelson, P. A. (1938). “A Note on the Pure Theory of Consumer’s Behaviour,”
+Economica, 5(17), 61–71.
+(1948). “Consumption Theory in Terms of Revealed Preference,” Economica,
+15(60), 243–253.
+(1950). “The Problem of Integrability in Utility Theory,” Economica, 17(68),
+355–385.
+(1963). “Problems of Methodology—Discussion,” American Economic
+Review, 53, 232–236.
+(1964). “Theory and Realism: A Reply,” American Economic Review, 54,
+736–739.
+(1965). “Professor Samuelson on Theory and Realism: Reply,” American
+Economic Review, 55, 1162–1172.
+Savage, L. J. (1954). The Foundations of Statistics. New York: John Wiley and Sons.
+Schipper, B. C. (2009). “How Mindless is Standard Economics Really?” Working
+papers, University of California, Department of Economics.
+Schrijver, A. (1998). Theory of Linear and Integer Programming. New York: John
+Wiley & Sons.
+Scott, D. (1964). “Measurement Structures and Linear Inequalities,” Journal of
+Mathematical Psychology, 1(2), 233–247.
+Seidenberg, A. (1954). “A New Decision Method for Elementary Algebra,” The Annals
+of Mathematics, 60(2), 365–374.
+Selten, R. (1991). “Properties of a Measure of Predictive Success,” Mathematical Social
+Sciences, 21(2), 153–167.
+Sen, A. (1969). “Quasi-Transitivity, Rational Choice and Collective Decisions,” The
+Review of Economic Studies, 36(3), 381–393.
+(1971). “Choice Functions and Revealed Preference,” The Review of Economic
+Studies, 38(3), 307–317.
+Shafer, W. (1977). “Revealed Preference Cycles and the Slutsky Matrix,” Journal of
+Economic Theory, 16(2), 293–309.
+Shafer, W., and H. Sonnenschein (1982). “Market Demand and Excess Demand
+Functions,” in Handbook of Mathematical Economics, edited by K. J. Arrow,
+W. Hildenbrand, M. D. Intriligator, and H. Sonnenschein, Vol. 2, pp. 671–693.
+Amsterdam: North-Holland.
+Shen, W.-M., and H. A. Simon (1993). “Fitness Requirements for Scientiﬁc Theories
+Containing Recursive Theoretical Terms,” The British Journal for the Philosophy of
+Science, 44(4), 641–652.
+Shirai, K. (2010). “On the Existence of a Submodular Utility Function,” Mimeo,
+Waseda University.
+Shmaya, E., and L. Yariv (2012). “Experiments on Decisions Under Uncertainty: A
+Theoretical Framework,” working paper.
+Simon, H. A. (1955). “A Behavioral Model of Rational Choice,” The Quarterly Journal
+of Economics, 69(1), 99.
+(1979). “Fit, Finite, and Universal Axiomatization of Theories,” Philosophy of
+Science, 46(2), 295–301.
+(1983). “Fitness Requirements for Scientiﬁc Theories,” The British Journal for
+the Philosophy of Science, 34(4), 355–365.
+
+
+--- Page 27 ---
+212
+References
+(1985). “Quantiﬁcation of Theoretical Terms and the Falsiﬁability of
+Theories,” The British Journal for the Philosophy of Science, 36(3), 291–298.
+Simon, H. A., and G. J. Groen (1973). “Ramsey Eliminability and the Testability
+of Scientiﬁc Theories,” The British Journal for the Philosophy of Science, 24(4),
+367–380.
+Sippel, R. (1997). “An Experiment on the Pure Theory of Consumer’s Behaviour,” The
+Economic Journal, 107(444), 1431–1444.
+Slater, M. L. (1951). “A Note on Motzkin’s Transposition Theorem,” Econometrica,
+19(2), 185–187.
+Smeulders, B., L. Cherchye, B. De Rock, and F. C. R. Spieksma (2013). “The Money
+Pump as a Measure of Revealed Preference Violations: A Comment,” Journal of
+Political Economy, 121(6), 1248–1258.
+Sneed, J. (1971). The Logical Structure of Mathematical Physics. Dordrecht: D. Reidel.
+Snyder, S. (1999). “Testable Restrictions of Pareto Optimal Public Good Provision,”
+Journal of Public Economics, 71(1), 97–119.
+Sondermann, D. (1982). “Revealed Preference: An Elementary Treatment,” Economet-
+rica, 50(3), 777–779.
+Sonnenschein, H. (1972). “Market Excess Demand Functions,” Econometrica, 40(3),
+549–563.
+Sprumont, Y. (2000). “On the Testable Implications of Collective Choice Theories,”
+Journal of Economic Theory, 93, 205–232.
+(2001). “Paretian Quasi-Orders: The Regular Two-Agent Case,” Journal of
+Economic Theory, 101(2), 437–456.
+Stegm¨uller, W., W. Balzer, and W. Spohn (1982). Philosophy of Economics: Proceed-
+ings, Munich, July 1981. Berlin et al.: Springer-Verlag.
+Stengle, G. (1974). “A Nullstellensatz and a Positivstellensatz in Semialgebraic
+Geometry,” Mathematische Annalen, 207(2), 87–97.
+Stigum, B. P. (1973). “Revealed Preference—A Proof of Houthakker’s Theorem,”
+Econometrica, 41(3), 411–423.
+Stoer, J., and C. Witzgall (1970). Convexity and Optimization in Finite Dimensions.
+Berlin et al.: Springer-Verlag.
+Sturmfels, B. (2002). Solving Systems of Polynomial Equations. Providence, RI:
+American Mathematical Society.
+Suzumura, K. (1976a). “Rational Choice and Revealed Preference,” The Review of
+Economic Studies, 43(1), 149–158.
+(1976b). “Remarks on the Theory of Collective Choice,” Economica, 43(172),
+381–390.
+(1977). “Houthakker’s Axiom in the Theory of Rational Choice,” Journal of
+Economic Theory, 14(2), 284–290.
+Swofford, J. L., and G. A. Whitney (1986). “Flexible Functional Forms and the Utility
+Approach to the Demand for Money: A Nonparametric Analysis: Note,” Journal of
+Money, Credit and Banking, 18(3), 383–389.
+(1987). “Nonparametric Tests of Utility Maximization and Weak Separability
+for Consumption, Leisure and Money,” The Review of Economics and Statistics,
+69(3), 458–464.
+Szpilrajn, E. (1930). “Sur l’Extension de l’Ordre Partiel,” Fundamenta Mathematicae,
+16, 386–389.
+
+
+--- Page 28 ---
+References
+213
+Tarski, A. (1951). “A Decision Method for Elementary Algebra and Geometry (2nd ed.,
+revised),” Berkeley and Los Angeles: Rand Corporation monograph.
+(1954). “Contributions to the Theory of Models I,” Indagationes Mathemati-
+cae, 16, 572–581.
+Tauer, L. W. (1995). “Do New York Dairy Farmers Maximize Proﬁts or Minimize
+Costs?” American Journal of Agricultural Economics, 77(2), 421–429.
+Tversky, A. (1967). “A General Theory of Polynomial Conjoint Measurement,” Journal
+of Mathematical Psychology, 4, 1–20.
+Tyson, C. (2008). “Cognitive Constraints, Contraction Consistency, and the Satisﬁcing
+Criterion,” Journal of Economic Theory, 138(1), 51–70.
+Uzawa, H. (1956). “Note on Preference and Axioms of Choice,” Annals of the Institute
+of Statistical Mathematics, 8(1), 35–40.
+(1960a). “Preference and Rational Choice in the Theory of Consumption,”
+in Mathematical Methods in the Social Sciences, 1959: Proceedings of the First
+Stanford Symposium, edited by K. J. Arrow, S. Karlin, and P. Suppes, pp. 129–150.
+Palo Alto, CA: Stanford University Press.
+(1960b). “Walras’ Tˆatonnement in the Theory of Exchange,” The Review of
+Economic Studies, 27(3), 182–194.
+(1971). “Preference and Rational Choice in the Theory of Consumption,” in
+Preferences, Utility, and Demand: A Minnesota Symposium, edited by J. S. Chipman,
+L. Hurwicz, M. K. Richter, and H. F. Sonnenschein, pp. 7–28. Orlando, FL: Harcourt
+Brace Jovanovich, Inc.
+Van Benthem, J. (1976). “A Problem Concerning Expansions and its Connections with
+Modal Logic,” working paper.
+Varian, H. R. (1982). “The Nonparametric Approach to Demand Analysis,” Economet-
+rica, 50(4), 945–974.
+(1983a). “Non-Parametric Tests of Consumer Behaviour,” Review of Economic
+Studies, 50(1), 99–110.
+(1983b). “Nonparametric Tests of Models of Investor Behavior,” Journal of
+Financial and Quantitative Analysis, 18(3), 269–278.
+(1984). “The Nonparametric Approach to Production Analysis,” Economet-
+rica, 52(3), 579–598.
+(1985). “Non-Parametric Analysis of Optimizing Behavior with Measurement
+Error,” Journal of Econometrics, 30, 445–458.
+(1988a). “Revealed Preference with a Subset of Goods,” Journal of Economic
+Theory, 46(1), 179–185.
+(1988b). “Estimating Risk Aversion from Arrow-Debreu Portfolio Choice,”
+Econometrica, 43(4), 973–979.
+(1990). “Goodness-of-Fit in Optimizing Models,” Journal of Econometrics,
+46(1–2), 125–140.
+(1991). “Goodness-of-Fit for Revealed Preference Tests,” working paper,
+Department of Economics, University of Michigan.
+(2006). “Revealed Preference,” in Samuelsonian Economics and the
+Twenty-First Century, edited by M. Szenberg and L. Ramrattan, pp. 99–115. Oxford
+University Press.
+
+
+--- Page 29 ---
+214
+References
+Veblen, O., and J. Alexander (1912–1913). “Manifolds of n Dimensions,” Annals of
+Mathematics, 14(1/2), 163–178.
+Ville, J. (1946). “Sur les Conditions d’Existence d’une Oph´elimit´e Totale et d’un Indice
+du Niveau des Prix,” Annales de L’Universit´e de Lyon, 9, 32–39.
+Ville, J., and P. Newman (1951–1952). “The Existence Conditions of a Total Utility
+Function,” Review of Economic Studies, 19(2), 123–128.
+Von Neumann, J. (1953). “A Certain Zero-Sum Two-Person Game Equivalent to the
+Optimal Assignment Problem,” Contributions to the Theory of Games, 2, 5–12.
+Wald, A. (1947a). “An Essentially Complete Class of Admissible Decision Functions,”
+The Annals of Mathematical Statistics, 18(4), 549–555.
+(1947b). “Foundations of a General Theory of Sequential Decision Functions,”
+Econometrica, 15(4), 279–313.
+(1950). Statistical Decision Functions. New York: John Wiley and Sons.
+Wilson, R. (1970). “The Finer Structure of Revealed Preference,” Journal of Economic
+Theory, 2(4), 348–353.
+Xiong, S. (2013). “Every Choice Correspondence is Backwards-Induction Rationaliz-
+able,” working paper.
+Xu, Y., and L. Zhou (2007). “Rationalizability of Choice Functions by Game Trees,”
+Journal of Economic Theory, 134(1), 548–556.
+Yannakakis, M. (1982). “The Complexity of the Partial Order Dimension Problem,”
+SIAM Journal on Algebraic and Discrete Methods, 3, 351.
+Yanovskaya, E. (1980). “Revealed Preference in Noncooperative Games” (in Russian),
+Mathematical Methods of Social Science, 13, 73–81.
+Yatchew, A. (1985). “A Note on Non-Parametric Tests of Consumer Behaviour,”
+Economics Letters, 18(1), 45–48.
+Yellott, J. I. (1977). “The Relationship between Luce’s Choice Axiom, Thurstone’s
+Theory of Comparative Judgment, and the Double Exponential Distribution,” Journal
+of Mathematical Psychology, 15(2), 109–144.
+
+
+--- Page 30 ---
+Index
+act, 123
+act-dependent probability representation, 126
+Afriat inequalities, 40, 64, 84, 118, 123, 138,
+139, 177
+Afriat’s efﬁciency index, 72, 78
+Afriat’s Theorem, 40, 139, 177, 178
+aggregate excess demand function, 130
+aggregation rule, 159
+Allais paradox, 115, 127
+allocation, 136
+atomic formula, 191
+axiom, 191
+axiom of revealed stochastic preference, 96
+axiomatization, 191
+UNCAF, 191
+balanced, 118
+doubly, 122
+bargaining
+egalitarian, 150
+Nash, 150
+utilitarian, 150
+Bayesian environment, 148
+beliefs, 116
+binary relation, 1
+acyclic, 5
+antisymmetric, 1
+asymmetric part, 1
+completeness, 1
+convex, 4
+extension of, 1
+irreﬂexive, 1
+linear order, 2, 159
+partial order, 2
+quasitransitive, 1, 17, 18, 22, 27
+reﬂexive, 1
+strict extension of, 1
+strict part, 1
+strictly convex, 4
+symmetric, 1
+symmetric part, 1
+transitive, 1
+weak order, 2
+Birkhoff–von Neumann Theorem, 92
+bistochastic matrix, 92
+Block–Marschak polynomials, 97
+blocking pair, 154
+Bronars’ index, 75
+canonical conjugate, 22
+certainty inclusive, 126
+chain, 2
+choice function, 143
+complementarity, 57, 58, 66
+complete markets, 117
+component, 2
+comprehensive set, 25, 87
+condition α, 20, 96, 144, 195
+condition β, 20, 144
+cone, 60, 110, 180
+congruence, 18, 179, 191, 194
+partial, 28
+conic independence, 92
+constant act, 124
+constant returns to scale, 90
+consumption dataset, 35, 60
+convex cone, 110
+convex hull, 109
+core, 140
+correspondence, 3
+cost rationalization, 83
+Cournot oligopoly, 177
+critical cost efﬁciency index, 73, 81
+cycle, 154
+
+
+--- Page 31 ---
+216
+Index
+cyclic monotonicity, 9, 41, 65
+cylinder, 99
+data envelopment analysis, 94
+dataset
+bargaining, 150
+consumption, 35, 60
+cross-country, 78
+cross-section, 78
+discrete, 58
+economy-wide, 136
+experimental, 79
+input–output, 83
+panel, 77
+partial production, 91
+partially observed, 51, 52
+production, 87
+time series, 79
+voting record, 168
+demand correspondence, 34
+demand function, 35, 130
+dictator game, 80
+direct revealed preference, 37
+strict, 37
+direct revelation mechanism, 147
+disagreement point, 149
+discipline, 16
+downward-sloping demand, 117
+edge, 154
+election, 172
+empirical content, 190
+endowment vector, 129
+Engel curve, 75
+envy-free, 91
+Epstein test, 121
+equivalence relation, 2
+Euclidean norm, 3
+Euclidean space, 2
+excess demand function, 130
+exchange economy, 129
+existential, see existential axiom
+existential axiom, 139, 175, 180, 184, 186
+expected utility, 115, 116
+extension lemma, 6
+extreme point, 109, 169
+falsiﬁcation, 176, 189
+Farkas’ Lemma, see Theorem of the
+Alternative
+ﬁrst-order stochastic dominance, 121
+game, 143
+game form, 143
+GARP, see generalized axiom of revealed
+preference
+generalized axiom of revealed preference, 26,
+37, 46, 139, 176, 177, 187, 191
+gradient, 3
+graph, 154
+gross complements, 66
+Hal Varian, 55, 61, 73, 78
+HARP, see homothetic axiom of revealed
+preference
+Herbert Simon, 23
+homothetic, 60
+homothetic axiom of revealed preference, 61
+homothetic revealed preference pair, 61
+ideal, 180
+ideal point, 164
+idempotence, 133
+IIA, 103
+Inada conditions, 150
+inclusion–exclusion principle, 98
+independence axiom, 109, 115
+indicator function, 3
+indicator vector, 3
+indifference relation, 1
+indirect revealed preference, 37
+inner product, 2
+interchangeable, 147
+interior, 3
+isomorphism, 189
+join, 2, 144
+joint choice function, 143
+Karl Popper, 184, 186
+L-dataset, 188
+L-structure, 189
+language, 188
+lattice, 2, 144
+linear order, 2, 159
+logit model, 106
+lottery, 114
+lower bound, 2
+lower contour set, 4
+lower production set, 88
+Luce independence of irrelevant alternatives,
+103
+Luce model, 104
+
+
+--- Page 32 ---
+Index
+217
+majority rule, 159
+matching, 154
+stable, 154
+maximal element, 2
+maxmin, 150
+mechanism design, 147
+meet, 2, 144
+M¨obius inversion, 98
+monetary act, 116
+money pump index, 74
+monotonic, 109
+monotonicity, 9
+multiplicative monoid, 181
+n-ary relation, 2
+N-congruence, 146
+Nash bargaining, 150, 182
+Nash equilibrium, 143
+no arbitrage, 117
+normal-form game, 143
+null state, 124
+numeraire, 65
+objective probability, 114
+observation, 188
+order pair, 5
+acyclic, 5, 179
+asymmetric, 9
+extension, 5, 17
+quasi-acyclic, 8, 22
+Pareto rationalizable, 145
+partial observability, 187
+partial order, 2
+path, 10, 154
+permutation matrix, 92
+persistence, 140
+persistence under contraction, 144
+persistence under expansion, 144
+polyhedral cone, 110
+polynomial, 180
+polynomial inequality, 138
+Positivstellensatz, 181
+preference
+additive separability, 64
+additively separable, 64
+homothetic, 60
+separable, 64
+preference relation
+objective expected utility, 115, 117
+probabilistically sophisticated, 121
+strict, 3, 96
+subjective expected utility, 122, 124
+preference proﬁle, 154
+preference relation
+continuous, 3
+Euclidean, 164
+locally nonsatiated, 3, 37, 51
+monotonic, 3, 25, 124
+monotonic with respect to order pair, 25
+rational, 3
+representation, 4
+smooth utility representation, 4
+strict, 144
+strictly monotonic, 3
+uniformly monotonic, 126
+prior, 116
+probabilistically sophisticated, 121
+production function, 83
+production set, 87
+proﬁt function, 90
+psychiatric patients, 79
+quantiﬁer elimination, 138, 175
+quasiconcave, 4
+quasilinear utility, 65
+random decision selection, 32, 79
+random utility, 96
+rate of violation of GARP, 78
+rationalizable, 91, 189
+additively separable, 64
+convex, 168
+egalitarian (maxmin), 150
+Euclidean, 164
+expected utility, 109, 115, 117
+g, 150
+majority rule, 159
+n-unanimity, 160
+Nash bargaining, 150
+Pareto, 145, 159
+probabilistic sophistication weakly, 121
+production dataset, 87
+quasilinear, 65
+random utility, 96
+satisﬁcing, 23
+stable matching, 154
+strongly, 15, 47
+strongly Nash, 143
+strongly pair, 168
+subjective expected utility, 122
+team, 145
+unanimity rule, 159
+utilitarian, 150, 162
+Walras, 136
+
+
+--- Page 33 ---
+218
+Index
+rationalizable (cont.)
+weakly, 16, 35
+weakly Nash, 144
+zero sum, 147
+real closed ﬁeld, 138
+regular, 109
+regularity, 96, 109
+relation symbols, 188
+relative theory, 192
+revealed preference
+general budget sets, 46
+order pair, 16, 36, 54, 115
+order pair (strong), 48, 58
+revealed preference graph, 53
+rich, 195
+risk aversion, 117
+risk-neutral prices, 117
+SARP, see strong axiom of revealed preference
+semideﬁnite programming, 181
+separating hyperplane theorem, 11
+states of the world, 116
+status quo, 192
+stochastic frontier analysis, 94
+strategy proﬁle, 143
+strict preference, see preference relation
+strictly quasiconcave, 4
+strong rationalization, 15
+strong axiom of revealed objective expected
+utility, 118
+strong axiom of revealed subjective expected
+utility, 122
+strong axiom of revealed preference, 48, 51,
+58, 130, 176
+strong rationalization, 47
+structuralism, 197
+subjective expected utility, 122
+subjective probability, 121
+submodular, 2, 57
+subrationalizable, 28
+substitutability, 58, 68
+superdifferential, 12
+supergradient, 11, 182
+supermodular, 2, 57
+Szpilrajn’s Theorem, 7
+Tarski–Seidenberg Theorem, 138, 175
+team rationalizable, 145
+Theorem of the Alternative, 12, 42, 43, 47, 86,
+87, 91, 102, 116, 148, 156, 167, 170, 171,
+175
+theory, 189
+transitive closure, 5, 24, 37, 78, 146, 160
+type space, 147
+unanimity rule, 159
+UNCAF, see universal negation of conjunction
+of atomic formulas
+uniform monotonicity, 126
+unit vector, 3
+universal, see universal axiom
+universal axiom, 180, 184, 186
+universal negation of conjunction of atomic
+formulas, 187, 191
+unordered, 1
+upper bound, 2
+greatest, 2
+least, 2
+upper contour set, 4
+strict, 4
+upper production set, 89
+utilitarianism, 150
+utility function, 4
+separable, 64
+smooth, 50
+V-axiom, 17
+Varian’s efﬁciency index, 73
+vector, 2
+veriﬁcation, 176
+vertex, 154
+Walras’ Law, 130
+Walrasian equilibrium, 136
+Walrasian equilibrium price, 130
+WARP, see weak axiom of revealed preference
+weak axiom of production, 88
+weak axiom of proﬁt maximization, 88
+weak axiom of revealed preference, 19, 35, 36,
+38, 46, 60, 61, 67, 73, 74, 76, 137, 179,
+191, 195
+weak order, 2
+weak rationalization, 16
+demand, 35
+in choice, 16
+weakened weak axiom of revealed preference,
+24
+weakly rationalizable, 35
+well-ordering, 29
+Zorn’s Lemma, 2, 8, 30
+
+
+--- Page 34 ---
+Other titles in the series (continued fron page iii)
+A. Colin Cameron and Pravin K. Trivedi, Regression analysis of count data, 9780521632010,
+9780521635677
+Steinar Strom, Editor, Econometrics and economic theory in the 20th century: The Ragnar Frisch
+Centennial Symposium, 9780521633239, 9780521633659
+Eric Ghysels, Norman R. Swanson, and Mark Watson, Editors, Essays in econometrics:
+Collected papers of Clive W. J. Granger (Volume I), 9780521772976, 9780521774963
+Eric Ghysels, Norman R. Swanson, and Mark Watson, Editors, Essays in econometrics:
+Collected papers of Clive W. J. Granger (Volume II), 9780521792073, 9780521796491
+Cheng Hsiao, Analysis of panel data, second edition, 9780521818551, 9780521522717
+Mathias Dewatripont, Lars Peter Hansen, and Stephen J. Turnovsky, Editors, Advances in
+economics and econometrics – Eighth World Congress (Volume I), 9780521818728,
+9780521524117
+Mathias Dewatripont, Lars Peter Hansen, and Stephen J. Turnovsky, Editors, Advances in
+economics and econometrics – Eighth World Congress (Volume II), 9780521818735,
+9780521524124
+Mathias Dewatripont, Lars Peter Hansen, and Stephen J. Turnovsky, Editors, Advances in
+economics and econometrics – Eighth World Congress (Volume III), 9780521818742,
+9780521524131
+Roger Koenker, Quantile regression, 9780521845731, 9780521608275
+Charles Blackorby, Walter Bossert, and David Donaldson, Population issues in social choice
+theory, welfare economics, and ethics, 9780521825511, 9780521532587
+John E. Roemer, Democracy, education, and equality, 9780521846653, 9780521609135
+Richard Blundell, Whitney K. Newey, and Thorsten Persson, Advances in economics and
+econometrics – Ninth World Congress (Volume I), 9780521871525, 9780521692083
+Richard Blundell, Whitney K. Newey, and Thorsten Persson, Advances in economics and
+econometrics – Ninth World Congress (Volume II), 9780521871532, 9780521692090
+Richard Blundell, Whitney K. Newey, and Thorsten Persson, Advances in economics and
+econometrics – Ninth World Congress (Volume III), 9780521871549, 9780521692106
+Fernando Vega-Redondo, Complex social networks, 9780521857406, 9780521674096
+Itzhak Gilboa, Theory of decision under uncertainty, 9780521517324, 9780521741231
+Krislert Samphantharak and Robert M. Townsend, Households as corporate ﬁrms: An analysis of
+household ﬁnance using integrated household surveys and corporate ﬁnancial accounting,
+9780521195829, 9780521124164
+Rakesh Vohra, Mechanism design: A linear programming approach, 9781107004368,
+9780521179461
+Daron Acemoglu, Manuel Arellano, Eddie Dekel, Advances in economics and econometrics –
+Tenth World Congress (Volume I), 9781107016040, 9781107638105
+Daron Acemoglu, Manuel Arellano, Eddie Dekel, Advances in economics and econometrics –
+Tenth World Congress (Volume II), 9781107016057, 9781107674165
+Daron Acemoglu, Manuel Arellano, Eddie Dekel, Advances in economics and econometrics –
+Tenth World Congress (Volume III), 9781107016064, 9781107627314
+Andrew Harvey, Dynamic models for volatility and heavy tails: With applications to ﬁnancial
+and economic time series, 9781107034723, 9781107630024
+Cheng Hsiao, An analysis of panel data (second edition), 9781107038691, 9781107657632
+Jean-Franc¸ois Mertens, Sylvain Sorin, Shmuel Zamir, Repeated games, 9781107030206,
+9781107662636

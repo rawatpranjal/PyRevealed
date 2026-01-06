@@ -1,0 +1,751 @@
+--- Page 1 ---
+CHAPTER 9
+General Equilibrium Theory
+The previous chapters deal with theories of individual agents’ behavior. In the
+rest of the book, we turn to economic theories that predict group or societal
+outcomes. We ﬁrst turn our attention to general equilibrium theory.
+General equilibrium theory can often be studied through a reduced-form
+model, the excess demand function of an economy. The equilibrium outcomes
+of the economy are given as zeroes of the excess demand function. There are
+two immediate questions about the scope of the model: What is the class of
+excess demand functions that can arise from a well-behaved economy? And
+which sets of prices can be equilibrium prices?
+The answers to these questions carry a largely negative message about
+general equilibrium theory. The Sonnenschein–Mantel–Debreu Theorem (as
+we shall refer to it) shows that, roughly speaking, any continuous function
+that satisﬁes Walras’ law can be the aggregate excess demand function of
+a very well-behaved economy. The result implies that any compact set of
+strictly positive prices can be the set of Walrasian equilibrium prices of a
+well-behaved economy. No additional constraints are obtained by insisting on
+basic regularity properties of the equilibria.
+Considered as data on an economy, an excess demand function, or a set of
+putative equilibrium prices, may seem odd. The next set of questions under
+study is much more similar to the approach in Chapter 3. If we assume that
+we can observe equilibria for different vectors of endowments (in a sense,
+we can sample from the “equilibrium manifold”), then the theory of general
+equilibrium can be refuted: There are nonrationalizable datasets. The theory
+is testable if we can observe prices from different endowment vectors. The
+nature of the testable implications follow from a very general principle, the
+Tarski–Seidenberg Theorem, which we shall also review here.
+We focus on a model of an economy where all economic activity takes the
+form of exchange. There are I consumers; each consumer i is described by
+a pair (⪰i,ωi), where ⪰i is a preference relation on Rn
++, and ωi ∈Rn
++ is an
+endowment vector. An exchange economy is a tuple E = (⪰i,ωi)I
+i=1.
+
+
+--- Page 2 ---
+130
+General Equilibrium Theory
+When ⪰i is continuous, strictly convex, and locally nonsatiated, the demand
+function of agent i is well deﬁned as di(p,M) = argmax⪰i{x ∈Rn
++ : p · x ≤M},
+for p ∈Rn
+++ and M > 0. The excess demand function of agent i is Zi(p) =
+di(p,p·ωi)−ωi. Finally, the aggregate excess demand function of the economy
+E is Z = I
+i=1 Zi. The function Z is continuous and satisﬁes p·Z(p) = 0 for all p
+in its domain, a property called Walras’ Law. A vector p ∈Rn
+++ is a Walrasian
+equilibrium price if Z(p) = 0.
+One can deﬁne the weak axiom of revealed preference for excess demand
+functions. Indeed, note that WARP for individual demand functions says that
+there cannot exist prices p and q such that q·di(p,p·ωi) < q·ωi and p·di(q,q·
+ωi) ≤p · ωi. So we say that an individual excess demand function Zi satisﬁes
+WARP if there are no p and q such that q·Zi(p) < 0 and p·Zi(q) ≤0. Moreover,
+Zi satisﬁes a version of the strong axiom of revealed preference, which states
+that there is no sequence of prices p1,...pK with pk · Zi(pk+1) ≤0, k = 1,...,
+K −1 and pK · Zi(p1) < 0.
+9.1
+THE SONNENSCHEIN–MANTEL–DEBREU THEOREM
+We know that the aggregate excess demand function of an exchange economy
+satisﬁes Walras’ Law and has homogeneity of degree zero. We ask here
+whether there are any other properties which are systematically satisﬁed by
+excess demand. Let S = {p ∈Rn
++ : ∥p∥= 1} be the intersection of the unit
+sphere with the non-negative orthant, and let  = {p ∈Rn
++ : 
+i pi = 1}. By
+homogeneity, one can, without loss of generality, restrict attention to prices
+either in S or , as demand functions and excess demand functions are
+homogeneous of degree zero. Depending on the context, it is easier to work
+with S or . The relative interior of S is denoted by int S. Likewise the relative
+interior of  is denoted by int .
+Sonnenschein–Mantel–Debreu Theorem
+Suppose Z : S →X is a continu-
+ous function satisfying Walras’ Law and let K ⊆int S be compact. Then there
+exists an exchange economy E = (⪰i,ωi)n
+i=1, in which each ⪰i is continuous,
+strictly convex, and monotonic, such that the sum of individuals agents’ excess
+demand functions in E coincides with Z on K.
+The Sonnenschein–Mantel–Debreu (SMD) Theorem has a complicated proof,
+but we present the gist of it in Section 9.1.1. Note that the economy E in the
+SMD Theorem has a number of agents that is equal to the number of goods.
+The next result shows that the conclusion of the theorem does not hold with
+fewer consumers.
+Proposition 9.1
+There is a function Z satisfying the hypotheses of the SMD
+Theorem, and a nonempty compact set K ⊆int S such that Z cannot be written
+as the sum of fewer than n individual agents’ excess demand functions on K.
+
+
+--- Page 3 ---
+9.1 The Sonnenschein–Mantel–Debreu Theorem
+131
+Proof. For any p ∈S, let T(p) denote the subspace that is orthogonal to p in
+Rn
++. Choose p0 ∈int S arbitrarily, and let ε > 0 be such that p0
+i > ε for all i. Let
+K be the set of p ∈int S with pi ≥ε for all i. The set K is compact.
+Deﬁne the function Z : S →Rn
++ by letting Z(p) be the projection of the vector
+(p −p0) on to T(p).1 Note that Z is continuous and satisﬁes Walras’ Law, as
+p · Z(p) = 0 because Z(p) is orthogonal to p. Observe that, for any p ∈S\{p0},
+(p −p0) · Z(p) > 0,
+(9.1)
+because p −p0 can never be orthogonal to p, as both p and p0 are in the unit
+sphere. This is a basic property of projections.
+Suppose, toward a contradiction, that there are k < n individual excess
+demand functions such that Z(p) = k
+i=1 Zi(p) for all p ∈K. Walras’ Law
+implies that Zi(p0) ∈T(p0). The vectors Zi(p0), i = 1,...,k, form a linearly
+dependent set, as 0 = Z(p0) = k
+i=1 Zi(p0). Let  be the linear subspace of
+T(p0) spanned by the vectors Zi(p0), i = 1,...,k.
+The dimension of  is strictly smaller than the dimension of T(p0), because
+dim < k ≤n −1 = dimT(p0). Then the orthogonal complement ⊥of 
+in T(p0) is nontrivial. Since p0 projects to 0 in T(p0), one can choose η ∈⊥
+small enough so that there is ¯p ∈K such that ¯p ̸= p0, and ¯p −p0 projects to η
+in T(p0).
+Choose an arbitrary i. Then
+(¯p −p0) · Zi(p0) = (¯p −p0 −η) · Zi(p0) + η · Zi(p0) = 0.
+This follows because we know (¯p −p0 −η) · Zi(p0) = 0 as Zi(p0) ∈T(p0) and
+(¯p−p0 −η) is the orthogonal projection of (¯p−p0) onto p0. Further, we know
+η · Zi(p0) = 0 as Zi(p0) ∈ and η ∈⊥. The function Zi satisﬁes the weak
+axiom of revealed preference, because it is an individual agent’s excess demand
+function. Then by Walras’ Law, (¯p−p0)·Zi(p0) = 0 implies that ¯p·Zi(p0) ≤0.
+By the weak axiom then, p0 · Zi(¯p) ≥0 = ¯p · Zi(¯p). Thus (¯p −p0) · Zi(¯p) ≤0.
+Since this holds for all i, we obtain that (¯p −p0) · Z(¯p) ≤0, in contradiction
+of (9.1).
+The SMD Theorem talks about the behavior of Z on a compact subset of the
+sphere; but students of general equilibrium theory know that many results rely
+on the behavior of Z close to the boundary of its domain, when some prices
+are close to zero. The next theorem says that one can decompose Z on all of its
+domain as the sum of individual excess demand functions. The decomposition
+is of a weaker nature, though.
+Theorem 9.2
+Suppose Z : S →X is a function satisfying Walras’ Law that
+is bounded below. Then there are functions Zi : S →X, i = 1,...,n, satisfying
+Walras’ Law and the Strong Axiom of Revealed Preference, for which Z =
+n
+i=1 Zi.
+1 Formally, Z(p) = p −p0 −pp′(p −p0) = pp′p0 −p0, since ||p|| = 1;p′ is the transpose of p.
+
+
+--- Page 4 ---
+132
+General Equilibrium Theory
+A proof of Theorem 9.2 can be obtained with arguments similar to those in
+Section 9.1.1.
+The SMD Theorem says that general equilibrium theory does not restrict
+aggregate excess demand functions. It may not seem natural to assume that
+someone could “observe” an excess demand function. It makes more sense that
+one could observe a set of putative equilibrium prices. The theorem implies,
+however, that any compact set of prices can be Walrasian equilibrium prices:
+Corollary 9.3
+Let K ⊆int S be compact. For any compact set K′ ⊆int S with
+K ⊆K′, there exists an exchange economy E = (⪰i,ωi)n
+i=1, in which each ⪰i is
+continuous, strictly convex, and monotonic, for which K is the set of Walrasian
+equilibrium prices of E in K′.
+Proof. Let g(p) = (11 −pp′11) (one of the projections in the proof of the SMD
+Theorem in Section 9.1.1, below),
+f(p) = inf
+q∈K ∥p −q∥,
+and set Z(p) = f(p)g(p). Note that Z is continuous, p·Z(p) = f(p)(p·g(p)) = 0,
+and Z(p) = 0 iff p ∈K ∪{11}. So for p ∈int S, Z(p) = 0 iff p ∈K. The result
+follows from the SMD Theorem applied to Z and K′.
+Some classic results of Mas-Colell strengthen Corollary 9.3. First, he
+shows that any compact set in the interior of the price sphere can be the
+equilibrium price set of a well-behaved economy (even taking the boundary
+into consideration). Further, if there are at least three commodities, then for
+any ﬁnite set A ⊆int S with an odd number of elements, and any function
+d : A →{−1,1} such that 
+p∈A d(p) = 1, there is a well-behaved exchange
+economy with a smooth excess demand function such that A is its set of
+Walrasian equilibrium prices, and d(p) is the index (see Mas-Colell, Whinston,
+and Green, 1995) of equilibrium p.
+9.1.1
+Sketch of the proof of the Sonnenschein–Mantel–Debreu Theorem
+Consider ﬁrst the excess demand function of a single consumer, Z(p) =
+d(p,p·ω)−ω. As discussed at the beginning of the chapter, the excess demand
+function Z satisﬁes WARP if there are no p and q such that q · Z(p) < 0 and
+p·Z(q) ≤0. Observe that if Z satisﬁes the weak axiom of revealed preference,
+and g : S →R+ is a strictly positive function, then p →g(p)Z(p) also satisﬁes
+the weak axiom of revealed preference.
+In preparation for the proof, we need to consider the function ˜Zi(p) =
+1i −pip. We intend for ˜Zi to be the excess demand function of an individual
+consumer. Recall that 1i is the unit vector with a one in the ith coordinate.
+Recall that ∥p∥= 1 for p ∈S; thus for any vector x ∈X, pp′x is the orthogonal
+projection of x onto the subspace deﬁned by the vector p. To see this, note that
+
+
+--- Page 5 ---
+9.1 The Sonnenschein–Mantel–Debreu Theorem
+133
+pp′ satisﬁes (pp′)(pp′) = pp′, so that for any x, if y = pp′x, then y = pp′y (a
+property called idempotence). Moreover, for any x, pp′(x −pp′x) = 0. So
+˜Zi(p) = 1i −pp′1i = 1i −pip
+is the “residual” of projecting 1i on the linear subspace spanned by p. In other
+words, it is the projection of 1i on the subspace of vectors orthogonal to p.
+Observe that ˜Zi is continuous and satisﬁes Walras’ Law, as p· ˜Zi(p) = pi −pip·
+p = 0.
+Note that ˜Zi is obtained as the result of a maximization program because
+˜Zi(p) is the projection of 1i on to a subspace. (The projection results from
+maximizing the negative of the distance of 1i to the subspace of vectors
+orthogonal to p.) As a consequence of being the solution to a maximization
+program, ˜Zi will satisfy the weak axiom of revealed preference.
+So we see that ˜Zi is continuous, and satisﬁes Walras’ law and WARP. The
+idea in the rest of the proof is to use the functions ˜Zi as a “basis” on which one
+can decompose the function Z.
+The set K from the hypothesis of the theorem is a compact set in the interior
+of the sphere. Let f : S →R be a continuous function for which
+Zi(p) + f(p)pi > 0
+for all p ∈K.2 There is such a function because K is compact and pi > 0. Note
+that the function
+p →(Zi(p) + f(p)pi) ˜Zi(p) = (Zi(p) + f(p)pi)(1i −pip)
+satisﬁes the weak axiom of revealed preference on K by the observation made
+above. Deﬁne then Zi(p) = (Zi(p) + f(p)pi)(1i −pip).
+We are not going to prove that Zi(p) on K can be generated by preferences
+⪰i which are continuous, strictly convex, and monotonic. This proof is quite
+involved and depends on the fact that K is a compact subset of the relative
+interior of the unit sphere. One can see that it is “almost” generated by
+preferences satisfying these properties (since it is based on a maximization
+problem). We hope that having established that Zi(p) satisﬁes the weak axiom
+is instructive enough.
+Finally, we must verify that Z = n
+i=1 Zi. Observe that
+n
+
+i=1
+(Zi(p) + f(p)pi)(pip)
+=
+n
+
+i=1
+(piZi(p) + p2
+i f(p))p
+= (p · Z(p) + p · pf(p))p = f(p)p.
+2 Note that Zi is the ith component of the function Z, not to be confused with Zi.
+
+
+--- Page 6 ---
+134
+General Equilibrium Theory
+Likewise,
+n
+
+i=1
+(Zi(p) + f(p)pi)1i
+= Z(p) + f(p)p.
+Thus,
+n
+
+i=1
+(Zi(p) + f(p)pi)(1i −pip) = Z(p).
+9.2
+HOMOTHETIC PREFERENCES
+We now turn to a different (and simpler) construction than the one in SMD. It
+requires that Z be smooth, but it delivers a rationalizing economy in which all
+agents’ preferences are homothetic.
+Homotheticity has, generally speaking, strong implications. For example,
+it is a crucial ingredient in aggregation theorems, from which the existence
+of a representative consumer follows. It is therefore striking that there is a
+version of the SMD Theorem even when we ask that agents’ preferences be
+homothetic.
+For convenience, we now take the domain of Z to be . The next result is
+due to Rolf Mantel.
+Theorem 9.4
+Suppose that Z :  →X is a C2 function satisfying Walras’
+Law, and let K ⊆int  be compact. Then there exists an exchange economy
+E = (⪰i,ωi)n
+i=1, in which each ⪰i is continuous, convex, homothetic, and
+monotonic, such that the sum of individuals agents’ excess demand functions
+in E coincides with Z on K.
+Proof. Let Z be as in the hypothesis of the theorem. We construct an exchange
+economy with n agents, each one endowed with m units of one good: the
+endowment of agent i is m1i. As we shall see, the parameter m plays an
+important role in this construction because it scales up an economy in which
+all prices are equilibrium prices.
+Let A be an n × n matrix and denote by ai the vector formed from its ith
+column. We choose A such that the ai vectors are linearly independent and
+ai · 1 = 1 (we use the notation 1 for a vector of ones). For an n-vector x, log(x)
+denotes the vector whose entries are the logarithms of the entries of x.
+Deﬁne the following functions:
+gi(p) = 1
+mZi
+1
+1
+
+j pj
+p
+2
+−ai · log(Ap),
+on the domain consisting of p ∈Rn
+++ with
+1
+
+j pj p ∈K. Denote by K′ this domain
+of prices. We intend gi to be the indirect utility function of agent i in our
+construction, when her income is 1.
+
+
+--- Page 7 ---
+9.2 Homothetic preferences
+135
+Observe now that ai log(Ap) is a concave function of p, and that the second
+derivatives of Z are bounded on K. Then by choosing m large enough we know
+that gi(p) is a convex function on K.
+Deﬁne the utility function of agent i to be
+ui(x) = inf{gi(p) : p · x ≤1,p ∈K′}.
+It is routine to verify that ui is monotonic, continuous, and quasiconcave.
+To see that the preferences represented by ui are homothetic, note that ui is
+log-homogeneous:
+ui(λx) = inf{gi(p) : λp · x ≤1,p ∈K′}
+= inf{gi((1/λ)q) : q · x ≤1,q ∈K′}
+= inf{ 1
+mZi
+1
+1
+
+j qj
+q
+2
+−ai · log(Aq(1/λ)) : q · x ≤1,q ∈K′},
+but
+ai · log(Aq(1/λ)) = ai · log(Aq) −ai · 1log(λ) = ai · log(Aq) −log(λ),
+so that ui(λx) = ui(x) + log(λ). This means that a monotonic transformation
+of ui is homogeneous, and therefore that the preferences represented by ui are
+homothetic.
+As a result, if we let vi(p,M) be the indirect utility function derived from ui,
+then
+vi(p,M) = gi(p) + log(M),
+for M > 0.
+Using Roy’s identity we obtain the demand of agent i as
+di(p,p · m1i) = −∇pvi(p,p · m1i)
+∇Mvi(p,p · m1i) = −p · m1i∇pgi(p).
+Now,
+∇pgi(p) = 1
+m∇Zi(p) −A′L(p)−1ai,
+where L(p) is the n×n diagonal matrix which has n
+j=1 ajipj in its ith row and
+column. So
+di(p,p · m1i) = −p · m1i∇gi(p) = −pi∇Zi(p) + (pim)A′L(p)−1ai.
+Then aggregate excess demand for this economy is
+n
+
+i=1
+di(p,p · m1i) −m1 = −
+n
+
+i=1
+pi∇Zi(p) +
+n
+
+i=1
+(pim)A′L(p)−1ai −m1
+= Z(p) + mA′L(p)−1Ap −m1
+= Z(p) + mA′1 −m1 = Z(p),
+where we have used the facts that Z(p) + n
+i=1 pi∇Zi(p) = 0 (which follows
+from Walras’ Law) and that A′1 = 1.
+
+
+--- Page 8 ---
+136
+General Equilibrium Theory
+Remark 9.5
+The proof of Theorem 9.4 uses an interesting construction. It
+uses an economy in which agents’ preferences are homothetic and all prices
+are equilibrium prices. One can verify that if gi in the proof is deﬁned to be
+ai · log(Ap), and agents’ endowments are as above, then the construction used
+in the proof gives an economy in which all prices are zero.
+The proof works by adding a scaled-down version of Z(p) to the excess
+demand function, and rationalizes such a “perturbed” excess demand by a
+perturbation of the original homothetic preferences. The new economy has
+the zeroes of Z as equilibrium prices, but its excess demand function is a
+scaled-down version of Z. Now homotheticity guarantees that by scaling up
+endowments we obtain an economy in which Z is the excess demand function.
+9.3
+PRICES AND ENDOWMENTS
+We have looked at the implications of general equilibrium theory when one is
+given either a set of prices or an aggregate excess demand function. We now
+turn to a different set of givens.
+We assume that we observe a ﬁnite collection of prices and endowments (or,
+equivalently, of aggregate endowment and individual agents’ incomes). Under
+the assumption that one can observe prices and endowments, we are going to
+show that general equilibrium theory is testable. This observation is due to
+Brown and Matzkin, as is most of the discussion in Section 9.3.
+Consider an exchange economy E = (⪰i,ωi)I
+i=1, where each pair (⪰i,ωi)
+describes one consumer; as before, each agent i is described by a preference
+relation ⪰i and a vector of endowments ωi ∈Rn
++. I is a positive integer
+specifying the number of consumers. An allocation of 
+i ωi is a vector
+(xi)i∈I ∈RnI
++ such that 
+i xi = 
+i ωi. A Walrasian equilibrium is a pair ((xi),p)
+such that (xi) is an allocation and p ∈Rl
+++ satisﬁes that xi is maximal for ⪰i in
+the set
+{z ∈Rn
++ : p · z ≤p · ωi}.
+We assume that we have data on prices, incomes, and resources. Speciﬁcally,
+an economy-wide dataset is a collection DW = (pk,(ωk
+i )I
+i=1)K
+k=0. If it seems
+unreasonable to assume that individual endowments are observable, note that
+one can instead work with individual incomes and aggregate endowment. The
+results will be the same.
+A dataset DW is Walras rationalizable if there are locally nonsatiated
+preference relations ⪰i and, for each k an allocation (xk
+i ) of 
+i ωk
+i such that
+((xk
+i ),pk) is a Walrasian equilibrium of the exchange economy (⪰i,ωk
+i )I
+i=1.
+There are economy-wide datasets that are not Walras rationalizable.
+Consider for example the dataset represented in Figure 9.1. In the ﬁgure, there
+are two observations (pk,(ωk
+1,ωk
+2)), k = 1,2. For each k, ¯ωk = ωk
+1 + ωk
+2 deﬁnes
+an Edgeworth box. Suppose that k = 1 gives the taller box, while k = 2 deﬁnes
+the wider of the two boxes. The boxes are represented so that the consumption
+space of agent 1 is the same in the two boxes (the (0,0) consumption vector
+
+
+--- Page 9 ---
+9.3 Prices and endowments
+137
+p1
+p2
+B
+A
+ω1
+ω2
+Fig. 9.1 Two Edgeworth boxes representing a non-rationalizable dataset.
+for agent 1 is the same in the two boxes). Note that pk and ωk
+i deﬁne a budget
+set for each consumer.
+If the data in Figure 9.1 were Walras rationalizable, there would need to
+exist some (unobserved) allocation of ¯ωk, for k = 1,2. These allocations must
+lie inside each Edgeworth box. Then, if the dataset in Figure 9.1 were Walras
+rationalizable, the allocation of ¯ω1 would have to lie on the segment A of the
+budget line for consumer 1, while the allocation of ω2 would have to lie on the
+segment B of the budget line for consumer 1 at prices p2. Any such allocation
+would imply that consumer 1 violates WARP. So the allocation could not be
+part of a Walrasian equilibrium, as the resulting choices by consumer 1 would
+be incompatible with any preference relation for consumer 1.
+The observation that the theory of Walrasian equilibrium is testable is subtle,
+and in sharp contrast with the message of the SMD Theorem, but it is not
+different in nature than the idea that there are individual observations that
+violate WARP. One would ideally want to characterize all datasets that are
+Walras rationalizable: such a test exists, but a “closed form” test is not known.
+The following theorem (due to Brown and Matzkin) is a direct conse-
+quence of Afriat’s Theorem. It is useful because it sets up the problem of
+Walras-rationalizing data as a system of polynomial inequalities.
+Theorem 9.6
+A dataset DW = (pk,(ωk
+i )I
+i=1)K
+k=0 is rationalizable iff there are
+numbers (Uk
+i ,λk
+i )I
+i=1 for k = 1,...,K, and vectors (xk
+i )I
+i=1 ∈XI for k = 1,...,K,
+
+
+--- Page 10 ---
+138
+General Equilibrium Theory
+such that
+Uk
+i ≤Ul
+i + λl
+ipl · (xk
+i −xl
+i)
+λk
+i > 0
+pk · xk
+i = pk · ωk
+i
+
+i
+xk
+i =
+
+i
+ωk
+i .
+The characterization in Theorem 9.6 is not practical as a test because to
+determine if a dataset is rationalizable requires solving a large system of
+polynomial inequalities. This is hard to do. The point made by Brown and
+Matzkin is that there exists a different test: one that is similar in nature
+to checking GARP or SARP. We proceed to introduce the mathematical
+framework in which we can express such a test. We need to introduce the
+mathematical theory that deals with systems of polynomial inequalities.
+Consider a system of polynomial inequalities:
+I :
+⎧
+⎪⎪⎨
+⎪⎪⎩
+p1(a,x) S1 0
+...
+pk(a,x) Sk 0,
+where a ∈Rm and x ∈Rn, so that pi is a polynomial of m + n variables and
+Si ∈{≥,=,>,̸=}. Here we interpret a ∈Rm as a parameter, and the variables
+x ∈Rn as unknowns: We want to know whether, for given a, there is x such
+that (a,x) solves system I.
+The following is a celebrated theorem due to Tarski and Seidenberg.
+Theorem 9.7
+There are systems of polynomial inequalities J1,...,JL in m
+variables with the following property: For all a ∈Rm, there is x ∈Rn for which
+(a,x) solves system I iff there is l such that a solves system Jl.
+Remark 9.8
+The theorem actually says more. It says that if we ﬁx a real
+closed ﬁeld F, then there is a solution to I in F iff the coefﬁcients of I are a
+solution to some Jl in F. Perhaps more importantly, the theorem is not just an
+existence result. It is also associated with an algorithm which can be used, in
+principle, to derive the systems J1,...,JL from the system I. The algorithm
+is, however, not computationally efﬁcient. It is known that the problem of
+eliminating quantiﬁers for real closed ﬁelds in general is computationally
+complex. We discuss related ideas in Chapter 12.
+We present two examples to illustrate the theorem. The ﬁrst is an example in
+elementary algebra. Consider the second-degree polynomial of one variable:
+p(x) = ax2 + bx + c. Suppose that a ̸= 0. The equation p(x) = 0 has a
+solution (in R) iff the inequality b2 −4ac ≥0 is satisﬁed. The example is
+an instance of quantiﬁer elimination since the statement ∃x(p(x) = 0), which
+involves an existential quantiﬁer over x, is seen to be equivalent (when a ̸= 0)
+
+
+--- Page 11 ---
+9.3 Prices and endowments
+139
+to the statement b2 −4ac ≥0.3 We can call the statement ∃x(p(x) = 0)
+an existential statement because it is preceded by an existential quantiﬁer;
+while b2 −4ac ≥0 is non-existential. As a statement that describes the
+empirical content of a theory, ∃x(p(x) = 0), or any other existential statement,
+is very problematic because its veriﬁcation requires checking all possible real
+numbers. By eliminating quantiﬁers we can go from an existential statement to
+a statement that can be directly veriﬁed on the data. Chapter 13 discusses this
+issue in more depth.
+The second example is familiar from our discussion of demand theory in
+Chapter 3. Let D = {(xk,pk)}K
+k=1 be a consumption dataset. Afriat’s Theorem
+says that there is a solution (U1,...,UK,λ1,...,λK) to the (linear) system of
+Afriat inequalities
+Uk ≤Ul + λlpl · (xk −xl),k ̸= l
+and λk > 0 iff the data satisfy GARP. Afriat’s Theorem is an example of
+elimination of quantiﬁers: The statement that there is a solution to the system
+of Afriat inequalities is existential. And Afriat’s Theorem says that such
+an existential system is equivalent to GARP – observe that GARP is the
+statement that for any sequence xh1,...,xhH of distinct observations ph1 · xh1 ≥
+ph1 · xh2,...,phH−1 · xhH−1 ≥phH−1 · xhH implies that phH · xhH ≤phH · xh1. Saying
+that a dataset satisﬁes GARP is not an existential statement.
+We can formulate the satisfaction of GARP as the satisfaction of a system of
+polynomial inequalities. To write down this system, let s denote a sequence
+xhs
+1,...,xhs
+Hs of distinct observations in D. Let  be the set of all such
+sequences. For each s ∈ we need to check that there is not a cycle xhs
+1 ⪰R ...
+⪰R xhs
+Hs ≻R xhs
+1. Satisfaction of GARP is the same as saying that no sequence
+s ∈ gives rise to a cycle.
+Let ri
+s be the inequality phs
+i · xhs
+i < phs
+i · xhs
+i+1, i = 1,...Hs −1, and qs the
+inequality phs
+Hs ·xhs
+Hs ≤phs
+Hs ·xhs
+1. Note that, for a sequence s, the satisfaction of
+any one of these inequalities rules out the potential cycle xhs
+1 ⪰R ... ⪰R xhs
+Hs ≻R
+xhs
+1.
+Deﬁne L = 
+s∈{r1
+s ,...,rHs
+s ,qs}. Note that each l ∈L selects, for every
+sequence s, one inequality: either one of the ri
+s, or qs. If we satisfy the inequality
+selected by l for s then we rule out the cycle indicated by sequence s. Let Jl be
+the system of inequalities obtained by collecting the inequalities selected by l.
+Satisfaction of just one system Jl rules out all potential cycles.
+We know from Afriat’s Theorem that there is a solution to the system of
+Afriat inequalities iff there is l such that the observed data (which are the
+coefﬁcients of the system of Afriat inequalities) satisfy the corresponding
+Jl. Thus Afriat’s Theorem illustrates an instance of quantiﬁer elimination, as
+formalized in Theorem 9.7.
+3 Formally, to apply the theorem, we need to treat a ̸= 0 as an inequality in the original system,
+although the existentially quantiﬁed x does not appear there. The inequality a ̸= 0 then also
+appears in the system in which x has been eliminated.
+
+
+--- Page 12 ---
+140
+General Equilibrium Theory
+9.4
+THE CORE OF EXCHANGE ECONOMIES
+We ﬁnalize the discussion of exchange economies by brieﬂy looking instead
+into the core of Walrasian equilibrium. Much less is known about the core than
+about equilibrium, and we need to restrict attention to the case of two agents.
+The material here is due to Bossert and Sprumont.
+Consider an exchange economy with two consumers. Suppose that there is
+an aggregate endowment ¯ω ∈Rn
+++. In any allocation, consumption of agent 2
+is determined by the consumption of agent 1. The set of possible endowments
+and consumptions of agent 1 is E = {x ∈Rn
++ : x ≤¯ω} (either agent is permitted
+to have zero endowment). For a set of preferences ⪰1 and ⪰2, we deﬁne the
+core
+C(⪰1,⪰2,ω) =
+{x ∈E : x ⪰1 ω1 and ( ¯ω −x) ⪰2 ( ¯ω −ω1)}
+∩{x ∈Rn
++ :̸ ∃y ∈E such that y ≻1 x and ( ¯ω −y) ≻2 ( ¯ω −x)}.
+The ﬁrst part of this equation speciﬁes the usual individual rationality
+constraint. The second expresses Pareto optimality. In fact, it expresses weak
+Pareto optimality, but note that for strictly convex preferences, the notions
+coincide.
+The question is, given a correspondence c : E ⇒E, when do there exist
+preferences ⪰1 and ⪰2, satisfying natural properties, such that for all e ∈E,
+c(e) = C(⪰1,⪰2,e)? The properties under consideration are continuity, strict
+monotonicity, and strict convexity.
+We say that a set S ⊆E is connected if it is connected in the usual topological
+sense; that is, the set cannot be partitioned into nontrivial disjoint open sets.
+Viewing c as a correspondence, we can also deﬁne continuity in the usual
+sense (of the joint hypotheses of lower and upper hemicontinuity). We say
+that the correspondence c is regular if it is continuous in e, and for all e, c(e)
+is connected.
+For the core with strictly convex and monotone preferences, if some vector
+e is ever selected for an endowment e′, then e must be the uniquely chosen
+element when e′ is the endowment. We say that c satisﬁes persistence if for all
+e,e′ ∈E, if e ∈c(e′), then c(e) = {e}.
+Two more technical conditions are speciﬁed. The conditions are a method
+of “identifying” the best and worst elements in the correspondence, and
+postulating that they behave naturally with respect to the usual order on Rn.
+Deﬁne, for e ∈E,
+S0(e) = {S ⊆E : c(e) ∪{0} ⊆S,S path connected }
+and
+Sω(e) = {S ⊆E : c(e) ∪{ω} ⊆S,S path connected }.
+
+
+--- Page 13 ---
+9.5 Chapter references
+141
+We say that c satisﬁes strict path monotonicity if for all e,e′ ∈E for which
+e ≥e′ and e ̸= e′, we have
+
+S∈S0(e)
+S ⊊
+
+S∈S0(e′)
+S
+and
+
+S∈Sω(e′)
+S ⊊
+
+S∈Sω(e)
+S.
+Finally, we deﬁne S(e,e′) = {S ⊆E : c(e) ∪c(e′) ⊆S,S path connected }.
+Say that c satisﬁes strict averaging reduction if for all e,e′ ∈E for which e ̸= e′
+and all λ ∈(0,1), c(λe + (1 −λ)e′) is contained in the interior of %
+S∈S(e,e′) S
+relative to 
+e∈E c(e).
+Theorem 9.9
+There exist strictly convex, strictly monotonic, and continuous
+⪰1 and ⪰2 for which c(e) = C(⪰1,⪰2,e) for all e ∈E iff c : E ⇒E
+satisﬁes regularity, persistence, strict path monotonicity, and strict averaging
+reduction.
+9.5
+CHAPTER REFERENCES
+The Sonnenschein–Mantel–Debreu Theorem was ﬁrst established for the case
+when Z is a polynomial in Sonnenschein (1972). Mantel (1974) proved a
+decomposition of Z as in the statement of the theorem, but using 2n agents.
+The ﬁnal statement was obtained by Debreu (1974). Proposition 9.1 is due to
+Debreu (1974). Corollary 9.3 is proved in Mas-Colell (1977); a much more
+general statement appears there: that any compact subset of the interior of
+the price sphere can be the equilibrium price set of a well-behaved economy.
+The strengthening follows from a strengthening of the SMD Theorem. The
+result pertaining to indices can also be found in this work; see also Mas-Colell,
+Whinston, and Green (1995). Geanakoplos (1984) constructs an explicit utility
+function to rationalize the individual excess demand functions constructed in
+Debreu’s proof. Theorem 9.2 is from McFadden, Mas-Colell, Mantel, and
+Richter (1974).
+Theorem 9.4 is due to Mantel (1976). Mantel shows more. The endowments
+in the construction in the theorem can be chosen arbitrarily, as long as they
+are linearly independent. In particular, they can be close to proportional: when
+they are exactly proportional (and preferences homothetic) we know that the
+economy admits a representative consumer, which of course strongly limits the
+excess demand function. A graphical illustration of the proof of Theorem 9.4
+can be found in Shafer and Sonnenschein (1982) (attributed to Mas-Colell).
+The SMD Theorem has a host of important implications. Uzawa (1960b)
+has shown that Brouwer’s Fixed-Point Theorem is equivalent to the existence
+theorem of the zeroes of a continuous function satisfying the properties
+usually obtained from exchange economies. The SMD Theorem implies that
+
+
+--- Page 14 ---
+142
+General Equilibrium Theory
+the Fixed-Point Theorem is equivalent to a standard equilibrium existence
+theorem. In recent years, this has been exploited by computer scientists
+studying the computational complexity of ﬁnding competitive equilibria (see
+Papadimitriou and Yannakakis (2010); this possibility was anticipated by
+Mantel (1977)).
+Theorem
+9.6,
+the
+example
+in
+9.3,
+and
+the
+idea
+of
+using
+the
+Tarski–Seidenberg result appear in Brown and Matzkin (1996). The
+Tarski–Seidenberg result is due to Tarski (1951), and was popularized by
+Seidenberg (1954). The computational complexity of quantiﬁer elimination in
+this environment was described in Davenport and Heintz (1988). Brown and
+Shannon (2000) show that, in the setting assumed by Brown and Matzkin,
+certain regularity conditions of equilibria (that all equilibria are locally
+stable, and that the equilibrium correspondence is monotone) have no testable
+implications in addition to Walrasian rationalizability.
+The discussion in 9.4, and in particular, Theorem 9.9, is due to Bossert and
+Sprumont (2002).
+We have not discussed the literature on public goods. Snyder (1999)
+provides a discussion of the relevant ideas.
+The survey paper by Carvajal, Ray, and Snyder (2004) covers in depth some
+of the same material as this chapter.

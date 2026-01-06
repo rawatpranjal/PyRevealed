@@ -1,0 +1,1197 @@
+--- Page 1 ---
+CHAPTER 7
+Stochastic Choice
+We now study the empirical content of individual rational choice when choice
+is stochastic. There are two possible interpretations of this exercise.
+The ﬁrst is that we lack data on individual choices. There is instead
+a population of agents, and we observe the distribution of choices in the
+population. For example we may know how many people purchased Italian
+wine in a wine store, and how many purchased French cheese in a cheese
+store, but we do not know if those who bought the French product in one store
+are the same people who bought Italian in the other. The theory to be tested
+is that of rational agents with stable preferences. Thus we want to know when
+an observed distribution of choices is consistent with a population of rational
+agents with potentially different, but stable, preferences.
+The second interpretation is that we observe an individual who literally
+randomizes among different alternatives. We might observe this individual
+agent over time, enough to infer a stochastic rule that he uses to select an
+element at random when faced with a given set of available choices.
+7.1
+STOCHASTIC RATIONALITY
+The model of stochastic choice can be described as follows. A system of choice
+probabilities is a pair (X,P), where X is a ﬁnite set of alternatives and P is
+a function with domain contained in 2X\{∅} × X, where P(A,x) = PA(x) is
+a non-negative number for each nonempty A ⊆X and x ∈A, and such that
+
+x∈A PA(x) = 1. In other words, PA(x) deﬁnes a probability distribution over
+the set A.
+In our ﬁrst interpretation of stochastic choice, there would be an underlying
+large population of agents: PA(x) is the fraction of agents who choose x when
+the set A of possible alternatives is available. In the second interpretation of
+stochastic choice, an individual agent’s choices really are random, and we
+know that PA(x) is her probability of choosing x from A.
+We assume here that all nonempty A ⊆X are possible sets of alternatives
+to choose from (they are budgets in the terminology of Chapters 2 and 3). We
+
+
+--- Page 2 ---
+96
+Stochastic Choice
+explain below (Remark 7.5) which results hold true when this assumption is
+relaxed.
+Given a ﬁnite set X, we consider the set  of all strict preferences on X. We
+can identify each element of  with a one-to-one function π : X →{1,...,|X|};
+such a function is a speciﬁc utility representation of the preference in question.
+It is convenient in what follows to describe preferences using utility functions.
+We use the following notational simpliﬁcation. Denote by π(A) the set
+{π(x) : x ∈A} and write π(x) ≥π(A) to mean that π(x) ≥π(y) for all y ∈A.
+Recall that the preferences in  are strict, so if x ∈A then π(x) ≥π(A) means
+that x gives the highest utility in A for utility function π.
+A probability distribution on  is a function ν :  →R+ with 
+π∈ ν(π)
+= 1. Denote by () the set of all probability distributions on . When ν ∈
+() and E ⊆ then we write ν(E) for 
+π∈E ν(π).
+A system of choice probabilities (X,P) is rationalizable if there is ν ∈()
+such that for all nonempty A ⊆X and all x ∈A,
+PA(x) =
+
+π∈
+ν(π)1{π(x)≥π(A)} = ν ({π ∈ : π(x) ≥π(A)}).
+Rationalizability has different interpretations, depending on how we interpret
+the stochastic choice and the system (X,P). If we interpret stochastic choice
+as the choices of a population of agents, and PA(x) as the fraction of agents
+that choose x from A, then rationalizability means that there is a population
+distribution ν over the possible preferences that agents can have. Then the
+fraction of agents choosing x is the fraction of agents for whom x is best in the
+set A. If, on the other hand, PA(x) is the result of individual random choices,
+then rationalizability means that the individual’s preferences change. Given
+a choice problem A, the individual agent draws a utility at random from ,
+and chooses x with probability equal to the probability of drawing a utility for
+which x is best in A. Given this interpretation, the model is often called a model
+of random utility.
+Before we go any further, it is worth setting down a very basic implication
+of rationalizability:
+Observation 7.1
+If (X,P) is rationalizable, then for any x ∈X and nonempty
+A,A′ ⊆X such that x ∈A ⊆A′, we have
+PA(x) ≥PA′(x).
+The monotonicity property in Observation 7.1 is the stochastic counterpart
+of Sen’s α (discussed in Chapter 2). The property is called regularity in the
+literature on stochastic choice. Regularity is clearly too weak to characterize
+rationalizable systems of choice probabilities. We turn instead to two stronger
+properties: the axiom of revealed stochastic preference and the non-negativity
+of the Block–Marschak polynomials.
+A system of choice probabilities (X,P) satisﬁes the axiom of revealed
+stochastic preference if, for all sequences (x1,A1),...(xn,An), with xi ∈Ai for
+
+
+--- Page 3 ---
+7.1 Stochastic rationality
+97
+i = 1,...,n, we have that
+n
+
+i=1
+PAi(xi) ≤max
+π∈
+n
+
+i=1
+1{π(xi)≥π(Ai)}.
+Note that the sequence (x1,A1),...(xn,An) may repeat the same term (xi,Ai)
+many times. As a consequence, testing the satisfaction of the axiom of revealed
+stochastic preference is problematic because one must verify that an inﬁnite
+number of sequences have the property above. This is never an issue when
+using other revealed preference axioms, for example when testing for SARP
+or GARP. It turns out, however, that there is an algorithm that inﬁnitely many
+steps determines if the axiom is satisﬁed. The algorithm amounts to checking
+the existence of a solution of a system of linear inequalities.1
+In addition to the axiom of revealed stochastic preference, a certain system
+of polynomials turns out to characterize stochastic rationality. For all A ⊊X
+and x ∈Ac = X \ A, deﬁne the number Kx,A by
+Kx,A =
+|A|
+
+i=0
+(−1)|A|−i
+
+{C⊆A:|C|=i}
+PCc(x).
+The collection of all Kx,A comprise the Block–Marschak polynomials for the
+system of choice probabilities (X,P).
+The meaning of the Block–Marschak polynomials is made clear by
+Proposition 7.3 below. They are in principle difﬁcult to interpret. Note,
+however, that a simple calculation gives:
+Kx,{y} = PX\{y}(x) −PX(x),
+for x ̸= y. So Observation 7.1 means that Kx,{y} ≥0 is necessary for
+rationalizability. It turns out that, not only Kx,{y}, but all the Block–Marschak
+polynomials must be non-negative for rationalizability; and conversely that
+if they are all non-negative, then the system of choice probabilities is
+rationalizable.
+The following result collects two theorems, one due to McFadden and
+Richter, and one due to Falmagne.
+Theorem 7.2
+Let (X,P) be a system of choice probabilities, where X is a
+ﬁnite set. The following statements are equivalent:
+I) (X,P) is rationalizable.
+II) (X,P) satisﬁes the axiom of revealed stochastic preference.
+III) The Block–Marschak polynomials for (X,P) are non-negative.
+The role of the Block-Marschak polynomials may seem obscure. The
+following result gives them a natural interpretation. We present this result
+1 The existence of such solutions lies at the heart of many problems studied in this book: see the
+discussion in Chapter 12.
+
+
+--- Page 4 ---
+98
+Stochastic Choice
+before the proof of Theorem 7.2 because it turns out to play a crucial rule
+in the proof.
+For C ⊆X, and any x ∈Cc, let
+Mx,C = {π ∈ : π(C) > π(x) ≥π(Cc)}
+be the set of all utilities in  that rank any member of C above x, and x at the
+top of Cc. Proposition 7.3 says that, if (X,P) is rationalizable, then Kx,A is the
+probability that all the elements in A are ranked above x, and that x is at the top
+of Ac; put differently, Kx,A is the probability that A is the upper contour set of x.
+Proposition 7.3
+The system of choice probabilities (X,P) is rationalized by
+ν ∈() iff Kx,A = ν(Mx,A) for all (x,A).
+Proof. The proof is an application of a combinatorial technique called
+M¨obius inversion; this speciﬁc type of M¨obius inversion is called the
+inclusion–exclusion principle. The technique lets us invert variables which are
+deﬁned by cumulative sums of real-valued functions deﬁned on a lattice. For
+a set A and x ∈A, ν rationalizes the system of choice probabilities iff PA(x)
+is the probability that the strict upper contour set of π at x is contained in Ac;
+formally
+PA(x) = ν({π ∈ : {y : π(y) > π(x)} ⊆Ac}).
+Moreover, ν(Mx,B) is by deﬁnition the probability that the strict upper contour
+set of x is exactly B. Consequently, ν rationalizes the system of choice
+probabilities iff PA(x) = 
+B⊆Ac ν(Mx,B), or inverting the role of A and Ac,
+PAc(x) =
+
+B⊆A
+ν(Mx,B).
+(7.1)
+Equation (7.1) shows that PAc is deﬁned by a cumulative sum; namely, one
+deﬁnes it by summing ν(Mx,B) across all B ⊆A. M¨obius inversion tells us
+that, conversely, if we know the value of the left-hand side of equation (7.1)
+for every A, we can recover ν(Mx,B) for all B. An explicit formula for this
+inversion in this case is well known, and is called the inclusion–exclusion
+principle. The application of this principle in this environment gives exactly
+ν(Mx,A) = Kx,A. (See Proposition 2 of Rota (1964) and the Corollary (Principle
+of Inclusion–Exclusion) on p. 345.)
+7.1.1
+Proof of Theorem 7.2
+The proof requires the following technical lemma, which we state here without
+proof. Note that the ﬁrst part of the lemma is an alternative inductive deﬁnition
+of the Block–Marschak polynomials.
+Lemma 7.4
+For all A ⊆X:
+I) Kx,A = PAc(x) −
+C⊊A Kx,C if x ∈Ac;
+II) 
+x∈Ac Kx,A = 
+x∈A Kx,A\{x}.
+
+
+--- Page 5 ---
+7.1 Stochastic rationality
+99
+We start by proving the equivalence of (I) and (III). The proof uses
+Proposition 7.3 in important ways. First, note that the implication (I) ⇒
+(III) is immediate from Proposition 7.3. We shall prove that (III) ⇒(I) by
+constructing a rationalizing ν ∈().
+The structure of this proof is quite involved, so we divide it into steps.
+Here is the basic structure. Our ultimate goal is to construct ν ∈() which
+rationalizes P. We do this by ﬁrst recursively constructing a set function ν∗on
+a collection of “cylinders” in . Let us consider π∗∈, and suppose x1 is the
+π∗-maximal element, x2 is the second highest ranked element, and so forth. We
+will ﬁrst deﬁne ν∗, the probability of the set of all π for which x1 is maximal.
+Using this number, we then ﬁnd the probability of the set of all π for which x1
+is maximal and x2 comes second. Ultimately, this will allow us to construct the
+probability of π∗.
+We use the notation ν∗simply because the function is not deﬁned on all
+subsets of , but rather on the set of cylinders described in the previous
+paragraph. But ν∗will then be deﬁned on atoms (on each singleton {π});
+and will thus have a natural extension from the set of atoms to a probability
+measure. This probability measure is ν. Of course, ν and ν∗will coincide on all
+cylinders. Along the way we will simply need to show that ν(π) ≥0 for every
+π, that the associated numbers add to one, and that we have rationalization.
+Note that the cylinders referred to in the previous paragraph will be exactly the
+type we need to consider in order to discuss rationalization.
+Step 1: Deﬁning the cylinders.
+We use the term d-sequence for a sequence (x1,...,xk) such that all its terms
+are (pairwise) distinct. For any d-sequence (x1,...,xk) let
+S(x1,...,xk) = {π ∈ : π(x1) > π(x2) > ··· > π(xk) > π(X \ {x1,...,xk})}.
+The set S(x1,...,xk) is the cylinder associated to (x1,...,xk). Let S be the collection
+of all cylinders: the subsets of  of the form S(x1,...,xk), for some d-sequence
+(x1,...,xk). We shall deﬁne a function ν∗on S.
+Step 2: Constructing ν∗, and verifying two important additivity properties.
+We want to deﬁne ν∗on S by induction. Let A = {x1,...,xk} for some
+d-sequence (x1,...,xk) and let RA be the set of d-sequences of length k with
+elements in A. The key properties required of ν∗will be the following.
+
+(x′
+1,...,x′
+k)∈RA
+ν∗(S(x′
+1,...,x′
+k,x)) = Kx,{x1,...,xk}.
+(7.2)
+and
+
+x∈Ac
+ν∗(S(x1,...,xk,x)) = ν∗(S(x1,...,xk))
+(7.3)
+We proceed to deﬁne ν∗. The guiding principle in the deﬁnition of ν∗is the
+interpretation of Kx,A obtained from Proposition 7.3. We seek to construct ν so
+that Kx,A is the probability that A is the strict upper contour set of x. The same
+guiding principle suggests properties (7.2) and (7.3).
+
+
+--- Page 6 ---
+100
+Stochastic Choice
+First, for every x ∈X, let ν∗(S(x)) = Kx,∅. Second, for every x,y ∈X,
+with x ̸= y, let ν∗(S(y,x)) = Kx,{y}. Suppose now that ν∗(S(y1,...,yl)) has
+been deﬁned for all d-sequences (y1,...,yl) with l ≤k. Fix a d-sequence
+(x1,...,xk,xk+1). Let A = {x1,...,xk} and RA be the set of all d-sequences in
+A. If 
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k)) = 0, let ν∗(S(x1,...,xk,xk+1)) = 0. Otherwise, let
+ν∗(S(x1,...,xk,xk+1)) = ν∗(S(x1,...,xk))Kxk+1,{x1,...,xk}
+
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k)).
+(7.4)
+This deﬁnes ν∗on S by induction.
+We shall prove that (7.2) and (7.3) are satisﬁed. The proof is by induction on
+the length of the d-sequence deﬁning A. It is easy to see by a direct calculation
+that (7.2) and (7.3) are satisﬁed for all sequences of length 0 and 1, where a
+sequence of length 0 is associated to A = ∅, and we deﬁne ν∗(S∅) = 1.
+Suppose that (7.2) holds for all d-sequences of length l ≤k −1. Let A =
+{x1,...,xk} for some d-sequence (x1,...,xk), of length k. Then we know that
+
+(x′
+1,...,x′
+k)∈RA
+ν∗(S(x′
+1,...,x′
+k)) =
+
+x∈A
+⎛
+⎜⎝
+
+(x′
+1,...,x′
+k−1)∈RA\{x}
+ν∗(S(x′
+1,...,x′
+k−1,x))
+⎞
+⎟⎠
+(7.5)
+=
+
+x∈A
+Kx,A\{x}
+(7.6)
+=
+
+x∈Ac
+Kx,A.
+(7.7)
+Here, (7.5) follows from the inductive hypothesis and (7.3) (by adding over the
+right-hand-side of (7.3)). Furthermore, (7.6) is a consequence of the inductive
+hypothesis and (7.2); and (7.7) follows from the second part of Lemma 7.4.
+Step 2a: Verifying the two additivity properties ((7.2) and (7.3)) in the case
+
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k)) = 0.
+There
+are
+two
+cases
+to
+consider.
+Suppose
+ﬁrst
+that
+
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k)) = 0. Then (7.7) implies that for any x ∈Ac,
+we have Kx,A = 0, as all Block-Marschak polynomials are non-negative (the
+hypothesis). Therefore, as by deﬁnition of ν∗, 
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k,x)) = 0,
+we have 
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k,x)) = Kx,A. This veriﬁes (7.2).
+Further, Equation (7.3) is clearly satisﬁed when 
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k))
+= 0, because, by deﬁnition, ν∗(S(x1,...,xk,x)) = 0.
+Step 2b: Verifying the two additivity properties ((7.2) and (7.3)) in the case
+
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k)) > 0.
+The second case to consider is when 
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k)) > 0.
+By deﬁnition of ν∗(S(x1,...,xk,x)), Equation (7.2) is always satisﬁed when
+
+
+--- Page 7 ---
+7.1 Stochastic rationality
+101
+
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k)) > 0. To see that (7.3) also holds, note that:
+
+x∈Ac
+ν∗(S(x1,...,xk,x)) = ν∗(S(x1,...,xk))
+x∈Ac Kx,{x1,...,xk}
+
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k))
+= ν∗(S(x1,...,xk))
+x∈A Kx,A\{x}
+
+(x′
+1,...,x′
+k)∈RA ν∗(S(x′
+1,...,x′
+k))
+= ν∗(S(x1,...,xk)).
+The second equality above follows from the second property in Lemma 7.4;
+the third equality follows from Equation (7.6).
+This ﬁnishes the proof that ν∗satisﬁes (7.2) and (7.3).
+Step 3: Deﬁning ν from the ν∗(π), and verifying that they coincide on
+cylinders.
+Now, ν can be deﬁned on  in the following way. If we ﬁx π ∈
+then S(x1,...,x|X|) = {π}, where (x1,...,x|X|) is the sequence deﬁned by π(xl) >
+π(xl+1), for l = 1...,|X| −1. We write ν(π) for ν∗(S(x1,...,x|X|)) and let ν be
+the obvious extension of this measure to all subsets of , namely ν(E) =
+
+π∈E ν(π). Equation (7.3) establishes that ν∗= ν on S. Moreover, ν ≥0,
+and it is easily veriﬁed that 
+π∈ ν({π}) = 1, so it is a probability measure.2
+Finally, the fact that ν(Mx,A) = Kx,A is the content of Equation (7.2). By
+Proposition 7.3, the proof is complete.
+We proceed to prove that (I) is equivalent to (II). The proof is a direct
+application of a version of Farkas’ Lemma.
+Note ﬁrst that (I) implies (II) because, for any sequence (x1,A1),...,(xn,An),
+rationalizability implies n
+i=1 PAi(xi) ≤maxν∈()
+n
+i=1 ν({π : π(xi) ≥
+π(Ai)}). The latter expression exhibits a linear function being maximized over
+a compact and convex set. Hence, there is a maximizer at an extreme point;
+in this case, there is a maximizer at some δπ∗∈(), where δπ∗is the point
+mass on {π∗}. Then δπ∗({π : π(xi) ≥π(Ai)}) = 1{π∗(xi)≥π∗(Ai)}, concluding this
+direction.
+Conversely, let W be a matrix that has one column for every π ∈ and
+one row for every pair (x,A) with x ∈A. In the entry corresponding to row
+(x,A) and column π we have a zero if there is y ∈A with π(y) > π(x) and a
+one otherwise; so the entry is 1{π(x)≥π(A)}. The matrix W can be represented as
+follows:
+⎡
+⎢⎢⎣
+π1
+···
+π|X|!
+...
+...
+···
+...
+(x,A)
+1{π1(x)≥π1(y)∀y∈A}
+···
+1{π|X|(x)≥π|X|!(y)∀y∈A}
+...
+...
+···
+...
+⎤
+⎥⎥⎦
+2 Indeed, using (7.6) we obtain that (−1)ν(π) = |X|−1
+i=0
+(−1)|X|−i|X|
+i
+
+= −1, by the
+Binomial Theorem.
+
+
+--- Page 8 ---
+102
+Stochastic Choice
+Let p be the vector with as many entries as there are pairs (x,A), whose entries
+of p are arranged in the same order as the rows of W, so that PA(x) is the entry
+in position (x,A) of the vector p.
+Then we can represent a probability distribution ν ∈() as a vector with
+one entry for every π ∈. The existence of a rationalizing ν is the same as the
+existence of a solution ν to the system
+p = W · ν,
+such that ν ≥0 and ν · (1,...,1) = 1.
+By Farkas’ Lemma (Lemma 1.14), there is no solution to the system iff there
+is a vector η and a scalar θ such that
+η · W + θ(1,...,1) ≤0
+(7.8)
+η · p + θ > 0.
+(7.9)
+We proceed to show ﬁrst that a violation of the axiom of revealed stochastic
+preference follows from the existence of a solution to (7.8)–(7.9) in which
+the entries of η are non-negative integers (in fact the two statements are
+equivalent).
+Let η and θ be a solution to (7.8)–(7.9) in which the entries of η are
+non-negative integers. Deﬁne a sequence (x1,A1),...(xn,An) by including (in
+any order) η(x,A) times the term (x,A); the sequence must have at least one term
+since a solution η to (7.8)–(7.9) cannot be the null vector. Then n
+i=1 PAi(xi) =
+
+(x,A) η(x,A)PA(x) and, for any π, n
+i=1 1{π(xi)≥π(Ai)} = 
+(x,A) η(x,A)1{π(x)≥π(A)}.
+Since η and θ solve (7.8)–(7.9) we obtain that
+n
+
+i=1
+PAi(xi) + θ > 0 ≥
+n
+
+i=1
+1{π(xi)≥π(Ai)} + θ,
+for all π. Thus the sequence (x1,A1),...(xn,An) presents a violation of the
+axiom.
+Finally, we prove that if there is a solution to (7.8)–(7.9) then we can take
+the entries of η to be non-negative integers. We show how to reduce the system
+to a collection of strict inequalities in η, by substituting out θ. Then we can
+take η to have rational entries and satisfy the system. After multiplying η by a
+large enough positive integer, we can assume that its entries are integers. We
+shall prove that they can be assumed to be non-negative.
+To see how to substitute out θ, note that Equations (7.8) and (7.9) imply
+that, for every π,
+
+(x,A)
+η(x,A)1{π(x)≥π(A)} + θ ≤0 <
+
+(x,A)
+η(x,A)PA(x) + θ.
+Hence for all π,
+
+(x,A)
+η(x,A)1{π(x)≥π(A)} <
+
+(x,A)
+η(x,A)PA(x).
+(7.10)
+
+
+--- Page 9 ---
+7.2 Luce’s model
+103
+(In fact (7.10) being true for every π is necessary and sufﬁcient for the
+existence of θ that satisﬁes Equations (7.8) and
+(7.9), by setting θ =
+−maxπ∈
+
+(x,A) η(x,A)1{π(x)≥π(A)} for a solution to (7.10).)
+So it is without loss of generality to assume that η is integer-valued.
+We show that we can take η ≥0 in (7.10) by showing that whenever η(ˆx,ˆA) < 0
+then Equation (7.10) holds for some η′ with η′
+(ˆx,ˆA) = 0 and η ≤η′.
+Suppose
+η(ˆx,ˆA) < 0.
+Note
+that
+for
+any
+π ∈,
+1{π(ˆx)≥π(ˆA)} =
+1 −
+z∈ˆA\{ˆx} 1{π(z)≥π(ˆA)} and PˆA(ˆx) = 1 −
+z∈ˆA\{ˆx} PˆA(z). Consequently
+we get
+η(ˆx,ˆA)1{π(ˆx)≥π(ˆA)} = η(ˆx,ˆA) + (−η(ˆx,ˆA))
+
+z∈ˆA\{ˆx}
+1{π(z)≥π(ˆA)}
+and
+η(ˆx,ˆA)PˆA(ˆx) = η(ˆx,ˆA) + (−η(ˆx,ˆA))
+
+z∈ˆA\{ˆx}
+PˆA(z).
+So now ﬁnd η′ as follows. Add −η(ˆx,ˆA) to both sides of Equation (7.10) for all π
+and make the preceding substitutions. Hence, η′ coincides with η everywhere
+except that η(ˆx,ˆA) = 0 and for all z ∈ˆA\{ˆx} η′
+(z,ˆA) = η(z,ˆA) −η(ˆx,ˆA), we obtain that
+η′ satisﬁes (7.10) for all π ∈ while η ≤η′ and η′
+(ˆx,ˆA) = 0.
+Remark 7.5
+The proof that (I) is equivalent to (II) in the preceding does
+not rely on the ability to observe the entire system of choice probabilities. In
+particular, the axiom of revealed stochastic preference is also necessary and
+sufﬁcient for rationalization by ν ∈() for environments as in Chapter 2,
+whereby we only observe PA for A in some set of budgets  ⊆2X\{∅}.
+7.2
+LUCE’S MODEL
+We now analyze the special class of systems (X,P) introduced by Duncan
+Luce. The model is heavily used in applied work, and it lies at the foundation of
+statistical and econometric studies of discrete choice. We proceed to describe
+the model, and study its relation to stochastic rationality.
+A system of choice probabilities (X,P) satisﬁes Luce’s independence of
+irrelevant alternatives (LIIA) if for any A, and any x,y ∈A, PA(x)P{x,y}(y) =
+P{x,y}(x)PA(y). The LIIA axiom is easiest to interpret when the probabilities
+involved are non-zero, so we can divide and obtain
+PA(x)
+PA(y) = P{x,y}(x)
+P{x,y}(y).
+So the LIIA axiom says that the likelihood of choosing x relative to y is
+independent of what other alternatives may be available in A.
+An example illustrates that LIIA may be unreasonable. Consider an agent
+facing the set of alternatives {car,bus1}, who chooses each with probability
+1/2. If the agent faces instead the set {car,bus1,bus2}, where the two buses only
+
+
+--- Page 10 ---
+104
+Stochastic Choice
+differ in their color (they go to the same place at the same speed), then we might
+expect him to choose the car or either of the two buses with probability 1/2.
+LIIA, however, implies that he must choose each alternative with probability
+1/3.
+LIIA has a clear implication. For notational simplicity, write qx,y for P{x,y}(x).
+Suppose that PA(x) > 0 for all x ∈A, and for all nonempty A. Fix an element
+z ∈X. Then we can deﬁne u(x) = qx,z/qz,x.
+Note that LIIA implies that 1 = 
+x∈A PA(x) = PA(y)
+x∈A
+qx,y
+qy,x . Note also
+that
+qx,y
+qy,x
+= Px,y,z(x)
+Px,y,z(y) = Px,y,z(z)qx,z/qz,x
+Px,y,z(z)qy,z/qz,y
+= u(x)
+u(y).
+Then,
+PA(y) =
+u(y)
+
+x∈A u(x).
+(7.11)
+We say that (X,P) conforms to the Luce model if there is a function u : X →
+R+ such that (7.11) holds for all A and y. We can make the interpretation of u
+a bit more precise. Say that x ⪰∗y if qx,y ≥1/2. If (X,P) conforms to Luce’s
+model then x ⪰∗y iff u(x) ≥u(y). So ⪰∗is a preference relation represented
+by u.
+The numbers u(x) can be thought of as utility intensities. In previous
+chapters, the utility functions have played a purely ordinal role in choice. But in
+the Luce model, an alternative that has a higher utility than another alternative
+has a higher probability of being chosen. So the utility function u conveys a
+meaning above and beyond how it orders the different objects of choice.
+The “revealed preference” problem of testing whether (X,P) conforms to
+Luce’s model is very simple to solve: set u(x) = PX(x) and verify whether the
+resulting u satisﬁes the deﬁnition. Instead of testing Luce’s model, we focus
+on the relation between the model and stochastic rationality, as described in
+Section 7.1.
+Theorem 7.6
+If (X,P) conforms to Luce’s model, then it is rationalizable.
+Before proving Theorem 7.6 we show that Luce’s model does not exhaust
+all the rationalizable systems of choice probabilities. Consider the following
+example.
+Let X = {a,b,c}. Suppose that the utility of a is given by a random variable
+˜a; and that there are random variables ˜b and ˜c that deﬁne the utilities of b and
+c. Suppose that the three random variables, ˜a, ˜b and ˜c, are independent and
+distributed on {1,...,6} according to the following table:
+1
+2
+3
+4
+5
+6
+˜a
+0
+0
+1/2
+1/2
+0
+0
+˜b
+0
+0.6
+0
+0
+0
+0.4
+˜c
+0.4
+0
+0
+0
+0.6
+0.
+
+
+--- Page 11 ---
+7.2 Luce’s model
+105
+The distributions of ˜a, ˜b, and ˜c describe a probability distribution on , as
+any speciﬁcation of random utilities is equivalent to a probability distribution
+on .
+Then qa,b = 0.6, qb,c = 0.4 + 0.6 × 0.4 = 0.64, and qc,a = 0.6. So a ≻∗b,
+b ≻∗c and c ≻∗a. Then ⪰∗cannot have any utility representation, let alone
+one that allows (X,P) to conform with the Luce model.
+7.2.1
+Proof of Theorem 7.6
+Suppose that (X,P) conforms to Luce’s model with a corresponding function
+u; by a normalization we can suppose that 
+x∈X u(x) = 1. We use the same
+notation as in the proof of Theorem 7.2.
+For any π ∈ and j, let xπ
+j denote the alternative in X with the jth highest
+value in π. Thus, π(xπ
+1 ) = |X|, π(xπ
+2 ) = |X| −1, . . . π(xπ
+|X|) = 1.
+The proof proceeds by constructing a probability space in which one can
+calculate the probability that a sequence of random draws will correspond to a
+preference π. Consider a probability space deﬁned as follows. Draw inﬁnite
+sequences in X at random by drawing independently (with replacement)
+elements from X such that each z is drawn with probability u(z). Let μ be
+the associated probability measure on X. It should be clear that for any A ⊆X
+and x ∈A, the probability that x is drawn before any other element in A is equal
+to u(x)/
+y∈A u(y).3
+For any sequence j1 < ... < j|X| with j1 = 1, let Dj1,...,j|X|(π) denote
+the event that xπ
+k is drawn for the ﬁrst time at draw number jk. Then
+
+j1<...<j|X| Dj1,...,j|X|(π) is the event C(π) that the draws will conform to π: so
+C(π) = 
+j1<...<j|X| Dj1,...,j|X|(π) is the event where xπ
+1 is drawn ﬁrst; followed
+by xπ
+2 (possibly after several repeated draws of xπ
+1 ); followed by xπ
+3 (possibly
+after several repeated draws of xπ
+1 and xπ
+2 ), and so on. The sets Dj1,...,j|X|(π) are
+disjoint, so the probability that the draws will conform to π is
+μ(C(π)) =
+
+j1<...<j|X|
+μ(Dj1,...,j|X|(π))
+=
+
+j1<...<j|X|
+u(xπ
+1 )j2−j1u(xπ
+2 )
+
+u(xπ
+1 ) + u(xπ
+2 )
+j3−j2−1
+· u(xπ
+3 )
+
+u(xπ
+1 ) + u(xπ
+2 ) + u(xπ
+3 )
+j4−j3−1 ···u(xπ
+|X|).
+The events C(π) form a partition. Deﬁne ν({π}) to be the probability of
+C(π). We can explicitly calculate ν as follows. Let hk = jk+1 −jk −1 and
+3 To see this: Let E be the event that x is drawn before any other element in A. Then E occurs
+if either x is obtained in the ﬁrst draw, which has probability u(x), or else an element of Ac is
+obtained in the ﬁrst draw (which has probability 1 −
+y∈A u(y)) and then E occurs. Then the
+probability q of E obeys the equation q = u(x) + (1 −
+y∈A u(y))q.
+
+
+--- Page 12 ---
+106
+Stochastic Choice
+vπ
+k = k
+l=1 u(xπ
+l ). Then,
+ν(π) = μ(C(π)) =
+"
+z∈X
+u(z)
+
+h1≥0,...h|X|−1≥0
+(vπ
+1 )h1(vπ
+2 )h2 ···(vπ
+|X|−1)h|X|−1
+=
+"
+z∈X
+u(z)
+|X|−1
+"
+k=1
+1
+1 −vπ
+k
+=
+"
+z∈X
+u(z)
+|X|−1
+"
+k=1
+1
+|X|
+l=k+1 u(xπ
+l )
+=
+|X|−1
+"
+k=1
+u(xπ
+k )
+|X|
+l=k u(xπ
+l )
+;
+where the next-to-last equality follows by distributing the product 
+z∈X u(z)
+appropriately, and using that |X|
+l=1 u(xπ
+l ) = 1.
+Finally, we have already observed that the probability of drawing x before
+any other alternative in A is equal to u(x)/
+y∈A u(y) = PA(x). Note that this
+probability also equals 
+{π:π(x)≥π(A)} μ(C(π)) = ν({π : π(x) ≥π(A)}). Hence
+ν rationalizes (X,P).
+7.2.2
+Luce’s model and the logit model
+Luce’s model can be interpreted as a random utility model in which the
+“average” utility of x is some known quantity v(x), but where the actual utility
+is v(x) + ε(x), where ε(x) is unknown and random.
+The following calculation shows a method of determining v, and motivates
+why we can think of Luce’s model as the “logit model.” Suppose that (X,P)
+conforms to Luce’s model, with utility index u. Note that
+qx,y =
+u(x)
+u(x) + u(y) =
+u(x)/u(y)
+u(x)/u(y) + 1 =
+ev(x)−v(y)
+1 + ev(x)−v(y) ,
+where v(x) = log(u(x)). Then the probability of choosing x over y is qx,y =
+ϕ(v(x) −v(y)). The function ϕ is the logistic distribution function. Then
+PA(x) =
+ev(x)
+
+y∈A ev(y) .
+(7.12)
+In particular, Equation (7.12) alternatively derives from a particular random
+utility model speciﬁcation, which is called the logit model. Suppose that PA(x)
+equals the probability that v(y) + ε(y) ≤v(x) + ε(x) for all y ∈A, y ̸= x.
+That is, the probability that ε(y) −ε(x) ≤v(x) −v(y) for all y ∈A, y ̸= x.
+Let v : X →R be an arbitrary function, and let G be a cdf on R, from
+which the terms ε(x) are drawn independently across x. In particular, if G is
+a Gumbel distribution, then qx,y, the probability of choosing x over y, is equal
+to the probability that a logistic random variable is below v(x) −v(y). The
+
+
+--- Page 13 ---
+7.2 Luce’s model
+107
+choice of a Gumbel distribution is suggested by the function ϕ being logistic.
+The following proposition establishes that this speciﬁcation implies the choice
+probabilities in Equation (7.12). It can therefore be viewed as a counterpart to
+Theorem 7.6.
+Proposition 7.7
+Let v : X →R, and suppose that G(α) = exp(−exp(−α)).
+Let ε be a random vector drawn from RX according to |X| independent draws
+of G. Let (X,P) be deﬁned by
+PA(x) = Pr(v(y) + ε(y) ≤v(x) + ε(x) for all y ∈A4).
+Then (X,P) conforms to Luce’s model with index u(x) = ev(x).
+Proof. Fix A and x ∈A. Let u(y) = ev(y) and δ(y) = e−ε(y). Note that the form
+of G implies that the distribution function of δ(y) is Pr(δ(y) ≤α) = 1 −e−α
+(the exponential distribution). Then, by the deﬁnition of (X,P),
+PA(x) = Pr(u(x)/δ(x) ≥u(y)/δ(y) for all y ∈A)
+=
+, ∞
+0
+Pr(δ(y) ≥¯δu(y)/u(x) for all y ∈A)e−¯δd¯δ
+=
+, ∞
+0
+⎛
+⎝"
+y∈A\{x}
+e−¯δu(y)/u(x)
+⎞
+⎠e−¯δd¯δ
+=
+, ∞
+0
+exp
+⎧
+⎨
+⎩−¯δ
+⎛
+⎝1 +
+
+y∈A\{x}
+u(y)
+u(x)
+⎞
+⎠
+⎫
+⎬
+⎭d¯δ
+=
+u(x)
+
+y∈A u(y).
+Proposition 7.7 relies on a particular distribution for the random utility term ε.
+One may ask if there are other distributions for ε that lead to the Luce model.
+We provide a partial answer in the next result (which is due to McFadden),
+where we show that if we insist on G being translation complete and the utility
+index being onto, then the distribution giving rise to the Luce model is unique.
+Consider now a system of choice probabilities (X,P), where we depart from
+the assumptions in this chapter by allowing that X may be inﬁnite. Suppose that
+PA(x) is only deﬁned for ﬁnite sets A. As before, x →PA(x) is a probability
+distribution on A.
+Assume that PA(x) is obtained from a random utility model, as above.
+Speciﬁcally, suppose that there is a utility v deﬁned on A, and random
+variables ε(x) such that x is chosen from A if v(y) + ε(y) < v(x) + ε(x) for all
+y ∈A. Suppose that the random variables ε(x) are independent with identical
+distribution function G on R. Say that (X,P) is generated from v : X →R
+and G.
+4 Here, Pr is probability calculated according to independent draws from G.
+
+
+--- Page 14 ---
+108
+Stochastic Choice
+The distribution function G is translation complete if, for any function f
+such that
+0 = lim
+x→−∞f(x) = lim
+x→+∞f(x),
+0
+f(x + t)dG(x) = 0 for all t implies that f = 0 a.s. The property of translation
+completeness is shared by many common distribution functions.
+Proposition 7.8
+Suppose that (X,P) is generated from v and G, and that
+(X,P) conforms to Luce’s model with utility index u(x) = ev(x). Suppose that
+v : X →R is such that v(X) = R, and that G is translation complete. Then there
+is α > 0 such that G(x) = exp(−α exp(−x)).
+Proof. Fix w ∈R and x ∈X. Let A = {x,y1,...,yK}, and let δi be such that
+v(yi) = w + δi for i = 1,...,K. Importantly, K is an arbitrary positive integer.
+Note that
+PA(x) =
+exp(v(x))
+exp(v(x)) + K
+i=1 exp(w + δi)
+=
+,  K
+"
+i=1
+(G(v(x) + t −w −δi))
+
+dG(t).
+Because v(X) = R, we can let all the δi →0 from below to obtain that (using
+the right continuity of G)
+exp(v(x))
+exp(v(x)) + K exp(w) =
+,
+(G(v(x) + t −w))KdG(t).
+On the other hand, if we choose z ∈X such that v(z) = w + log(K) then
+P{x,z}(x) =
+0
+G(v(x) + t −w −log(K))dG(t). Now,
+P{x,z}(x) =
+exp(v(x))
+exp(v(x)) + exp(v(z)) =
+exp(v(x))
+exp(v(x)) + K exp(w),
+hence,
+(G(v(x) + t −w))KdG(t) =
+,
+(G(v(x) + t −w −log(K)))dG(t).
+Since, w and x were arbitrary, we obtain that for all w,
+, 
+(G(v(x) + t −w))K −G(v(x) + t −w −log(K))dG(t)
+
+= 0.
+Since x was arbitrary, we can choose v(x) = 0 and note that by translation
+completeness, (G(t))K = G(t −log(K)) for all t. We claim that there is α > 0
+such that G(t) = exp(−α exp(−t)).
+First, note that G(t −log(K)) = (G(t))K implies, setting t = 0, that
+G(−log(K)) = (G(0))K for any positive integer K. Likewise, for any positive
+integer L, we have, by setting t = log(K/L), G(−log(L)) = (G(log(K/L)))K.
+But G(−log(L)) = (G(0))L, so (G(0))L = (G(log(K/L)))K, or G(log(K/L)) =
+(G(0))
+L
+K . G ◦log is therefore continuous on the strictly positive rational
+numbers, and by deﬁnition, it is right-continuous, so that for any strictly
+positive real number r, G(log(r)) = (G(0))1/r. Now, let x ∈R. We have
+
+
+--- Page 15 ---
+7.3 Random expected utility
+109
+G(x) = G(log(exp(x))) = (G(0))exp(−x). Finally, since G(x) is a cumulative
+distribution function, we infer that 0 < G(0) < 1, so we may set α =
+−log(G(0)) > 0, and obtain G(x) = exp(−α exp(−x)).
+7.3
+RANDOM EXPECTED UTILITY
+The previous discussion has not sought to limit the structure of rationalizing
+preferences in any way. We shall now study the random choice of lotteries, and
+consider only von Neumann–Morgenstern expected utility preferences.
+Let Y be a ﬁnite set of “prizes.” The objects of choice will be lotteries over
+Y. A lottery is a probability distribution over Y. Let X be the set of all lotteries
+over Y. An alternative x in X indicates the probability xi of the ith element
+of Y.
+In the present setting, a (von Neumann–Morgenstern) utility function is a
+vector u ∈RY. An expected utility maximizing agent with utility function u
+weakly prefers a lottery x over y iff u · x ≥u · y.
+We have as before a system of choice probabilities, but where X is inﬁnite
+and we deﬁne the choice only over ﬁnite nonempty sets. So a system of choice
+probabilities is a pair (X,P), where PA is a probability distribution over A, for
+all ﬁnite nonempty sets A. More speciﬁcally, PA is a Borel probability measure
+on X with PA(A) = 1.
+We say that (X,P) is expected-utility rationalizable if there is a probability
+measure μ on RY such that for every ﬁnite nonempty A and every x ∈A,
+PA(x) = μ
+
+{u ∈RY : u · x ≥u · y for all y ∈A}
+
+.
+The domain of μ is required to be the σ-algebra generated by all sets of the
+form {u ∈RY : u · x ≥u · y for all y ∈A}. Such sets are discussed in a bit more
+detail below. Further, μ is required to be regular, in the sense that for every
+possible A, with probability 1, u has a unique maximizer.
+The system (X,P) is monotonic if A ⊆A′ and x ∈A, then PA(x) ≥PA′(x).
+The property of monotonicity, or regularity, was discussed earlier in 7.1. By
+Observation 7.1, any rationalizable system of choice probabilities must be
+monotonic.
+We say that the system (X,P) is linear if
+PλA+(1−λ)y(λx + (1 −λ)y) = PA(x).
+The notion of linearity is analogous to the property of independence in
+expected-utility theory.5
+The convex hull of a ﬁnite set A, denoted by conv(A) is the set of all convex
+combinations of the elements in A. Write ext(A) for the extreme points of the
+5 If ⪰is a preference relation over lotteries, independence says that x ⪰y iff λx + (1 −λ)z ⪰
+λy + (1 −λ)z, for all z and λ ∈(0,1). In the present setup, the probability of selecting x is
+unaffected by a mixture with y because any of the intended rationalizing preferences should be
+unaffected by the mixture.
+
+
+--- Page 16 ---
+110
+Stochastic Choice
+convex hull of A: these are the points in the convex hull of A which cannot be
+written as a convex combination of other points in the convex hull of A.
+A system (X,P) is extreme if PA(ext(A)) = 1.
+Finally, say that (X,P) is mixture continuous if PλA+(1−λ)A′ is continuous as
+a function of λ, for all ﬁnite nonempty sets A and A′.
+The next result is due to Gul and Pesendorfer.
+Theorem 7.9
+A system of choice probabilities is expected-utility rationaliz-
+able iff it is monotone, linear, extreme, and mixture continuous.
+We proceed to discuss the main ideas in the proof of Theorem 7.9. Let
+N(A,x) = {u ∈RY : u · x ≥u · y
+∀y ∈A}.
+Thus N(A,x) is the set of utilities rationalizing the choice of x from the set A.
+Note that the rationalizability of (X,P) by a probability measure μ means that
+PA(x) = μ(N(A,x)).
+The proof of Theorem 7.9 uses basic ideas from convex analysis in
+Euclidean spaces. Part of the difﬁculty in the proof is due to the domain of
+P being subsets of the simplex, not more general subsets of a Euclidean space.
+So the ﬁrst step is to recast the problem using ﬁnite subsets of Rn as the domain
+of P. The way to do that is to assume that Y has n+1 elements, and observe that
+the (n + 1)-dimensional simplex is contained in an n-dimensional hyperplane.
+This hyperplane is isomorphic to Rn. Then use linearity to extend P to the
+domain of all ﬁnite subsets of Rn. We omit the details.
+Suppose then that we have deﬁned PA for ﬁnite sets A ⊆Rn. Linearity can
+be more simply recast in this case as stating that PA(x) = PA+{y}(x + y) for all
+x ∈A.
+For P to be rationalizable, we need a probability measure μ for which
+PA(x) = μ(N(A,x)). So one can deﬁne a function μ on all sets of the form
+N(A,x) by setting μ(N(A,x)) = PA(x). The proof proceeds by ﬁrst showing
+that μ is well deﬁned, and then that μ is additive on the family of sets of the
+form N(A,x).
+Note that if u,v ∈N(A,x) then αu+βv ∈N(A,x) for any α,β ≥0. So N(A,x)
+is a convex cone. In fact, 0 ∈N(A,x) so it is a pointed cone, and A is ﬁnite so
+it is a polyhedral cone (one deﬁned by the intersection of a ﬁnite number of
+halfspaces).
+To see that μ is well deﬁned on sets of this kind (pointed polyhedral cones),
+we need to establish two things. The ﬁrst is a basic result from convex analysis:
+if K is any pointed cone, then there is always a ﬁnite set A and x ∈A such that
+K = N(A,x). The result is geometrically intuitive, and illustrated in Figure 7.1.
+We do not provide a formal proof of the existence of A and x with K = N(A,x),
+but hope that the ﬁgure suggests one. The dotted lines in the ﬁgure are obtained
+as perpendicular to the extreme rays of the cone.
+The second fact we need to establish says that if K = N(A,x) = N(A′,x′),
+then PA(x) = PA′(x′). To prove this fact, note ﬁrst that linearity implies that
+PA(x) = PA−{x}(0). In an abuse of notation, let A and A′ denote A −{x} and
+
+
+--- Page 17 ---
+7.3 Random expected utility
+111
+Κ
+x
+A pointed cone Κ.
+(a)
+(b)
+A set A = (x, x′, x′′)
+such that Κ  = N (A, x).
+x
+x′
+x′′
+Fig. 7.1 Cones and decision problems.
+Κ′
+Κ = Κ′ ∪ Κ′′.
+(a)
+(b)
+Κ = Κ′ ∪ Κ′′.
+Κ′
+x
+Aλ
+yλ
+zλ
+Κ′′
+Κ′′
+Fig. 7.2 Finite additivity.
+A′ −{x′}. Let K = N(A,0) = N(A′,0). Then we know that pos(A) = N(K,0)
+and pos(A′) = N(K,0), so A′ ⊆pos(A).6 Since A′ is ﬁnite and 0 ∈A, there is
+λ > 0 such that λA′ ⊆conv(A). Then monotonicity and linearity imply that
+PA′(0) = PλA′(0) ≥PA(0).
+The reverse argument establishes PA′(0) ≤PA(0).
+To show that μ is (ﬁnitely) additive we need to show that if K, K′, and
+K′′ are pointed polyhedral cones (meaning sets of the form N(A,0)) such that
+K = K′∪K′′, and the cones have disjoint interior, then μ(K) = μ(K′)+μ(K′′).7
+We give a sketch of the argument based on Figure 7.2. On the left of the ﬁgure
+we have a cone K that is the union of K′ and K′′, two cones with disjoint
+interior. By the previous graphical argument, one can ﬁnd A′ and A′′ such that
+6 The notation posA stands for the set of all positive linear combinations of elements in A.
+7 The intersection of these cones must have probability zero, if we are to obtain a regular
+probability measure.
+
+
+--- Page 18 ---
+112
+Stochastic Choice
+K′ = N(y,A′) and K′′ = N(z,A′′) for some points y and z. Consider x chosen on
+the line connecting y and z. Let A be such that K = K′ ∪K′′ = N(x,A).
+Let Aλ = (1−2λ)A+λA′ +λA′′, and let yλ and zλ be as in Figure 7.2(a). By
+linearity, PAλ(yλ) = PA′(y) = μ(K′) and PAλ(zλ) = PA′′(z) = μ(K′′).
+Let B be any closed ball such that the intersection of B with the extreme
+points of A is {x}. Then by choosing λ small enough we can guarantee that the
+only extreme points of Aλ in B are yλ and zλ. Hence the extremeness property
+of P implies that
+PAλ(B) = PAλ(yλ) + PAλ(zλ) = μ(K′) + μ(K′′).
+By mixture continuity, PA(B) = limλ→0 PAλ(B). Since B was arbitrary, μ(K) =
+PA(x) = μ(K′) + μ(K′′).
+The general argument for additivity is more sophisticated. It relies on
+basic results from convex analysis and the idea that N(
+i βiDi,
+i βiyi) is
+independent of βi so long as they are positive (think of the set of all rectangles
+with sides parallel to the axes).
+Once μ has been established to be an additive measure of the set of all
+pointed cones, an extension argument is required to show that it is a probability
+measure on vectors u (utility indices).
+7.4
+CHAPTER REFERENCES
+The two interpretations of random choice outlined at the beginning of
+the chapter are very standard. Many econometric applications of these
+models assume a population distribution of preferences (so-called individual
+unobserved heterogeneity). There is also substantial evidence that agents
+choose different alternatives when faced with the same choice problem: see,
+for example, Mosteller and Nogee (1951), Papandreou (1953), and Chipman
+(1960) for early discussions of this fact. Agranov and Ortoleva (2013) conduct
+an experiment in which subjects seem to deliberately randomize.
+Theorem 7.2 is due to McFadden and Richter (1971, 1990) and Falmagne
+(1978). In particular, the equivalence between (I) and (II) is due to McFadden
+and Richter, while the equivalence between (I) and (III) is due to Falmagne.
+The earlier work of Block and Marschak (1960) had established that
+the non-negativity of the Block-Marschak polynomials was necessary for
+rationalization. Lemma 7.4 is from Falmagne (1978) (see his Theorem 3).
+Proposition 7.3 appears in Barber´a and Pattanaik (1986). The idea of applying
+M¨obius inversion to these problems ﬁrst appears in Colonius (1984), see also
+Fiorini (2004) and Billot and Thisse (2005). Rota (1964) provides a classic
+discussion of M¨obius inversion and the inclusion–exclusion principle.
+Luce’s model is presented in Luce (1959). The example of the buses and the
+car is due to Debreu (1960b), while a related example attributed to Savage
+is presented in Luce and Suppes (1965). This example motivates a model
+in which objects are ﬁrst categorized before applying a Luce-style model,
+
+
+--- Page 19 ---
+7.4 Chapter references
+113
+see Gul, Natenzon, and Pesendorfer (2014). There is plenty of experimental
+evidence where subjects exhibit violations of LIIA. One of the best-known
+such experiments is reported in Huber, Payne, and Puto (1982): it is called the
+attraction effect.
+Theorem 7.6 is due to Block and Marschak (1960). The proof presented here
+follows Debreu (1960a). The example showing that there are rationalizable
+systems that do not conform to Luce’s model is attributed by Block and
+Marschak (1960) to Paul Halmos.
+Propositions 7.7 and 7.8 appear in McFadden (1974). He attributes
+Proposition 7.7 to Holman and Marley, who never published their result.
+Proposition 7.8 is part of a collection of uniqueness results regarding models
+of random utility: see Yellott (1977). Hausman and Wise (1978) investigate the
+related random utility model where error terms are normally distributed.
+Theorem 7.9 is due to Gul and Pesendorfer (2006). Our informal discussion
+of the proof is largely taken from their paper.
+There are other natural approaches to stochastic choice which we have
+not discussed here. For example, Machina (1985) suggests that the choice
+probabilities attributed to any set may be generated by maximizing a convex
+preference relation on the space of lotteries over that set.

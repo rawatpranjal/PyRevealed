@@ -1,0 +1,731 @@
+--- Page 1 ---
+CHAPTER 4
+Topics in Rational Demand
+Chapter 3 established the testable implications of the hypothesis that con-
+sumers are rational. We are often interested in situations where the rational-
+izing preference, or demand function, satisﬁes additional properties. We want
+to know what additional structure is imposed on a dataset from demanding
+that the rationalization has to use a utility function with some given property.
+In particular, we focus on the properties of supermodularity, submodularity,
+homotheticity, separability, complements, and substitutes.
+4.1
+DISCRETE GOODS: SUPERMODULAR AND SUBMODULAR
+RATIONALIZATIONS
+In Chapter 3 we discussed a collection of results in the spirit of Afriat’s
+Theorem. In these results, one obtains a concave rationalization from the
+rationalizability of the data. Arguably, though, most consumption goods come
+in discrete units. Some goods seem particularly “lumpy,” such as cars and
+houses. For such goods, the notion of concavity is not well deﬁned. One can
+instead investigate super- and submodularity. Supermodularity corresponds
+to the notion that goods are complements: speciﬁcally, that increases in the
+consumption of one good become more valuable when one consumes more
+of the other goods. Submodularity corresponds to the property of substitute
+goods.
+The meaning of super- and submodularity can be understood from
+Figure 4.1. In the ﬁgure, there are two goods. For any two bundles x and y,
+x ∧y is the component-wise minimum of the bundles x and y, and x ∨y is the
+component-wise maximum (see the deﬁnitions in Chapter 1). The function
+u : X →R is supermodular if for all x,y ∈X,
+u(x) + u(y) ≤u(x ∨y) + u(x ∧y),
+and submodular if −u is supermodular.
+If u is supermodular then the change in utility u(x)−u(x∧y) cannot exceed
+the change u(x∨y)−u(y). Note that in Figure 4.1, the increase in good 2 when
+we go from x∧y to x is the same as when we go from y to x∨y. This means that
+
+
+--- Page 2 ---
+58
+Topics in Rational Demand
+x
+y
+u(x) – u(x    y)
+x    y
+>
+x    y
+>
+>
+>
+u(x    y) – u(y) 
+Fig. 4.1 Supermodularity.
+the change in utility resulting from adding the amount of good 2 in the change
+from x ∧y to x, can only be larger when the quantity of good 1 is larger. This
+is a notion of complementary goods: the increases in utility due to increases in
+consumption of good 2 are larger as we consume more of good 1.
+Submodularity has the opposite interpretation. If u is submodular in the
+ﬁgure, then the increase in utility due to the increase in consumption of good
+2 is diminished by a higher consumption of good 1. Thus the two goods are
+substitutes.
+It turns out that, when goods are discrete, supermodularity and submodu-
+larity of utility are empirically indistinguishable from rationalizability of the
+data. This result is in the spirit of Afriat’s, but it comes from a rather different
+set of ideas.
+Let X ⊆Zn
++. A (discrete) dataset is a ﬁnite list of observations (xk,Bk),
+k = 1,...,K, where for each k, xk ∈Bk ⊆X. The interpretation is that xk is
+the chosen element from the budget Bk. Assume:
+• xk is maximal in Bk, in the sense that if y > xk then y /∈Bk.
+• Bk satisﬁes the property that z ∈Bk whenever there is y ∈Bk and z ≤y.
+• |Bk| < +∞.
+Given a dataset D, we can deﬁne the strong revealed preference pair ⟨⪰S,≻S⟩
+as in Chapter 3 by x ⪰S y iff there is k such that x = xk and y ∈Bk, and x ≻S y
+iff x ⪰S y and x ̸= y. Then the strong axiom of revealed preference (SARP) is
+the requirement that ⟨⪰S,≻S⟩is acyclic.
+Note that Theorem 3.9 is valid for the model discussed here. The notion of
+data is different, but the assumptions we have made on the data guarantee that
+the proof of the theorem applies as written.
+Theorem 4.1
+Let X ⊆Zn
++ be a lattice. The following statements are
+equivalent:
+
+
+--- Page 3 ---
+4.1 Discrete goods: Supermodular and submodular rationalizations 59
+I) D is strongly rationalizable.
+II) D satisﬁes SARP.
+III) D has a strictly monotonic and supermodular strong rationalization
+u : X →R.
+IV) D has a strictly monotonic and submodular strong rationalization v :
+X →R.
+Proof. The equivalence of (I) and (II) is clear from previous results (Theo-
+rem 3.9). We need to prove that (II) implies (III) and (IV).
+Because K is ﬁnite, and each Bk is ﬁnite, there is M such that for all x ∈
+k Bk
+and all i, xi < M. Let XM = {x ∈Zn
++ : xi < M for all i}.
+Let D satisfy SARP. Imagine ﬁrst that consumption space is XM. By
+Theorem 3.9, D has a strictly monotonic rationalization ⪰on XM. Since XM
+is ﬁnite, there is an integer-valued utility function v : XM →Z+ deﬁned by
+v(x) = |{y ∈XM : x ⪰y}|. Let V = supx∈XM v(x). Deﬁne g : X →R as follows.
+For x ∈XM, g(x) = v(x). Otherwise, g(x) = V + 
+i xi. Note that g is a strictly
+monotonic, integer-valued function which strongly rationalizes the data.
+Let u(x) = 2g(x); we claim that u is a supermodular strong rationalization of
+D. It is clearly a strong rationalization because it is a monotonic transformation
+of g. To see that it is supermodular, let x and y in X and suppose without loss
+of generality that g(x) ≥g(y). If x = x ∨y then y = x ∧y so there is nothing to
+prove. Suppose then that x ̸= x∨y, which implies that x∨y ≻x, as ⪰is strictly
+monotonic. Thus g(x ∨y) ≥g(x) + 1. Then,
+u(x) + u(y) = 2g(x) + 2g(y) ≤2g(x) + 2g(x) ≤2g(x)+1
+≤2g(x∨y) = u(x ∨y) ≤u(x ∨y) + u(x ∧y);
+so u is supermodular.
+To exhibit a submodular strong rationalization, deﬁne v : X →R by v(x) =
+g(x)
+i=0 2−i. The function v is a strong rationalization of D because v is a
+monotonic transformation of g. To see that v is submodular, suppose that
+x ̸= x ∨y and x ̸= x ∧y (otherwise we have nothing to prove). Then,
+v(x) −v(x ∧y) =
+g(x)
+
+j=g(x∧y)+1
+2−j ≥
+ 1
+2
+!g(x∧y)+1
+.
+On the other hand,
+v(x ∨y) −v(y) =
+g(x∨y)
+
+j=g(y)+1
+2−j ≤
+∞
+
+j=g(y)+1
+2−j
+=
+ 1
+2
+!g(y)
+≤
+ 1
+2
+!g(x∧y)+1
+where the last inequality follows because x ̸= x ∨y implies that y ̸= x ∧y, so
+y ≻x∧y by the strict monotonicity of ⪰. Thus v(x∨y)−v(y) ≤v(x)−v(x∧y),
+which shows that v is submodular.
+
+
+--- Page 4 ---
+60
+Topics in Rational Demand
+x
+Data {(p, x), (p′, x ′)} satisfying GARP.
+Projected data violate GARP.
+x
+x ′
+x'
+(b) 
+(a) 
+Fig. 4.2 Testable implications of homothetic preferences.
+4.2
+DIVISIBLE GOODS
+Super- and submodularity are properties of particular interest when studying
+discrete goods. Other properties are commonly studied in environments with
+divisible goods. We now turn to homotheticity, separability, complements, and
+substitutes.
+Assume throughout that consumption space X ⊆Rn
++ is a convex set. The
+notion of dataset is the same as in 3.1: A consumption dataset D is a collection
+(xk,pk), k = 1,...K, with K ≥1 an integer, xk ∈X and pk ∈Rn
+++.
+4.2.1
+Homotheticity
+Here we assume X is a cone, so that whenever x ∈X and α ≥0, we have αx ∈X.
+A preference ⪰is homothetic if, for all α > 0 and all x,y, x ⪰y implies that
+αx ⪰αy. A function u : X →R is homothetic if the preference that it represents
+is homothetic.
+We can begin to understand the testable implications of homotheticity from
+Figure 4.2. Suppose that we are interested in whether the data {(p,x),(p′,x′)}
+have a homothetic rationalization. Clearly, the data satisfy GARP so they
+have a rationalization. It is easy to see, however, that no homothetic
+rationalization exists. The reason can be gleaned from Figure 4.2(b): a
+homothetic rationalization would imply that demand would have to lie on the
+ray joining x and 0, for any budget line that is parallel to the budget line for
+(p,x). So if we “deﬂate” the budget line for (p,x) until it crosses the point
+where the ray crosses the budget line for (p′,x′) the demand would have to lie
+at that intersection. We would then have a violation of WARP.
+Somewhat more formally, Figure 4.2 presents the following situation. If
+there were a homothetic rationalization, then any supporting hyperplane of the
+upper contour set {y ∈X : y ⪰x} would also support {y ∈X : y ⪰θx}, for θ > 0.
+Choose θ such that θx lies on the budget line for (p′,x′), i.e. p′ · (θx) = p′ · x′;
+thus x′ is revealed preferred to θx. By homotheticity, p supports the upper
+
+
+--- Page 5 ---
+4.2 Divisible goods
+61
+contour set of ⪰at θx, so θx should be chosen at prices p and income p · θx.
+Then WARP would require that p · (θx) ≤p · x′.
+The reasoning above leads to the following necessary condition for
+rationalization by a homothetic preference:
+θ = p′ · x′
+p′ · x ⇒θp · x ≤p · x′;
+or,
+1 ≤p · x′
+p · x
+p′ · x
+p′ · x′ .
+A strengthening of this condition turns out to be necessary and sufﬁcient for
+rationalization by a homothetic preference. To simplify the notation, we shall
+normalize the prices in the data so that pk ·xk = 1 for all k. If we have prices so
+that pk · xk ̸= 1, it is simple to redeﬁne prices qk =
+pk
+pk·xk provided each xk ̸= 0.
+Theorem 4.2 will then apply to these normalized prices.
+A dataset D satisﬁes the homothetic axiom of revealed preference (HARP)
+if, for any sequence k1,...,kL of numbers in {1,...,K}, we have
+pkL · xk1
+L−1
+"
+i=1
+pki · xki+1 ≥1.
+Observe that HARP is stronger than GARP: Fix a sequence k1,...,kL such
+that GARP is violated; that is pki ·xki+1 ≤pki ·xki, i = 1,...L−1, and pkL ·xk1 <
+pkL ·xkL. Then pki ·xki = 1 implies that the product of the left-hand side of these
+inequalities is strictly less than one. Thus HARP is violated.
+Finally, let us deﬁne the homothetic revealed preference order pair ⟨⪰H,≻H⟩
+as x ⪰H y when there are k and α > 0 for which αx = xk and pk · xk ≥pk · (αy)
+and x ≻H y when there are k and α > 0 for which αx = xk and pk ·xk > pk ·(αy).
+The meaning of ⪰H should be intuitive: x ⪰H y when the data, together with
+the hypothesis of homothetic preferences, imply that x must be preferred to y.
+Speciﬁcally, if x and xk are on the same ray, then homotheticity requires that
+x be demanded at the same prices as xk. This is like adding the observation
+(x,pk) to the data. Then pk · x > pk · y implies that x is “revealed preferred” to
+y, which is precisely the meaning of x ⪰H y.
+The following result is due to Hal Varian.
+Theorem 4.2
+Let X be a convex cone such that for all x ∈X and all ε > 0,
+there is ε′ ∈(0,ε) with x + ε′1 ∈X. Let D = {(xk,pk)}K
+k=1 be a consumption
+dataset, where for all k, pk · xk = 1. The following statements are equivalent:
+I) D has a locally nonsatiated and homothetic weak rationalization.
+II) D satisﬁes the homothetic axiom of revealed preference.
+III) There is a strictly positive real number Uk for each k, such that
+Uk ≤Ulpl · xk
+for each pair of observations (xk,pk) and (xl,pl) in D.
+
+
+--- Page 6 ---
+62
+Topics in Rational Demand
+IV) D has a concave, homothetic, continuous, and monotonic rationaliza-
+tion u : X →R.
+V) ⟨⪰H,≻H⟩is acyclic.
+Proof. We ﬁrst prove that I implies II. Let ⪰be a locally nonsatiated,
+homothetic rationalization. Fix any sequence k1,...,kL in {1,...,K}.
+Let the sequence s1,...,sL−1 be deﬁned by
+s1 = pk1 · xk2
+s2 = (pk1 · xk2)pk2 · xk3 = s1pk2 · xk3
+...
+sL−1 = sL−2pkL−1 · xkL.
+We ﬁrst argue that xk1 ⪰xk2/s1. Notice that the bundle xk2/s1 is affordable in
+the budget at which xk1 was purchased: pk1 · (xk2/s1) = 1. Then xk1 ⪰(xk2/s1).
+Next, we argue that homotheticity implies (xk2/s1) ⪰(xk3/s2). The reason is
+that
+pk2 · xk2 = pk2 ·
+ s1
+s2 xk3
+!
+= 1,
+so that xk2 ⪰(s1/s2)xk3, and hence by homotheticity, (xk2/s1) ⪰(xk3/s2).
+By repeating this argument we obtain that
+xk1 ⪰(xk2/s1) ⪰(xk3/s2) ⪰··· ⪰(xkL/sL−1).
+By assumption, xkL is ⪰maximal in the set {x : pkL ·x ≤pkL ·xkL}, so xkL/sL−1
+is ⪰maximal in the set {x : sL−1pkL ·x ≤sL−1pkL ·xkL/sL−1} by the homotheticity
+of ⪰. Then xk1 ⪰(xkL/sL−1) and local nonsatiation of ⪰implies sL−1pkL ·xk1 ≥
+sL−1pkL · (xkL/sL−1). Since sL−1pkL · (xkL/sL−1) = 1 we have established that
+HARP is satisﬁed.
+Second, we prove that II implies III. Let the number Ul be deﬁned as the
+inﬁmum of
+L−1
+"
+i=1
+pki · xki+1
+over all sequences k1,...,kL in {1,...,K} with kL = l. The inﬁmum is achieved
+for some sequence because HARP guarantees that removing a cycle only
+makes the product L−1
+i=1 pki ·xki+1 smaller, so we can without loss of generality
+consider the inﬁmum over sequences with no cycles, and there are ﬁnitely
+many such sequences. Let Ul = L−1
+i=1 pki ·xki+1 and Um = L′−1
+i=1 pk′
+i ·xk′
+i+1; then
+Ul =
+L−1
+"
+i=1
+pki · xki+1 ≤(
+L′−1
+"
+i=1
+pk′
+i · xk′
+i+1)(pm · xl) = Um(pm · xl).
+Note that, following this construction, Uk > 0 for all k.
+
+
+--- Page 7 ---
+4.2 Divisible goods
+63
+Third, we prove that III implies IV. Since we assumed that pl · xl = 1 for all
+l, we have Ulpl · xk = Ul + Ulpl · (xk −xl) for all k,l, so that we have a solution
+to Afriat’s inequalities. Deﬁne a utility function u : X →R by
+u(x) = min{Uk + Ukpk · (x −xk) : k = 1,...,K},
+a construction analogous to the one in the proof of Afriat’s Theorem. Then
+pk · xk ≥pk · y implies that u(xk) ≥u(y), so u rationalizes the data.
+Clearly, u is continuous, monotonic, and homothetic. The proof that it is
+concave is the same as in Afriat’s Theorem.
+Finally, we demonstrate that (II) and (V) are equivalent. Suppose by means
+of contradiction that there is a cycle z1 ⪰H ... ⪰H zL ≻H z1. For each i = 1,...,L,
+suppose αizi = xki. Now, zi ⪰H zi+1 means that pki · xki ≥pki ·
+
+αizi+1
+=
+pki ·
+#
+αkixki+1
+αki+1
+$
+. Then for all i = 1,...,L −1, 1 = pki · xki ≥pki ·
+#
+αkixki+1
+αki+1
+$
+, and
+1 = pkL · xkL > pkL ·
+#
+αkLxk1
+αk1
+$
+. Multiplying the inequalities and canceling the α
+terms obtains pkL · xk1 L−1
+i=1 pki · xki+1 < 1, violating HARP.
+On the other hand, suppose (II) is violated, and let k1,...,kL be a sequence
+for which pkL · xk1 L−1
+i=1 pki · xki+1 < 1. Deﬁne z1 = xk1, α1 = 1, and for each
+i = 2,...,L, deﬁne αi = pki−1 ·xki, and zi =
+xki
+i
+j=1 αj . Observe that for all i = 1,...,
+L −1, zi ⪰H zi+1, since pki · (αizi) = pki · (αizi+1). Observe also that
+#L
+i=1 αL$
+pkL ·zL = pkL ·xkL = 1, and that
+#L
+i=1 αL$
+pkL ·z1 = pkL ·xk1 L−1
+i=1 pki ·
+xki+1 < 1 by assumption, so that zL ≻H z1, constituting a ⟨⪰H,≻H⟩cycle.
+Remark 4.3
+The preceding does not allow observations of xk = 0. If we
+did, the “non-normalized” version of HARP and condition (III) are necessary
+and sufﬁcient here. The non-normalized version of HARP would read that for
+all sequences {k1,...,kn}, we have pkn · xk1 n−1
+i=1 pk1 · xki+1 ≥n
+i=1 pki · xki. The
+non-normalized version of condition (III) is that Ukpl · xl ≤Ulpl · xk for all k
+and l.
+4.2.2
+Separability
+In practical analysis of consumer demand, separability is a very important
+property. In principle, a consumer chooses among many different goods,
+solving inter- as well as intratemporal optimization problems. Practical
+researchers abstract away from this complexity by considering some subset of
+goods in isolation. For example, classical studies of applied demand, such as
+Deaton (1974), work with only 9 goods. Modern applied papers often consider
+more goods, but still greatly simplify the universe of possible goods.
+The simpliﬁcation of focusing on a small subset of goods and assuming
+separability avoids the issues raised in Section 3.2.3. In fact, assuming
+separability of some kind seems unavoidable for any tractable empirical study
+of consumption.
+
+
+--- Page 8 ---
+64
+Topics in Rational Demand
+Let X ⊆X1 ×X2, with Xi ⊆Rni
++; and write vectors in X as (x1,x2), where xi ∈
+Xi. A preference relation ⪰is separable in X1 if for all x1,x′
+1 ∈X1 and all x2, ˆx2 ∈
+X2 (x1,x2) ⪰(x′
+1,x2) if and only if (x1, ˆx2) ⪰(x′
+1, ˆx2). A utility function u: X →R
+is separable in X1 if there are functions f : X1 →R and g : f(X1) × X2 →
+R, where for all x2, y →g(y,x2) is strictly monotonic, such that u(x1,x2) =
+g(f(x1),x2).
+When preferences are separable, the consumer’s maximization problem
+reduces into a “subproblem” for the goods in X1. Given a budget to spend on
+goods x1, the consumer can solve the problem of choosing x1 independently
+of the speciﬁc bundle x2 chosen: only the budget left over to spend on x1
+matters, not the actual quantities of the goods in x2. Thus separability allows
+the separate analysis of demand for x1. Of course, here we are concerned with
+testing for separability, so we cannot ignore the relation between choosing x1
+and x2.
+Theorem 4.4
+The following statements are equivalent:
+I) There are strictly positive real numbers Uk, Vk, λk, μk, k = 1,...,K
+such that
+Uk ≤Ul + λlpl
+1 · (xk
+1 −xl
+1) + λl
+μl (Vk −Vl),
+(4.1)
+Vk ≤Vl + μlpl
+2 · (xk
+2 −xl
+2).
+(4.2)
+II) The dataset {(pk
+2,xk
+2)} satisﬁes GARP; and there is a solution (Vk,μk)
+to 4.2 above such that the dataset {((pk
+1,1/μk),(xk
+1,Vk)} satisﬁes
+GARP.
+III) D has a concave, continuous, and monotonic rationalization
+u : X →R that is separable in X1.
+We present Theorem 4.4 without proof. It is important to note that Theorem 4.4
+focuses on concave rationalizations (note the contrast with Afriat’s Theorem,
+where concavity comes for free). The Afriat inequalities for this problem are
+described by Equations (4.1) and (4.2). These inequalities are not linear, in
+contrast with the original Afriat inequalities.
+A special kind of separability is additive separability. A test for additive
+separability is particularly interesting for time-series data (see Section 5.3.3),
+in which there is a single observation (a dataset of size 1).
+Let X ⊆X1 × X2 × ··· × XT, with Xt = Rn
++, t = 1,...,T. Write vectors
+in X as (x1,...,xT), where xt ∈Rn
++. A preference relation ⪰is additively
+separable if there is a function u : Rn
++ →R such that (x1,...,xT) ⪰(x′
+1,...,x′
+T)
+iff T
+t=0 u(xt) ≥T
+t=0 u(x′
+t).
+Say that a dataset {(xk,pk)}K
+k=1 is additively separably rationalizable by the
+function u : Rn
++ →R if the additively separable preferences deﬁned from u
+weakly rationalize the data {(xk,pk)}K
+k=1. We provide a test for the case when
+K = 1, so the dataset is (x,p). Note that p = (p1,...,pT), with pt ∈Rn
+++.
+
+
+--- Page 9 ---
+4.2 Divisible goods
+65
+Proposition 4.5
+Data (x,p) (a dataset with K = 1) with x ≫0 is additively
+separably rationalizable by a concave and strictly increasing function iff the
+correspondence ρ(x) = 
+t:x=xt{pt} satisﬁes cyclic monotonicity.
+Proposition 4.5 follows from using the ﬁrst-order conditions for maximiza-
+tion of 
+t u(xt), and Corollary 1.10.
+Note that general utility maximization is not testable with a single
+observation, but the theory of additive separability has testable implications
+even when K = 1.
+4.2.3
+Quasilinear utility
+Many economic models assume that utility takes a quasilinear form: u(x) + y,
+for x ∈Rn
++ and y ∈R. There are n+1 goods, and the (n+1)-st is a numeraire.
+Wealth is measured in the same units as the numeraire good, which therefore
+always has a price of one. We shall allow consumption of the numeraire to be
+negative, which is a common assumption in applications of quasilinear utility.
+Given the assumption that y can be negative, the maximization of u(x) + y
+subject to a budget constraint with prices p (the problem max(x,y) u(x) + y
+subject to the constraint p · x + y ≤I) is, when u is locally nonsatiated,
+equivalent to the maximization of u(x) −p · x.
+As in Proposition 4.5, the property of cyclic monotonicity described in 1.4
+can be used to characterize datasets that could be rationalized by a quasilinear
+utility.
+We take as primitive a dataset D: a collection (xk,pk), k = 1,...K, with
+K ≥1 an integer, xk ∈X and pk ∈Rn
+++. There are now, however, n + 1 goods
+and we seek a rationalization by a quasilinear utility function. A dataset D is
+quasilinear rationalizable if there exists a locally nonsatiated utility function
+u : X →R such that for all k and x ∈X,
+u(x) −pk · x ≤u(xk) −pk · xk.
+Theorem 4.6
+Let X be a convex consumption space such that for all x ∈X
+and all ε > 0, there is ε′ ∈(0,ε) with x+ε′1 ∈X. The following statements are
+equivalent:
+I) D is quasilinear rationalizable.
+II) For each k, there is Uk such that for all k,l,
+Uk ≤Ul + pl · (xk −xl).
+III) The correspondence ρ(x) = 
+k:x=xk{pk} satisﬁes cyclic monotonicity.
+IV) The data are quasilinear rationalizable by a continuous, strictly
+increasing, concave utility function.
+Proof. That (I) implies (II) is as follows. Let u rationalize the data, and
+let Uk = u(xk). In particular, we have Ul −pk · xl ≤Uk −pk · xk, which
+establishes II.
+
+
+--- Page 10 ---
+66
+Topics in Rational Demand
+That (II) implies (III) follows from adding up Afriat inequalities correspond-
+ing to cycles, as we discussed after stating Afriat’s Theorem (and by the same
+argument as in the proof of Theorem 1.9). The proof that (III) implies (IV) is
+exactly as in Theorem (1.9): let
+u(x) = inf{pk1 · (x −xk1) + pk2 · (xk1 −xk2) + ... + pkM−1 · (xkM −xkM−1)},
+where the inﬁmum is taken over all sequences k1,...,kM with xk1 ﬁxed at some
+arbitrary x0 ∈X. (See Corollary 1.10).
+That (IV) implies (I) is trivial.
+Remark 4.7
+If one assumes that income and quasilinear good consumption
+must be positive, then the equivalence of (II)–(IV) in the preceding still
+hold. That (IV) implies (II) holds from the ﬁrst-order conditions of concave
+optimization. Condition (IV) could be proved by choosing I large enough so
+that I −pi · xi ≥0 for all i, and deﬁning yi = I −pi · xi.
+The idea behind Theorem 4.6 is similar to the argument in Theorem 1.9, and it
+is instructive to see why. If we reason as in the discussion of Afriat’s Theorem,
+and assume that there is a differentiable rationalization u, then the relevant
+ﬁrst-order condition for maximizing u(x) −p · x is
+∇u(x) = p.
+As was the case for Afriat’s Theorem, we seek to infer marginal utilities from
+data, but the difference is that now the Lagrange multiplier (λk in Afriat’s
+Theorem) is known and equal to one. The dataset therefore already tells us
+what the marginal utilities must be, if the data are to be rationalized by a
+quasilinear utility. Theorem 4.6 therefore asks for prices that could be marginal
+utilities for a concave utility function – namely cyclic monotonicity. Most of
+the work in proving Afriat’s Theorem went into establishing the existence of
+multipliers λk such that ρ(x) = 
+k:x=xk{λkpk} is cyclically monotone. In the
+case of quasilinear utility, this is already taken care of by the quasilinearity
+assumption.
+4.2.4
+Gross complements and substitutes
+We now turn to two basic properties of demand: the complementarity or
+substitutability between a pair of goods. Roughly speaking, two goods are
+“gross” complements if a price change that favors the consumption of one
+good also induces higher consumption of the second good. Common examples
+of complementary goods include coffee and sugar, or gin and tonic. Instead
+of being properties of preference, gross complements and gross substitutes are
+properties of demand functions.
+Formally, we say that a demand function on R2
++ satisﬁes gross complements
+if for all m, d(p,m) is a weakly decreasing function of p. We say that the
+demand function is rational if there exists a locally nonsatiated preference
+
+
+--- Page 11 ---
+4.2 Divisible goods
+67
+relation ⪰for which there is a unique ⪰-maximal element of {x ∈Rn
++ : p · x ≤
+m}, and d(p,m) is equal to this element. A demand function satisfying gross
+complements is one for which both goods respond in the same direction to
+changes in price. On the other hand, we will say a demand function on R2
++
+satisﬁes gross substitutes if d1(p,m) increases in p2, and d2(p,m) increases
+in p1. Note that for these deﬁnitions to be at all meaningful, demand must be
+single-valued. We say a demand function is a rational demand function if there
+is a monotonic preference which generates d as its demand correspondence.
+It is convenient here to suppose that m is normalized; this is without loss of
+generality as any rational demand function is homogeneous. For the remainder
+of this subsection, we always assume m = 1, and drop the dependence of d
+on m.
+Data come in the form of observed price/demand pairs, D = {(pk,xk)}K
+k=1. We
+turn to the question of when data are consistent with a rational demand function
+exhibiting the property of gross complements. In line with the normalization of
+income, assume that data has been normalized such that, for all k, pk · xk = 1.
+Consider Figure 4.3(a), which depicts a hypothetical observation of demand
+x = (x1,x2) at prices p = (p1,p2). In principle, the two budgets in Figure 4.3(a)
+are not comparable, and the observations might be consistent with gross
+complements. However, the dotted budget line in the ﬁgure can be obtained
+by either starting from (x,p) and making one good cheaper, or by starting from
+(x′,p′) and making the other good cheaper. Either way, demand at the dotted
+budget line should be larger than both x and x′. As Figure 4.3(b) illustrates,
+this is not possible. In this fashion we obtain a condition on the data that is
+necessary for consistency with gross complements: the pointwise maximum
+of demands, x ∨x′, must be affordable for any budget larger than the p and p′
+budgets.
+There is a second necessary condition. Consider the observed demands in
+Figure 4.3(c). This a situation where, when we go from p to p′, demand for
+the good that gets cheaper decreases while demand for the good that gets
+more expensive increases. This is not in itself a violation of complementarity.
+However, consider Figure 4.3(d): were we to increase the budget from p to the
+dotted prices, complementarity would imply a demand at the dotted prices that
+is larger than x. But no point in the dotted budget line is both larger than x and
+satisﬁes the weak axiom of revealed preference (WARP) with respect to the
+choice of x′.
+So a simultaneous increase in one price and decrease in another cannot yield
+opposite changes in demand. This property is a strengthening of WARP: Fix
+p, p′ and x as in Figure 4.3(c). Then WARP requires that x′ not lie below the
+point where the p and p′ budget lines cross. Our property requires that x′ not
+lie below the point on the p′-budget line with the same quantity of good 2 as x.
+The following result states that the two necessary conditions illustrated
+in Figure 4.3 are in fact both necessary and sufﬁcient. These constitute a
+nonparametric test of gross complements in the demand for a pair of goods.
+
+
+--- Page 12 ---
+68
+Topics in Rational Demand
+x
+A larger budget.
+(a)
+(b)
+(c)
+(d)
+Inconsistency with gross complements.
+Two observations: (x, p) and (x′, p′).
+Gross complements would induce a
+WARP violation.
+x
+x
+x
+x′
+x′
+x′
+x′
+Fig. 4.3 Implications of gross complements.
+Theorem 4.8
+Let {(pk,xk)}K
+k=1 be a dataset with n = 2 and, for all k, pk ·
+xk = 1 (a normalization). There exists a rational demand d, satisfying gross
+complements, such that for all k, d(pk) = xk iff for all k,l, the following are
+satisﬁed:
+• (pk ∧pl) · (xk ∨xl) ≤1
+• For all i ̸= j, if pk · xl ≤1 and pk
+i > pl
+i, then xk
+j ≥xl
+j.
+We now turn to gross substitutes. To illustrate the implications of gross
+substitutes for observed demand, consider the example in Figure 4.4. We have
+two observations: x is the bundle purchased at prices p, and x′ is purchased at
+prices p′. These purchases do not appear to directly violate gross substitutes.
+The observed choices are also consistent with the weak axiom of revealed
+preference, so there is an extension of these purchases to a rational demand
+function that is deﬁned for all prices. There is, however, no demand function
+compatible with these observations which satisﬁes gross substitutes: Consider
+the prices p′′ given by the dotted budget line. Gross substitutes and the choice
+of x at p require a decrease in the consumption of the good whose price is the
+same in p and in p′′, so demand at p′′ should lie in the northwest segment of the
+
+
+--- Page 13 ---
+4.3 Chapter references
+69
+x
+x′
+x
+x′
+Two observations: (x, p) and (x′, p′).
+Implications of gross substitutes.
+(b)
+(a)
+Fig. 4.4 Implications of gross substitutes.
+budget line. On the other hand, gross substitutes and the choice of x′ require
+that demand at p′′ lies in the southeast segment of the budget line. Since these
+two segments are disjoint, there is no demand function that extends the data
+and satisﬁes gross substitutes.
+Figure 4.4 then suggests a necessary condition for observations to be
+consistent with a rational demand exhibiting gross substitutes. The next
+theorem states that the condition is both necessary and sufﬁcient. Smoothness
+of demand comes for free in this case.
+Theorem 4.9
+Let {(pk,xk)}K
+k=1 be a dataset with n = 2 and, for all k, pk·xk = 1
+(a normalization). There exists a smooth and rational demand function d
+satisfying gross substitutes such that for all k, d(pk) = xk iff for all k,l such
+that pk
+1 ≤pl
+1 and pl
+2 ≤pk
+2, we have pl
+1xl
+1 ≤pk
+1xk
+1.
+4.3
+CHAPTER REFERENCES
+A version of Theorem 4.1 appeared ﬁrst in Chambers and Echenique (2009b),
+and was extended by Shirai (2010). Our proof of the supermodular result
+follows suggestions by Eran Shmaya and John Quah. The submodular utility
+used in the proof is a construction due to Rader (1963) (Shirai noted that this
+construction yields a submodular utility).
+The results in Sections 4.2.1 and 4.2.2 are from Varian (1983a). The
+equivalence between conditions (III) and (I) in Section 4.2.1 was shown by
+Afriat (1972) and Diewert (1973); HARP is due to Varian, though Diewert
+mentions an equivalent test in a footnote. Knoblauch (1993) describes a
+method for predicting responses to price changes for data consistent with
+homotheticity.
+Theorem 4.4 is due to Hal Varian. The recent paper of Quah (2013) is
+the ﬁrst paper to treat the case of a general, possibly nonconcave, separable
+rationalization. In fact Quah presents an example of a dataset that has a
+
+
+--- Page 14 ---
+70
+Topics in Rational Demand
+separable rationalization, but not a concave and separable one. Quah shows
+that to test for separability one needs to verify that data satisfy some ﬁnite
+set of conﬁgurations. The paper by Cherchye, Demuynck, Hjertstrand, and
+De Rock (2014) shows that testing for separability in Varian’s concave setting
+is computationally hard, and provides a computational approach to dealing
+with the system of inequalities in Theorem 4.4. Echenique (2013) proves that
+the nonconcave case is also computationally hard, even when the number of
+goods is as small as in Deaton (1974) (i.e. 9 goods).
+Proposition 4.5 appears in Browning (1989), who uses it to test for
+additive separability in time series data. He focuses on the case of a single
+observation because households in consumption surveys only make a single
+choice. The paper of Echenique, Imai, and Saito (2013) presents a result on
+time separability for multiple observations (as well as for other models of
+intertemporal choice).
+The result on quasilinear utility is from Brown and Calsamiglia (2007).
+Theorem 4.8 is due to Chambers, Echenique, and Shmaya (2010), while
+Theorem 4.9 appears in Chambers, Echenique, and Shmaya (2011). Related
+are the papers of Kehoe and Mas-Colell (1984) and Kehoe (1992), which show
+that gross substitutability of demand implies a version of the weak axiom.

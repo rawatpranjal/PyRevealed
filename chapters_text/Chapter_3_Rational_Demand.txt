@@ -1,0 +1,1319 @@
+--- Page 1 ---
+CHAPTER 3
+Rational Demand
+Revealed preference theory started out as an exploration into the testable
+implications of neoclassical demand theory, and while it has expanded in
+many different directions, the analysis of rational demand is the most actively
+researched area in revealed preference theory. In this chapter, we present an
+exposition of the basic results in the revealed preference theory of rational
+demand.
+We suppose here that we have observations on the purchasing decisions of
+a single consumer. The consumer makes a sequence of independent choices at
+different price vectors. The data consists of the consumer’s choices, and we
+seek to understand the implications of rational consumption behavior for such
+data.
+The material on rational demand is divided into three chapters. In Chapter 3
+we discuss the basic results on weak and strong rationalization, including
+Afriat’s Theorem, the main result in the revealed preference theory of rational
+demand. In Chapter 4 we turn to speciﬁc properties of demand functions; and
+in Chapter 5 to some of the practical issues that arise when applying the results
+of revealed preference theory to empirical research.
+3.1
+WEAK RATIONALIZATION
+Consider an agent choosing a bundle of n goods to purchase. Consumption
+space is X ⊆Rn
++, meaning that the consumer chooses x ∈X. We assume that
+for any x ∈X and ε > 0, there is ε′ with 0 < ε′ < ε and x + ε′1 ∈X; this means
+that it is possible to add more of every good to any bundle in X and still remain
+in X.1
+Given a preference relation ⪰on X, let d : Rn
+++ × R+ →2X be the demand
+correspondence associated to ⪰; it is deﬁned as
+d(p,m) = {x ∈X : p · x ≤m and (∀y ∈X)(y ≻x ⇒p · y > m)}.
+1 This assumption is used to guarantee the existence of locally nonsatiated rationalizations.
+
+
+--- Page 2 ---
+3.1 Weak rationalization
+35
+We refer to d as a demand function if d(p,m) is always a singleton.
+A consumption dataset D is a collection (xk,pk), k = 1,...K, with K ≥1
+an integer, xk ∈X and pk ∈Rn
+++. For each k, xk is the consumption bundle
+purchased by the consumer at prices pk. We shall assume that the consumer
+exhausts all his income, so that the expenditure pk · xk is also the total income
+devoted to consumption at the time at which the purchases were made. This
+assumption is in principle unavoidable, because if we were to allow for unspent
+(and unobservable) income, then any dataset is rationalizable. Section 3.2.3
+discusses some related issues. As we shall see, the assumption that income
+equals expenditure amounts to an implicit assumption of local nonsatiation.
+We seek to understand when the consumer’s behavior is compatible with
+the basic theory of rational choice. Formally, a preference relation ⪰weakly
+rationalizes a consumption dataset D if, for all k and y ∈X, pk·xk ≥pk·y implies
+that xk ⪰y. In other words, if d is the demand correspondence associated to ⪰,
+then ⪰weakly rationalizes D if xk ∈d(pk,pk ·xk) for all k. Say that D is weakly
+rationalizable if there is a preference relation that weakly rationalizes D. There
+is a stronger version of rationalizability, which we shall discuss in Section 3.2.
+We often specify a preference relation through a utility function. Say that a
+utility u : X →R weakly rationalizes the data if for all k and y ∈X, pk ·xk ≥pk ·y
+implies that u(xk) ≥u(y).
+If we place no restrictions on ⪰, then any dataset is weakly rationalizable.
+We can just let ⪰indicate indifference among all the elements of X. The
+resulting theory is not very interesting or useful: it explains everything because
+it predicts nothing. For this reason, we are going to impose some basic
+discipline on our exercise by requiring that the rationalizing ⪰be monotonic.
+Consider the situation in Figure 3.1. The ﬁgure illustrates a dataset D0 =
+{(x1,p1),(x2,p2)}. The bundle x2 is affordable at a budget in which x1 was
+demanded. If the consumer were rational we could infer that she likes x1 at
+least as much as x2: we say that x1 is revealed preferred to x2. At the same time,
+x2 is revealed preferred to x1. We would conclude that a rational consumer who
+made these choices would regard x1 and x2 as equally good. Any rationalizing
+preference must impose indifference between x1 and x2.
+Now we see that if the rationalizing preference is required to be monotone,
+then indifference is impossible. When the consumer in Figure 3.1 purchased x1,
+she could have chosen x2 by spending strictly less than she did at x1. We should
+then conclude that she cannot regard the two choices as exactly equivalent: the
+consumer could have afforded a bundle x∗≫x2 at prices p1 and expenditure
+p1 · x1. By monotonicity of the rationalizing preference, the bundle x∗must be
+strictly preferred to x2. At the same time, x1 must be at least as good as x∗. So
+x∗must be strictly preferred to x2; the consumer cannot be indifferent between
+the two. We infer that the observations in Figure 3.1 constitute a refutation of
+the hypothesis that the consumer is rational and his preferences are monotonic.
+Generally, we say that a consumption dataset D satisﬁes the weak axiom of
+revealed preference (WARP) if there is no pair of observations (xk,pk) and
+(xl,pl) such that pk · xk ≥pk · xl while pl · xl > pl · xk. In words, there is no pair
+
+
+--- Page 3 ---
+36
+Rational Demand
+p2
+p1
+x1
+x2
+Fig. 3.1 A violation of WARP.
+of observations such that the ﬁrst is revealed preferred to the second, while
+the second is strictly revealed preferred to the ﬁrst. The dataset in Figure 3.1
+exhibits a violation of WARP (recall the discussion of WARP in 2.1.1).
+To go beyond the example in Figure 3.1 it is useful to introduce some general
+deﬁnitions.
+Given a consumption dataset D = {(xk,pk)}K
+k=1, we can deﬁne an order pair
+⟨⪰R,≻R⟩on X by x ⪰R y iff there is k such that x = xk and pk · xk ≥pk · y; and
+x ≻R y iff there is k such that x = xk and pk · xk > pk · y. Note that ≻R ⊆⪰R,
+but that ≻R will typically not be the strict binary relation associated to ⪰R.2
+The pair ⟨⪰R,≻R⟩is D’s revealed preference pair. A dataset satisﬁes WARP
+iff there is no x,y ∈X with x ⪰R y and y ≻R x.
+Revealed preference pairs, as we have just deﬁned them, are special cases of
+the notions introduced in Section 2.3 of Chapter 2. The primitives in Chapter 2
+are: a set X, a collection of subsets  ⊆2X\{∅}, and a choice function c :
+ →2X\{∅} such that for all B ∈, c(B) ⊆B. Here, X ⊆Rn
++ is our given
+consumption space; the collection  of budget sets is deﬁned as  = {Bk},
+where Bk = {y ∈X : pk ·xk ≥pk ·y}; and c(B) = {xk : Bk = B}. Then the notion
+of revealed preference order pair coincides with the deﬁnition in Chapter 2, and
+the deﬁnition of WARP we have just given is equivalent to that of Chapter 2.
+Observe that the relations ⪰R and ≻R are typically very incomplete, in
+the sense that many alternatives in X are not comparable according to these
+relations; the problem of rationalizability can be viewed as the problem of
+completing (or extending) these relations in a way that preserves transitivity.
+We saw in the discussion of Figure 3.1 that WARP is necessary for weak
+rationalization by a monotonic preference. It will be shown below that WARP
+is not sufﬁcient. The (stronger) property that is both necessary and sufﬁcient
+for weak rationalization by a monotonic preference is deﬁned as follows:
+2 This property of ⟨⪰R,≻R⟩is in fact why we introduced the notion of order pairs.
+
+
+--- Page 4 ---
+3.1 Weak rationalization
+37
+A dataset satisﬁes the generalized axiom of revealed preference (GARP) if
+its revealed preference pair is an acyclic order pair. Note that the requirement
+that ⟨⪰R,≻R⟩is an order pair implies that ≻R must be asymmetric. We also say
+that the revealed preference order pair satisﬁes GARP. Again, the concept of
+GARP corresponds to the deﬁnition in 2.3.
+Deﬁne the indirect revealed preference relation to be the binary relation
+(⪰R)T, the transitive closure of ⪰R. In that sense, we can think of ⪰R as
+a direct revealed preference relation, and of ≻R as a direct strict revealed
+preference relation. Thus, one equivalent way to phrase GARP is to say that if x
+is indirectly revealed preferred to y, then y cannot be revealed strictly preferred
+to x.
+GARP is also equivalent to the following property. For any sequence of data
+points ((xk1,pk1),...,(xkL,pkL)), if the following inequalities hold:
+pk1 · xk1 ≥pk1 · xk2
+pk2 · xk2 ≥pk2 · xk3
+...
+pkL−1 · xkL−1 ≥pkL−1 · xkL
+pkL · xkL ≥pkL · xk1,
+then they must hold with equality.
+Theorem 3.1
+A dataset is weakly rationalizable by a monotonic preference
+relation iff its revealed preference pair satisﬁes GARP.
+With the identiﬁcation made above between the primitives of this chapter
+and those of Chapter 2, Theorem 3.1 is easily seen to be a special case of
+Theorem 2.19. Simply verify that the conditions of Theorem 2.19 are satisﬁed;
+namely, 1) that each Bk is comprehensive with respect to the natural ordering
+⟨≥,>⟩; and 2) that x ≻R y iff x ⪰R y and there exists k with x,y,z ∈Bk x ∈c(Bk)
+and z > y. In fact, because all prices are strictly positive, the same properties
+hold with respect to the order pair ⟨≥,≫⟩.
+Remark 3.2
+The proof of Theorem 3.1 reveals a bit more than stated: GARP
+implies the existence of a strictly monotone rationalizing preference. Thus
+monotonicity and strict monotonicity are observationally equivalent. Further,
+we can impose local nonsatiation on our rationalizing preference. In that case,
+the existence of a locally nonsatiated weak rationalization implies GARP. So
+local nonsatiation and strict monotonicity are observationally equivalent.
+Remark 3.3
+When the consumption space is discrete, say it is Zn
++, then
+Theorem 3.1 must be modiﬁed. In this environment it is possible that pk · xl <
+pk ·xk but there is no x ∈ZN
++ for which xl < x and pk ·x ≤pk ·xk. For example, if
+n = 2, this occurs with the two-observation consumption dataset speciﬁed by
+(x1,p1) = ((1,2),(4,3)) and (x2,p2) = ((2,0),(5,2)). This consumption dataset
+
+
+--- Page 5 ---
+38
+Rational Demand
+pk
+xk+1
+xk+1
+xk+2
+xk
+xk
+λ
+λ1
+λ2
+xl
+xl lies below λ, then xk > R xl.
+xk+2 to the right of xk+1.
+(a) 
+(b) 
+Fig. 3.2 An illustration of the proof of Theorem 3.4.
+is weakly rationalizable by a strictly monotonic preference, yet p1 ·x2 < p1 ·x1
+and p2 ·x1 < p2 ·x2. The issue is that the notion xk ≻R xl as deﬁned in Chapter 2
+does not coincide with pk · xl < pk · xk in this case.
+The importance of the difference between WARP and GARP is brought out by
+our next results, Theorem 3.4 and Remark 3.5.
+Theorem 3.4
+Suppose that there are exactly two goods (n = 2). Then a
+dataset satisﬁes GARP if and only if it satisﬁes WARP.
+Proof. We show that if a consumption dataset D fails GARP, then there must
+exist a cycle of length two. To this end, we will argue by contradiction and
+consider a cycle of minimal length, supposing that it has length at least three.
+The proof is geometric.
+Suppose then that (x1,p1),...,(xL,pL) is a sequence of observations in D that
+imply a violation of GARP. So they form a cycle C:
+x1 ⪰R x2 ⪰R ··· ⪰R xL ≻R x1,
+with L ≥3. Suppose, toward a contradiction, that there are no shorter cycles.
+We ﬁrst show that no observed bundle is larger than another. Suppose to
+the contrary that xk ≥xl for k ̸= l. Working with indices modulo L, xk−1 ⪰R xk
+would then imply xk−1 ⪰R xl, for pk−1 ·xk−1 ≥pk−1 ·xk ≥pk−1 ·xl. Then we may
+remove xk, . . . , xl−1 from the cycle to form one of shorter length, retaining the
+strict inequality if it lies in this part of the cycle – a contradiction, as C was
+minimal.
+So suppose that no observed bundle is larger than another. Since n = 2, the
+observed bundles can be ordered by the quantity of good 1 consumed in each
+bundle.
+The basic observation is the following. Let xk be a bundle in C. Consider the
+half-line in R2
++ starting from xk and passing through xk+1. See Figure 3.2(a).
+The half-line, named λ in the ﬁgure, will lie wholly within the budget at which
+
+
+--- Page 6 ---
+3.1 Weak rationalization
+39
+xk was purchased. So if xl is on or below the half-line, then xk ⪰R xl. And
+xk ≻R xl when xk ≻R xk+1, or when xl is strictly below λ.
+Now suppose that xk has more of good 1 than xk+1, so xk+1 lies to the left
+of xk. Consider xk+2, a bundle distinct from xk and xk+1. Let λ1 be the half-line
+starting from xk and passing through xk+1, and λ2 be the half-line starting from
+xk+1 and passing through xk+2. Note that xk+2 cannot lie strictly below λ1, or
+we would obtain xk ≻R xk+2 and a shorter cycle than C.
+We shall prove that xk+2 must be to the left of xk+1. Suppose, toward a
+contradiction, that xk+2 has more of good 1 than xk+1; so it lies to the right,
+as in Figure 3.2(b). If xk were strictly below λ2, we would have the cycle
+of length two xk ⪰R xk+1 ≻R xk. So the only possibility is that xk lies on
+λ2. Thus xk, xk+1, and xk+2 are all on the same line. But this conﬁguration
+always leads to a shorter cycle than C, because it implies that xk ⪰R xk+1 ⪰R xk
+and that xk ⪰R xk+2. Thus, if xk ≻R xk+1, or if xk+1 ≻R xk+2 (which implies
+xk+1 ≻R xk), then there is a shorter cycle – in fact a cycle of length two. And
+if ¬(xk ≻R xk+1) and ¬(xk+1 ≻R xk+2) then the strict comparison in C lies
+elsewhere, so xk ⪰R xk+2 leads to a shorter cycle. Thus xk+2 must be to the
+left of xk+1.
+The argument we have just made says that whenever xk+1 lies to the left of
+xk, xk+2 must lie to the left of xk+1. Now, C is a cycle, so (1) there is some k
+such that xk+1 is to the left of xk; and (2) it cannot be true that xk+1 is to the left
+of xk for all k. We are left with a contradiction.
+Remark 3.5
+Theorem 3.4 fails dramatically when n ≥3. For each k there is
+an example of a dataset that is not weakly rationalizable, but that has no cycles
+of length less than k. Hence, when n ≥3 there is no hope of simplifying GARP
+to some axiom that would only require ruling out cycles of certain lengths.
+Consider the set {x ∈R3
++ : 
+i xi = 1}. Draw on the face of this set a
+regular, convex polygon with k vertices (a regular k-gon). The vertices of the
+polygon will be the demand observations (these are vectors in R3
++). One needs
+to construct prices which result in a cycle of length k, but no shorter cycle.
+Consider going clockwise around the polygon. Any vertex, say observation xj,
+has an adjacent vertex xj+1 (connected by an edge) in the clockwise direction.
+It is clear that one can separate the convex hull {xj,xj+1} from the convex
+hull of {xi}k
+i=1\{xj,xj+1}. In fact, by a simple continuity argument, we can
+pick a hyperplane with normal vector qj such that xj lies on the hyperplane,
+qj · xj+1 < qj · xj, and for all i ̸∈{j,j + 1}, qj · xi > qj · xj. Then for α small
+enough, pj = αqj + (1,...,1) will be a vector of strictly positive prices for
+which pj · xj+1 < pj · xj, and for all i ̸∈{j,j + 1}, pj · xi > pj · xj (recall that
+
+l=1,2,3 xi
+l = 1 for all i). This gives a cycle of length k, but of no shorter length.
+Theorem 3.1 answers the question of which datasets are weakly rationalizable.
+As we observed in Remark 3.2, consumption datasets cannot distinguish
+between a locally nonsatiated and a strictly monotonic preference relation.
+It turns out that much more can be said about the possible rationalizing
+
+
+--- Page 7 ---
+40
+Rational Demand
+preference relation: the following remarkable result says that the hypotheses of
+rationalization via a concave, strictly increasing, and continuous utility func-
+tion are empirically indistinguishable from the hypothesis of rationalization
+via a locally non-satiated preference.
+Afriat’s Theorem
+Let X be a convex consumption space, and D =
+{(xk,pk)}K
+k=1 be a consumption dataset. The following statements are equiv-
+alent:
+I) D has a locally non-satiated weak rationalization;
+II) D satisﬁes GARP;
+III) There are strictly positive real numbers Uk and λk, for each k, such
+that
+Uk ≤Ul + λlpl · (xk −xl)
+for each pair of observations (xk,pk) and (xl,pl) in D;
+IV) D has a continuous, concave, and strictly monotonic rationalization
+u : X →R.
+The inequalities in Statement III of Afriat’s Theorem are called Afriat
+inequalities.
+Remark 3.6
+We can replace the system of inequalities in (III) by a smaller
+system, which only requires the inequalities to hold for k and l for which
+pl · (xk −xl) ≤0. This fact is evident from the proof of the theorem in 3.1.1.
+Before we give the proof, it is useful to interpret (III), the Afriat inequalities.
+The inequalities come from the ﬁrst-order conditions for the maximization of
+a utility function subject to a budget set: Suppose for simplicity that the data
+is rationalizable by a utility function u that is differentiable. The ﬁrst order
+condition would demand that
+∇u(x)|x=xk = λkpk,
+where λk is a Lagrange multiplier. If, in addition, the utility function is concave
+we know that u(y) −u(x) ≤∇u(x) · (y −x) (see Proposition 1.11). By letting
+Uk = u(xk), one obtains the Afriat inequality
+Uk −Ul = u(xk) −u(xl) ≤∇u(xl) · (xk −xl) = λlpl · (xk −xl).
+It should then be clear that Afriat inequalities have two sources. One is
+satisfaction of the ﬁrst-order condition for the consumer’s problem. The other
+is the concavity of the utility function. The numbers Uk in (III) are meant to
+be the utility levels achieved when consuming xk, and λk is meant to be the
+Lagrange multiplier.
+What is remarkable about Afriat’s Theorem is that GARP is sufﬁcient to
+ensure a solution to this system of inequalities. The idea that GARP captures
+rationalizability (Theorems 2.19 and 3.1) is relatively easy to see. The result
+that concavity comes for free is deeper.
+
+
+--- Page 8 ---
+3.1 Weak rationalization
+41
+p1
+p2
+x1
+x2
+x2
+x1
+A dataset satisfying WARP.
+Indifference curves for Afriat’s utility.
+(a)
+(b)
+Fig. 3.3 An illustration of the utility function in Afriat’s Theorem.
+Given a solution to the system of inequalities (III), one can write down a
+rationalizing utility function that satisﬁes the conditions in (IV):
+u(x) = min{Uk + λkpk · (x −xk) : k = 1,...,K}.
+This utility function is illustrated in Figure 3.3. On the left, in Figure 3.3(a) is a
+dataset satisfying WARP. On the right are indifference curves corresponding to
+the utility function deﬁned, as above, from solutions to the Afriat inequalities
+for that dataset.
+One last comment is in order. The utility we have just exhibited is not
+smooth (for a result on smooth utility, see Section 3.2.1); but we made use
+of smoothness when we introduced the ﬁrst-order conditions. Smoothness is
+not crucial to the argument. The important concept is that λkpk must be a
+supergradient of the utility function. It is instructive to see why this is the
+case.
+Assume given a solution to the Afriat inequalities. We can then string
+together Afriat inequalities as follows: Uk −Ul ≤λlpl ·(xk −xl) and Um −Uk ≤
+λkpk · (xm −xk) imply that
+Um −Ul ≤λlpl · (xk −xl) + λkpk · (xm −xk).
+In fact, if we consider a sequence k1,k2,...kL, and kL = k1, then
+0 =
+L−1
+
+i=1
+(Uki+1 −Uki) ≤
+L−1
+
+i=1
+λkipki · (xki+1 −xki).
+The property we have just derived from a solution to the Afriat inequalities
+is, in the terminology of 1.4, that the correspondence ρ(x) = 
+k:x=xk{λkpk} is
+cyclically monotone (on its domain). Then, reasoning as in Theorem 1.9 (and
+Corollary 1.10), one obtains a rationalizing utility.
+In other words, one way of understanding Afriat’s Theorem is as providing
+numbers λk for which the correspondence ρ(x) = 
+k:x=xk{λkpk} is cyclically
+monotone. In that sense, GARP can be viewed as an ordinal version of cyclic
+monotonicity.
+
+
+--- Page 9 ---
+42
+Rational Demand
+Remark 3.7
+One may similarly ask whether the existence of λk > 0 for
+which ρ(x) = 
+k:x=xk{λkpk} satisﬁes monotonicity is equivalent to WARP.
+Unfortunately it is not. An example is as follows. Let p1 = (1,0,0), x1 =
+(3,3,3), p2 = (0,1,0), x2 = (2,2,5), p3 = (0,0,1), and x3 = (4,0,4). It is easily
+veriﬁed that this consumption dataset satisﬁes WARP, and that there are no
+corresponding λk leading to a satisfaction of monotonicity. Prices can also be
+chosen strictly positive.
+We offer two different proofs of Afriat’s Theorem.
+3.1.1
+Proof of Afriat’s Theorem
+We prove that (I) ⇒(II) ⇒(III) ⇒(IV) ⇒(I). That (I) ⇒(II) follows
+from Theorem 3.1. That (IV) ⇒(I) is obvious. We shall prove the other
+implications, starting from (II) ⇒(III), which is the substance of this proof.
+The proof uses the Theorem of the Alternative, in the form of Lemma 1.12.
+We shall prove that if there is no solution to the system of linear inequalities
+in (III), then GARP is violated. Using Lemma 1.12 it is easy to formulate
+the consequences of the inequalities not having a solution. We ignore the
+requirement that each Ui > 0, as any solution to the remaining inequalities
+can be made to satisfy this simply by adding a large enough constant to each
+Ui. We need to specify the matrix B that corresponds to these linear inequalities
+in a helpful way.
+Consider all pairs (i,j) ∈{1,...,K}2 with i ̸= j, and call this set of pairs A.
+We now construct a real-valued matrix of dimension (|A| + K) × 2K. The ﬁrst
+|A| rows are indexed by elements of A, and the last K by {1,...,K}. The ﬁrst
+K columns are labeled 1,...,K, while the second K are labeled 1′,...,K′. The
+construction of the matrix is illustrated below.
+⎡
+⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+1
+···
+i
+···
+j
+···
+K
+1′
+···
+i′
+···
+K′
+(1,2)
+1
+···
+0
+···
+0
+···
+0
+p1 · (x2 −x1)
+···
+0
+···
+0
+...
+...
+...
+...
+...
+...
+...
+...
+(i,j)
+0
+···
+1
+···
+−1
+···
+0
+0
+···
+pi · (xj −xi)
+···
+0
+...
+...
+...
+...
+...
+...
+...
+...
+...
+...
+...
+...
+...
+...
+...
+...
+i
+0
+···
+0
+···
+0
+···
+0
+0
+···
+1
+···
+0
+...
+...
+...
+...
+...
+...
+...
+...
+⎤
+⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+Deﬁne the matrix B as follows: For the ﬁrst |A| rows, in the row
+corresponding to (i,j), we put zeroes in all entries except for 1 in column i,
+−1 in column j, and pi · (xj −xi) in column i′. We can write this succinctly
+by denoting a vector of all zeroes with a single 1 in its ith entry by 1i. Then
+row (i,j) is the vector 1i −1j + pi · (xj −xi)1i′. For the last K rows, in the row
+
+
+--- Page 10 ---
+3.1 Weak rationalization
+43
+corresponding to i, we put the vector 1i′. Clearly, a vector
+(U,λ) = (U1,...,UK,λ1,...,λK)
+satisﬁes the system of inequalities in (III) iff B(i,j) · (U,λ) ≥0, for all (i,j) ∈A,
+and Bi · (U,λ) > 0 for all i.
+By Lemma 1.12, the nonexistence of a solution to Afriat’s inequalities
+means that there is for each (i,j) a η(i,j) ≥0 and for each h ∈{1,...,K} a ηh ≥0
+such that
+
+(i,j)∈A
+η(i,j)B(i,j) +
+K
+
+h=1
+ηhBh = 0,
+(3.1)
+and
+ηh > 0
+for at least one 1 ≤h ≤K.
+(3.2)
+Out of all η = (η(i,j),ηh) satisfying (3.1) and (3.2), choose η to have a minimum
+number of entries that equal zero. Think of the numbers η(i,j) and ηh as weights.
+So Lemma 1.12 gives a weighted sum of rows that is identically zero, and
+where the weight is strictly positive for at least one of the last K rows of the
+matrix.
+Let i be such that ηi > 0 as in (3.2). The weighted sum of entries in column
+i′ is zero, so there must exist a pair (i,j) for which pi ·(xj −xi) < 0 and η(i,j) > 0.
+Then we have a positive weight on −1 in the column for j. So there must exist
+some k with η(j,k) > 0. Then, writing the sum of entries in column j′,
+0 = ηj +
+
+(j,k)
+η(j,k)pj · (xk −xj) = ηj +
+
+(j,k)
+η(j,k)>0
+η(j,k)pj · (xk −xj).
+Since ηj ≥0, it follows that there be some index k such that pj ·(xk −xj) ≤0 in
+addition to η(j,k) > 0.
+We therefore see that xi ≻R xj ⪰R xk. In fact, what we proved above is the
+implication
+η(i,j) > 0 ⇒there exists k such that
+
+η(j,k) > 0 and xj ⪰R xk
+;
+(3.3)
+therefore, continuing in this fashion we obtain a cycle
+xi1 ⪰R ··· ⪰R xiL ⪰R xiL+1 = xi1
+as the set {xk}K
+1 is ﬁnite.
+There are two possibilities. Either xia ≻R xia+1 for at least one a, or pia ·
+(xia+1 −xia) = 0 for all a. In the former case ⟨⪰R,≻R⟩is not acyclic, so the data
+violate GARP and we are done.
+In the latter case, we show that we can transform the weights η to
+obtain new weights η′ such that η′
+(ia,ia+1) = 0 for at least one (ia,ia+1) with
+pia · (xia+1 −xia) = 0. Note that, because xi1,xi2,...,xiL,xi1 is a cycle, and
+
+
+--- Page 11 ---
+44
+Rational Demand
+pia · (xia+1 −xia) = 0, we have that
+L
+
+a=1
+
+(1ia −1ia+1) + pia · (xia+1 −xia)1i′a
+
+= 0.
+By construction (3.3) above, η(ia,ia+1) > 0 for each 1 ≤a ≤L, so set
+κ = min
+a=1,...,Lη(ia,ia+1)
+and consider
+η′
+(i,j) =
+
+η(i,j) −κ
+if ∃a : (ia,ia+1) = (i,j)
+η(i,j)
+otherwise,
+and η′
+i = ηi for all i. Then,
+
+(i,j)∈A
+η′
+(i,j)B(i,j) +
+K
+
+i=1
+η′
+iBi =
+
+(i,j)∈A
+η(i,j)B(i,j) +
+K
+
+i=1
+ηiBi
+−κ
+ L
+
+a=1
+(1ia −1ia+1) + pia · (xia+1 −xia)1i′a
+
+= 0.
+Note
+that
+η′
+equals
+zero
+for
+at
+least
+one
+(ia+1,ia)
+such
+that
+pia · (xia+1 −xia) = 0 (the ones with minimum weight in η).
+Therefore, η′ ≥0 is also a vector that satisﬁes Equations (3.1) and (3.2),
+η′ ≤η, and η′ has at least one entry = 0 that η does not have. This is not
+possible, as η was chosen to contain the minimal number of zeros. Thus, it
+must be the case xia ≻R xia+1 for some 1 ≤a ≤L, which proves (II) ⇒(III).
+To prove that (III) implies (IV), deﬁne a utility function u : X →R by
+u(x) = min{Uk + λkpk · (x −xk) : k = 1,...,K}.
+Observe that u is the minimum of continuous, monotone increasing, and con-
+cave (linear) functions, and hence is itself continuous, monotone increasing,
+and concave.
+It is easy to see that u is a weak rationalization. First, u(xk) = Uk for all k,
+as (III) implies that Uk = Uk +λkpk ·(xk −xk) ≤Ul +λlpl ·(xk −xl). Second, ﬁx
+an observation k and let y be such that pk ·xk ≥pk ·y. We have that u(xk) ≥u(y)
+because
+u(xk) = Uk ≥Uk + λkpk · (y −xk) ≥u(y).
+Thus the preference represented by u is a weak rationalization of the data.
+□
+3.1.2
+Constructive proof of Afriat’s Theorem
+The substantive step in the proof of Afriat’s Theorem is the implication (II)
+⇒(III). The proof we have given in 3.1.1 relies on Lemma 1.12, and has
+
+
+--- Page 12 ---
+3.1 Weak rationalization
+45
+the advantage of illustrating a method that we use repeatedly in this book (see
+for instance Chapter 12; or Theorems 3.8 and 3.12 in the present chapter). We
+now turn to a proof that shows how one constructs numbers Uk and λk that
+solve the inequalities in (III). This proof has the advantage of giving a way of
+constructing a rationalizing utility by constructively ﬁnding a solution to the
+Afriat inequalities.3
+Let X0 ⊆X be the set of observed consumption bundles; that is, X0 = {xk :
+k = 1,...,K}. Consider the revealed preference pair ⟨⪰R,≻R⟩restricted to X0.
+By Theorem 1.5, GARP implies that there is a preference relation ⪰on X0
+such that x ⪰y when x ⪰R y and x ≻y when x ≻R y. Partition X0 according to
+the equivalence classes of ⪰. That is, let I1,...,IJ be a partition of X0 such that
+x ∼y for x,y ∈Ij and x ≻y if x ∈Ij, y ∈Ih, and j > h.4
+There are two important aspects of the partition I1,...,IJ. First, if xk,xl ∈Ij
+then pl · (xk −xl) ≥0 and pk · (xl −xk) ≥0; as pk · (xl −xk) < 0, for example,
+would imply that xk ≻R xl and thus xk ≻xl. Second, if xk ∈Ij, xl ∈Ih and h < j,
+then pl · (xk −xl) > 0; as pl · (xk −xl) ≤0 would imply that xl ⪰R xk and thus
+xl ⪰xk.
+We now deﬁne (Uk,λk)K
+k=1 recursively. Set Uk = λk = 1 if xk ∈IJ.
+Suppose that we have deﬁned (Uk,λk) for all xk ∈J
+h=j+1 Ih. We can choose
+Vj such that, for all xl ∈Ij and xk ∈J
+h=j+1 Ih,
+Vj < Uk
+and
+Vj < Uk + λkpk · (xl −xk).
+(3.4)
+Set Ul = Vj for all l with xl ∈Ij.
+Note that the choice of Ul ensures that if xk ∈J
+h=j+1 Ih then Ul < Uk. Since
+pl · (xk −xl) > 0 for each xl ∈Ij, we can choose λl to be
+λl = max
+k
+Uk −Ul
+pl · (xk −xl) ≥0
+(3.5)
+where the max is taken over k such that xk ∈J
+h=j+1 Ih.
+The chosen (Uk,λk)K
+k=1 satisfy the inequalities in (III). Indeed, let k and l be
+such that xk ∈Ij, xl ∈Ih and j > h. Then (3.4) ensures that
+Ul ≤Uk + λkpk · (xl −xk),
+and (3.5) that
+Uk ≤Ul + λlpl · (xk −xl).
+(3.6)
+If k and l are such that xk,xl ∈Ij, then Uk = Ul so (3.6) follows because λk > 0
+and pl · (xk −xl) ≥0.
+3 It should also be mentioned that linear programming methods, applied to the linear system in
+the proof in 3.1.1, can also be used to construct a solution to the Afriat inequalities.
+4 Strictly speaking, the existence of ⪰is not constructive, as Theorem 1.5 relies on Zorn’s
+Lemma. In the present case, however, X0 is ﬁnite and ⪰is easily constructed.
+
+
+--- Page 13 ---
+46
+Rational Demand
+3.1.3
+General budget sets
+We turn to a version of Afriat’s Theorem for general budget sets, budget sets
+that may not be deﬁned by a vector of prices. We can generalize the statement
+pk · (x −xk) ≤0, specifying when x is affordable at prices pk, by introducing a
+monotonic, continuous function gk : X →R for which gk(xk) = 0. We say that
+x is affordable when gk(x) ≤0.
+A dataset is now a collection (xk,Bk),k = 1,...,K; where for each k there is
+a monotonic and continuous function gk : X →R such that Bk = {z ∈X : gk(z) ≤
+0}. We suppose that gk(xk) = 0. Note that our previous notion of a dataset is a
+special case, where for each k, gk(x) = pk · (x −xk).
+Adapting the deﬁnitions of revealed preference, we can deﬁne x ⪰R y when
+there is k such that x = xk and gk(y) ≤0; and x ≻R y when there is k such that
+x = xk and gk(y) < 0. A dataset satisﬁes GARP if ⟨⪰R,≻R⟩is an acyclic order
+pair. A dataset satisﬁes WARP if x ⪰R y implies that y ≻R x does not hold.
+In this more general environment, WARP and GARP are no longer
+equivalent when n = 2. Consider the three points (0,3),(2,2),(3,0). For any
+pair of these, the convex and comprehensive hull of that pair does not include
+the third. We can choose our gk functions so that there are three budget sets,
+the convex and comprehensive hulls of the pairs. It is then easy to construct a
+violation of GARP for which there is no corresponding violation of WARP.
+The following generalization of Afriat’s Theorem is due to Forges and
+Minelli.
+Theorem 3.8
+Let X be convex. The following are equivalent:
+I) The
+data
+{(xk,Bk)}K
+k=1
+have
+a
+locally
+nonsatiated
+weak
+rationalization;
+II) ⟨⪰R,≻R⟩is acyclic;
+III) There are strictly positive real numbers Uk and λk, for each k, such
+that
+Ul ≤Uk + λkgk(xl)
+for each pair of observations k and l.
+IV) The
+data
+{(Bk,xk)}K
+k=1
+have
+a
+monotonic
+and
+continuous
+rationalization;
+Further, in the case when all the functions gk are concave, the statements
+above are equivalent to the existence of a monotonic, continuous, and concave
+rationalization.
+Proof. First, that (IV) ⇒(I) ⇒(II) is immediate. The substance of the
+proof is (II) ⇒(III), just as in the proof of Afriat’s Theorem. The proof
+follows along the same lines as our proof of Afriat’s Theorem.
+To prove that (II) ⇒(III), construct a matrix B as follows. Let A be the
+set of pairs (k,l) with k ̸= l. For the ﬁrst |A| rows, in the row corresponding to
+(k,l), we put 1k −1l + gk(xl)1k′. For the last K rows, in the row corresponding
+
+
+--- Page 14 ---
+3.2 Strong rationalization
+47
+to k, we put the vector 1k′. A vector
+(U,λ) = (U1,...,UK,λ1,...,λK)
+satisﬁes the system of inequalities in (III) iff B(k,l) ·(U,λ) ≥0, for all (k,l) ∈A,
+and Bk · (U,λ) > 0 for all k.
+Suppose that there is no solution to the system in (III). By Lemma 1.12 there
+is η ≥0 such that
+
+(k,l)∈A
+η(k,l)B(k,l) +
+
+k
+ηkBk = 0,
+and ηk > 0 for at least one k. Choose η to have the least number of zero entries.
+Reasoning just as in the proof of Afriat’s Theorem, we know that there is l
+for which η(k,l) > 0 and gk(xl) < 0. The negative entry in the column for l in
+row (k,l) must cancel out with some row (w,l) with strictly positive weight in
+η; in fact w can be chosen such that gl(xw) ≤0. Thus xk ≻R xl ⪰R xw. The rest
+of the proof is analogous to the proof of Afriat’s Theorem: we obtain a cycle
+of ⟨⪰R,≻R⟩.
+To prove that (III) ⇒(IV) we use a similar construction to the one in
+Afriat’s Theorem; we let
+u(x) = min{Uk + λkgk(x) : k = 1,...,K}.
+Note that u is monotone increasing and continuous. In addition, if gk(y) ≤0
+then u(y) ≤Uk = u(xk); so it is a weak rationalization.
+Finally, the construction above is concave when each gk is concave.
+3.2
+STRONG RATIONALIZATION
+A preference relation ⪰strongly rationalizes a consumption dataset D if, for
+all k and y ∈X,
+(pk · y ≤pk · xk and y ̸= xk) ⇒xk ≻y
+Say that D is strongly rationalizable if there is a preference relation that
+strongly rationalizes D. Note that this deﬁnition implies choice must be
+single-valued, which is not the case for the notion of strong rationalization
+presented in 2.1. Otherwise, the deﬁnition of strong rationalization here is
+consistent with that in 2.1 under the assumption of single-valued choice.
+Recall that one can understand weak rationalization as the extension of
+the observed demand behavior to a demand correspondence, namely the
+demand correspondence generated by the rationalizing preference. In contrast,
+strong rationalization is about extending the observed demand behavior to a
+(single-valued) demand function. In particular, the dataset {(x1,p1),(x2,p2)},
+with p1 = p2, x1 ̸= x2, and p1 · x1 = p2 · x2, is weakly rationalizable by
+a preference that is indifferent among x1 and x2, but it is not strongly
+rationalizable as it is incompatible with a single-valued demand function.
+
+
+--- Page 15 ---
+48
+Rational Demand
+Given a consumption dataset D, we can deﬁne an order pair ⟨⪰S,≻S⟩by
+x ⪰S y iff there is k such that x = xk and pk ·xk ≥pk ·y; and x ≻S y iff x ⪰S y and
+x ̸= y. The pair ⟨⪰S,≻S⟩is D’s strong revealed preference pair.
+A dataset satisﬁes the strong axiom of revealed preference (SARP) if its
+strong revealed preference pair is acyclic.
+Theorem 3.9
+A dataset is strongly rationalizable iff it satisﬁes SARP.
+Remark 3.10
+The rationalization can, in fact, be assumed to be strictly
+monotonic, as in Theorem 3.1. Since we are considering strong rationalization,
+there is no need to impose monotonicity or local nonsatiation to rule out a
+trivial rationalization.
+Proof. Let D be a dataset that satisﬁes SARP. We can deﬁne ⟨RM,PM⟩from
+⟨⪰S,≻S⟩as RM= ⪰S ∪≥and PM= ≻S ∪>. Then the proof of the following
+lemma is similar to the proof of Theorem 2.19, and therefore omitted.
+Lemma 3.11
+If ⟨⪰S,≻S⟩satisﬁes SARP then ⟨RM,PM⟩is acyclic.
+Now the proof follows from Theorem 1.5.
+The next result is in the spirit of Afriat’s Theorem. It shows that if we insist on
+a strong rationalization, then strict concavity is observationally equivalent to
+local nonsatiation. Note that strict concavity is trivially testable in the context
+of weak rationalization, as strict concavity (indeed strict quasiconcavity) of
+the utility function implies that demand is single valued. It turns out that
+strict concavity adds no additional empirical content to the hypothesis of
+single-valued demand.
+Theorem 3.12
+Let X be a convex consumption space, and D = (xk,pk)K
+k=1 be
+a consumption dataset. Then the following are equivalent:
+I) D has a locally nonsatiated strong rationalization.
+II) D satisﬁes SARP.
+III) There are strictly positive real numbers Uk and λk, for each k, such
+that for all k and l,
+Uk ≤Ul + λlpl · (xk −xl);
+and further, if xk ̸= xl,
+Uk < Ul + λlpl · (xk −xl).
+IV) D has a continuous, strictly concave, and strictly monotonic strong
+rationalization u : X →R.
+Proof. The proof that (II) ⇒(III) goes along familiar lines. Construct the
+matrix B as in Afriat’s Theorem, but only include in A the pairs (i,j) with
+pi · (xj −xi) ≤0 (as we remarked above, this can also be done in the proof
+of Afriat’s Theorem). Now, partition the set A into A1 containing the pairs
+
+
+--- Page 16 ---
+3.2 Strong rationalization
+49
+(k,l) with xk = xl, and A2 containing the pairs (k,l) with xk ̸= xl. Now, a
+vector (U,λ) = (U1,...,UK,λ1,...,λK) satisﬁes the inequalities in (III) iff
+B(i,j) · (U,λ) ≥0, for all (i,j) ∈A1, B(i,j) · (U,λ) > 0, for all (i,j) ∈A2, and
+Bi · (U,λ) > 0 for all i.
+The nonexistence of a solution to this system of inequalities implies the
+existence of a vector of weights η such that
+
+(i,j)∈A1
+η(i,j)B(i,j) +
+
+(i,j)∈A2
+η(i,j)B(i,j) +
+K
+
+i=1
+ηiBi = 0
+with strictly positive weights ηi > 0 for some i, or ηi,j > 0 for some (i,j) ∈A2.
+If ηi > 0 then there is j such that pi · (xj −xi) < 0, and the proof proceeds to
+establish a cycle exactly as in the proof of Afriat’s Theorem. If, instead, ηi,j > 0
+for some (i,j) ∈A2 then pi · (xj −xi) ≤0 and xi ̸= xj implies that xi ≻R xj by
+deﬁnition of ⟨⪰S,≻S⟩. Thus we start a cycle with a strict revealed preference
+comparison, just as in the case when ηi > 0.
+The proof of (III) ⇒(IV) requires more work than in the corresponding
+step of the proof of Afriat’s Theorem. Let us ﬁx a solution (U,λ) of the
+system (III).
+Let h : Rn →R be a strictly convex and differentiable function such that
+h(x) = 0 only at 0, and is otherwise positive with globally bounded derivative
+(above and below) in all directions.5 Let ε > 0 be small enough such that two
+criteria are satisﬁed: in the ﬁrst place, such that
+Uj < Ui + λipi · (xj −xi) −εh(xj −xi)
+for all xi ̸= xj; and in the second place, such that for all x and commodities i,
+ε∇h(x) < λipi,
+where ≤is vector inequality and ∇refers to the gradient (this is possible as h
+has bounded derivative in each direction and λipi ∈Rn
+++).
+We now deﬁne, for each i, ϕi : X →R by
+ϕi(x) = Ui + λipi · (x −xi) −εh(x −xi).
+Finally, we deﬁne u : X →R by
+u(x) = min
+i ϕi(x).
+It is obvious that u is strictly concave. We claim that it also rationalizes the
+data.
+As a ﬁrst step, we need to ensure that it is monotonic. This follows from the
+second property of ε above, which ensures that ∇ϕi ≫0.
+Now, we must show that u rationalizes the data. First, note that u(xi) =
+ϕi(xi) = Ui (this follows by the generalized Afriat inequalities in (III) and by
+5 For example, h(x) = n
+i=1 (|xi| −ln(|xi| + 1)).
+
+
+--- Page 17 ---
+50
+Rational Demand
+No smooth rationalization.
+Non-linear prices: a bulk discount.
+p2
+p1
+x1
+x1 = x2
+(a)
+(b)
+Fig. 3.4 Smooth utility and general budget sets.
+the choice of ε). Now, suppose that pi · (x −xi) ≤0 and x ̸= xi. Then
+u(x) ≤ϕi(x) = Ui + λipi · (x −xi) −εh(x −xi) < Ui = u(xi).
+So u strongly rationalizes the data.
+3.2.1
+Smooth utility
+Many economic models endow consumers with a differentiable utility, and it
+is natural to use consumption data to test for differentiability. Consider data
+(x1,p1),(x2,p2) as in Figure 3.4(a); it is clear that a rationalizing utility would
+need to have a “kink” at x1. The data in Figure 3.4(a) suggest a necessary
+condition for rationalization by a smooth function: that xk ̸= xl when pk ̸= pl.
+This condition turns out to be the only added empirical content of smoothness,
+as formalized by the following result due to Chiappori and Rochet.
+Theorem 3.13
+A dataset D = (xk,pk)K
+k=1 is strongly rationalizable by a
+smooth, strictly monotonic, and strictly concave utility u : X →R iff D satisﬁes
+(1) SARP and (2) xk = xl iff pk = pl.
+3.2.2
+General budget sets
+Finally, we discuss data with general budget sets. Let X be a convex set. A
+dataset is now a collection (xk,Bk),k = 1,...,K, where Bk is a closed set such
+that
+I) the complement of Bk in X is a convex set;
+II) if z /∈Bk and y > z, then y /∈z;
+III) if y > xk, then y /∈Bk.
+A consumer facing nonlinear prices is a classical example of how such data
+could be generated. For example, in the budget in Figure 3.4(b) there is a
+
+
+--- Page 18 ---
+3.2 Strong rationalization
+51
+quantity discount: good 1 costs p1 for quantities below x1 and p′
+1 < p1 for
+quantities above.
+Here (I) captures precisely the “quantity discount” idea, while (II) is a
+generalization of the monotonicity in standard budgets with linear prices.
+Requirement (III) corresponds to the standard assumption that choices exhaust
+all the consumer’s income. A special case of this model is obtained when
+there are continuous, monotone increasing, and convex functions gk such that
+gk(xk) = 0 and Bk = {y ∈X : gk(y) ≤0}. It is interesting to contrast the model
+with the one in Section 3.1.3.
+Adapting the deﬁnitions of revealed preference, we can deﬁne x ⪰S y when
+there is k such that x = xk and y ∈Bk; and x ≻S y when x ⪰S y and x ̸= y. By
+analogy with our previous theory, we say that the data satisfy SARP if ⟨⪰S,≻S⟩
+is acyclic.
+The following result is due to Rosa Matzkin.
+Theorem 3.14
+Let X be convex and bounded. A dataset is strongly
+rationalizable by a strictly monotonic, and strictly concave utility iff it satisﬁes
+SARP.
+3.2.3
+Partially observed prices and consumption
+The analysis until now has assumed data on all relevant prices and con-
+sumptions. This assumption may not always be reasonable. For example the
+return on household labor, which can be seen as the price of leisure, may not
+be observable. Similarly, consumption surveys normally ask for information
+on consumption deﬁned narrowly: supermarket purchases, purchases of
+non-durables, etc. The demand for all commodities may not be observable.
+We show in this section that such lack of observability leads to a serious lack
+of predictive power.
+Let us begin with the case of partially observed prices. Say that we have
+n + m commodities. We observe the consumption of all n + m commodities,
+with K data points. However, we only observe the prices corresponding to the
+ﬁrst n commodities.
+Formally, we say that a consumption dataset with partially observed prices
+D is a collection (xk,pk), k = 1,...K, with xk ∈Rn+m
++
+and pk ∈Rn
+++. We
+say that D, a consumption dataset with partially observed prices, is weakly
+rationalizable if for each k = 1,...,K, there exists qk ∈Rm
+++ such that
+(xk,(pk,qk)) is a consumption dataset which is weakly rationalizable.
+Let xn denote the projection of x ∈Rn+m
++
+onto its ﬁrst n coordinates;
+similarly deﬁne xm to be the projection on the last m coordinates. Further,
+for a consumption dataset with partially observed prices, and x ∈Rm
+++, we
+let Kx = {k ∈{1,...,K} : xk
+m = x}.
+Theorem 3.15
+A consumption dataset with partially observed prices is
+weakly rationalizable by a locally nonsatiated preference iff for all x ∈Rm
+++,
+the set (xk
+n,pk)k∈Kx is weakly rationalizable by a locally nonsatiated preference.
+
+
+--- Page 19 ---
+52
+Rational Demand
+Proof. If the consumption dataset with partially observed prices is weakly
+rationalizable by a locally nonsatiated preference, there exist Uk, λk, and qk
+such that for all k,l ∈Kx, Uk ≤Ul + λl(pl,ql) · (xk −xl). But since xk
+m = x =
+xl
+m, these inequalities become Uk ≤Ul + λlpl · (xk
+n −xl
+n), so that the Afriat
+inequalities are satisﬁed for (xk
+n,pk)k∈Kx.
+Conversely, suppose that each (xk
+n,pk)k∈Kx is weakly rationalizable by a
+locally nonsatiated preference. Let q ∈Rm
+++ be such that xk
+m ̸= xl
+m implies
+q · xk
+m ̸= q · xl
+m; simply choose q to be not perpendicular to any of the vectors
+{xk
+m −xl
+m}k̸=l.
+Now, for each k, let μk > 0 be large enough so that
+μk >
+max
+{l:xlm̸=xkm}
+
+pk · (xl
+n −xk
+n)
+q · (xkm −xlm) ,1
+
+.
+Let qk = μkq. Let us deﬁne our pair ⟨⪰R,≻R⟩as usual, for the consumption
+dataset (xk,(pk,qk)). There can be no cycles within Kx for any x, by hypothesis.
+We now claim that for k,l for which xk
+m ̸= xl
+m, q·xk
+m > q·xl
+m implies that xl ⪰R xk
+is false. To see this, ql ·(xl
+m −xk
+m) < pl ·(xk
+n −xl
+n), so that (pl,ql)·xl < (pl,ql)·xk.
+Now, we claim that there are no ⟨⪰R,≻R⟩cycles. Suppose for a contradiction
+that there is a cycle, x1 ⪰R x2 ⪰R ... ⪰R xK ≻R x1. Then we claim that for all
+k, q · xk
+m ≥q · xk+1
+m , where addition is modulo K as usual. If not then there is
+a k for which the inequality is reversed. In this case, we must have xk
+m ̸= xk+1
+m
+and q · xk+1
+m
+> q · xk
+m, from which we obtain from the previous paragraph that
+xk ⪰R xk+1 is false, which is a contradiction. Consequently, we have that for all
+k, q·xk
+m = q·xk+1
+m , from which we obtain by the assumption on q that xk
+m = xk+1
+m .
+This implies that all elements of the cycle must lie in a single Kx, which was
+assumed false. Hence there is no ⟨⪰R,≻R⟩cycle.
+Importantly, Theorem 3.15 demonstrates that if demand for commodities
+whose prices are unobserved is always distinct across observations, preference
+maximization implies no additional conditions.
+We can also ask what happens when there is unobserved consumption. It
+turns out that as soon as there is some commodity whose consumption we
+cannot observe, there is no empirical content to preference maximization. A
+consumption dataset with partially observed consumption D is a collection
+(xk,pk) for k = 1,...,K, where each xk ∈Rn
++, and each pk ∈Rn+m
+++ .
+Theorem 3.16
+Suppose that m ≥1. Then for any consumption dataset with
+partially observed consumption, there exists yk ∈Rm
++ for which ((xk,yk),pk),
+k = 1,...,K, is a consumption dataset which is weakly rationalizable by a
+locally nonsatiated preference.
+Proof. The indices naturally order observations. We assume zero consumption
+for all commodities with index at least as high as n + 2. Consumption of
+commodity n + 1 is deﬁned ﬁrst for k = 1 as 0. Inductively it is deﬁned to
+be large enough so that {x : pk · x ≤pk · (xk
+n,xk
+n+1,0,...,0)} is nested in the
+
+
+--- Page 20 ---
+3.3 Revealed preference graphs
+53
+relative interior of {x : pk+1 · x ≤pk+1 · (xk+1
+n
+,xk+1
+n+1,0,...,0)}. To do so, note
+that the set {x : pk · x ≤pk · (xk
+n,xk
+n+1,0,...,0)} is compact, so we can maximize
+pk+1 · x on it, and let the maximum value of this be w. Choose xk+1
+n+1 so that
+pk+1 · (xk+1
+n
+,xk+1
+n+1,0,...,0) is greater than w, and set yk = (xk+1
+n+1,0,...,0). By
+this construction, we have that for k > l, pk · (xk,yk) > pk · (xl,yl). Conversely,
+suppose that pk · (xk,yk) > pk · (xl,yl). Clearly l ̸= k. If l > k, then by
+construction, pk · (xl,yl) > pk · (xk,yk); since yl was chosen so that (xl,yl) is
+not in the set {x : pk · x ≤pk · (xk,yk)}. So k > l iff pk · (xk,yk) > pk · (xl,yl).
+Consequently, the data ((xk,yk),pk) can be rationalized by a locally nonsatiated
+preference.
+Theorems 3.15 and 3.16 allow ﬂexibility in choosing the observed wealth,
+which is something which, in the setup of this chapter, has been taken to be
+equal to expenditure (hence determined, or observed). If wealth is observable,
+these results break down. It remains an open question to characterize the
+empirical content of preference maximization with only partially observed
+prices and/or consumption, especially when wealth can be observed. Results
+exist for the one-dimensional case where bounds are put on consumption in
+Theorem 3.16.
+Finally, we note that empirical studies of consumption avoid the conclusion
+of Theorem 3.16 by assuming that preferences are separable. If one studies,
+for example, supermarket purchases, then one assumes that goods which are
+not purchased in a supermarket are separable from the ones that are. This
+means that if an agent conforms to the theory, she will have a budget for the
+supermarket. One can then treat the problem of choosing optimal consumption
+in the supermarket separately from the rest of the agent’s consumption
+decisions. Separability is treated in 4.2.2.
+3.3
+REVEALED PREFERENCE GRAPHS
+Finally, we investigate here a question which is related speciﬁcally to the
+structure of linear budget sets. Return to the notion of data introduced in 3.1:
+a collection (xk,pk), k = 1,...K, with K ≥1 an integer, xk ∈X and pk ∈Rn
+++.
+The integer K is the cardinality of the dataset.
+For a consumption dataset D of cardinality K, we can deﬁne the revealed
+preference graph ⟨⊵,▷⟩on {1,...,K} by i ⊵j if pi · xi ≥pi · xj and i ▷j if
+pi · xi > pi · xj. We say that ⟨⊵,▷⟩is the revealed preference graph deﬁned
+by D.
+The following simple result states that there are no a priori restrictions on
+which order pairs can be revealed preference graphs.
+Theorem 3.17
+Let ⟨⊵,▷⟩be an order pair in which ⊵is a reﬂexive binary
+relation and ▷is an irreﬂexive binary relation on {1,...,K}. Then there exists
+X and a consumption dataset D on X of cardinality K for which ⟨⊵,▷⟩is the
+corresponding revealed preference graph.
+
+
+--- Page 21 ---
+54
+Rational Demand
+Proof. Suppose ⊵is reﬂexive. Let X = RK
++ and let xi = 1i; the unit vector in
+dimension i. For each i and j, set
+pi
+j =
+⎧
+⎪⎨
+⎪⎩
+1/2
+if i ▷j
+1
+if i ⊵j and not i ▷j
+2
+if not i ⊵j
+It is easy to verify that D so deﬁned has ⟨⊵,▷⟩as its revealed preference order
+pair.
+Theorem 3.17 allows ﬂexibility in choosing consumption space. If consump-
+tion space is ﬁxed, then the question of which order pairs can be revealed
+preference graphs remains open. We will encounter phenomena of this type
+several times; see for example Theorem 9.1 and Theorem 11.2.
+Theorem 3.18
+For any X ⊆Rn
++ in which n ≥2, for any K ≥1, the following
+order pairs are revealed preference graphs on {1,...,K}:
+I) ⟨= ∪̸=,̸=⟩
+II) ⟨=,∅⟩
+In the ﬁrst graph of Theorem 3.18, every observation is strictly revealed
+preferred to every other observation.
+Proof. To see that the ﬁrst is a revealed preference graph, let S be the unit
+sphere in Rn. Fix arbitrary p1, . . . , pK ∈Rn
+++ such that pi and pj are not collinear
+whenever i ̸= j, deﬁne xi = argmaxS pi · x. It is easy to verify that this data has
+⟨= ∪̸=,̸=⟩as its revealed preference graph. (Note that any smooth convex
+set with nonempty interior intersecting the strictly positive orthant will work
+in place of S, so long as we can choose pi so to have unique and distinct
+maximizers in the positive orthant.)
+Showing that ⟨=,∅⟩is a revealed preference graph follows a similar
+construction, instead letting P = {x ∈Rn
++ : xi ≥1}. Choose arbitrary pi (as
+long as pi and pj are not collinear when i ̸= j) and let xi = argminP pi · x.
+Similarly, there is nothing particularly special about the set P.
+3.4
+CHAPTER REFERENCES
+Samuelson (1938) introduced the idea of revealed preferences, and formulated
+the weak axiom of revealed preference. Little (1949) and Samuelson (1948)
+showed how to construct indifference curves from revealed preference in the
+two-commodity case. Houthakker (1950) proved a version of Theorem 3.1,
+the ﬁrst characterization of the empirical content of rational consumption.
+Houthakker’s condition was stated for single-valued demand, and was
+equivalent to the condition we here call SARP. Related are the papers by
+
+
+--- Page 22 ---
+3.4 Chapter references
+55
+Newman (1960) and Stigum (1973).6 Samuelson (1950) coined the phrase
+“strong axiom of revealed preference;” however, the concept he attributes
+to Houthakker is slightly different from Houthakker’s actual contribution.
+Speciﬁcally, Samuelson required that the strong revealed preference pair be
+quasi-acyclic. There seems to be no general consensus on the meaning of
+SARP in the literature; for more on this, see Suzumura (1977). We should
+also mention the contribution of Mas-Colell (1978), which can be viewed
+as an identiﬁcation result for demand functions satisfying certain revealed
+preference axioms.
+Marcel Richter, in two important survey articles (Richter, 1971 and
+Richter, 1979) presents a uniﬁed view of revealed preference, discussing the
+commonalities and differences between the material in Chapters 2 and 3. In
+particular, Richter (1979) accounts for how the duality between choices and
+budgets translates into revealed preference theory. Richter also covers the
+relation to the question of integrability of demand, which is out of the scope of
+our book.
+The observation in Remark 3.3 is due to Polisson and Quah (2013).
+Theorem 3.4 is due to Rose (1958), though the result was conjectured earlier
+by Hicks (1956, pp. 52–54).7 An example of a well-deﬁned, continuous, almost
+everywhere differentiable demand function satisfying WARP and not GARP
+is given in Gale (1960a) (see also Hicks, 1956, pp. 110–111). Kihlstrom,
+Mas-Colell, and Sonnenschein (1976) provide a theory of such demand
+functions. WARP is the absence of cycles of length two: a natural conjecture
+is that absence of cycles of length n would sufﬁce for rationalizability in
+n-dimensional space. Kamiya (1963) gives an example of ﬁnite data for three
+consumption goods which exhibits no cycles of length two or three, but which
+is not rationalizable. Shafer (1977) establishes that this non-equivalence is
+robust. Shafer works with demand functions (not ﬁnite data) and shows that for
+three commodities, one must require absence of cycles of all possible lengths,
+by exhibiting, for any n, single-valued demand functions which exhibit no
+cycles of length n, but which are not rationalizable. Peters and Wakker (1994,
+1996) discuss this result for environments with more than three commodities;
+see also John (1997). Finally, a recent investigation into these ideas is Heufer
+(2007).
+Afriat’s Theorem appeared ﬁrst in Afriat (1967), but was popularized by
+Hal Varian in a collection of papers ((1982; 1983a; 1985)). Recently, Fostel,
+Scarf, and Todd (2004) and Chung-Piaw and Vohra (2003) provided new
+proofs of Afriat’s Theorem. Our proof in 3.1.1 is different from these, and
+follows basically the argument by Matzkin and Richter (1991). The ﬁrst
+6 Uzawa (1960a, 1971) investigates demand functions satisfying WARP and a regularity
+condition. See also Bossert (1993). A series of papers investigates a related “continuous”
+version of an acyclicity condition; see Ville (1946); Ville and Newman (1951–1952); Hurwicz
+and Richter (1979).
+7 See also Newman (1955); Houthakker (1957); Newman (1960), Blackorby, Bossert, and
+Donaldson (1995), and Banerjee and Murphy (2006).
+
+
+--- Page 23 ---
+56
+Rational Demand
+linear-programming-style proofs of Afriat’s Theorem are due to Diewert
+(1973). The argument using linear combinations of rows in the proof is a form
+of the Poincar´e–Veblen–Alexander Theorem (see Berge, 2001; the theorem is
+attributed to early contributors to the mathematical discipline of topology, i.e.
+Poincar´e, 1895; Veblen and Alexander, 1912–1913). The constructive proof of
+Afriat’s Theorem in 3.1.2 is taken from Varian (1982).
+The recent paper by Reny (2014) considers inﬁnite datasets, and shows
+that GARP is necessary and sufﬁcient for the existence of a quasiconcave
+rationalization. Reny’s result uniﬁes the approaches based on ﬁnite datasets
+and demand functions. It is noteworthy that an inﬁnite dataset satisfying GARP
+may not be rationalizable by a concave utility, only a quasiconcave one. The
+theorem of Reny also gives a particularly simple proof of a weak version of
+Afriat’s Theorem (one ensuring a quasiconcave rationalization) for ﬁnite data.
+Sondermann (1982) provides a sufﬁcient condition ensuring representation by
+an upper semicontinuous (closed upper contour sets) utility.
+Necessary and sufﬁcient conditions for the existence of λk such that xk →
+λkpk is monotone are presented in John (2001), where it is also shown that
+the model is equivalent to rationalization by a nontransitive preference with a
+certain type of “utility” rationalization which has a certain convexity property.
+Probably the ﬁrst paper to study a version of Afriat’s Theorem for nonlinear
+budget sets is Yatchew (1985), who investigates necessary and sufﬁcient
+conditions for convex utility maximization on ﬁnite unions of polyhedra in
+the form of inequalities. Theorem 3.8 is from Forges and Minelli (2009).
+Forges and Minelli also present a stronger result, where if the functions gk
+are quasiconvex and differentiable then there is a concave rationalization,
+if there is a rationalization. Cherchye, Demuynck, and De Rock (2014)
+build on this result, establishing a characterization of datasets which are
+weakly rationalizable by quasiconcave, locally nonsatiated, and continuous
+preferences on arbitrary budget sets which are closed and satisfy free
+disposability.
+Theorem 3.12 is due to Matzkin and Richter (1991). Matzkin and Richter
+clarify the notions of weak and strong rationalizability, and put the previous
+work on revealed preference in this context. Theorem 3.13 is due to Chiappori
+and Rochet (1987). Matzkin and Richter (1991) also present a result on smooth
+rationalization, in the spirit of Theorem 3.13. The result on general budget sets
+in Theorem 3.14 is due to Matzkin (1991).
+Theorems 3.15 and 3.16 are due to Varian (1988a); the case of m = 1 is
+established there.
+Theorem 3.17 can be found in Deb and Pai (2014), as well as the ﬁrst part
+of Theorem 3.18, though these results are implicit in other works.
+Finally, we have not discussed stochastic choice in demand theory:
+See the papers by Bandyopadhyay, Dasgupta, and Pattanaik (1999) and
+Bandyopadhyay, Dasgupta, and Pattanaik (2004).

@@ -1,0 +1,1042 @@
+--- Page 1 ---
+CHAPTER 8
+Choice Under Uncertainty
+In this chapter we turn to models of choice under uncertainty. We consider an
+agent who makes choices without fully knowing the consequences of those
+choices, and focus on models in which uncertainty can be quantiﬁed and
+formulated probabilistically. The most important such model is, of course,
+expected utility.
+8.1
+OBJECTIVE PROBABILITY
+There are times when probabilities can be thought to be objective and known,
+or observable. This is the case, for example, when outcomes are randomized
+according to some known physical device—such as a game in a casino, or a
+randomization device used by an experimenter in the laboratory.
+We consider two basic environments. In one the primitive objects of
+choice are lotteries. In the other, the objects of choice are state-contingent
+consumption.
+8.1.1
+Notation
+Let X be a ﬁnite set. We denote by (X) = {p ∈RX : p ≥0;
+x∈X p(x) = 1} the
+set of all probability distributions over X.
+8.1.2
+Choice over lotteries
+Given is a ﬁnite set X of possible prizes. (X) is the set of all lotteries over X.
+We imagine an agent who chooses a lottery. The agent understands that there
+is uncertainty over the realization of the lottery: over which prize the lottery
+will result in. But the probabilities speciﬁed in the lottery are accurate (or at
+least useful) representations of that uncertainty.
+We investigate a very basic result on revealed preference in this
+environment.
+
+
+--- Page 2 ---
+8.1 Objective probability
+115
+An expected utility preference ⪰is a binary relation for which there exists
+u : X →R such that for all p,q ∈(X),
+p ⪰q iff
+
+x∈X
+p(x)u(x) ≥
+
+x∈X
+q(x)u(x).
+The classical axiomatization of expected utility preferences relies on the
+independence axiom of decision theory; namely, that for all p,q,r ∈(X) and
+all α ∈(0,1], p ⪰q iff αp + (1 −α)r ⪰αq + (1 −α)r.
+Most experimental studies refuting the expected utility model are direct
+refutations of the independence axiom. The best-known such refutation is
+through a thought experiment, known as the Allais paradox. Instead of setting
+up a thought experiment, we are going to assume that we are given data on
+choices among pairs of lotteries.
+The data can be organized into a revealed preference pair ⟨⪰R,≻R⟩, where
+each of ⪰R and ≻R are ﬁnite sets. The idea is that an agent makes “binary
+choices:” choices from budgets with two alternatives, and these choices deﬁne
+⟨⪰R,≻R⟩. We ask when there exists an expected utility preference ⪰such that
+for all p,q ∈(X), p ⪰R q implies p ⪰q and p ≻R q implies p ≻q.
+The following example demonstrates that observed data can be incompatible
+with the expected utility model without directly violating the independence
+axiom.
+Example 8.1
+Let X = {x,y,z}, and consider the rankings: (1,0,0) ≻R
+(1/3,1/3,1/3), (0,1,0) ≻R (1/3,1/3,1/3), (0,0,1) ≻R (1/3,1/3,1/3). This
+is clearly incompatible with the expected utility model: namely, the rankings
+would imply that u(x),u(y),u(z) > u(x)+u(y)+u(z)
+3
+, which is impossible. However,
+there is no direct refutation of the independence axiom. There is, instead, a
+refutation of the joint hypotheses of the independence axiom and transitivity.
+(Note, incidentally, that the example is not a direct refutation of transitivity
+either.) Our aim is to uncover all implications of the joint hypotheses of
+independence and transitivity for ﬁnite datasets.
+Theorem 8.2
+Suppose that each of ⪰R and ≻R are ﬁnite, and without loss of
+generality let ⪰R= {(pi,qi)}K
+i=1 and ≻R= {(pi,qi)}L
+i=K+1. There is an expected
+utility preference ⪰such that for all p,q ∈(X), p ⪰R q implies p ⪰q and
+p ≻R q implies p ≻q iff there is no λ ∈(L) for which λ({K + 1,...,L}) > 0
+and L
+i=1 λipi = L
+i=1 λiqi.
+It is worth remarking on what Theorem 8.2 says. The λ ∈(L) can
+be understood as a lottery over lotteries (a “ﬁrst stage” lottery), which is
+compounded either with the lotteries {pi}L
+i=1 or the lotteries {qi}L
+i=1. When λ
+is compounded with the lotteries {pi}L
+i=1, the reduced lottery is L
+i=1 λipi, and
+when compounded with {qi}L
+i=1, it is L
+i=1 λiqi. The condition in Theorem 8.2
+requires that, for weights λ, it is impossible that the corresponding p lotteries
+are preferred ex-post, yet ex-ante the two compound lotteries are identical.
+Figure 8.1 illustrates the condition in Theorem 8.2.
+
+
+--- Page 3 ---
+116
+Choice Under Uncertainty
+p1
+1 – λ
+1 – λ
+p1  ≥R  q1
+p2  >R  q2
+p2
+q1
+q2
+=
+λ
+λ
+Fig. 8.1 An illustration of Theorem 8.2.
+Proof. The proof is almost a direct translation of Lemma 1.12 to this
+environment. Namely, we seek the existence of u ∈RX such that for all
+i = 1,...,K, (pi −qi) · u ≥0, and for all i = K + 1,...,L, (pi −qi) · u > 0.
+Non-existence of u is therefore equivalent to existence of λ ∈RL
++ such that for
+some i ∈{K + 1,...,L}, λi > 0 and L
+i=1(pi −qi) = 0. Since L
+i=1 λi > 0, we
+can normalize λ so that L
+i=1 λi = 1.
+8.1.3
+State-contingent consumption
+Many applications of choice under uncertainty in economic models involve
+a state-contingent environment. Suppose that there is a ﬁnite set  of states
+of the world. A state-contingent consumption bundle is modeled as a vector
+in R
++. An agent chooses x ∈R
++: If the state of the world is ω ∈ then the
+agent obtains a monetary payment of xω. The vectors x ∈R
++ are referred to as
+monetary acts in decision theory.
+The focus of our discussion will be expected utility theory with risk
+aversion. Consider an agent with a known prior probability measure π ∈()
+describing her beliefs over the possible states of the world. We suppose that for
+all ω ∈, πω > 0. The prior is known. This means that it is observable; possibly
+it has been induced by some experimental design (for example, experiments in
+economics often use a randomization device).
+Expected utility theory says that the choice of x ∈R
++ is determined by
+maximizing a utility function of the form
+U(x) =
+
+ω∈
+πωu(xω),
+where u : R+ →R is a strictly monotonically increasing and concave function.
+The function u is a utility function over money, and the concavity of u means
+that the agent in question is risk averse.
+Suppose we are given data on the behavior of our agent in the market. When
+faced with prices p = (pω)ω∈ ∈R
+++ and an income I > 0, the agent chooses
+x to maximize U(x) over the x that she can afford. It is important to emphasize
+what the meaning of prices are here. In the development of the theory, we take
+
+
+--- Page 4 ---
+8.1 Objective probability
+117
+prices for state-contingent consumption as given, but to have access to such
+prices in real data requires the relevant ﬁnancial markets to be complete.1
+A dataset is a collection (xk,pk)k∈K of pairs of a consumption xk ∈R
++ chosen
+at prices pk ∈R
+++ and budget pk · xk. Here K denotes the set {1,...,K}, an
+instance of inconsequential notational abuse.
+We are given a probability distribution π ∈(). A function u : R+ →R
+weakly expected-utility rationalizes a dataset (xk,pk)k∈K if u is strictly
+increasing and concave, and if pk · y ≤pk · xk implies that
+
+ω∈
+πωu(yω) ≤
+
+ω∈
+πωu(xk
+ω)
+for all k ∈K. We should emphasize that:
+I) The prior π is given and known. We are interested in testing whether
+the agent behaves according to expected utility with respect to prior
+π, rather than any other (possibly subjective) prior.
+II) The exercise is restricted to concave utility functions. Concavity
+means that the agent is risk averse.
+The existence of a known prior π allows us to compute risk-neutral prices,
+deﬁned as follows: for k ∈K and ω ∈, let
+ρk
+ω = pk
+ω
+πω
+.
+Risk-neutral prices turn out to be the relevant prices one needs to use to test
+for expected utility theory.
+We can gain some intuition for how the problem can be solved by
+considering the case when u : R+ →R is differentiable. The ﬁrst-order
+condition for utility maximization demands that, for any k and ω, we have
+πωu′(xk
+ω) = λkpk
+ω, where λk is the Lagrange multiplier for the maximization
+problem in which xk is chosen, and we have assumed an interior optimum.
+Using the deﬁnition of risk-neutral prices, we obtain that u′(xk
+ω) = λkρk
+ω. It
+follows from concavity of u, then, that xk
+ω > xk
+ω′ implies ρk
+ω/ρk
+ω′ ≤1. This
+property can be thought of as downward-sloping demand.
+More generally, if we have xk
+ω > xk′
+ω′ and xk′
+ω′′ > xk
+ω′′′ then we obtain that
+1 ≥u′(xk
+ω)
+u′(xk′
+ω′)
+· u′(xk′
+ω′′)
+u′(xk
+ω′′′) = ρk
+ω
+ρk′
+ω′
+· ρk′
+ω′′
+ρk
+ω′′′
+,
+as u is concave, and Lagrange multipliers cancel out. The implication is not
+that two pairs of quantities and prices are inversely related, but in some sense
+that (xk
+ω,xk′
+ω′) and (xk′
+ω′′,xk
+ω′′′) are “inversely related” to (ρk
+ω,ρk′
+ω′) and (ρk′
+ω′′,ρk
+ω′′′).
+The preceding calculation suggests that one should consider sequences of
+pairs (xkiωi,x
+k′
+i
+ω′
+i)n
+i=1 for which each k appears in ki (on the left of the pair) the
+1 Prices p can be calculated (uniquely) from an array of asset prices under two assumptions: that
+the markets are complete and that there is no arbitrage.
+
+
+--- Page 5 ---
+118
+Choice Under Uncertainty
+same number of times it appears in k′
+i (on the right). Such sequences will be
+called balanced.
+A dataset {(xk,pk)}K
+k=1 satisﬁes the Strong Axiom of Revealed Objective
+Expected Utility (SAREU) if, for any balanced sequence of pairs (xkiωi,x
+k′
+i
+ω′
+i)n
+i=1
+with the property that xkiωi > x
+k′
+i
+ω′
+i for all i, the product of relative risk-neutral
+prices satisﬁes
+n
+"
+i=1
+ρkiωi
+ρ
+k′
+i
+ω′
+i
+≤1.
+It is possible to write SAREU so that it rules out certain kinds of cycles. We
+use the syntax above to make the comparison with subjective probabilities in
+Section 8.2.2 (below) easier.
+Theorem 8.3
+The following statements are equivalent:
+I) {(xk,pk)}K
+k=1 is weakly expected-utility rationalizable.
+II) For all k ∈K and s ∈S there exist λk > 0 and vk
+ω > 0 such that
+πωvk
+ω = λkpk
+ω
+and xk
+ω > xk′
+ω′ implies that vk
+ω ≤vk′
+ω′.
+III) {(xk,pk)}K
+k=1 satisfy SAREU.
+Remark 8.4
+Statement (II) asserts the existence of Afriat inequalities for this
+problem. The numbers vk
+ω are meant to be the marginal utilities (for money) at
+the quantity xk
+ω, and λk is meant to be the Lagrange multiplier.
+We could equivalently have written Statement (II) as: For all k ∈K and ω ∈
+there exist λk > 0 and uk,ω such that
+uk,ω′ ≤ul,ω + λl pl
+ω
+πω
+[xk
+ω′ −xl
+ω],
+for all k,l ∈K and all ω,ω′ ∈.
+Proof. To begin with, we establish the equivalence between statements (II)
+and (III), the more interesting aspect of the proof of Theorem 8.3. The reader
+should note the similarities between the construction in the proof that (III)
+implies (II), and the construction in Theorem 1.9. The proof of the equivalence
+of (I) and (II) is standard, and is included below for completeness’ sake.
+Let Y = {xk
+ω : k ∈K;ω ∈}; enumerate the elements of Y in increasing order,
+as follows:
+y1 < y2 < ... < yn.
+First we show that (III) implies (II). Suppose that {(xk,pk)}K
+k=1 satisﬁes
+SAREU. We shall construct a solution to the system
+πωvk
+ω = λkpk
+ω
+(8.1)
+xk
+ω > xk′
+ω′ ⇒vk
+ω ≤vk′
+ω′,
+(8.2)
+
+
+--- Page 6 ---
+8.1 Objective probability
+119
+where λk > 0 and vk
+ω > 0 for each k, thereby proving (II).
+Let k0 be such that xk0
+ω = yn for some ω, and such that
+ρk0
+ω = max{ρk′
+ω′ : xk′
+ω′ = yn}.
+For k,l ∈K, deﬁne η(k,l) as follows. Let
+η(k,l) = max
+
+ρk
+ω
+ρl
+ω′
+: xk
+ω > xl
+ω′
+
+if there is ω,ω′ ∈ such that xk
+ω > xl
+ω′, and η(k,l) = 0 otherwise.
+Note that SAREU implies that
+η(k1,k2)η(k2,k3)···η(km,k1) ≤1.
+Therefore, for any sequence k1,...,km ∈K, in which ki = kj for i < j, we have
+that
+η(k0,k1)η(k1,k2)···η(ki−1,ki)η(ki,ki+1)···η(kj−1,kj)η(kj,kj+1)···
+η(km−1,km) ≤η(k0,k1)η(k1,k2)···η(ki−1,ki)η(kj,kj+1)···η(km−1,km).
+(8.3)
+Let λl = 1 whenever l is such that there is ω ∈ such that xl
+ω = yn. For any
+other l, let
+λl = max{η(k0,k1)η(k1,k2)···η(km,l) : k1,...,km ∈K and m ≥0.}
+Observe that λl is well deﬁned, as Equation (8.3) implies that one can restrict
+attention to a ﬁnite set of sequences k1,...,km; observe also that λl > 0.
+The deﬁnition of (λl)l∈K implies that, when yn > xk
+ω > xl
+ω′ we have
+λl ≥η(k,l)λk ≥ρk
+ω
+ρl
+ω′
+λk;
+(8.4)
+and when yn = xk
+ω > xl
+ω′ we have that, for some ˆω,
+λl ≥η(k0,l) ≥ρk0
+ˆω
+ρl
+ω′
+≥ρk
+ω
+ρl
+ω′
+λk;
+where the ﬁrst inequality is by deﬁnition of λl; the second by deﬁnition of η
+(as yn = xk0
+ˆω > xl
+ω′); the third by deﬁnition of k0, and where we have used that
+λk = 1 in this case. Therefore we have that λl ≥ρkω
+ρl
+ω′ λk holds whenever xk
+ω > xl
+ω′,
+regardless of whether xk
+ω = yn or xk
+ω < yn.
+If we let vl
+ω = λlρl
+ω for all l ∈K and ω ∈, then we have solutions to
+system (8.1)–(8.2).
+Conversely, suppose that (II) is true. Let there be strictly positive numbers
+vk
+ω, λk, for ω ∈ and k = 1,...,K, solving system (8.1)–(8.2).
+
+
+--- Page 7 ---
+120
+Choice Under Uncertainty
+Let (xkiωi,x
+k′
+i
+ω′
+i)n
+i=1 be a sequence of pairs under the assumptions of SAREU.
+Since xkiωi > x
+k′
+i
+ω′
+i we have that vkiωi ≤v
+k′
+i
+ω′
+i. Hence
+1 ≤
+n
+"
+i=1
+v
+k′
+i
+ω′
+i
+vkiωi
+=
+n
+"
+i=1
+λk′
+iρ
+k′
+i
+ω′
+i
+λkiρkiωi
+=
+n
+"
+i=1
+ρ
+k′
+i
+ω′
+i
+ρkiωi
+,
+as each k appears as ki the same number of times it appears as k′
+i in the
+sequence, and therefore the λki and λk′
+i cancel out. So the data satisfy SAREU,
+and thus we establish (III).
+We shall now prove that (I) implies (II). Let (xk,pk)K
+k=1 be weakly
+rationalizable by an expected utility preference with prior π. Let u : R+ →R
+be a strictly increasing and concave rationalizing utility function. We can then
+consider the ﬁrst-order conditions for a maximizing utility: see, for example,
+Theorem 28.3 of Rockafellar (1997) for a formulation that does not require
+u to be smooth. The ﬁrst-order conditions say that there are numbers λk ≥0,
+k = 1,...,K such that if we let
+vk
+ω = λkpk
+ω
+πω
+then vk
+ω ∈∂u(xk
+ω) if xk
+ω > 0, and there is w ∈∂u(xk
+ω) with vk
+ω ≥w if xk
+ω = 0.
+In fact, since u is strictly increasing it is easy to see that λk > 0, and therefore
+vk
+ω > 0.
+By the concavity of u, and the consequent monotonicity of ∂u(xk
+ω)
+(Theorem 1.9), if xk
+ω > xk′
+ω′ > 0, vk
+ω ∈∂u(xk
+ω), and vk′
+ω′ ∈∂u(xk′
+ω′), then vk
+ω ≤vk′
+ω′.
+If xk
+ω > xk′
+ω′ = 0, then w ∈∂u(xk′
+ω′) with vk′
+ω′ ≥w. So vk
+ω ≤w ≤vk′
+ω′.
+Next, we show that (II) implies (I). Suppose that the numbers vk
+ω, λk, for
+s = 1,...,S and k = 1,...,K, are as in (II).
+Let
+yi = min{vk
+ω : xk
+ω = yi} and ¯yi = max{vk
+ω : xk
+ω = yi}.
+Let zi = (yi + yi+1)/2, i = 1,...,n −1; z0 = 0, and zn = yn + 1. Let f be a
+correspondence deﬁned as follows:
+f(z) =
+⎧
+⎪⎨
+⎪⎩
+[yi, ¯yi]
+if z = yi,
+max{¯yi : z < yi}
+if yn > z and ∀i(z ̸= yi),
+yn/2
+if yn < z.
+By the assumptions placed on vk
+ω, and by construction of f, y < y′, v ∈f(y)
+and v′ ∈f(y′) imply that v′ ≤v. Then the correspondence f is monotone, and
+there exists a concave function u for which f(z) ⊆∂u(z) (see Corollary 1.10 of
+Theorem 1.9). Given that vk
+ω > 0 for all k and ω, all the elements in the range
+of f are positive, and therefore u is a strictly increasing function.
+
+
+--- Page 8 ---
+8.2 Subjective probability
+121
+Finally, for all (k,s), pk
+ω/πω = vk
+ω ∈∂u(vk
+ω) and therefore the ﬁrst-order
+conditions to a maximum choice of x hold at xk
+ω. Since u is concave the
+ﬁrst-order conditions are sufﬁcient. The data are therefore rationalizable.
+8.2
+SUBJECTIVE PROBABILITY
+The expected utility model of Section 8.1 assumes that an agent’s behavior
+can be represented probabilistically, and in Section 8.1 probabilities are in fact
+observable. However, in most situations of interest to economists, probabilities
+are not observable. Economic agents are assumed that assign subjective
+probabilities to the states of the world. It is important to understand when
+agents’ behavior is consistent with the use of subjective probabilities.
+8.2.1
+The Epstein Test
+One of the most basic questions in the theory of choice under uncertainty
+is whether individuals perceive uncertainty probabilistically. One way of
+formalizing this idea is due to Machina and Schmeidler (1992), and is
+called probabilistic sophistication. A preference ⪰over R
++ is said to be
+probabilistically sophisticated if there is a probability measure π on  such
+that for all x,y ∈R, if the random variable x ﬁrst-order stochastically
+dominates y on the probability space (,π), then x ⪰y; and x ≻y when the
+ﬁrst-order stochastic dominance is strict.2
+Consider a dataset {(xk,pk)}K
+k=1, as in 8.1. The dataset is weakly ratio-
+nalizable by a probabilistically sophisticated preference if there is a proba-
+bilistically sophisticated preference ⪰such that xk ⪰y, for all y ∈R
++ with
+pk · y ≤pk · xk.
+The following test of the probabilistic sophistication hypothesis is due to
+Larry Epstein. The idea is as follows. For two states, ω and ω′, what type of
+behavior could reveal that πω ≥πω′? Epstein’s idea was that if prices in state
+ω are higher than they are in state ω′, and the individual demands more in state
+ω, then if the probabilistic sophistication hypothesis were true, the only reason
+this could occur would be if πω > πω′.
+Theorem 8.5
+Suppose the dataset {(xk,pk)}K
+k=1 contains observations l,m for
+which pl
+ω > pl
+ω′ and pm
+ω ≤pm
+ω′, and xl
+ω > xl
+ω′ and xm
+ω′ > xm
+ω. Then there is no
+probabilistically sophisticated preference which weakly rationalizes the data.
+Proof. Suppose by way of contradiction that there is a probabilistically
+sophisticated rationalization with associated probability π. We know that
+either πω > πω′ or πω′ ≥πω. In the ﬁrst case, because pm
+ω ≤pm
+ω′, we know
+that
+pm
+ωxm
+ω′ + pm
+ω′xm
+ω ≤pm
+ωxm
+ω + pm
+ω′xm
+ω′.
+2 We say a random variable x ﬁrst-order stochastically dominates y on probability space (,π)
+if for all a ∈R, π({ω ∈ : X(ω) ≥a}) ≥π({ω ∈ : Y(ω) ≥a}).
+
+
+--- Page 9 ---
+122
+Choice Under Uncertainty
+But the bundle which results by switching consumption in states ω and ω′ in
+xm strictly ﬁrst-order stochastically dominates xm, a contradiction. So it must
+be the case that πω′ ≥πω. Now, we have
+pl
+ωxl
+ω′ + pl
+ω′xl
+ω < pl
+ωxl
+ω + pl
+ω′xl
+ω′,
+so the bundle which results from switching consumption in states ω and
+ω′ for bundle xl ﬁrst-order stochastically dominates xl, and is strictly
+cheaper. By increasing consumption in every state, there is a bundle which
+strictly ﬁrst-order stochastically dominates xl and is feasible at prices pl, a
+contradiction to the fact that xl is demanded.
+8.2.2
+Subjective expected utility
+The benchmark model of decisions under uncertainty is the model of subjective
+expected utility (SEU). This model postulates that agents’ choices are governed
+by expected utility calculations, as in Section 8.1.3, but where the prior π is
+not given, or observable. Instead, the agents’ choices are as if there were some
+prior, and some utility function, that could explain them.
+As in Section 8.1.3, a dataset is a collection {(xk,pk)k∈K} of pairs of a
+consumption xk ∈R
++ chosen at prices pk ∈R
+++ and income pk · xk.
+A utility function u : R+ →R, together with a prior π ∈(), weakly
+subjective expected-utility rationalizes a dataset (xk,pk)k∈K if u is strictly
+increasing and concave, and if pk · y ≤pk · xk implies that
+
+ω∈
+πωu(yω) ≤
+
+ω∈
+πωu(xk
+ω),
+for all k ∈K. We say that such a dataset is weakly SEU rationalizable.
+Viewed in this light, it is clear that the SEU model is a special case
+of both the additive separable model considered in Section 4.2.2, and the
+probabilistically sophisticated model of Section 8.2.1.
+Now one can reason along the same lines of 8.1.3 to obtain an implication
+from quantities on prices. The complication is that, since the prior π is not
+observable, one cannot subsume probabilities into risk-neutral prices. Instead,
+unknown probabilities need to be accounted for in the analysis. The details are
+omitted; but sufﬁce it to say that we need the same notion of balancedness as in
+8.1.3. In fact, we need more: say that a sequence of pairs (xkiωi,x
+k′
+i
+ω′
+i)n
+i=1 is doubly
+balanced if it is balanced and if, moreover, each ω ∈ appears as ωi (on the
+left of the pair) the same number of times it appears as ω′
+i (on the right).
+A dataset {(xk,pk)}K
+k=1 satisﬁes the Strong Axiom of Revealed Subjective
+Expected Utility (SARSEU) if, for any sequence of pairs (xkiωi,x
+k′
+i
+ω′
+i)n
+i=1 for which
+
+
+--- Page 10 ---
+8.3 Complete class results
+123
+xkiωi > x
+k′
+i
+ω′
+i for all i, the product of relative prices satisﬁes
+n
+"
+i=1
+pkiωi
+p
+k′
+i
+ω′
+i
+≤1.
+SAREU in 8.1.3 can be written as ruling out certain kinds of cycles. With
+SARSEU this is not possible because the axiom involves, in a sense, pairs of
+cycles (one cycle in k’s and one in ω’s).
+Theorem 8.6
+The following statements are equivalent:
+I) {(xk,pk)}K
+k=1 is weakly SEU rationalizable.
+II) For all k = {1,...,K}, there exist λk > 0 and π ∈() such that for
+all ω ∈, πω > 0, and for each pair k,ω, there exists uk,ω such that
+for all k,l and all ω,ω′,
+uk,ω′ ≤ul,ω + λl pl
+ω
+πω
+[xk
+ω′ −xl
+ω].
+III) {(xk,pk)}K
+k=1 satisﬁes SARSEU.
+We will not offer a proof of Theorem 8.6, but note that it rests on familiar
+ideas. Basically, (II) in Theorem 8.6 are the relevant Afriat inequalities for
+the problem at hand. We only care to construct a utility index for a single
+commodity, which should be the same across states after rescaling; πω here
+acts as a scaling factor. Importantly, these Afriat inequalities deﬁne a nonlinear
+polynomial system in the variables u,λ,π, which presents a signiﬁcant
+complication. The proof that SARSEU characterizes SEU rationalizability
+rests on linearizing the Afriat inequalities, and then using an approximation
+argument.
+8.3
+COMPLETE CLASS RESULTS
+The above discussion has focused on consumption data, but one could ask the
+same type of question in an abstract environment of choice. We now assume as
+given a single observation of a choice in an abstract environment: the set X is
+some abstract payoff space;  is a ﬁnite set of states; and the objects of choice
+are acts, mappings f :  →X. The set of all acts is X.
+Choice is modeled by a preference relation ⪰over acts. The important aspect
+of ⪰will be that it has a maximal element in some “budget,” or set of available
+acts, F; so we know that there is f ∗∈F such that f ∗≻g for all g ∈F\{f ∗}. The
+existence of f ∗can be obtained from a single observation of a choice at F.3
+3 Of course, information on the other comparisons contained in ⪰would have to entail additional
+observations.
+
+
+--- Page 11 ---
+124
+Choice Under Uncertainty
+A constant act is one whose payoff is independent of the state. We
+identify an element x ∈X with the constant act that takes the value x for all
+states.
+A null state is a state ω with the property that the agent does not care about
+what obtains on ω. Formally, ω ∈ is null if for all x,y ∈X and f ∈X, xωf ∼
+yωf, where xωf denotes the act which pays x if ω obtains and f otherwise.
+A preference ⪰on X satisﬁes monotonicity if for all f,g ∈X, f(ω) ⪰g(ω)
+for all ω ∈ implies f ⪰g, with strict preference if there is non-null ω ∈ for
+which f(ω) ≻g(ω).
+In this context, a preference ⪰is a subjective expected utility preference if
+there is a function u : X →R and a probability measure π on  for which f ⪰g
+iff 
+ω u(f(ω))πω ≥
+ω u(g(ω))πω.
+The following result (due to T. B¨orgers) is related to the results in
+statistical decision theory known as “complete class theorems,” except that no
+convexiﬁcation via randomization is required.
+Theorem 8.7
+Suppose that F ⊆X is ﬁnite and that ⪰satisﬁes monotonicity.
+If f ∗∈F satisﬁes f ∗≻g for all g ∈F\{f ∗}, then there exists a subjective
+expected utility preference ⪰∗for which f ∗≻∗g for all g ∈F\{f ∗}.
+Proof. Because f ∗∈F is strictly better than all g ̸= f ∗where g ∈F, it follows
+that there must exist at least one non-null state. In the rest of the proof we
+ignore null states; it is easy to assign them probability zero at the end.
+The proof is by induction on the size of . We actually prove the slightly
+stronger induction hypothesis: if G is a ﬁnite set of acts, ⪰is a preference
+on G, and g∗∈G has the property that for all g ∈G\{g∗}, there is ω ∈
+for which g∗(ω) ≻g(ω), then there is u : X →R and π on (,2) for
+which 
+ω u(g∗(ω))πω > 
+ω u(g(ω))πω for all g ∈G\{g∗}. (The proof of
+Theorem 8.7 will then be done, as monotonicity implies that for all f ∈F\{f ∗},
+there is ω ∈ for which f ∗(ω) ≻f(ω).)
+The result is trivial if || = 1. Suppose then that || > 1, and that the result is
+true whenever the size of the state space is strictly smaller than ||. Let X∗=
+{x ∈g∗() : g∗(ω) ⪰x for all ω ∈}; that is, X∗is the set of worst possible
+outcomes occurring with g∗(recall that g∗() is ﬁnite). Consider ∗= {ω ∈
+ : g∗(ω) ∈X∗} and G∗= {g ∈G : ∃ω ∈ such that for all x ∈X∗,x ≻g(ω)}:
+∗is the set of states which lead to one of the worst outcomes, and G∗is the
+set of acts which realize outcomes worse than any in X∗.
+Suppose that \∗̸= ∅. Clearly, |\∗| < ||. Further, g∗∈G\G∗. Finally,
+there is no g ∈G\G∗for which g(ω) ⪰g∗(ω) for all ω ∈\∗. If there were,
+then by deﬁnition, since g ̸∈G∗, g never realizes a worse outcome than an
+outcome in X∗; consequently, we would have g(ω) ⪰g∗(ω) for all ω ∈∗as
+well, so that g(ω) ⪰g∗(ω) for all ω ∈, contradicting the hypothesis.
+Therefore, by the induction hypothesis, there exists u∗: X →R and π∗on
+ \ ∗for which 
+ω∈\∗u∗(g∗(ω))π∗
+ω > 
+ω∈\∗u∗(g(ω))π∗
+ω for all g ∈
+G \G∗. For δ > 0, let u∗
+δ : X →R be deﬁned by u∗(x) if x ⪰x∗for some x∗∈X∗,
+
+
+--- Page 12 ---
+8.3 Complete class results
+125
+and u∗
+δ(x) = u∗(x) −δ otherwise. Further, for ε > 0, deﬁne π∗
+ε ({ω}) =
+ε
+|∗| if
+ω ∈∗, otherwise, π∗
+ε ({ω}) = (1 −ε)π∗({ω}).
+For
+ε
+small
+enough,
+g∗
+satisﬁes
+
+ω∈ u∗(g∗(ω))π∗
+ε ({ω})
+>
+
+ω∈ u∗(g(ω))π∗
+ε ({ω}) for all g ∈G\G∗. Now, for all δ > 0, and for all
+g ∈G\G∗, we have 
+ω∈ u∗(g(ω))π∗
+ε ({ω}) = 
+ω∈ u∗
+δ(g(ω))π∗
+ε ({ω}).
+By
+choosing
+δ > 0
+large,
+we
+can
+ensure
+that
+for
+any
+g ∈G∗,
+
+ω∈ u∗
+δ(g(ω))π∗
+ε ({ω}) can be made arbitrarily small. This completes
+the induction step.
+On the other hand, if \∗= ∅, we know that g∗(ω) ∼g∗(ω′) for all ω,ω′.
+In this case, let π be arbitrary, and let u∗: X →R so that for any x ∈X∗and
+g ∈G, if x ≻g(ω), then u∗(x) > u∗(g(ω)). Again by considering u∗
+δ for δ > 0
+large, the result follows.
+Theorem 8.7 establishes that, with one observation, the empirical content
+of monotonicity coincides with the empirical content of subjective expected
+utility maximization. With more than one observation, such a result does not
+hold in general.
+Given the conclusion of Theorem 8.7, it is useful to have an understanding of
+the empirical content of monotonicity. We shall explain this empirical content
+in the case of one observation.
+Proposition 8.8
+Suppose that F ⊆X is ﬁnite, and let f ∗∈F. Then there
+exists a monotonic preference relation ⪰for which f ∗≻g for all g ∈F \
+{f ∗} iff ωg ∈ can be chosen for all g ∈F\{f ∗} such that the binary relation
+{(f ∗(ωg),g(ωg))}g∈F\{f ∗} on X is acyclic.
+Proof. If there exists a monotonic and rational ⪰, we know that for each g ∈
+F\{f ∗}, there is ωg for which f ∗(ωg) ≻g(ωg); if not, then g(ω) ⪰f ∗(ω) for all
+ω ∈, whereby monotonicity dictates that g ⪰f ∗, contradicting f ∗≻g. The
+relation {(f ∗(ωg),g(ωg))}g∈F\{f ∗} is clearly acyclic, as it is a subrelation of ≻
+deﬁned on X.
+On the other hand, suppose that there are states ωg ∈ for which the
+relation {(f ∗(ωg),g(ωg))}g∈F\{f ∗} on X is acyclic. By Szpilrajn’s Theorem
+(Theorem 1.4) there is an extension of this binary relation to a linear order
+⪰∗on X. Deﬁne ⪰′ on F by f ⪰′ g if and only if f(ω) ⪰∗g(ω) for all ω ∈:
+note that by deﬁnition ⪰′ is reﬂexive, transitive, and antisymmetric. Further, if
+g ⪰′ f ∗, then g = f ∗. Let
+⪰′′ =⪰′ ∪
+
+g∈F\{f ∗}
+{(f ∗,g)}.
+There can be no ⟨⪰′′,≻′′⟩cycles as, by construction, if g ⪰′ f ∗, then g = f ∗.
+As there are no ⪰′′ cycles, we can use Theorem 1.5 again to extend ⪰′′ to a
+preference relation ⪰on F such that for all g ∈F\{f ∗}, f ∗≻g. The preference
+relation is, by construction, monotonic.
+
+
+--- Page 13 ---
+126
+Choice Under Uncertainty
+8.4
+SUBJECTIVE EXPECTED UTILITY WITH AN
+ACT-DEPENDENT PRIOR
+Many modern theories of decisions under uncertainty are predicated
+on an assumption that probability can depend on the act chosen; for
+example,
+the
+theory
+of
+maxmin
+expected
+utility
+supposes
+a
+utility
+of the form U(f) = 
+ω∈ u(f(ω))πf ({ω}), where πf
+is chosen from
+argminπ∈
+
+ω∈ u(f(ω))πf ({ω}) for some  ⊆().
+We end the chapter by considering the testable implications of the notion that
+choices are guided by an expected utility calculation in which the probability
+measure over states can depend on the act chosen. The notion of a dataset will
+correspond to that in Chapter 2, namely abstract choice.
+Let X and  be ﬁnite sets. Say that a preference ⪰on X is an act-dependent
+probability representation if there is u : X →R and, for all f ∈X, there is
+πf ∈() such that the function U(f) = 
+ω∈ u(f(ω))πf ({ω}) represents ⪰.
+It is quite easy to characterize act-dependent probability preferences. Say
+that a preference ⪰satisﬁes uniform monotonicity if f ⪰g whenever f,g ∈X
+are such that for all ω,ω′ ∈, f(ω) ⪰g(ω′).4
+Proposition 8.9
+If X is ﬁnite, a preference ⪰has an act-dependent
+probability representation iff it satisﬁes uniform monotonicity.
+Proof. Suppose ⪰is a preference satisfying uniform monotonicity. Since X is
+ﬁnite and ⪰is a preference relation, there exists U : X →R which represents
+⪰. Deﬁne u(x) = U(x), where U(x) is the value of U applied to the constant
+act taking outcome x. Note that for every f, by uniform monotonicity,
+min
+ω∈ u(f(ω)) ≤U(f) ≤max
+ω∈ u(f(ω)).
+Therefore, U(f) can be expressed as a convex combination of minω∈ u(f(ω))
+and maxω∈ u(f(ω)). Choose the probability πf so as to obtain the result of this
+convex combination.
+The other direction is equally simple; suppose that for all ω,ω′ ∈, f(ω) ⪰
+g(ω′): U(f) = 
+ω∈ u(f(ω))πf ({ω}) ≥minω∈ u(f(ω)) ≥maxω∈ u(g(ω)) ≥
+
+ω∈ u(f(ω))πg({ω}) = U(g).
+We can now speak of a choice function deﬁned on a collection of “budgets,” or
+sets of feasible acts , each element of  being a subset of X. We assume that
+ is certainty inclusive, in the sense that for all x,y ∈X, {x,y} ∈. Thus, choice
+from every pair of certain outcomes can be observed. According to this choice
+function, we have our standard revealed preference pair, ⟨⪰c,≻c⟩, as deﬁned
+in Chapter 2. We introduce a new relation ⪰′ deﬁned by f ⪰′ g if f(ω) ⪰c g(ω′)
+for all ω,ω′ ∈.
+With the property of certainty inclusiveness, the empirical content of
+uniform monotonicity is quite easy to describe using previous results.
+4 With a slight abuse of notation, an element of X is identiﬁed with a constant act returning that
+element.
+
+
+--- Page 14 ---
+8.5 Chapter references
+127
+Theorem 8.10
+A choice function on a certainty inclusive domain is strongly
+rationalized by a preference relation satisfying uniform monotonicity iff
+⟨⪰c ∪⪰′,≻c⟩is acyclic.
+Proof. Follows easily from Corollary 1.6 and Theorem 2.5.
+8.5
+CHAPTER REFERENCES
+Allais’ paradox is due to Allais (1953). He presents a classic test of the
+expected utility hypothesis. Typical choices in Allais’ experiment directly
+violate the independence axiom. Theorem 8.2 appears in Fishburn (1974),
+among other related results. Bar-Shira (1992) also investigates the set of
+linear inequalities arising in this problem, and uses it to bound risk aversion
+in the context of monetary lotteries. Border (1992) extends this idea to
+a choice-theoretic approach, assuming monetary lotteries and a strictly
+increasing utility index. Border’s approach is closer to the ideas in Afriat’s
+Theorem. Kim (1996) also provides a generalization of this result.
+The equivalence between (I) and (III) in Theorem 8.3 is essentially taken
+from Kubler, Selden, and Wei (2014). The equivalence between (I) and (II) in
+Theorem 8.3 is a version of Afriat inequalities for this problem: it appears
+in Green and Srivastava (1986), Varian (1983b), Varian (1988b), Bayer,
+Bose, Polisson, Renou, and Quah (2012), and Diewert (2012). The recent
+paper by Chambers, Liu, and Martinez (2014) provides a revealed preference
+axiom for the case of multiple goods in each state (the setup of Green and
+Srivastava, 1986). Green and Osband (1991) study a version of the objective
+probability problem in which the probability measure over states is changing,
+and “demand” as a function of the objective probability measure over states
+is observed. Park (1998) conducts a related investigation of the weighted
+expected utility model of Hong (1983).
+The Epstein Test is due to Epstein (2000), who viewed his test as a market
+counterpart of Ellsberg’s paradox (Ellsberg, 1961). Theorem 8.6 is based on the
+work of Green and Srivastava (1986), who take π as an observable, and also
+provide a cyclic monotonicity-style test; Kim (1991) presents related results
+in this direction. Bayer, Bose, Polisson, Renou, and Quah (2012) investigate
+related conditions which arise in the context of ambiguity models.
+Axiomatizations of subjective expected utility have a long history, but the
+most important are due to Savage (1954) and Anscombe and Aumann (1963).
+The latter of these provides an axiomatization for ﬁnite states of the world.
+Theorem 8.6 is due to Echenique and Saito (2013), which also presents
+a characterization of state-dependent utility (i.e. additively separable utility
+across states). The equivalence between rationalizability and the version of
+Afriat inequalities in Theorem 8.6 is the same as obtained by Green and
+Srivastava (1986) (presented in Theorem 8.3 for the case of objective expected
+utility, only existentially quantiﬁed over the prior). The papers by Bayer, Bose,
+Polisson, Renou, and Quah (2012), Ahn, Choi, Gale, and Kariv (2014), and
+
+
+--- Page 15 ---
+128
+Choice Under Uncertainty
+Hey and Pace (2014) apply revealed preference tests to experimental data on
+uncertainty and subjective probabilities.
+Polisson, Renou, and Quah (2013) also develop a system of Afriat
+inequalities for the model of subjective expected utility, and for other models.
+One important difference between the work of Polisson and Quah and other
+papers is that they do not require the utility over money to be concave.
+Chambers, Echenique, and Saito (2015) give revealed preference axioms
+for translation invariant and homothetic models of choice under uncertainty,
+including the maxmin model of Gilboa and Schmeidler (1989), and the
+expected utility model when the utility function takes the speciﬁc “constant
+absolute risk aversion” (CARA) or “constant relative risk aversion” (CRRA)
+form.
+The paper by Richter and Shapiro (1978) should be mentioned as well. They
+study the design of a set of pairwise comparisons so that, given the outcome
+of such a pair of comparisons, a deﬁnitive statement can be made about the
+agents’ subjective probabilities. An example of such a statement is whether
+the probability of state ω1 is at least twice that of state ω2.
+Theorem 8.7 is due to B¨orgers (1993), and the interpretation offered here
+is due to Lo (2000). It can be shown that for the primitive ⪰, one can choose
+⪰∗to have the same null states and the same ranking over constant acts as
+⪰. This result is related to a class of results in statistical decision theory
+known as “complete class theorems,” which establish related results when
+the outcome space has a convex structure due to randomization and linearity
+of payoffs in randomization. These results are originally due to Wald (1950,
+1947a,b); Dvoretzky, Wald, and Wolfowitz (1951) use the fact that the range
+of a nonatomic vector measure is convex and compact to establish a similar
+result without any required randomization. A classic reference on these topics
+is Ferguson (1967).
+Bossert and Suzumura (2012) establish Theorem 8.10. The question of the
+empirical content of preferences satisfying uniform monotonicity on domains
+which do not satisfy certainty inclusiveness is open, as is the same question for
+monotonic preferences.
+Finally, there is a literature investigating the empirical content of different
+updating rules for probabilistic beliefs. Shmaya and Yariv (2012) characterize
+the empirical content of Bayes’ rule, and show that it is equivalent to many
+apparently more general classes of updating rules.
