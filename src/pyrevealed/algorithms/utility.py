@@ -334,3 +334,62 @@ def predict_demand(
                         best_x = x
 
         return best_x
+
+
+# =============================================================================
+# TECH-FRIENDLY ALIASES
+# =============================================================================
+
+# fit_latent_values: Tech-friendly name for recover_utility
+fit_latent_values = recover_utility
+"""
+Fit latent preference values from user behavior.
+
+This is the tech-friendly alias for recover_utility.
+
+Extracts latent preference values that can be used as:
+- Features for ML models
+- Inputs to counterfactual simulations
+- User embeddings for personalization
+
+Example:
+    >>> from pyrevealed import BehaviorLog, fit_latent_values
+    >>> result = fit_latent_values(user_log)
+    >>> if result.converged:
+    ...     features = result.latent_values  # Use as ML features
+
+Returns:
+    LatentValueResult with latent_values array
+"""
+
+# build_value_function: Tech-friendly name for construct_afriat_utility
+build_value_function = construct_afriat_utility
+"""
+Build a callable value function from fitted latent values.
+
+This is the tech-friendly alias for construct_afriat_utility.
+
+Returns a function that estimates the value/utility of any action vector.
+
+Example:
+    >>> from pyrevealed import BehaviorLog, fit_latent_values, build_value_function
+    >>> result = fit_latent_values(user_log)
+    >>> value_fn = build_value_function(user_log, result)
+    >>> estimated_value = value_fn(new_action_vector)
+"""
+
+# predict_choice: Tech-friendly name for predict_demand
+predict_choice = predict_demand
+"""
+Predict what action a user will take given new costs and a resource limit.
+
+This is the tech-friendly alias for predict_demand.
+
+Uses the fitted latent value model to predict user behavior under
+new conditions (counterfactual analysis).
+
+Example:
+    >>> from pyrevealed import BehaviorLog, fit_latent_values, predict_choice
+    >>> result = fit_latent_values(user_log)
+    >>> predicted_action = predict_choice(user_log, result, new_costs, budget)
+"""

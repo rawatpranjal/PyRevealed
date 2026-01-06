@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyrevealed"
-version = "0.1.0"
-description = "Revealed Preference Analysis for Consumer Behavior - Non-parametric behavioral consistency metrics"
+version = "0.3.0"
+description = "Behavioral Signal Analysis for User Understanding - Detect bots, shared accounts, and UI confusion"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
@@ -13,14 +13,14 @@ authors = [
     {name = "PyRevealed Contributors"}
 ]
 keywords = [
-    "revealed-preference",
-    "economics",
-    "consumer-theory",
-    "GARP",
-    "Afriat",
-    "behavioral-analysis",
+    "bot-detection",
     "fraud-detection",
-    "consistency"
+    "behavioral-analysis",
+    "user-analytics",
+    "anomaly-detection",
+    "consistency-check",
+    "revealed-preference",
+    "machine-learning"
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",

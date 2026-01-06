@@ -1,4 +1,23 @@
-"""Result dataclasses for revealed preference analysis."""
+"""Result dataclasses for behavioral signal analysis.
+
+This module provides result containers for various behavioral analysis algorithms.
+
+Tech-Friendly Names (Primary):
+    - ConsistencyResult: Behavioral consistency check result
+    - IntegrityResult: Behavioral integrity/noise score result
+    - ConfusionResult: Confusion/exploitability metric result
+    - LatentValueResult: Latent preference value extraction result
+    - PreferenceAnchorResult: Preference anchor (ideal point) result
+    - FeatureIndependenceResult: Feature independence/separability result
+
+Economics Names (Deprecated Aliases):
+    - GARPResult -> ConsistencyResult
+    - AEIResult -> IntegrityResult
+    - MPIResult -> ConfusionResult
+    - UtilityRecoveryResult -> LatentValueResult
+    - IdealPointResult -> PreferenceAnchorResult
+    - SeparabilityResult -> FeatureIndependenceResult
+"""
 
 from __future__ import annotations
 
@@ -274,3 +293,64 @@ class SeparabilityResult:
     def can_price_independently(self) -> bool:
         """True if groups can be priced without considering cross-effects."""
         return self.is_separable and self.cross_effect_strength < 0.1
+
+
+# =============================================================================
+# TECH-FRIENDLY ALIASES (Primary names)
+# =============================================================================
+
+# ConsistencyResult: Result of behavioral consistency validation
+ConsistencyResult = GARPResult
+"""
+Tech-friendly alias for GARPResult.
+
+Use this to check if user behavior is internally consistent.
+Consistent behavior = not a bot, single user account.
+"""
+
+# IntegrityResult: Result of integrity/noise score computation
+IntegrityResult = AEIResult
+"""
+Tech-friendly alias for AEIResult.
+
+The integrity score (0-1) indicates data quality:
+- 1.0 = Perfect signal, fully consistent user
+- 0.5 = Noisy signal, possible bot or confused user
+- <0.5 = Very noisy, likely bot or shared account
+"""
+
+# ConfusionResult: Result of confusion/exploitability metric
+ConfusionResult = MPIResult
+"""
+Tech-friendly alias for MPIResult.
+
+The confusion score indicates how exploitable the user's decisions are.
+High confusion = bad UX causing irrational choices.
+"""
+
+# LatentValueResult: Result of latent preference extraction
+LatentValueResult = UtilityRecoveryResult
+"""
+Tech-friendly alias for UtilityRecoveryResult.
+
+Contains extracted latent preference values that can be used as
+features for ML models or for counterfactual simulations.
+"""
+
+# PreferenceAnchorResult: Result of preference anchor (ideal point) estimation
+PreferenceAnchorResult = IdealPointResult
+"""
+Tech-friendly alias for IdealPointResult.
+
+The preference anchor is the user's ideal location in feature space.
+Useful for recommendation explainability and personalization.
+"""
+
+# FeatureIndependenceResult: Result of feature independence test
+FeatureIndependenceResult = SeparabilityResult
+"""
+Tech-friendly alias for SeparabilityResult.
+
+Tests whether feature groups (e.g., product categories) can be
+priced/optimized independently without cross-effects.
+"""

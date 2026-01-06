@@ -257,3 +257,48 @@ def compute_houtman_maks_index(
 
     index = len(removed) / T
     return index, removed
+
+
+# =============================================================================
+# TECH-FRIENDLY ALIASES
+# =============================================================================
+
+# compute_confusion_metric: Tech-friendly name for compute_mpi
+compute_confusion_metric = compute_mpi
+"""
+Compute the confusion metric (how exploitable the user's decisions are).
+
+This is the tech-friendly alias for compute_mpi (Money Pump Index).
+
+The confusion metric measures how much value could be extracted from
+a user making inconsistent decisions. High confusion indicates:
+- Bad UX causing irrational choices
+- User not understanding the options
+- Possible UI dark patterns affecting behavior
+
+Use this for:
+- A/B testing UX changes (lower confusion = better UX)
+- Detecting UI confusion patterns
+- Identifying users who need guidance
+
+Example:
+    >>> from pyrevealed import BehaviorLog, compute_confusion_metric
+    >>> result = compute_confusion_metric(user_log)
+    >>> if result.confusion_score > 0.15:
+    ...     alert_ux_team(user_id)
+
+Returns:
+    ConfusionResult with confusion_score in [0, 1]
+"""
+
+# compute_minimal_outlier_fraction: Tech-friendly name for compute_houtman_maks_index
+compute_minimal_outlier_fraction = compute_houtman_maks_index
+"""
+Compute the minimal fraction of observations to remove to achieve consistency.
+
+Tech-friendly alias for compute_houtman_maks_index.
+
+Returns the smallest fraction of user sessions that must be removed to
+make the remaining behavior fully consistent. Useful for identifying
+which specific transactions are problematic.
+"""

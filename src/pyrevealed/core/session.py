@@ -1,7 +1,22 @@
-"""Core data structures for revealed preference analysis."""
+"""Core data structures for behavioral signal analysis.
+
+This module provides data containers for user behavior logs used in
+consistency validation, latent value extraction, and anomaly detection.
+
+Tech-Friendly Names (Primary):
+    - BehaviorLog: User behavior history (cost/action pairs)
+    - RiskChoiceLog: Choices under uncertainty
+    - EmbeddingChoiceLog: Choices in feature/embedding space
+
+Economics Names (Deprecated Aliases):
+    - ConsumerSession -> BehaviorLog
+    - RiskSession -> RiskChoiceLog
+    - SpatialSession -> EmbeddingChoiceLog
+"""
 
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -10,7 +25,305 @@ from numpy.typing import NDArray
 
 
 @dataclass
-class RiskSession:
+class BehaviorLog:
+    """
+    Represents user behavior history as cost/action pairs over T observations.
+
+    The fundamental unit of analysis for behavioral consistency validation.
+    Each row represents one observation (transaction, time period, etc.) where
+    the user faced specific costs and took specific actions.
+
+    This is the tech-friendly name for what economists call "ConsumerSession".
+
+    Attributes:
+        cost_vectors: T x N matrix of costs (e.g., prices) per observation.
+            Can also be passed as `prices` for backward compatibility.
+        action_vectors: T x N matrix of actions (e.g., quantities) per observation.
+            Can also be passed as `quantities` for backward compatibility.
+        user_id: Optional identifier for the user/session.
+            Can also be passed as `session_id` for backward compatibility.
+        metadata: Optional dictionary for additional attributes.
+
+    Properties:
+        spend_matrix: Pre-computed T x T matrix where S[i,j] = cost_i @ action_j
+        total_spend: Diagonal of spend matrix (actual spend at each observation)
+        num_records: Number of observations T
+        num_features: Number of goods/actions N
+
+    Example:
+        >>> import numpy as np
+        >>> # User faced different prices and bought different quantities
+        >>> log = BehaviorLog(
+        ...     cost_vectors=np.array([[1.0, 2.0], [2.0, 1.0]]),
+        ...     action_vectors=np.array([[3.0, 1.0], [1.0, 3.0]]),
+        ...     user_id="user_123"
+        ... )
+        >>> log.num_records
+        2
+
+        >>> # Backward compatible with old parameter names
+        >>> log = BehaviorLog(prices=prices_array, quantities=quantities_array)
+    """
+
+    # Primary parameter names (tech-friendly)
+    cost_vectors: NDArray[np.float64] | None = None
+    action_vectors: NDArray[np.float64] | None = None
+    user_id: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    # Legacy parameter names (deprecated but supported)
+    prices: NDArray[np.float64] | None = field(default=None, repr=False)
+    quantities: NDArray[np.float64] | None = field(default=None, repr=False)
+    session_id: str | None = field(default=None, repr=False)
+
+    # Cached computed properties
+    _expenditure_matrix: NDArray[np.float64] | None = field(
+        default=None, repr=False, compare=False
+    )
+
+    def __post_init__(self) -> None:
+        """Resolve parameter aliases and validate inputs."""
+        # Resolve cost_vectors vs prices
+        if self.cost_vectors is None and self.prices is not None:
+            self.cost_vectors = self.prices
+        elif self.cost_vectors is None and self.prices is None:
+            raise ValueError("Must provide cost_vectors (or prices)")
+
+        # Resolve action_vectors vs quantities
+        if self.action_vectors is None and self.quantities is not None:
+            self.action_vectors = self.quantities
+        elif self.action_vectors is None and self.quantities is None:
+            raise ValueError("Must provide action_vectors (or quantities)")
+
+        # Resolve user_id vs session_id
+        if self.user_id is None and self.session_id is not None:
+            self.user_id = self.session_id
+
+        # Ensure arrays are float64
+        self.cost_vectors = np.asarray(self.cost_vectors, dtype=np.float64)
+        self.action_vectors = np.asarray(self.action_vectors, dtype=np.float64)
+
+        # Keep legacy attributes in sync for backward compatibility
+        self.prices = self.cost_vectors
+        self.quantities = self.action_vectors
+        self.session_id = self.user_id
+
+        self._validate()
+        self._compute_expenditure_matrix()
+
+    def _validate(self) -> None:
+        """Validate cost and action matrix dimensions and values."""
+        if self.cost_vectors.shape != self.action_vectors.shape:
+            raise ValueError(
+                f"cost_vectors shape {self.cost_vectors.shape} must match "
+                f"action_vectors shape {self.action_vectors.shape}"
+            )
+        if self.cost_vectors.ndim != 2:
+            raise ValueError(
+                f"cost_vectors must be a 2D array (T x N), got {self.cost_vectors.ndim}D"
+            )
+        if self.cost_vectors.shape[0] < 1:
+            raise ValueError("Must have at least one observation")
+        if self.cost_vectors.shape[1] < 1:
+            raise ValueError("Must have at least one feature")
+        if np.any(self.cost_vectors <= 0):
+            raise ValueError("All costs must be strictly positive")
+        if np.any(self.action_vectors < 0):
+            raise ValueError("All actions must be non-negative")
+
+    def _compute_expenditure_matrix(self) -> None:
+        """Pre-compute spend matrix S[i,j] = cost_i @ action_j."""
+        self._expenditure_matrix = self.cost_vectors @ self.action_vectors.T
+
+    @property
+    def spend_matrix(self) -> NDArray[np.float64]:
+        """
+        T x T matrix where S[i,j] = cost to take action j at costs i.
+
+        This matrix is fundamental to behavioral consistency analysis:
+        - If S[i,i] >= S[i,j], then action i is revealed preferred to action j
+          at costs i (action j was affordable but not chosen).
+        """
+        if self._expenditure_matrix is None:
+            self._compute_expenditure_matrix()
+        return self._expenditure_matrix  # type: ignore
+
+    @property
+    def total_spend(self) -> NDArray[np.float64]:
+        """
+        Actual spend at each observation (diagonal of spend matrix).
+
+        total_spend[i] = cost_i @ action_i = total cost at observation i.
+        """
+        return np.diag(self.spend_matrix)
+
+    @property
+    def num_records(self) -> int:
+        """Number of observations/records T."""
+        return self.cost_vectors.shape[0]
+
+    @property
+    def num_features(self) -> int:
+        """Number of features/goods/actions N."""
+        return self.cost_vectors.shape[1]
+
+    # Legacy property aliases for backward compatibility
+    @property
+    def expenditure_matrix(self) -> NDArray[np.float64]:
+        """Alias for spend_matrix (deprecated, use spend_matrix)."""
+        return self.spend_matrix
+
+    @property
+    def own_expenditures(self) -> NDArray[np.float64]:
+        """Alias for total_spend (deprecated, use total_spend)."""
+        return self.total_spend
+
+    @property
+    def num_observations(self) -> int:
+        """Alias for num_records (deprecated, use num_records)."""
+        return self.num_records
+
+    @property
+    def num_goods(self) -> int:
+        """Alias for num_features (deprecated, use num_features)."""
+        return self.num_features
+
+    @classmethod
+    def from_dataframe(
+        cls,
+        df: Any,  # pandas.DataFrame
+        cost_cols: list[str] | None = None,
+        action_cols: list[str] | None = None,
+        user_id: str | None = None,
+        # Legacy parameter names
+        price_cols: list[str] | None = None,
+        quantity_cols: list[str] | None = None,
+        session_id: str | None = None,
+    ) -> BehaviorLog:
+        """
+        Create BehaviorLog from pandas DataFrame.
+
+        Args:
+            df: DataFrame with cost and action columns
+            cost_cols: Column names for costs (or use price_cols)
+            action_cols: Column names for actions (or use quantity_cols)
+            user_id: Optional user identifier (or use session_id)
+
+        Returns:
+            BehaviorLog instance
+
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({
+            ...     'cost_A': [1.0, 2.0], 'cost_B': [2.0, 1.0],
+            ...     'action_A': [3.0, 1.0], 'action_B': [1.0, 3.0]
+            ... })
+            >>> log = BehaviorLog.from_dataframe(
+            ...     df, cost_cols=['cost_A', 'cost_B'],
+            ...     action_cols=['action_A', 'action_B']
+            ... )
+        """
+        # Resolve aliases
+        cost_cols = cost_cols or price_cols
+        action_cols = action_cols or quantity_cols
+        user_id = user_id or session_id
+
+        if cost_cols is None:
+            raise ValueError("Must provide cost_cols (or price_cols)")
+        if action_cols is None:
+            raise ValueError("Must provide action_cols (or quantity_cols)")
+
+        costs = df[cost_cols].values
+        actions = df[action_cols].values
+        return cls(cost_vectors=costs, action_vectors=actions, user_id=user_id)
+
+    @classmethod
+    def from_long_format(
+        cls,
+        df: Any,  # pandas.DataFrame
+        time_col: str = "time",
+        item_col: str = "item_id",
+        cost_col: str | None = None,
+        action_col: str | None = None,
+        user_id: str | None = None,
+        # Legacy parameter names
+        price_col: str | None = None,
+        qty_col: str | None = None,
+        session_id: str | None = None,
+    ) -> BehaviorLog:
+        """
+        Create BehaviorLog from long-format transaction logs.
+
+        Pivots SQL-style transaction data (one row per item per time) into
+        wide-format matrices (one row per observation).
+
+        Args:
+            df: Long-format DataFrame with one row per item per time
+            time_col: Column name for time/observation identifier
+            item_col: Column name for item/product identifier
+            cost_col: Column name for cost (or use price_col)
+            action_col: Column name for action (or use qty_col)
+            user_id: Optional user identifier (or use session_id)
+
+        Returns:
+            BehaviorLog instance
+        """
+        import pandas as pd
+
+        # Resolve aliases
+        cost_col = cost_col or price_col or "price"
+        action_col = action_col or qty_col or "quantity"
+        user_id = user_id or session_id
+
+        # Pivot to wide format
+        action_pivot = df.pivot(index=time_col, columns=item_col, values=action_col)
+        cost_pivot = df.pivot(index=time_col, columns=item_col, values=cost_col)
+
+        # Fill missing actions with 0 (item not taken)
+        actions = action_pivot.fillna(0).values
+
+        # Costs should not be missing
+        if cost_pivot.isna().any().any():
+            missing = cost_pivot.isna().sum().sum()
+            raise ValueError(
+                f"Found {missing} missing costs. All costs must be provided."
+            )
+        costs = cost_pivot.values
+
+        return cls(cost_vectors=costs, action_vectors=actions, user_id=user_id)
+
+    def split_by_window(self, window_size: int) -> list[BehaviorLog]:
+        """
+        Split log into non-overlapping windows.
+
+        Useful for detecting structural breaks or analyzing consistency
+        over different time periods.
+
+        Args:
+            window_size: Number of observations per window
+
+        Returns:
+            List of BehaviorLog instances, one per window
+        """
+        logs = []
+        for i in range(0, self.num_records, window_size):
+            end = min(i + window_size, self.num_records)
+            if end - i >= 2:  # Need at least 2 observations
+                logs.append(
+                    BehaviorLog(
+                        cost_vectors=self.cost_vectors[i:end],
+                        action_vectors=self.action_vectors[i:end],
+                        user_id=f"{self.user_id}_window_{i//window_size}"
+                        if self.user_id
+                        else None,
+                    )
+                )
+        return logs
+
+
+# Alias for RiskSession with tech-friendly name
+@dataclass
+class RiskChoiceLog:
     """
     Represents choice data between safe and risky options under uncertainty.
 
@@ -189,226 +502,33 @@ class SpatialSession:
         return len(self.choice_sets)
 
 
-@dataclass
-class ConsumerSession:
-    """
-    Represents observed consumer choice data across T observations and N goods.
+# =============================================================================
+# TECH-FRIENDLY ALIASES (Primary names)
+# =============================================================================
 
-    The fundamental unit of analysis in revealed preference theory. Each row
-    represents one observation (shopping trip, time period, etc.) where the
-    consumer faced a specific price vector and chose a specific bundle.
+# EmbeddingChoiceLog is an alias for SpatialSession
+EmbeddingChoiceLog = SpatialSession
+"""Alias for SpatialSession (tech-friendly name for embedding space choices)."""
 
-    Attributes:
-        prices: T x N matrix of prices (each row is a price vector for one observation)
-        quantities: T x N matrix of quantities (each row is the chosen bundle)
-        session_id: Optional identifier for the session/consumer
-        metadata: Optional dictionary for additional attributes
 
-    Properties:
-        expenditure_matrix: Pre-computed T x T matrix E where E[i,j] = p_i @ q_j
-        own_expenditures: Diagonal of expenditure matrix (actual spend at each obs)
-        num_observations: Number of observations T
-        num_goods: Number of goods N
+# =============================================================================
+# LEGACY ALIASES (Deprecated - use tech-friendly names instead)
+# =============================================================================
 
-    Example:
-        >>> import numpy as np
-        >>> prices = np.array([[1.0, 2.0], [2.0, 1.0]])
-        >>> quantities = np.array([[3.0, 1.0], [1.0, 3.0]])
-        >>> session = ConsumerSession(prices=prices, quantities=quantities)
-        >>> session.num_observations
-        2
-    """
+# ConsumerSession is now an alias for BehaviorLog
+ConsumerSession = BehaviorLog
+"""
+Deprecated: Use BehaviorLog instead.
 
-    prices: NDArray[np.float64]
-    quantities: NDArray[np.float64]
-    session_id: str | None = None
-    metadata: dict[str, Any] = field(default_factory=dict)
+ConsumerSession is the legacy name from economics literature.
+BehaviorLog is the preferred tech-friendly name.
+"""
 
-    # Cached computed properties (not part of equality/hash)
-    _expenditure_matrix: NDArray[np.float64] | None = field(
-        default=None, repr=False, compare=False
-    )
+# RiskSession is now an alias for RiskChoiceLog
+RiskSession = RiskChoiceLog
+"""
+Deprecated: Use RiskChoiceLog instead.
 
-    def __post_init__(self) -> None:
-        """Validate inputs and compute cached properties."""
-        # Ensure arrays are float64
-        self.prices = np.asarray(self.prices, dtype=np.float64)
-        self.quantities = np.asarray(self.quantities, dtype=np.float64)
-
-        self._validate()
-        self._compute_expenditure_matrix()
-
-    def _validate(self) -> None:
-        """Validate price and quantity matrix dimensions and values."""
-        if self.prices.shape != self.quantities.shape:
-            raise ValueError(
-                f"Prices shape {self.prices.shape} must match "
-                f"quantities shape {self.quantities.shape}"
-            )
-        if self.prices.ndim != 2:
-            raise ValueError(
-                f"Prices must be a 2D array (T x N), got {self.prices.ndim}D"
-            )
-        if self.prices.shape[0] < 1:
-            raise ValueError("Must have at least one observation")
-        if self.prices.shape[1] < 1:
-            raise ValueError("Must have at least one good")
-        if np.any(self.prices <= 0):
-            raise ValueError("All prices must be strictly positive")
-        if np.any(self.quantities < 0):
-            raise ValueError("All quantities must be non-negative")
-
-    def _compute_expenditure_matrix(self) -> None:
-        """
-        Pre-compute expenditure matrix E[i,j] = p_i @ q_j.
-
-        E[i,j] represents the cost of buying bundle j at prices i.
-        The diagonal E[i,i] is the actual expenditure at observation i.
-        """
-        self._expenditure_matrix = self.prices @ self.quantities.T
-
-    @property
-    def expenditure_matrix(self) -> NDArray[np.float64]:
-        """
-        T x T matrix where E[i,j] = expenditure to buy bundle j at prices i.
-
-        This matrix is fundamental to revealed preference analysis:
-        - If E[i,i] >= E[i,j], then bundle i is revealed preferred to bundle j
-          at prices i (bundle j was affordable but not chosen).
-        """
-        if self._expenditure_matrix is None:
-            self._compute_expenditure_matrix()
-        return self._expenditure_matrix  # type: ignore
-
-    @property
-    def own_expenditures(self) -> NDArray[np.float64]:
-        """
-        Actual expenditure at each observation (diagonal of expenditure matrix).
-
-        own_expenditures[i] = p_i @ q_i = total money spent at observation i.
-        """
-        return np.diag(self.expenditure_matrix)
-
-    @property
-    def num_observations(self) -> int:
-        """Number of observations T."""
-        return self.prices.shape[0]
-
-    @property
-    def num_goods(self) -> int:
-        """Number of goods N."""
-        return self.prices.shape[1]
-
-    @classmethod
-    def from_dataframe(
-        cls,
-        df: Any,  # pandas.DataFrame
-        price_cols: list[str],
-        quantity_cols: list[str],
-        session_id: str | None = None,
-    ) -> ConsumerSession:
-        """
-        Create ConsumerSession from pandas DataFrame.
-
-        Args:
-            df: DataFrame with price and quantity columns
-            price_cols: List of column names for prices (in order of goods)
-            quantity_cols: List of column names for quantities (in order of goods)
-            session_id: Optional session identifier
-
-        Returns:
-            ConsumerSession instance
-
-        Example:
-            >>> import pandas as pd
-            >>> df = pd.DataFrame({
-            ...     'p_A': [1.0, 2.0], 'p_B': [2.0, 1.0],
-            ...     'q_A': [3.0, 1.0], 'q_B': [1.0, 3.0]
-            ... })
-            >>> session = ConsumerSession.from_dataframe(
-            ...     df, price_cols=['p_A', 'p_B'], quantity_cols=['q_A', 'q_B']
-            ... )
-        """
-        prices = df[price_cols].values
-        quantities = df[quantity_cols].values
-        return cls(prices=prices, quantities=quantities, session_id=session_id)
-
-    @classmethod
-    def from_long_format(
-        cls,
-        df: Any,  # pandas.DataFrame
-        time_col: str = "time",
-        item_col: str = "item_id",
-        price_col: str = "price",
-        qty_col: str = "quantity",
-        session_id: str | None = None,
-    ) -> ConsumerSession:
-        """
-        Create ConsumerSession from long-format transaction logs.
-
-        Pivots SQL-style transaction data (one row per item per time) into
-        wide-format matrices (one row per observation).
-
-        Args:
-            df: Long-format DataFrame with one row per item per time
-            time_col: Column name for time/observation identifier
-            item_col: Column name for item/product identifier
-            price_col: Column name for price
-            qty_col: Column name for quantity
-            session_id: Optional session identifier
-
-        Returns:
-            ConsumerSession instance
-
-        Note:
-            Prices for items not purchased at a given time must be present
-            in the data. Missing values will be filled with 0 for quantities
-            but will raise an error if prices are missing.
-        """
-        import pandas as pd
-
-        # Pivot to wide format
-        q_pivot = df.pivot(index=time_col, columns=item_col, values=qty_col)
-        p_pivot = df.pivot(index=time_col, columns=item_col, values=price_col)
-
-        # Fill missing quantities with 0 (item not purchased)
-        quantities = q_pivot.fillna(0).values
-
-        # Prices should not be missing - need to know opportunity cost
-        if p_pivot.isna().any().any():
-            missing = p_pivot.isna().sum().sum()
-            raise ValueError(
-                f"Found {missing} missing prices. All prices must be provided "
-                "to calculate opportunity costs for unbought items."
-            )
-        prices = p_pivot.values
-
-        return cls(prices=prices, quantities=quantities, session_id=session_id)
-
-    def split_by_window(self, window_size: int) -> list[ConsumerSession]:
-        """
-        Split session into non-overlapping windows.
-
-        Useful for detecting structural breaks or analyzing consistency
-        over different time periods.
-
-        Args:
-            window_size: Number of observations per window
-
-        Returns:
-            List of ConsumerSession instances, one per window
-        """
-        sessions = []
-        for i in range(0, self.num_observations, window_size):
-            end = min(i + window_size, self.num_observations)
-            if end - i >= 2:  # Need at least 2 observations for RP analysis
-                sessions.append(
-                    ConsumerSession(
-                        prices=self.prices[i:end],
-                        quantities=self.quantities[i:end],
-                        session_id=f"{self.session_id}_window_{i//window_size}"
-                        if self.session_id
-                        else None,
-                    )
-                )
-        return sessions
+RiskSession is the legacy name from economics literature.
+RiskChoiceLog is the preferred tech-friendly name.
+"""

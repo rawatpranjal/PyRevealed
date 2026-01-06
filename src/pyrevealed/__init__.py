@@ -1,44 +1,209 @@
 """
-PyRevealed: Revealed Preference Analysis for Consumer Behavior.
+PyRevealed: Behavioral Signal Analysis for User Understanding.
 
-Non-parametric behavioral consistency metrics for fraud detection and user segmentation.
+Detect bots, shared accounts, and UI confusion using structural consistency
+checks on user behavior logs.
+
+## Tech-Friendly API (Primary)
+
+High-Level Classes:
+    - BehavioralAuditor: Validate behavior consistency (linter for user data)
+    - PreferenceEncoder: Extract latent preferences (encoder for ML pipelines)
+
+Data Containers:
+    - BehaviorLog: User behavior history (cost/action pairs)
+    - RiskChoiceLog: Choices under uncertainty
+    - EmbeddingChoiceLog: Choices in feature/embedding space
+
+Functions:
+    - validate_consistency(): Check behavioral consistency
+    - compute_integrity_score(): Compute integrity/noise score
+    - compute_confusion_metric(): Compute confusion/exploitability score
+    - fit_latent_values(): Extract latent preference values
+    - find_preference_anchor(): Find preference anchor in embedding space
+    - test_feature_independence(): Test feature group independence
+
+## Legacy API (Deprecated but supported)
+
+Economics-based names still work for backward compatibility:
+    - ConsumerSession -> BehaviorLog
+    - check_garp -> validate_consistency
+    - compute_aei -> compute_integrity_score
+    - compute_mpi -> compute_confusion_metric
 """
 
-from pyrevealed.core.session import ConsumerSession, RiskSession, SpatialSession
+# =============================================================================
+# HIGH-LEVEL CLASSES (Primary API)
+# =============================================================================
+
+from pyrevealed.auditor import BehavioralAuditor, AuditReport
+from pyrevealed.encoder import PreferenceEncoder
+
+# =============================================================================
+# DATA CONTAINERS - Tech-friendly names (Primary)
+# =============================================================================
+
+from pyrevealed.core.session import (
+    # Primary tech-friendly names
+    BehaviorLog,
+    RiskChoiceLog,
+    EmbeddingChoiceLog,
+    # Legacy names (aliases for backward compatibility)
+    ConsumerSession,
+    RiskSession,
+    SpatialSession,
+)
+
+# =============================================================================
+# RESULT TYPES - Tech-friendly names (Primary)
+# =============================================================================
+
 from pyrevealed.core.result import (
+    # Primary tech-friendly names
+    ConsistencyResult,
+    IntegrityResult,
+    ConfusionResult,
+    LatentValueResult,
+    PreferenceAnchorResult,
+    FeatureIndependenceResult,
+    # Legacy names (aliases for backward compatibility)
     GARPResult,
     AEIResult,
     MPIResult,
     UtilityRecoveryResult,
-    RiskProfileResult,
     IdealPointResult,
     SeparabilityResult,
+    # Risk result (already tech-friendly)
+    RiskProfileResult,
 )
-from pyrevealed.algorithms.garp import check_garp
-from pyrevealed.algorithms.aei import compute_aei
-from pyrevealed.algorithms.mpi import compute_mpi
-from pyrevealed.algorithms.utility import recover_utility, construct_afriat_utility
+
+# =============================================================================
+# FUNCTIONS - Tech-friendly names (Primary)
+# =============================================================================
+
+# Consistency validation
+from pyrevealed.algorithms.garp import (
+    validate_consistency,
+    validate_consistency_weak,
+    check_garp,  # Legacy
+    check_warp,  # Legacy
+)
+
+# Integrity/noise score
+from pyrevealed.algorithms.aei import (
+    compute_integrity_score,
+    compute_aei,  # Legacy
+    compute_varian_index,
+)
+
+# Confusion metric
+from pyrevealed.algorithms.mpi import (
+    compute_confusion_metric,
+    compute_minimal_outlier_fraction,
+    compute_mpi,  # Legacy
+    compute_houtman_maks_index,  # Legacy
+)
+
+# Latent value extraction
+from pyrevealed.algorithms.utility import (
+    fit_latent_values,
+    build_value_function,
+    predict_choice,
+    recover_utility,  # Legacy
+    construct_afriat_utility,  # Legacy
+    predict_demand,  # Legacy
+)
+
+# Risk profiling (already tech-friendly)
 from pyrevealed.algorithms.risk import (
     compute_risk_profile,
     check_expected_utility_axioms,
     classify_risk_type,
 )
+
+# Preference anchor / embedding analysis
 from pyrevealed.algorithms.spatial import (
-    find_ideal_point,
-    check_euclidean_rationality,
-    compute_preference_strength,
-    find_multiple_ideal_points,
-)
-from pyrevealed.algorithms.separability import (
-    check_separability,
-    find_separable_partition,
-    compute_cannibalization,
+    find_preference_anchor,
+    validate_embedding_consistency,
+    compute_signal_strength,
+    find_multiple_anchors,
+    find_ideal_point,  # Legacy
+    check_euclidean_rationality,  # Legacy
+    compute_preference_strength,  # Legacy
+    find_multiple_ideal_points,  # Legacy
 )
 
-__version__ = "0.2.0"
+# Feature independence / separability
+from pyrevealed.algorithms.separability import (
+    test_feature_independence,
+    discover_independent_groups,
+    compute_cross_impact,
+    check_separability,  # Legacy
+    find_separable_partition,  # Legacy
+    compute_cannibalization,  # Legacy
+)
+
+__version__ = "0.3.0"
 
 __all__ = [
-    # Data structures
+    # ==========================================================================
+    # HIGH-LEVEL CLASSES (Primary API)
+    # ==========================================================================
+    "BehavioralAuditor",
+    "AuditReport",
+    "PreferenceEncoder",
+
+    # ==========================================================================
+    # DATA CONTAINERS - Tech-friendly (Primary)
+    # ==========================================================================
+    "BehaviorLog",
+    "RiskChoiceLog",
+    "EmbeddingChoiceLog",
+
+    # ==========================================================================
+    # RESULT TYPES - Tech-friendly (Primary)
+    # ==========================================================================
+    "ConsistencyResult",
+    "IntegrityResult",
+    "ConfusionResult",
+    "LatentValueResult",
+    "PreferenceAnchorResult",
+    "FeatureIndependenceResult",
+    "RiskProfileResult",
+
+    # ==========================================================================
+    # FUNCTIONS - Tech-friendly (Primary)
+    # ==========================================================================
+    # Consistency
+    "validate_consistency",
+    "validate_consistency_weak",
+    # Integrity
+    "compute_integrity_score",
+    # Confusion
+    "compute_confusion_metric",
+    "compute_minimal_outlier_fraction",
+    # Latent values
+    "fit_latent_values",
+    "build_value_function",
+    "predict_choice",
+    # Risk
+    "compute_risk_profile",
+    "check_expected_utility_axioms",
+    "classify_risk_type",
+    # Preference anchor
+    "find_preference_anchor",
+    "validate_embedding_consistency",
+    "compute_signal_strength",
+    "find_multiple_anchors",
+    # Feature independence
+    "test_feature_independence",
+    "discover_independent_groups",
+    "compute_cross_impact",
+
+    # ==========================================================================
+    # LEGACY NAMES (Deprecated - use tech-friendly names above)
+    # ==========================================================================
+    # Data containers
     "ConsumerSession",
     "RiskSession",
     "SpatialSession",
@@ -47,25 +212,22 @@ __all__ = [
     "AEIResult",
     "MPIResult",
     "UtilityRecoveryResult",
-    "RiskProfileResult",
     "IdealPointResult",
     "SeparabilityResult",
-    # Core algorithms (GARP, AEI, MPI)
+    # Functions
     "check_garp",
+    "check_warp",
     "compute_aei",
+    "compute_varian_index",
     "compute_mpi",
+    "compute_houtman_maks_index",
     "recover_utility",
     "construct_afriat_utility",
-    # Risk profile analysis
-    "compute_risk_profile",
-    "check_expected_utility_axioms",
-    "classify_risk_type",
-    # Spatial/ideal point analysis
+    "predict_demand",
     "find_ideal_point",
     "check_euclidean_rationality",
     "compute_preference_strength",
     "find_multiple_ideal_points",
-    # Separability analysis
     "check_separability",
     "find_separable_partition",
     "compute_cannibalization",
@@ -74,16 +236,27 @@ __all__ = [
 ]
 
 
-def get_integrity_score(session: ConsumerSession, tolerance: float = 1e-6) -> float:
+def get_integrity_score(log: BehaviorLog, precision: float = 1e-6) -> float:
     """
-    Convenience function to get the Afriat Efficiency Index score directly.
+    Convenience function to get the behavioral integrity score directly.
+
+    The integrity score measures data quality:
+    - 1.0 = Perfect signal, fully consistent user
+    - 0.5 = Noisy signal, possible bot or confused user
+    - <0.5 = Very noisy, likely bot or shared account
 
     Args:
-        session: ConsumerSession with prices and quantities
-        tolerance: Convergence tolerance for binary search
+        log: BehaviorLog (or ConsumerSession) with user behavior data
+        precision: Convergence tolerance for computation
 
     Returns:
-        Float between 0 (irrational) and 1 (perfectly rational)
+        Float between 0 (chaotic) and 1 (perfectly consistent)
+
+    Example:
+        >>> from pyrevealed import BehaviorLog, get_integrity_score
+        >>> score = get_integrity_score(user_log)
+        >>> if score < 0.85:
+        ...     flag_for_review(user_id)
     """
-    result = compute_aei(session, tolerance=tolerance)
+    result = compute_integrity_score(log, tolerance=precision)
     return result.efficiency_index

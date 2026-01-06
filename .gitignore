@@ -94,5 +94,10 @@ Thumbs.db
 *.pdf
 !chapters/*.pdf
 
+# Dunnhumby integration tests (large datasets)
+dunnhumby/data/
+dunnhumby/cache/
+dunnhumby/output/
+
 # Generated outputs
 *.png

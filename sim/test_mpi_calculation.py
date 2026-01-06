@@ -171,50 +171,7 @@ def test_mpi_manual_calculation() -> SimulationResults:
     print(results.name)
     print("="*60)
 
-    # Simple 2-cycle example
-    # Cycle: 0 -> 1 -> 0
-    prices = np.array([
-        [1.0, 1.0],
-        [1.0, 1.0],
-    ])
-    quantities = np.array([
-        [4.0, 1.0],  # x0: exp = 5
-        [1.0, 4.0],  # x1: exp = 5
-    ])
-
-    # Check if this creates a violation
-    # p0 @ x0 = 5, p0 @ x1 = 5 -> x0 weakly revealed preferred to x1
-    # p1 @ x1 = 5, p1 @ x0 = 5 -> x1 weakly revealed preferred to x0
-    # This is NOT a strict violation (both weak preferences)
-
-    # Create strict violation
-    prices = np.array([
-        [1.0, 1.0],
-        [1.0, 1.0],
-    ])
-    quantities = np.array([
-        [5.0, 1.0],  # exp = 6
-        [1.0, 5.0],  # exp = 6
-    ])
-    # p0 @ x0 = 6, p0 @ x1 = 6 -> weak preference
-    # Still no strict preference!
-
-    # Need strict preference: p_i @ x_i > p_i @ x_j
-    # But with same prices and same total expenditure, we only get weak
-    # Use different expenditure levels
-
-    prices = np.array([
-        [1.0, 2.0],
-        [2.0, 1.0],
-    ])
-    quantities = np.array([
-        [6.0, 1.0],  # p0 @ x0 = 8
-        [1.0, 6.0],  # p1 @ x1 = 8
-    ])
-    # p0 @ x0 = 8, p0 @ x1 = 1 + 12 = 13 > 8 -> x1 NOT affordable at p0
-    # This is NOT a violation
-
-    # Classic crossing budget lines
+    # Test 1: Equal expenditure data should be consistent (MPI = 0)
     prices = np.array([
         [1.0, 1.0],
         [1.0, 1.0],
@@ -223,52 +180,67 @@ def test_mpi_manual_calculation() -> SimulationResults:
         [3.0, 2.0],  # exp = 5
         [2.0, 3.0],  # exp = 5
     ])
-    # p0 @ x0 = 5, p0 @ x1 = 5 -> weak preference 0 to 1
-    # p1 @ x1 = 5, p1 @ x0 = 5 -> weak preference 1 to 0
-    # No STRICT preference, so no GARP violation
-
-    session = ConsumerSession(prices=prices, quantities=quantities)
-    garp_result = check_garp(session)
-
-    # This data is actually GARP consistent (no strict preferences)
-    results.record(
-        "no_strict_preference_consistent",
-        garp_result.is_consistent,
-        "Data without strict preferences should be consistent"
-    )
-
-    # Now create actual violation with strict preferences
-    prices = np.array([
-        [1.0, 1.0],
-        [1.0, 1.0],
-    ])
-    quantities = np.array([
-        [4.0, 1.0],  # exp = 5
-        [2.0, 2.5],  # exp = 4.5
-    ])
-    # p0 @ x0 = 5, p0 @ x1 = 4.5 < 5 -> x0 STRICTLY revealed preferred to x1
-    # p1 @ x1 = 4.5, p1 @ x0 = 5 > 4.5 -> x0 NOT affordable at p1
-    # Still no violation!
-
-    # Both must be affordable at each other's budgets for cycle
-    prices = np.array([
-        [1.0, 1.0],
-        [1.0, 1.0],
-    ])
-    quantities = np.array([
-        [3.0, 1.0],  # exp = 4
-        [1.0, 3.0],  # exp = 4
-    ])
-    # All equal expenditure: weak preferences only, no strict -> consistent
+    # p0 @ x0 = 5, p0 @ x1 = 5 -> weak preference only
+    # No STRICT preference, so GARP consistent
 
     session = ConsumerSession(prices=prices, quantities=quantities)
     garp_result = check_garp(session)
     mpi_result = compute_mpi(session)
 
     results.record(
+        "equal_expenditure_consistent",
+        garp_result.is_consistent,
+        "Equal expenditure data should be GARP consistent"
+    )
+
+    results.record(
         "equal_expenditure_mpi_zero",
         mpi_result.mpi_value == 0.0,
         f"Equal expenditure data: MPI = {mpi_result.mpi_value}"
+    )
+
+    # Test 2: Verified 2-cycle GARP violation
+    # Key insight: need DIFFERENT prices to create strict preferences on BOTH sides
+    prices = np.array([
+        [1.5, 1.0],
+        [1.0, 1.5],
+    ])
+    quantities = np.array([
+        [4.0, 3.0],  # x0: p0@x0 = 9, p1@x0 = 8.5
+        [3.0, 4.0],  # x1: p0@x1 = 8.5, p1@x1 = 9
+    ])
+    # p0@x0 = 9 > p0@x1 = 8.5 -> x0 STRICTLY revealed preferred to x1
+    # p1@x1 = 9 > p1@x0 = 8.5 -> x1 STRICTLY revealed preferred to x0
+    # This creates a 2-cycle GARP violation!
+
+    session = ConsumerSession(prices=prices, quantities=quantities)
+    garp_result = check_garp(session)
+    mpi_result = compute_mpi(session)
+
+    results.record(
+        "2cycle_is_violation",
+        not garp_result.is_consistent,
+        "2-cycle with crossing budgets should be GARP violation"
+    )
+
+    results.record(
+        "2cycle_mpi_positive",
+        mpi_result.mpi_value > 0.0,
+        f"2-cycle MPI = {mpi_result.mpi_value} (should be > 0)"
+    )
+
+    # Test 3: Verify MPI calculation manually for the 2-cycle
+    # MPI = sum(p_k @ x_k - p_k @ x_{k+1}) / sum(p_k @ x_k)
+    # Cycle: 0 -> 1 -> 0
+    # Numerator: (p0@x0 - p0@x1) + (p1@x1 - p1@x0) = (9-8.5) + (9-8.5) = 1.0
+    # Denominator: p0@x0 + p1@x1 = 9 + 9 = 18
+    # Expected MPI = 1.0 / 18 ≈ 0.0556
+    expected_mpi = 1.0 / 18.0
+
+    results.record(
+        "2cycle_mpi_value",
+        abs(mpi_result.mpi_value - expected_mpi) < 0.01,
+        f"MPI = {mpi_result.mpi_value:.4f}, expected ≈ {expected_mpi:.4f}"
     )
 
     return results

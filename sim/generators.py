@@ -591,8 +591,8 @@ def generate_efficiency_data(
     waste_factor = 1.0 - target_efficiency
 
     for t in range(n_observations):
-        # Add noise proportional to waste
-        noise = rng.normal(0, waste_factor, n_goods)
+        # Add bounded noise proportional to waste (uniform is bounded unlike normal)
+        noise = rng.uniform(-waste_factor, waste_factor, n_goods)
         quantities[t] = np.maximum(quantities[t] * (1 + noise), 0.1)
 
     return prices, quantities
@@ -613,11 +613,19 @@ def compute_theoretical_mpi(
     Args:
         prices: Price matrix
         quantities: Quantity matrix
-        cycle: Tuple of observation indices forming the cycle
+        cycle: Tuple of observation indices forming the cycle.
+               Can be (0, 1, 2) or (0, 1, 2, 0) - closing edge is added if needed.
 
     Returns:
         Theoretical MPI value
     """
+    if len(cycle) < 2:
+        return 0.0
+
+    # Ensure cycle closes back to first element
+    if cycle[0] != cycle[-1]:
+        cycle = cycle + (cycle[0],)
+
     numerator = 0.0
     denominator = 0.0
 

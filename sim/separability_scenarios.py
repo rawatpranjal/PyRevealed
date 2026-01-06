@@ -73,8 +73,8 @@ def generate_separable_superapp(
         quantities[t, 2] = alpha_eats[0] * eats_budget / prices[t, 2]
         quantities[t, 3] = alpha_eats[1] * eats_budget / prices[t, 3]
 
-        # Add small noise
-        quantities[t] += rng.normal(0, 0.1, n_goods)
+        # Add small multiplicative noise (preserves separability structure)
+        quantities[t] *= (1 + rng.normal(0, 0.05, n_goods))
         quantities[t] = np.maximum(quantities[t], 0.01)
 
     session = ConsumerSession(

@@ -224,3 +224,38 @@ def check_warp(
     ]
 
     return len(violations) == 0, violations
+
+
+# =============================================================================
+# TECH-FRIENDLY ALIASES
+# =============================================================================
+
+# validate_consistency: Tech-friendly name for check_garp
+validate_consistency = check_garp
+"""
+Validate that user behavior is internally consistent.
+
+This is the tech-friendly alias for check_garp (GARP = Generalized Axiom
+of Revealed Preference). Consistent behavior indicates:
+- Single user (not a shared account)
+- Not a bot (bots make random inconsistent choices)
+- Not confused by the UI
+
+Returns a ConsistencyResult with:
+- is_valid: True if behavior is consistent
+- inconsistencies: List of detected inconsistencies
+
+Example:
+    >>> from pyrevealed import BehaviorLog, validate_consistency
+    >>> result = validate_consistency(user_log)
+    >>> if not result.is_valid:
+    ...     print(f"Found {result.num_violations} inconsistencies")
+"""
+
+# validate_consistency_weak: Tech-friendly name for check_warp
+validate_consistency_weak = check_warp
+"""
+Weak consistency check (only checks direct contradictions).
+
+Faster than full validate_consistency but may miss transitive inconsistencies.
+"""

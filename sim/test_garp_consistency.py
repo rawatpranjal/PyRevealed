@@ -345,7 +345,7 @@ def test_cycle_detection_correctness() -> SimulationResults:
         result = check_garp(session)
 
         if not result.is_consistent and result.violations:
-            for cycle_idx, cycle in enumerate(result.violations[:3]):  # Check first 3 cycles
+            for cycle_idx, cycle in enumerate(result.violations[:10]):  # Check up to 10 cycles
                 # Verify cycle is valid
                 # cycle is (i1, i2, ..., in, i1) where last = first
 

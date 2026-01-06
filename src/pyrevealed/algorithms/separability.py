@@ -369,3 +369,51 @@ def compute_cannibalization(
         'symmetric': symmetric,
         'net_direction': a_to_b - b_to_a,
     }
+
+
+# =============================================================================
+# TECH-FRIENDLY ALIASES
+# =============================================================================
+
+# test_feature_independence: Tech-friendly name for check_separability
+test_feature_independence = check_separability
+"""
+Test if two feature groups are independent (can be optimized separately).
+
+This is the tech-friendly alias for check_separability.
+
+Use this to determine if product categories can be priced/optimized
+independently without considering cross-effects.
+
+Example:
+    >>> from pyrevealed import BehaviorLog, test_feature_independence
+    >>> # Test if Rides and Eats are independent for a superapp user
+    >>> result = test_feature_independence(user_log, group_a=[0, 1], group_b=[2, 3])
+    >>> if result.is_separable:
+    ...     print("Can price independently")
+
+Returns:
+    FeatureIndependenceResult with is_separable and cross_effect_strength
+"""
+
+# discover_independent_groups: Tech-friendly name for find_separable_partition
+discover_independent_groups = find_separable_partition
+"""
+Auto-discover groups of features that can be treated independently.
+
+This is the tech-friendly alias for find_separable_partition.
+
+Uses clustering to find natural groupings of features where
+cross-effects are minimal.
+"""
+
+# compute_cross_impact: Tech-friendly name for compute_cannibalization
+compute_cross_impact = compute_cannibalization
+"""
+Compute how much one feature group impacts another.
+
+This is the tech-friendly alias for compute_cannibalization.
+
+Measures cross-elasticity effects between feature groups.
+High cross-impact means changes in one group significantly affect the other.
+"""

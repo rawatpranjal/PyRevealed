@@ -258,3 +258,71 @@ def find_multiple_ideal_points(
             results.append((result2.ideal_point, explained))
 
     return results[:n_points]
+
+
+# =============================================================================
+# TECH-FRIENDLY ALIASES
+# =============================================================================
+
+# find_preference_anchor: Tech-friendly name for find_ideal_point
+find_preference_anchor = find_ideal_point
+"""
+Find the user's preference anchor (ideal point) in embedding space.
+
+This is the tech-friendly alias for find_ideal_point.
+
+The preference anchor is the location in feature space that the user
+seems to prefer. Items closer to this anchor are more likely to be chosen.
+
+Use this for:
+- Recommendation explainability ("You prefer items near this anchor")
+- Personalization (recommend items close to anchor)
+- Detecting account sharing (multiple anchors = multiple users)
+
+Example:
+    >>> from pyrevealed import EmbeddingChoiceLog, find_preference_anchor
+    >>> result = find_preference_anchor(user_choices)
+    >>> print(f"User's anchor: {result.ideal_point}")
+
+Returns:
+    PreferenceAnchorResult with ideal_point and explained_variance
+"""
+
+# validate_embedding_consistency: Tech-friendly name for check_euclidean_rationality
+validate_embedding_consistency = check_euclidean_rationality
+"""
+Check if user choices are consistent in embedding space.
+
+This is the tech-friendly alias for check_euclidean_rationality.
+
+Verifies that the user's choices can be explained by a single preference
+anchor. Inconsistency suggests multiple users or erratic behavior.
+"""
+
+# compute_signal_strength: Tech-friendly name for compute_preference_strength
+compute_signal_strength = compute_preference_strength
+"""
+Compute the signal strength of user preferences.
+
+This is the tech-friendly alias for compute_preference_strength.
+
+Higher signal strength means clearer, more consistent preferences.
+Low signal strength indicates noisy or random choices.
+"""
+
+# find_multiple_anchors: Tech-friendly name for find_multiple_ideal_points
+find_multiple_anchors = find_multiple_ideal_points
+"""
+Find multiple preference anchors (for shared accounts/multi-user detection).
+
+This is the tech-friendly alias for find_multiple_ideal_points.
+
+If multiple anchors explain the data well, this suggests the account
+is shared by multiple users with different preferences.
+
+Example:
+    >>> from pyrevealed import EmbeddingChoiceLog, find_multiple_anchors
+    >>> anchors = find_multiple_anchors(user_choices, n=2)
+    >>> if len(anchors) > 1 and anchors[1][1] > 0.3:
+    ...     flag_as_shared_account(user_id)
+"""

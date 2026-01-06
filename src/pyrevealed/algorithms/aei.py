@@ -202,3 +202,36 @@ def compute_varian_index(
         completeness as referenced in the literature.
     """
     return compute_aei(session, tolerance, max_iterations).efficiency_index
+
+
+# =============================================================================
+# TECH-FRIENDLY ALIASES
+# =============================================================================
+
+# compute_integrity_score: Tech-friendly name for compute_aei
+compute_integrity_score = compute_aei
+"""
+Compute the behavioral integrity score (0-1).
+
+This is the tech-friendly alias for compute_aei (Afriat Efficiency Index).
+
+The integrity score measures how "clean" the behavioral signal is:
+- 1.0 = Perfect integrity, fully consistent user behavior
+- 0.9+ = High integrity, minor noise
+- 0.7-0.9 = Moderate integrity, some confusion or noise
+- <0.7 = Low integrity, likely bot or multiple users
+
+Use this for:
+- Bot detection (bots have low integrity scores)
+- Account sharing detection (multiple users = inconsistent behavior)
+- Data quality assessment before ML training
+
+Example:
+    >>> from pyrevealed import BehaviorLog, compute_integrity_score
+    >>> result = compute_integrity_score(user_log)
+    >>> if result.integrity_score < 0.85:
+    ...     flag_for_review(user_id)
+
+Returns:
+    IntegrityResult with integrity_score in [0, 1]
+"""
