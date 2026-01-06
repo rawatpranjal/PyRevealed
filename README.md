@@ -130,12 +130,53 @@ Do households treat product groups as separate budgets?
 
 Only Protein (Beef, Lunchmeat) vs Staples (Bread, Soup) shows separate budgeting (62%). All other category pairs: pooled budgets (<35%).
 
+### Auto-Discovered Product Groups
+
+Does the data confirm our manual category groupings? Using `discover_independent_groups()`:
+
+| Manual Group | Products | Auto-Discovery Agreement |
+|--------------|----------|-------------------------|
+| **Dairy** | Milk, Cheese, Yogurt | 61% ✓ |
+| **Snacks** | Soda, Chips, Pizza | 60% ✓ |
+| **Staples** | Bread, Soup | 71% ✓ |
+| **Protein** | Beef, Lunchmeat | 42% ✗ |
+
+Three of four manual groupings confirmed. Protein products don't cluster as strongly as expected.
+
+### Robustness (Houtman-Maks Index)
+
+How many observations need to be removed to make behavior consistent?
+
+| Metric | Value |
+|--------|-------|
+| Mean outlier fraction | 18.6% |
+| Perfect rationality (HM=0) | 3.8% |
+| Easy fixes (HM<0.1) | 17.0% |
+| AEI-HM correlation | -0.499 |
+
+17% of households are "almost rational"—removing <10% of their observations makes them fully consistent.
+
+### Predictive Validation
+
+Can first-half behavior predict second-half outcomes? Split-sample study with LightGBM:
+
+| Target | Persistence RMSE | LightGBM RMSE | R² | Improvement |
+|--------|------------------|---------------|-----|-------------|
+| **Integrity (AEI)** | 0.114 | 0.081 | 0.084 | **28.4%** |
+| **Total Spending** | 195.78 | 195.03 | 0.785 | 0.4% |
+| **Category Shares** | 0.06-0.09 | 0.06-0.09 | 0.33-0.55 | 1-5% |
+
+**Key insight**: First-half spending patterns (category shares) are the strongest predictors of second-half behavioral consistency—more predictive than first-half integrity itself.
+
 ### Key Insights
 
 - 4.5% of households are perfectly consistent (GARP)
 - Mean integrity score: 0.839
 - Mean exploitability (MPI): 0.225
 - Only Protein vs Staples shows separate mental budgets (62%)
+- Auto-discovery confirms 3/4 manual category groupings
+- 17% of households are "almost rational" (HM < 0.1)
+- First-half spending patterns predict second-half consistency better than first-half consistency itself
 
 ### Running the Dunnhumby Tests
 
@@ -154,6 +195,12 @@ python3 dunnhumby/comprehensive_analysis.py
 
 # 5. Run advanced analysis (complementarity, mental accounting, stress test, structural breaks)
 python3 dunnhumby/advanced_analysis.py
+
+# 6. Run encoder analysis (auto-discovery, Houtman-Maks)
+python3 dunnhumby/encoder_analysis.py
+
+# 7. Run predictive validation (split-sample LightGBM)
+python3 dunnhumby/predictive_analysis.py
 
 # Optional: Quick test mode (100 households sample)
 python3 dunnhumby/run_all.py --quick
@@ -178,6 +225,8 @@ pyrevealed/
 │   ├── extended_analysis.py  # Statistical analyses
 │   ├── comprehensive_analysis.py  # MPI, WARP, separability
 │   ├── advanced_analysis.py  # Complementarity, stress tests
+│   ├── encoder_analysis.py  # Auto-discovery, Houtman-Maks
+│   ├── predictive_analysis.py  # Split-sample LightGBM
 │   └── data/            # Kaggle dataset (download required)
 ├── docs/images/         # README visualizations
 ├── notebooks/           # Tutorials
