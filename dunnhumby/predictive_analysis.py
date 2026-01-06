@@ -192,6 +192,23 @@ def build_dataset(sessions: Dict[int, HouseholdData], min_obs: int = 20) -> pd.D
     return df
 
 
+def get_feature_groups(feature_cols: list) -> dict:
+    """Categorize features into groups for ablation study."""
+    basic_stats = ['n_observations', 'total_spend', 'mean_spend_per_obs', 'std_spend']
+    category_shares = [c for c in feature_cols if c.startswith('share_')]
+
+    pyrevealed_auditor = ['integrity_score', 'confusion_score', 'bot_risk',
+                          'shared_account_risk', 'ux_confusion_risk', 'is_consistent']
+    pyrevealed_encoder = ['mean_latent', 'std_latent', 'mean_marginal', 'encoder_fitted']
+
+    return {
+        'basic': basic_stats + category_shares,
+        'pyrevealed': pyrevealed_auditor + pyrevealed_encoder,
+        'auditor': pyrevealed_auditor,
+        'encoder': pyrevealed_encoder,
+    }
+
+
 def train_and_evaluate(df: pd.DataFrame) -> dict:
     """Train LightGBM models and evaluate against baselines."""
     import lightgbm as lgb
@@ -303,10 +320,54 @@ def train_and_evaluate(df: pd.DataFrame) -> dict:
 
         print(f"  {target_name}: RMSE={lgb_rmse:.4f}, R²={lgb_r2:.4f}")
 
+    # Ablation study: Basic vs Basic+PyRevealed
+    print("\n  Running ablation study (Basic vs Basic+PyRevealed)...")
+    ablation_results = {}
+
+    feature_groups = get_feature_groups(feature_cols)
+    basic_cols = [c for c in feature_groups['basic'] if c in feature_cols]
+    pyrevealed_cols = [c for c in feature_groups['pyrevealed'] if c in feature_cols]
+
+    for target_name in ['Integrity (AEI)', 'Total Spending']:
+        if target_name not in results:
+            continue
+
+        target_col = targets[target_name]
+        y = df_clean[target_col].values
+
+        # Model with basic features only
+        X_basic = df_clean[basic_cols].values
+        model_basic = lgb.LGBMRegressor(**lgb_params)
+        y_pred_basic = cross_val_predict(model_basic, X_basic, y, cv=kf)
+        rmse_basic = np.sqrt(mean_squared_error(y, y_pred_basic))
+        r2_basic = r2_score(y, y_pred_basic)
+
+        # Full model (basic + pyrevealed)
+        rmse_full = results[target_name]['lgb_rmse']
+        r2_full = results[target_name]['lgb_r2']
+
+        # Incremental value of PyRevealed
+        rmse_reduction = (rmse_basic - rmse_full) / rmse_basic * 100
+        r2_lift = r2_full - r2_basic
+
+        ablation_results[target_name] = {
+            'rmse_basic': rmse_basic,
+            'r2_basic': r2_basic,
+            'rmse_full': rmse_full,
+            'r2_full': r2_full,
+            'rmse_reduction_pct': rmse_reduction,
+            'r2_lift': r2_lift,
+        }
+
+        print(f"    {target_name}: Basic R²={r2_basic:.3f} → Full R²={r2_full:.3f} "
+              f"(+{r2_lift:.3f} from PyRevealed)")
+
     return {
         'results': results,
         'feature_importances': all_importances,
         'feature_names': feature_names,
+        'ablation': ablation_results,
+        'feature_groups': feature_groups,
     }
 
 
@@ -464,12 +525,53 @@ if __name__ == "__main__":
         print(f"  - Spending prediction: R²={r['lgb_r2']:.3f}, "
               f"{r['improvement_vs_persist']:.1f}% better than persistence")
 
-    # Top features for integrity
+    # Ablation study results
+    if 'ablation' in study['results'] and study['results']['ablation']:
+        print("\n" + "=" * 70)
+        print(" ABLATION STUDY: Incremental Value of PyRevealed Features")
+        print("=" * 70)
+
+        print("\n  Feature Sets:")
+        groups = study['results']['feature_groups']
+        print(f"    Basic: {len(groups['basic'])} features (spend stats + category shares)")
+        print(f"    PyRevealed: {len(groups['pyrevealed'])} features (auditor + encoder)")
+
+        print("\n  Results:")
+        print(f"  {'Target':<20} {'Basic R²':>10} {'Full R²':>10} {'R² Lift':>10} {'RMSE Δ':>10}")
+        print("  " + "-" * 62)
+
+        for target_name, abl in study['results']['ablation'].items():
+            print(f"  {target_name:<20} {abl['r2_basic']:>10.3f} {abl['r2_full']:>10.3f} "
+                  f"{abl['r2_lift']:>+10.3f} {abl['rmse_reduction_pct']:>+9.1f}%")
+
+    # Top features for integrity (grouped)
     if 'Integrity (AEI)' in study['results']['feature_importances']:
+        print("\n" + "=" * 70)
+        print(" FEATURE IMPORTANCE: Predicting Second-Half Integrity")
+        print("=" * 70)
+
         imp = study['results']['feature_importances']['Integrity (AEI)']
-        top_features = sorted(imp.items(), key=lambda x: x[1], reverse=True)[:5]
-        print("\n  Top features for predicting integrity:")
-        for name, val in top_features:
-            print(f"    - {name}: {val:.1f}")
+        groups = study['results']['feature_groups']
+
+        # Sum importance by group
+        group_importance = {}
+        for group_name, group_cols in groups.items():
+            total = sum(imp.get(c, 0) for c in group_cols)
+            group_importance[group_name] = total
+
+        print("\n  Importance by Feature Group:")
+        total_imp = sum(group_importance.values())
+        for group_name in ['basic', 'pyrevealed']:
+            if group_name in group_importance:
+                pct = group_importance[group_name] / total_imp * 100 if total_imp > 0 else 0
+                print(f"    {group_name.capitalize():<12}: {pct:5.1f}%")
+
+        # Top individual features
+        top_features = sorted(imp.items(), key=lambda x: x[1], reverse=True)[:10]
+        print("\n  Top 10 Individual Features:")
+        for i, (name, val) in enumerate(top_features, 1):
+            # Mark PyRevealed features
+            marker = " [PyRevealed]" if name in groups['pyrevealed'] else ""
+            print(f"    {i:2}. {name:<25} {val:6.1f}{marker}")
 
     print(f"\nVisualizations saved to: {OUTPUT_DIR}")

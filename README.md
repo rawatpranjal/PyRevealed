@@ -166,7 +166,15 @@ Can first-half behavior predict second-half outcomes? Split-sample study with Li
 | **Total Spending** | 195.78 | 195.03 | 0.785 | 0.4% |
 | **Category Shares** | 0.06-0.09 | 0.06-0.09 | 0.33-0.55 | 1-5% |
 
-**Key insight**: First-half spending patterns (category shares) are the strongest predictors of second-half behavioral consistency—more predictive than first-half integrity itself.
+**Ablation Study: Incremental Value of PyRevealed Features**
+
+| Feature Set | Integrity R² | Spending R² |
+|-------------|--------------|-------------|
+| Basic only (14 features) | 0.071 | 0.784 |
+| Basic + PyRevealed (24 features) | **0.084** | 0.785 |
+| **PyRevealed R² lift** | **+0.014** | +0.001 |
+
+PyRevealed features (BehavioralAuditor + PreferenceEncoder) contribute **12.5% of total feature importance** for integrity prediction. First-half `integrity_score` ranks **#5** among all predictors of second-half consistency.
 
 ### Key Insights
 
@@ -177,6 +185,7 @@ Can first-half behavior predict second-half outcomes? Split-sample study with Li
 - Auto-discovery confirms 3/4 manual category groupings
 - 17% of households are "almost rational" (HM < 0.1)
 - First-half spending patterns predict second-half consistency better than first-half consistency itself
+- PyRevealed features provide +0.014 R² lift for integrity prediction (12.5% of feature importance)
 
 ### Running the Dunnhumby Tests
 
