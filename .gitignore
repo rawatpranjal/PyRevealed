@@ -101,3 +101,4 @@ dunnhumby/output/
 
 # Generated outputs
 *.png
+!docs/images/*.png
