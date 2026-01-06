@@ -180,8 +180,21 @@ pyrevealed/
 │   ├── advanced_analysis.py  # Complementarity, stress tests
 │   └── data/            # Kaggle dataset (download required)
 ├── docs/images/         # README visualizations
-└── notebooks/           # Tutorials
+├── notebooks/           # Tutorials
+└── examples/            # Advanced usage examples
 ```
+
+## More Examples
+
+See the `examples/` directory for advanced usage:
+
+| File | Description |
+|------|-------------|
+| `01_behavioral_auditor.py` | Linter-style API with bot/fraud/UX risk assessments |
+| `02_preference_encoder.py` | sklearn-style ML integration and counterfactual predictions |
+| `03_risk_analysis.py` | Risk profiling under uncertainty (risk-averse vs risk-seeking) |
+| `04_spatial_preferences.py` | Ideal point analysis in embedding space |
+| `05_advanced_features.py` | Separability, data loading, temporal analysis |
 
 ## Theory
 
