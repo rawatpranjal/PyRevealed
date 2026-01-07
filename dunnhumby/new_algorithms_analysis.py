@@ -6,6 +6,11 @@ Showcase L: Homotheticity (HARP) - Tests if preferences scale with budget
 Showcase M: Granular Efficiency (VEI) - Per-observation integrity scores
 Showcase N: Income Invariance - Tests for income effects (quasilinearity)
 Showcase O: Cross-Price Effects - Substitute/complement detection
+
+2024 Survey Algorithms:
+Showcase P: Smooth Preferences (Differentiable Rationality) - SARP + uniqueness
+Showcase Q: Strict Consistency (Acyclical P) - Strict preference cycles only
+Showcase R: Price Preferences (GAPP) - Consistent price preferences
 """
 
 from __future__ import annotations
@@ -28,6 +33,10 @@ from src.pyrevealed import (
     compute_granular_integrity,
     test_income_invariance,
     compute_cross_price_matrix,
+    # 2024 Survey algorithms
+    validate_smooth_preferences,
+    validate_strict_consistency,
+    validate_price_preferences,
 )
 
 from config import OUTPUT_DIR, TOP_COMMODITIES, COMMODITY_SHORT_NAMES
@@ -516,6 +525,305 @@ def analyze_cross_price_effects(
     }
 
 
+# =============================================================================
+# 2024 SURVEY ALGORITHMS
+# =============================================================================
+
+
+def analyze_smooth_preferences(
+    sessions: Dict[int, HouseholdData],
+    sample_size: int = 500,
+) -> dict:
+    """
+    Showcase P: Smooth Preferences (Differentiable Rationality).
+
+    Tests if preferences are differentiable (smooth utility function).
+    Requires both SARP (no indifference cycles) and price-quantity uniqueness.
+    Based on Chiappori & Rochet (1987).
+    """
+    import matplotlib.pyplot as plt
+
+    print("\n[Showcase P] Testing Smooth Preferences (Differentiable Rationality)...")
+
+    keys = list(sessions.keys())
+    sample_keys = random.sample(keys, min(sample_size, len(keys)))
+
+    sarp_pass = 0
+    uniqueness_pass = 0
+    differentiable_pass = 0
+    total = 0
+
+    for i, key in enumerate(sample_keys):
+        if (i + 1) % 100 == 0:
+            print(f"  Processed {i + 1}/{len(sample_keys)}...")
+
+        try:
+            log = sessions[key].behavior_log
+
+            result = validate_smooth_preferences(log)
+            total += 1
+
+            if result.satisfies_sarp:
+                sarp_pass += 1
+            if result.satisfies_uniqueness:
+                uniqueness_pass += 1
+            if result.is_differentiable:
+                differentiable_pass += 1
+
+        except Exception:
+            continue
+
+    if total == 0:
+        return {'error': 'No valid computations'}
+
+    # Visualization
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    categories = ['SARP\n(No indifference cycles)', 'Uniqueness\n(p≠p\' ⟹ x≠x\')', 'Differentiable\n(Both)']
+    counts = [sarp_pass, uniqueness_pass, differentiable_pass]
+    pcts = [100 * c / total for c in counts]
+    colors = ['steelblue', 'coral', 'forestgreen']
+
+    bars = ax.bar(categories, pcts, color=colors, edgecolor='black', alpha=0.7)
+
+    for bar, pct, cnt in zip(bars, pcts, counts):
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
+                f'{pct:.1f}%\n({cnt})', ha='center', va='bottom', fontsize=10)
+
+    ax.set_ylabel('Percentage of Households')
+    ax.set_title(f'Smooth Preferences Test (n={total})\n'
+                 f'Differentiable = SARP ∧ Uniqueness')
+    ax.set_ylim(0, 105)
+    ax.grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / 'showcase_p_smooth_preferences.png', dpi=150)
+    plt.close()
+
+    return {
+        'n_samples': total,
+        'sarp_pass': sarp_pass,
+        'pct_sarp': round(100 * sarp_pass / total, 1),
+        'uniqueness_pass': uniqueness_pass,
+        'pct_uniqueness': round(100 * uniqueness_pass / total, 1),
+        'differentiable_pass': differentiable_pass,
+        'pct_differentiable': round(100 * differentiable_pass / total, 1),
+    }
+
+
+def analyze_strict_consistency(
+    sessions: Dict[int, HouseholdData],
+    sample_size: int = 500,
+) -> dict:
+    """
+    Showcase Q: Strict Consistency (Acyclical P).
+
+    Tests only strict preference cycles (more lenient than GARP).
+    Passes if violations are only due to indifference (weak preferences).
+    Based on Dziewulski (2023).
+    """
+    import matplotlib.pyplot as plt
+
+    print("\n[Showcase Q] Testing Strict Consistency (Acyclical P)...")
+
+    keys = list(sessions.keys())
+    sample_keys = random.sample(keys, min(sample_size, len(keys)))
+
+    acyclical_p_pass = 0
+    garp_pass = 0
+    approximately_rational = 0  # GARP fails but Acyclical P passes
+    total = 0
+
+    for i, key in enumerate(sample_keys):
+        if (i + 1) % 100 == 0:
+            print(f"  Processed {i + 1}/{len(sample_keys)}...")
+
+        try:
+            log = sessions[key].behavior_log
+
+            result = validate_strict_consistency(log)
+            total += 1
+
+            if result.is_acyclical:
+                acyclical_p_pass += 1
+            if result.garp_consistent:
+                garp_pass += 1
+            if result.is_approximately_rational and not result.garp_consistent:
+                approximately_rational += 1
+
+        except Exception:
+            continue
+
+    if total == 0:
+        return {'error': 'No valid computations'}
+
+    # Visualization
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+    # Comparison bar chart
+    ax = axes[0]
+    categories = ['GARP\n(Full consistency)', 'Acyclical P\n(Strict cycles only)']
+    counts = [garp_pass, acyclical_p_pass]
+    pcts = [100 * c / total for c in counts]
+    colors = ['steelblue', 'forestgreen']
+
+    bars = ax.bar(categories, pcts, color=colors, edgecolor='black', alpha=0.7)
+
+    for bar, pct, cnt in zip(bars, pcts, counts):
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
+                f'{pct:.1f}%\n({cnt})', ha='center', va='bottom', fontsize=10)
+
+    ax.set_ylabel('Percentage of Households')
+    ax.set_title(f'GARP vs Acyclical P (n={total})')
+    ax.set_ylim(0, 105)
+    ax.grid(True, alpha=0.3, axis='y')
+
+    # Venn-style breakdown
+    ax = axes[1]
+    garp_only = garp_pass  # GARP ⟹ Acyclical P
+    approx_only = approximately_rational
+    neither = total - acyclical_p_pass
+
+    categories = ['Fully Consistent\n(GARP pass)', 'Approximately Rational\n(GARP fail, Acyclical P pass)',
+                  'Inconsistent\n(Both fail)']
+    counts = [garp_only, approx_only, neither]
+    pcts = [100 * c / total for c in counts]
+    colors = ['forestgreen', 'gold', 'tomato']
+
+    bars = ax.bar(categories, pcts, color=colors, edgecolor='black', alpha=0.7)
+
+    for bar, pct, cnt in zip(bars, pcts, counts):
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
+                f'{pct:.1f}%\n({cnt})', ha='center', va='bottom', fontsize=10)
+
+    ax.set_ylabel('Percentage of Households')
+    ax.set_title('Consistency Classification')
+    ax.set_ylim(0, max(pcts) * 1.2 + 5)
+    ax.grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / 'showcase_q_strict_consistency.png', dpi=150)
+    plt.close()
+
+    return {
+        'n_samples': total,
+        'garp_pass': garp_pass,
+        'pct_garp': round(100 * garp_pass / total, 1),
+        'acyclical_p_pass': acyclical_p_pass,
+        'pct_acyclical_p': round(100 * acyclical_p_pass / total, 1),
+        'approximately_rational': approximately_rational,
+        'pct_approximately_rational': round(100 * approximately_rational / total, 1),
+    }
+
+
+def analyze_price_preferences(
+    sessions: Dict[int, HouseholdData],
+    sample_size: int = 500,
+) -> dict:
+    """
+    Showcase R: Price Preferences (GAPP).
+
+    Tests if user has consistent price preferences (dual of GARP).
+    Tests whether users prefer situations where their desired items are cheaper.
+    Based on Deb et al. (2022).
+    """
+    import matplotlib.pyplot as plt
+
+    print("\n[Showcase R] Testing Price Preferences (GAPP)...")
+
+    keys = list(sessions.keys())
+    sample_keys = random.sample(keys, min(sample_size, len(keys)))
+
+    gapp_pass = 0
+    garp_pass = 0
+    both_pass = 0
+    total = 0
+
+    for i, key in enumerate(sample_keys):
+        if (i + 1) % 100 == 0:
+            print(f"  Processed {i + 1}/{len(sample_keys)}...")
+
+        try:
+            log = sessions[key].behavior_log
+
+            result = validate_price_preferences(log)
+            total += 1
+
+            gapp_ok = result.is_consistent
+            garp_ok = result.garp_consistent
+
+            if gapp_ok:
+                gapp_pass += 1
+            if garp_ok:
+                garp_pass += 1
+            if gapp_ok and garp_ok:
+                both_pass += 1
+
+        except Exception:
+            continue
+
+    if total == 0:
+        return {'error': 'No valid computations'}
+
+    # Compute overlap stats
+    garp_only = garp_pass - both_pass
+    gapp_only = gapp_pass - both_pass
+    neither = total - garp_pass - gapp_only
+
+    # Visualization
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+    # Comparison
+    ax = axes[0]
+    categories = ['GARP\n(Quantity consistency)', 'GAPP\n(Price consistency)', 'Both']
+    counts = [garp_pass, gapp_pass, both_pass]
+    pcts = [100 * c / total for c in counts]
+    colors = ['steelblue', 'coral', 'forestgreen']
+
+    bars = ax.bar(categories, pcts, color=colors, edgecolor='black', alpha=0.7)
+
+    for bar, pct, cnt in zip(bars, pcts, counts):
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
+                f'{pct:.1f}%\n({cnt})', ha='center', va='bottom', fontsize=10)
+
+    ax.set_ylabel('Percentage of Households')
+    ax.set_title(f'GARP vs GAPP Comparison (n={total})')
+    ax.set_ylim(0, 105)
+    ax.grid(True, alpha=0.3, axis='y')
+
+    # 4-way breakdown
+    ax = axes[1]
+    categories = ['Both Pass', 'GARP only', 'GAPP only', 'Neither']
+    counts = [both_pass, garp_only, gapp_only, neither]
+    pcts = [100 * c / total for c in counts]
+    colors = ['forestgreen', 'steelblue', 'coral', 'gray']
+
+    bars = ax.bar(categories, pcts, color=colors, edgecolor='black', alpha=0.7)
+
+    for bar, pct, cnt in zip(bars, pcts, counts):
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
+                f'{pct:.1f}%\n({cnt})', ha='center', va='bottom', fontsize=10)
+
+    ax.set_ylabel('Percentage of Households')
+    ax.set_title('GARP/GAPP Overlap')
+    ax.set_ylim(0, max(pcts) * 1.2 + 5)
+    ax.grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / 'showcase_r_price_preferences.png', dpi=150)
+    plt.close()
+
+    return {
+        'n_samples': total,
+        'garp_pass': garp_pass,
+        'pct_garp': round(100 * garp_pass / total, 1),
+        'gapp_pass': gapp_pass,
+        'pct_gapp': round(100 * gapp_pass / total, 1),
+        'both_pass': both_pass,
+        'pct_both': round(100 * both_pass / total, 1),
+    }
+
+
 def run_new_algorithms_analysis() -> dict:
     """Run all new algorithm analyses."""
     print("=" * 70)
@@ -541,6 +849,16 @@ def run_new_algorithms_analysis() -> dict:
 
     # Showcase O
     results['cross_price'] = analyze_cross_price_effects(sessions)
+
+    # 2024 Survey Algorithms
+    # Showcase P
+    results['smooth_preferences'] = analyze_smooth_preferences(sessions)
+
+    # Showcase Q
+    results['strict_consistency'] = analyze_strict_consistency(sessions)
+
+    # Showcase R
+    results['price_preferences'] = analyze_price_preferences(sessions)
 
     print("\n" + "=" * 70)
     print(" NEW ALGORITHMS ANALYSIS COMPLETE")
@@ -594,5 +912,30 @@ if __name__ == "__main__":
         print(f"  Key relationships:")
         for pair in c['key_pairs'][:5]:
             print(f"    {pair['product_a']} & {pair['product_b']}: {pair['score']:.3f} ({pair['relationship']})")
+
+    # 2024 Survey Algorithms
+    if 'error' not in results.get('smooth_preferences', {}):
+        print("\n[P] SMOOTH PREFERENCES (Differentiable Rationality)")
+        sp = results['smooth_preferences']
+        print(f"  Households tested: {sp['n_samples']}")
+        print(f"  SARP pass: {sp['pct_sarp']:.1f}%")
+        print(f"  Uniqueness pass: {sp['pct_uniqueness']:.1f}%")
+        print(f"  Differentiable (both): {sp['pct_differentiable']:.1f}%")
+
+    if 'error' not in results.get('strict_consistency', {}):
+        print("\n[Q] STRICT CONSISTENCY (Acyclical P)")
+        sc = results['strict_consistency']
+        print(f"  Households tested: {sc['n_samples']}")
+        print(f"  GARP pass: {sc['pct_garp']:.1f}%")
+        print(f"  Acyclical P pass: {sc['pct_acyclical_p']:.1f}%")
+        print(f"  Approximately rational (GARP fail, Acyclical P pass): {sc['pct_approximately_rational']:.1f}%")
+
+    if 'error' not in results.get('price_preferences', {}):
+        print("\n[R] PRICE PREFERENCES (GAPP)")
+        pp = results['price_preferences']
+        print(f"  Households tested: {pp['n_samples']}")
+        print(f"  GARP pass: {pp['pct_garp']:.1f}%")
+        print(f"  GAPP pass: {pp['pct_gapp']:.1f}%")
+        print(f"  Both pass: {pp['pct_both']:.1f}%")
 
     print(f"\nVisualizations saved to: {OUTPUT_DIR}")

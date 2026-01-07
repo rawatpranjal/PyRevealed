@@ -23,6 +23,9 @@ from pyrevealed.algorithms.harp import validate_proportional_scaling
 from pyrevealed.algorithms.vei import compute_granular_integrity
 from pyrevealed.algorithms.quasilinear import test_income_invariance
 from pyrevealed.algorithms.gross_substitutes import test_cross_price_effect
+from pyrevealed.algorithms.differentiable import validate_smooth_preferences
+from pyrevealed.algorithms.acyclical_p import validate_strict_consistency
+from pyrevealed.algorithms.gapp import validate_price_preferences
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import BehaviorLog
@@ -35,6 +38,9 @@ if TYPE_CHECKING:
         GranularIntegrityResult,
         IncomeInvarianceResult,
         CrossPriceResult,
+        SmoothPreferencesResult,
+        StrictConsistencyResult,
+        PricePreferencesResult,
     )
 
 
@@ -415,3 +421,70 @@ class BehavioralAuditor:
         return test_cross_price_effect(
             log, good_g=good_g, good_h=good_h, tolerance=self.precision
         )
+
+    # =========================================================================
+    # 2024 SURVEY ALGORITHMS
+    # =========================================================================
+
+    def validate_smooth_preferences(self, log: BehaviorLog) -> SmoothPreferencesResult:
+        """
+        Test if user preferences are smooth (differentiable).
+
+        Smooth preferences enable demand function derivatives for
+        price sensitivity analysis. Requires both SARP (no indifferent
+        cycles) and price-quantity uniqueness.
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+
+        Returns:
+            SmoothPreferencesResult with differentiability status
+
+        Example:
+            >>> result = auditor.validate_smooth_preferences(user_log)
+            >>> if result.is_differentiable:
+            ...     print("Preferences are smooth - can compute price elasticities")
+        """
+        return validate_smooth_preferences(log, tolerance=self.precision)
+
+    def validate_strict_consistency(self, log: BehaviorLog) -> StrictConsistencyResult:
+        """
+        Test strict behavioral consistency (more lenient than full check).
+
+        Tests only strict preference cycles. Passes if violations are
+        only due to weak preferences (indifference). Useful for
+        identifying "approximately rational" behavior.
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+
+        Returns:
+            StrictConsistencyResult with consistency status
+
+        Example:
+            >>> result = auditor.validate_strict_consistency(user_log)
+            >>> if result.strict_violations_only:
+            ...     print("GARP fails but only due to indifference")
+        """
+        return validate_strict_consistency(log, tolerance=self.precision)
+
+    def validate_price_preferences(self, log: BehaviorLog) -> PricePreferencesResult:
+        """
+        Test if user has consistent price preferences.
+
+        The dual of consistency validation - tests if the user prefers
+        situations where their desired items are cheaper. Useful for
+        understanding price sensitivity.
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+
+        Returns:
+            PricePreferencesResult with price preference consistency
+
+        Example:
+            >>> result = auditor.validate_price_preferences(user_log)
+            >>> if result.prefers_lower_prices:
+            ...     print("User consistently seeks lower prices")
+        """
+        return validate_price_preferences(log, tolerance=self.precision)

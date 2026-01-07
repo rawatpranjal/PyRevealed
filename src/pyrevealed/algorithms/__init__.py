@@ -50,6 +50,21 @@ from pyrevealed.algorithms.gross_substitutes import (
     test_cross_price_effect,
     compute_cross_price_matrix,
 )
+# 2024 Survey algorithms
+from pyrevealed.algorithms.differentiable import (
+    check_differentiable,
+    check_sarp,
+    validate_smooth_preferences,
+    validate_sarp,
+)
+from pyrevealed.algorithms.acyclical_p import (
+    check_acyclical_p,
+    validate_strict_consistency,
+)
+from pyrevealed.algorithms.gapp import (
+    check_gapp,
+    validate_price_preferences,
+)
 
 __all__ = [
     # Core consistency
@@ -95,4 +110,15 @@ __all__ = [
     "check_law_of_demand",
     "test_cross_price_effect",
     "compute_cross_price_matrix",
+    # 2024 Survey: Differentiable rationality
+    "check_differentiable",
+    "check_sarp",
+    "validate_smooth_preferences",
+    "validate_sarp",
+    # 2024 Survey: Acyclical P
+    "check_acyclical_p",
+    "validate_strict_consistency",
+    # 2024 Survey: GAPP
+    "check_gapp",
+    "validate_price_preferences",
 ]

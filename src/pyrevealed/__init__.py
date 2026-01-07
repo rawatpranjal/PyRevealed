@@ -96,6 +96,14 @@ from pyrevealed.core.result import (
     # Lancaster characteristics model
     LancasterResult,
     CharacteristicsValuationResult,
+    # 2024 Survey algorithms - tech-friendly
+    SmoothPreferencesResult,
+    StrictConsistencyResult,
+    PricePreferencesResult,
+    # 2024 Survey algorithms - legacy
+    DifferentiableResult,
+    AcyclicalPResult,
+    GAPPResult,
 )
 
 # =============================================================================
@@ -207,6 +215,30 @@ from pyrevealed.algorithms.gross_substitutes import (
     check_law_of_demand,
 )
 
+# =============================================================================
+# 2024 SURVEY ALGORITHMS
+# =============================================================================
+
+# Smooth preferences (Differentiable rationality)
+from pyrevealed.algorithms.differentiable import (
+    validate_smooth_preferences,
+    validate_sarp,
+    check_differentiable,  # Legacy
+    check_sarp,  # Legacy
+)
+
+# Strict consistency (Acyclical P)
+from pyrevealed.algorithms.acyclical_p import (
+    validate_strict_consistency,
+    check_acyclical_p,  # Legacy
+)
+
+# Price preferences (GAPP)
+from pyrevealed.algorithms.gapp import (
+    validate_price_preferences,
+    check_gapp,  # Legacy
+)
+
 __version__ = "0.3.0"
 
 __all__ = [
@@ -291,6 +323,13 @@ __all__ = [
     "test_cross_price_effect",
     "compute_cross_price_matrix",
     "check_law_of_demand",
+    # Smooth preferences (2024 Survey)
+    "validate_smooth_preferences",
+    "validate_sarp",
+    # Strict consistency (2024 Survey)
+    "validate_strict_consistency",
+    # Price preferences (2024 Survey)
+    "validate_price_preferences",
 
     # ==========================================================================
     # LEGACY NAMES (Deprecated - use tech-friendly names above)
@@ -340,6 +379,18 @@ __all__ = [
     "check_quasilinearity_exhaustive",
     "check_gross_substitutes",
     "compute_substitution_matrix",
+    # 2024 Survey result types
+    "SmoothPreferencesResult",
+    "StrictConsistencyResult",
+    "PricePreferencesResult",
+    "DifferentiableResult",
+    "AcyclicalPResult",
+    "GAPPResult",
+    # 2024 Survey functions - legacy names
+    "check_differentiable",
+    "check_sarp",
+    "check_acyclical_p",
+    "check_gapp",
     # Convenience
     "get_integrity_score",
 ]

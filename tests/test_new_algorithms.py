@@ -6,6 +6,9 @@ Tests for:
 - VEI (Per-observation efficiency)
 - Quasilinearity (Cyclic monotonicity)
 - Gross Substitutes
+- Differentiable rationality (2024 Survey)
+- Acyclical P (2024 Survey)
+- GAPP (2024 Survey)
 """
 
 import numpy as np
@@ -29,6 +32,16 @@ from pyrevealed import (
     test_cross_price_effect,
     check_gross_substitutes,
     compute_cross_price_matrix,
+    # 2024 Survey: Differentiable rationality
+    validate_smooth_preferences,
+    check_differentiable,
+    check_sarp,
+    # 2024 Survey: Acyclical P
+    validate_strict_consistency,
+    check_acyclical_p,
+    # 2024 Survey: GAPP
+    validate_price_preferences,
+    check_gapp,
 )
 
 
@@ -393,3 +406,241 @@ class TestAuditorIntegration:
         auditor = BehavioralAuditor()
         result = auditor.test_cross_price_effect(simple_consistent_session, 0, 1)
         assert hasattr(result, "relationship")
+
+
+# =============================================================================
+# DIFFERENTIABLE RATIONALITY (2024 SURVEY) TESTS
+# =============================================================================
+
+
+class TestDifferentiableRationality:
+    """Tests for differentiable rationality (smooth preferences) test."""
+
+    def test_consistent_session_result(self, simple_consistent_session):
+        """Test differentiable on consistent session."""
+        result = validate_smooth_preferences(simple_consistent_session)
+        assert hasattr(result, "is_differentiable")
+        assert hasattr(result, "satisfies_sarp")
+        assert hasattr(result, "satisfies_uniqueness")
+        assert hasattr(result, "sarp_violations")
+        assert hasattr(result, "uniqueness_violations")
+
+    def test_single_observation_passes(self, single_observation_session):
+        """Test single observation trivially passes."""
+        result = check_differentiable(single_observation_session)
+        assert result.is_differentiable is True
+        assert result.satisfies_sarp is True
+        assert result.satisfies_uniqueness is True
+
+    def test_garp_violation_implies_sarp_check(self, simple_violation_session):
+        """Test SARP is checked on violation session."""
+        result = check_differentiable(simple_violation_session)
+        # GARP violation may or may not imply SARP violation
+        assert hasattr(result, "satisfies_sarp")
+
+    def test_uniqueness_check(self):
+        """Test price-quantity uniqueness check."""
+        # Same prices, different quantities - should pass uniqueness
+        prices = np.array([[1.0, 2.0], [1.0, 2.0]])
+        quantities = np.array([[3.0, 1.0], [1.0, 3.0]])  # Different!
+        session = ConsumerSession(prices=prices, quantities=quantities)
+        result = check_differentiable(session)
+        assert result.satisfies_uniqueness is True
+
+    def test_uniqueness_violation(self):
+        """Test uniqueness violation detection."""
+        # Different prices, same quantities - should fail uniqueness
+        prices = np.array([[1.0, 2.0], [2.0, 1.0]])  # Different!
+        quantities = np.array([[2.0, 2.0], [2.0, 2.0]])  # Same!
+        session = ConsumerSession(prices=prices, quantities=quantities)
+        result = check_differentiable(session)
+        assert result.satisfies_uniqueness is False
+        assert len(result.uniqueness_violations) > 0
+
+    def test_computation_time_tracked(self, simple_consistent_session):
+        """Test computation time is tracked."""
+        result = validate_smooth_preferences(simple_consistent_session)
+        assert result.computation_time_ms > 0
+
+    def test_is_piecewise_linear_property(self, simple_consistent_session):
+        """Test is_piecewise_linear property."""
+        result = check_differentiable(simple_consistent_session)
+        assert result.is_piecewise_linear == (not result.is_differentiable)
+
+    def test_sarp_function(self, simple_consistent_session):
+        """Test check_sarp function."""
+        is_sarp, violations = check_sarp(simple_consistent_session)
+        assert isinstance(is_sarp, bool)
+        assert isinstance(violations, list)
+
+    def test_matrix_shapes(self, simple_consistent_session):
+        """Test preference matrices have correct shapes."""
+        result = check_differentiable(simple_consistent_session)
+        T = simple_consistent_session.num_observations
+        assert result.direct_revealed_preference.shape == (T, T)
+        assert result.transitive_closure.shape == (T, T)
+
+
+# =============================================================================
+# ACYCLICAL P (2024 SURVEY) TESTS
+# =============================================================================
+
+
+class TestAcyclicalP:
+    """Tests for Acyclical P (strict preference acyclicity) test."""
+
+    def test_consistent_session_result(self, simple_consistent_session):
+        """Test Acyclical P on consistent session."""
+        result = validate_strict_consistency(simple_consistent_session)
+        assert hasattr(result, "is_consistent")
+        assert hasattr(result, "violations")
+        assert hasattr(result, "strict_preference_matrix")
+        assert hasattr(result, "garp_consistent")
+
+    def test_more_lenient_than_garp(self, simple_violation_session):
+        """Test Acyclical P may pass when GARP fails."""
+        result = check_acyclical_p(simple_violation_session)
+        # Acyclical P is more lenient - it may pass when GARP fails
+        # (if violations are only due to weak preferences)
+        assert hasattr(result, "strict_violations_only")
+
+    def test_single_observation_passes(self, single_observation_session):
+        """Test single observation trivially passes."""
+        result = validate_strict_consistency(single_observation_session)
+        assert result.is_consistent is True
+
+    def test_is_approximately_rational_property(self, simple_consistent_session):
+        """Test is_approximately_rational property."""
+        result = check_acyclical_p(simple_consistent_session)
+        assert result.is_approximately_rational == result.is_consistent
+
+    def test_num_strict_preferences_tracked(self, simple_consistent_session):
+        """Test num_strict_preferences is tracked."""
+        result = check_acyclical_p(simple_consistent_session)
+        assert result.num_strict_preferences >= 0
+
+    def test_computation_time_tracked(self, simple_consistent_session):
+        """Test computation time is tracked."""
+        result = validate_strict_consistency(simple_consistent_session)
+        assert result.computation_time_ms > 0
+
+    def test_matrix_shapes(self, simple_consistent_session):
+        """Test matrices have correct shapes."""
+        result = check_acyclical_p(simple_consistent_session)
+        T = simple_consistent_session.num_observations
+        assert result.strict_preference_matrix.shape == (T, T)
+        assert result.transitive_closure.shape == (T, T)
+
+    def test_garp_comparison(self, simple_consistent_session):
+        """Test GARP comparison is available."""
+        result = check_acyclical_p(simple_consistent_session)
+        assert isinstance(result.garp_consistent, bool)
+
+
+# =============================================================================
+# GAPP (2024 SURVEY) TESTS
+# =============================================================================
+
+
+class TestGAPP:
+    """Tests for GAPP (price preference consistency) test."""
+
+    def test_consistent_session_result(self, simple_consistent_session):
+        """Test GAPP on consistent session."""
+        result = validate_price_preferences(simple_consistent_session)
+        assert hasattr(result, "is_consistent")
+        assert hasattr(result, "violations")
+        assert hasattr(result, "price_preference_matrix")
+        assert hasattr(result, "garp_consistent")
+
+    def test_single_observation_passes(self, single_observation_session):
+        """Test single observation trivially passes."""
+        result = check_gapp(single_observation_session)
+        assert result.is_consistent is True
+
+    def test_prefers_lower_prices_property(self, simple_consistent_session):
+        """Test prefers_lower_prices property."""
+        result = check_gapp(simple_consistent_session)
+        assert result.prefers_lower_prices == result.is_consistent
+
+    def test_price_preference_matrix_shape(self, simple_consistent_session):
+        """Test price preference matrix has correct shape."""
+        result = check_gapp(simple_consistent_session)
+        T = simple_consistent_session.num_observations
+        assert result.price_preference_matrix.shape == (T, T)
+        assert result.strict_price_preference.shape == (T, T)
+
+    def test_diagonal_is_true(self, simple_consistent_session):
+        """Test diagonal of R_p is True (weakly prefer same price)."""
+        result = check_gapp(simple_consistent_session)
+        diagonal = np.diag(result.price_preference_matrix)
+        assert np.all(diagonal)
+
+    def test_computation_time_tracked(self, simple_consistent_session):
+        """Test computation time is tracked."""
+        result = validate_price_preferences(simple_consistent_session)
+        assert result.computation_time_ms > 0
+
+    def test_garp_comparison_available(self, simple_violation_session):
+        """Test GARP comparison is available."""
+        result = check_gapp(simple_violation_session)
+        assert isinstance(result.garp_consistent, bool)
+
+    def test_num_price_preferences(self, simple_consistent_session):
+        """Test num_price_preferences is tracked."""
+        result = check_gapp(simple_consistent_session)
+        assert result.num_price_preferences >= 0
+
+
+# =============================================================================
+# AUDITOR INTEGRATION FOR 2024 SURVEY ALGORITHMS
+# =============================================================================
+
+
+class TestAuditor2024SurveyIntegration:
+    """Tests for BehavioralAuditor integration with 2024 survey algorithms."""
+
+    def test_auditor_smooth_preferences_exists(self, simple_consistent_session):
+        """Test auditor.validate_smooth_preferences exists."""
+        from pyrevealed import BehavioralAuditor
+
+        auditor = BehavioralAuditor()
+        assert hasattr(auditor, "validate_smooth_preferences")
+
+    def test_auditor_smooth_preferences(self, simple_consistent_session):
+        """Test auditor.validate_smooth_preferences works."""
+        from pyrevealed import BehavioralAuditor
+
+        auditor = BehavioralAuditor()
+        result = auditor.validate_smooth_preferences(simple_consistent_session)
+        assert hasattr(result, "is_differentiable")
+
+    def test_auditor_strict_consistency_exists(self, simple_consistent_session):
+        """Test auditor.validate_strict_consistency exists."""
+        from pyrevealed import BehavioralAuditor
+
+        auditor = BehavioralAuditor()
+        assert hasattr(auditor, "validate_strict_consistency")
+
+    def test_auditor_strict_consistency(self, simple_consistent_session):
+        """Test auditor.validate_strict_consistency works."""
+        from pyrevealed import BehavioralAuditor
+
+        auditor = BehavioralAuditor()
+        result = auditor.validate_strict_consistency(simple_consistent_session)
+        assert hasattr(result, "is_approximately_rational")
+
+    def test_auditor_price_preferences_exists(self, simple_consistent_session):
+        """Test auditor.validate_price_preferences exists."""
+        from pyrevealed import BehavioralAuditor
+
+        auditor = BehavioralAuditor()
+        assert hasattr(auditor, "validate_price_preferences")
+
+    def test_auditor_price_preferences(self, simple_consistent_session):
+        """Test auditor.validate_price_preferences works."""
+        from pyrevealed import BehavioralAuditor
+
+        auditor = BehavioralAuditor()
+        result = auditor.validate_price_preferences(simple_consistent_session)
+        assert hasattr(result, "prefers_lower_prices")
