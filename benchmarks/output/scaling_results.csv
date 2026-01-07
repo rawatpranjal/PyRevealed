@@ -1,5 +1,9 @@
 algorithm,n_observations,n_goods,data_type,mean_time_ms,std_time_ms,min_time_ms,max_time_ms,peak_memory_mb,throughput_obs_per_sec,success,error_message
-garp,10,10,rational,0.04,0.02,0.03,0.06,0.01,232633.84,True,
-garp,50,10,rational,0.05,0.00,0.05,0.06,0.04,911848.45,True,
-garp,100,10,rational,0.17,0.01,0.16,0.17,0.16,591958.85,True,
-garp,500,10,rational,19.66,2.79,15.71,21.67,2.45,25435.57,True,
+garp,10,10,rational,0.05,0.02,0.04,0.07,0.01,204719.50,True,
+garp,50,10,rational,0.06,0.00,0.06,0.06,0.04,820236.73,True,
+garp,100,10,rational,0.16,0.01,0.15,0.18,0.16,617073.28,True,
+garp,500,10,rational,25.70,3.29,21.31,29.23,2.45,19453.06,True,
+garp,1000,10,rational,121.21,17.73,108.55,146.29,9.60,8249.93,True,
+garp,2000,10,rational,902.43,8.16,892.96,912.87,38.21,2216.23,True,
+garp,5000,10,rational,15036.86,220.38,14725.90,15210.52,238.48,332.52,True,
+garp,10000,10,rational,123823.14,1440.76,122506.62,125828.15,953.74,80.76,True,

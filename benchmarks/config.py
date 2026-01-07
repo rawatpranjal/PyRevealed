@@ -6,11 +6,14 @@ from pathlib import Path
 BENCHMARKS_DIR = Path(__file__).parent
 OUTPUT_DIR = BENCHMARKS_DIR / "output"
 
-# Scale levels (observations T)
-SCALE_LEVELS = [10, 50, 100, 500, 1000, 2000, 5000, 10000]
+# Scale levels (observations T) - up to 100K for big-tech scale
+SCALE_LEVELS = [100, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000]
 
 # Quick mode scale levels
-QUICK_SCALE_LEVELS = [10, 50, 100, 500]
+QUICK_SCALE_LEVELS = [100, 500, 1000, 2000]
+
+# Medium mode scale levels (for faster full runs)
+MEDIUM_SCALE_LEVELS = [100, 500, 1000, 5000, 10000]
 
 # Goods dimensions (N)
 GOODS_DIMENSIONS = [5, 10]
