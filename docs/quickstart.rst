@@ -38,7 +38,7 @@ Create a behavior log and run consistency checks:
 Using BehavioralAuditor
 -----------------------
 
-For a higher-level API with risk assessments:
+For a higher-level API:
 
 .. code-block:: python
 
@@ -52,15 +52,15 @@ For a higher-level API with risk assessments:
 
    auditor = BehavioralAuditor()
 
-   # Quick checks
+   # Quick consistency check
    if auditor.validate_history(log):
        print("User behavior is consistent")
 
-   # Full audit with risk scores
+   # Full audit
    report = auditor.full_audit(log)
-   print(f"Bot risk: {report.bot_risk:.2f}")
-   print(f"Shared account risk: {report.shared_account_risk:.2f}")
-   print(f"UX confusion risk: {report.ux_confusion_risk:.2f}")
+   print(f"Consistent: {report.is_consistent}")
+   print(f"Integrity: {report.integrity_score:.2f}")
+   print(f"Confusion: {report.confusion_score:.2f}")
 
 Available Tests
 ---------------
