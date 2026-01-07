@@ -1,5 +1,5 @@
-Tutorial
-========
+Tutorial 1
+==========
 
 What can 2 years of grocery data tell us about human decision-making? In this tutorial, you'll analyze real shopping behavior from 2,222 households and discover that most people aren't perfectly "rational"—but that's not necessarily a bad thing.
 

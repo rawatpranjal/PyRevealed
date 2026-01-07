@@ -99,6 +99,11 @@ dunnhumby/data/
 dunnhumby/cache/
 dunnhumby/output/
 
+# Datasets (downloaded from external sources)
+datasets/*/data/
+datasets/*/output/
+datasets/cache/
+
 # Generated outputs
 *.png
 !docs/images/*.png

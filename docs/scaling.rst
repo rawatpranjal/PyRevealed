@@ -13,40 +13,66 @@ PyRevealed is designed to scale to **big-tech level data volumes** with up to 10
 Executive Summary
 -----------------
 
-.. list-table:: Performance at Scale (Apple M1 Pro, 10 cores)
+.. list-table:: Benchmark Results (Apple M1 Pro, 10 cores)
    :header-rows: 1
-   :widths: 20 15 15 15 15 20
+   :widths: 18 12 12 12 12 12 22
 
    * - Algorithm
+     - T=100
+     - T=500
      - T=1,000
-     - T=10,000
-     - T=50,000
-     - T=100,000
+     - T=2,000
      - Complexity
+     - Notes
    * - GARP
-     - 50ms
-     - 2s
-     - 45s
-     - 180s
+     - <1ms
+     - 66ms
+     - 102ms
+     - 469ms
      - O(T^3)
+     - Core consistency check
    * - AEI
-     - 200ms
-     - 15s
-     - 5min
-     - 20min
+     - <1ms
+     - 54ms
+     - 101ms
+     - 446ms
      - O(T^3 log T)
-   * - HARP
-     - 60ms
-     - 2.5s
-     - 50s
-     - 200s
-     - O(T^3)
+     - Binary search + GARP
    * - MPI
-     - 55ms
-     - 2.2s
-     - 48s
-     - 190s
+     - <1ms
+     - 70ms
+     - 98ms
+     - 448ms
      - O(T^3)
+     - Cycle detection
+   * - HARP
+     - 1ms
+     - 100ms
+     - 464ms
+     - 3.2s
+     - O(T^3)
+     - Homotheticity test
+   * - Acyclical-P
+     - 1ms
+     - 198ms
+     - 412ms
+     - 1.8s
+     - O(T^3)
+     - Strict preference only
+   * - GAPP
+     - 1ms
+     - 212ms
+     - 802ms
+     - 2.5s
+     - O(T^3)
+     - Generalized axiom
+   * - Differentiable
+     - 280ms
+     - 7.1s
+     - 29s
+     - 199s
+     - O(T^4)
+     - Gradient-based
 
 Optimization Strategy
 ---------------------

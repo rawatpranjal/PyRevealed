@@ -68,8 +68,8 @@ def recover_utility(
     constraints_b = []
 
     for k in range(T):
-        for l in range(T):
-            if k == l:
+        for obs_l in range(T):
+            if k == obs_l:
                 continue
 
             # Constraint: U_k - U_l - lambda_l * [p_l @ (x_k - x_l)] <= 0
@@ -77,12 +77,12 @@ def recover_utility(
 
             row = np.zeros(n_vars)
             row[k] = 1.0  # Coefficient for U_k
-            row[l] = -1.0  # Coefficient for U_l
+            row[obs_l] = -1.0  # Coefficient for U_l
 
             # Coefficient for lambda_l: -p_l @ (x_k - x_l) = p_l @ (x_l - x_k)
-            diff = Q[l] - Q[k]  # x_l - x_k
-            lambda_coef = P[l] @ diff  # p_l @ (x_l - x_k)
-            row[T + l] = lambda_coef
+            diff = Q[obs_l] - Q[k]  # x_l - x_k
+            lambda_coef = P[obs_l] @ diff  # p_l @ (x_l - x_k)
+            row[T + obs_l] = lambda_coef
 
             constraints_A.append(row)
             constraints_b.append(0.0)
@@ -176,11 +176,11 @@ def _compute_afriat_residuals(
     residuals = np.zeros((T, T))
 
     for k in range(T):
-        for l in range(T):
+        for obs_l in range(T):
             # Afriat inequality: U_k <= U_l + lambda_l * p_l @ (x_k - x_l)
             # Residual = RHS - LHS = U_l + lambda_l * p_l @ (x_k - x_l) - U_k
-            diff = Q[k] - Q[l]
-            residuals[k, l] = U[l] + lambdas[l] * (P[l] @ diff) - U[k]
+            diff = Q[k] - Q[obs_l]
+            residuals[k, obs_l] = U[obs_l] + lambdas[obs_l] * (P[obs_l] @ diff) - U[k]
 
     return residuals
 

@@ -27,6 +27,52 @@ Notation
 
 ---
 
+Maintained Assumptions
+----------------------
+
+The following assumptions are **necessary** for revealed preference analysis to be meaningful.
+If these are violated, GARP failures may reflect model misspecification rather than irrationality.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 5 25 70
+
+   * -
+     - Assumption
+     - Implication if Violated
+   * - **A1**
+     - **Stable Preferences** — Consumer has a fixed utility function :math:`U(x)` across all observations
+     - Legitimate preference changes (e.g., developing a taste for coffee) appear as GARP violations
+   * - **A2**
+     - **Utility Maximization** — Consumer chooses :math:`\arg\max_x U(x)` subject to budget
+     - Satisficing, habit formation, inattention, and heuristic decision-making generate violations
+   * - **A3**
+     - **Local Non-Satiation** — More is always weakly preferred; consumer spends entire budget
+     - Free disposal allowed, but discarding goods or saving violates the model
+   * - **A4**
+     - **Single Decision-Maker** — Observed choices reflect one agent's preferences
+     - Household data with multiple members, or accounts with gift purchases, violate this
+   * - **A5**
+     - **Complete Observation** — We observe the entire consumption bundle and prices faced
+     - If we only see partial consumption (e.g., Amazon but not groceries), GARP may fail spuriously
+
+---
+
+Axiom Hierarchy
+---------------
+
+.. admonition:: Relationship Between Axioms
+
+   **SARP** :math:`\Rightarrow` **GARP** :math:`\Rightarrow` **WARP**
+
+   - **WARP** rules out direct contradictions (length-2 cycles)
+   - **GARP** rules out transitive contradictions (any cycle with a strict edge)
+   - **SARP** rules out all indifference cycles (strongest condition)
+
+   Most empirical work uses GARP as it corresponds exactly to utility maximization via Afriat's Theorem.
+
+---
+
 Consistency Tests
 -----------------
 
@@ -55,12 +101,19 @@ Let :math:`R^*` be the transitive closure of :math:`R` (computed via Floyd-Warsh
 
    \text{GARP holds} \iff \nexists \, i,j : \left( x^i \, R^* \, x^j \right) \land \left( x^j \, P \, x^i \right)
 
-.. important::
+.. admonition:: Afriat's Theorem (1967)
+   :class: important
 
-   **Afriat's Theorem:** GARP is *necessary and sufficient* for the existence of a
-   locally non-satiated utility function that rationalizes the data.
+   The following are **equivalent**:
 
-**Reference:** Varian (1982), Chambers & Echenique (2016) Ch. 3
+   1. The data :math:`\{(p^t, x^t)\}_{t=1}^T` satisfy GARP
+   2. There exist utility values :math:`\{U_t\}` and multipliers :math:`\{\lambda_t > 0\}` satisfying:
+      :math:`U_s \leq U_t + \lambda_t \cdot p^t \cdot (x^s - x^t) \quad \forall s,t`
+   3. There exists a **continuous, monotonic, concave** utility function :math:`U(x)` that rationalizes the data
+
+   This is the foundational result: GARP is both necessary and sufficient for rationalizability.
+
+**Reference:** Afriat (1967), Varian (1982), Chambers & Echenique (2016) Ch. 3
 
 ---
 
@@ -180,9 +233,25 @@ Integrity Score (Afriat Efficiency Index)
 
 **Interpretation:**
 
-- :math:`\text{AEI} = 1.0`: Perfectly consistent
-- :math:`\text{AEI} = 0.8`: 20% of budget "wasted" on inconsistent choices
-- :math:`\text{AEI} < 0.7`: Significant departures from rationality
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - AEI
+     - Interpretation
+   * - 1.0
+     - Perfectly rational — all choices consistent with utility maximization
+   * - 0.95+
+     - Minor deviations — Varian's threshold for "approximately rational"
+   * - 0.85–0.95
+     - Moderate deviations — some inconsistent choices
+   * - < 0.70
+     - Substantial departures from rationality
+
+.. note::
+
+   **Benchmark:** CKMS (2014) found mean AEI = 0.881 in controlled lab experiments.
+   E-commerce data typically shows lower values due to measurement noise.
 
 **Reference:** Afriat (1972), Varian (1990)
 
@@ -201,8 +270,20 @@ For a violation cycle :math:`k_1 \to k_2 \to \cdots \to k_m \to k_1`:
 
 **Interpretation:** Maximum fraction of spending extractable by cycling through preference contradictions.
 
-- :math:`\text{MPI} = 0`: Unexploitable (consistent)
-- :math:`\text{MPI} > 0.3`: Highly confused/exploitable
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - MPI
+     - Interpretation
+   * - 0
+     - Unexploitable — no preference cycles exist
+   * - 0.01–0.10
+     - Minor exploitability — small inconsistencies
+   * - 0.10–0.30
+     - Moderate exploitability — noticeable confusion
+   * - > 0.30
+     - Highly exploitable — severely confused consumer
 
 **Reference:** Chambers & Echenique (2016) Ch. 5
 
@@ -265,8 +346,25 @@ Random bundles are generated via symmetric Dirichlet distribution on budget hype
 
 **Interpretation:**
 
-- Power > 0.7: Passing GARP is statistically meaningful
-- Power < 0.5: Even random behavior would pass
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Power
+     - Interpretation
+   * - > 0.90
+     - Excellent — passing GARP is highly informative
+   * - 0.70–0.90
+     - Good — meaningful test of rationality
+   * - 0.50–0.70
+     - Moderate — some discrimination but inconclusive
+   * - < 0.50
+     - Weak — even random behavior often passes; test lacks power
+
+.. warning::
+
+   Low power indicates budget sets don't overlap much. A high AEI with low power
+   may just mean the data couldn't detect irrationality, not that the consumer is rational.
 
 **Reference:** Bronars (1987)
 
@@ -396,22 +494,24 @@ References
 
 3. Chambers, C. P., & Echenique, F. (2016). *Revealed Preference Theory*. Cambridge University Press.
 
-4. Chiappori, P. A., & Rochet, J. C. (1987). Revealed preferences and differentiable demand. *Econometrica*, 55(3), 687-691.
+4. Choi, S., Kariv, S., Müller, W., & Silverman, D. (2014). Who is (more) rational? *American Economic Review*, 104(6), 1518-1550.
 
-5. Deb, R., Kitamura, Y., Quah, J. K. H., & Stoye, J. (2022). Revealed price preference: Theory and empirical analysis. *Review of Economic Studies*, forthcoming.
+5. Chiappori, P. A., & Rochet, J. C. (1987). Revealed preferences and differentiable demand. *Econometrica*, 55(3), 687-691.
 
-6. Dziewulski, P. (2023). Revealed preference and limited consideration. *American Economic Review*, forthcoming.
+6. Deb, R., Kitamura, Y., Quah, J. K. H., & Stoye, J. (2022). Revealed price preference: Theory and empirical analysis. *Review of Economic Studies*, forthcoming.
 
-7. Hicks, J. R. (1939). *Value and Capital*. Oxford University Press.
+7. Dziewulski, P. (2023). Revealed preference and limited consideration. *American Economic Review*, forthcoming.
 
-8. Houtman, M., & Maks, J. A. H. (1985). Determining all maximal data subsets consistent with revealed preference. *Kwantitatieve Methoden*, 19, 89-104.
+8. Hicks, J. R. (1939). *Value and Capital*. Oxford University Press.
 
-9. Rochet, J. C. (1987). A necessary and sufficient condition for rationalizability in a quasi-linear context. *Journal of Mathematical Economics*, 16(2), 191-200.
+9. Houtman, M., & Maks, J. A. H. (1985). Determining all maximal data subsets consistent with revealed preference. *Kwantitatieve Methoden*, 19, 89-104.
 
-10. Samuelson, P. A. (1938). A note on the pure theory of consumer's behaviour. *Economica*, 5(17), 61-71.
+10. Rochet, J. C. (1987). A necessary and sufficient condition for rationalizability in a quasi-linear context. *Journal of Mathematical Economics*, 16(2), 191-200.
 
-11. Varian, H. R. (1982). The nonparametric approach to demand analysis. *Econometrica*, 50(4), 945-973.
+11. Samuelson, P. A. (1938). A note on the pure theory of consumer's behaviour. *Economica*, 5(17), 61-71.
 
-12. Varian, H. R. (1983). Non-parametric tests of consumer behaviour. *Review of Economic Studies*, 50(1), 99-110.
+12. Varian, H. R. (1982). The nonparametric approach to demand analysis. *Econometrica*, 50(4), 945-973.
 
-13. Varian, H. R. (1990). Goodness-of-fit in optimizing models. *Journal of Econometrics*, 46(1-2), 125-140.
+13. Varian, H. R. (1983). Non-parametric tests of consumer behaviour. *Review of Economic Studies*, 50(1), 99-110.
+
+14. Varian, H. R. (1990). Goodness-of-fit in optimizing models. *Journal of Econometrics*, 46(1-2), 125-140.

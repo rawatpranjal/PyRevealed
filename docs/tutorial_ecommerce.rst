@@ -1,5 +1,5 @@
-Tutorial: E-Commerce Data
-=========================
+Tutorial 2
+==========
 
 Can Amazon purchase data reveal how rational consumers really are? In this
 tutorial, you'll analyze 1.85 million transactions from 5,027 US consumers
