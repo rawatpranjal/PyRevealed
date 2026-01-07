@@ -58,23 +58,222 @@ confusion = compute_confusion_metric(log)
 print(f"Confusion Metric: {confusion:.3f}")
 ```
 
-## How It Works
+---
 
-PyRevealed implements **revealed preference theory** from economics:
+## Concepts & Tests
 
-1. **Consistency Check (GARP)**: If a consumer chose bundle A when B was affordable, and chose B when C was affordable, they should not choose C when A was affordable. Violations indicate inconsistency.
+PyRevealed implements tests from **revealed preference theory**. Each test analyzes a `BehaviorLog` containing `(prices, quantities)` observations.
 
-2. **Afriat Efficiency Index**: Measures what fraction of behavior is consistent with utility maximization. Score of 1.0 = perfectly consistent; lower scores indicate departures from rationality.
+### Consistency Tests
 
-3. **Money Pump Index**: Measures how much money could be extracted from a consumer by exploiting their preference cycles.
+#### WARP — Weak Axiom of Revealed Preference
 
-The math is based on Afriat (1967) and Varian (1982).
+**What it tests**: Direct preference contradictions (no transitivity).
+
+**Definition**: If bundle *x* was chosen when *y* was affordable, then *y* should never be chosen when *x* is affordable.
+
+**Formally**: If *p_t · x_t ≥ p_t · x_s*, then we should not have *p_s · x_s > p_s · x_t*.
+
+**Interpretation**: `True` = no direct contradictions; `False` = at least one direct reversal.
+
+```python
+is_consistent, violations = check_warp(log)  # Legacy
+result = validate_consistency_weak(log)       # Tech-friendly
+```
+
+#### GARP — Generalized Axiom of Revealed Preference
+
+**What it tests**: Transitive preference contradictions (follows chains).
+
+**Definition**: If *x* is directly or indirectly revealed preferred to *y*, then *y* should not be strictly revealed preferred to *x*.
+
+**Formally**: Build revealed preference relation *R* where *x_t R x_s* iff *p_t · x_t ≥ p_t · x_s*. Take transitive closure *R\**. GARP holds iff no cycle exists where strict preference closes the loop.
+
+**Interpretation**: `True` = behavior consistent with utility maximization; `False` = preference cycle exists.
+
+```python
+result = check_garp(log)           # Legacy
+result = validate_consistency(log)  # Tech-friendly
+```
+
+---
+
+### Efficiency Indices
+
+#### AEI — Afriat Efficiency Index (Integrity Score)
+
+**What it measures**: Fraction of behavior explainable by utility maximization.
+
+**Definition**: Find the largest *e ∈ [0, 1]* such that the "wasted" fraction *(1 - e)* of each budget makes all choices GARP-consistent.
+
+**Formally**: Binary search for max *e* where *e · p_t · x_t ≥ p_t · x_s* admits no violations.
+
+**Interpretation**:
+- `1.0` = perfectly consistent
+- `0.9+` = minor noise
+- `0.7–0.9` = moderate inconsistency
+- `<0.7` = significant departures (possible bot/shared account)
+
+```python
+result = compute_aei(log)              # Legacy
+result = compute_integrity_score(log)  # Tech-friendly
+score = result.efficiency_index        # Float in [0, 1]
+```
+
+#### MPI — Money Pump Index (Confusion Metric)
+
+**What it measures**: Exploitability via preference cycles.
+
+**Definition**: Maximum fraction of spending extractable by cycling through preference contradictions.
+
+**Formally**: Find worst cycle *i₁ → i₂ → ... → iₖ → i₁* and compute money extractable per round.
+
+**Interpretation**:
+- `0.0` = unexploitable (fully consistent)
+- `0.1–0.3` = minor exploitability
+- `>0.3` = significant confusion (bad UX or manipulation vulnerability)
+
+```python
+result = compute_mpi(log)                 # Legacy
+result = compute_confusion_metric(log)    # Tech-friendly
+score = result.mpi_value                  # Float in [0, 1]
+```
+
+#### Houtman-Maks Index (Outlier Fraction)
+
+**What it measures**: Minimum observations to remove for GARP consistency.
+
+**Definition**: Smallest set of observations whose removal makes remaining data GARP-consistent.
+
+**Interpretation**:
+- `0.0` = already consistent
+- `<0.1` = "almost rational" (few outliers)
+- `>0.2` = substantial inconsistency
+
+```python
+fraction, removed_indices = compute_minimal_outlier_fraction(log)
+```
+
+#### VEI — Varian Efficiency Index (Per-Observation Efficiency)
+
+**What it measures**: Efficiency score for each individual observation.
+
+**Definition**: Solve LP to minimize *Σ(1 - eᵢ)* subject to GARP constraints with observation-specific efficiency *eᵢ*.
+
+**Formally**: *eᵢ · (pᵢ · xᵢ) ≥ pᵢ · xⱼ* for all *(i, j)* in transitive closure.
+
+**Interpretation**: Identifies which specific observations are problematic (low *eᵢ*).
+
+```python
+result = compute_vei(log)                   # Legacy
+result = compute_granular_integrity(log)    # Tech-friendly
+result.efficiency_vector                    # Array of per-obs scores
+result.problematic_observations             # Indices where eᵢ < threshold
+```
+
+---
+
+### Statistical Power
+
+#### Bronars' Power Index (Test Power)
+
+**What it measures**: Statistical significance of passing GARP.
+
+**Definition**: Fraction of random behaviors (uniform on budget hyperplanes) that would violate GARP.
+
+**Formally**: Generate *N* random bundles via Dirichlet distribution on each budget set. Power = violation rate.
+
+**Interpretation**:
+- `>0.5` = test is statistically meaningful
+- `<0.5` = even random behavior passes (low power, uninformative)
+
+```python
+result = compute_bronars_power(log, n_simulations=1000)  # Legacy
+result = compute_test_power(log, n_simulations=1000)     # Tech-friendly
+result.power_index          # Float in [0, 1]
+result.is_significant       # True if power > 0.5
+```
+
+---
+
+### Preference Structure
+
+#### HARP — Homothetic Axiom (Proportional Scaling)
+
+**What it tests**: Do preferences scale proportionally with budget?
+
+**Definition**: Relative spending shares should remain constant regardless of income level.
+
+**Formally**: For expenditure ratio *rᵢⱼ = (pᵢ · xᵢ) / (pᵢ · xⱼ)*, product around any cycle must be ≤ 1.
+
+**Interpretation**: `True` = homothetic preferences (Cobb-Douglas, CES); `False` = income effects on composition.
+
+```python
+result = check_harp(log)                        # Legacy
+result = validate_proportional_scaling(log)     # Tech-friendly
+result.is_homothetic                            # Boolean
+```
+
+#### Quasilinearity (Income Invariance)
+
+**What it tests**: Is marginal utility of money constant?
+
+**Definition**: Choices depend only on relative prices, not income level.
+
+**Formally**: For any cycle, *Σₖ pₖ · (xₖ₊₁ - xₖ) ≥ 0* (cyclic monotonicity).
+
+**Interpretation**: `True` = no income effects; `False` = behavior varies with budget.
+
+```python
+result = check_quasilinearity(log)      # Legacy
+result = test_income_invariance(log)    # Tech-friendly
+result.is_quasilinear                   # Boolean
+result.has_income_effects               # Inverse property
+```
+
+#### Separability (Feature Independence)
+
+**What it tests**: Can preferences over group A be analyzed independently of group B?
+
+**Definition**: Choices within group A don't depend on quantities in group B.
+
+**Formally**: Submatrix of choices restricted to group A satisfies GARP independently.
+
+**Interpretation**: `True` = separate "mental budgets"; `False` = cross-group dependencies.
+
+```python
+result = check_separability(log, group_a=[0, 1], group_b=[2, 3])  # Legacy
+result = test_feature_independence(log, group_a=[0, 1], group_b=[2, 3])  # Tech-friendly
+```
+
+---
+
+### Cross-Price Effects
+
+#### Gross Substitutes / Complements
+
+**What it tests**: Relationship between goods when prices change.
+
+**Definition**:
+- **Substitutes**: Price of A ↑ → demand for B ↑ (replace A with B)
+- **Complements**: Price of A ↑ → demand for B ↓ (bought together)
+
+**Formally**: Compare quantity changes when price of good *g* changes while others stay constant.
+
+```python
+result = check_gross_substitutes(log, good_g=0, good_h=1)  # Legacy
+result = test_cross_price_effect(log, good_g=0, good_h=1)  # Tech-friendly
+result.relationship  # "substitutes", "complements", "independent", "inconclusive"
+
+# Full matrix
+matrix = compute_cross_price_matrix(log)
+```
 
 ---
 
 ## Empirical Study: Dunnhumby Consumer Data
 
-Analysis of the **Dunnhumby "The Complete Journey"** dataset—2 years of grocery transactions from ~2,500 households.
+Application of PyRevealed to the **Dunnhumby "The Complete Journey"** dataset—2 years of grocery transactions from ~2,500 households.
 
 ### Dataset Overview
 
@@ -86,19 +285,7 @@ Analysis of the **Dunnhumby "The Complete Journey"** dataset—2 years of grocer
 | Total transactions | 645,288 |
 | Processing time | 92 seconds |
 
-### Methodology
-
-**Integrity Score (AEI)**: If you bought more apples when they were expensive and fewer when cheap, something's off. The integrity score finds the largest fraction of your choices that could come from a single consistent preference. Score of 1.0 = perfectly consistent; 0.5 = random noise.
-
-**WARP (Weak Axiom)**: Did you ever directly contradict yourself? Example: Bought bundle A when B was cheaper, then bought B when A was cheaper.
-
-**GARP (Generalized Axiom)**: Did you contradict yourself through a chain? Example: Preferred A over B, B over C, but then C over A. GARP catches more violations because it follows transitivity chains.
-
-**Money Pump Index (MPI)**: How much money could a clever salesman extract by exploiting your inconsistencies? If you say A > B > C > A, someone can sell you A for B, B for C, C for A—you end up where you started but poorer. The MPI is the fraction of spending that could be "pumped" this way.
-
-**Separability**: Do you have separate mental budgets for different things? If Dairy and Protein are separable, buying more milk doesn't change how you buy beef. We test whether behavior in group A can be explained independently of group B.
-
-### Key Findings
+### Results
 
 | Metric | Value | Interpretation |
 |--------|-------|----------------|
@@ -156,26 +343,16 @@ How many observations need to be removed to make behavior consistent?
 
 17% of households are "almost rational"—removing <10% of their observations makes them fully consistent.
 
-### Advanced Statistical Tests
-
-New algorithms for deeper behavioral analysis:
+### Preference Structure Tests
 
 | Test | Result | Interpretation |
 |------|--------|----------------|
-| **Bronars Power** | 0.845 mean, 87.5% significant | GARP test has high power—passing is meaningful |
-| **Homotheticity (HARP)** | 3.2% pass | Few households scale preferences with budget |
-| **Income Invariance** | 0% quasilinear | All households show income effects |
-| **Per-Obs Efficiency (VEI)** | 0.534 mean | Granular view of which observations violate |
-
-**Bronars' Power Index**: Measures if a high consistency score is statistically meaningful. Power of 0.845 means 84.5% of random behaviors would fail GARP—so passing GARP is genuinely informative.
-
-**Homotheticity (HARP)**: Tests if preferences scale proportionally with budget. Only 3.2% of households are homothetic, meaning relative spending shares change significantly with income.
-
-**Income Invariance**: Tests for constant marginal utility of money. 100% of households show income effects—choices depend on budget level, not just relative prices.
+| **Bronars Power** | 0.845 (87.5% significant) | GARP test has high statistical power |
+| **Homotheticity (HARP)** | 3.2% pass | Few scale preferences with budget |
+| **Income Invariance** | 0% quasilinear | All show income effects |
+| **Per-Obs Efficiency (VEI)** | 0.534 mean | Granular efficiency per observation |
 
 ### Cross-Price Relationships
-
-Using `compute_cross_price_matrix()` to detect substitutes vs complements:
 
 | Product Pair | Score | Relationship |
 |--------------|-------|--------------|
@@ -211,18 +388,16 @@ PyRevealed features (BehavioralAuditor + PreferenceEncoder) contribute **12.5% o
 
 ### Key Insights
 
-- 4.5% of households are perfectly consistent (GARP)
-- Mean integrity score: 0.839
-- Mean exploitability (MPI): 0.225
-- Only Protein vs Staples shows separate mental budgets (62%)
-- Auto-discovery confirms 3/4 manual category groupings
-- 17% of households are "almost rational" (HM < 0.1)
-- First-half spending patterns predict second-half consistency better than first-half consistency itself
-- PyRevealed features provide +0.014 R² lift for integrity prediction (12.5% of feature importance)
-- **Bronars power: 0.845** — GARP test is statistically meaningful (87.5% significant)
-- **Only 3.2% are homothetic** — most households don't scale preferences with budget
-- **100% show income effects** — no quasilinear preferences found
-- **Products are mostly complements** — Milk+Bread, Soda+Pizza bought together
+| Category | Finding |
+|----------|---------|
+| **Consistency** | 4.5% GARP-consistent, mean AEI = 0.839 |
+| **Exploitability** | Mean MPI = 0.225 |
+| **Statistical Power** | Bronars = 0.845 (87.5% significant) |
+| **Preference Structure** | 3.2% homothetic, 0% quasilinear |
+| **Separability** | Only Protein vs Staples shows separate budgets (62%) |
+| **Robustness** | 17% "almost rational" (HM < 0.1) |
+| **Cross-Price** | Mostly complements (Milk+Bread, Soda+Pizza) |
+| **Prediction** | PyRevealed features: +0.014 R² lift (12.5% importance) |
 
 ### Running the Dunnhumby Tests
 
