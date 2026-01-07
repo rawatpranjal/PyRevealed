@@ -71,12 +71,12 @@ print(f"Confusion Metric: {confusion:.3f}")
 
 ### Scores (0 to 1)
 
-| Method | What it tells you | How to read it |
-|--------|-------------------|----------------|
-| `compute_integrity_score(log)` | How consistent is this user? | 1.0 = perfect, 0.8 = good, <0.7 = suspicious |
-| `compute_confusion_metric(log)` | How exploitable via pricing tricks? | 0 = safe, >0.3 = easily manipulated |
-| `compute_minimal_outlier_fraction(log)` | How many bad choices to ignore? | <0.1 = almost perfect, >0.2 = messy data |
-| `compute_test_power(log)` | Is "consistent" meaningful here? | >0.5 = yes, <0.5 = test is too easy |
+| Method | What it measures |
+|--------|------------------|
+| `compute_integrity_score(log)` | How consistent is this user? (higher = more consistent) |
+| `compute_confusion_metric(log)` | How exploitable via pricing tricks? (lower = safer) |
+| `compute_minimal_outlier_fraction(log)` | Fraction of observations to remove for consistency |
+| `compute_test_power(log)` | Statistical power of consistency test |
 
 ### Preference Structure
 

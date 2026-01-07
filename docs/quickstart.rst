@@ -99,26 +99,20 @@ Efficiency Scores (0-1)
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 30 30
+   :widths: 50 50
 
    * - Function
      - What it measures
-     - Interpretation
    * - ``compute_integrity_score(log)``
-     - Fraction consistent with utility max
-     - 1.0 = perfect, <0.7 = bot risk
+     - How consistent? (higher = more consistent)
    * - ``compute_confusion_metric(log)``
-     - Exploitability via preference cycles
-     - 0.0 = safe, >0.3 = confused
+     - How exploitable? (lower = safer)
    * - ``compute_minimal_outlier_fraction(log)``
-     - Observations to remove for consistency
-     - <0.1 = almost rational
+     - Fraction of observations to remove for consistency
    * - ``compute_granular_integrity(log)``
-     - Per-observation efficiency
-     - Identifies problem observations
+     - Per-observation efficiency scores
    * - ``compute_test_power(log)``
-     - Statistical significance of tests
-     - >0.5 = meaningful result
+     - Statistical power of consistency test
 
 Preference Structure (Boolean)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
