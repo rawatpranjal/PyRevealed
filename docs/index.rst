@@ -1,15 +1,7 @@
 PyRevealed
 ==========
 
-Analyze user choices to detect bots, confused users, and preference patterns.
-
-**What it does:** Given purchase history (prices + quantities), PyRevealed tests if choices are internally consistent—and quantifies how "rational" the behavior is.
-
-**Use cases:**
-
-- Bot detection (bots often fail consistency tests)
-- UX auditing (confused users show exploitable patterns)
-- Preference modeling (recover utility functions from data)
+Test if user choices are internally consistent and quantify how "rational" the behavior is.
 
 Installation
 ------------
