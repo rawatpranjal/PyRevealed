@@ -1,7 +1,10 @@
 Mathematical Foundations
 ========================
 
-This page provides formal mathematical definitions for all methods in PyRevealed.
+.. note::
+
+   This page provides formal mathematical definitions for all methods in PyRevealed,
+   based on *Revealed Preference Theory* by Chambers & Echenique (2016).
 
 Notation
 --------
@@ -52,7 +55,10 @@ Let :math:`R^*` be the transitive closure of :math:`R` (computed via Floyd-Warsh
 
    \text{GARP holds} \iff \nexists \, i,j : \left( x^i \, R^* \, x^j \right) \land \left( x^j \, P \, x^i \right)
 
-**Interpretation:** If bundle :math:`i` is transitively revealed preferred to bundle :math:`j`, then :math:`j` cannot be strictly revealed preferred to :math:`i`.
+.. important::
+
+   **Afriat's Theorem:** GARP is *necessary and sufficient* for the existence of a
+   locally non-satiated utility function that rationalizes the data.
 
 **Reference:** Varian (1982), Chambers & Echenique (2016) Ch. 3
 

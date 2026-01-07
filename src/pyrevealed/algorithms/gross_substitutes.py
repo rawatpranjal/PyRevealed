@@ -9,6 +9,7 @@ from numpy.typing import NDArray
 
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import GrossSubstitutesResult, SubstitutionMatrixResult
+from pyrevealed.core.exceptions import ValueRangeError, DataValidationError
 
 
 def check_gross_substitutes(
@@ -61,9 +62,16 @@ def check_gross_substitutes(
     N = session.num_goods
 
     if good_g < 0 or good_g >= N or good_h < 0 or good_h >= N:
-        raise ValueError(f"Good indices must be in [0, {N})")
+        raise ValueRangeError(
+            f"Good indices must be in [0, {N}). "
+            f"Got good_g={good_g}, good_h={good_h}. "
+            f"Hint: Use valid indices from 0 to {N-1}."
+        )
     if good_g == good_h:
-        raise ValueError("good_g and good_h must be different")
+        raise DataValidationError(
+            f"good_g and good_h must be different. Got {good_g} for both. "
+            f"Hint: Gross substitutes analysis requires two distinct goods."
+        )
 
     P = session.prices       # T x N
     Q = session.quantities   # T x N

@@ -18,10 +18,18 @@ from __future__ import annotations
 
 import warnings
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 from numpy.typing import NDArray
+
+from pyrevealed.core.exceptions import (
+    DataQualityWarning,
+    DimensionError,
+    InsufficientDataError,
+    NaNInfError,
+    ValueRangeError,
+)
 
 
 @dataclass
@@ -71,6 +79,9 @@ class BehaviorLog:
     user_id: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
+    # NaN/Inf handling policy
+    nan_policy: Literal["raise", "warn", "drop"] = field(default="raise", repr=False)
+
     # Legacy parameter names (deprecated but supported)
     prices: NDArray[np.float64] | None = field(default=None, repr=False)
     quantities: NDArray[np.float64] | None = field(default=None, repr=False)
@@ -103,6 +114,11 @@ class BehaviorLog:
         self.cost_vectors = np.asarray(self.cost_vectors, dtype=np.float64)
         self.action_vectors = np.asarray(self.action_vectors, dtype=np.float64)
 
+        # Handle NaN/Inf values according to policy
+        self.cost_vectors, self.action_vectors = self._handle_nan_inf(
+            self.cost_vectors, self.action_vectors
+        )
+
         # Keep legacy attributes in sync for backward compatibility
         self.prices = self.cost_vectors
         self.quantities = self.action_vectors
@@ -111,25 +127,114 @@ class BehaviorLog:
         self._validate()
         self._compute_expenditure_matrix()
 
+    def _handle_nan_inf(
+        self, costs: NDArray[np.float64], actions: NDArray[np.float64]
+    ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+        """Handle NaN and Inf values according to nan_policy.
+
+        Args:
+            costs: Cost vectors array
+            actions: Action vectors array
+
+        Returns:
+            Tuple of (cleaned_costs, cleaned_actions)
+
+        Raises:
+            NaNInfError: If nan_policy='raise' and NaN/Inf found
+        """
+        cost_invalid = ~np.isfinite(costs)
+        action_invalid = ~np.isfinite(actions)
+
+        has_invalid_costs = np.any(cost_invalid)
+        has_invalid_actions = np.any(action_invalid)
+
+        if not (has_invalid_costs or has_invalid_actions):
+            return costs, actions
+
+        # Find affected rows
+        affected_rows = np.where(
+            np.any(cost_invalid, axis=1) | np.any(action_invalid, axis=1)
+        )[0]
+        nan_count = int(np.sum(cost_invalid) + np.sum(action_invalid))
+
+        # Build informative message
+        row_preview = affected_rows[:5].tolist()
+        row_msg = str(row_preview) + ("..." if len(affected_rows) > 5 else "")
+
+        if self.nan_policy == "raise":
+            raise NaNInfError(
+                f"Found {nan_count} NaN/Inf values in {len(affected_rows)} observations. "
+                f"Affected rows: {row_msg}. "
+                f"Use nan_policy='drop' to remove affected rows, or "
+                f"nan_policy='warn' to drop with a warning."
+            )
+        elif self.nan_policy == "warn":
+            warnings.warn(
+                f"Dropping {len(affected_rows)} observations with NaN/Inf values "
+                f"(rows: {row_msg}).",
+                DataQualityWarning,
+                stacklevel=4,
+            )
+            return self._drop_rows(costs, actions, affected_rows)
+        elif self.nan_policy == "drop":
+            return self._drop_rows(costs, actions, affected_rows)
+
+        return costs, actions
+
+    def _drop_rows(
+        self,
+        costs: NDArray[np.float64],
+        actions: NDArray[np.float64],
+        rows_to_drop: NDArray[np.intp],
+    ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+        """Drop specified rows from both arrays."""
+        mask = np.ones(costs.shape[0], dtype=bool)
+        mask[rows_to_drop] = False
+        return costs[mask], actions[mask]
+
     def _validate(self) -> None:
         """Validate cost and action matrix dimensions and values."""
         if self.cost_vectors.shape != self.action_vectors.shape:
-            raise ValueError(
-                f"cost_vectors shape {self.cost_vectors.shape} must match "
-                f"action_vectors shape {self.action_vectors.shape}"
+            raise DimensionError(
+                f"cost_vectors shape {self.cost_vectors.shape} does not match "
+                f"action_vectors shape {self.action_vectors.shape}. "
+                f"Both arrays must have shape (T, N) where T=observations and N=features. "
+                f"Hint: Check that your price and quantity data have the same dimensions."
             )
         if self.cost_vectors.ndim != 2:
-            raise ValueError(
-                f"cost_vectors must be a 2D array (T x N), got {self.cost_vectors.ndim}D"
+            raise DimensionError(
+                f"cost_vectors must be a 2D array (T x N), got {self.cost_vectors.ndim}D "
+                f"with shape {self.cost_vectors.shape}. "
+                f"Hint: Use .reshape(-1, N) to convert 1D arrays."
             )
         if self.cost_vectors.shape[0] < 1:
-            raise ValueError("Must have at least one observation")
+            raise InsufficientDataError(
+                "Must have at least one observation. "
+                "Hint: Check that your data is not empty after preprocessing."
+            )
         if self.cost_vectors.shape[1] < 1:
-            raise ValueError("Must have at least one feature")
+            raise InsufficientDataError(
+                "Must have at least one feature/good. "
+                "Hint: Check that your data has at least one column."
+            )
         if np.any(self.cost_vectors <= 0):
-            raise ValueError("All costs must be strictly positive")
+            invalid_positions = np.argwhere(self.cost_vectors <= 0)
+            pos_preview = invalid_positions[:5].tolist()
+            pos_msg = str(pos_preview) + ("..." if len(invalid_positions) > 5 else "")
+            raise ValueRangeError(
+                f"Found {len(invalid_positions)} non-positive costs at positions: {pos_msg}. "
+                f"All costs must be strictly positive (> 0) for revealed preference analysis. "
+                f"Hint: Check for missing data encoded as 0, or filter out zero-cost observations."
+            )
         if np.any(self.action_vectors < 0):
-            raise ValueError("All actions must be non-negative")
+            invalid_positions = np.argwhere(self.action_vectors < 0)
+            pos_preview = invalid_positions[:5].tolist()
+            pos_msg = str(pos_preview) + ("..." if len(invalid_positions) > 5 else "")
+            raise ValueRangeError(
+                f"Found {len(invalid_positions)} negative actions at positions: {pos_msg}. "
+                f"All actions must be non-negative (>= 0). "
+                f"Hint: Check for data entry errors or consider using absolute values."
+            )
 
     def _compute_expenditure_matrix(self) -> None:
         """Pre-compute spend matrix S[i,j] = cost_i @ action_j."""
@@ -369,25 +474,60 @@ class RiskChoiceLog:
 
     def _validate(self) -> None:
         """Validate dimensions and values."""
+        # Check for NaN/Inf in numeric arrays
+        for name, arr in [
+            ("safe_values", self.safe_values),
+            ("risky_outcomes", self.risky_outcomes),
+            ("risky_probabilities", self.risky_probabilities),
+        ]:
+            if not np.all(np.isfinite(arr)):
+                invalid_count = int(np.sum(~np.isfinite(arr)))
+                raise NaNInfError(
+                    f"Found {invalid_count} NaN/Inf values in {name}. "
+                    f"All values must be finite numbers."
+                )
+
         T = len(self.safe_values)
 
         if self.safe_values.ndim != 1:
-            raise ValueError("safe_values must be 1D array")
+            raise DimensionError(
+                f"safe_values must be 1D array, got {self.safe_values.ndim}D. "
+                f"Hint: Use .flatten() or .ravel() to convert."
+            )
         if self.choices.ndim != 1 or len(self.choices) != T:
-            raise ValueError(f"choices must have length {T}")
+            raise DimensionError(
+                f"choices must have length {T} (matching safe_values), "
+                f"got length {len(self.choices)}."
+            )
         if self.risky_outcomes.ndim != 2 or self.risky_outcomes.shape[0] != T:
-            raise ValueError(f"risky_outcomes must have shape (T={T}, K)")
+            raise DimensionError(
+                f"risky_outcomes must have shape (T={T}, K), "
+                f"got shape {self.risky_outcomes.shape}."
+            )
         if self.risky_probabilities.shape != self.risky_outcomes.shape:
-            raise ValueError("risky_probabilities must match risky_outcomes shape")
+            raise DimensionError(
+                f"risky_probabilities shape {self.risky_probabilities.shape} must match "
+                f"risky_outcomes shape {self.risky_outcomes.shape}."
+            )
 
         # Check probabilities sum to 1
         prob_sums = self.risky_probabilities.sum(axis=1)
         if not np.allclose(prob_sums, 1.0):
-            raise ValueError("risky_probabilities must sum to 1 for each observation")
+            bad_rows = np.where(~np.isclose(prob_sums, 1.0))[0]
+            raise ValueRangeError(
+                f"risky_probabilities must sum to 1 for each observation. "
+                f"Rows with invalid sums: {bad_rows[:5].tolist()}"
+                f"{'...' if len(bad_rows) > 5 else ''}. "
+                f"Hint: Normalize each row with probs / probs.sum(axis=1, keepdims=True)."
+            )
 
         # Check non-negative probabilities
         if np.any(self.risky_probabilities < 0):
-            raise ValueError("Probabilities must be non-negative")
+            invalid_positions = np.argwhere(self.risky_probabilities < 0)
+            raise ValueRangeError(
+                f"Found {len(invalid_positions)} negative probabilities. "
+                f"All probabilities must be non-negative."
+            )
 
     @property
     def num_observations(self) -> int:
@@ -468,23 +608,46 @@ class SpatialSession:
 
     def _validate(self) -> None:
         """Validate dimensions and indices."""
+        # Check for NaN/Inf in item features
+        if not np.all(np.isfinite(self.item_features)):
+            invalid_count = int(np.sum(~np.isfinite(self.item_features)))
+            raise NaNInfError(
+                f"Found {invalid_count} NaN/Inf values in item_features. "
+                f"All feature values must be finite numbers."
+            )
+
         if self.item_features.ndim != 2:
-            raise ValueError("item_features must be 2D (M items x D dimensions)")
+            raise DimensionError(
+                f"item_features must be 2D (M items x D dimensions), "
+                f"got {self.item_features.ndim}D with shape {self.item_features.shape}."
+            )
 
         M = self.item_features.shape[0]
         T = len(self.choice_sets)
 
         if len(self.choices) != T:
-            raise ValueError(f"choices length {len(self.choices)} != {T} choice sets")
+            raise DimensionError(
+                f"choices length {len(self.choices)} must equal number of "
+                f"choice sets ({T})."
+            )
 
         for t, (choice_set, chosen) in enumerate(zip(self.choice_sets, self.choices)):
             if len(choice_set) < 2:
-                raise ValueError(f"Choice set {t} must have at least 2 items")
+                raise InsufficientDataError(
+                    f"Choice set {t} has only {len(choice_set)} item(s). "
+                    f"Each choice set must have at least 2 items for preference analysis."
+                )
             if chosen not in choice_set:
-                raise ValueError(f"Chosen item {chosen} not in choice set {t}")
+                raise ValueRangeError(
+                    f"Chosen item {chosen} is not in choice set {t}: {choice_set}. "
+                    f"The chosen item must be one of the available options."
+                )
             for idx in choice_set:
                 if idx < 0 or idx >= M:
-                    raise ValueError(f"Item index {idx} out of range [0, {M})")
+                    raise ValueRangeError(
+                        f"Item index {idx} in choice set {t} is out of range [0, {M}). "
+                        f"Hint: Ensure all indices refer to valid items in item_features."
+                    )
 
     @property
     def num_items(self) -> int:

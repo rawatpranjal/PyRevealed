@@ -50,6 +50,8 @@ Contents
    tutorial
    theory
    api
+   scaling
+   troubleshooting
    case_study
 
 Acknowledgments

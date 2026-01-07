@@ -22,6 +22,7 @@ from pyrevealed.algorithms.utility import (
     build_value_function,
     predict_choice,
 )
+from pyrevealed.core.exceptions import NotFittedError
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import BehaviorLog
@@ -112,9 +113,10 @@ class PreferenceEncoder:
     def _check_fitted(self) -> None:
         """Raise error if not fitted."""
         if not self._is_fitted:
-            raise ValueError(
+            raise NotFittedError(
                 "Encoder not fitted. Call fit() first, or check if behavior "
-                "is too inconsistent (use BehavioralAuditor to check)."
+                "is too inconsistent (use BehavioralAuditor to check). "
+                "Hint: Use compute_integrity_score() to check data consistency before fitting."
             )
 
     def extract_latent_values(self) -> NDArray[np.float64]:

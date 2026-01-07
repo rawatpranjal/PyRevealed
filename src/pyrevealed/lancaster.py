@@ -40,6 +40,13 @@ from scipy.optimize import nnls
 
 from pyrevealed.core.session import BehaviorLog
 from pyrevealed.core.result import LancasterResult
+from pyrevealed.core.exceptions import (
+    DataQualityWarning,
+    DimensionError,
+    InsufficientDataError,
+    NaNInfError,
+    ValueRangeError,
+)
 
 
 @dataclass
@@ -150,57 +157,103 @@ class LancasterLog:
 
     def _validate(self) -> None:
         """Validate input dimensions and values."""
+        # Check for NaN/Inf in all arrays
+        for name, arr in [
+            ("cost_vectors", self.cost_vectors),
+            ("action_vectors", self.action_vectors),
+            ("attribute_matrix", self.attribute_matrix),
+        ]:
+            if not np.all(np.isfinite(arr)):
+                invalid_count = int(np.sum(~np.isfinite(arr)))
+                raise NaNInfError(
+                    f"Found {invalid_count} NaN/Inf values in {name}. "
+                    f"All values must be finite numbers. "
+                    f"Hint: Use np.nan_to_num() or filter invalid values before creating LancasterLog."
+                )
+
         # Check cost_vectors shape
         if self.cost_vectors.ndim != 2:
-            raise ValueError(
-                f"cost_vectors must be 2D (T x N), got {self.cost_vectors.ndim}D"
+            raise DimensionError(
+                f"cost_vectors must be 2D (T x N), got {self.cost_vectors.ndim}D "
+                f"with shape {self.cost_vectors.shape}."
             )
 
         T, N = self.cost_vectors.shape
 
         # Check action_vectors shape
         if self.action_vectors.shape != self.cost_vectors.shape:
-            raise ValueError(
+            raise DimensionError(
                 f"action_vectors shape {self.action_vectors.shape} must match "
-                f"cost_vectors shape {self.cost_vectors.shape}"
+                f"cost_vectors shape {self.cost_vectors.shape}. "
+                f"Hint: Both matrices must have the same T observations and N products."
             )
 
         # Check attribute_matrix shape
         if self.attribute_matrix.ndim != 2:
-            raise ValueError(
-                f"attribute_matrix must be 2D (N x K), got {self.attribute_matrix.ndim}D"
+            raise DimensionError(
+                f"attribute_matrix must be 2D (N x K), got {self.attribute_matrix.ndim}D "
+                f"with shape {self.attribute_matrix.shape}."
             )
 
         if self.attribute_matrix.shape[0] != N:
-            raise ValueError(
+            raise DimensionError(
                 f"attribute_matrix rows ({self.attribute_matrix.shape[0]}) must match "
-                f"number of products N ({N})"
+                f"number of products N ({N}). "
+                f"The attribute matrix should have one row per product."
             )
 
         K = self.attribute_matrix.shape[1]
 
         # Minimum size requirements
         if T < 1:
-            raise ValueError("Must have at least one observation")
+            raise InsufficientDataError(
+                "Must have at least one observation. "
+                "Hint: Check that your data is not empty after preprocessing."
+            )
         if N < 1:
-            raise ValueError("Must have at least one product")
+            raise InsufficientDataError(
+                "Must have at least one product. "
+                "Hint: Check that your data has at least one product column."
+            )
         if K < 1:
-            raise ValueError("Must have at least one characteristic")
+            raise InsufficientDataError(
+                "Must have at least one characteristic. "
+                "Hint: The attribute matrix must have at least one column."
+            )
 
         # Value checks
         if np.any(self.cost_vectors <= 0):
-            raise ValueError("All costs/prices must be strictly positive")
+            invalid_positions = np.argwhere(self.cost_vectors <= 0)
+            pos_preview = invalid_positions[:5].tolist()
+            raise ValueRangeError(
+                f"Found {len(invalid_positions)} non-positive costs at positions: "
+                f"{pos_preview}{'...' if len(invalid_positions) > 5 else ''}. "
+                f"All costs/prices must be strictly positive."
+            )
         if np.any(self.action_vectors < 0):
-            raise ValueError("All actions/quantities must be non-negative")
+            invalid_positions = np.argwhere(self.action_vectors < 0)
+            pos_preview = invalid_positions[:5].tolist()
+            raise ValueRangeError(
+                f"Found {len(invalid_positions)} negative actions at positions: "
+                f"{pos_preview}{'...' if len(invalid_positions) > 5 else ''}. "
+                f"All actions/quantities must be non-negative."
+            )
         if np.any(self.attribute_matrix < 0):
-            raise ValueError("All attribute values must be non-negative")
+            invalid_positions = np.argwhere(self.attribute_matrix < 0)
+            pos_preview = invalid_positions[:5].tolist()
+            raise ValueRangeError(
+                f"Found {len(invalid_positions)} negative attribute values at positions: "
+                f"{pos_preview}{'...' if len(invalid_positions) > 5 else ''}. "
+                f"All attribute values must be non-negative."
+            )
 
         # Check for zero rows in A (products with no characteristics)
         zero_rows = np.where(self.attribute_matrix.sum(axis=1) == 0)[0]
         if len(zero_rows) > 0:
-            raise ValueError(
+            raise ValueRangeError(
                 f"Products {zero_rows.tolist()} have no characteristics (all zeros in A). "
-                "Every product must deliver at least one characteristic."
+                "Every product must deliver at least one characteristic. "
+                "Hint: Remove products with no attributes or add missing attribute values."
             )
 
         # Check for zero columns in A (unused characteristics) - warn only
@@ -209,7 +262,7 @@ class LancasterLog:
             warnings.warn(
                 f"Characteristics {zero_cols.tolist()} are not present in any product. "
                 "Consider removing these columns from the attribute matrix.",
-                UserWarning,
+                DataQualityWarning,
                 stacklevel=3,
             )
 
@@ -220,7 +273,7 @@ class LancasterLog:
                 f"Attribute matrix is rank-deficient (rank={rank}, K={K}). "
                 "Shadow prices may not be unique. Consider reducing characteristics "
                 "or adding more products.",
-                UserWarning,
+                DataQualityWarning,
                 stacklevel=3,
             )
 

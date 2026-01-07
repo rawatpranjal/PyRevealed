@@ -1,0 +1,193 @@
+/* PyRevealed Documentation Custom Styles */
+
+/* ========================================================================
+   Tables - More elegant styling
+   ======================================================================== */
+
+.bd-content table.docutils {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.bd-content table.docutils th {
+    background: linear-gradient(180deg, var(--pst-color-primary) 0%, var(--pst-color-primary-highlight) 100%);
+    color: white;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.bd-content table.docutils td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--pst-color-border);
+}
+
+.bd-content table.docutils tr:last-child td {
+    border-bottom: none;
+}
+
+.bd-content table.docutils tbody tr:hover {
+    background-color: var(--pst-color-surface);
+}
+
+/* ========================================================================
+   Math blocks - Better presentation
+   ======================================================================== */
+
+div.math {
+    padding: 16px 20px;
+    margin: 20px 0;
+    background: var(--pst-color-surface);
+    border-left: 4px solid var(--pst-color-primary);
+    border-radius: 0 8px 8px 0;
+    overflow-x: auto;
+}
+
+/* ========================================================================
+   Code blocks - Refined appearance
+   ======================================================================== */
+
+div.highlight {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+div.highlight pre {
+    padding: 16px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ========================================================================
+   Admonitions - More elegant note boxes
+   ======================================================================== */
+
+.admonition {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-left-width: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.admonition-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* ========================================================================
+   Section headers - Better hierarchy
+   ======================================================================== */
+
+.bd-content h1 {
+    border-bottom: 2px solid var(--pst-color-primary);
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+}
+
+.bd-content h2 {
+    margin-top: 40px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--pst-color-border);
+}
+
+.bd-content h3 {
+    margin-top: 32px;
+    color: var(--pst-color-primary);
+}
+
+.bd-content h4 {
+    margin-top: 24px;
+}
+
+/* ========================================================================
+   Horizontal rules - Subtle dividers
+   ======================================================================== */
+
+.bd-content hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--pst-color-border), transparent);
+    margin: 40px 0;
+}
+
+/* ========================================================================
+   List tables - Better styling for method tables
+   ======================================================================== */
+
+.bd-content table.docutils.align-default {
+    width: 100%;
+}
+
+.bd-content table.docutils code {
+    background: var(--pst-color-surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* ========================================================================
+   Announcement banner - Subtle styling
+   ======================================================================== */
+
+.bd-header-announcement {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+}
+
+.bd-header-announcement a {
+    font-weight: 500;
+}
+
+/* ========================================================================
+   Sidebar - Cleaner navigation
+   ======================================================================== */
+
+.bd-sidebar-primary {
+    border-right: 1px solid var(--pst-color-border);
+}
+
+.bd-sidebar-secondary {
+    border-left: 1px solid var(--pst-color-border);
+}
+
+/* ========================================================================
+   Content area - Better readability
+   ======================================================================== */
+
+.bd-content {
+    line-height: 1.7;
+}
+
+.bd-content p {
+    margin-bottom: 16px;
+}
+
+/* ========================================================================
+   Function/method signatures - Better visibility
+   ======================================================================== */
+
+dl.py.function > dt,
+dl.py.method > dt,
+dl.py.class > dt {
+    background: var(--pst-color-surface);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 4px solid var(--pst-color-primary);
+    margin-bottom: 12px;
+}
+
+/* ========================================================================
+   Inline code - Subtle styling
+   ======================================================================== */
+
+.bd-content code.literal {
+    background: var(--pst-color-surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    border: 1px solid var(--pst-color-border);
+}

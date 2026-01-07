@@ -11,6 +11,7 @@ from scipy.optimize import linprog
 
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import UtilityRecoveryResult
+from pyrevealed.core.exceptions import OptimizationError
 
 
 def recover_utility(
@@ -217,10 +218,18 @@ def construct_afriat_utility(
         ...     utility = u(new_bundle)
     """
     if not utility_result.success:
-        raise ValueError("Cannot construct utility from failed recovery")
+        raise OptimizationError(
+            "Cannot construct utility from failed recovery. "
+            f"LP status: {utility_result.lp_status}. "
+            "Hint: Check data consistency with compute_integrity_score() first. "
+            "If integrity is low, the behavior may be too inconsistent for utility recovery."
+        )
 
     if utility_result.utility_values is None or utility_result.lagrange_multipliers is None:
-        raise ValueError("Utility values or multipliers are None")
+        raise OptimizationError(
+            "Utility values or multipliers are None despite successful LP. "
+            "This may indicate a numerical issue. Try adjusting tolerance."
+        )
 
     U = utility_result.utility_values
     lambdas = utility_result.lagrange_multipliers

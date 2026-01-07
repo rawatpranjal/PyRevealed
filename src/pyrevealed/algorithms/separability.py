@@ -29,6 +29,7 @@ from numpy.typing import NDArray
 
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import SeparabilityResult
+from pyrevealed.core.exceptions import DataValidationError, ValueRangeError
 from pyrevealed.algorithms.garp import check_garp
 from pyrevealed.algorithms.aei import compute_aei
 
@@ -89,12 +90,19 @@ def check_separability(
     # Validate groups don't overlap and cover all goods
     all_indices = set(group_a) | set(group_b)
     if len(all_indices) != len(group_a) + len(group_b):
-        raise ValueError("Groups must not overlap")
+        overlap = set(group_a) & set(group_b)
+        raise DataValidationError(
+            f"Groups must not overlap. Found overlapping indices: {list(overlap)}. "
+            f"Hint: Each good should belong to exactly one group for separability testing."
+        )
 
     N = session.num_goods
     for idx in all_indices:
         if idx < 0 or idx >= N:
-            raise ValueError(f"Good index {idx} out of range [0, {N})")
+            raise ValueRangeError(
+                f"Good index {idx} out of range [0, {N}). "
+                f"Hint: Indices must refer to valid goods in the session (0 to {N-1})."
+            )
 
     # Create sub-sessions for each group
     session_a = _extract_subsession(session, group_a)

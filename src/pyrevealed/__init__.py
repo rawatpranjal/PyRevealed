@@ -60,6 +60,27 @@ from pyrevealed.core.session import (
 )
 
 # =============================================================================
+# EXCEPTIONS AND WARNINGS
+# =============================================================================
+
+from pyrevealed.core.exceptions import (
+    # Base exception
+    PyRevealedError,
+    # Data validation exceptions
+    DataValidationError,
+    DimensionError,
+    ValueRangeError,
+    NaNInfError,
+    # Computation exceptions
+    OptimizationError,
+    NotFittedError,
+    InsufficientDataError,
+    # Warnings
+    DataQualityWarning,
+    NumericalInstabilityWarning,
+)
+
+# =============================================================================
 # RESULT TYPES - Tech-friendly names (Primary)
 # =============================================================================
 
@@ -259,6 +280,24 @@ __all__ = [
     "BehaviorLog",
     "RiskChoiceLog",
     "EmbeddingChoiceLog",
+
+    # ==========================================================================
+    # EXCEPTIONS AND WARNINGS
+    # ==========================================================================
+    # Base exception
+    "PyRevealedError",
+    # Data validation exceptions
+    "DataValidationError",
+    "DimensionError",
+    "ValueRangeError",
+    "NaNInfError",
+    # Computation exceptions
+    "OptimizationError",
+    "NotFittedError",
+    "InsufficientDataError",
+    # Warnings
+    "DataQualityWarning",
+    "NumericalInstabilityWarning",
 
     # ==========================================================================
     # RESULT TYPES - Tech-friendly (Primary)

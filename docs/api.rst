@@ -118,3 +118,51 @@ Risk Analysis
 .. autofunction:: pyrevealed.check_expected_utility_axioms
 
 .. autofunction:: pyrevealed.classify_risk_type
+
+Exceptions and Warnings
+-----------------------
+
+PyRevealed provides custom exceptions that inherit from ``ValueError`` for
+backward compatibility. See :doc:`troubleshooting` for detailed usage examples.
+
+Base Exception
+^^^^^^^^^^^^^^
+
+.. autoexception:: pyrevealed.PyRevealedError
+   :show-inheritance:
+
+Data Validation Exceptions
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoexception:: pyrevealed.DataValidationError
+   :show-inheritance:
+
+.. autoexception:: pyrevealed.DimensionError
+   :show-inheritance:
+
+.. autoexception:: pyrevealed.ValueRangeError
+   :show-inheritance:
+
+.. autoexception:: pyrevealed.NaNInfError
+   :show-inheritance:
+
+Computation Exceptions
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoexception:: pyrevealed.OptimizationError
+   :show-inheritance:
+
+.. autoexception:: pyrevealed.NotFittedError
+   :show-inheritance:
+
+.. autoexception:: pyrevealed.InsufficientDataError
+   :show-inheritance:
+
+Warnings
+^^^^^^^^
+
+.. autoclass:: pyrevealed.DataQualityWarning
+   :show-inheritance:
+
+.. autoclass:: pyrevealed.NumericalInstabilityWarning
+   :show-inheritance:
