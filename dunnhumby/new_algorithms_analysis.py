@@ -644,7 +644,7 @@ def analyze_strict_consistency(
             result = validate_strict_consistency(log)
             total += 1
 
-            if result.is_acyclical:
+            if result.is_consistent:
                 acyclical_p_pass += 1
             if result.garp_consistent:
                 garp_pass += 1

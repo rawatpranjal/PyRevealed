@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import time
-from collections import deque
 
 import numpy as np
 from numpy.typing import NDArray
@@ -12,6 +11,7 @@ from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import GARPResult
 from pyrevealed.core.types import Cycle
 from pyrevealed.graph.transitive_closure import floyd_warshall_transitive_closure
+from pyrevealed._kernels import bfs_find_path_numba, find_violation_pairs_numba
 
 
 def check_garp(
@@ -120,6 +120,8 @@ def _find_violation_cycles(
     - Each consecutive pair is connected by revealed preference (R)
     - At least one edge is strict preference (P)
 
+    Uses Numba JIT for fast violation pair finding and path reconstruction.
+
     Args:
         R: Direct revealed preference matrix
         P: Strict revealed preference matrix
@@ -132,14 +134,18 @@ def _find_violation_cycles(
     violations: list[Cycle] = []
     seen_cycles: set[frozenset[int]] = set()
 
-    # Find pairs (i, j) where R*[i,j] and P[j,i]
-    violation_pairs = np.argwhere(violation_matrix)
+    # Find pairs (i, j) where R*[i,j] and P[j,i] using Numba kernel
+    R_star_c = np.ascontiguousarray(R_star, dtype=np.bool_)
+    P_c = np.ascontiguousarray(P, dtype=np.bool_)
+    violation_pairs = find_violation_pairs_numba(R_star_c, P_c)
 
-    for pair in violation_pairs:
-        i, j = int(pair[0]), int(pair[1])
+    R_c = np.ascontiguousarray(R, dtype=np.bool_)
+
+    for idx in range(violation_pairs.shape[0]):
+        i, j = int(violation_pairs[idx, 0]), int(violation_pairs[idx, 1])
 
         # Reconstruct a path from i to j using R, then add the strict edge back
-        path = _reconstruct_path_bfs(R, i, j)
+        path = _reconstruct_path_bfs(R_c, i, j)
 
         if path is not None:
             # The cycle is: path from i to j, then j -> i (strict preference)
@@ -162,8 +168,10 @@ def _reconstruct_path_bfs(
     """
     Reconstruct shortest path from start to end using BFS on R.
 
+    Uses Numba JIT for fast path finding.
+
     Args:
-        R: Direct revealed preference adjacency matrix
+        R: Direct revealed preference adjacency matrix (must be contiguous)
         start: Starting node index
         end: Ending node index
 
@@ -171,23 +179,12 @@ def _reconstruct_path_bfs(
         List of node indices forming the path (ending with start to complete cycle),
         or None if no path exists
     """
-    T = R.shape[0]
-    queue: deque[tuple[int, list[int]]] = deque([(start, [start])])
-    visited = {start}
+    path_arr = bfs_find_path_numba(R, np.int64(start), np.int64(end))
 
-    while queue:
-        current, path = queue.popleft()
+    if len(path_arr) == 0 or path_arr[0] == -1:
+        return None
 
-        if current == end and len(path) > 1:
-            # Found path to end, return with start appended to complete cycle
-            return path + [start]
-
-        for next_node in range(T):
-            if R[current, next_node] and next_node not in visited:
-                visited.add(next_node)
-                queue.append((next_node, path + [next_node]))
-
-    return None
+    return list(path_arr)
 
 
 def check_warp(

@@ -9,7 +9,6 @@ Based on Dziewulski (2023).
 from __future__ import annotations
 
 import time
-from collections import deque
 
 import numpy as np
 from numpy.typing import NDArray
@@ -18,6 +17,7 @@ from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import AcyclicalPResult
 from pyrevealed.core.types import Cycle
 from pyrevealed.graph.transitive_closure import floyd_warshall_transitive_closure
+from pyrevealed._kernels import bfs_find_path_numba
 
 
 def check_acyclical_p(
@@ -164,23 +164,18 @@ def _reconstruct_path_bfs(
     start: int,
     end: int,
 ) -> list[int] | None:
-    """Reconstruct shortest path from start to end using BFS on P."""
-    T = P.shape[0]
-    queue: deque[tuple[int, list[int]]] = deque([(start, [start])])
-    visited = {start}
+    """Reconstruct shortest path from start to end using BFS on P.
 
-    while queue:
-        current, path = queue.popleft()
+    Uses Numba JIT for fast path finding.
+    """
+    P_c = np.ascontiguousarray(P, dtype=np.bool_)
+    path_arr = bfs_find_path_numba(P_c, np.int64(start), np.int64(end))
 
-        if current == end and len(path) > 1:
-            return path
+    if len(path_arr) == 0 or path_arr[0] == -1:
+        return None
 
-        for next_node in range(T):
-            if P[current, next_node] and next_node not in visited:
-                visited.add(next_node)
-                queue.append((next_node, path + [next_node]))
-
-    return None
+    # Remove the trailing start (we don't want cycle completion here)
+    return list(path_arr[:-1])
 
 
 # =============================================================================
