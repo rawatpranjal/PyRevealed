@@ -39,11 +39,9 @@ Quick Example
    is_consistent = validate_consistency(log)
    integrity = compute_integrity_score(log)
 
-Contents
---------
-
 .. toctree::
    :maxdepth: 1
+   :hidden:
 
    installation
    quickstart
@@ -54,21 +52,7 @@ Contents
    troubleshooting
    case_study
 
-Acknowledgments
----------------
+----
 
-This library is based on the theory developed in:
-
-   Chambers, C. P., & Echenique, F. (2016). *Revealed Preference Theory*.
-   Cambridge University Press.
-   `[Amazon] <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_
-
-Special thanks to **Professor Chris Chambers** at Georgetown University
-for his wonderful classes on revealed preference theory.
-
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+Based on `Chambers & Echenique (2016) <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_.
+Thanks to Professor Chris Chambers at Georgetown.

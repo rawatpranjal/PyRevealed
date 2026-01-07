@@ -1,19 +1,19 @@
 """Example: BehavioralAuditor - Linter-style API for behavioral consistency.
 
 The BehavioralAuditor provides a high-level, "linter-style" API for validating
-user behavior. Use it to detect:
-- Bots (inconsistent/random behavior)
-- Shared accounts (multiple preference profiles)
-- UI confusion (exploitable inconsistencies)
+user behavior consistency using revealed preference theory.
 
-This example shows the full_audit() method that returns risk assessments.
+This example shows how to use the auditor to:
+- Check if behavior is consistent with utility maximization
+- Measure behavioral integrity (Afriat Efficiency Index)
+- Measure exploitability of inconsistencies (Money Pump Index)
 """
 
 import numpy as np
 from pyrevealed import BehaviorLog, BehavioralAuditor
 
 # =============================================================================
-# Example 1: Consistent User (Low Risk)
+# Example 1: Consistent User
 # =============================================================================
 
 print("=" * 60)
@@ -44,13 +44,10 @@ print(f"User: {consistent_log.user_id}")
 print(f"  Is Consistent: {report.is_consistent}")
 print(f"  Integrity Score: {report.integrity_score:.2f}")
 print(f"  Confusion Score: {report.confusion_score:.2f}")
-print(f"  Bot Risk: {report.bot_risk:.2f}")
-print(f"  Shared Account Risk: {report.shared_account_risk:.2f}")
-print(f"  UX Confusion Risk: {report.ux_confusion_risk:.2f}")
 print()
 
 # =============================================================================
-# Example 2: Inconsistent User (Potential Bot or Shared Account)
+# Example 2: Inconsistent User
 # =============================================================================
 
 print("=" * 60)
@@ -80,9 +77,6 @@ print(f"User: {inconsistent_log.user_id}")
 print(f"  Is Consistent: {report.is_consistent}")
 print(f"  Integrity Score: {report.integrity_score:.2f}")
 print(f"  Confusion Score: {report.confusion_score:.2f}")
-print(f"  Bot Risk: {report.bot_risk:.2f}")
-print(f"  Shared Account Risk: {report.shared_account_risk:.2f}")
-print(f"  UX Confusion Risk: {report.ux_confusion_risk:.2f}")
 print()
 
 # =============================================================================
@@ -133,21 +127,18 @@ print("Practical Use Cases")
 print("=" * 60)
 
 print("""
-1. BOT DETECTION:
-   if report.bot_risk > 0.7:
+1. DATA QUALITY ASSESSMENT:
+   if report.integrity_score < 0.85:
        flag_for_review(user_id)
 
-2. SHARED ACCOUNT DETECTION:
-   if report.shared_account_risk > 0.5:
-       prompt_profile_split(user_id)
-
-3. UX IMPROVEMENT:
-   if report.ux_confusion_risk > 0.5:
-       enable_user_guidance(user_id)
-
-4. A/B TESTING:
+2. A/B TESTING:
    control_confusion = np.mean([audit(u).confusion_score for u in control])
    variant_confusion = np.mean([audit(u).confusion_score for u in variant])
    if variant_confusion < control_confusion:
        print("New UX reduces user confusion!")
+
+3. SEGMENT ANALYSIS:
+   for segment in user_segments:
+       scores = [audit(u).integrity_score for u in segment]
+       print(f"{segment.name}: mean integrity = {np.mean(scores):.2f}")
 """)

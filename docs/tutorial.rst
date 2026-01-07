@@ -243,8 +243,8 @@ The confusion metric measures how exploitable a user's inconsistencies are. If s
 
    **Practical applications**:
 
-   - **Bot detection**: Bots often have very low integrity scores (random behavior)
-   - **UX confusion**: High confusion scores may indicate UI problems
+   - **Data quality**: Low integrity scores indicate noisy or inconsistent data
+   - **UX analysis**: High confusion scores may indicate UI problems
    - **A/B testing**: Compare confusion scores between interface variants
 
 
@@ -487,7 +487,7 @@ Let's summarize what we've learned from analyzing 2,222 households over 2 years:
 - Try the :doc:`quickstart` with your own data
 - Check out the ``examples/`` directory for more advanced use cases:
 
-  - ``01_behavioral_auditor.py``: Bot and fraud detection
+  - ``01_behavioral_auditor.py``: Behavioral consistency analysis
   - ``02_preference_encoder.py``: ML feature extraction
   - ``03_risk_analysis.py``: Risk profiling
   - ``06_characteristics_model.py``: Lancaster model deep dive
@@ -520,4 +520,3 @@ Here's a challenge: Run the analysis on your own behavioral data. You'll need:
    print(f"Consistent: {report.is_consistent}")
    print(f"Integrity: {report.integrity_score:.3f}")
    print(f"Confusion: {report.confusion_score:.3f}")
-   print(f"Bot risk: {report.bot_risk:.2f}")

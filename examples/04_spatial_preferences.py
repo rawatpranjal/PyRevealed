@@ -7,7 +7,7 @@ preference model from Chambers & Echenique Chapter 11).
 Use cases:
 - Recommendation explainability ("You prefer items near this anchor")
 - Personalization (recommend items close to user's ideal point)
-- Shared account detection (multiple anchors = multiple users)
+- Preference heterogeneity analysis
 - Embedding-based preference analysis
 """
 
@@ -127,22 +127,22 @@ for i, s in enumerate(strengths):
     print(f"  Choice {i}: strength={s:.3f} ({status})")
 
 # =============================================================================
-# Example 5: Detect Shared Accounts (Multiple Anchors)
+# Example 5: Analyzing Preference Heterogeneity (Multiple Anchors)
 # =============================================================================
 
 print("\n" + "=" * 60)
-print("Example 5: Detect Shared Accounts via Multiple Anchors")
+print("Example 5: Analyze Preference Heterogeneity with Multiple Anchors")
 print("=" * 60)
 
-# Simulate a shared account: half choices from user preferring origin,
-# half from user preferring (1, 1)
+# Simulate heterogeneous preferences: some choices favor origin,
+# some favor (1, 1)
 mixed_choices = [0, 3, 5, 3]  # Inconsistent: some near origin, some near (1,1)
 
 mixed_session = EmbeddingChoiceLog(
     item_features=item_features,
     choice_sets=choice_sets,
     choices=mixed_choices,
-    session_id="shared_account"
+    session_id="mixed_preferences"
 )
 
 # Find multiple anchors
@@ -160,7 +160,7 @@ print(f"\nSingle anchor explained variance: {single_result.explained_variance:.1
 print(f"Violations with single anchor: {single_result.num_violations}")
 
 if len(anchors) > 1 and anchors[1][1] > 0.2:
-    print("\nSHARED ACCOUNT INDICATOR: Multiple distinct preference profiles detected!")
+    print("\nHETEROGENEOUS PREFERENCES: Multiple distinct preference profiles detected!")
 
 # =============================================================================
 # Example 6: Recommendation Use Case
@@ -210,10 +210,10 @@ print("""
    # Score new items by distance to anchor
    scores = [-np.linalg.norm(item_emb - user_anchor) for item_emb in catalog]
 
-3. SHARED ACCOUNT DETECTION:
-   anchors = find_multiple_anchors(account_choices, n_points=3)
+3. PREFERENCE HETEROGENEITY ANALYSIS:
+   anchors = find_multiple_anchors(choices, n_points=3)
    if len(anchors) > 1 and anchors[1][1] > 0.25:
-       flag_as_shared_account(account_id)
+       print("Multiple distinct preference profiles detected")
 
 4. PREFERENCE DRIFT DETECTION:
    old_anchor = find_preference_anchor(old_choices).ideal_point

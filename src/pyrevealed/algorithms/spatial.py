@@ -211,10 +211,10 @@ def find_multiple_ideal_points(
     method: str = "SLSQP",
 ) -> list[tuple[NDArray[np.float64], float]]:
     """
-    Find multiple ideal points (e.g., for shared account detection).
+    Find multiple ideal points to explain inconsistent choices.
 
-    If a single ideal point has many violations, the account might be shared
-    by multiple users with different preferences.
+    If a single ideal point has many violations, multiple ideal points
+    may better explain the observed choice patterns.
 
     Args:
         session: SpatialSession with choice data
@@ -275,7 +275,7 @@ seems to prefer. Items closer to this anchor are more likely to be chosen.
 Use this for:
 - Recommendation explainability ("You prefer items near this anchor")
 - Personalization (recommend items close to anchor)
-- Detecting account sharing (multiple anchors = multiple users)
+- Understanding user preference structure
 
 Example:
     >>> from pyrevealed import EmbeddingChoiceLog, find_preference_anchor
@@ -311,16 +311,15 @@ Low signal strength indicates noisy or random choices.
 # find_multiple_anchors: Tech-friendly name for find_multiple_ideal_points
 find_multiple_anchors = find_multiple_ideal_points
 """
-Find multiple preference anchors (for shared accounts/multi-user detection).
+Find multiple preference anchors to explain inconsistent choices.
 
 This is the tech-friendly alias for find_multiple_ideal_points.
 
-If multiple anchors explain the data well, this suggests the account
-is shared by multiple users with different preferences.
+If multiple anchors explain the data better than a single anchor,
+this indicates heterogeneous preferences in the choice data.
 
 Example:
     >>> from pyrevealed import EmbeddingChoiceLog, find_multiple_anchors
     >>> anchors = find_multiple_anchors(user_choices, n=2)
-    >>> if len(anchors) > 1 and anchors[1][1] > 0.3:
-    ...     flag_as_shared_account(user_id)
+    >>> print(f"Found {len(anchors)} anchors")
 """

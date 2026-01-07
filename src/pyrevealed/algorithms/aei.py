@@ -214,23 +214,21 @@ Compute the behavioral integrity score (0-1).
 
 This is the tech-friendly alias for compute_aei (Afriat Efficiency Index).
 
-The integrity score measures how "clean" the behavioral signal is:
-- 1.0 = Perfect integrity, fully consistent user behavior
-- 0.9+ = High integrity, minor noise
-- 0.7-0.9 = Moderate integrity, some confusion or noise
-- <0.7 = Low integrity, likely bot or multiple users
+The integrity score measures consistency with utility maximization:
+- 1.0 = Perfectly consistent behavior
+- 0.9+ = Minor deviations from rationality
+- 0.7-0.9 = Moderate inconsistencies
+- <0.7 = Notable violations of rationality
 
 Use this for:
-- Bot detection (bots have low integrity scores)
-- Account sharing detection (multiple users = inconsistent behavior)
-- Data quality assessment before ML training
+- Behavioral consistency assessment
+- Data quality evaluation before analysis
 
 Example:
     >>> from pyrevealed import BehaviorLog, compute_integrity_score
     >>> result = compute_integrity_score(user_log)
-    >>> if result.integrity_score < 0.85:
-    ...     flag_for_review(user_id)
+    >>> print(f"Integrity: {result.efficiency_index:.2f}")
 
 Returns:
-    IntegrityResult with integrity_score in [0, 1]
+    IntegrityResult with efficiency_index in [0, 1]
 """

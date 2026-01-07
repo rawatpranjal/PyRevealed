@@ -1,6 +1,13 @@
 Performance
 ===========
 
+.. admonition:: Key Insight
+
+   The O(T^3) Floyd-Warshall bottleneck is parallelized via Numba JIT with ``prange``,
+   enabling 100K+ observations. The k-loop has dependencies, but the i-loop parallelizes
+   across cores - combined with JIT caching, this makes revealed preference practical
+   for production bot detection and user scoring at scale.
+
 PyRevealed is designed to scale to **big-tech level data volumes** with up to 100,000+ observations per user session.
 
 Executive Summary
