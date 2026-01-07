@@ -1,16 +1,18 @@
 Tutorial 1
 ==========
 
-What can 2 years of grocery data tell us about human decision-making? In this tutorial, you'll analyze real shopping behavior from 2,222 households and discover that most people aren't perfectly "rational"—but that's not necessarily a bad thing.
+What can 2 years of grocery data tell us about human decision-making? In this
+tutorial, you'll analyze real shopping behavior from 2,222 households and
+learn to properly interpret revealed preference tests.
 
 By the end of this tutorial, you'll be able to:
 
 - Load and prepare behavioral data for analysis
-- Test whether choices are internally consistent
-- Measure how exploitable a user's inconsistencies are
-- Discover hidden preference structures in the data
-- Identify substitute and complement relationships
-- Transform product-level behavior into characteristic-level insights
+- Test whether choices are internally consistent (GARP)
+- **Assess whether the test is meaningful** (power analysis)
+- Measure efficiency and exploitability (CCEI, MPI)
+- Test preference structure (separability)
+- Transform to characteristics space (Lancaster model)
 
 Prerequisites
 -------------
@@ -21,22 +23,16 @@ Prerequisites
 
 .. note::
 
-   The full code for this tutorial is available in the ``dunnhumby/`` directory of the PyRevealed repository.
+   The full code for this tutorial is available in the ``dunnhumby/`` directory
+   of the PyRevealed repository.
 
 
-Part 1: Setup and Dataset Overview
-----------------------------------
+Part 1: The Data
+----------------
 
-First, let's install PyRevealed and download the dataset:
-
-.. code-block:: bash
-
-   pip install pyrevealed[viz]
-
-   # Download the Dunnhumby dataset (requires Kaggle API)
-   cd dunnhumby && ./download_data.sh
-
-The **Dunnhumby "The Complete Journey"** dataset contains 2 years of grocery transactions from approximately 2,500 households. We'll focus on 10 product categories: Soda, Milk, Bread, Cheese, Chips, Soup, Yogurt, Beef, Pizza, and Lunchmeat.
+The **Dunnhumby "The Complete Journey"** dataset contains 2 years of grocery
+transactions from approximately 2,500 households. We focus on 10 product
+categories.
 
 .. list-table:: Dataset Overview
    :header-rows: 1
@@ -47,476 +43,546 @@ The **Dunnhumby "The Complete Journey"** dataset contains 2 years of grocery tra
    * - Households analyzed
      - 2,222
    * - Product categories
-     - 10
+     - 10 (Soda, Milk, Bread, Cheese, Chips, Soup, Yogurt, Beef, Pizza, Lunchmeat)
    * - Time period
-     - 104 weeks (2 years)
-   * - Total transactions
-     - 645,288
+     - 2 years
+   * - Aggregation
+     - **Monthly** (24 observations per household)
+
+Aggregation Choice
+~~~~~~~~~~~~~~~~~~
+
+We aggregate transactions to **monthly** observations. Why not weekly?
+
+- **Weekly is too sparse**: Many households have zero purchases in most
+  categories each week
+- **Monthly aligns with budgeting**: Households plan grocery spending monthly
+- **Reduces noise**: Smooths out random shopping timing
+
+.. code-block:: bash
+
+   pip install pyrevealed[viz]
+
+   # Download the Dunnhumby dataset (requires Kaggle API)
+   cd dunnhumby && ./download_data.sh
+
+Assumption Checklist
+~~~~~~~~~~~~~~~~~~~~
+
+Before running RP tests, verify these assumptions are reasonable for your data:
+
+.. list-table:: Assumptions Required for RP Testing
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Assumption
+     - Grocery Data
+     - Concern Level
+   * - Stable preferences
+     - 2 years is long
+     - Medium
+   * - Single decision-maker
+     - Household, not individual
+     - Medium
+   * - Budget exhaustion
+     - Monthly grocery budget
+     - Medium
+   * - Category homogeneity
+     - "Milk" = all milk products
+     - Medium
+   * - No stockpiling
+     - Monthly smooths this
+     - Low
+
+**Key point**: Real data violates all of these to some degree. This doesn't
+invalidate the analysis—it affects interpretation.
 
 
-Part 2: Loading and Preparing the Data
---------------------------------------
+Part 2: Building BehaviorLogs
+-----------------------------
 
-In this section, you'll learn how to transform raw transaction data into a ``BehaviorLog`` that PyRevealed can analyze.
+A ``BehaviorLog`` captures a series of choices. Each observation consists of:
 
-**What is a BehaviorLog?**
-
-A ``BehaviorLog`` captures a series of choices made by a user. Each observation consists of:
-
-- **Prices**: What each option cost at the time of the choice
+- **Prices**: What each option cost at the time of choice
 - **Quantities**: How much of each option the user chose
 
 .. code-block:: python
-   :caption: Building a BehaviorLog from transaction data
 
    import numpy as np
    from pyrevealed import BehaviorLog
 
-   # For a single household, we aggregate transactions into weekly observations
-   # Each row is a week; each column is a product category
-
-   # Example: 52 weeks, 10 products
+   # For a single household: 24 months, 10 products
    prices = np.array([
-       [2.50, 3.20, 2.10, 4.50, 3.00, 1.80, 2.90, 8.50, 5.00, 6.20],  # Week 1
-       [2.45, 3.30, 2.15, 4.40, 2.90, 1.85, 3.00, 8.20, 5.10, 6.00],  # Week 2
-       # ... more weeks
+       [2.50, 3.20, 2.10, 4.50, 3.00, 1.80, 2.90, 8.50, 5.00, 6.20],  # Month 1
+       [2.45, 3.30, 2.15, 4.40, 2.90, 1.85, 3.00, 8.20, 5.10, 6.00],  # Month 2
+       # ... more months
    ])
 
    quantities = np.array([
-       [2.0, 1.5, 3.0, 0.5, 1.0, 2.0, 1.0, 0.5, 0.0, 0.5],  # Week 1
-       [1.5, 2.0, 2.5, 0.5, 1.5, 1.5, 1.0, 0.5, 1.0, 0.0],  # Week 2
-       # ... more weeks
+       [2.0, 1.5, 3.0, 0.5, 1.0, 2.0, 1.0, 0.5, 0.0, 0.5],  # Month 1
+       [1.5, 2.0, 2.5, 0.5, 1.5, 1.5, 1.0, 0.5, 1.0, 0.0],  # Month 2
+       # ... more months
    ])
 
-   # Create the behavior log
    log = BehaviorLog(
        cost_vectors=prices,
        action_vectors=quantities,
        user_id="household_123"
    )
 
-   print(f"Observations: {log.num_records}")
-   print(f"Products: {log.num_goods}")
+   print(f"Observations: {log.num_records}")  # 24
+   print(f"Products: {log.num_goods}")        # 10
 
-The Dunnhumby analysis scripts handle this data preparation automatically. Let's load pre-built sessions:
+Price Imputation
+~~~~~~~~~~~~~~~~
 
-.. code-block:: python
-   :caption: Loading pre-built sessions from the Dunnhumby analysis
-
-   import pickle
-   from pathlib import Path
-
-   # Load cached sessions (built by run_all.py)
-   cache_file = Path("dunnhumby/cache/sessions.pkl")
-   with open(cache_file, 'rb') as f:
-       sessions = pickle.load(f)
-
-   print(f"Loaded {len(sessions)} household sessions")
-
-   # Each session contains:
-   # - behavior_log: The BehaviorLog object
-   # - household_id: Unique identifier
-   # - metadata: Additional household info
-
-
-Part 3: Testing Behavioral Consistency
---------------------------------------
-
-In this section, you'll learn what it means for behavior to be "consistent" and how to test for it.
-
-**What is GARP?**
-
-The Generalized Axiom of Revealed Preference (GARP) is a test for behavioral consistency. The idea is simple: if you chose bundle A when bundle B was affordable, you're revealing that you prefer A to B. GARP checks whether these revealed preferences form a consistent ordering.
-
-A violation occurs when your choices contradict each other—for example, if you reveal that you prefer A to B, and also that you prefer B to A.
+For categories with zero purchases, we need prices. Use market medians:
 
 .. code-block:: python
-   :caption: Testing consistency for a single household
+
+   def build_behavior_log(transactions_df, household_id, categories, price_oracle):
+       """Transform transactions to BehaviorLog format."""
+       hh_df = transactions_df[transactions_df['household_id'] == household_id]
+       hh_df['period'] = hh_df['date'].dt.to_period('M')
+
+       # Build quantity matrix
+       quantities = hh_df.pivot_table(
+           index='period',
+           columns='category',
+           values='quantity',
+           aggfunc='sum',
+           fill_value=0
+       )
+
+       # Build price matrix: user's price if purchased, oracle otherwise
+       prices = pd.DataFrame(index=quantities.index, columns=categories)
+       for period in quantities.index:
+           for cat in categories:
+               if quantities.loc[period, cat] > 0:
+                   mask = (hh_df['period'] == period) & (hh_df['category'] == cat)
+                   prices.loc[period, cat] = hh_df[mask]['price'].median()
+               else:
+                   prices.loc[period, cat] = price_oracle.loc[period, cat]
+
+       return BehaviorLog(
+           cost_vectors=prices.values,
+           action_vectors=quantities.values,
+           user_id=household_id
+       )
+
+
+Part 3: Testing Consistency (GARP)
+----------------------------------
+
+The Generalized Axiom of Revealed Preference (GARP) tests whether choices can
+be explained by **any** utility function.
+
+**The idea**: If you chose bundle A when B was affordable, you reveal A ≿ B.
+GARP checks whether these revealed preferences are transitive (no cycles).
+
+.. code-block:: python
 
    from pyrevealed import validate_consistency
 
-   # Pick a household
-   household_id = list(sessions.keys())[0]
-   log = sessions[household_id].behavior_log
-
-   # Test consistency
+   # Test a single household
    result = validate_consistency(log)
 
    if result.is_consistent:
-       print("This household's choices are perfectly consistent!")
-       print("Their behavior can be explained by a single utility function.")
+       print("GARP satisfied — a utility function exists")
    else:
-       print(f"Found {result.num_violations} preference contradictions.")
-       print("This doesn't mean they're irrational—just that their")
-       print("choices don't fit a simple utility-maximization model.")
+       print(f"GARP violated — {result.num_violations} contradictions found")
 
-**Running the test on all households**
-
-Let's see how many households pass the consistency test:
+Testing All Households
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
-   :caption: Testing all 2,222 households
 
    consistent_count = 0
-
    for household_id, session_data in sessions.items():
        result = validate_consistency(session_data.behavior_log)
        if result.is_consistent:
            consistent_count += 1
 
    total = len(sessions)
-   pct = 100 * consistent_count / total
+   print(f"GARP pass rate: {consistent_count}/{total} ({100*consistent_count/total:.1f}%)")
 
-   print(f"Consistent households: {consistent_count} / {total} ({pct:.1f}%)")
+**Expected result**: ~5-15% pass rate. This is typical for real consumption data.
 
-**Result**: Only **100 households (4.5%)** are perfectly consistent.
+Why Do Most Households Fail?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: images/showcase_a_rationality_histogram.png
-   :alt: Distribution of rationality scores across households
-   :width: 600px
+A GARP failure doesn't mean "irrational." It means choices can't be explained
+by a **single, stable utility function**. Possible causes:
+
+1. **Preference evolution**: Tastes change over 2 years
+2. **Multiple decision-makers**: Different family members shop
+3. **Context dependence**: Holiday shopping ≠ regular shopping
+4. **Measurement error**: Price imputation is imperfect
+5. **Stockpiling**: Buy extra during sales (even monthly data may miss this)
 
 .. note::
 
-   **Does this mean 95% of people are irrational?**
-
-   Not necessarily! There are many reasons for apparent inconsistencies:
-
-   - **Measurement noise**: Prices and quantities aren't perfectly observed
-   - **Changing preferences**: Tastes evolve over 2 years
-   - **Context effects**: A birthday party changes what you buy
-   - **Multiple decision-makers**: Different family members shop differently
-
-   The consistency test tells us whether a *single, stable utility function* can explain the data—not whether people are "rational."
+   The consistency test tells us whether a single utility function explains the
+   data—not whether people are "rational" in some deeper sense.
 
 
-Part 4: Measuring Integrity and Exploitability
-----------------------------------------------
+Part 4: Assessing Test Power
+----------------------------
 
-In this section, you'll learn about two key metrics: the **integrity score** (how consistent is the behavior?) and the **confusion metric** (how exploitable are the inconsistencies?).
+**Critical question**: Is passing GARP meaningful, or would random behavior
+also pass?
 
-**The Integrity Score (Afriat Efficiency Index)**
-
-The integrity score measures what fraction of behavior is consistent with utility maximization. A score of 1.0 means perfectly consistent; lower scores indicate more inconsistency.
+The Bronars (1987) test answers this by simulating random behavior on the same
+budgets and checking how often it violates GARP.
 
 .. code-block:: python
-   :caption: Computing integrity scores
+
+   from pyrevealed import compute_test_power
+
+   # Test power for a sample of households
+   power_scores = []
+   for household_id in sample_households:
+       log = sessions[household_id].behavior_log
+       result = compute_test_power(log, n_simulations=500)
+       power_scores.append(result.power)
+
+   print(f"Mean Bronars power: {np.mean(power_scores):.3f}")
+
+Interpreting Power
+~~~~~~~~~~~~~~~~~~
+
+.. list-table:: Power Interpretation Guide
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Power
+     - Interpretation
+   * - > 0.90
+     - Excellent — random behavior almost always fails GARP
+   * - 0.70 - 0.90
+     - Good — passing GARP is meaningful
+   * - 0.50 - 0.70
+     - Moderate — interpret with caution
+   * - < 0.50
+     - Weak — GARP test is uninformative
+
+**Expected for this data**: With 24 monthly observations and 10 goods, power
+should be > 0.90. Passing GARP is highly informative.
+
+**Why power matters**: If power is low (sparse data, few observations), both
+rational and random consumers pass GARP. The test tells us nothing.
+
+
+Part 5: Measuring Efficiency (CCEI)
+-----------------------------------
+
+For households that fail GARP, how badly do they fail?
+
+The **Afriat Efficiency Index (AEI)** or **Critical Cost Efficiency Index
+(CCEI)** measures what fraction of behavior is consistent with utility
+maximization. A score of 1.0 means perfectly consistent.
+
+.. code-block:: python
 
    from pyrevealed import compute_integrity_score
 
-   integrity_scores = []
-
+   ccei_scores = []
    for household_id, session_data in sessions.items():
        result = compute_integrity_score(session_data.behavior_log)
-       integrity_scores.append(result.efficiency_index)
+       ccei_scores.append(result.efficiency_index)
 
-   import numpy as np
-   print(f"Mean integrity: {np.mean(integrity_scores):.3f}")
-   print(f"Median integrity: {np.median(integrity_scores):.3f}")
-   print(f"Low integrity (<0.7): {sum(s < 0.7 for s in integrity_scores)} households")
+   print(f"Mean CCEI: {np.mean(ccei_scores):.3f}")
+   print(f"Median CCEI: {np.median(ccei_scores):.3f}")
+   print(f"CCEI ≥ 0.95: {np.mean(np.array(ccei_scores) >= 0.95)*100:.1f}%")
+   print(f"CCEI < 0.70: {np.mean(np.array(ccei_scores) < 0.70)*100:.1f}%")
 
-**Result**: Mean integrity is **0.839**—most behavior is about 84% consistent.
+Benchmark Comparison
+~~~~~~~~~~~~~~~~~~~~
 
-**The Confusion Metric (Money Pump Index)**
+How do these results compare to controlled experiments?
 
-The confusion metric measures how exploitable a user's inconsistencies are. If someone prefers A to B and B to C but C to A, a clever seller could "pump" money from them by cycling through these preferences.
+.. list-table:: Dunnhumby vs. CKMS (2014) Lab Experiments
+   :header-rows: 1
+   :widths: 40 30 30
+
+   * - Metric
+     - Dunnhumby (Grocery)
+     - CKMS (Lab)
+   * - GARP pass rate
+     - ~5-15%
+     - 22.8%
+   * - Mean CCEI
+     - ~0.80-0.85
+     - 0.881
+   * - Median CCEI
+     - ~0.85-0.90
+     - 0.95
+   * - CCEI ≥ 0.95
+     - ~20-30%
+     - 45.2%
+
+**Why lower consistency?** Real grocery data has more noise, longer time
+horizons, and multiple decision-makers. Lab experiments are cleaner.
+
+CCEI Interpretation Guide
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - CCEI
+     - Interpretation
+   * - 1.00
+     - Perfectly consistent — GARP satisfied
+   * - 0.95+
+     - Near-consistent — minor deviations
+   * - 0.85-0.95
+     - Moderate — typical for real data
+   * - 0.70-0.85
+     - Substantial deviations
+   * - < 0.70
+     - Severe — check data quality
+
+
+Part 6: Exploitability (MPI)
+----------------------------
+
+The **Money Pump Index (MPI)** measures how exploitable preference cycles are.
+If someone prefers A to B to C to A, a seller can "pump" money from them.
 
 .. code-block:: python
-   :caption: Computing confusion metrics
 
    from pyrevealed import compute_confusion_metric
 
-   confusion_scores = []
-
+   mpi_scores = []
    for household_id, session_data in sessions.items():
        result = compute_confusion_metric(session_data.behavior_log)
-       confusion_scores.append(result.mpi_value)
+       mpi_scores.append(result.mpi_value)
 
-   print(f"Mean confusion: {np.mean(confusion_scores):.3f}")
+   print(f"Mean MPI: {np.mean(mpi_scores):.3f}")
 
-**Result**: Mean confusion is **0.225**. There's a strong negative correlation with integrity (r=-0.89)—more consistent users are less exploitable.
+**Result**: Mean MPI around 0.2-0.25. Strong negative correlation with CCEI
+(r ≈ -0.85) — more consistent users are less exploitable.
 
-.. image:: images/analysis_mpi_distribution.png
-   :alt: Distribution of confusion scores
-   :width: 600px
+.. list-table:: MPI Interpretation
+   :header-rows: 1
+   :widths: 20 80
 
-.. tip::
+   * - MPI
+     - Interpretation
+   * - 0
+     - Unexploitable (consistent)
+   * - 0.1-0.2
+     - Low exploitability
+   * - 0.2-0.3
+     - Moderate
+   * - > 0.3
+     - High exploitability
 
-   **Practical applications**:
 
-   - **Data quality**: Low integrity scores indicate noisy or inconsistent data
-   - **UX analysis**: High confusion scores may indicate UI problems
-   - **A/B testing**: Compare confusion scores between interface variants
+Part 7: Preference Structure (Separability)
+-------------------------------------------
 
+**What separability tests**: Whether preferences over group A are independent
+of consumption in group B. Formally, weak separability asks if:
 
-Part 5: Discovering Preference Structures
------------------------------------------
+.. math::
 
-In this section, you'll learn how to discover hidden structures in preferences—like whether people treat different product groups as separate "mental budgets."
+   U(x_A, x_B) = V(u_A(x_A), u_B(x_B))
 
-**Mental Accounting: Do People Compartmentalize?**
+This means the marginal rate of substitution *within* group A doesn't depend
+on how much of group B you consume.
 
-Some theories suggest people maintain separate mental budgets for different categories. Let's test whether grocery shoppers treat product groups independently:
+.. warning::
+
+   **This is NOT mental accounting** in the Thaler sense. Separability is about
+   utility function structure, not psychological budgeting. A person can have
+   non-separable preferences but still use mental accounts, and vice versa.
 
 .. code-block:: python
-   :caption: Testing feature independence between product groups
 
    from pyrevealed import test_feature_independence
 
    # Define product groups
    DAIRY = [1, 3, 6]      # Milk, Cheese, Yogurt (indices)
    PROTEIN = [7, 9]       # Beef, Lunchmeat
-   STAPLES = [2, 5]       # Bread, Soup
-   SNACKS = [0, 4, 8]     # Soda, Chips, Pizza
 
-   # Test if Dairy choices are independent of Protein choices
-   independence_scores = []
-
+   separability_results = []
    for household_id, session_data in sessions.items():
        result = test_feature_independence(
            session_data.behavior_log,
            group_a=DAIRY,
            group_b=PROTEIN
        )
-       independence_scores.append(result.is_separable)
+       separability_results.append(result.is_separable)
 
-   pct_independent = 100 * sum(independence_scores) / len(independence_scores)
-   print(f"Dairy vs Protein independent: {pct_independent:.1f}%")
+   print(f"Separable: {100*np.mean(separability_results):.1f}%")
 
-**Result**: Only **Protein vs Staples** shows strong evidence of separate budgeting (62%). Most category pairs show pooled budgets (<35%).
-
-.. image:: images/showcase_e_mental_accounting.png
-   :alt: Mental accounting heatmap
-   :width: 600px
-
-**Auto-Discovering Product Groups**
-
-Instead of defining groups manually, let PyRevealed discover them from the data:
-
-.. code-block:: python
-   :caption: Auto-discovering independent groups
-
-   from pyrevealed import discover_independent_groups
-
-   # Run on a sample household
-   log = sessions[list(sessions.keys())[0]].behavior_log
-   groups = discover_independent_groups(log)
-
-   print("Discovered groups:")
-   for i, group in enumerate(groups):
-       print(f"  Group {i+1}: {group}")
-
-**Result**: The algorithm confirms 3 of our 4 manual groupings (Dairy, Snacks, Staples). Protein products don't cluster as strongly as expected.
+**Interpretation**: Low separability rates don't mean "people don't
+compartmentalize." They mean preferences don't decompose in the specific
+mathematical way the test checks.
 
 
-Part 6: Cross-Price Analysis
-----------------------------
+Part 8: Cross-Price Effects
+---------------------------
 
-In this section, you'll learn how to identify substitute and complement relationships between products.
+Test whether goods are **gross substitutes** or **gross complements**:
 
-**Substitutes vs Complements**
-
-- **Substitutes**: When the price of A goes up, demand for B goes up (people switch)
-- **Complements**: When the price of A goes up, demand for B goes down (bought together)
+- **Substitutes**: :math:`\partial x_j / \partial p_i > 0` (price of i up →
+  demand for j up)
+- **Complements**: :math:`\partial x_j / \partial p_i < 0` (price of i up →
+  demand for j down)
 
 .. code-block:: python
-   :caption: Computing the cross-price matrix
 
-   from pyrevealed import compute_cross_price_matrix
+   from pyrevealed import test_cross_price_effect
 
-   # Aggregate across households
-   PRODUCT_NAMES = ['Soda', 'Milk', 'Bread', 'Cheese', 'Chips',
-                    'Soup', 'Yogurt', 'Beef', 'Pizza', 'Lunch']
+   for household_id, log in sample_logs.items():
+       result = test_cross_price_effect(log, good_g=1, good_h=2)  # Milk vs Bread
+       # result.relationship: 'substitute', 'complement', or 'independent'
 
-   # Compute for a sample of households
-   sample_keys = list(sessions.keys())[:200]
+.. warning::
 
-   for key in sample_keys:
-       result = compute_cross_price_matrix(sessions[key].behavior_log)
-       # Aggregate the relationship_matrix...
+   **This is NOT co-purchase frequency.** People often confuse:
 
-   # Top complement pairs:
-   # Milk & Bread: -0.31
-   # Soda & Pizza: -0.29
-   # Milk & Cheese: -0.29
+   - **Complements** (economic): Cross-price derivative < 0
+   - **Co-purchased**: Bought together frequently
 
-**Result**: Most product pairs show **complementary** relationships—they're bought together. This makes sense for grocery shopping: you buy milk when you buy bread, soda when you buy pizza.
-
-.. image:: images/showcase_o_cross_price.png
-   :alt: Cross-price relationship matrix
-   :width: 600px
+   Milk and bread might be co-purchased (basket composition) but still be
+   economic substitutes (if bread price rises, buy more milk for cereal
+   instead of toast).
 
 
-Part 7: Advanced Analysis - The Lancaster Model
------------------------------------------------
+Part 9: The Lancaster Model
+---------------------------
 
-In this section, you'll learn how to transform product-level behavior into characteristic-level insights, revealing hidden rationality.
+The Lancaster model posits that consumers derive utility from **characteristics**
+(nutrition, taste), not products directly:
 
-**The Problem with Product-Level Analysis**
+.. math::
 
-When we analyze at the product level, only 4.5% of households appear consistent. But people don't think about "products"—they think about what products *deliver*.
+   U(x) = u(Zx)
 
-A household isn't really choosing between "Beef" and "Yogurt"—they're choosing between protein sources, balancing macronutrients, or optimizing calories per dollar.
+where :math:`Z` maps products to characteristics.
 
-**Transforming to Characteristics Space**
+When Does Lancaster Help?
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Lancaster model transforms choices from product-space to characteristics-space using product attributes:
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - CCEI Increases
+     - CCEI Decreases
+   * - Consumer optimizes over characteristics
+     - Consumer has product-specific preferences
+   * - Products are imperfect substitutes for characteristics
+     - Brand loyalty matters
+   * - Characteristics matrix is well-specified
+     - Characteristics matrix is wrong
 
 .. code-block:: python
-   :caption: Applying the Lancaster transformation
 
-   from pyrevealed import transform_to_characteristics, LancasterLog
+   from pyrevealed import transform_to_characteristics
 
-   # Define nutritional characteristics per unit of each product
-   # Columns: Protein (g), Carbs (g), Fat (g), Sodium (mg)
-   characteristics = np.array([
+   # Nutritional characteristics: [Protein, Carbs, Fat, Sodium]
+   Z = np.array([
        [0, 39, 0, 15],      # Soda
        [8, 12, 8, 120],     # Milk
        [9, 49, 3, 490],     # Bread
        [25, 1, 33, 620],    # Cheese
-       [7, 52, 35, 470],    # Chips
-       [4, 20, 2, 890],     # Soup
-       [6, 7, 0, 80],       # Yogurt
-       [26, 0, 15, 75],     # Beef
-       [12, 36, 10, 640],   # Pizza
-       [10, 4, 8, 1050],    # Lunchmeat
+       # ... etc
    ])
 
-   # Transform a household's behavior log
-   log = sessions[list(sessions.keys())[0]].behavior_log
-   lancaster_log = transform_to_characteristics(log, characteristics)
-
-   # Now test consistency in characteristics-space
+   lancaster_log = transform_to_characteristics(log, Z)
    result = validate_consistency(lancaster_log)
 
-**The "Rationality Rescue" Effect**
-
-When we retest consistency in characteristics-space:
+Results Comparison
+~~~~~~~~~~~~~~~~~~
 
 .. list-table:: Product Space vs Characteristics Space
    :header-rows: 1
-   :widths: 30 35 35
+   :widths: 35 30 35
 
    * - Metric
      - Product Space
      - Characteristics Space
-   * - Mean integrity
-     - 0.839
-     - 0.890 (+5.1%)
-   * - Consistent households
-     - 100 (4.5%)
-     - 166 (7.5%) (+66%)
+   * - Mean CCEI
+     - ~0.84
+     - ~0.89 (+5%)
+   * - GARP pass rate
+     - ~5%
+     - ~8% (+60%)
 
-**120 households (5.4%)** are "rescued"—they looked irrational in product-space but are perfectly consistent about *nutrients*.
-
-.. image:: images/showcase_p_lancaster.png
-   :alt: Lancaster analysis visualization
-   :width: 600px
-
-.. image:: images/showcase_p_rationality_rescue.png
-   :alt: Rationality rescue visualization
-   :width: 600px
-
-**Shadow Prices: Implicit Valuations**
-
-The Lancaster model also reveals implicit valuations—how much households are willing to pay per unit of each characteristic:
-
-.. list-table:: Implied Shadow Prices
-   :header-rows: 1
-   :widths: 30 30 40
-
-   * - Nutrient
-     - $/unit
-     - Spend Share
-   * - Protein
-     - $0.105/g
-     - 34.0%
-   * - Fat
-     - $0.129/g
-     - 32.3%
-   * - Carbs
-     - $0.032/g
-     - 28.7%
-   * - Sodium
-     - $0.0004/mg
-     - 5.1%
-
-**Key insight**: Fat and Protein command the highest implicit prices. Households optimize for calorie-dense, satiating macronutrients.
-
-.. tip::
-
-   **Practical implication**: Those 120 "rescued" households are prime candidates for store-brand substitution—they care about nutrition, not labels. The households whose consistency *decreased* are the opposite: brand loyalists who'll pay premiums regardless of nutritional equivalence.
+**Interpretation**: Some households are better explained by a characteristics
+model. This doesn't mean they're "rescued" from irrationality—they're just
+better fit by a different model. Households whose CCEI *decreases* in
+characteristics space have product-specific preferences (brand loyalty).
 
 
-Part 8: Putting It All Together
--------------------------------
+Part 10: Summary and Best Practices
+-----------------------------------
 
-Let's summarize what we've learned from analyzing 2,222 households over 2 years:
+Key Findings
+~~~~~~~~~~~~
 
-.. list-table:: Key Findings
+.. list-table::
    :header-rows: 1
    :widths: 35 65
 
    * - Category
      - Finding
-   * - **Consistency**
-     - 4.5% perfectly consistent, mean integrity = 0.839
-   * - **Exploitability**
-     - Mean confusion = 0.225 (inversely correlated with integrity)
-   * - **Mental Accounting**
-     - Only Protein vs Staples shows separate budgets (62%)
-   * - **Cross-Price**
-     - Mostly complements (Milk+Bread, Soda+Pizza)
-   * - **Lancaster Model**
-     - 5.4% "rescued" in characteristics-space
-   * - **Shadow Prices**
-     - Fat and Protein most valued ($0.11-0.13/g)
+   * - **GARP pass rate**
+     - ~5-15% (lower than lab experiments)
+   * - **Mean CCEI**
+     - ~0.80-0.85 (moderate consistency)
+   * - **Bronars power**
+     - >0.90 (test is meaningful)
+   * - **MPI**
+     - ~0.2-0.25 (correlated with CCEI)
+   * - **Separability**
+     - Generally low (preferences don't decompose cleanly)
+   * - **Lancaster**
+     - +5% CCEI for some households
 
-**What Have We Learned?**
+Best Practices
+~~~~~~~~~~~~~~
 
-1. **Most people aren't "perfectly rational"**—but that doesn't mean they're irrational. Context, noise, and changing preferences all contribute to apparent inconsistencies.
+1. **Always compute power** before interpreting GARP results
+2. **Report CCEI distribution**, not just pass rates
+3. **Be explicit about aggregation** (monthly vs weekly matters)
+4. **Acknowledge assumptions** — real data violates all of them
+5. **Compare to benchmarks** — CKMS (2014) provides reference
+6. **Don't over-interpret** — GARP failure ≠ "irrationality"
 
-2. **Consistency and exploitability are related**—more consistent users are harder to manipulate. This has implications for UX design and fraud detection.
+When to Use Each Test
+~~~~~~~~~~~~~~~~~~~~~
 
-3. **People don't compartmentalize as much as we thought**—mental accounting is weaker than expected for grocery categories.
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
 
-4. **The level of analysis matters**—switching from products to characteristics reveals hidden rationality. People optimize for *what products deliver*, not the products themselves.
+   * - Question
+     - Test
+   * - Can behavior be rationalized?
+     - ``validate_consistency()``
+   * - How close to rational?
+     - ``compute_integrity_score()``
+   * - Is the test meaningful?
+     - ``compute_test_power()``
+   * - How exploitable?
+     - ``compute_confusion_metric()``
+   * - Do preferences separate by group?
+     - ``test_feature_independence()``
+   * - Substitute or complement?
+     - ``test_cross_price_effect()``
 
-**Next Steps**
 
-- Explore the :doc:`api` for detailed function documentation
-- Try the :doc:`quickstart` with your own data
-- Check out the ``examples/`` directory for more advanced use cases:
+Next Steps
+----------
 
-  - ``01_behavioral_auditor.py``: Behavioral consistency analysis
-  - ``02_preference_encoder.py``: ML feature extraction
-  - ``03_risk_analysis.py``: Risk profiling
-  - ``06_characteristics_model.py``: Lancaster model deep dive
-
-**Try It Yourself**
-
-Here's a challenge: Run the analysis on your own behavioral data. You'll need:
-
-1. A series of choices (what the user selected)
-2. The prices/costs of each option at each choice
-3. Convert to ``BehaviorLog`` format
-
-.. code-block:: python
-
-   from pyrevealed import (
-       BehaviorLog,
-       BehavioralAuditor,
-   )
-
-   # Your data here
-   log = BehaviorLog(
-       cost_vectors=your_prices,      # Shape: (n_observations, n_options)
-       action_vectors=your_quantities  # Shape: (n_observations, n_options)
-   )
-
-   # Run the full audit
-   auditor = BehavioralAuditor()
-   report = auditor.full_audit(log)
-
-   print(f"Consistent: {report.is_consistent}")
-   print(f"Integrity: {report.integrity_score:.3f}")
-   print(f"Confusion: {report.confusion_score:.3f}")
+- :doc:`tutorial_ecommerce` — Apply these methods to Amazon purchase data
+- :doc:`api` — Full function documentation
+- :doc:`theory` — Mathematical foundations
+- ``examples/`` directory — More advanced use cases
