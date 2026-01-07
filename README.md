@@ -126,36 +126,6 @@ pyrevealed/
 └── examples/            # Advanced usage examples
 ```
 
-## More Examples
-
-See the `examples/` directory for advanced usage:
-
-| File | Description |
-|------|-------------|
-| `01_behavioral_auditor.py` | Linter-style API with bot/fraud/UX risk assessments |
-| `02_preference_encoder.py` | sklearn-style ML integration and counterfactual predictions |
-| `03_risk_analysis.py` | Risk profiling under uncertainty (risk-averse vs risk-seeking) |
-| `04_spatial_preferences.py` | Ideal point analysis in embedding space |
-| `05_advanced_features.py` | Separability, data loading, temporal analysis |
-| `06_characteristics_model.py` | Lancaster model for attribute-level preferences |
-
-## Theory
-
-Based on *Revealed Preference Theory* by Chambers & Echenique (2016):
-
-- **Chapter 2**: Abstract choice consistency (WARP, SARP)
-- **Chapter 3**: Afriat's Theorem and rational demand
-- **Chapter 5**: Efficiency indices and money pump
-- **Chapter 11**: Ideal point models in feature space
-
-Also incorporates algorithms from the 2024 survey paper:
-
-> "Revealed preference and revealed preference cycles: A survey" (2024)
-
-- **Differentiable Rationality**: Chiappori & Rochet (1987)
-- **Acyclical P**: Dziewulski (2023)
-- **GAPP**: Deb et al. (2022)
-
 ## License
 
 MIT
