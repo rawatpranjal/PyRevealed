@@ -47,6 +47,7 @@ Contents
 
    installation
    quickstart
+   tutorial
    theory
    api
    case_study
