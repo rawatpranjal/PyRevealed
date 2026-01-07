@@ -1,14 +1,15 @@
 PyRevealed
 ==========
 
-Behavioral Signal Analysis for User Understanding.
+Analyze user choices to detect bots, confused users, and preference patterns.
 
-Given a history of user choices and the options available at each choice, PyRevealed computes:
+**What it does:** Given purchase history (prices + quantities), PyRevealed tests if choices are internally consistent—and quantifies how "rational" the behavior is.
 
-- **Consistency scores**: How internally consistent is this user's behavior?
-- **Preference recovery**: What utility function explains their choices?
-- **Exploitability metrics**: How much could be extracted via arbitrage?
-- **Feature independence**: Are choices over group A independent of group B?
+**Use cases:**
+
+- Bot detection (bots often fail consistency tests)
+- UX auditing (confused users show exploitable patterns)
+- Preference modeling (recover utility functions from data)
 
 Installation
 ------------
