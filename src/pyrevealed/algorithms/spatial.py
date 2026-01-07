@@ -17,7 +17,6 @@ Euclidean rationalizability.
 from __future__ import annotations
 
 import time
-from typing import Callable
 
 import numpy as np
 from numpy.typing import NDArray
@@ -67,7 +66,6 @@ def find_ideal_point(
     """
     start_time = time.perf_counter()
 
-    D = session.num_dimensions
     T = session.num_observations
 
     # Initial guess: centroid of chosen items
@@ -79,7 +77,9 @@ def find_ideal_point(
         """Sum of constraint violations (hinge loss)."""
         total_loss = 0.0
 
-        for t, (choice_set, chosen) in enumerate(zip(session.choice_sets, session.choices)):
+        for t, (choice_set, chosen) in enumerate(
+            zip(session.choice_sets, session.choices)
+        ):
             chosen_feature = session.item_features[chosen]
             chosen_dist_sq = np.sum((ideal - chosen_feature) ** 2)
 
@@ -92,17 +92,12 @@ def find_ideal_point(
                     # margin = chosen_dist - other_dist (should be negative)
                     margin = np.sqrt(chosen_dist_sq) - np.sqrt(other_dist_sq)
                     if margin > 0:
-                        total_loss += margin ** 2
+                        total_loss += margin**2
 
         return total_loss
 
     # Optimize
-    result = minimize(
-        objective,
-        x0,
-        method=method,
-        options={'maxiter': max_iterations}
-    )
+    result = minimize(objective, x0, method=method, options={"maxiter": max_iterations})
 
     ideal_point = result.x
 
@@ -132,7 +127,9 @@ def find_ideal_point(
     num_correct = T - len(set(v[0] for v in violations))
     explained_variance = num_correct / T if T > 0 else 1.0
 
-    mean_distance_to_chosen = np.mean(distances_to_chosen) if distances_to_chosen else 0.0
+    mean_distance_to_chosen = (
+        np.mean(distances_to_chosen) if distances_to_chosen else 0.0
+    )
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
 
@@ -147,7 +144,9 @@ def find_ideal_point(
     )
 
 
-def check_euclidean_rationality(session: SpatialSession) -> tuple[bool, list[tuple[int, int]]]:
+def check_euclidean_rationality(
+    session: SpatialSession,
+) -> tuple[bool, list[tuple[int, int]]]:
     """
     Check if choices are consistent with some ideal point (Euclidean rationality).
 
@@ -190,7 +189,7 @@ def compute_preference_strength(
         chosen_dist = np.linalg.norm(ideal_point - session.item_features[chosen])
 
         # Get minimum distance to unchosen items
-        min_unchosen_dist = float('inf')
+        min_unchosen_dist = float("inf")
         for item_idx in choice_set:
             if item_idx != chosen:
                 dist = np.linalg.norm(ideal_point - session.item_features[item_idx])
@@ -225,7 +224,6 @@ def find_multiple_ideal_points(
     Returns:
         List of (ideal_point, explained_fraction) tuples, sorted by quality
     """
-    D = session.num_dimensions
     T = session.num_observations
 
     results = []

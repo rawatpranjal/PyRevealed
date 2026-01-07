@@ -138,7 +138,6 @@ def _check_garp_at_efficiency(
         Tuple of (is_consistent, GARPResult)
     """
     E = session.expenditure_matrix
-    T = session.num_observations
     own_exp = session.own_expenditures
 
     # Modified revealed preference with efficiency deflation

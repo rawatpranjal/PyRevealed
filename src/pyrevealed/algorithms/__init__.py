@@ -20,6 +20,7 @@ from pyrevealed.algorithms.separability import (
     find_separable_partition,
     compute_cannibalization,
 )
+
 # New algorithms
 from pyrevealed.algorithms.bronars import (
     compute_bronars_power,
@@ -50,6 +51,7 @@ from pyrevealed.algorithms.gross_substitutes import (
     test_cross_price_effect,
     compute_cross_price_matrix,
 )
+
 # 2024 Survey algorithms
 from pyrevealed.algorithms.differentiable import (
     check_differentiable,

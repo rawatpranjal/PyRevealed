@@ -36,7 +36,7 @@ html_css_files = ["custom.css"]
 
 html_theme_options = {
     "github_url": "https://github.com/rawatpranjal/PyRevealed",
-    "show_toc_level": 2,
+    "show_toc_level": 1,
     "navigation_with_keys": True,
     "show_prev_next": False,
 }

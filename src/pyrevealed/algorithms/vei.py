@@ -225,10 +225,9 @@ def compute_vei_l2(
             if R_star[i, j]:
                 bound_val = E[i, j] / own_exp[i]
                 # Constraint: e[i] >= bound_val
-                constraints.append({
-                    'type': 'ineq',
-                    'fun': lambda e, idx=i, bv=bound_val: e[idx] - bv
-                })
+                constraints.append(
+                    {"type": "ineq", "fun": lambda e, idx=i, bv=bound_val: e[idx] - bv}
+                )
 
     bounds = [(0.0, 1.0) for _ in range(T)]
     e0 = np.ones(T) * 0.9  # Initial guess
@@ -237,11 +236,11 @@ def compute_vei_l2(
         result = minimize(
             objective,
             e0,
-            method='SLSQP',
+            method="SLSQP",
             jac=grad,
             bounds=bounds,
             constraints=constraints,
-            options={'ftol': tolerance, 'maxiter': 1000},
+            options={"ftol": tolerance, "maxiter": 1000},
         )
         success = result.success
         status = result.message

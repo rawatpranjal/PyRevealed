@@ -12,7 +12,6 @@ from __future__ import annotations
 import time
 
 import numpy as np
-from numpy.typing import NDArray
 
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import GAPPResult

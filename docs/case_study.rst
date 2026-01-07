@@ -1,5 +1,5 @@
-Case Study: Dunnhumby
-=====================
+Examples
+========
 
 PyRevealed has been validated on real-world data from the **Dunnhumby "The Complete Journey"** dataset—2 years of grocery transactions from 2,222 households.
 

@@ -145,7 +145,9 @@ class LancasterLog:
             self, "action_vectors", np.asarray(self.action_vectors, dtype=np.float64)
         )
         object.__setattr__(
-            self, "attribute_matrix", np.asarray(self.attribute_matrix, dtype=np.float64)
+            self,
+            "attribute_matrix",
+            np.asarray(self.attribute_matrix, dtype=np.float64),
         )
 
         # Keep legacy aliases in sync
@@ -335,7 +337,11 @@ class LancasterLog:
             # Ensure all shadow prices are strictly positive for BehaviorLog
             # NNLS can produce zeros, which would fail BehaviorLog validation
             shadow_prices = self._shadow_prices.copy()
-            min_positive = shadow_prices[shadow_prices > 0].min() if np.any(shadow_prices > 0) else 1e-10
+            min_positive = (
+                shadow_prices[shadow_prices > 0].min()
+                if np.any(shadow_prices > 0)
+                else 1e-10
+            )
             epsilon = min_positive * 1e-6  # Tiny relative to smallest positive price
             shadow_prices = np.maximum(shadow_prices, epsilon)
 

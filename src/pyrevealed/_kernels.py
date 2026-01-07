@@ -633,7 +633,9 @@ def build_afriat_constraints_numba(
                 # i R j: constraint is u_j - u_i + lambda_j * (E[j,i] - e_j) <= 0
                 A_ub[idx, i] = -1.0  # -u_i
                 A_ub[idx, j] = 1.0  # +u_j
-                A_ub[idx, T + j] = expenditure_matrix[j, i] - own_exp[j]  # lambda_j coeff
+                A_ub[idx, T + j] = (
+                    expenditure_matrix[j, i] - own_exp[j]
+                )  # lambda_j coeff
                 b_ub[idx] = 0.0
                 idx += 1
 

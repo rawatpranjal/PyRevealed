@@ -1,5 +1,5 @@
-Scaling Performance
-===================
+Performance
+===========
 
 PyRevealed is designed to scale to **big-tech level data volumes** with up to 100,000+ observations per user session.
 

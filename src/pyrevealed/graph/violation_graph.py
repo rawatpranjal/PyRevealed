@@ -33,9 +33,7 @@ class ViolationGraph:
         >>> fig, ax = graph.plot(highlight_violations=True)
     """
 
-    def __init__(
-        self, session: ConsumerSession, garp_result: GARPResult
-    ) -> None:
+    def __init__(self, session: ConsumerSession, garp_result: GARPResult) -> None:
         """
         Initialize ViolationGraph from session and GARP result.
 
@@ -127,10 +125,7 @@ class ViolationGraph:
         Returns:
             List of (source, target, relation_type) tuples
         """
-        return [
-            (u, v, d["relation"])
-            for u, v, d in self.graph.edges(data=True)
-        ]
+        return [(u, v, d["relation"]) for u, v, d in self.graph.edges(data=True)]
 
     def plot(
         self,

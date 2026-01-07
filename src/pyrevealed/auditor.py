@@ -4,10 +4,9 @@ This module provides a user-friendly, tech-native interface for validating
 user behavior consistency. Think of it as a "linter" for behavioral data.
 
 Use this to:
-- Detect bots (inconsistent/random behavior)
-- Detect account sharing (multiple preference profiles)
-- Detect UI confusion (exploitable inconsistencies)
-- A/B test UX changes (compare confusion scores)
+- Measure behavioral consistency (integrity score)
+- Measure exploitability of inconsistencies (confusion metric)
+- Compare behavior across user segments or time periods
 """
 
 from __future__ import annotations
@@ -50,20 +49,14 @@ class AuditReport:
     Comprehensive audit report for user behavior.
 
     Attributes:
-        is_consistent: True if behavior passes consistency check
-        integrity_score: Behavioral integrity score (0-1, higher = cleaner signal)
-        confusion_score: Confusion/exploitability score (0-1, higher = more confused)
-        bot_risk: Estimated probability this is bot behavior
-        shared_account_risk: Estimated probability of account sharing
-        ux_confusion_risk: Estimated probability of UI-caused confusion
+        is_consistent: True if behavior passes GARP consistency check
+        integrity_score: Afriat Efficiency Index (0-1, higher = more consistent)
+        confusion_score: Money Pump Index (0-1, higher = more exploitable)
     """
 
     is_consistent: bool
     integrity_score: float
     confusion_score: float
-    bot_risk: float
-    shared_account_risk: float
-    ux_confusion_risk: float
 
     def __repr__(self) -> str:
         status = "PASS" if self.is_consistent else "FAIL"
@@ -79,12 +72,8 @@ class BehavioralAuditor:
     Validates behavioral consistency in user action logs.
 
     BehavioralAuditor is the "linter" for user behavior. It checks if
-    a user's historical actions are internally consistent, which helps
-    identify:
-
-    - **Bots**: Random/automated behavior fails consistency checks
-    - **Shared accounts**: Multiple users = multiple inconsistent preferences
-    - **UI confusion**: Bad UX leads to exploitable decision patterns
+    a user's historical actions are internally consistent with utility
+    maximization.
 
     Example:
         >>> from pyrevealed import BehavioralAuditor, BehaviorLog
@@ -244,62 +233,24 @@ class BehavioralAuditor:
         """
         Run comprehensive behavioral audit.
 
-        Computes all metrics and returns a single report with
-        risk assessments for bot, shared account, and UI confusion.
+        Computes all core metrics and returns a single report.
 
         Args:
             log: BehaviorLog containing user's historical actions
 
         Returns:
-            AuditReport with all scores and risk assessments
+            AuditReport with consistency, integrity, and confusion scores
 
         Example:
             >>> report = auditor.full_audit(user_log)
-            >>> if report.bot_risk > 0.7:
-            ...     block_user(user_id)
-            >>> elif report.shared_account_risk > 0.5:
-            ...     prompt_profile_split(user_id)
-            >>> elif report.ux_confusion_risk > 0.5:
-            ...     enable_user_guidance(user_id)
+            >>> print(f"Consistent: {report.is_consistent}")
+            >>> print(f"Integrity: {report.integrity_score:.2f}")
+            >>> print(f"Confusion: {report.confusion_score:.2f}")
         """
-        is_consistent = self.validate_history(log)
-        integrity = self.get_integrity_score(log)
-        confusion = self.get_confusion_score(log)
-
-        # Heuristic risk calculations
-        # Bot risk: High if low integrity AND inconsistent
-        if not is_consistent and integrity < 0.7:
-            bot_risk = 0.8
-        elif not is_consistent and integrity < 0.85:
-            bot_risk = 0.5
-        elif not is_consistent:
-            bot_risk = 0.3
-        else:
-            bot_risk = 0.1
-
-        # Shared account risk: Moderate integrity but inconsistent
-        if not is_consistent and 0.6 <= integrity <= 0.85:
-            shared_account_risk = 0.6
-        elif not is_consistent:
-            shared_account_risk = 0.3
-        else:
-            shared_account_risk = 0.1
-
-        # UX confusion risk: High confusion score
-        if confusion > 0.2:
-            ux_confusion_risk = 0.7
-        elif confusion > 0.1:
-            ux_confusion_risk = 0.4
-        else:
-            ux_confusion_risk = 0.15
-
         return AuditReport(
-            is_consistent=is_consistent,
-            integrity_score=integrity,
-            confusion_score=confusion,
-            bot_risk=bot_risk,
-            shared_account_risk=shared_account_risk,
-            ux_confusion_risk=ux_confusion_risk,
+            is_consistent=self.validate_history(log),
+            integrity_score=self.get_integrity_score(log),
+            confusion_score=self.get_confusion_score(log),
         )
 
     # =========================================================================
@@ -332,7 +283,9 @@ class BehavioralAuditor:
             log, n_simulations=n_simulations, tolerance=self.precision
         )
 
-    def validate_proportional_scaling(self, log: BehaviorLog) -> ProportionalScalingResult:
+    def validate_proportional_scaling(
+        self, log: BehaviorLog
+    ) -> ProportionalScalingResult:
         """
         Test if user preferences scale proportionally with budget.
 

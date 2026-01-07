@@ -69,8 +69,6 @@ def compute_bronars_power(
     from pyrevealed.algorithms.garp import check_garp
     from pyrevealed.algorithms.aei import compute_aei
 
-    T = session.num_observations
-    N = session.num_goods
     prices = session.prices
     expenditures = session.own_expenditures  # e_i = p_i @ x_i
 

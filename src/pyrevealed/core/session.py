@@ -373,7 +373,6 @@ class BehaviorLog:
         Returns:
             BehaviorLog instance
         """
-        import pandas as pd
 
         # Resolve aliases
         cost_col = cost_col or price_col or "price"
@@ -418,7 +417,7 @@ class BehaviorLog:
                     BehaviorLog(
                         cost_vectors=self.cost_vectors[i:end],
                         action_vectors=self.action_vectors[i:end],
-                        user_id=f"{self.user_id}_window_{i//window_size}"
+                        user_id=f"{self.user_id}_window_{i // window_size}"
                         if self.user_id
                         else None,
                     )
@@ -467,7 +466,9 @@ class RiskChoiceLog:
         """Validate inputs."""
         self.safe_values = np.asarray(self.safe_values, dtype=np.float64)
         self.risky_outcomes = np.asarray(self.risky_outcomes, dtype=np.float64)
-        self.risky_probabilities = np.asarray(self.risky_probabilities, dtype=np.float64)
+        self.risky_probabilities = np.asarray(
+            self.risky_probabilities, dtype=np.float64
+        )
         self.choices = np.asarray(self.choices, dtype=np.bool_)
 
         self._validate()

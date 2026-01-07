@@ -158,12 +158,28 @@ def plot_aei_distribution(
     median_score = np.median(scores_arr)
     std_score = np.std(scores_arr)
 
-    ax.axvline(mean_score, color="red", linestyle="--", linewidth=2, label=f"Mean: {mean_score:.3f}")
-    ax.axvline(median_score, color="orange", linestyle="-.", linewidth=2, label=f"Median: {median_score:.3f}")
+    ax.axvline(
+        mean_score,
+        color="red",
+        linestyle="--",
+        linewidth=2,
+        label=f"Mean: {mean_score:.3f}",
+    )
+    ax.axvline(
+        median_score,
+        color="orange",
+        linestyle="-.",
+        linewidth=2,
+        label=f"Median: {median_score:.3f}",
+    )
 
     # Add threshold lines for interpretation
-    ax.axvline(0.85, color="green", linestyle=":", alpha=0.7, label="Bot threshold (0.85)")
-    ax.axvline(0.95, color="purple", linestyle=":", alpha=0.7, label="High consistency (0.95)")
+    ax.axvline(
+        0.85, color="green", linestyle=":", alpha=0.7, label="Bot threshold (0.85)"
+    )
+    ax.axvline(
+        0.95, color="purple", linestyle=":", alpha=0.7, label="High consistency (0.95)"
+    )
 
     ax.set_xlim(0, 1)
     ax.set_xlabel("Afriat Efficiency Index (AEI)")
@@ -284,6 +300,13 @@ def plot_preference_heatmap(
     for i in range(T):
         for j in range(T):
             text = "1" if matrix[i, j] > 0.5 else ""
-            ax.text(j, i, text, ha="center", va="center", color="white" if matrix[i, j] > 0.5 else "black")
+            ax.text(
+                j,
+                i,
+                text,
+                ha="center",
+                va="center",
+                color="white" if matrix[i, j] > 0.5 else "black",
+            )
 
     return fig, ax

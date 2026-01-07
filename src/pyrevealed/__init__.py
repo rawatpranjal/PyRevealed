@@ -1,8 +1,7 @@
 """
 PyRevealed: Behavioral Signal Analysis for User Understanding.
 
-Detect bots, shared accounts, and UI confusion using structural consistency
-checks on user behavior logs.
+Analyze behavioral consistency using revealed preference theory.
 
 ## Tech-Friendly API (Primary)
 
@@ -273,14 +272,12 @@ __all__ = [
     "LancasterLog",
     "CharacteristicsLog",
     "transform_to_characteristics",
-
     # ==========================================================================
     # DATA CONTAINERS - Tech-friendly (Primary)
     # ==========================================================================
     "BehaviorLog",
     "RiskChoiceLog",
     "EmbeddingChoiceLog",
-
     # ==========================================================================
     # EXCEPTIONS AND WARNINGS
     # ==========================================================================
@@ -298,7 +295,6 @@ __all__ = [
     # Warnings
     "DataQualityWarning",
     "NumericalInstabilityWarning",
-
     # ==========================================================================
     # RESULT TYPES - Tech-friendly (Primary)
     # ==========================================================================
@@ -318,7 +314,6 @@ __all__ = [
     # Lancaster characteristics model results
     "LancasterResult",
     "CharacteristicsValuationResult",
-
     # ==========================================================================
     # FUNCTIONS - Tech-friendly (Primary)
     # ==========================================================================
@@ -369,7 +364,6 @@ __all__ = [
     "validate_strict_consistency",
     # Price preferences (2024 Survey)
     "validate_price_preferences",
-
     # ==========================================================================
     # LEGACY NAMES (Deprecated - use tech-friendly names above)
     # ==========================================================================
@@ -439,23 +433,22 @@ def get_integrity_score(log: BehaviorLog, precision: float = 1e-6) -> float:
     """
     Convenience function to get the behavioral integrity score directly.
 
-    The integrity score measures data quality:
-    - 1.0 = Perfect signal, fully consistent user
-    - 0.5 = Noisy signal, possible bot or confused user
-    - <0.5 = Very noisy, likely bot or shared account
+    The integrity score (Afriat Efficiency Index) measures consistency:
+    - 1.0 = Perfectly consistent with utility maximization
+    - 0.9+ = Minor deviations from rationality
+    - <0.9 = Notable inconsistencies in behavior
 
     Args:
         log: BehaviorLog (or ConsumerSession) with user behavior data
         precision: Convergence tolerance for computation
 
     Returns:
-        Float between 0 (chaotic) and 1 (perfectly consistent)
+        Float between 0 (highly inconsistent) and 1 (perfectly consistent)
 
     Example:
         >>> from pyrevealed import BehaviorLog, get_integrity_score
         >>> score = get_integrity_score(user_log)
-        >>> if score < 0.85:
-        ...     flag_for_review(user_id)
+        >>> print(f"Integrity: {score:.2f}")
     """
     result = compute_integrity_score(log, tolerance=precision)
     return result.efficiency_index

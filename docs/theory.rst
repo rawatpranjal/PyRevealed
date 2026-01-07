@@ -1,5 +1,5 @@
-Mathematical Foundations
-========================
+Theory
+======
 
 .. note::
 

@@ -225,7 +225,10 @@ def construct_afriat_utility(
             "If integrity is low, the behavior may be too inconsistent for utility recovery."
         )
 
-    if utility_result.utility_values is None or utility_result.lagrange_multipliers is None:
+    if (
+        utility_result.utility_values is None
+        or utility_result.lagrange_multipliers is None
+    ):
         raise OptimizationError(
             "Utility values or multipliers are None despite successful LP. "
             "This may indicate a numerical issue. Try adjusting tolerance."

@@ -22,7 +22,6 @@ equivalent to the exact Theorem 4.4 test.
 from __future__ import annotations
 
 import time
-from typing import Literal
 
 import numpy as np
 from numpy.typing import NDArray
@@ -30,7 +29,6 @@ from numpy.typing import NDArray
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import SeparabilityResult
 from pyrevealed.core.exceptions import DataValidationError, ValueRangeError
-from pyrevealed.algorithms.garp import check_garp
 from pyrevealed.algorithms.aei import compute_aei
 
 
@@ -101,7 +99,7 @@ def check_separability(
         if idx < 0 or idx >= N:
             raise ValueRangeError(
                 f"Good index {idx} out of range [0, {N}). "
-                f"Hint: Indices must refer to valid goods in the session (0 to {N-1})."
+                f"Hint: Indices must refer to valid goods in the session (0 to {N - 1})."
             )
 
     # Create sub-sessions for each group
@@ -123,9 +121,7 @@ def check_separability(
 
     # Separable if both groups are internally consistent and cross-effects are low
     is_separable = (
-        within_a_consistent > 0.9 and
-        within_b_consistent > 0.9 and
-        cross_effect < 0.2
+        within_a_consistent > 0.9 and within_b_consistent > 0.9 and cross_effect < 0.2
     )
 
     # Generate recommendation
@@ -183,8 +179,8 @@ def _compute_cross_effect(
     quantities_b = session.quantities[:, group_b]
 
     # Compute price indices for each group (expenditure weighted)
-    exp_a = np.sum(prices_a * quantities_a, axis=1)
-    exp_b = np.sum(prices_b * quantities_b, axis=1)
+    np.sum(prices_a * quantities_a, axis=1)
+    np.sum(prices_b * quantities_b, axis=1)
 
     # Compute average price per group
     avg_price_a = np.mean(prices_a, axis=1)
@@ -273,17 +269,15 @@ def find_separable_partition(
 
     while len(groups) > max_groups:
         # Find closest pair of groups
-        min_dist = float('inf')
+        min_dist = float("inf")
         merge_i, merge_j = 0, 1
 
         for i in range(len(groups)):
             for j in range(i + 1, len(groups)):
                 # Average linkage
-                avg_dist = np.mean([
-                    distance[gi, gj]
-                    for gi in groups[i]
-                    for gj in groups[j]
-                ])
+                avg_dist = np.mean(
+                    [distance[gi, gj] for gi in groups[i] for gj in groups[j]]
+                )
                 if avg_dist < min_dist:
                     min_dist = avg_dist
                     merge_i, merge_j = i, j
@@ -321,10 +315,10 @@ def compute_cannibalization(
 
     if T < 2:
         return {
-            'a_to_b': 0.0,
-            'b_to_a': 0.0,
-            'symmetric': 0.0,
-            'net_direction': 0.0,
+            "a_to_b": 0.0,
+            "b_to_a": 0.0,
+            "symmetric": 0.0,
+            "net_direction": 0.0,
         }
 
     # Compute expenditure shares
@@ -372,10 +366,10 @@ def compute_cannibalization(
         b_to_a = symmetric / 2
 
     return {
-        'a_to_b': a_to_b,
-        'b_to_a': b_to_a,
-        'symmetric': symmetric,
-        'net_direction': a_to_b - b_to_a,
+        "a_to_b": a_to_b,
+        "b_to_a": b_to_a,
+        "symmetric": symmetric,
+        "net_direction": a_to_b - b_to_a,
     }
 
 

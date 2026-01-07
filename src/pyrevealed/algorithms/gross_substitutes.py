@@ -5,7 +5,6 @@ from __future__ import annotations
 import time
 
 import numpy as np
-from numpy.typing import NDArray
 
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import GrossSubstitutesResult, SubstitutionMatrixResult
@@ -65,7 +64,7 @@ def check_gross_substitutes(
         raise ValueRangeError(
             f"Good indices must be in [0, {N}). "
             f"Got good_g={good_g}, good_h={good_h}. "
-            f"Hint: Use valid indices from 0 to {N-1}."
+            f"Hint: Use valid indices from 0 to {N - 1}."
         )
     if good_g == good_h:
         raise DataValidationError(
@@ -73,8 +72,8 @@ def check_gross_substitutes(
             f"Hint: Gross substitutes analysis requires two distinct goods."
         )
 
-    P = session.prices       # T x N
-    Q = session.quantities   # T x N
+    P = session.prices  # T x N
+    Q = session.quantities  # T x N
 
     substitutes_pairs: list[tuple[int, int]] = []
     complements_pairs: list[tuple[int, int]] = []

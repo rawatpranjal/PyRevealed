@@ -16,7 +16,7 @@ from typing import Literal
 
 import numpy as np
 from numpy.typing import NDArray
-from scipy.optimize import minimize_scalar, minimize
+from scipy.optimize import minimize_scalar
 
 from pyrevealed.core.session import RiskSession
 from pyrevealed.core.result import RiskProfileResult
@@ -86,9 +86,7 @@ def compute_risk_profile(
         log_p_risky = -np.log1p(np.exp(-diff))
         log_p_safe = -np.log1p(np.exp(diff))
 
-        ll = np.sum(
-            np.where(session.choices, log_p_risky, log_p_safe)
-        )
+        ll = np.sum(np.where(session.choices, log_p_risky, log_p_safe))
 
         return -ll  # Negative for minimization
 
@@ -96,8 +94,8 @@ def compute_risk_profile(
     result = minimize_scalar(
         neg_log_likelihood,
         bounds=rho_bounds,
-        method='bounded',
-        options={'xatol': tolerance}
+        method="bounded",
+        options={"xatol": tolerance},
     )
 
     rho = result.x
@@ -168,8 +166,7 @@ def _crra_curvature(x: float, rho: float) -> float:
 
 
 def _compute_certainty_equivalents(
-    session: RiskSession,
-    rho: float
+    session: RiskSession, rho: float
 ) -> NDArray[np.float64]:
     """
     Compute certainty equivalent for each risky lottery.

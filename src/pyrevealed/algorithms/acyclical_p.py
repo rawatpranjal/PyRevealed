@@ -55,7 +55,6 @@ def check_acyclical_p(
     start_time = time.perf_counter()
 
     E = session.expenditure_matrix  # T x T
-    T = session.num_observations
     own_exp = session.own_expenditures  # Shape: (T,)
 
     # =========================================================================

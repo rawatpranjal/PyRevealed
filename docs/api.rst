@@ -1,5 +1,5 @@
-API Reference
-=============
+API
+===
 
 High-Level Classes
 ------------------

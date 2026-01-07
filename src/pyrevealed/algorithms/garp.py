@@ -62,7 +62,6 @@ def check_garp(
     start_time = time.perf_counter()
 
     E = session.expenditure_matrix  # T x T
-    T = session.num_observations
 
     # Own expenditures (diagonal): what was actually spent at each observation
     own_exp = session.own_expenditures  # Shape: (T,)

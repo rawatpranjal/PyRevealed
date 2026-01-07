@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import time
-from collections import deque
 
 import numpy as np
 from numpy.typing import NDArray
 
 from pyrevealed.core.session import ConsumerSession
-from pyrevealed.core.result import HARPResult, GARPResult
+from pyrevealed.core.result import HARPResult
 from pyrevealed.core.types import Cycle
 from pyrevealed._kernels import floyd_warshall_max_log_numba, bfs_find_cycle_numba
 
@@ -60,7 +59,6 @@ def check_harp(
 
     E = session.expenditure_matrix  # T x T where E[i,j] = p_i @ x_j
     own_exp = session.own_expenditures  # e_i = E[i,i]
-    T = session.num_observations
 
     # First run GARP for comparison
     garp_result = check_garp(session, tolerance)
