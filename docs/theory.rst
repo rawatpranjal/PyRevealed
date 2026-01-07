@@ -7,8 +7,7 @@ Theory
    based on *Revealed Preference Theory* by Chambers & Echenique (2016).
 
 Notation
---------
-
+-----
 .. list-table::
    :widths: 20 80
 
@@ -25,11 +24,9 @@ Notation
    * - :math:`n`
      - Number of goods
 
----
 
 Maintained Assumptions
-----------------------
-
+-------------------
 The following assumptions are **necessary** for revealed preference analysis to be meaningful.
 If these are violated, GARP failures may reflect model misspecification rather than irrationality.
 
@@ -41,26 +38,24 @@ If these are violated, GARP failures may reflect model misspecification rather t
      - Assumption
      - Implication if Violated
    * - **A1**
-     - **Stable Preferences** — Consumer has a fixed utility function :math:`U(x)` across all observations
+     - **Stable Preferences** - Consumer has a fixed utility function :math:`U(x)` across all observations
      - Legitimate preference changes (e.g., developing a taste for coffee) appear as GARP violations
    * - **A2**
-     - **Utility Maximization** — Consumer chooses :math:`\arg\max_x U(x)` subject to budget
+     - **Utility Maximization** - Consumer chooses :math:`\arg\max_x U(x)` subject to budget
      - Satisficing, habit formation, inattention, and heuristic decision-making generate violations
    * - **A3**
-     - **Local Non-Satiation** — More is always weakly preferred; consumer spends entire budget
+     - **Local Non-Satiation** - More is always weakly preferred; consumer spends entire budget
      - Free disposal allowed, but discarding goods or saving violates the model
    * - **A4**
-     - **Single Decision-Maker** — Observed choices reflect one agent's preferences
+     - **Single Decision-Maker** - Observed choices reflect one agent's preferences
      - Household data with multiple members, or accounts with gift purchases, violate this
    * - **A5**
-     - **Complete Observation** — We observe the entire consumption bundle and prices faced
+     - **Complete Observation** - We observe the entire consumption bundle and prices faced
      - If we only see partial consumption (e.g., Amazon but not groceries), GARP may fail spuriously
 
----
 
 Axiom Hierarchy
----------------
-
+------------
 .. admonition:: Relationship Between Axioms
 
    **SARP** :math:`\Rightarrow` **GARP** :math:`\Rightarrow` **WARP**
@@ -71,11 +66,9 @@ Axiom Hierarchy
 
    Most empirical work uses GARP as it corresponds exactly to utility maximization via Afriat's Theorem.
 
----
 
 Consistency Tests
------------------
-
+--------------
 GARP (Generalized Axiom of Revealed Preference)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -115,7 +108,6 @@ Let :math:`R^*` be the transitive closure of :math:`R` (computed via Floyd-Warsh
 
 **Reference:** Afriat (1967), Varian (1982), Chambers & Echenique (2016) Ch. 3
 
----
 
 WARP (Weak Axiom of Revealed Preference)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -132,7 +124,6 @@ Unlike GARP, WARP only checks direct (length-2) violations without transitivity.
 
 **Reference:** Samuelson (1938), Chambers & Echenique (2016) Ch. 2
 
----
 
 SARP (Strict Axiom of Revealed Preference)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -149,7 +140,6 @@ SARP prohibits indifference cycles. Stronger than GARP.
 
 **Reference:** Chambers & Echenique (2016) Ch. 2
 
----
 
 Smooth Preferences (Differentiable Rationality)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -169,7 +159,6 @@ Two conditions must hold:
 
 **Reference:** Chiappori & Rochet (1987)
 
----
 
 Strict Consistency (Acyclical P)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -186,7 +175,6 @@ More lenient than GARP. Only checks cycles in strict preference :math:`P`:
 
 **Reference:** Dziewulski (2023)
 
----
 
 Price Preferences (GAPP)
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -209,11 +197,9 @@ Dual of GARP for price vectors. Define price preference:
 
 **Reference:** Deb et al. (2022)
 
----
 
 Efficiency Scores
------------------
-
+--------------
 Integrity Score (Afriat Efficiency Index)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -240,11 +226,11 @@ Integrity Score (Afriat Efficiency Index)
    * - AEI
      - Interpretation
    * - 1.0
-     - Perfectly rational — all choices consistent with utility maximization
+     - Perfectly rational - all choices consistent with utility maximization
    * - 0.95+
-     - Minor deviations — Varian's threshold for "approximately rational"
+     - Minor deviations - Varian's threshold for "approximately rational"
    * - 0.85–0.95
-     - Moderate deviations — some inconsistent choices
+     - Moderate deviations - some inconsistent choices
    * - < 0.70
      - Substantial departures from rationality
 
@@ -255,7 +241,6 @@ Integrity Score (Afriat Efficiency Index)
 
 **Reference:** Afriat (1972), Varian (1990)
 
----
 
 Confusion Metric (Money Pump Index)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -277,17 +262,16 @@ For a violation cycle :math:`k_1 \to k_2 \to \cdots \to k_m \to k_1`:
    * - MPI
      - Interpretation
    * - 0
-     - Unexploitable — no preference cycles exist
+     - Unexploitable - no preference cycles exist
    * - 0.01–0.10
-     - Minor exploitability — small inconsistencies
+     - Minor exploitability - small inconsistencies
    * - 0.10–0.30
-     - Moderate exploitability — noticeable confusion
+     - Moderate exploitability - noticeable confusion
    * - > 0.30
-     - Highly exploitable — severely confused consumer
+     - Highly exploitable - severely confused consumer
 
 **Reference:** Chambers & Echenique (2016) Ch. 5
 
----
 
 Outlier Fraction (Houtman-Maks Index)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -300,7 +284,6 @@ Outlier Fraction (Houtman-Maks Index)
 
 **Reference:** Houtman & Maks (1985)
 
----
 
 Per-Observation Efficiency (Varian's Index)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -327,7 +310,6 @@ subject to:
 
 **Reference:** Varian (1990)
 
----
 
 Test Power (Bronars' Index)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -353,13 +335,13 @@ Random bundles are generated via symmetric Dirichlet distribution on budget hype
    * - Power
      - Interpretation
    * - > 0.90
-     - Excellent — passing GARP is highly informative
+     - Excellent - passing GARP is highly informative
    * - 0.70–0.90
-     - Good — meaningful test of rationality
+     - Good - meaningful test of rationality
    * - 0.50–0.70
-     - Moderate — some discrimination but inconclusive
+     - Moderate - some discrimination but inconclusive
    * - < 0.50
-     - Weak — even random behavior often passes; test lacks power
+     - Weak - even random behavior often passes; test lacks power
 
 .. warning::
 
@@ -368,11 +350,9 @@ Random bundles are generated via symmetric Dirichlet distribution on budget hype
 
 **Reference:** Bronars (1987)
 
----
 
 Preference Structure
---------------------
-
+-----------------
 Proportional Scaling (HARP)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -400,7 +380,6 @@ In log-space (Floyd-Warshall):
 
 **Reference:** Varian (1983)
 
----
 
 Income Invariance (Quasilinearity)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -419,7 +398,6 @@ Tests quasilinear utility :math:`U(x, m) = v(x) + m` via cyclic monotonicity.
 
 **Reference:** Rochet (1987)
 
----
 
 Feature Independence (Separability)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -436,7 +414,6 @@ Tests weak separability: :math:`U(x_A, x_B) = V(u_A(x_A), u_B(x_B))`
 
 **Reference:** Chambers & Echenique (2016) Ch. 4, Theorem 4.4
 
----
 
 Cross-Price Effects
 ^^^^^^^^^^^^^^^^^^^
@@ -457,11 +434,9 @@ Cross-Price Effects
 
 **Reference:** Hicks (1939)
 
----
 
 Utility Recovery
-----------------
-
+-------------
 Afriat's Inequalities
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -483,11 +458,9 @@ The recovered utility is piecewise linear and concave.
 
 **Reference:** Afriat (1967), Varian (1982)
 
----
 
 References
-----------
-
+-------
 1. Afriat, S. N. (1967). The construction of utility functions from expenditure data. *International Economic Review*, 8(1), 67-77.
 
 2. Bronars, S. G. (1987). The power of nonparametric tests of preference maximization. *Econometrica*, 55(3), 693-698.

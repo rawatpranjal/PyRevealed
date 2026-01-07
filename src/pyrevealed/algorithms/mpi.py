@@ -271,15 +271,7 @@ Compute the confusion metric (how exploitable the user's decisions are).
 This is the tech-friendly alias for compute_mpi (Money Pump Index).
 
 The confusion metric measures how much value could be extracted from
-a user making inconsistent decisions. High confusion indicates:
-- Bad UX causing irrational choices
-- User not understanding the options
-- Possible UI dark patterns affecting behavior
-
-Use this for:
-- A/B testing UX changes (lower confusion = better UX)
-- Detecting UI confusion patterns
-- Identifying users who need guidance
+a user making inconsistent decisions via preference cycling.
 
 Example:
     >>> from pyrevealed import BehaviorLog, compute_confusion_metric

@@ -220,10 +220,6 @@ The integrity score measures consistency with utility maximization:
 - 0.7-0.9 = Moderate inconsistencies
 - <0.7 = Notable violations of rationality
 
-Use this for:
-- Behavioral consistency assessment
-- Data quality evaluation before analysis
-
 Example:
     >>> from pyrevealed import BehaviorLog, compute_integrity_score
     >>> result = compute_integrity_score(user_log)
