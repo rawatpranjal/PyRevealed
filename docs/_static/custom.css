@@ -361,3 +361,102 @@ div.math {
 .bd-content .section > hr {
     margin: 48px 0;
 }
+
+/* ============================================
+   DARK MODE OVERRIDES
+   ============================================ */
+
+html[data-theme="dark"] .bd-content .admonition {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] .bd-content .admonition.note {
+    background: #1e3a5f;
+}
+
+html[data-theme="dark"] .bd-content .admonition.note > .admonition-title {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .bd-content .admonition.warning {
+    background: #422006;
+}
+
+html[data-theme="dark"] .bd-content .admonition.warning > .admonition-title {
+    color: #fbbf24;
+}
+
+html[data-theme="dark"] .bd-content .admonition.important {
+    background: #450a0a;
+}
+
+html[data-theme="dark"] .bd-content .admonition.important > .admonition-title {
+    color: #f87171;
+}
+
+html[data-theme="dark"] .bd-content .admonition.tip,
+html[data-theme="dark"] .bd-content .admonition.hint {
+    background: #052e16;
+}
+
+html[data-theme="dark"] .bd-content .admonition.tip > .admonition-title,
+html[data-theme="dark"] .bd-content .admonition.hint > .admonition-title {
+    color: #4ade80;
+}
+
+html[data-theme="dark"] .bd-content table.docutils {
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .bd-content table.docutils th {
+    background: #1e293b;
+    color: #94a3b8;
+    border-bottom-color: #334155;
+}
+
+html[data-theme="dark"] .bd-content table.docutils td {
+    border-bottom-color: #1e293b;
+}
+
+html[data-theme="dark"] .bd-content table.docutils tr:nth-child(even) td {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .bd-content div.highlight {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .bd-content code.literal {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .bd-content div.math {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] .bd-content dl.py dt {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .bd-content dl.py dd {
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .bd-content dl.field-list dt {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .bd-content blockquote {
+    border-left-color: #475569;
+}
+
+html[data-theme="dark"] .bd-content a {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .bd-content a:hover {
+    color: #93c5fd;
+}
