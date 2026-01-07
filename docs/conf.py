@@ -38,23 +38,7 @@ html_theme_options = {
     "github_url": "https://github.com/rawatpranjal/PyRevealed",
     "show_toc_level": 2,
     "navigation_with_keys": True,
-    "show_nav_level": 1,
-    "navigation_depth": 3,
-    "show_prev_next": True,
-    "navbar_align": "left",
-    "header_links_before_dropdown": 6,
-    "icon_links": [
-        {
-            "name": "PyPI",
-            "url": "https://pypi.org/project/pyrevealed/",
-            "icon": "fa-brands fa-python",
-        },
-    ],
-    "announcement": "Based on <a href='https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805'>Chambers & Echenique (2016)</a>",
-}
-
-html_context = {
-    "default_mode": "auto",
+    "show_prev_next": False,
 }
 
 # -- Extension configuration -------------------------------------------------
