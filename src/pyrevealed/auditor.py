@@ -18,10 +18,24 @@ from typing import TYPE_CHECKING
 from pyrevealed.algorithms.garp import validate_consistency
 from pyrevealed.algorithms.aei import compute_integrity_score
 from pyrevealed.algorithms.mpi import compute_confusion_metric
+from pyrevealed.algorithms.bronars import compute_test_power
+from pyrevealed.algorithms.harp import validate_proportional_scaling
+from pyrevealed.algorithms.vei import compute_granular_integrity
+from pyrevealed.algorithms.quasilinear import test_income_invariance
+from pyrevealed.algorithms.gross_substitutes import test_cross_price_effect
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import BehaviorLog
-    from pyrevealed.core.result import ConsistencyResult, IntegrityResult, ConfusionResult
+    from pyrevealed.core.result import (
+        ConsistencyResult,
+        IntegrityResult,
+        ConfusionResult,
+        TestPowerResult,
+        ProportionalScalingResult,
+        GranularIntegrityResult,
+        IncomeInvarianceResult,
+        CrossPriceResult,
+    )
 
 
 @dataclass
@@ -280,4 +294,124 @@ class BehavioralAuditor:
             bot_risk=bot_risk,
             shared_account_risk=shared_account_risk,
             ux_confusion_risk=ux_confusion_risk,
+        )
+
+    # =========================================================================
+    # NEW METHODS - Extended Analysis
+    # =========================================================================
+
+    def compute_test_power(
+        self, log: BehaviorLog, n_simulations: int = 1000
+    ) -> TestPowerResult:
+        """
+        Compute statistical power of the consistency test.
+
+        Bronars' Power Index measures whether passing the consistency test
+        is statistically meaningful. Low power means even random behavior
+        would pass, making the consistency result uninformative.
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+            n_simulations: Number of random simulations (default: 1000)
+
+        Returns:
+            TestPowerResult with power_index and is_significant
+
+        Example:
+            >>> result = auditor.compute_test_power(user_log)
+            >>> if result.power_index < 0.5:
+            ...     print("Warning: GARP test has low power for this data")
+        """
+        return compute_test_power(
+            log, n_simulations=n_simulations, tolerance=self.precision
+        )
+
+    def validate_proportional_scaling(self, log: BehaviorLog) -> ProportionalScalingResult:
+        """
+        Test if user preferences scale proportionally with budget.
+
+        Homothetic preferences mean relative preferences don't change
+        with budget - useful for demand prediction and user segmentation.
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+
+        Returns:
+            ProportionalScalingResult with is_homothetic and violations
+
+        Example:
+            >>> result = auditor.validate_proportional_scaling(user_log)
+            >>> if result.is_homothetic:
+            ...     print("User preferences scale with budget")
+        """
+        return validate_proportional_scaling(log, tolerance=self.precision)
+
+    def compute_granular_integrity(
+        self, log: BehaviorLog, efficiency_threshold: float = 0.9
+    ) -> GranularIntegrityResult:
+        """
+        Get per-observation integrity scores.
+
+        Unlike get_integrity_score which gives one global score, this
+        identifies which specific observations are problematic.
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+            efficiency_threshold: Threshold below which observations are flagged (default: 0.9)
+
+        Returns:
+            GranularIntegrityResult with efficiency_vector and problematic_observations
+
+        Example:
+            >>> result = auditor.compute_granular_integrity(user_log)
+            >>> for idx in result.problematic_observations:
+            ...     print(f"Investigate observation {idx}")
+        """
+        return compute_granular_integrity(
+            log, tolerance=self.precision, efficiency_threshold=efficiency_threshold
+        )
+
+    def test_income_invariance(self, log: BehaviorLog) -> IncomeInvarianceResult:
+        """
+        Test if user behavior is invariant to income changes.
+
+        Quasilinear preferences have constant marginal utility of money,
+        meaning no income effects on goods choices.
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+
+        Returns:
+            IncomeInvarianceResult with is_quasilinear and violations
+
+        Example:
+            >>> result = auditor.test_income_invariance(user_log)
+            >>> if result.has_income_effects:
+            ...     print("User behavior varies with income")
+        """
+        return test_income_invariance(log, tolerance=self.precision)
+
+    def test_cross_price_effect(
+        self, log: BehaviorLog, good_g: int, good_h: int
+    ) -> CrossPriceResult:
+        """
+        Test cross-price relationship between two goods.
+
+        Determines if goods are substitutes (price of A up → demand for B up)
+        or complements (price of A up → demand for B down).
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+            good_g: Index of first good
+            good_h: Index of second good
+
+        Returns:
+            CrossPriceResult with relationship classification
+
+        Example:
+            >>> result = auditor.test_cross_price_effect(user_log, 0, 1)
+            >>> print(f"Goods 0 and 1 are {result.relationship}")
+        """
+        return test_cross_price_effect(
+            log, good_g=good_g, good_h=good_h, tolerance=self.precision
         )

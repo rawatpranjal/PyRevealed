@@ -38,6 +38,11 @@ Economics-based names still work for backward compatibility:
 
 from pyrevealed.auditor import BehavioralAuditor, AuditReport
 from pyrevealed.encoder import PreferenceEncoder
+from pyrevealed.lancaster import (
+    LancasterLog,
+    CharacteristicsLog,
+    transform_to_characteristics,
+)
 
 # =============================================================================
 # DATA CONTAINERS - Tech-friendly names (Primary)
@@ -75,6 +80,22 @@ from pyrevealed.core.result import (
     SeparabilityResult,
     # Risk result (already tech-friendly)
     RiskProfileResult,
+    # New result types - tech-friendly
+    TestPowerResult,
+    ProportionalScalingResult,
+    IncomeInvarianceResult,
+    CrossPriceResult,
+    GranularIntegrityResult,
+    # New result types - legacy
+    BronarsPowerResult,
+    HARPResult,
+    QuasilinearityResult,
+    GrossSubstitutesResult,
+    SubstitutionMatrixResult,
+    VEIResult,
+    # Lancaster characteristics model
+    LancasterResult,
+    CharacteristicsValuationResult,
 )
 
 # =============================================================================
@@ -143,6 +164,49 @@ from pyrevealed.algorithms.separability import (
     compute_cannibalization,  # Legacy
 )
 
+# =============================================================================
+# NEW ALGORITHMS
+# =============================================================================
+
+# Test power (Bronars)
+from pyrevealed.algorithms.bronars import (
+    compute_test_power,
+    compute_test_power_fast,
+    compute_bronars_power,  # Legacy
+    compute_bronars_power_fast,  # Legacy
+)
+
+# Proportional scaling (HARP)
+from pyrevealed.algorithms.harp import (
+    validate_proportional_scaling,
+    check_harp,  # Legacy
+)
+
+# Granular integrity (VEI)
+from pyrevealed.algorithms.vei import (
+    compute_granular_integrity,
+    compute_granular_integrity_l2,
+    compute_vei,  # Legacy
+    compute_vei_l2,  # Legacy
+)
+
+# Income invariance (Quasilinearity)
+from pyrevealed.algorithms.quasilinear import (
+    test_income_invariance,
+    test_income_invariance_exhaustive,
+    check_quasilinearity,  # Legacy
+    check_quasilinearity_exhaustive,  # Legacy
+)
+
+# Cross-price effects (Gross substitutes)
+from pyrevealed.algorithms.gross_substitutes import (
+    test_cross_price_effect,
+    compute_cross_price_matrix,
+    check_gross_substitutes,  # Legacy
+    compute_substitution_matrix,  # Legacy
+    check_law_of_demand,
+)
+
 __version__ = "0.3.0"
 
 __all__ = [
@@ -152,6 +216,10 @@ __all__ = [
     "BehavioralAuditor",
     "AuditReport",
     "PreferenceEncoder",
+    # Lancaster Characteristics Model
+    "LancasterLog",
+    "CharacteristicsLog",
+    "transform_to_characteristics",
 
     # ==========================================================================
     # DATA CONTAINERS - Tech-friendly (Primary)
@@ -170,6 +238,15 @@ __all__ = [
     "PreferenceAnchorResult",
     "FeatureIndependenceResult",
     "RiskProfileResult",
+    # New result types
+    "TestPowerResult",
+    "ProportionalScalingResult",
+    "IncomeInvarianceResult",
+    "CrossPriceResult",
+    "GranularIntegrityResult",
+    # Lancaster characteristics model results
+    "LancasterResult",
+    "CharacteristicsValuationResult",
 
     # ==========================================================================
     # FUNCTIONS - Tech-friendly (Primary)
@@ -199,6 +276,21 @@ __all__ = [
     "test_feature_independence",
     "discover_independent_groups",
     "compute_cross_impact",
+    # Test power (NEW)
+    "compute_test_power",
+    "compute_test_power_fast",
+    # Proportional scaling (NEW)
+    "validate_proportional_scaling",
+    # Granular integrity (NEW)
+    "compute_granular_integrity",
+    "compute_granular_integrity_l2",
+    # Income invariance (NEW)
+    "test_income_invariance",
+    "test_income_invariance_exhaustive",
+    # Cross-price effects (NEW)
+    "test_cross_price_effect",
+    "compute_cross_price_matrix",
+    "check_law_of_demand",
 
     # ==========================================================================
     # LEGACY NAMES (Deprecated - use tech-friendly names above)
@@ -214,6 +306,13 @@ __all__ = [
     "UtilityRecoveryResult",
     "IdealPointResult",
     "SeparabilityResult",
+    # New result types - legacy names
+    "BronarsPowerResult",
+    "HARPResult",
+    "QuasilinearityResult",
+    "GrossSubstitutesResult",
+    "SubstitutionMatrixResult",
+    "VEIResult",
     # Functions
     "check_garp",
     "check_warp",
@@ -231,6 +330,16 @@ __all__ = [
     "check_separability",
     "find_separable_partition",
     "compute_cannibalization",
+    # New functions - legacy names
+    "compute_bronars_power",
+    "compute_bronars_power_fast",
+    "check_harp",
+    "compute_vei",
+    "compute_vei_l2",
+    "check_quasilinearity",
+    "check_quasilinearity_exhaustive",
+    "check_gross_substitutes",
+    "compute_substitution_matrix",
     # Convenience
     "get_integrity_score",
 ]

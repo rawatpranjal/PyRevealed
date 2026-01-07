@@ -133,3 +133,88 @@ def many_goods_session() -> ConsumerSession:
         [1.0, 1.0, 1.0, 1.0, 1.0],  # Equal
     ])
     return ConsumerSession(prices=prices, quantities=quantities, session_id="many_goods")
+
+
+# =============================================================================
+# LANCASTER CHARACTERISTICS MODEL FIXTURES
+# =============================================================================
+
+
+@pytest.fixture
+def simple_lancaster_data() -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Simple 2-product, 2-characteristic Lancaster setup.
+
+    Products: Apple (95 cal, 4.4g fiber), Banana (105 cal, 3.1g fiber)
+    Characteristics: calories, fiber
+
+    Returns:
+        Tuple of (prices, quantities, attribute_matrix)
+    """
+    attribute_matrix = np.array([
+        [95.0, 4.4],   # Apple: calories, fiber per unit
+        [105.0, 3.1],  # Banana: calories, fiber per unit
+    ])
+    prices = np.array([
+        [1.0, 0.5],
+        [0.8, 0.6],
+        [1.2, 0.4],
+    ])
+    quantities = np.array([
+        [2.0, 3.0],
+        [4.0, 1.0],
+        [1.0, 5.0],
+    ])
+    return prices, quantities, attribute_matrix
+
+
+@pytest.fixture
+def well_specified_lancaster_data() -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Well-specified Lancaster setup: N=3 products, K=2 characteristics, full rank.
+
+    The attribute matrix has full column rank (rank = K = 2).
+
+    Returns:
+        Tuple of (prices, quantities, attribute_matrix)
+    """
+    attribute_matrix = np.array([
+        [1.0, 0.0],   # Product 1: only characteristic 1
+        [0.0, 1.0],   # Product 2: only characteristic 2
+        [0.5, 0.5],   # Product 3: both characteristics
+    ])
+    prices = np.array([
+        [2.0, 3.0, 2.5],
+        [1.5, 4.0, 2.75],
+    ])
+    quantities = np.array([
+        [3.0, 2.0, 1.0],
+        [1.0, 1.0, 4.0],
+    ])
+    return prices, quantities, attribute_matrix
+
+
+@pytest.fixture
+def identity_attribute_matrix() -> np.ndarray:
+    """
+    Identity-like attribute matrix where products map 1:1 to characteristics.
+
+    Useful for testing that shadow prices equal product prices.
+    """
+    return np.array([
+        [1.0, 0.0],
+        [0.0, 1.0],
+    ])
+
+
+@pytest.fixture
+def rank_deficient_attribute_matrix() -> np.ndarray:
+    """
+    Attribute matrix with K=3 but only rank=2 (linearly dependent columns).
+
+    Used to test rank-deficiency warnings.
+    """
+    return np.array([
+        [1.0, 2.0, 3.0],  # Product 1
+        [2.0, 4.0, 6.0],  # Product 2: linearly dependent (2 * Product 1)
+    ])

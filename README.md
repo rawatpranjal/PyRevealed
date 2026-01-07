@@ -156,6 +156,39 @@ How many observations need to be removed to make behavior consistent?
 
 17% of households are "almost rational"—removing <10% of their observations makes them fully consistent.
 
+### Advanced Statistical Tests
+
+New algorithms for deeper behavioral analysis:
+
+| Test | Result | Interpretation |
+|------|--------|----------------|
+| **Bronars Power** | 0.845 mean, 87.5% significant | GARP test has high power—passing is meaningful |
+| **Homotheticity (HARP)** | 3.2% pass | Few households scale preferences with budget |
+| **Income Invariance** | 0% quasilinear | All households show income effects |
+| **Per-Obs Efficiency (VEI)** | 0.534 mean | Granular view of which observations violate |
+
+**Bronars' Power Index**: Measures if a high consistency score is statistically meaningful. Power of 0.845 means 84.5% of random behaviors would fail GARP—so passing GARP is genuinely informative.
+
+**Homotheticity (HARP)**: Tests if preferences scale proportionally with budget. Only 3.2% of households are homothetic, meaning relative spending shares change significantly with income.
+
+**Income Invariance**: Tests for constant marginal utility of money. 100% of households show income effects—choices depend on budget level, not just relative prices.
+
+### Cross-Price Relationships
+
+Using `compute_cross_price_matrix()` to detect substitutes vs complements:
+
+| Product Pair | Score | Relationship |
+|--------------|-------|--------------|
+| Milk & Bread | -0.31 | Complements |
+| Soda & Pizza | -0.29 | Complements |
+| Milk & Cheese | -0.29 | Complements |
+| Cheese & Lunchmeat | -0.23 | Complements |
+| Soda & Chips | -0.22 | Complements |
+
+Most product pairs show complementary relationships (bought together), consistent with grocery shopping patterns.
+
+![Cross-Price Matrix](docs/images/showcase_o_cross_price.png)
+
 ### Predictive Validation
 
 Can first-half behavior predict second-half outcomes? Split-sample study with LightGBM:
@@ -186,6 +219,10 @@ PyRevealed features (BehavioralAuditor + PreferenceEncoder) contribute **12.5% o
 - 17% of households are "almost rational" (HM < 0.1)
 - First-half spending patterns predict second-half consistency better than first-half consistency itself
 - PyRevealed features provide +0.014 R² lift for integrity prediction (12.5% of feature importance)
+- **Bronars power: 0.845** — GARP test is statistically meaningful (87.5% significant)
+- **Only 3.2% are homothetic** — most households don't scale preferences with budget
+- **100% show income effects** — no quasilinear preferences found
+- **Products are mostly complements** — Milk+Bread, Soda+Pizza bought together
 
 ### Running the Dunnhumby Tests
 
@@ -210,6 +247,9 @@ python3 dunnhumby/encoder_analysis.py
 
 # 7. Run predictive validation (split-sample LightGBM)
 python3 dunnhumby/predictive_analysis.py
+
+# 8. Run new algorithms analysis (Bronars, HARP, VEI, quasilinearity, cross-price)
+python3 dunnhumby/new_algorithms_analysis.py
 
 # Optional: Quick test mode (100 households sample)
 python3 dunnhumby/run_all.py --quick

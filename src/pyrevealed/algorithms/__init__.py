@@ -20,6 +20,36 @@ from pyrevealed.algorithms.separability import (
     find_separable_partition,
     compute_cannibalization,
 )
+# New algorithms
+from pyrevealed.algorithms.bronars import (
+    compute_bronars_power,
+    compute_bronars_power_fast,
+    compute_test_power,
+    compute_test_power_fast,
+)
+from pyrevealed.algorithms.harp import (
+    check_harp,
+    validate_proportional_scaling,
+)
+from pyrevealed.algorithms.vei import (
+    compute_vei,
+    compute_vei_l2,
+    compute_granular_integrity,
+    compute_granular_integrity_l2,
+)
+from pyrevealed.algorithms.quasilinear import (
+    check_quasilinearity,
+    check_quasilinearity_exhaustive,
+    test_income_invariance,
+    test_income_invariance_exhaustive,
+)
+from pyrevealed.algorithms.gross_substitutes import (
+    check_gross_substitutes,
+    compute_substitution_matrix,
+    check_law_of_demand,
+    test_cross_price_effect,
+    compute_cross_price_matrix,
+)
 
 __all__ = [
     # Core consistency
@@ -41,4 +71,28 @@ __all__ = [
     "check_separability",
     "find_separable_partition",
     "compute_cannibalization",
+    # Bronars power
+    "compute_bronars_power",
+    "compute_bronars_power_fast",
+    "compute_test_power",
+    "compute_test_power_fast",
+    # HARP homotheticity
+    "check_harp",
+    "validate_proportional_scaling",
+    # VEI per-observation efficiency
+    "compute_vei",
+    "compute_vei_l2",
+    "compute_granular_integrity",
+    "compute_granular_integrity_l2",
+    # Quasilinearity
+    "check_quasilinearity",
+    "check_quasilinearity_exhaustive",
+    "test_income_invariance",
+    "test_income_invariance_exhaustive",
+    # Gross substitutes
+    "check_gross_substitutes",
+    "compute_substitution_matrix",
+    "check_law_of_demand",
+    "test_cross_price_effect",
+    "compute_cross_price_matrix",
 ]
