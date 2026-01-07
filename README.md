@@ -59,35 +59,34 @@ print(f"Confusion Metric: {confusion:.3f}")
 
 ## Available Tests & Scores
 
-### Consistency Tests (Boolean)
+### Yes/No Tests
 
-| Function | What it tests | True means |
-|----------|---------------|------------|
-| `validate_consistency(log)` | Transitive preference cycles | Utility-maximizing behavior |
-| `validate_consistency_weak(log)` | Direct preference contradictions | No direct reversals |
-| `validate_sarp(log)` | Indifference cycles | No mutual preferences |
-| `validate_smooth_preferences(log)` | Differentiable utility | Can compute elasticities |
-| `validate_strict_consistency(log)` | Strict cycles only (lenient) | Approximately rational |
-| `validate_price_preferences(log)` | Price preference consistency | Seeks lower prices |
+| Method | Question it answers |
+|--------|---------------------|
+| `validate_consistency(log)` | Is this user rational? (no self-contradicting choices) |
+| `validate_consistency_weak(log)` | Any obvious flip-flops? (picked A over B, then B over A) |
+| `validate_smooth_preferences(log)` | Smooth preferences? (needed for price sensitivity analysis) |
+| `validate_strict_consistency(log)` | Approximately rational? (ignores minor contradictions) |
+| `validate_price_preferences(log)` | Does user prefer situations where their items are cheaper? |
 
-### Efficiency Scores (0–1)
+### Scores (0 to 1)
 
-| Function | What it measures | Interpretation |
-|----------|------------------|----------------|
-| `compute_integrity_score(log)` | Fraction consistent with utility max | 1.0 = perfect, <0.7 = bot risk |
-| `compute_confusion_metric(log)` | Exploitability via preference cycles | 0.0 = safe, >0.3 = confused |
-| `compute_minimal_outlier_fraction(log)` | Observations to remove for consistency | <0.1 = almost rational |
-| `compute_granular_integrity(log)` | Per-observation efficiency | Identifies problem observations |
-| `compute_test_power(log)` | Statistical significance of tests | >0.5 = meaningful result |
+| Method | What it tells you | How to read it |
+|--------|-------------------|----------------|
+| `compute_integrity_score(log)` | How consistent is this user? | 1.0 = perfect, 0.8 = good, <0.7 = suspicious |
+| `compute_confusion_metric(log)` | How exploitable via pricing tricks? | 0 = safe, >0.3 = easily manipulated |
+| `compute_minimal_outlier_fraction(log)` | How many bad choices to ignore? | <0.1 = almost perfect, >0.2 = messy data |
+| `compute_test_power(log)` | Is "consistent" meaningful here? | >0.5 = yes, <0.5 = test is too easy |
 
-### Preference Structure (Boolean)
+### Preference Structure
 
-| Function | What it tests | True means |
-|----------|---------------|------------|
-| `validate_proportional_scaling(log)` | Preferences scale with budget | Homothetic (Cobb-Douglas) |
-| `test_income_invariance(log)` | Constant marginal utility of money | No income effects |
-| `test_feature_independence(log, groups)` | Group A independent of group B | Separate mental budgets |
-| `test_cross_price_effect(log, g, h)` | Substitute/complement relationship | Returns relationship type |
+| Method | Question it answers |
+|--------|---------------------|
+| `validate_proportional_scaling(log)` | Do they buy the same mix regardless of budget size? |
+| `test_income_invariance(log)` | Does budget size affect what they choose? |
+| `test_feature_independence(log, [a], [b])` | Are choices in group A separate from group B? |
+| `test_cross_price_effect(log, item1, item2)` | Are these items substitutes or complements? |
+| `transform_to_characteristics(log, A)` | Analyze by attributes (nutrition, specs) not products |
 
 ---
 

@@ -1,0 +1,5 @@
+algorithm,n_observations,n_goods,data_type,mean_time_ms,std_time_ms,min_time_ms,max_time_ms,peak_memory_mb,throughput_obs_per_sec,success,error_message
+garp,10,10,rational,0.04,0.02,0.03,0.06,0.01,232633.84,True,
+garp,50,10,rational,0.05,0.00,0.05,0.06,0.04,911848.45,True,
+garp,100,10,rational,0.17,0.01,0.16,0.17,0.16,591958.85,True,
+garp,500,10,rational,19.66,2.79,15.71,21.67,2.45,25435.57,True,

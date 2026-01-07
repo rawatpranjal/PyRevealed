@@ -81,6 +81,46 @@ How many observations need to be removed to make behavior consistent?
 | **Income Invariance** | 0% pass | All show income effects |
 | **Per-Obs Efficiency** | 0.534 mean | Granular efficiency per observation |
 
+### 2024 Survey Algorithms
+
+Results from algorithms in the 2024 survey paper "Revealed preference and revealed preference cycles: A survey".
+
+#### Smooth Preferences (Differentiable Rationality)
+
+Tests whether preferences are smooth/differentiable, enabling price sensitivity analysis. Requires both SARP (no indifference cycles) and price-quantity uniqueness. Based on Chiappori & Rochet (1987).
+
+| Metric | Value | Interpretation |
+|--------|-------|----------------|
+| **SARP pass** | 36 (1.6%) | Few have no indifference cycles |
+| **Uniqueness pass** | 394 (17.7%) | Some have distinct choices for different prices |
+| **Differentiable** | 36 (1.6%) | Very few have smooth preferences |
+
+Only 1.6% of households have fully differentiable preferences—most have piecewise-linear utility functions.
+
+#### Strict Consistency (Acyclical P)
+
+Tests only strict preference cycles (more lenient than GARP). Based on Dziewulski (2023).
+
+| Metric | Value | Interpretation |
+|--------|-------|----------------|
+| **GARP pass** | 100 (4.5%) | Fully consistent |
+| **Acyclical P pass** | 111 (5.0%) | No strict preference cycles |
+| **Approximately rational** | 11 (0.5%) | GARP fail but Acyclical P pass |
+
+11 households (0.5%) are "approximately rational"—they fail GARP only due to weak preference (indifference) violations.
+
+#### Price Preferences (GAPP)
+
+Tests consistency of revealed price preferences (dual of GARP). Based on Deb et al. (2022).
+
+| Metric | Value | Interpretation |
+|--------|-------|----------------|
+| **GARP pass** | 100 (4.5%) | Quantity-consistent |
+| **GAPP pass** | 0 (0.0%) | Price-consistent |
+| **Both pass** | 0 (0.0%) | Fully consistent on both axes |
+
+GAPP is very strict—no households have fully consistent price preferences. All households exhibit some price preference inconsistencies, suggesting they don't systematically prefer situations where their desired items are cheaper.
+
 ### Cross-Price Relationships
 
 | Product Pair | Score | Relationship |
@@ -168,6 +208,9 @@ The shadow prices reveal implicit valuations: Fat and Protein command ~$0.11-0.1
 | **Cross-Price** | Mostly complements (Milk+Bread, Soda+Pizza) |
 | **Prediction** | PyRevealed features: +0.014 R² lift (12.5% importance) |
 | **Lancaster Model** | 5.4% "rescued" in characteristics-space, +5.1% mean integrity |
+| **Smooth Preferences** | 1.6% differentiable (SARP + uniqueness) |
+| **Strict Consistency** | 5.0% Acyclical P pass, 0.5% "approximately rational" |
+| **Price Preferences** | 0% GAPP pass (all have price preference cycles) |
 
 ---
 
