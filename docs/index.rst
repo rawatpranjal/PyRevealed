@@ -52,6 +52,18 @@ Contents
    api
    case_study
 
+Acknowledgments
+---------------
+
+This library is based on the theory developed in:
+
+   Chambers, C. P., & Echenique, F. (2016). *Revealed Preference Theory*.
+   Cambridge University Press.
+   `[Amazon] <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_
+
+Special thanks to **Professor Chris Chambers** at Georgetown University
+for his wonderful classes on revealed preference theory.
+
 Indices and tables
 ------------------
 
