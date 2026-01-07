@@ -1,4 +1,4 @@
-/* Minimal PyRevealed Documentation Styles */
+/* PyRevealed Documentation Styles */
 
 /* Clean spacing */
 .bd-content {
@@ -41,49 +41,85 @@ div.math {
     margin-top: 32px;
 }
 
-/* Speed badge */
+/* ============================================
+   HOMEPAGE STYLES
+   ============================================ */
+
+/* Speed badge - prominent with glow */
 .speed-badge {
     display: inline-block;
     background: linear-gradient(135deg, #2563eb, #3b82f6);
     color: white;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.9em;
-    margin-bottom: 8px;
+    padding: 10px 24px;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); }
+    50% { box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5); }
 }
 
 /* Hero tagline */
 .hero-tagline {
-    font-size: 1.25em;
+    font-size: 1.3em;
     color: var(--pst-color-text-muted);
-    margin-bottom: 32px;
-    line-height: 1.5;
+    margin-bottom: 40px;
+    line-height: 1.6;
+    max-width: 700px;
 }
 
-/* Feature grid */
+/* Feature grid - 3 columns */
 .feature-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    margin: 32px 0 48px 0;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 40px 0 56px 0;
 }
 
+@media (max-width: 900px) {
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Feature cards with depth */
 .feature-card {
-    padding: 24px;
+    padding: 28px;
     border: 1px solid var(--pst-color-border);
-    border-radius: 12px;
+    border-radius: 16px;
     background: var(--pst-color-background);
-    transition: border-color 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
 }
 
 .feature-card:hover {
     border-color: #3b82f6;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.12);
+}
+
+/* Feature icon */
+.feature-icon {
+    font-size: 2em;
+    margin-bottom: 14px;
+    display: block;
 }
 
 .feature-card h3 {
-    margin: 0 0 8px 0;
-    font-size: 1.1em;
+    margin: 0 0 10px 0;
+    font-size: 1.15em;
+    font-weight: 600;
     color: var(--pst-color-text-base);
 }
 
@@ -91,16 +127,237 @@ div.math {
     margin: 0;
     font-size: 0.95em;
     color: var(--pst-color-text-muted);
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
-/* Install command box */
-.install-box {
-    background: var(--pst-color-surface);
-    border: 1px solid var(--pst-color-border);
-    border-radius: 8px;
+/* ============================================
+   INTERNAL PAGE STYLES - Clean & Minimal
+   ============================================ */
+
+/* --- Admonitions --- */
+.bd-content .admonition {
     padding: 16px 20px;
-    font-family: monospace;
-    font-size: 1em;
+    border-radius: 8px;
+    border: none;
+    border-left: 4px solid;
+    margin: 24px 0;
+    background: #f8f9fa;
+}
+
+.bd-content .admonition-title {
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 8px;
+    padding: 0;
+    background: none;
+}
+
+.bd-content .admonition p:last-child {
+    margin-bottom: 0;
+}
+
+/* Note - soft blue */
+.bd-content .admonition.note {
+    background: #f0f7ff;
+    border-left-color: #3b82f6;
+}
+
+.bd-content .admonition.note > .admonition-title {
+    color: #1d4ed8;
+}
+
+/* Warning - soft amber */
+.bd-content .admonition.warning {
+    background: #fffbeb;
+    border-left-color: #f59e0b;
+}
+
+.bd-content .admonition.warning > .admonition-title {
+    color: #b45309;
+}
+
+/* Important - soft red */
+.bd-content .admonition.important {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+}
+
+.bd-content .admonition.important > .admonition-title {
+    color: #dc2626;
+}
+
+/* Tip / Hint - soft green */
+.bd-content .admonition.tip,
+.bd-content .admonition.hint {
+    background: #f0fdf4;
+    border-left-color: #22c55e;
+}
+
+.bd-content .admonition.tip > .admonition-title,
+.bd-content .admonition.hint > .admonition-title {
+    color: #16a34a;
+}
+
+/* --- Tables --- */
+.bd-content table.docutils {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 24px 0;
+}
+
+.bd-content table.docutils th {
+    background: #f1f5f9;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #475569;
+    padding: 12px 16px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.bd-content table.docutils td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.bd-content table.docutils tr:nth-child(even) td {
+    background: #fafafa;
+}
+
+.bd-content table.docutils tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- Code Blocks --- */
+.bd-content div.highlight {
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.bd-content div.highlight pre {
+    padding: 16px;
+    margin: 0;
+    background: transparent;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+/* --- Inline Code --- */
+.bd-content code.literal {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: #334155;
+}
+
+/* --- Math Blocks --- */
+.bd-content div.math {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 28px 0;
+    overflow-x: auto;
+}
+
+/* --- API Documentation --- */
+.bd-content dl.py {
+    margin: 24px 0;
+    padding: 0;
+}
+
+.bd-content dl.py dt {
+    background: #f8f9fa;
+    padding: 12px 16px;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9em;
+}
+
+.bd-content dl.py dd {
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin: 0 0 16px 0;
+}
+
+.bd-content dl.py dd p:last-child {
+    margin-bottom: 0;
+}
+
+/* Parameter lists */
+.bd-content dl.field-list {
     margin: 16px 0;
+}
+
+.bd-content dl.field-list dt {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.9em;
+}
+
+.bd-content dl.field-list dd {
+    margin-left: 0;
+    padding-left: 16px;
+    margin-bottom: 12px;
+}
+
+/* --- Definition Lists --- */
+.bd-content dl:not(.py):not(.field-list) dt {
+    font-weight: 600;
+    color: var(--pst-color-text-base);
+    margin-top: 16px;
+}
+
+.bd-content dl:not(.py):not(.field-list) dd {
+    margin-left: 0;
+    padding-left: 20px;
+    color: var(--pst-color-text-muted);
+}
+
+/* --- Blockquotes --- */
+.bd-content blockquote {
+    border-left: 3px solid #e2e8f0;
+    padding-left: 20px;
+    margin: 20px 0;
+    color: var(--pst-color-text-muted);
+    font-style: italic;
+}
+
+/* --- Links --- */
+.bd-content a {
+    color: #2563eb;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.bd-content a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+/* --- Lists --- */
+.bd-content ul,
+.bd-content ol {
+    padding-left: 24px;
+    margin: 16px 0;
+}
+
+.bd-content li {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+/* --- Section Dividers --- */
+.bd-content .section > hr {
+    margin: 48px 0;
 }
