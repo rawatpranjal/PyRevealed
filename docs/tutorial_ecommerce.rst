@@ -16,7 +16,7 @@ Prerequisites
 -------------
 
 - Completed :doc:`tutorial` (Dunnhumby basics)
-- Python 3.8+ with NumPy, pandas, matplotlib
+- Python 3.10+ with NumPy, pandas, matplotlib
 - Basic understanding of revealed preference theory
 
 .. note::

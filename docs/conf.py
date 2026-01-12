@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath("../src"))
 project = "PyRevealed"
 copyright = "2024, PyRevealed Contributors"
 author = "PyRevealed Contributors"
-release = "0.3.0"
+release = "0.3.1"
 
 # -- General configuration ---------------------------------------------------
 

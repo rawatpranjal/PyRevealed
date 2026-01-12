@@ -16,7 +16,7 @@ Topics covered:
 Prerequisites
 -------------
 
-- Python 3.8+
+- Python 3.10+
 - Basic familiarity with NumPy and pandas
 - Understanding of basic statistics (means, correlations)
 

@@ -68,9 +68,9 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/pyrevealed/pyrevealed"
+Homepage = "https://github.com/rawatpranjal/PyRevealed"
 Documentation = "https://pyrevealed.readthedocs.io"
-Repository = "https://github.com/pyrevealed/pyrevealed"
+Repository = "https://github.com/rawatpranjal/PyRevealed"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pyrevealed"]
