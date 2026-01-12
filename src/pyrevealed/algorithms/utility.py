@@ -109,7 +109,7 @@ def recover_utility(
             b_ub=b_ub,
             bounds=bounds,
             method="highs",
-            options={"presolve": True, "tol": tolerance},
+            options={"presolve": True},
         )
     except Exception as e:
         computation_time = (time.perf_counter() - start_time) * 1000

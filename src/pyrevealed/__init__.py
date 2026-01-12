@@ -124,6 +124,10 @@ from pyrevealed.core.result import (
     DifferentiableResult,
     AcyclicalPResult,
     GAPPResult,
+    # v0.4.0: New result types for API consistency
+    WARPResult,
+    SARPResult,
+    HoutmanMaksResult,
 )
 
 # =============================================================================
@@ -259,7 +263,7 @@ from pyrevealed.algorithms.gapp import (
     check_gapp,  # Legacy
 )
 
-__version__ = "0.3.1"
+__version__ = "0.4.1"
 
 __all__ = [
     # ==========================================================================
@@ -419,6 +423,10 @@ __all__ = [
     "DifferentiableResult",
     "AcyclicalPResult",
     "GAPPResult",
+    # v0.4.0: New result types for API consistency
+    "WARPResult",
+    "SARPResult",
+    "HoutmanMaksResult",
     # 2024 Survey functions - legacy names
     "check_differentiable",
     "check_sarp",
