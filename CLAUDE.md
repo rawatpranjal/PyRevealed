@@ -78,6 +78,43 @@ Test data in `tests/conftest.py`:
 - `three_cycle_violation_session` - 3-cycle GARP violation
 - `large_random_session` - 100 obs × 10 goods for performance
 
+## Version Alignment
+
+When releasing a new version, these files must be kept in sync:
+
+| File | Field | Example |
+|------|-------|---------|
+| `pyproject.toml` | `version = "X.Y.Z"` | Line 7 |
+| `src/pyrevealed/__init__.py` | `__version__ = "X.Y.Z"` | Line 262 |
+| `docs/conf.py` | `release = "X.Y.Z"` | Line 14 |
+
+### Verification Commands
+
+```bash
+# Check all versions match
+grep -E "^version|__version__|release" pyproject.toml src/pyrevealed/__init__.py docs/conf.py
+
+# Verify module version
+python3 -c "import pyrevealed; print(pyrevealed.__version__)"
+
+# Check PyPI version
+pip index versions pyrevealed
+
+# Check URLs are correct
+grep -n "github" pyproject.toml docs/conf.py
+```
+
+### Release Checklist
+
+1. Update version in all 3 files above
+2. Ensure GitHub URLs point to `https://github.com/rawatpranjal/PyRevealed`
+3. Ensure `LICENSE` file exists
+4. Ensure Python version in `docs/tutorial*.rst` matches `pyproject.toml` (`requires-python`)
+5. Commit, push, and verify:
+   - PyPI: https://pypi.org/project/pyrevealed/
+   - ReadTheDocs: https://pyrevealed.readthedocs.io
+   - GitHub: https://github.com/rawatpranjal/PyRevealed
+
 ## Theory Reference
 
 Based on Chambers & Echenique (2016) *Revealed Preference Theory*:
