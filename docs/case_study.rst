@@ -18,7 +18,7 @@ Key Findings
      - Finding
    * - **Consistency**
      - 4.5% perfectly consistent, mean integrity = 0.839
-   * - **Exploitability**
+   * - **Welfare Loss**
      - Mean confusion = 0.225 (inversely correlated with integrity)
    * - **Statistical Power**
      - Test power = 0.845 (87.5% statistically significant)
@@ -33,7 +33,7 @@ Key Findings
    * - **Smooth Preferences**
      - 1.6% differentiable (SARP + uniqueness)
    * - **Strict Consistency**
-     - 5.0% Acyclical P pass, 0.5% "approximately rational"
+     - 5.0% Acyclical P pass, 0.5% approximately consistent
    * - **Price Preferences**
      - 0% GAPP pass (all have price preference cycles)
 

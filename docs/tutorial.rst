@@ -1,18 +1,17 @@
 Tutorial 1
 ==========
 
-What can 2 years of grocery data tell us about human decision-making? In this
-tutorial, you'll analyze real shopping behavior from 2,222 households and
-learn to properly interpret revealed preference tests.
+This tutorial analyzes 2 years of grocery data from 2,222 households using
+revealed preference methods.
 
-By the end of this tutorial, you'll be able to:
+Topics covered:
 
-- Load and prepare behavioral data for analysis
-- Test whether choices are internally consistent (GARP)
-- **Assess whether the test is meaningful** (power analysis)
-- Measure efficiency and exploitability (CCEI, MPI)
-- Test preference structure (separability)
-- Transform to characteristics space (Lancaster model)
+- Data preparation and BehaviorLog construction
+- GARP consistency testing
+- Power analysis (Bronars test)
+- Efficiency metrics (CCEI, MPI, Houtman-Maks)
+- Preference structure (separability, cross-price effects)
+- Lancaster characteristics model
 
 Prerequisites
 -------------
@@ -25,6 +24,50 @@ Prerequisites
 
    The full code for this tutorial is available in the ``dunnhumby/`` directory
    of the PyRevealed repository.
+
+
+.. _important-assumptions:
+
+Important Assumptions
+---------------------
+
+Revealed preference tests rely on several assumptions. Real data typically
+violates these to some degree, which affects interpretation.
+
+.. list-table:: Assumptions Required for RP Testing
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Assumption
+     - Grocery Data
+     - Concern Level
+   * - Stable preferences
+     - Extended period
+     - Medium
+   * - Single decision-maker
+     - Household, not individual
+     - Medium
+   * - Budget exhaustion
+     - Monthly grocery budget
+     - Medium
+   * - Category homogeneity
+     - "Milk" = all milk products
+     - Medium
+   * - No stockpiling
+     - Monthly aggregation mitigates
+     - Low
+
+What GARP Failure Means
+~~~~~~~~~~~~~~~~~~~~~~~
+
+GARP failure means no single, stable utility function rationalizes the observed
+choices. Common causes:
+
+- Preferences changed over the observation period
+- Multiple household members with different preferences
+- Context-dependent choices (holidays, special occasions)
+- Measurement error in prices or quantities
+- Stockpiling behavior
 
 
 Part 1: The Data
@@ -52,12 +95,11 @@ categories.
 Aggregation Choice
 ~~~~~~~~~~~~~~~~~~
 
-We aggregate transactions to **monthly** observations. Why not weekly?
+Transactions are aggregated to **monthly** observations:
 
-- **Weekly is too sparse**: Many households have zero purchases in most
-  categories each week
-- **Monthly aligns with budgeting**: Households plan grocery spending monthly
-- **Reduces noise**: Smooths out random shopping timing
+- Weekly data is too sparse (many zero-purchase periods)
+- Monthly aligns with household budgeting cycles
+- Reduces noise from random shopping timing
 
 .. code-block:: bash
 
@@ -66,45 +108,14 @@ We aggregate transactions to **monthly** observations. Why not weekly?
    # Download the Dunnhumby dataset (requires Kaggle API)
    cd dunnhumby && ./download_data.sh
 
-Assumption Checklist
-~~~~~~~~~~~~~~~~~~~~
-
-Before running RP tests, verify these assumptions are reasonable for your data:
-
-.. list-table:: Assumptions Required for RP Testing
-   :header-rows: 1
-   :widths: 30 35 35
-
-   * - Assumption
-     - Grocery Data
-     - Concern Level
-   * - Stable preferences
-     - 2 years is long
-     - Medium
-   * - Single decision-maker
-     - Household, not individual
-     - Medium
-   * - Budget exhaustion
-     - Monthly grocery budget
-     - Medium
-   * - Category homogeneity
-     - "Milk" = all milk products
-     - Medium
-   * - No stockpiling
-     - Monthly smooths this
-     - Low
-
-**Key point**: Real data violates all of these to some degree. This doesn't
-invalidate the analysis—it affects interpretation.
-
 
 Part 2: Building BehaviorLogs
 -----------------------------
 
-A ``BehaviorLog`` captures a series of choices. Each observation consists of:
+A ``BehaviorLog`` stores a sequence of choice observations:
 
-- **Prices**: What each option cost at the time of choice
-- **Quantities**: How much of each option the user chose
+- **Prices**: Price vector at time of choice
+- **Quantities**: Quantity vector chosen
 
 .. code-block:: python
 
@@ -136,7 +147,7 @@ A ``BehaviorLog`` captures a series of choices. Each observation consists of:
 Price Imputation
 ~~~~~~~~~~~~~~~~
 
-For categories with zero purchases, we need prices. Use market medians:
+For zero-purchase categories, impute prices using market medians:
 
 .. code-block:: python
 
@@ -175,10 +186,9 @@ Part 3: Testing Consistency (GARP)
 ----------------------------------
 
 The Generalized Axiom of Revealed Preference (GARP) tests whether choices can
-be explained by **any** utility function.
-
-**The idea**: If you chose bundle A when B was affordable, you reveal A ≿ B.
-GARP checks whether these revealed preferences are transitive (no cycles).
+be explained by a utility function. Choosing bundle A when B was affordable
+reveals A ≿ B. GARP checks whether these revealed preferences form a consistent
+(acyclic) ordering.
 
 .. code-block:: python
 
@@ -206,34 +216,15 @@ Testing All Households
    total = len(sessions)
    print(f"GARP pass rate: {consistent_count}/{total} ({100*consistent_count/total:.1f}%)")
 
-**Expected result**: ~5-15% pass rate. This is typical for real consumption data.
-
-Why Do Most Households Fail?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A GARP failure doesn't mean "irrational." It means choices can't be explained
-by a **single, stable utility function**. Possible causes:
-
-1. **Preference evolution**: Tastes change over 2 years
-2. **Multiple decision-makers**: Different family members shop
-3. **Context dependence**: Holiday shopping ≠ regular shopping
-4. **Measurement error**: Price imputation is imperfect
-5. **Stockpiling**: Buy extra during sales (even monthly data may miss this)
-
-.. note::
-
-   The consistency test tells us whether a single utility function explains the
-   data—not whether people are "rational" in some deeper sense.
+Typical GARP pass rates for field data range from 5-15%, reflecting assumption
+violations over long time horizons (see :ref:`important-assumptions`).
 
 
 Part 4: Assessing Test Power
 ----------------------------
 
-**Critical question**: Is passing GARP meaningful, or would random behavior
-also pass?
-
-The Bronars (1987) test answers this by simulating random behavior on the same
-budgets and checking how often it violates GARP.
+The Bronars (1987) test assesses whether GARP has discriminative power by
+simulating random behavior on the same budgets and measuring violation rates.
 
 .. code-block:: python
 
@@ -251,36 +242,31 @@ budgets and checking how often it violates GARP.
 Interpreting Power
 ~~~~~~~~~~~~~~~~~~
 
-.. list-table:: Power Interpretation Guide
+.. list-table:: Power Interpretation
    :header-rows: 1
    :widths: 25 75
 
    * - Power
      - Interpretation
    * - > 0.90
-     - Excellent — random behavior almost always fails GARP
+     - Random behavior almost always violates GARP
    * - 0.70 - 0.90
-     - Good — passing GARP is meaningful
+     - GARP results are informative
    * - 0.50 - 0.70
-     - Moderate — interpret with caution
+     - Limited discriminative power
    * - < 0.50
-     - Weak — GARP test is uninformative
+     - GARP cannot distinguish consistent from random behavior
 
-**Expected for this data**: With 24 monthly observations and 10 goods, power
-should be > 0.90. Passing GARP is highly informative.
-
-**Why power matters**: If power is low (sparse data, few observations), both
-rational and random consumers pass GARP. The test tells us nothing.
+With 24 observations and 10 goods, power typically exceeds 0.90.
 
 
 Part 5: Measuring Efficiency (CCEI)
 -----------------------------------
 
-For households that fail GARP, how badly do they fail?
-
-The **Afriat Efficiency Index (AEI)** or **Critical Cost Efficiency Index
-(CCEI)** measures what fraction of behavior is consistent with utility
-maximization. A score of 1.0 means perfectly consistent.
+The **Critical Cost Efficiency Index (CCEI)**, also called the Afriat Efficiency
+Index, quantifies the degree of GARP violation. A CCEI of 1.0 indicates perfect
+consistency; lower values indicate larger budget adjustments needed to
+rationalize behavior.
 
 .. code-block:: python
 
@@ -298,8 +284,6 @@ maximization. A score of 1.0 means perfectly consistent.
 
 Benchmark Comparison
 ~~~~~~~~~~~~~~~~~~~~
-
-How do these results compare to controlled experiments?
 
 .. list-table:: Dunnhumby vs. CKMS (2014) Lab Experiments
    :header-rows: 1
@@ -321,11 +305,11 @@ How do these results compare to controlled experiments?
      - ~20-30%
      - 45.2%
 
-**Why lower consistency?** Real grocery data has more noise, longer time
-horizons, and multiple decision-makers. Lab experiments are cleaner.
+Lower consistency in field data reflects measurement noise, longer time horizons,
+and multiple decision-makers per household.
 
-CCEI Interpretation Guide
-~~~~~~~~~~~~~~~~~~~~~~~~~
+CCEI Interpretation
+~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -334,22 +318,22 @@ CCEI Interpretation Guide
    * - CCEI
      - Interpretation
    * - 1.00
-     - Perfectly consistent — GARP satisfied
+     - GARP satisfied
    * - 0.95+
-     - Near-consistent — minor deviations
+     - Minor deviations
    * - 0.85-0.95
-     - Moderate — typical for real data
+     - Typical for field data
    * - 0.70-0.85
      - Substantial deviations
    * - < 0.70
-     - Severe — check data quality
+     - Large deviations; verify data quality
 
 
-Part 6: Exploitability (MPI)
-----------------------------
+Part 6: Welfare Loss (MPI)
+--------------------------
 
-The **Money Pump Index (MPI)** measures how exploitable preference cycles are.
-If someone prefers A to B to C to A, a seller can "pump" money from them.
+The **Money Pump Index (MPI)** measures potential welfare loss from preference
+cycles (e.g., A ≻ B ≻ C ≻ A).
 
 .. code-block:: python
 
@@ -362,8 +346,8 @@ If someone prefers A to B to C to A, a seller can "pump" money from them.
 
    print(f"Mean MPI: {np.mean(mpi_scores):.3f}")
 
-**Result**: Mean MPI around 0.2-0.25. Strong negative correlation with CCEI
-(r ≈ -0.85) — more consistent users are less exploitable.
+Mean MPI in this data is 0.2-0.25, with strong negative correlation to CCEI
+(r ≈ -0.85).
 
 .. list-table:: MPI Interpretation
    :header-rows: 1
@@ -372,33 +356,39 @@ If someone prefers A to B to C to A, a seller can "pump" money from them.
    * - MPI
      - Interpretation
    * - 0
-     - Unexploitable (consistent)
+     - No preference cycles
    * - 0.1-0.2
-     - Low exploitability
+     - Minor cycles
    * - 0.2-0.3
-     - Moderate
+     - Moderate cycles
    * - > 0.3
-     - High exploitability
+     - Substantial cycles
+
+Houtman-Maks Index
+~~~~~~~~~~~~~~~~~~
+
+The Houtman-Maks Index measures the minimum fraction of observations to remove
+for GARP consistency.
+
+.. code-block:: python
+
+   from pyrevealed import compute_minimal_outlier_fraction
+
+   result = compute_minimal_outlier_fraction(log)
+   print(f"Observations to remove: {result.fraction:.1%}")
+
+CCEI, MPI, and Houtman-Maks capture different aspects of inconsistency.
 
 
 Part 7: Preference Structure (Separability)
 -------------------------------------------
 
-**What separability tests**: Whether preferences over group A are independent
-of consumption in group B. Formally, weak separability asks if:
+Weak separability tests whether preferences over group A are independent of
+consumption in group B:
 
 .. math::
 
    U(x_A, x_B) = V(u_A(x_A), u_B(x_B))
-
-This means the marginal rate of substitution *within* group A doesn't depend
-on how much of group B you consume.
-
-.. warning::
-
-   **This is NOT mental accounting** in the Thaler sense. Separability is about
-   utility function structure, not psychological budgeting. A person can have
-   non-separable preferences but still use mental accounts, and vice versa.
 
 .. code-block:: python
 
@@ -419,20 +409,12 @@ on how much of group B you consume.
 
    print(f"Separable: {100*np.mean(separability_results):.1f}%")
 
-**Interpretation**: Low separability rates don't mean "people don't
-compartmentalize." They mean preferences don't decompose in the specific
-mathematical way the test checks.
-
 
 Part 8: Cross-Price Effects
 ---------------------------
 
-Test whether goods are **gross substitutes** or **gross complements**:
-
-- **Substitutes**: :math:`\partial x_j / \partial p_i > 0` (price of i up →
-  demand for j up)
-- **Complements**: :math:`\partial x_j / \partial p_i < 0` (price of i up →
-  demand for j down)
+Test whether goods are gross substitutes (:math:`\partial x_j / \partial p_i > 0`)
+or complements (:math:`\partial x_j / \partial p_i < 0`).
 
 .. code-block:: python
 
@@ -442,29 +424,13 @@ Test whether goods are **gross substitutes** or **gross complements**:
        result = test_cross_price_effect(log, good_g=1, good_h=2)  # Milk vs Bread
        # result.relationship: 'substitute', 'complement', or 'independent'
 
-.. warning::
-
-   **This is NOT co-purchase frequency.** People often confuse:
-
-   - **Complements** (economic): Cross-price derivative < 0
-   - **Co-purchased**: Bought together frequently
-
-   Milk and bread might be co-purchased (basket composition) but still be
-   economic substitutes (if bread price rises, buy more milk for cereal
-   instead of toast).
-
 
 Part 9: The Lancaster Model
 ---------------------------
 
-The Lancaster model posits that consumers derive utility from **characteristics**
-(nutrition, taste), not products directly:
-
-.. math::
-
-   U(x) = u(Zx)
-
-where :math:`Z` maps products to characteristics.
+The Lancaster model assumes utility derives from characteristics (e.g., nutrition)
+rather than products directly: :math:`U(x) = u(Zx)` where :math:`Z` maps products
+to characteristics.
 
 When Does Lancaster Help?
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -515,10 +481,8 @@ Results Comparison
      - ~5%
      - ~8% (+60%)
 
-**Interpretation**: Some households are better explained by a characteristics
-model. This doesn't mean they're "rescued" from irrationality—they're just
-better fit by a different model. Households whose CCEI *decreases* in
-characteristics space have product-specific preferences (brand loyalty).
+Households with decreased CCEI in characteristics space have product-specific
+preferences.
 
 
 Part 10: Summary and Best Practices
@@ -531,58 +495,62 @@ Key Findings
    :header-rows: 1
    :widths: 35 65
 
-   * - Category
-     - Finding
-   * - **GARP pass rate**
-     - ~5-15% (lower than lab experiments)
-   * - **Mean CCEI**
-     - ~0.80-0.85 (moderate consistency)
-   * - **Bronars power**
-     - >0.90 (test is meaningful)
-   * - **MPI**
-     - ~0.2-0.25 (correlated with CCEI)
-   * - **Separability**
-     - Generally low (preferences don't decompose cleanly)
-   * - **Lancaster**
-     - +5% CCEI for some households
+   * - Metric
+     - Value
+   * - GARP pass rate
+     - 5-15%
+   * - Mean CCEI
+     - 0.80-0.85
+   * - Bronars power
+     - >0.90
+   * - Mean MPI
+     - 0.2-0.25
+   * - Lancaster improvement
+     - +5% CCEI
 
 Best Practices
 ~~~~~~~~~~~~~~
 
-1. **Always compute power** before interpreting GARP results
-2. **Report CCEI distribution**, not just pass rates
-3. **Be explicit about aggregation** (monthly vs weekly matters)
-4. **Acknowledge assumptions** — real data violates all of them
-5. **Compare to benchmarks** — CKMS (2014) provides reference
-6. **Don't over-interpret** — GARP failure ≠ "irrationality"
+1. Compute power before interpreting GARP results
+2. Report CCEI distribution, not just pass rates
+3. Document aggregation choices
+4. Consider assumption applicability
+5. Compare to published benchmarks (e.g., CKMS 2014)
 
-When to Use Each Test
-~~~~~~~~~~~~~~~~~~~~~
+Function Reference
+~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 50 50
 
-   * - Question
-     - Test
-   * - Can behavior be rationalized?
+   * - Purpose
+     - Function
+   * - GARP consistency
      - ``validate_consistency()``
-   * - How close to rational?
+   * - CCEI / efficiency index
      - ``compute_integrity_score()``
-   * - Is the test meaningful?
+   * - Bronars power
      - ``compute_test_power()``
-   * - How exploitable?
+   * - Money Pump Index
      - ``compute_confusion_metric()``
-   * - Do preferences separate by group?
+   * - Per-observation CCEI
+     - ``compute_granular_integrity()``
+   * - Houtman-Maks Index
+     - ``compute_minimal_outlier_fraction()``
+   * - Weak separability
      - ``test_feature_independence()``
-   * - Substitute or complement?
+   * - Homotheticity (HARP)
+     - ``validate_proportional_scaling()``
+   * - Cross-price effects
      - ``test_cross_price_effect()``
+   * - Utility recovery
+     - ``fit_latent_values()``
 
 
-Next Steps
-----------
+See Also
+--------
 
-- :doc:`tutorial_ecommerce` — Apply these methods to Amazon purchase data
-- :doc:`api` — Full function documentation
+- :doc:`tutorial_ecommerce` — E-commerce application
+- :doc:`api` — API documentation
 - :doc:`theory` — Mathematical foundations
-- ``examples/`` directory — More advanced use cases

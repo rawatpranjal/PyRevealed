@@ -1,17 +1,16 @@
 Tutorial 2
 ==========
 
-Can Amazon purchase data reveal how rational consumers really are? In this
-tutorial, you'll analyze 1.85 million transactions from 5,027 US consumers
-and learn how to apply revealed preference theory to real-world e-commerce data.
+This tutorial analyzes 1.85 million Amazon transactions from 5,027 US consumers
+using revealed preference methods.
 
-By the end of this tutorial, you'll be able to:
+Topics covered:
 
-- Understand the gap between economic theory and e-commerce data
-- Transform transaction logs into the format required for RP analysis
-- Implement GARP tests and compute efficiency indices from scratch
-- Scale analysis to thousands of users
-- Interpret results in context and assess statistical power
+- Theory vs. e-commerce data: assumptions and limitations
+- Data processing pipeline for transaction logs
+- GARP testing and efficiency index computation
+- Scaling to thousands of users
+- Power analysis and result interpretation
 
 Prerequisites
 -------------
@@ -75,7 +74,7 @@ purchase histories from 5,027 US consumers spanning 2018-2023.
 Part 2: Theory Review
 ---------------------
 
-Before processing data, let's review the key concepts.
+Key concepts for revealed preference analysis.
 
 Revealed Preference Relations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,7 +124,7 @@ The Axioms
 Part 3: Data Processing Pipeline
 --------------------------------
 
-Let's transform raw transactions into analyzable matrices.
+Transforming raw transactions into analyzable matrices.
 
 Step 1: Load and Clean
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -221,7 +220,7 @@ For each user, create price and quantity matrices:
 Part 4: Implementing the Algorithms
 -----------------------------------
 
-Let's implement GARP testing and AEI computation from scratch.
+GARP testing and AEI computation from scratch.
 
 Cost Matrix
 ~~~~~~~~~~~
@@ -315,7 +314,7 @@ AEI via Binary Search
 Part 5: Analyzing One User
 --------------------------
 
-Let's test our implementation on a single user:
+Testing the implementation on a single user:
 
 .. code-block:: python
 
@@ -339,17 +338,17 @@ Let's test our implementation on a single user:
    print(f"  AEI: {aei:.4f}")
 
    if aei >= 0.95:
-       print("\n  Interpretation: Highly consistent with utility maximization")
+       print("\n  Interpretation: Highly consistent")
    elif aei >= 0.80:
        print("\n  Interpretation: Moderately consistent")
    else:
-       print("\n  Interpretation: Significant departures from rationality")
+       print("\n  Interpretation: Significant departures from consistency")
 
 
 Part 6: Scaling to All Users
 ----------------------------
 
-Now let's analyze the full dataset:
+Analyzing the full dataset:
 
 .. code-block:: python
 
@@ -402,7 +401,7 @@ Aggregate Results
 Part 7: Comparison to Benchmarks
 --------------------------------
 
-How do these results compare to controlled experiments?
+Comparison to controlled experiments.
 
 .. list-table:: E-Commerce vs. CKMS (2014) Lab Experiments
    :header-rows: 1
@@ -424,7 +423,7 @@ How do these results compare to controlled experiments?
      - ~25%
      - ~45%
 
-**Why lower consistency?**
+Lower consistency in field data reflects:
 
 1. Category aggregation creates artificial violations
 2. Preferences may change over 5 years
@@ -436,7 +435,7 @@ How do these results compare to controlled experiments?
 Part 8: Heterogeneity Analysis
 ------------------------------
 
-Who is more rational? Let's examine correlations:
+Examining correlations between consistency and user characteristics:
 
 .. code-block:: python
 
@@ -448,20 +447,20 @@ Who is more rational? Let's examine correlations:
    axes[0].scatter(results_df['n_periods'], results_df['aei'], alpha=0.3, s=10)
    axes[0].set_xlabel('Active Months')
    axes[0].set_ylabel('AEI')
-   axes[0].set_title('More data → More violations')
+   axes[0].set_title('AEI vs Active Months')
 
    # AEI vs spending
    axes[1].scatter(np.log10(results_df['total_spend']), results_df['aei'], alpha=0.3, s=10)
    axes[1].set_xlabel('Log10(Total Spend)')
    axes[1].set_ylabel('AEI')
-   axes[1].set_title('Higher spenders slightly more consistent')
+   axes[1].set_title('AEI vs Total Spend')
 
    # AEI histogram
    axes[2].hist(results_df['aei'], bins=50, edgecolor='black', alpha=0.7)
    axes[2].axvline(results_df['aei'].mean(), color='red', linestyle='--', label='Mean')
    axes[2].set_xlabel('AEI')
    axes[2].set_ylabel('Count')
-   axes[2].set_title('Distribution of Rationality')
+   axes[2].set_title('AEI Distribution')
    axes[2].legend()
 
    plt.tight_layout()
@@ -479,7 +478,7 @@ Who is more rational? Let's examine correlations:
      - More data reveals more inconsistency
    * - Log(total spend)
      - +0.05 to +0.10
-     - Higher spenders more deliberate
+     - Weak positive correlation
    * - Categories purchased
      - -0.10 to -0.20
      - Broader baskets harder to rationalize
@@ -488,7 +487,7 @@ Who is more rational? Let's examine correlations:
 Part 9: Power Analysis
 ----------------------
 
-Is passing GARP meaningful, or would random behavior also pass?
+The Bronars test assesses whether GARP has discriminative power.
 
 The Bronars Test
 ~~~~~~~~~~~~~~~~
@@ -570,7 +569,7 @@ This generates:
 
 - ``output/user_results.csv`` — Full results
 - ``output/aei_distribution.png`` — Histogram
-- ``output/spend_vs_rationality.png`` — Scatter plot
+- ``output/spend_vs_aei.png`` — Scatter plot
 
 
 Key Takeaways
@@ -579,16 +578,16 @@ Key Takeaways
 1. **E-commerce data requires assumptions** — category aggregation, temporal
    aggregation, price imputation all affect results
 
-2. **Real consumers are approximately rational** — mean AEI ~0.85 means 85%
+2. **Behavior is approximately consistent** — mean AEI ~0.85 means 85%
    of behavior can be explained by utility maximization
 
-3. **Lower consistency than lab experiments** — this reflects data complexity,
-   not necessarily less rational consumers
+3. **Lower consistency than lab experiments** — reflects data complexity
+   and assumption violations
 
 4. **More data = more violations** — consumers with longer histories show
    lower AEI, suggesting measurement issues
 
-5. **Power analysis matters** — verify your test can distinguish rational
+5. **Power analysis matters** — verify your test can distinguish consistent
    from random behavior
 
 
@@ -599,7 +598,7 @@ Exercises
    levels for a consistent consumer.
 
 2. **COVID Effect:** Split data into pre-COVID (before March 2020) and
-   during-COVID. Did rationality change?
+   during-COVID. Compare AEI distributions.
 
 3. **Category Analysis:** Which product categories drive the most violations?
 

@@ -3,33 +3,57 @@ PyRevealed
 
 .. raw:: html
 
-   <span class="speed-badge">132x faster than R</span>
+   <span class="speed-badge">Fastest Package</span>
 
 .. raw:: html
 
    <p class="hero-tagline">
    Production-ready revealed preference analysis. Test if choices are internally consistent,
-   quantify behavioral rationality, and detect exploitable patterns in decision data.
+   quantify behavioral consistency, and analyze decision patterns.
    </p>
 
 .. raw:: html
 
    <div class="feature-grid">
      <div class="feature-card">
+       <span class="feature-icon">✓</span>
        <h3>Consistency Testing</h3>
        <p>Check GARP, WARP, and SARP axioms to verify if choices could come from utility maximization.</p>
      </div>
      <div class="feature-card">
+       <span class="feature-icon">◉</span>
        <h3>Integrity Scoring</h3>
-       <p>Get a 0-1 score measuring how close behavior is to perfect rationality (Afriat Efficiency Index).</p>
+       <p>Get a 0-1 score measuring how close behavior is to perfect consistency (Afriat Efficiency Index).</p>
      </div>
      <div class="feature-card">
-       <h3>Exploitability Analysis</h3>
-       <p>Compute the Money Pump Index to find how much value can be extracted from inconsistent choices.</p>
+       <span class="feature-icon">⚡</span>
+       <h3>Welfare Loss Analysis</h3>
+       <p>Compute the Money Pump Index to measure welfare loss from preference cycles.</p>
      </div>
      <div class="feature-card">
+       <span class="feature-icon">ƒ</span>
        <h3>Utility Recovery</h3>
        <p>Reconstruct utility functions that rationalize observed behavior for prediction and simulation.</p>
+     </div>
+     <div class="feature-card">
+       <span class="feature-icon">◫</span>
+       <h3>Separability Testing</h3>
+       <p>Test if goods can be grouped into independent categories with their own utility functions.</p>
+     </div>
+     <div class="feature-card">
+       <span class="feature-icon">⚙</span>
+       <h3>ML Integration</h3>
+       <p>sklearn-compatible PreferenceEncoder for extracting behavioral features into ML pipelines.</p>
+     </div>
+     <div class="feature-card">
+       <span class="feature-icon">⟳</span>
+       <h3>Batch Processing</h3>
+       <p>Process thousands of users in parallel with multiprocessing for large-scale analysis.</p>
+     </div>
+     <div class="feature-card">
+       <span class="feature-icon">✔</span>
+       <h3>R Validated</h3>
+       <p>Cross-validated against R's revealedPrefs package for correctness you can trust.</p>
      </div>
    </div>
 
@@ -63,7 +87,7 @@ Quick Example
    # Check if choices are consistent with utility maximization
    is_consistent = validate_consistency(log)  # True
 
-   # Get integrity score (0 = irrational, 1 = perfectly rational)
+   # Get integrity score (0 = inconsistent, 1 = perfectly consistent)
    result = compute_integrity_score(log)
    print(f"Integrity: {result.efficiency_index:.2f}")  # 1.00
 

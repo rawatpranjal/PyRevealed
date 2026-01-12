@@ -7,7 +7,8 @@ Theory
    based on *Revealed Preference Theory* by Chambers & Echenique (2016).
 
 Notation
------
+--------
+
 .. list-table::
    :widths: 20 80
 
@@ -26,9 +27,10 @@ Notation
 
 
 Maintained Assumptions
--------------------
+----------------------
+
 The following assumptions are **necessary** for revealed preference analysis to be meaningful.
-If these are violated, GARP failures may reflect model misspecification rather than irrationality.
+If these are violated, GARP failures may reflect model misspecification rather than behavioral inconsistency.
 
 .. list-table::
    :header-rows: 1
@@ -55,7 +57,8 @@ If these are violated, GARP failures may reflect model misspecification rather t
 
 
 Axiom Hierarchy
-------------
+---------------
+
 .. admonition:: Relationship Between Axioms
 
    **SARP** :math:`\Rightarrow` **GARP** :math:`\Rightarrow` **WARP**
@@ -68,7 +71,8 @@ Axiom Hierarchy
 
 
 Consistency Tests
---------------
+-----------------
+
 GARP (Generalized Axiom of Revealed Preference)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -141,8 +145,8 @@ SARP prohibits indifference cycles. Stronger than GARP.
 **Reference:** Chambers & Echenique (2016) Ch. 2
 
 
-Smooth Preferences (Differentiable Rationality)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Smooth Preferences (Differentiable Utility)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Function:** ``validate_smooth_preferences(log)``
 
@@ -171,7 +175,7 @@ More lenient than GARP. Only checks cycles in strict preference :math:`P`:
 
    \text{Acyclical P holds} \iff P^* \text{ has no cycles}
 
-**Interpretation:** Approximately rational behavior. GARP may fail due to indifference, but strict preferences are consistent.
+**Interpretation:** Approximately consistent behavior. GARP may fail due to indifference, but strict preferences are consistent.
 
 **Reference:** Dziewulski (2023)
 
@@ -199,7 +203,8 @@ Dual of GARP for price vectors. Define price preference:
 
 
 Efficiency Scores
---------------
+-----------------
+
 Integrity Score (Afriat Efficiency Index)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -226,13 +231,13 @@ Integrity Score (Afriat Efficiency Index)
    * - AEI
      - Interpretation
    * - 1.0
-     - Perfectly rational - all choices consistent with utility maximization
+     - Perfectly consistent - all choices consistent with utility maximization
    * - 0.95+
-     - Minor deviations - Varian's threshold for "approximately rational"
+     - Minor deviations - Varian's threshold for approximate consistency
    * - 0.85–0.95
      - Moderate deviations - some inconsistent choices
    * - < 0.70
-     - Substantial departures from rationality
+     - Substantial departures from consistency
 
 .. note::
 
@@ -262,13 +267,13 @@ For a violation cycle :math:`k_1 \to k_2 \to \cdots \to k_m \to k_1`:
    * - MPI
      - Interpretation
    * - 0
-     - Unexploitable - no preference cycles exist
+     - No cycles - fully consistent preferences
    * - 0.01–0.10
-     - Minor exploitability - small inconsistencies
+     - Minor cycles - small inconsistencies
    * - 0.10–0.30
-     - Moderate exploitability - noticeable confusion
+     - Moderate cycles - noticeable inconsistencies
    * - > 0.30
-     - Highly exploitable - severely confused consumer
+     - Severe cycles - substantial inconsistencies
 
 **Reference:** Chambers & Echenique (2016) Ch. 5
 
@@ -337,7 +342,7 @@ Random bundles are generated via symmetric Dirichlet distribution on budget hype
    * - > 0.90
      - Excellent - passing GARP is highly informative
    * - 0.70–0.90
-     - Good - meaningful test of rationality
+     - Good - meaningful test of consistency
    * - 0.50–0.70
      - Moderate - some discrimination but inconclusive
    * - < 0.50
@@ -346,13 +351,14 @@ Random bundles are generated via symmetric Dirichlet distribution on budget hype
 .. warning::
 
    Low power indicates budget sets don't overlap much. A high AEI with low power
-   may just mean the data couldn't detect irrationality, not that the consumer is rational.
+   may just mean the data couldn't detect inconsistency, not that the consumer is consistent.
 
 **Reference:** Bronars (1987)
 
 
 Preference Structure
------------------
+--------------------
+
 Proportional Scaling (HARP)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -436,7 +442,8 @@ Cross-Price Effects
 
 
 Utility Recovery
--------------
+----------------
+
 Afriat's Inequalities
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -460,7 +467,8 @@ The recovered utility is piecewise linear and concave.
 
 
 References
--------
+----------
+
 1. Afriat, S. N. (1967). The construction of utility functions from expenditure data. *International Economic Review*, 8(1), 67-77.
 
 2. Bronars, S. G. (1987). The power of nonparametric tests of preference maximization. *Econometrica*, 55(3), 693-698.

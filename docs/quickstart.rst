@@ -31,7 +31,7 @@ Create a behavior log and run consistency checks:
    integrity = compute_integrity_score(log)
    print(f"Integrity Score: {integrity.efficiency_index:.3f}")
 
-   # Compute confusion metric (0-1, higher = more exploitable)
+   # Compute confusion metric (0-1, higher = more preference cycles)
    confusion = compute_confusion_metric(log)
    print(f"Confusion Metric: {confusion.mpi_value:.3f}")
 
@@ -89,7 +89,7 @@ Consistency Tests (Boolean)
      - Can compute elasticities
    * - ``validate_strict_consistency(log)``
      - Strict cycles only (lenient)
-     - Approximately rational
+     - Approximately consistent
    * - ``validate_price_preferences(log)``
      - Price preference consistency
      - Seeks lower prices
@@ -106,7 +106,7 @@ Efficiency Scores (0-1)
    * - ``compute_integrity_score(log)``
      - How consistent? (higher = more consistent)
    * - ``compute_confusion_metric(log)``
-     - How exploitable? (lower = safer)
+     - Welfare loss (lower = fewer cycles)
    * - ``compute_minimal_outlier_fraction(log)``
      - Fraction of observations to remove for consistency
    * - ``compute_granular_integrity(log)``
@@ -132,7 +132,7 @@ Preference Structure (Boolean)
      - No income effects
    * - ``test_feature_independence(log, groups)``
      - Group A independent of group B
-     - Separate mental budgets
+     - Separable preferences
    * - ``test_cross_price_effect(log, g, h)``
      - Substitute/complement relationship
      - Returns relationship type
