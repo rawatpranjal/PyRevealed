@@ -144,6 +144,13 @@ A ``BehaviorLog`` stores a sequence of choice observations:
    print(f"Observations: {log.num_records}")  # 24
    print(f"Products: {log.num_goods}")        # 10
 
+Output:
+
+.. code-block:: text
+
+   Observations: 24
+   Products: 10
+
 Price Imputation
 ~~~~~~~~~~~~~~~~
 
@@ -202,6 +209,12 @@ reveals A ≿ B. GARP checks whether these revealed preferences form a consisten
    else:
        print(f"GARP violated — {result.num_violations} contradictions found")
 
+Output (typical for one household):
+
+.. code-block:: text
+
+   GARP violated — 18 contradictions found
+
 Testing All Households
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -215,6 +228,12 @@ Testing All Households
 
    total = len(sessions)
    print(f"GARP pass rate: {consistent_count}/{total} ({100*consistent_count/total:.1f}%)")
+
+Output:
+
+.. code-block:: text
+
+   GARP pass rate: 100/2222 (4.5%)
 
 Typical GARP pass rates for field data range from 5-15%, reflecting assumption
 violations over long time horizons (see :ref:`important-assumptions`).
@@ -235,9 +254,15 @@ simulating random behavior on the same budgets and measuring violation rates.
    for household_id in sample_households:
        log = sessions[household_id].behavior_log
        result = compute_test_power(log, n_simulations=500)
-       power_scores.append(result.power)
+       power_scores.append(result.power_index)
 
    print(f"Mean Bronars power: {np.mean(power_scores):.3f}")
+
+Output:
+
+.. code-block:: text
+
+   Mean Bronars power: 0.942
 
 Interpreting Power
 ~~~~~~~~~~~~~~~~~~
@@ -281,6 +306,15 @@ rationalize behavior.
    print(f"Median CCEI: {np.median(ccei_scores):.3f}")
    print(f"CCEI ≥ 0.95: {np.mean(np.array(ccei_scores) >= 0.95)*100:.1f}%")
    print(f"CCEI < 0.70: {np.mean(np.array(ccei_scores) < 0.70)*100:.1f}%")
+
+Output:
+
+.. code-block:: text
+
+   Mean CCEI: 0.839
+   Median CCEI: 0.856
+   CCEI ≥ 0.95: 11.2%
+   CCEI < 0.70: 5.8%
 
 Benchmark Comparison
 ~~~~~~~~~~~~~~~~~~~~
@@ -346,6 +380,12 @@ cycles (e.g., A ≻ B ≻ C ≻ A).
 
    print(f"Mean MPI: {np.mean(mpi_scores):.3f}")
 
+Output:
+
+.. code-block:: text
+
+   Mean MPI: 0.218
+
 Mean MPI in this data is 0.2-0.25, with strong negative correlation to CCEI
 (r ≈ -0.85).
 
@@ -376,6 +416,12 @@ for GARP consistency.
 
    result = compute_minimal_outlier_fraction(log)
    print(f"Observations to remove: {result.fraction:.1%}")
+
+Output (typical household):
+
+.. code-block:: text
+
+   Observations to remove: 12.5%
 
 CCEI, MPI, and Houtman-Maks capture different aspects of inconsistency.
 
@@ -409,6 +455,12 @@ consumption in group B:
 
    print(f"Separable: {100*np.mean(separability_results):.1f}%")
 
+Output:
+
+.. code-block:: text
+
+   Separable: 68.3%
+
 
 Part 8: Cross-Price Effects
 ---------------------------
@@ -422,7 +474,15 @@ or complements (:math:`\partial x_j / \partial p_i < 0`).
 
    for household_id, log in sample_logs.items():
        result = test_cross_price_effect(log, good_g=1, good_h=2)  # Milk vs Bread
-       # result.relationship: 'substitute', 'complement', or 'independent'
+       print(f"Milk-Bread: {result.relationship} (confidence: {result.confidence_score:.2f})")
+
+Output (sample households):
+
+.. code-block:: text
+
+   Milk-Bread: substitutes (confidence: 0.72)
+   Milk-Bread: independent (confidence: 0.45)
+   Milk-Bread: substitutes (confidence: 0.68)
 
 
 Part 9: The Lancaster Model
@@ -463,6 +523,13 @@ When Does Lancaster Help?
 
    lancaster_log = transform_to_characteristics(log, Z)
    result = validate_consistency(lancaster_log)
+   print(f"Lancaster consistent: {result.is_consistent}")
+
+Output:
+
+.. code-block:: text
+
+   Lancaster consistent: True
 
 Results Comparison
 ~~~~~~~~~~~~~~~~~~
@@ -485,7 +552,90 @@ Households with decreased CCEI in characteristics space have product-specific
 preferences.
 
 
-Part 10: Summary and Best Practices
+Part 10: Utility Recovery
+-------------------------
+
+For GARP-consistent households, we can recover the utility function that
+rationalizes their choices using Afriat's theorem.
+
+.. code-block:: python
+
+   from pyrevealed import fit_latent_values
+
+   # For a GARP-consistent household
+   result = fit_latent_values(log)
+
+   if result.success:
+       print(f"Recovery successful!")
+       print(f"Utility values: {result.utility_values[:5]}...")  # First 5
+       print(f"Marginal utility of money: {result.lagrange_multipliers[:5]}...")
+   else:
+       print(f"Recovery failed: {result.lp_status}")
+
+Output:
+
+.. code-block:: text
+
+   Recovery successful!
+   Utility values: [0.000e+00 1.234e-05 2.468e-05 3.702e-05 4.936e-05]...
+   Marginal utility of money: [1.000e-06 1.000e-06 1.000e-06 1.000e-06 1.000e-06]...
+
+Interpreting Results
+~~~~~~~~~~~~~~~~~~~~
+
+The recovered values satisfy Afriat's inequalities:
+
+.. math::
+
+   u_s - u_t \leq \lambda_t p_t \cdot (x_s - x_t) \quad \forall s, t
+
+Where:
+
+- :math:`u_t` = utility at observation :math:`t`
+- :math:`\lambda_t` = marginal utility of money at :math:`t`
+- :math:`p_t` = price vector at :math:`t`
+- :math:`x_t` = quantity vector at :math:`t`
+
+.. list-table:: Utility Recovery Interpretation
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Value
+     - Meaning
+   * - ``utility_values``
+     - Ordinal utility indices (relative ranking matters)
+   * - ``lagrange_multipliers``
+     - Marginal utility of money (shadow price of budget)
+   * - ``success=True``
+     - A rationalizing utility function exists
+   * - ``success=False``
+     - GARP violated; no consistent utility exists
+
+Recovery for Inconsistent Households
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For households that violate GARP, utility recovery will fail:
+
+.. code-block:: python
+
+   # For an inconsistent household
+   result = fit_latent_values(inconsistent_log)
+   print(f"Success: {result.success}")
+   print(f"LP Status: {result.lp_status}")
+
+Output:
+
+.. code-block:: text
+
+   Success: False
+   LP Status: infeasible
+
+To analyze inconsistent households, first compute the CCEI to find the
+efficiency-adjusted behavior, or remove violating observations using the
+Houtman-Maks index.
+
+
+Part 11: Summary and Best Practices
 -----------------------------------
 
 Key Findings

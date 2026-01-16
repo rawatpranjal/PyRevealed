@@ -25,8 +25,8 @@ from pyrevealed.algorithms.utility import (
 from pyrevealed.core.exceptions import NotFittedError
 
 if TYPE_CHECKING:
-    from pyrevealed.core.session import BehaviorLog
-    from pyrevealed.core.result import LatentValueResult
+    from pyrevealed.core.session import BehaviorLog, MenuChoiceLog
+    from pyrevealed.core.result import LatentValueResult, OrdinalUtilityResult
 
 
 class PreferenceEncoder:
@@ -244,3 +244,280 @@ class PreferenceEncoder:
         if not self._is_fitted:
             return None
         return self._result.mean_marginal_utility
+
+    def transform(
+        self, logs: list[BehaviorLog] | BehaviorLog
+    ) -> NDArray[np.float64]:
+        """
+        Transform behavior logs to feature array.
+
+        For each log, extracts latent values as a feature vector.
+        Each log is fitted independently and its latent values extracted.
+
+        Args:
+            logs: Single BehaviorLog or list of BehaviorLogs
+
+        Returns:
+            Feature array of shape (n_logs, n_features) where n_features
+            is the number of observations in each log. If logs have different
+            numbers of observations, they are padded with NaN.
+
+        Example:
+            >>> encoder = PreferenceEncoder()
+            >>> features = encoder.transform([log1, log2, log3])
+            >>> # Use features in an ML model
+            >>> model.fit(features, labels)
+        """
+        from pyrevealed.core.session import BehaviorLog as BehaviorLogType
+
+        if isinstance(logs, BehaviorLogType):
+            logs = [logs]
+
+        if len(logs) == 0:
+            return np.array([]).reshape(0, 0)
+
+        # Extract features for each log
+        all_features = []
+        max_len = max(log.num_records for log in logs)
+
+        for log in logs:
+            result = fit_latent_values(log, tolerance=self.precision)
+            if result.success and result.utility_values is not None:
+                features = result.utility_values
+                # Pad to max_len if necessary
+                if len(features) < max_len:
+                    features = np.pad(
+                        features,
+                        (0, max_len - len(features)),
+                        constant_values=np.nan,
+                    )
+            else:
+                features = np.full(max_len, np.nan)
+            all_features.append(features)
+
+        return np.vstack(all_features)
+
+    def fit_transform(
+        self, logs: list[BehaviorLog] | BehaviorLog
+    ) -> NDArray[np.float64]:
+        """
+        Fit encoder and transform logs in one call.
+
+        This is the standard sklearn-style interface. For a single log,
+        fits the encoder to that log and returns its latent values.
+        For multiple logs, fits to the first log and transforms all.
+
+        Args:
+            logs: Single BehaviorLog or list of BehaviorLogs
+
+        Returns:
+            Feature array of shape (n_logs, n_features)
+
+        Example:
+            >>> encoder = PreferenceEncoder()
+            >>> features = encoder.fit_transform([log1, log2])
+            >>> print(f"Feature shape: {features.shape}")
+        """
+        from pyrevealed.core.session import BehaviorLog as BehaviorLogType
+
+        if isinstance(logs, BehaviorLogType):
+            self.fit(logs)
+            return self.extract_latent_values().reshape(1, -1)
+
+        if len(logs) == 0:
+            return np.array([]).reshape(0, 0)
+
+        # Fit on first log
+        self.fit(logs[0])
+
+        # Transform all logs
+        return self.transform(logs)
+
+
+class MenuPreferenceEncoder:
+    """
+    Encodes menu-based preferences into ordinal preference representations.
+
+    MenuPreferenceEncoder follows the scikit-learn pattern: fit() to learn
+    from menu choice data, then extract features or make predictions.
+
+    The encoder recovers ordinal preferences from observed menu choices
+    using topological sort of the revealed preference graph.
+
+    Example:
+        >>> from pyrevealed import MenuPreferenceEncoder, MenuChoiceLog
+        >>>
+        >>> # Create menu choice log
+        >>> log = MenuChoiceLog(
+        ...     menus=[frozenset({0, 1, 2}), frozenset({1, 2})],
+        ...     choices=[0, 1],  # 0 > 1 > 2
+        ... )
+        >>>
+        >>> # Fit encoder
+        >>> encoder = MenuPreferenceEncoder()
+        >>> encoder.fit(log)
+        >>>
+        >>> # Get preference order
+        >>> print(f"Order: {encoder.preference_order_}")
+    """
+
+    def __init__(self) -> None:
+        """Initialize the encoder."""
+        self._result: OrdinalUtilityResult | None = None
+        self._log: MenuChoiceLog | None = None
+        self._is_fitted: bool = False
+
+    def fit(self, log: MenuChoiceLog) -> MenuPreferenceEncoder:
+        """
+        Fit the encoder to a menu choice log.
+
+        Recovers ordinal preferences from menu choices using
+        topological sort of the revealed preference graph.
+
+        Args:
+            log: MenuChoiceLog containing menu choices
+
+        Returns:
+            self (for method chaining)
+
+        Example:
+            >>> encoder = MenuPreferenceEncoder().fit(menu_log)
+        """
+        from pyrevealed.algorithms.abstract_choice import fit_menu_preferences
+
+        result = fit_menu_preferences(log)
+        self._result = result
+        self._log = log
+        self._is_fitted = result.success
+        return self
+
+    @property
+    def is_fitted_(self) -> bool:
+        """Check if the encoder has been successfully fitted."""
+        return self._is_fitted
+
+    @property
+    def preference_order_(self) -> list[int] | None:
+        """Get the recovered preference order (most to least preferred)."""
+        if not self._is_fitted or self._result is None:
+            return None
+        return self._result.preference_order
+
+    @property
+    def utility_ranking_(self) -> dict[int, int] | None:
+        """Get the utility ranking (item -> rank, where 0 = most preferred)."""
+        if not self._is_fitted or self._result is None:
+            return None
+        return self._result.utility_ranking
+
+    def _check_fitted(self) -> None:
+        """Raise error if not fitted."""
+        if not self._is_fitted:
+            raise NotFittedError(
+                "Encoder not fitted. Call fit() first, or check if data is "
+                "SARP-consistent (use BehavioralAuditor.validate_menu_history())."
+            )
+
+    def transform(
+        self, logs: list[MenuChoiceLog] | MenuChoiceLog
+    ) -> NDArray[np.float64]:
+        """
+        Transform menu choice logs to preference feature array.
+
+        For each log, extracts utility values based on recovered preferences.
+        Each log is fitted independently and its preference values extracted.
+
+        Args:
+            logs: Single MenuChoiceLog or list of MenuChoiceLogs
+
+        Returns:
+            Feature array of shape (n_logs, n_items) where each row
+            contains utility values for items (NaN for unfitted logs)
+
+        Example:
+            >>> encoder = MenuPreferenceEncoder()
+            >>> features = encoder.transform([log1, log2, log3])
+        """
+        from pyrevealed.core.session import MenuChoiceLog as MenuChoiceLogType
+        from pyrevealed.algorithms.abstract_choice import fit_menu_preferences
+
+        if isinstance(logs, MenuChoiceLogType):
+            logs = [logs]
+
+        if len(logs) == 0:
+            return np.array([]).reshape(0, 0)
+
+        # Extract features for each log
+        all_features = []
+        max_items = max(log.num_items for log in logs)
+
+        for log in logs:
+            result = fit_menu_preferences(log)
+            if result.success and result.utility_values is not None:
+                features = result.utility_values
+                # Pad to max_items if necessary
+                if len(features) < max_items:
+                    features = np.pad(
+                        features,
+                        (0, max_items - len(features)),
+                        constant_values=np.nan,
+                    )
+            else:
+                features = np.full(max_items, np.nan)
+            all_features.append(features)
+
+        return np.vstack(all_features)
+
+    def fit_transform(
+        self, logs: list[MenuChoiceLog] | MenuChoiceLog
+    ) -> NDArray[np.float64]:
+        """
+        Fit encoder and transform logs in one call.
+
+        For a single log, fits the encoder to that log and returns its
+        preference values. For multiple logs, fits to the first log
+        and transforms all.
+
+        Args:
+            logs: Single MenuChoiceLog or list of MenuChoiceLogs
+
+        Returns:
+            Feature array of shape (n_logs, n_items)
+
+        Example:
+            >>> encoder = MenuPreferenceEncoder()
+            >>> features = encoder.fit_transform([log1, log2])
+        """
+        from pyrevealed.core.session import MenuChoiceLog as MenuChoiceLogType
+
+        if isinstance(logs, MenuChoiceLogType):
+            self.fit(logs)
+            if self._result is not None and self._result.utility_values is not None:
+                return self._result.utility_values.reshape(1, -1)
+            return np.array([[np.nan]])
+
+        if len(logs) == 0:
+            return np.array([]).reshape(0, 0)
+
+        # Fit on first log
+        self.fit(logs[0])
+
+        # Transform all logs
+        return self.transform(logs)
+
+    def get_fit_details(self) -> OrdinalUtilityResult:
+        """
+        Get detailed results from the fitting process.
+
+        Returns the full OrdinalUtilityResult with preference order,
+        utility values, and diagnostic information.
+
+        Returns:
+            OrdinalUtilityResult with full details
+
+        Raises:
+            NotFittedError: If not fitted
+        """
+        self._check_fitted()
+        assert self._result is not None  # guaranteed by _check_fitted
+        return self._result

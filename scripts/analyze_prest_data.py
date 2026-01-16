@@ -96,7 +96,7 @@ def analyze_budgetary_data(budgetary: pd.DataFrame) -> pd.DataFrame:
         garp_result = check_garp(session)
         aei_result = compute_aei(session)
         mpi_result = compute_mpi(session)
-        hm_index, removed_obs = compute_houtman_maks_index(session)
+        hm_result = compute_houtman_maks_index(session)
 
         results.append(
             {
@@ -107,8 +107,8 @@ def analyze_budgetary_data(budgetary: pd.DataFrame) -> pd.DataFrame:
                 "Violations": garp_result.num_violations,
                 "AEI": aei_result.efficiency_index,
                 "MPI": mpi_result.mpi_value,
-                "HM_Index": hm_index,
-                "Removed_Obs": len(removed_obs),
+                "HM_Index": hm_result.fraction,
+                "Removed_Obs": hm_result.num_removed,
             }
         )
 

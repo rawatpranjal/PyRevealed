@@ -598,6 +598,184 @@ def generate_efficiency_data(
     return prices, quantities
 
 
+# =============================================================================
+# ABSTRACT CHOICE THEORY GENERATORS (Menu-based)
+# =============================================================================
+
+
+def generate_rational_menu_choices(
+    n_obs: int,
+    n_items: int,
+    seed: int | None = None,
+    menu_size: int | None = None,
+) -> tuple[list[frozenset[int]], list[int], list[int]]:
+    """
+    Generate menu choice data from a rational agent with fixed preference order.
+
+    Creates menus and choices that satisfy SARP/Congruence by construction.
+    The agent has a strict preference order over items and always chooses
+    the most preferred item from each menu.
+
+    Args:
+        n_obs: Number of choice observations
+        n_items: Number of distinct items
+        seed: Random seed for reproducibility
+        menu_size: Size of each menu (default: random 2 to n_items)
+
+    Returns:
+        Tuple of (menus, choices, preference_order) where:
+        - menus: List of T frozensets (available items in each menu)
+        - choices: List of T chosen item indices
+        - preference_order: List of items from most to least preferred
+    """
+    rng = np.random.default_rng(seed)
+
+    # Generate random preference ordering (0 = most preferred)
+    preference_order = list(rng.permutation(n_items))
+    preference_rank = {item: rank for rank, item in enumerate(preference_order)}
+
+    menus: list[frozenset[int]] = []
+    choices: list[int] = []
+
+    for _ in range(n_obs):
+        # Determine menu size for this observation
+        if menu_size is not None:
+            size = min(menu_size, n_items)
+        else:
+            size = rng.integers(2, n_items + 1)
+
+        # Sample items for this menu
+        menu_items = rng.choice(n_items, size=size, replace=False)
+        menu = frozenset(menu_items.tolist())
+
+        # Choose the most preferred item in the menu
+        best_item = min(menu, key=lambda x: preference_rank[x])
+
+        menus.append(menu)
+        choices.append(best_item)
+
+    return menus, choices, preference_order
+
+
+def generate_warp_violation_menus(
+    n_items: int = 3,
+    seed: int | None = None,
+) -> tuple[list[frozenset[int]], list[int]]:
+    """
+    Generate menu choice data with a guaranteed WARP violation.
+
+    Creates a direct 2-cycle where item x is chosen over y in one menu,
+    but y is chosen over x in another menu.
+
+    Args:
+        n_items: Number of items (must be >= 2)
+        seed: Random seed for reproducibility
+
+    Returns:
+        Tuple of (menus, choices) with guaranteed WARP violation
+    """
+    if n_items < 2:
+        raise ValueError("Need at least 2 items for WARP violation")
+
+    rng = np.random.default_rng(seed)
+
+    # Pick two items for the violation
+    items = rng.choice(n_items, size=2, replace=False)
+    x, y = int(items[0]), int(items[1])
+
+    # Create WARP violation: x chosen over y, then y chosen over x
+    menus = [frozenset({x, y}), frozenset({x, y})]
+    choices = [x, y]  # x preferred to y, then y preferred to x
+
+    return menus, choices
+
+
+def generate_sarp_violation_cycle(
+    n_items: int = 4,
+    cycle_length: int = 3,
+    seed: int | None = None,
+) -> tuple[list[frozenset[int]], list[int]]:
+    """
+    Generate menu choice data with a guaranteed SARP k-cycle violation.
+
+    Creates a cycle where item i_1 > i_2 > ... > i_k > i_1 (preference cycle).
+
+    Args:
+        n_items: Number of items (must be >= cycle_length)
+        cycle_length: Length of the violation cycle (>= 2)
+        seed: Random seed for reproducibility
+
+    Returns:
+        Tuple of (menus, choices) with guaranteed SARP cycle violation
+    """
+    if cycle_length < 2:
+        raise ValueError("Cycle length must be at least 2")
+    if n_items < cycle_length:
+        raise ValueError(f"Need at least {cycle_length} items for {cycle_length}-cycle")
+
+    rng = np.random.default_rng(seed)
+
+    # Pick items for the cycle
+    cycle_items = rng.choice(n_items, size=cycle_length, replace=False).tolist()
+
+    menus: list[frozenset[int]] = []
+    choices: list[int] = []
+
+    # Create cycle: each item is chosen when paired with the next
+    # i_1 > i_2, i_2 > i_3, ..., i_k > i_1
+    for i in range(cycle_length):
+        current_item = cycle_items[i]
+        next_item = cycle_items[(i + 1) % cycle_length]
+
+        # Menu contains both current and next
+        menu = frozenset({current_item, next_item})
+        menus.append(menu)
+        choices.append(current_item)  # Current is chosen over next
+
+    return menus, choices
+
+
+def generate_random_menu_choices(
+    n_obs: int,
+    n_items: int,
+    menu_size: int = 3,
+    seed: int | None = None,
+) -> tuple[list[frozenset[int]], list[int]]:
+    """
+    Generate random menu choice data (likely to violate SARP).
+
+    Creates random menus and random choices. With sufficient observations,
+    this is likely to produce SARP violations.
+
+    Args:
+        n_obs: Number of observations
+        n_items: Number of distinct items
+        menu_size: Size of each menu
+        seed: Random seed
+
+    Returns:
+        Tuple of (menus, choices)
+    """
+    rng = np.random.default_rng(seed)
+
+    menus: list[frozenset[int]] = []
+    choices: list[int] = []
+
+    for _ in range(n_obs):
+        # Random menu
+        size = min(menu_size, n_items)
+        menu_items = rng.choice(n_items, size=size, replace=False)
+        menu = frozenset(menu_items.tolist())
+
+        # Random choice from menu
+        choice = int(rng.choice(list(menu)))
+
+        menus.append(menu)
+        choices.append(choice)
+
+    return menus, choices
+
+
 def compute_theoretical_mpi(
     prices: NDArray[np.float64],
     quantities: NDArray[np.float64],

@@ -16,7 +16,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from pyrevealed.core.session import ConsumerSession
-from pyrevealed.core.result import DifferentiableResult
+from pyrevealed.core.result import DifferentiableResult, SARPResult
 from pyrevealed.core.types import Cycle
 from pyrevealed.graph.transitive_closure import floyd_warshall_transitive_closure
 from pyrevealed._kernels import bfs_find_path_numba
@@ -196,7 +196,7 @@ def _reconstruct_path_bfs(
 def check_sarp(
     session: ConsumerSession,
     tolerance: float = 1e-10,
-) -> tuple[bool, list[Cycle]]:
+) -> SARPResult:
     """
     Check if consumer data satisfies SARP (Strict Axiom of Revealed Preference).
 
@@ -208,10 +208,14 @@ def check_sarp(
         tolerance: Numerical tolerance for comparisons
 
     Returns:
-        Tuple of (is_consistent, list of violation cycles)
+        SARPResult with is_consistent flag and list of violation cycles
     """
     result = check_differentiable(session, tolerance)
-    return result.satisfies_sarp, result.sarp_violations
+    return SARPResult(
+        is_consistent=result.satisfies_sarp,
+        violations=result.sarp_violations,
+        computation_time_ms=result.computation_time_ms,
+    )
 
 
 # =============================================================================

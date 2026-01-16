@@ -376,7 +376,7 @@ def run_axiom_tests() -> list[AxiomTestResult]:
         ))
 
         # WARP test
-        py_warp, _ = check_warp(session)
+        py_warp = check_warp(session).is_consistent
         r_warp = r_check_warp(prices, quantities)
         results.append(AxiomTestResult(
             axiom="WARP",
@@ -387,7 +387,7 @@ def run_axiom_tests() -> list[AxiomTestResult]:
         ))
 
         # SARP test
-        py_sarp, _ = check_sarp(session)
+        py_sarp = check_sarp(session).is_consistent
         r_sarp = r_check_sarp(prices, quantities)
         results.append(AxiomTestResult(
             axiom="SARP",
@@ -413,7 +413,7 @@ def run_axiom_tests() -> list[AxiomTestResult]:
     ))
 
     # SARP
-    py_sarp, _ = check_sarp(session)
+    py_sarp = check_sarp(session).is_consistent
     r_sarp = r_check_sarp(prices, quantities)
     results.append(AxiomTestResult(
         axiom="SARP",

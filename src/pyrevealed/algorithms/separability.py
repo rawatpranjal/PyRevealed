@@ -3,28 +3,32 @@
 Tests whether utility can be decomposed into independent sub-utilities
 for different groups of goods (weak separability).
 
-IMPORTANT: This module uses a HEURISTIC APPROXIMATION for separability testing.
-The exact test from Chambers & Echenique (2016) Chapter 4, Theorem 4.4 (pp.63-64)
-requires solving nonlinear Afriat inequalities:
+This module provides two methods for separability testing:
 
-    Uk ≤ Ul + λl·p¹l·(x¹k - x¹l) + (λl/μl)·(Vk - Vl)    (4.1)
-    Vk ≤ Vl + μl·p²l·(x²k - x²l)                         (4.2)
+1. HEURISTIC APPROXIMATION (check_separability):
+   Uses AEI within each group + cross-correlation. Fast but approximate.
 
-These inequalities are nonlinear (unlike standard Afriat inequalities) and
-require specialized solvers. This implementation instead uses:
-1. AEI (Afriat Efficiency Index) within each group
-2. Cross-correlation between groups
+2. EXACT THEOREM 4.4 TEST (check_separability_exact):
+   Solves the nonlinear Afriat inequalities from Chambers & Echenique (2016):
 
-This is a practical approximation that works well in many cases but is NOT
-equivalent to the exact Theorem 4.4 test.
+       Uk ≤ Ul + λl·p¹l·(x¹k - x¹l) + (λl/μl)·(Vk - Vl)    (4.1)
+       Vk ≤ Vl + μl·p²l·(x²k - x²l)                         (4.2)
+
+   Uses sequential LP relaxation to solve this nonlinear system iteratively.
+
+References:
+    Chambers & Echenique (2016), Chapter 4, Theorem 4.4 (pp.63-64)
+    Cherchye et al. (2014), "Nonparametric analysis of household labor supply"
 """
 
 from __future__ import annotations
 
 import time
+from typing import Callable
 
 import numpy as np
 from numpy.typing import NDArray
+from scipy.optimize import linprog, minimize
 
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import SeparabilityResult
@@ -144,6 +148,515 @@ def check_separability(
         recommendation=recommendation,
         computation_time_ms=elapsed_ms,
     )
+
+
+def check_separability_exact(
+    session: ConsumerSession,
+    group_a: list[int],
+    group_b: list[int],
+    method: str = "sequential",
+    tolerance: float = 1e-6,
+    max_iterations: int = 100,
+) -> SeparabilityResult:
+    """
+    Exact separability test using Theorem 4.4 from Chambers & Echenique (2016).
+
+    Tests weak separability by solving the nonlinear Afriat inequalities:
+
+        U_k ≤ U_l + λ_l·p¹_l·(x¹_k - x¹_l) + (λ_l/μ_l)·(V_k - V_l)    (4.1)
+        V_k ≤ V_l + μ_l·p²_l·(x²_k - x²_l)                             (4.2)
+
+    where:
+    - U_k, V_k are utility values for the outer and inner utilities
+    - λ_k, μ_k are Lagrange multipliers (marginal utilities)
+    - p¹, p² are prices for groups A and B
+    - x¹, x² are quantities for groups A and B
+
+    Args:
+        session: ConsumerSession with prices and quantities
+        group_a: List of good indices in Group A
+        group_b: List of good indices in Group B
+        method: Solution method - "sequential" (LP relaxation) or "nonlinear"
+        tolerance: Numerical tolerance for convergence
+        max_iterations: Maximum iterations for sequential LP method
+
+    Returns:
+        SeparabilityResult with exact separability test results
+
+    Example:
+        >>> import numpy as np
+        >>> from pyrevealed import ConsumerSession, check_separability_exact
+        >>> prices = np.array([
+        ...     [1.0, 1.5, 2.0, 2.5],
+        ...     [1.5, 1.0, 2.5, 2.0],
+        ... ])
+        >>> quantities = np.array([
+        ...     [2.0, 1.0, 1.0, 0.5],
+        ...     [1.0, 2.0, 0.5, 1.0],
+        ... ])
+        >>> session = ConsumerSession(prices=prices, quantities=quantities)
+        >>> result = check_separability_exact(session, [0, 1], [2, 3])
+        >>> print(f"Is separable: {result.is_separable}")
+
+    References:
+        Chambers & Echenique (2016), Chapter 4, Theorem 4.4 (pp.63-64)
+    """
+    start_time = time.perf_counter()
+
+    # Validate groups don't overlap and cover all goods
+    all_indices = set(group_a) | set(group_b)
+    if len(all_indices) != len(group_a) + len(group_b):
+        overlap = set(group_a) & set(group_b)
+        raise DataValidationError(
+            f"Groups must not overlap. Found overlapping indices: {list(overlap)}. "
+            f"Hint: Each good should belong to exactly one group for separability testing."
+        )
+
+    N = session.num_goods
+    for idx in all_indices:
+        if idx < 0 or idx >= N:
+            raise ValueRangeError(
+                f"Good index {idx} out of range [0, {N}). "
+                f"Hint: Indices must refer to valid goods in the session (0 to {N - 1})."
+            )
+
+    # Extract prices and quantities for each group
+    P_a = session.prices[:, group_a]
+    Q_a = session.quantities[:, group_a]
+    P_b = session.prices[:, group_b]
+    Q_b = session.quantities[:, group_b]
+
+    # Solve using the specified method
+    if method == "sequential":
+        is_separable, U, V, lambdas, mus = _solve_separability_sequential(
+            P_a, Q_a, P_b, Q_b, tolerance, max_iterations
+        )
+    elif method == "nonlinear":
+        is_separable, U, V, lambdas, mus = _solve_separability_nonlinear(
+            P_a, Q_a, P_b, Q_b, tolerance
+        )
+    else:
+        raise ValueError(f"Unknown method: {method}. Use 'sequential' or 'nonlinear'.")
+
+    # Compute within-group consistency (for reporting)
+    session_a = _extract_subsession(session, group_a)
+    session_b = _extract_subsession(session, group_b)
+    aei_a = compute_aei(session_a, tolerance=tolerance)
+    aei_b = compute_aei(session_b, tolerance=tolerance)
+
+    # Cross-effect is reported as 0 if separable (by definition), else computed heuristically
+    if is_separable:
+        cross_effect = 0.0
+    else:
+        cross_effect = _compute_cross_effect(session, group_a, group_b)
+
+    # Generate recommendation
+    if is_separable:
+        recommendation = "price_independently"
+    elif cross_effect > 0.5:
+        recommendation = "unified_strategy"
+    else:
+        recommendation = "partial_independence"
+
+    elapsed_ms = (time.perf_counter() - start_time) * 1000
+
+    return SeparabilityResult(
+        is_separable=is_separable,
+        group_a_indices=list(group_a),
+        group_b_indices=list(group_b),
+        cross_effect_strength=cross_effect,
+        within_group_a_consistency=aei_a.efficiency_index,
+        within_group_b_consistency=aei_b.efficiency_index,
+        recommendation=recommendation,
+        computation_time_ms=elapsed_ms,
+    )
+
+
+def _solve_separability_sequential(
+    P_a: NDArray[np.float64],
+    Q_a: NDArray[np.float64],
+    P_b: NDArray[np.float64],
+    Q_b: NDArray[np.float64],
+    tolerance: float,
+    max_iterations: int,
+) -> tuple[bool, NDArray | None, NDArray | None, NDArray | None, NDArray | None]:
+    """
+    Solve separability conditions using sequential LP relaxation.
+
+    The approach:
+    1. Fix μ_k = 1 for all k (normalize sub-utility scale)
+    2. Solve standard Afriat LP for group B to get V_k
+    3. With V_k fixed, inequality (4.1) becomes linear in U_k, λ_k
+    4. Solve LP for U_k, λ_k
+    5. Update μ_k based on solution and iterate until convergence
+
+    Returns:
+        Tuple of (is_separable, U, V, lambdas, mus) or (False, None, None, None, None)
+    """
+    T = P_a.shape[0]
+    epsilon = 1e-6
+
+    # Step 1: Initialize μ_k = 1 for all k
+    mus = np.ones(T)
+
+    # Step 2: Solve Afriat inequalities for group B to get V_k
+    # V_k <= V_l + μ_l * p²_l @ (x²_k - x²_l)
+    # With μ = 1, this is standard Afriat LP
+    V, mus_b, success_b = _solve_afriat_lp(P_b, Q_b, tolerance)
+
+    if not success_b or V is None:
+        return False, None, None, None, None
+
+    # Use the recovered μ values from group B
+    mus = mus_b
+
+    # Step 3: With V fixed, solve for U and λ
+    # Constraint (4.1): U_k <= U_l + λ_l * p¹_l @ (x¹_k - x¹_l) + (λ_l/μ_l) * (V_k - V_l)
+
+    # This is still nonlinear in λ because of λ_l/μ_l term
+    # But if we fix the ratio r_l = λ_l/μ_l, then:
+    # U_k <= U_l + λ_l * [p¹_l @ (x¹_k - x¹_l) + (V_k - V_l)/μ_l]
+
+    # Iterative approach: start with r_l = 1, solve LP, update r_l
+    lambdas = np.ones(T)
+    U = np.zeros(T)
+
+    prev_obj = float('inf')
+
+    for iteration in range(max_iterations):
+        # Solve LP for U given current λ/μ ratios
+        U_new, lambdas_new, success_u = _solve_outer_afriat_lp(
+            P_a, Q_a, V, mus, tolerance
+        )
+
+        if not success_u or U_new is None:
+            # Try to recover with adjusted parameters
+            if iteration > 0:
+                # Use previous solution
+                break
+            return False, None, None, None, None
+
+        U = U_new
+        lambdas = lambdas_new
+
+        # Compute objective (sum of slacks)
+        obj = np.sum(lambdas)
+
+        # Check convergence
+        if abs(obj - prev_obj) < tolerance:
+            break
+
+        prev_obj = obj
+
+        # Update μ values based on group B consistency
+        # Re-solve group B LP with updated normalization
+        V_new, mus_new, success_b = _solve_afriat_lp(P_b, Q_b, tolerance)
+        if success_b and V_new is not None and mus_new is not None:
+            V = V_new
+            mus = mus_new
+
+    # Verify solution satisfies all constraints
+    is_valid = _verify_separability_solution(P_a, Q_a, P_b, Q_b, U, V, lambdas, mus, tolerance)
+
+    if is_valid:
+        return True, U, V, lambdas, mus
+    else:
+        return False, None, None, None, None
+
+
+def _solve_afriat_lp(
+    P: NDArray[np.float64],
+    Q: NDArray[np.float64],
+    tolerance: float,
+) -> tuple[NDArray | None, NDArray | None, bool]:
+    """
+    Solve standard Afriat LP for utility values.
+
+    min Σ λ_k
+    s.t. U_k <= U_l + λ_l * p_l @ (x_k - x_l)  for all k, l
+         U_k >= 0, λ_k > ε
+
+    Returns:
+        Tuple of (utility_values, lagrange_multipliers, success)
+    """
+    T = P.shape[0]
+    n_vars = 2 * T  # U_1...U_T, λ_1...λ_T
+
+    constraints_A = []
+    constraints_b = []
+
+    for k in range(T):
+        for obs_l in range(T):
+            if k == obs_l:
+                continue
+
+            # U_k - U_l - λ_l * p_l @ (x_l - x_k) <= 0
+            row = np.zeros(n_vars)
+            row[k] = 1.0  # U_k
+            row[obs_l] = -1.0  # -U_l
+
+            diff = Q[obs_l] - Q[k]
+            lambda_coef = P[obs_l] @ diff
+            row[T + obs_l] = lambda_coef
+
+            constraints_A.append(row)
+            constraints_b.append(0.0)
+
+    A_ub = np.array(constraints_A) if constraints_A else np.zeros((0, n_vars))
+    b_ub = np.array(constraints_b) if constraints_b else np.zeros(0)
+
+    epsilon = 1e-6
+    bounds = [(0, None)] * T + [(epsilon, None)] * T
+
+    c = np.zeros(n_vars)
+    c[T:] = 1.0
+
+    try:
+        result = linprog(
+            c,
+            A_ub=A_ub,
+            b_ub=b_ub,
+            bounds=bounds,
+            method="highs",
+            options={"presolve": True},
+        )
+        if result.success:
+            U = result.x[:T]
+            lambdas = result.x[T:]
+            return U, lambdas, True
+    except Exception:
+        pass
+
+    return None, None, False
+
+
+def _solve_outer_afriat_lp(
+    P_a: NDArray[np.float64],
+    Q_a: NDArray[np.float64],
+    V: NDArray[np.float64],
+    mus: NDArray[np.float64],
+    tolerance: float,
+) -> tuple[NDArray | None, NDArray | None, bool]:
+    """
+    Solve the outer utility Afriat LP with V fixed.
+
+    Constraint (4.1) linearized:
+    U_k <= U_l + λ_l * [p¹_l @ (x¹_k - x¹_l)] + λ_l * [(V_k - V_l)/μ_l]
+
+    Rearranging:
+    U_k - U_l - λ_l * [p¹_l @ (x¹_k - x¹_l) + (V_k - V_l)/μ_l] <= 0
+    """
+    T = P_a.shape[0]
+    n_vars = 2 * T  # U_1...U_T, λ_1...λ_T
+
+    constraints_A = []
+    constraints_b = []
+
+    for k in range(T):
+        for obs_l in range(T):
+            if k == obs_l:
+                continue
+
+            row = np.zeros(n_vars)
+            row[k] = 1.0  # U_k
+            row[obs_l] = -1.0  # -U_l
+
+            # Coefficient for λ_l
+            diff_q = Q_a[obs_l] - Q_a[k]
+            price_term = P_a[obs_l] @ diff_q
+
+            # V term
+            v_diff = (V[k] - V[obs_l]) / max(mus[obs_l], 1e-10)
+
+            # Combined coefficient
+            lambda_coef = price_term + v_diff
+            row[T + obs_l] = lambda_coef
+
+            constraints_A.append(row)
+            constraints_b.append(0.0)
+
+    A_ub = np.array(constraints_A) if constraints_A else np.zeros((0, n_vars))
+    b_ub = np.array(constraints_b) if constraints_b else np.zeros(0)
+
+    epsilon = 1e-6
+    bounds = [(0, None)] * T + [(epsilon, None)] * T
+
+    c = np.zeros(n_vars)
+    c[T:] = 1.0
+
+    try:
+        result = linprog(
+            c,
+            A_ub=A_ub,
+            b_ub=b_ub,
+            bounds=bounds,
+            method="highs",
+            options={"presolve": True},
+        )
+        if result.success:
+            U = result.x[:T]
+            lambdas = result.x[T:]
+            return U, lambdas, True
+    except Exception:
+        pass
+
+    return None, None, False
+
+
+def _solve_separability_nonlinear(
+    P_a: NDArray[np.float64],
+    Q_a: NDArray[np.float64],
+    P_b: NDArray[np.float64],
+    Q_b: NDArray[np.float64],
+    tolerance: float,
+) -> tuple[bool, NDArray | None, NDArray | None, NDArray | None, NDArray | None]:
+    """
+    Solve separability conditions using direct nonlinear optimization.
+
+    Minimizes the sum of constraint violations for the full nonlinear system.
+
+    Returns:
+        Tuple of (is_separable, U, V, lambdas, mus) or (False, None, None, None, None)
+    """
+    T = P_a.shape[0]
+    epsilon = 1e-6
+
+    # Variables: U_1...U_T, V_1...V_T, λ_1...λ_T, μ_1...μ_T
+    n_vars = 4 * T
+
+    def objective(x: NDArray[np.float64]) -> float:
+        """Sum of Lagrange multipliers (minimization target)."""
+        lambdas = x[2*T:3*T]
+        mus = x[3*T:4*T]
+        return np.sum(lambdas) + np.sum(mus)
+
+    def constraint_violations(x: NDArray[np.float64]) -> float:
+        """Total constraint violation (should be 0 if separable)."""
+        U = x[:T]
+        V = x[T:2*T]
+        lambdas = x[2*T:3*T]
+        mus = x[3*T:4*T]
+
+        violations = 0.0
+
+        # Constraint (4.1): U_k <= U_l + λ_l * p¹_l @ (x¹_k - x¹_l) + (λ_l/μ_l) * (V_k - V_l)
+        for k in range(T):
+            for obs_l in range(T):
+                if k == obs_l:
+                    continue
+
+                diff_q = Q_a[k] - Q_a[obs_l]
+                price_term = lambdas[obs_l] * (P_a[obs_l] @ diff_q)
+                v_term = (lambdas[obs_l] / max(mus[obs_l], epsilon)) * (V[k] - V[obs_l])
+
+                rhs = U[obs_l] + price_term + v_term
+                if U[k] > rhs + tolerance:
+                    violations += U[k] - rhs
+
+        # Constraint (4.2): V_k <= V_l + μ_l * p²_l @ (x²_k - x²_l)
+        for k in range(T):
+            for obs_l in range(T):
+                if k == obs_l:
+                    continue
+
+                diff_q = Q_b[k] - Q_b[obs_l]
+                rhs = V[obs_l] + mus[obs_l] * (P_b[obs_l] @ diff_q)
+                if V[k] > rhs + tolerance:
+                    violations += V[k] - rhs
+
+        return violations
+
+    # Initial guess from sequential LP
+    _, U_init, V_init, lambda_init, mu_init = _solve_separability_sequential(
+        P_a, Q_a, P_b, Q_b, tolerance, max_iterations=50
+    )
+
+    if U_init is None:
+        # Start from scratch
+        U_init = np.ones(T)
+        V_init = np.ones(T)
+        lambda_init = np.ones(T)
+        mu_init = np.ones(T)
+
+    x0 = np.concatenate([U_init, V_init, lambda_init, mu_init])
+
+    # Bounds: U, V >= 0, λ, μ > ε
+    bounds = [(0, None)] * T + [(0, None)] * T + [(epsilon, None)] * T + [(epsilon, None)] * T
+
+    # Constraint: violations = 0
+    constraints = [{"type": "eq", "fun": constraint_violations}]
+
+    try:
+        result = minimize(
+            objective,
+            x0,
+            method="SLSQP",
+            bounds=bounds,
+            constraints=constraints,
+            options={"maxiter": 1000, "ftol": tolerance},
+        )
+
+        if result.success or constraint_violations(result.x) < tolerance:
+            U = result.x[:T]
+            V = result.x[T:2*T]
+            lambdas = result.x[2*T:3*T]
+            mus = result.x[3*T:4*T]
+
+            # Verify solution
+            is_valid = _verify_separability_solution(
+                P_a, Q_a, P_b, Q_b, U, V, lambdas, mus, tolerance
+            )
+
+            if is_valid:
+                return True, U, V, lambdas, mus
+
+    except Exception:
+        pass
+
+    return False, None, None, None, None
+
+
+def _verify_separability_solution(
+    P_a: NDArray[np.float64],
+    Q_a: NDArray[np.float64],
+    P_b: NDArray[np.float64],
+    Q_b: NDArray[np.float64],
+    U: NDArray[np.float64],
+    V: NDArray[np.float64],
+    lambdas: NDArray[np.float64],
+    mus: NDArray[np.float64],
+    tolerance: float,
+) -> bool:
+    """Verify that a solution satisfies all separability constraints."""
+    T = len(U)
+    epsilon = 1e-10
+
+    # Check constraint (4.1)
+    for k in range(T):
+        for obs_l in range(T):
+            if k == obs_l:
+                continue
+
+            diff_q = Q_a[k] - Q_a[obs_l]
+            price_term = lambdas[obs_l] * (P_a[obs_l] @ diff_q)
+            v_term = (lambdas[obs_l] / max(mus[obs_l], epsilon)) * (V[k] - V[obs_l])
+
+            rhs = U[obs_l] + price_term + v_term
+            if U[k] > rhs + tolerance:
+                return False
+
+    # Check constraint (4.2)
+    for k in range(T):
+        for obs_l in range(T):
+            if k == obs_l:
+                continue
+
+            diff_q = Q_b[k] - Q_b[obs_l]
+            rhs = V[obs_l] + mus[obs_l] * (P_b[obs_l] @ diff_q)
+            if V[k] > rhs + tolerance:
+                return False
+
+    return True
 
 
 def _extract_subsession(
@@ -418,4 +931,15 @@ This is the tech-friendly alias for compute_cannibalization.
 
 Measures cross-elasticity effects between feature groups.
 High cross-impact means changes in one group significantly affect the other.
+"""
+
+# test_feature_independence_exact: Tech-friendly name for check_separability_exact
+test_feature_independence_exact = check_separability_exact
+"""
+Exact test if two feature groups are independent using Theorem 4.4.
+
+This is the tech-friendly alias for check_separability_exact.
+
+Uses the rigorous nonlinear Afriat inequality approach from
+Chambers & Echenique (2016) Chapter 4 to test separability.
 """

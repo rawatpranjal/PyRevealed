@@ -8,7 +8,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from pyrevealed.core.session import ConsumerSession
-from pyrevealed.core.result import MPIResult
+from pyrevealed.core.result import MPIResult, HoutmanMaksResult
 from pyrevealed.core.types import Cycle
 
 
@@ -192,7 +192,7 @@ def _compute_simple_mpi(
 def compute_houtman_maks_index(
     session: ConsumerSession,
     tolerance: float = 1e-10,
-) -> tuple[float, list[int]]:
+) -> HoutmanMaksResult:
     """
     Compute Houtman-Maks index: minimum observations to remove for consistency.
 
@@ -209,13 +209,15 @@ def compute_houtman_maks_index(
         tolerance: Numerical tolerance
 
     Returns:
-        Tuple of (index as fraction, list of removed observation indices)
+        HoutmanMaksResult with fraction and list of removed observation indices
 
     Note:
-        The index is returned as a fraction: num_removed / num_observations.
+        The fraction is: num_removed / num_observations.
         A lower value indicates more consistent behavior.
     """
     from pyrevealed.algorithms.garp import check_garp
+
+    start_time = time.perf_counter()
 
     T = session.num_observations
     remaining = list(range(T))
@@ -255,8 +257,14 @@ def compute_houtman_maks_index(
         remaining.remove(worst_obs)
         removed.append(worst_obs)
 
-    index = len(removed) / T
-    return index, removed
+    computation_time = (time.perf_counter() - start_time) * 1000
+    fraction = len(removed) / T
+
+    return HoutmanMaksResult(
+        fraction=fraction,
+        removed_observations=removed,
+        computation_time_ms=computation_time,
+    )
 
 
 # =============================================================================

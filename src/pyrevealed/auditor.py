@@ -14,6 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from pyrevealed.core.mixins import ResultSummaryMixin
 from pyrevealed.algorithms.garp import validate_consistency
 from pyrevealed.algorithms.aei import compute_integrity_score
 from pyrevealed.algorithms.mpi import compute_confusion_metric
@@ -25,9 +26,16 @@ from pyrevealed.algorithms.gross_substitutes import test_cross_price_effect
 from pyrevealed.algorithms.differentiable import validate_smooth_preferences
 from pyrevealed.algorithms.acyclical_p import validate_strict_consistency
 from pyrevealed.algorithms.gapp import validate_price_preferences
+from pyrevealed.algorithms.abstract_choice import (
+    validate_menu_warp,
+    validate_menu_sarp,
+    validate_menu_consistency,
+    compute_menu_efficiency,
+    fit_menu_preferences,
+)
 
 if TYPE_CHECKING:
-    from pyrevealed.core.session import BehaviorLog
+    from pyrevealed.core.session import BehaviorLog, MenuChoiceLog
     from pyrevealed.core.result import (
         ConsistencyResult,
         IntegrityResult,
@@ -40,6 +48,8 @@ if TYPE_CHECKING:
         SmoothPreferencesResult,
         StrictConsistencyResult,
         PricePreferencesResult,
+        CongruenceResult,
+        OrdinalUtilityResult,
     )
 
 
@@ -58,12 +68,152 @@ class AuditReport:
     integrity_score: float
     confusion_score: float
 
+    def summary(self) -> str:
+        """Return human-readable audit summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("BEHAVIORAL AUDIT REPORT")]
+
+        # Overall status
+        status = m._format_status(self.is_consistent, "PASS", "FAIL")
+        lines.append(f"\nOverall Status: {status}")
+
+        # Core metrics
+        lines.append(m._format_section("Core Metrics"))
+        lines.append(m._format_metric("Consistent (GARP)", self.is_consistent))
+        lines.append(m._format_metric("Integrity Score (AEI)", self.integrity_score))
+        lines.append(m._format_metric("Confusion Score (MPI)", self.confusion_score))
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+
+        # Integrity interpretation
+        integrity_interp = m._format_interpretation(self.integrity_score, "efficiency")
+        lines.append(f"  Integrity: {integrity_interp}")
+
+        # Confusion interpretation (note: score() inverts MPI)
+        confusion_interp = m._format_interpretation(1.0 - self.confusion_score, "mpi")
+        lines.append(f"  Confusion: {confusion_interp}")
+
+        # Overall recommendation
+        lines.append(m._format_section("Recommendation"))
+        if self.is_consistent and self.integrity_score >= 0.95:
+            lines.append("  Behavior is highly consistent with utility maximization.")
+            lines.append("  User signal is clean and reliable.")
+        elif self.integrity_score >= 0.85:
+            lines.append("  Behavior shows minor inconsistencies.")
+            lines.append("  User signal is generally reliable with some noise.")
+        elif self.integrity_score >= 0.70:
+            lines.append("  Behavior shows moderate inconsistencies.")
+            lines.append("  Consider investigating specific violations.")
+        else:
+            lines.append("  Behavior shows significant inconsistencies.")
+            lines.append("  User may be confused, a bot, or shared account.")
+
+        return "\n".join(lines)
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns the average of integrity score and (1 - confusion score).
+        """
+        return (self.integrity_score + (1.0 - min(1.0, self.confusion_score))) / 2.0
+
     def __repr__(self) -> str:
         status = "PASS" if self.is_consistent else "FAIL"
         return (
             f"AuditReport({status}, "
             f"integrity={self.integrity_score:.2f}, "
             f"confusion={self.confusion_score:.2f})"
+        )
+
+
+@dataclass
+class MenuAuditReport:
+    """
+    Comprehensive audit report for menu-based choice behavior.
+
+    Attributes:
+        is_warp_consistent: True if behavior passes WARP check
+        is_sarp_consistent: True if behavior passes SARP check
+        is_rationalizable: True if behavior can be rationalized by a preference order
+        efficiency_score: Houtman-Maks efficiency (0-1, higher = fewer observations to remove)
+        preference_order: Recovered preference ranking (most to least preferred), or None
+    """
+
+    is_warp_consistent: bool
+    is_sarp_consistent: bool
+    is_rationalizable: bool
+    efficiency_score: float
+    preference_order: list[int] | None
+
+    def summary(self) -> str:
+        """Return human-readable menu audit summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("MENU CHOICE AUDIT REPORT")]
+
+        # Overall status
+        status = m._format_status(self.is_rationalizable, "RATIONALIZABLE", "INCONSISTENT")
+        lines.append(f"\nOverall Status: {status}")
+
+        # Core metrics
+        lines.append(m._format_section("Consistency Tests"))
+        lines.append(m._format_metric("WARP Consistent", self.is_warp_consistent))
+        lines.append(m._format_metric("SARP Consistent", self.is_sarp_consistent))
+        lines.append(m._format_metric("Fully Rationalizable", self.is_rationalizable))
+        lines.append(m._format_metric("Efficiency Score (HM)", self.efficiency_score))
+
+        # Preference order
+        if self.preference_order is not None and len(self.preference_order) > 0:
+            lines.append(m._format_section("Recovered Preference Order"))
+            order_str = " > ".join(str(i) for i in self.preference_order[:10])
+            lines.append(f"  {order_str}")
+            if len(self.preference_order) > 10:
+                lines.append(f"  ... ({len(self.preference_order) - 10} more items)")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+
+        # Efficiency interpretation
+        if self.efficiency_score >= 1.0 - 1e-6:
+            lines.append("  Efficiency: Perfect - all observations are consistent.")
+        elif self.efficiency_score >= 0.9:
+            lines.append("  Efficiency: Excellent - minor inconsistencies only.")
+        elif self.efficiency_score >= 0.8:
+            lines.append("  Efficiency: Good - some observations may need review.")
+        else:
+            lines.append(f"  Efficiency: Moderate - {(1-self.efficiency_score)*100:.1f}% observations inconsistent.")
+
+        # Overall recommendation
+        lines.append(m._format_section("Recommendation"))
+        if self.is_rationalizable:
+            lines.append("  Choices are fully rationalizable by a preference order.")
+            lines.append("  User has stable, consistent preferences.")
+        elif self.is_sarp_consistent:
+            lines.append("  Choices satisfy SARP but not full congruence.")
+            lines.append("  Consider checking maximality condition.")
+        elif self.is_warp_consistent:
+            lines.append("  Choices satisfy WARP but not SARP.")
+            lines.append("  Some transitive preference cycles exist.")
+        else:
+            lines.append("  Choices violate WARP - direct preference reversals.")
+            lines.append("  User preferences appear inconsistent.")
+
+        return "\n".join(lines)
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns the efficiency score directly.
+        """
+        return self.efficiency_score
+
+    def __repr__(self) -> str:
+        status = "RATIONALIZABLE" if self.is_rationalizable else "INCONSISTENT"
+        return (
+            f"MenuAuditReport({status}, "
+            f"warp={self.is_warp_consistent}, "
+            f"sarp={self.is_sarp_consistent}, "
+            f"efficiency={self.efficiency_score:.2f})"
         )
 
 
@@ -441,3 +591,115 @@ class BehavioralAuditor:
             ...     print("User consistently seeks lower prices")
         """
         return validate_price_preferences(log, tolerance=self.precision)
+
+    # =========================================================================
+    # MENU-BASED CHOICE ANALYSIS (Abstract Choice Theory)
+    # =========================================================================
+
+    def validate_menu_history(self, log: MenuChoiceLog) -> bool:
+        """
+        Check if menu-based choice history is consistent (SARP).
+
+        A consistent history means choices don't form preference cycles.
+        Inconsistent behavior suggests irrational decision-making.
+
+        Args:
+            log: MenuChoiceLog containing menu choices
+
+        Returns:
+            True if behavior is SARP-consistent, False otherwise
+
+        Example:
+            >>> if auditor.validate_menu_history(menu_log):
+            ...     print("Menu choices are consistent")
+        """
+        result = validate_menu_sarp(log)
+        return result.is_consistent
+
+    def get_menu_consistency_details(self, log: MenuChoiceLog) -> CongruenceResult:
+        """
+        Get detailed menu consistency (Congruence/rationalizability) results.
+
+        Returns the full CongruenceResult with information about
+        SARP violations and maximality violations.
+
+        Args:
+            log: MenuChoiceLog containing menu choices
+
+        Returns:
+            CongruenceResult with is_rationalizable, violations, etc.
+        """
+        return validate_menu_consistency(log)
+
+    def get_menu_efficiency_score(self, log: MenuChoiceLog) -> float:
+        """
+        Get menu choice efficiency score (Houtman-Maks index).
+
+        The efficiency score measures what fraction of observations
+        are consistent. 1.0 means fully consistent, lower values
+        indicate more inconsistencies.
+
+        Args:
+            log: MenuChoiceLog containing menu choices
+
+        Returns:
+            Float between 0 (all inconsistent) and 1 (perfectly consistent)
+
+        Example:
+            >>> score = auditor.get_menu_efficiency_score(menu_log)
+            >>> if score < 0.9:
+            ...     print("Some inconsistent choices detected")
+        """
+        result = compute_menu_efficiency(log)
+        return result.efficiency_index
+
+    def recover_menu_preferences(self, log: MenuChoiceLog) -> OrdinalUtilityResult:
+        """
+        Recover ordinal preference ranking from menu choices.
+
+        If the data is SARP-consistent, computes a preference ranking
+        using topological sort of the revealed preference graph.
+
+        Args:
+            log: MenuChoiceLog containing menu choices
+
+        Returns:
+            OrdinalUtilityResult with preference_order and utility_ranking
+
+        Example:
+            >>> result = auditor.recover_menu_preferences(menu_log)
+            >>> if result.success:
+            ...     print(f"Preference order: {result.preference_order}")
+        """
+        return fit_menu_preferences(log)
+
+    def full_menu_audit(self, log: MenuChoiceLog) -> MenuAuditReport:
+        """
+        Run comprehensive menu choice audit.
+
+        Computes all menu-based consistency metrics and returns a single report.
+
+        Args:
+            log: MenuChoiceLog containing menu choices
+
+        Returns:
+            MenuAuditReport with WARP, SARP, efficiency, and preference results
+
+        Example:
+            >>> report = auditor.full_menu_audit(menu_log)
+            >>> print(f"Rationalizable: {report.is_rationalizable}")
+            >>> print(f"Efficiency: {report.efficiency_score:.2f}")
+        """
+        warp_result = validate_menu_warp(log)
+        sarp_result = validate_menu_sarp(log)
+        cong_result = validate_menu_consistency(log)
+        eff_result = compute_menu_efficiency(log)
+        pref_result = fit_menu_preferences(log)
+
+        return MenuAuditReport(
+            is_warp_consistent=warp_result.is_consistent,
+            is_sarp_consistent=sarp_result.is_consistent,
+            is_rationalizable=cong_result.is_rationalizable,
+            efficiency_score=eff_result.efficiency_index,
+            preference_order=pref_result.preference_order,
+        )

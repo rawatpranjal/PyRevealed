@@ -293,11 +293,11 @@ def test_houtman_maks_index() -> SimulationResults:
         garp_result = check_garp(session)
 
         if not garp_result.is_consistent:
-            hm_index, removed = compute_houtman_maks_index(session)
+            hm_result = compute_houtman_maks_index(session)
 
             # Verify: removing these observations makes data consistent
-            if removed:
-                remaining = [i for i in range(len(prices)) if i not in removed]
+            if hm_result.removed_observations:
+                remaining = [i for i in range(len(prices)) if i not in hm_result.removed_observations]
                 if len(remaining) >= 2:
                     sub_prices = prices[remaining]
                     sub_quantities = quantities[remaining]
@@ -307,9 +307,9 @@ def test_houtman_maks_index() -> SimulationResults:
                     results.record(
                         f"hm_consistent_after_removal_seed{seed}",
                         sub_result.is_consistent,
-                        f"Still violated after removing {removed}"
+                        f"Still violated after removing {hm_result.removed_observations}"
                     )
-                    print(f"  Seed {seed}: Removed {len(removed)} obs, HM index = {hm_index:.3f}")
+                    print(f"  Seed {seed}: Removed {hm_result.num_removed} obs, HM index = {hm_result.fraction:.3f}")
 
     return results
 
@@ -326,24 +326,24 @@ def test_houtman_maks_bounds() -> SimulationResults:
     # Consistent data: HM = 0
     prices, quantities, _ = generate_rational_data(10, 3, "cobb_douglas", seed=7001)
     session = ConsumerSession(prices=prices, quantities=quantities)
-    hm_index, removed = compute_houtman_maks_index(session)
+    hm_result = compute_houtman_maks_index(session)
 
     results.record(
         "hm_zero_for_consistent",
-        hm_index == 0.0 and len(removed) == 0,
-        f"HM = {hm_index}, removed = {removed}"
+        hm_result.fraction == 0.0 and len(hm_result.removed_observations) == 0,
+        f"HM = {hm_result.fraction}, removed = {hm_result.removed_observations}"
     )
 
     # Single observation: HM = 0
     prices = np.array([[1.0, 2.0]])
     quantities = np.array([[3.0, 1.0]])
     session = ConsumerSession(prices=prices, quantities=quantities)
-    hm_index, removed = compute_houtman_maks_index(session)
+    hm_result = compute_houtman_maks_index(session)
 
     results.record(
         "hm_single_observation",
-        hm_index == 0.0,
-        f"Single obs: HM = {hm_index}"
+        hm_result.fraction == 0.0,
+        f"Single obs: HM = {hm_result.fraction}"
     )
 
     # HM index should be in [0, 1]
@@ -351,12 +351,12 @@ def test_houtman_maks_bounds() -> SimulationResults:
         seed = 7100 + trial
         prices, quantities = generate_irrational_data(10, 3, seed)
         session = ConsumerSession(prices=prices, quantities=quantities)
-        hm_index, _ = compute_houtman_maks_index(session)
+        hm_result = compute_houtman_maks_index(session)
 
         results.record(
             f"hm_bounds_seed{seed}",
-            0.0 <= hm_index <= 1.0,
-            f"HM = {hm_index} out of [0, 1]"
+            0.0 <= hm_result.fraction <= 1.0,
+            f"HM = {hm_result.fraction} out of [0, 1]"
         )
 
     return results

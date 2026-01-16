@@ -8,7 +8,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from pyrevealed.core.session import ConsumerSession
-from pyrevealed.core.result import GARPResult
+from pyrevealed.core.result import GARPResult, WARPResult
 from pyrevealed.core.types import Cycle
 from pyrevealed.graph.transitive_closure import floyd_warshall_transitive_closure
 from pyrevealed._kernels import bfs_find_path_numba, find_violation_pairs_numba
@@ -189,7 +189,7 @@ def _reconstruct_path_bfs(
 def check_warp(
     session: ConsumerSession,
     tolerance: float = 1e-10,
-) -> tuple[bool, list[tuple[int, int]]]:
+) -> WARPResult:
     """
     Check if consumer data satisfies WARP (Weak Axiom of Revealed Preference).
 
@@ -201,8 +201,10 @@ def check_warp(
         tolerance: Numerical tolerance for comparisons
 
     Returns:
-        Tuple of (is_consistent, list of violating pairs)
+        WARPResult with is_consistent flag and list of violating pairs
     """
+    start_time = time.perf_counter()
+
     E = session.expenditure_matrix
     own_exp = session.own_expenditures
 
@@ -219,7 +221,13 @@ def check_warp(
         if i < j  # Avoid duplicates
     ]
 
-    return len(violations) == 0, violations
+    computation_time = (time.perf_counter() - start_time) * 1000
+
+    return WARPResult(
+        is_consistent=len(violations) == 0,
+        violations=violations,
+        computation_time_ms=computation_time,
+    )
 
 
 # =============================================================================

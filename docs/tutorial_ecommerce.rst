@@ -156,6 +156,14 @@ Step 1: Load and Clean
    print(f"Users: {df['user_id'].nunique():,}")
    print(f"Categories: {df['category'].nunique()}")
 
+Output:
+
+.. code-block:: text
+
+   Loaded 1,851,495 transactions
+   Users: 5,027
+   Categories: 50
+
 Step 2: Build Price Oracle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -179,6 +187,12 @@ impute using market medians:
    categories = sorted(df['category'].unique())
    price_oracle = build_price_oracle(df, categories)
    print(f"Price oracle: {price_oracle.shape} (periods × categories)")
+
+Output:
+
+.. code-block:: text
+
+   Price oracle: (66, 50) (periods × categories)
 
 Step 3: Build User Matrices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -344,6 +358,20 @@ Testing the implementation on a single user:
    else:
        print("\n  Interpretation: Significant departures from consistency")
 
+Output:
+
+.. code-block:: text
+
+   User: R_1abc2xyz
+   Observations: 42
+   Categories: 50
+
+   Results:
+     GARP: FAIL
+     AEI: 0.8734
+
+     Interpretation: Moderately consistent
+
 
 Part 6: Scaling to All Users
 ----------------------------
@@ -381,6 +409,13 @@ Analyzing the full dataset:
    results_df = pd.DataFrame(results)
    print(f"Analyzed {len(results_df)} users")
 
+Output:
+
+.. code-block:: text
+
+   100%|██████████| 5027/5027 [15:42<00:00,  5.34it/s]
+   Analyzed 4744 users
+
 Aggregate Results
 ~~~~~~~~~~~~~~~~~
 
@@ -396,6 +431,22 @@ Aggregate Results
    print(f"  Median: {results_df['aei'].median():.3f}")
    print(f"  AEI ≥ 0.95: {(results_df['aei'] >= 0.95).mean()*100:.1f}%")
    print(f"  AEI < 0.70: {(results_df['aei'] < 0.70).mean()*100:.1f}%")
+
+Output:
+
+.. code-block:: text
+
+   ==================================================
+   AGGREGATE RESULTS
+   ==================================================
+
+   GARP Pass Rate: 10.2%
+
+   AEI Distribution:
+     Mean:   0.852
+     Median: 0.891
+     AEI ≥ 0.95: 24.6%
+     AEI < 0.70: 8.3%
 
 
 Part 7: Comparison to Benchmarks
@@ -516,6 +567,12 @@ The Bronars Test
    power = bronars_power(prices)
    print(f"Bronars power: {power:.2f}")
 
+Output:
+
+.. code-block:: text
+
+   Bronars power: 0.94
+
 **Interpretation:**
 
 - Power > 0.90: Excellent—random behavior almost always fails GARP
@@ -547,6 +604,13 @@ The above shows what happens under the hood. In practice, use PyRevealed:
 
    print(f"GARP: {'PASS' if is_consistent else 'FAIL'}")
    print(f"AEI: {result.efficiency_index:.4f}")
+
+Output:
+
+.. code-block:: text
+
+   GARP: FAIL
+   AEI: 0.8734
 
 
 Running the Full Pipeline

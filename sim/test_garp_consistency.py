@@ -163,7 +163,7 @@ def test_known_violation_cycles() -> SimulationResults:
 
     session = ConsumerSession(prices=prices, quantities=quantities)
     garp_result = check_garp(session)
-    warp_result, warp_violations = check_warp(session)
+    warp_result = check_warp(session)
 
     # With equal prices and expenditures, this is NOT a violation (indifference)
     # Let me create a proper violation
@@ -236,10 +236,10 @@ def test_warp_implies_garp() -> SimulationResults:
         session = ConsumerSession(prices=prices, quantities=quantities)
 
         garp_result = check_garp(session)
-        warp_consistent, warp_violations = check_warp(session)
+        warp_result = check_warp(session)
 
         # If WARP is violated, GARP must be violated
-        if not warp_consistent:
+        if not warp_result.is_consistent:
             results.record(
                 f"warp_implies_garp_seed{seed}",
                 not garp_result.is_consistent,

@@ -35,8 +35,8 @@ Economics-based names still work for backward compatibility:
 # HIGH-LEVEL CLASSES (Primary API)
 # =============================================================================
 
-from pyrevealed.auditor import BehavioralAuditor, AuditReport
-from pyrevealed.encoder import PreferenceEncoder
+from pyrevealed.auditor import BehavioralAuditor, AuditReport, MenuAuditReport
+from pyrevealed.encoder import PreferenceEncoder, MenuPreferenceEncoder
 from pyrevealed.lancaster import (
     LancasterLog,
     CharacteristicsLog,
@@ -52,10 +52,17 @@ from pyrevealed.core.session import (
     BehaviorLog,
     RiskChoiceLog,
     EmbeddingChoiceLog,
+    MenuChoiceLog,
+    # New data structures (Chapters 13, 15)
+    StochasticChoiceLog,
+    ProbabilisticChoiceLog,
+    ProductionLog,
+    FirmLog,
     # Legacy names (aliases for backward compatibility)
     ConsumerSession,
     RiskSession,
     SpatialSession,
+    ChoiceSession,
 )
 
 # =============================================================================
@@ -128,6 +135,34 @@ from pyrevealed.core.result import (
     WARPResult,
     SARPResult,
     HoutmanMaksResult,
+    # Abstract Choice Theory (menu-based)
+    AbstractWARPResult,
+    MenuWARPResult,
+    AbstractSARPResult,
+    MenuSARPResult,
+    CongruenceResult,
+    MenuConsistencyResult,
+    HoutmanMaksAbstractResult,
+    MenuEfficiencyResult,
+    OrdinalUtilityResult,
+    MenuPreferenceResult,
+    # Chambers & Echenique (2016) - New algorithm results
+    IntegrabilityResult,
+    SlutskyConditionsResult,
+    WelfareResult,
+    WelfareChangeResult,
+    AdditivityResult,
+    AdditiveUtilityResult,
+    CompensatedDemandResult,
+    HicksianDemandResult,
+    GeneralMetricResult,
+    MetricPreferencesResult,
+    StochasticChoiceResult,
+    RandomUtilityResult,
+    AttentionResult,
+    ConsiderationSetResult,
+    ProductionGARPResult,
+    FirmBehaviorResult,
 )
 
 # =============================================================================
@@ -263,6 +298,105 @@ from pyrevealed.algorithms.gapp import (
     check_gapp,  # Legacy
 )
 
+# =============================================================================
+# ABSTRACT CHOICE THEORY (Menu-based preferences)
+# =============================================================================
+
+from pyrevealed.algorithms.abstract_choice import (
+    # Primary tech-friendly names
+    validate_menu_warp,
+    validate_menu_sarp,
+    validate_menu_consistency,
+    compute_menu_efficiency,
+    fit_menu_preferences,
+    # Legacy names (economics terminology)
+    check_abstract_warp,
+    check_abstract_sarp,
+    check_congruence,
+    compute_abstract_efficiency,
+    recover_ordinal_utility,
+)
+
+# =============================================================================
+# CHAMBERS & ECHENIQUE (2016) - NEW ALGORITHMS
+# =============================================================================
+
+# Integrability conditions (Ch 6.4-6.5)
+from pyrevealed.algorithms.integrability import (
+    test_integrability,
+    compute_slutsky_matrix,
+    check_slutsky_symmetry,
+    check_slutsky_nsd,
+    check_integrability,  # Legacy
+)
+
+# Welfare analysis (Ch 7.3-7.4)
+from pyrevealed.algorithms.welfare import (
+    analyze_welfare_change,
+    compute_compensating_variation,
+    compute_equivalent_variation,
+    recover_cost_function,
+    compute_consumer_surplus,
+    compute_deadweight_loss,
+    compute_cv,  # Legacy
+    compute_ev,  # Legacy
+)
+
+# Additive separability (Ch 9.3)
+from pyrevealed.algorithms.additive import (
+    test_additive_separability,
+    identify_additive_groups,
+    check_no_cross_effects,
+    check_additivity,  # Legacy
+)
+
+# Compensated demand (Ch 10.3) - extended gross_substitutes
+from pyrevealed.algorithms.gross_substitutes import (
+    decompose_price_effects,
+    compute_hicksian_demand,
+    check_compensated_law_of_demand,
+    compute_slutsky_decomposition,
+    estimate_compensated_demand,
+)
+
+# General metric spaces (Ch 11.3-11.4) - extended spatial
+from pyrevealed.algorithms.spatial import (
+    find_ideal_point_general,
+    determine_best_metric,
+    test_metric_rationality,
+    find_anchor_general,
+    select_best_metric,
+)
+
+# Stochastic choice (Ch 13)
+from pyrevealed.algorithms.stochastic import (
+    fit_random_utility_model,
+    test_mcfadden_axioms,
+    estimate_choice_probabilities,
+    check_independence_irrelevant_alternatives,
+    fit_luce_model,
+    fit_rum,  # Legacy
+    check_iia,  # Legacy
+)
+
+# Limited attention (Ch 14)
+from pyrevealed.algorithms.attention import (
+    test_attention_rationality,
+    estimate_consideration_sets,
+    compute_salience_weights,
+    test_attention_filter,
+    identify_attention,  # Legacy
+)
+
+# Production theory (Ch 15)
+from pyrevealed.algorithms.production import (
+    test_profit_maximization,
+    check_cost_minimization,
+    estimate_returns_to_scale,
+    compute_technical_efficiency,
+    check_production_garp,  # Legacy
+)
+
 __version__ = "0.4.1"
 
 __all__ = [
@@ -271,7 +405,9 @@ __all__ = [
     # ==========================================================================
     "BehavioralAuditor",
     "AuditReport",
+    "MenuAuditReport",
     "PreferenceEncoder",
+    "MenuPreferenceEncoder",
     # Lancaster Characteristics Model
     "LancasterLog",
     "CharacteristicsLog",
@@ -282,6 +418,7 @@ __all__ = [
     "BehaviorLog",
     "RiskChoiceLog",
     "EmbeddingChoiceLog",
+    "MenuChoiceLog",
     # ==========================================================================
     # EXCEPTIONS AND WARNINGS
     # ==========================================================================
@@ -432,6 +569,112 @@ __all__ = [
     "check_sarp",
     "check_acyclical_p",
     "check_gapp",
+    # ==========================================================================
+    # ABSTRACT CHOICE THEORY (Menu-based)
+    # ==========================================================================
+    # Data container
+    "ChoiceSession",
+    # Result types - tech-friendly
+    "MenuWARPResult",
+    "MenuSARPResult",
+    "MenuConsistencyResult",
+    "MenuEfficiencyResult",
+    "MenuPreferenceResult",
+    # Result types - legacy
+    "AbstractWARPResult",
+    "AbstractSARPResult",
+    "CongruenceResult",
+    "HoutmanMaksAbstractResult",
+    "OrdinalUtilityResult",
+    # Functions - tech-friendly
+    "validate_menu_warp",
+    "validate_menu_sarp",
+    "validate_menu_consistency",
+    "compute_menu_efficiency",
+    "fit_menu_preferences",
+    # Functions - legacy
+    "check_abstract_warp",
+    "check_abstract_sarp",
+    "check_congruence",
+    "compute_abstract_efficiency",
+    "recover_ordinal_utility",
+    # ==========================================================================
+    # CHAMBERS & ECHENIQUE (2016) - NEW ALGORITHMS
+    # ==========================================================================
+    # New data structures
+    "StochasticChoiceLog",
+    "ProbabilisticChoiceLog",
+    "ProductionLog",
+    "FirmLog",
+    # New result types - Chambers & Echenique
+    "IntegrabilityResult",
+    "SlutskyConditionsResult",
+    "WelfareResult",
+    "WelfareChangeResult",
+    "AdditivityResult",
+    "AdditiveUtilityResult",
+    "CompensatedDemandResult",
+    "HicksianDemandResult",
+    "GeneralMetricResult",
+    "MetricPreferencesResult",
+    "StochasticChoiceResult",
+    "RandomUtilityResult",
+    "AttentionResult",
+    "ConsiderationSetResult",
+    "ProductionGARPResult",
+    "FirmBehaviorResult",
+    # Integrability (Ch 6.4-6.5)
+    "test_integrability",
+    "compute_slutsky_matrix",
+    "check_slutsky_symmetry",
+    "check_slutsky_nsd",
+    "check_integrability",
+    # Welfare (Ch 7.3-7.4)
+    "analyze_welfare_change",
+    "compute_compensating_variation",
+    "compute_equivalent_variation",
+    "recover_cost_function",
+    "compute_consumer_surplus",
+    "compute_deadweight_loss",
+    "compute_cv",
+    "compute_ev",
+    # Additive separability (Ch 9.3)
+    "test_additive_separability",
+    "identify_additive_groups",
+    "check_no_cross_effects",
+    "check_additivity",
+    # Compensated demand (Ch 10.3)
+    "decompose_price_effects",
+    "compute_hicksian_demand",
+    "check_compensated_law_of_demand",
+    "compute_slutsky_decomposition",
+    "estimate_compensated_demand",
+    # General metrics (Ch 11.3-11.4)
+    "find_ideal_point_general",
+    "determine_best_metric",
+    "test_metric_rationality",
+    "find_anchor_general",
+    "select_best_metric",
+    # Stochastic choice (Ch 13)
+    "fit_random_utility_model",
+    "test_mcfadden_axioms",
+    "estimate_choice_probabilities",
+    "check_independence_irrelevant_alternatives",
+    "fit_luce_model",
+    "fit_rum",
+    "check_iia",
+    # Limited attention (Ch 14)
+    "test_attention_rationality",
+    "estimate_consideration_sets",
+    "compute_salience_weights",
+    "test_attention_filter",
+    "identify_attention",
+    # Production theory (Ch 15)
+    "test_profit_maximization",
+    "check_cost_minimization",
+    "estimate_returns_to_scale",
+    "compute_technical_efficiency",
+    "check_production_garp",
     # Convenience
     "get_integrity_score",
 ]

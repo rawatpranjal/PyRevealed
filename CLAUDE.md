@@ -32,18 +32,46 @@ PyRevealed implements revealed preference theory to analyze behavioral consisten
 ### Core Data Flow
 
 ```
-BehaviorLog (prices + quantities)
+BehaviorLog (prices + quantities)     MenuChoiceLog (menus + choices)
+    ↓                                      ↓
+┌───────────────────────────────────────┐  ┌─────────────────────────────────┐
+│ Core Algorithms (algorithms/)         │  │ Abstract Choice (algorithms/)   │
+│  • garp.py → consistency check        │  │  • abstract_choice.py           │
+│  • aei.py → integrity score (0-1)     │  │    → WARP/SARP/Congruence       │
+│  • mpi.py → exploitability metric     │  │    → Houtman-Maks efficiency    │
+│  • utility.py → preference recovery   │  │    → Ordinal utility recovery   │
+│  • separability.py → group independence│  │  • attention.py                 │
+└───────────────────────────────────────┘  │    → Limited attention models   │
+    ↓                                      └─────────────────────────────────┘
+Result dataclasses (core/result.py)             ↓
+                                         StochasticChoiceLog (frequencies)
+                                               ↓
+                                         ┌─────────────────────────────────┐
+                                         │ Stochastic (algorithms/)        │
+                                         │  • stochastic.py                │
+                                         │    → Random utility models      │
+                                         │    → IIA/regularity tests       │
+                                         └─────────────────────────────────┘
+
+ProductionLog (inputs + outputs)
     ↓
 ┌───────────────────────────────────────┐
-│ Core Algorithms (algorithms/)         │
-│  • garp.py → consistency check        │
-│  • aei.py → integrity score (0-1)     │
-│  • mpi.py → exploitability metric     │
-│  • utility.py → preference recovery   │
-│  • separability.py → group independence│
+│ Production (algorithms/)              │
+│  • production.py                      │
+│    → Profit maximization test         │
+│    → Cost minimization check          │
+│    → Returns to scale estimation      │
 └───────────────────────────────────────┘
-    ↓
-Result dataclasses (core/result.py)
+
+Advanced Analysis (algorithms/)
+┌───────────────────────────────────────┐
+│  • integrability.py → Slutsky tests   │
+│  • welfare.py → CV/EV computation     │
+│  • additive.py → additive separability│
+│  • gross_substitutes.py → Slutsky     │
+│    decomposition, Hicksian demand     │
+│  • spatial.py → general metric prefs  │
+└───────────────────────────────────────┘
 ```
 
 ### Key Modules
@@ -51,23 +79,34 @@ Result dataclasses (core/result.py)
 | Module | Purpose |
 |--------|---------|
 | `auditor.py` | High-level `BehavioralAuditor` class (linter-style API) |
-| `encoder.py` | `PreferenceEncoder` for ML feature extraction (sklearn-style) |
-| `core/session.py` | `BehaviorLog` data container (prices × quantities matrix) |
+| `encoder.py` | `PreferenceEncoder` and `MenuPreferenceEncoder` for ML feature extraction |
+| `core/session.py` | `BehaviorLog`, `MenuChoiceLog`, `StochasticChoiceLog`, `ProductionLog` containers |
 | `algorithms/garp.py` | GARP consistency via Floyd-Warshall transitive closure |
 | `algorithms/aei.py` | Afriat Efficiency Index via binary search |
 | `algorithms/mpi.py` | Money Pump Index via cycle detection |
 | `algorithms/utility.py` | Utility recovery via scipy.linprog |
+| `algorithms/abstract_choice.py` | Menu-based WARP/SARP/Congruence, Houtman-Maks, ordinal utility |
+| `algorithms/integrability.py` | Slutsky symmetry/NSD tests (Ch 6) |
+| `algorithms/welfare.py` | Compensating/equivalent variation (Ch 7) |
+| `algorithms/additive.py` | Additive separability tests (Ch 9) |
+| `algorithms/gross_substitutes.py` | Slutsky decomposition, Hicksian demand (Ch 10) |
+| `algorithms/spatial.py` | General metric preference recovery (Ch 11) |
+| `algorithms/stochastic.py` | Random utility models, IIA tests (Ch 13) |
+| `algorithms/attention.py` | Limited attention, consideration sets (Ch 14) |
+| `algorithms/production.py` | Profit/cost tests for firm behavior (Ch 15) |
 
 ### API Pattern
 
 Primary API uses tech-friendly names:
 ```python
 from pyrevealed import BehaviorLog, validate_consistency, compute_integrity_score, compute_confusion_metric
+from pyrevealed import MenuChoiceLog, validate_menu_sarp, compute_menu_efficiency, fit_menu_preferences
 ```
 
 Old economics names still work as aliases:
 ```python
 from pyrevealed import ConsumerSession, check_garp, compute_aei, compute_mpi
+from pyrevealed import check_abstract_sarp, check_congruence, recover_ordinal_utility
 ```
 
 ### Test Fixtures
@@ -118,6 +157,24 @@ grep -n "github" pyproject.toml docs/conf.py
 ## Theory Reference
 
 Based on Chambers & Echenique (2016) *Revealed Preference Theory*:
+
+**Budget-Based (Chapters 3-5):**
 - GARP: Generalized Axiom of Revealed Preference (transitivity check)
 - AEI: Afriat Efficiency Index (fraction of behavior consistent with utility maximization)
 - MPI: Money Pump Index (exploitability via preference cycles)
+
+**Menu-Based / Abstract Choice (Chapters 1-2):**
+- WARP: Weak Axiom (no direct preference reversals)
+- SARP: Strong Axiom (no preference cycles of any length)
+- Congruence: Full rationalizability (SARP + maximality)
+- Houtman-Maks: Fraction of observations that are consistent
+
+**Advanced Analysis (Chapters 6-15):**
+- Integrability (Ch 6): Slutsky symmetry and negative semi-definiteness
+- Welfare (Ch 7): Compensating and equivalent variation
+- Additive Separability (Ch 9): No cross-price effects
+- Compensated Demand (Ch 10): Slutsky decomposition, Hicksian demand
+- General Metrics (Ch 11): Ideal point with non-Euclidean distances
+- Stochastic Choice (Ch 13): Random utility models, IIA, regularity
+- Limited Attention (Ch 14): Consideration sets, attention filters
+- Production (Ch 15): Profit maximization, cost minimization tests

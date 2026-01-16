@@ -3,7 +3,7 @@ PyRevealed
 
 .. raw:: html
 
-   <span class="speed-badge">Fastest Package</span>
+   <span class="speed-badge">Faster than R</span>
 
 .. raw:: html
 
@@ -22,13 +22,8 @@ PyRevealed
      </div>
      <div class="feature-card">
        <span class="feature-icon">◉</span>
-       <h3>Integrity Scoring</h3>
-       <p>Get a 0-1 score measuring how close behavior is to perfect consistency (Afriat Efficiency Index).</p>
-     </div>
-     <div class="feature-card">
-       <span class="feature-icon">⚡</span>
-       <h3>Welfare Loss Analysis</h3>
-       <p>Compute the Money Pump Index to measure welfare loss from preference cycles.</p>
+       <h3>Behavioral Metrics</h3>
+       <p>Get AEI (0-1 consistency score) and MPI (welfare loss from preference cycles).</p>
      </div>
      <div class="feature-card">
        <span class="feature-icon">ƒ</span>
@@ -36,24 +31,19 @@ PyRevealed
        <p>Reconstruct utility functions that rationalize observed behavior for prediction and simulation.</p>
      </div>
      <div class="feature-card">
-       <span class="feature-icon">◫</span>
-       <h3>Separability Testing</h3>
-       <p>Test if goods can be grouped into independent categories with their own utility functions.</p>
-     </div>
-     <div class="feature-card">
        <span class="feature-icon">⚙</span>
        <h3>ML Integration</h3>
        <p>sklearn-compatible PreferenceEncoder for extracting behavioral features into ML pipelines.</p>
      </div>
      <div class="feature-card">
-       <span class="feature-icon">⟳</span>
-       <h3>Batch Processing</h3>
-       <p>Process thousands of users in parallel with multiprocessing for large-scale analysis.</p>
+       <span class="feature-icon">☰</span>
+       <h3>Multiple Data Types</h3>
+       <p>Budgets, menus, stochastic choice, and production data with separability testing.</p>
      </div>
      <div class="feature-card">
-       <span class="feature-icon">✔</span>
-       <h3>R Validated</h3>
-       <p>Cross-validated against R's revealedPrefs package for correctness you can trust.</p>
+       <span class="feature-icon">⚡</span>
+       <h3>Production Ready</h3>
+       <p>Fast parallel processing for thousands of users. Cross-validated against R's revealedPrefs.</p>
      </div>
    </div>
 
@@ -91,6 +81,36 @@ Quick Example
    result = compute_integrity_score(log)
    print(f"Integrity: {result.efficiency_index:.2f}")  # 1.00
 
+Core Functions
+--------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 35 25
+
+   * - Function
+     - Returns
+     - Score Meaning
+   * - ``validate_consistency(log)``
+     - ``bool``
+     - True = rational
+   * - ``compute_integrity_score(log)``
+     - ``AEIResult`` (0-1)
+     - 1 = perfect
+   * - ``compute_confusion_metric(log)``
+     - ``MPIResult`` (0-1)
+     - 0 = no cycles
+   * - ``fit_latent_values(log)``
+     - ``UtilityRecoveryResult``
+     - Utility values
+   * - ``compute_minimal_outlier_fraction(log)``
+     - ``HoutmanMaksResult`` (0-1)
+     - 0 = all consistent
+
+.. note::
+   **Quick interpretation**: Integrity ≥0.95 is excellent, ≥0.90 is good, <0.70 indicates problems.
+   Confusion <0.05 is very low, >0.15 indicates significant preference cycles.
+
 .. toctree::
    :maxdepth: 1
    :hidden:
@@ -98,6 +118,10 @@ Quick Example
    installation
    quickstart
    tutorial
+   tutorial_menu_choice
+   tutorial_welfare
+   tutorial_demand_analysis
+   tutorial_advanced
    tutorial_ecommerce
    theory
    api

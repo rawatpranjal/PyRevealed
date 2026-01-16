@@ -676,6 +676,550 @@ EmbeddingChoiceLog = SpatialSession
 
 
 # =============================================================================
+# MENU-BASED CHOICE DATA (Abstract Choice Theory)
+# =============================================================================
+
+
+@dataclass
+class MenuChoiceLog:
+    """
+    Represents menu-based choice data for abstract choice theory analysis.
+
+    This data structure supports analyzing discrete choices from menus
+    without price/budget constraints. Used for voting, surveys, recommendations,
+    and any domain where items are chosen from finite sets.
+
+    Based on Chapters 1-2 of Chambers & Echenique (2016) "Revealed Preference Theory".
+
+    Attributes:
+        menus: List of T menus, each a frozenset of item indices.
+            Each menu represents the available options at that observation.
+        choices: List of T chosen item indices (one per menu).
+            choices[t] must be an element of menus[t].
+        item_labels: Optional list of N item names for display.
+        user_id: Optional identifier for the user/session.
+        metadata: Optional dictionary for additional attributes.
+
+    Properties:
+        num_observations: Number of choice observations T
+        num_items: Number of unique items N
+        all_items: Set of all item indices that appear in any menu
+
+    Example:
+        >>> # User chooses from restaurant menus
+        >>> log = MenuChoiceLog(
+        ...     menus=[
+        ...         frozenset({0, 1, 2}),  # Menu 1: Pizza, Burger, Salad
+        ...         frozenset({1, 2, 3}),  # Menu 2: Burger, Salad, Pasta
+        ...         frozenset({0, 3}),      # Menu 3: Pizza, Pasta
+        ...     ],
+        ...     choices=[0, 1, 0],  # Chose Pizza, Burger, Pizza
+        ...     item_labels=["Pizza", "Burger", "Salad", "Pasta"],
+        ... )
+        >>> log.num_observations
+        3
+
+        >>> # Check if choice pattern is SARP-consistent
+        >>> from pyrevealed import validate_menu_sarp
+        >>> result = validate_menu_sarp(log)
+        >>> print(f"Consistent: {result.is_consistent}")
+    """
+
+    menus: list[frozenset[int]]
+    choices: list[int]
+    item_labels: list[str] | None = None
+    user_id: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        """Validate inputs."""
+        self._validate()
+
+    def _validate(self) -> None:
+        """Validate menu and choice data."""
+        # Check lengths match
+        if len(self.menus) != len(self.choices):
+            raise DimensionError(
+                f"Number of menus ({len(self.menus)}) must match "
+                f"number of choices ({len(self.choices)}). "
+                f"Hint: Each observation needs exactly one menu and one choice."
+            )
+
+        if len(self.menus) < 1:
+            raise InsufficientDataError(
+                "Must have at least one observation. "
+                "Hint: Check that your data is not empty."
+            )
+
+        # Check each menu and choice
+        for t, (menu, choice) in enumerate(zip(self.menus, self.choices)):
+            # Check menu is not empty
+            if len(menu) < 1:
+                raise InsufficientDataError(
+                    f"Menu at observation {t} is empty. "
+                    f"Each menu must have at least one item."
+                )
+
+            # Check choice is in menu
+            if choice not in menu:
+                raise ValueRangeError(
+                    f"Choice {choice} at observation {t} is not in menu {menu}. "
+                    f"The chosen item must be one of the available options."
+                )
+
+            # Check for negative indices
+            if any(idx < 0 for idx in menu):
+                raise ValueRangeError(
+                    f"Menu at observation {t} contains negative indices. "
+                    f"All item indices must be non-negative."
+                )
+
+        # Check item labels if provided
+        if self.item_labels is not None:
+            max_idx = max(max(menu) for menu in self.menus)
+            if len(self.item_labels) <= max_idx:
+                raise DimensionError(
+                    f"item_labels has {len(self.item_labels)} items but "
+                    f"menus contain index {max_idx}. "
+                    f"Hint: Ensure item_labels covers all item indices."
+                )
+
+    @property
+    def num_observations(self) -> int:
+        """Number of choice observations T."""
+        return len(self.menus)
+
+    @property
+    def all_items(self) -> frozenset[int]:
+        """Set of all item indices that appear in any menu."""
+        all_items: set[int] = set()
+        for menu in self.menus:
+            all_items.update(menu)
+        return frozenset(all_items)
+
+    @property
+    def num_items(self) -> int:
+        """Number of unique items N."""
+        return len(self.all_items)
+
+    def get_item_label(self, idx: int) -> str:
+        """Get label for an item index."""
+        if self.item_labels is not None and idx < len(self.item_labels):
+            return self.item_labels[idx]
+        return f"item_{idx}"
+
+    def get_choice_label(self, t: int) -> str:
+        """Get label for the choice at observation t."""
+        return self.get_item_label(self.choices[t])
+
+    def get_menu_labels(self, t: int) -> list[str]:
+        """Get labels for all items in menu at observation t."""
+        return [self.get_item_label(idx) for idx in sorted(self.menus[t])]
+
+    @classmethod
+    def from_dataframe(
+        cls,
+        df: Any,  # pandas.DataFrame
+        menu_col: str = "menu",
+        choice_col: str = "choice",
+        user_id: str | None = None,
+    ) -> MenuChoiceLog:
+        """
+        Create MenuChoiceLog from pandas DataFrame.
+
+        Expects a DataFrame where each row is an observation with:
+        - A menu column containing sets/lists of item indices
+        - A choice column containing the chosen item index
+
+        Args:
+            df: DataFrame with menu and choice columns
+            menu_col: Column name for menus (default: "menu")
+            choice_col: Column name for choices (default: "choice")
+            user_id: Optional user identifier
+
+        Returns:
+            MenuChoiceLog instance
+
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({
+            ...     'menu': [{0, 1, 2}, {1, 2, 3}, {0, 3}],
+            ...     'choice': [0, 1, 0]
+            ... })
+            >>> log = MenuChoiceLog.from_dataframe(df)
+        """
+        menus = [frozenset(m) for m in df[menu_col]]
+        choices = list(df[choice_col])
+        return cls(menus=menus, choices=choices, user_id=user_id)
+
+    @classmethod
+    def from_recommendations(
+        cls,
+        shown_items: list[list[int]],
+        clicked_items: list[int],
+        item_labels: list[str] | None = None,
+        user_id: str | None = None,
+    ) -> MenuChoiceLog:
+        """
+        Create MenuChoiceLog from recommendation system data.
+
+        Converts a sequence of (shown items, clicked item) pairs
+        into menu choice format. Common in recommender systems.
+
+        Args:
+            shown_items: List of T lists, each containing item indices shown to user
+            clicked_items: List of T chosen item indices
+            item_labels: Optional item names
+            user_id: Optional user identifier
+
+        Returns:
+            MenuChoiceLog instance
+
+        Example:
+            >>> # User saw 3 recommendation slates and clicked one item each time
+            >>> shown = [[0, 1, 2, 3], [1, 2, 4, 5], [0, 3, 4]]
+            >>> clicked = [1, 4, 0]
+            >>> log = MenuChoiceLog.from_recommendations(shown, clicked)
+        """
+        menus = [frozenset(items) for items in shown_items]
+        return cls(
+            menus=menus,
+            choices=clicked_items,
+            item_labels=item_labels,
+            user_id=user_id,
+        )
+
+
+# =============================================================================
+# STOCHASTIC CHOICE DATA (Chapter 13)
+# =============================================================================
+
+
+@dataclass
+class StochasticChoiceLog:
+    """
+    Represents stochastic/probabilistic choice data for random utility models.
+
+    This data structure supports analyzing choices where the same decision-maker
+    may make different choices in the same situation (probabilistic choice).
+    Based on Chapter 13 of Chambers & Echenique (2016).
+
+    Attributes:
+        menus: List of T menus, each a frozenset of item indices.
+        choice_frequencies: List of T dictionaries mapping item -> choice count.
+            Each dict shows how many times each item was chosen from that menu.
+        item_labels: Optional list of N item names for display.
+        total_observations_per_menu: Optional list of total observations per menu.
+        user_id: Optional identifier for the user/session.
+        metadata: Optional dictionary for additional attributes.
+
+    Example:
+        >>> # Same menu presented 100 times, user chose item 0 60 times, item 1 40 times
+        >>> log = StochasticChoiceLog(
+        ...     menus=[frozenset({0, 1, 2})],
+        ...     choice_frequencies=[{0: 60, 1: 40, 2: 0}],
+        ... )
+        >>> log.get_choice_probability(0, 0)  # P(choose 0 from menu 0)
+        0.6
+    """
+
+    menus: list[frozenset[int]]
+    choice_frequencies: list[dict[int, int]]
+    item_labels: list[str] | None = None
+    total_observations_per_menu: list[int] | None = None
+    user_id: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        """Validate inputs."""
+        self._validate()
+        # Compute total observations if not provided
+        if self.total_observations_per_menu is None:
+            self.total_observations_per_menu = [
+                sum(freq.values()) for freq in self.choice_frequencies
+            ]
+
+    def _validate(self) -> None:
+        """Validate stochastic choice data."""
+        if len(self.menus) != len(self.choice_frequencies):
+            raise DimensionError(
+                f"Number of menus ({len(self.menus)}) must match "
+                f"number of choice frequency dicts ({len(self.choice_frequencies)})."
+            )
+
+        if len(self.menus) < 1:
+            raise InsufficientDataError(
+                "Must have at least one menu observation."
+            )
+
+        for t, (menu, freqs) in enumerate(zip(self.menus, self.choice_frequencies)):
+            # Check all chosen items are in the menu
+            for item in freqs:
+                if item not in menu:
+                    raise ValueRangeError(
+                        f"Item {item} in frequencies at observation {t} "
+                        f"is not in menu {menu}."
+                    )
+            # Check for negative frequencies
+            for item, count in freqs.items():
+                if count < 0:
+                    raise ValueRangeError(
+                        f"Negative frequency {count} for item {item} at observation {t}."
+                    )
+
+    @property
+    def num_menus(self) -> int:
+        """Number of distinct menus T."""
+        return len(self.menus)
+
+    @property
+    def all_items(self) -> frozenset[int]:
+        """Set of all item indices that appear in any menu."""
+        all_items: set[int] = set()
+        for menu in self.menus:
+            all_items.update(menu)
+        return frozenset(all_items)
+
+    @property
+    def num_items(self) -> int:
+        """Number of unique items N."""
+        return len(self.all_items)
+
+    def get_choice_probability(self, menu_idx: int, item: int) -> float:
+        """Get probability of choosing item from menu at menu_idx."""
+        if menu_idx >= len(self.menus):
+            raise IndexError(f"Menu index {menu_idx} out of range.")
+        total = self.total_observations_per_menu[menu_idx]
+        if total == 0:
+            return 0.0
+        return self.choice_frequencies[menu_idx].get(item, 0) / total
+
+    def get_choice_probabilities(self, menu_idx: int) -> dict[int, float]:
+        """Get all choice probabilities for a menu."""
+        return {
+            item: self.get_choice_probability(menu_idx, item)
+            for item in self.menus[menu_idx]
+        }
+
+    @classmethod
+    def from_repeated_choices(
+        cls,
+        menus: list[frozenset[int]],
+        choices: list[int],
+    ) -> "StochasticChoiceLog":
+        """
+        Create StochasticChoiceLog from repeated deterministic choice data.
+
+        Groups observations by menu and computes choice frequencies.
+
+        Args:
+            menus: List of menus (may have duplicates)
+            choices: List of chosen items (one per observation)
+
+        Returns:
+            StochasticChoiceLog with aggregated frequencies
+        """
+        from collections import defaultdict
+
+        # Group by menu
+        menu_to_choices: dict[frozenset[int], list[int]] = defaultdict(list)
+        for menu, choice in zip(menus, choices):
+            menu_to_choices[menu].append(choice)
+
+        # Convert to frequencies
+        unique_menus = list(menu_to_choices.keys())
+        choice_frequencies = []
+        for menu in unique_menus:
+            freq: dict[int, int] = defaultdict(int)
+            for choice in menu_to_choices[menu]:
+                freq[choice] += 1
+            choice_frequencies.append(dict(freq))
+
+        return cls(menus=unique_menus, choice_frequencies=choice_frequencies)
+
+
+# =============================================================================
+# PRODUCTION DATA (Chapter 15)
+# =============================================================================
+
+
+@dataclass
+class ProductionLog:
+    """
+    Represents firm production data for production theory analysis.
+
+    This data structure supports analyzing firm behavior using revealed
+    preference methods for profit maximization and cost minimization tests.
+    Based on Chapter 15 of Chambers & Echenique (2016).
+
+    Attributes:
+        input_prices: T x N_inputs matrix of input prices per observation.
+        input_quantities: T x N_inputs matrix of input quantities used.
+        output_prices: T x N_outputs matrix of output prices per observation.
+        output_quantities: T x N_outputs matrix of output quantities produced.
+        firm_id: Optional identifier for the firm.
+        metadata: Optional dictionary for additional attributes.
+
+    Properties:
+        profit: Profit at each observation (revenue - cost)
+        total_cost: Total input cost at each observation
+        total_revenue: Total output revenue at each observation
+
+    Example:
+        >>> import numpy as np
+        >>> # Firm uses 2 inputs to produce 1 output over 3 periods
+        >>> log = ProductionLog(
+        ...     input_prices=np.array([[1.0, 2.0], [1.5, 2.0], [1.0, 2.5]]),
+        ...     input_quantities=np.array([[10.0, 5.0], [8.0, 6.0], [12.0, 4.0]]),
+        ...     output_prices=np.array([[10.0], [12.0], [11.0]]),
+        ...     output_quantities=np.array([[5.0], [4.0], [6.0]]),
+        ... )
+        >>> log.profit  # Revenue - Cost
+        array([30., 26., 46.])
+    """
+
+    input_prices: NDArray[np.float64]
+    input_quantities: NDArray[np.float64]
+    output_prices: NDArray[np.float64]
+    output_quantities: NDArray[np.float64]
+    firm_id: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    # Cached computed properties
+    _cost_matrix: NDArray[np.float64] | None = field(
+        default=None, repr=False, compare=False
+    )
+    _revenue_matrix: NDArray[np.float64] | None = field(
+        default=None, repr=False, compare=False
+    )
+
+    def __post_init__(self) -> None:
+        """Validate inputs and compute matrices."""
+        # Ensure arrays are float64
+        self.input_prices = np.asarray(self.input_prices, dtype=np.float64)
+        self.input_quantities = np.asarray(self.input_quantities, dtype=np.float64)
+        self.output_prices = np.asarray(self.output_prices, dtype=np.float64)
+        self.output_quantities = np.asarray(self.output_quantities, dtype=np.float64)
+
+        self._validate()
+        self._compute_matrices()
+
+    def _validate(self) -> None:
+        """Validate production data dimensions and values."""
+        # Check input dimensions
+        if self.input_prices.shape != self.input_quantities.shape:
+            raise DimensionError(
+                f"input_prices shape {self.input_prices.shape} does not match "
+                f"input_quantities shape {self.input_quantities.shape}."
+            )
+
+        # Check output dimensions
+        if self.output_prices.shape != self.output_quantities.shape:
+            raise DimensionError(
+                f"output_prices shape {self.output_prices.shape} does not match "
+                f"output_quantities shape {self.output_quantities.shape}."
+            )
+
+        # Check same number of observations
+        T_input = self.input_prices.shape[0]
+        T_output = self.output_prices.shape[0]
+        if T_input != T_output:
+            raise DimensionError(
+                f"Number of input observations ({T_input}) must match "
+                f"number of output observations ({T_output})."
+            )
+
+        # Check for NaN/Inf
+        for name, arr in [
+            ("input_prices", self.input_prices),
+            ("input_quantities", self.input_quantities),
+            ("output_prices", self.output_prices),
+            ("output_quantities", self.output_quantities),
+        ]:
+            if not np.all(np.isfinite(arr)):
+                invalid_count = int(np.sum(~np.isfinite(arr)))
+                raise NaNInfError(
+                    f"Found {invalid_count} NaN/Inf values in {name}."
+                )
+
+        # Check for positive prices
+        if np.any(self.input_prices <= 0):
+            raise ValueRangeError("All input prices must be strictly positive.")
+        if np.any(self.output_prices <= 0):
+            raise ValueRangeError("All output prices must be strictly positive.")
+
+        # Check for non-negative quantities
+        if np.any(self.input_quantities < 0):
+            raise ValueRangeError("Input quantities cannot be negative.")
+        if np.any(self.output_quantities < 0):
+            raise ValueRangeError("Output quantities cannot be negative.")
+
+    def _compute_matrices(self) -> None:
+        """Pre-compute cost and revenue matrices."""
+        # Cost matrix: C[i,j] = w_i @ x_j (cost of using inputs j at prices i)
+        self._cost_matrix = self.input_prices @ self.input_quantities.T
+        # Revenue matrix: R[i,j] = p_i @ y_j (revenue from outputs j at prices i)
+        self._revenue_matrix = self.output_prices @ self.output_quantities.T
+
+    @property
+    def num_observations(self) -> int:
+        """Number of observations T."""
+        return self.input_prices.shape[0]
+
+    @property
+    def num_inputs(self) -> int:
+        """Number of inputs N_inputs."""
+        return self.input_prices.shape[1]
+
+    @property
+    def num_outputs(self) -> int:
+        """Number of outputs N_outputs."""
+        return self.output_prices.shape[1]
+
+    @property
+    def total_cost(self) -> NDArray[np.float64]:
+        """Total input cost at each observation."""
+        return np.diag(self._cost_matrix)
+
+    @property
+    def total_revenue(self) -> NDArray[np.float64]:
+        """Total output revenue at each observation."""
+        return np.diag(self._revenue_matrix)
+
+    @property
+    def profit(self) -> NDArray[np.float64]:
+        """Profit at each observation (revenue - cost)."""
+        return self.total_revenue - self.total_cost
+
+    @property
+    def cost_matrix(self) -> NDArray[np.float64]:
+        """T x T matrix where C[i,j] = cost of using inputs j at prices i."""
+        return self._cost_matrix
+
+    @property
+    def revenue_matrix(self) -> NDArray[np.float64]:
+        """T x T matrix where R[i,j] = revenue from outputs j at prices i."""
+        return self._revenue_matrix
+
+
+# =============================================================================
+# TECH-FRIENDLY ALIASES (Primary names)
+# =============================================================================
+
+# ChoiceSession is an alias for MenuChoiceLog (economics name)
+ChoiceSession = MenuChoiceLog
+"""Alias for MenuChoiceLog (economics terminology from abstract choice theory)."""
+
+# ProbabilisticChoiceLog is an alias for StochasticChoiceLog
+ProbabilisticChoiceLog = StochasticChoiceLog
+"""Tech-friendly alias for StochasticChoiceLog."""
+
+# FirmLog is an alias for ProductionLog
+FirmLog = ProductionLog
+"""Tech-friendly alias for ProductionLog for firm behavior analysis."""
+
+
+# =============================================================================
 # LEGACY ALIASES (Deprecated - use tech-friendly names instead)
 # =============================================================================
 

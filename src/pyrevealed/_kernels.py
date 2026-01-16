@@ -829,3 +829,241 @@ def compute_distances_batch_numba(
         result[i] = np.sqrt(dist_sq)
 
     return result
+
+
+# =============================================================================
+# ABSTRACT CHOICE KERNELS
+# =============================================================================
+
+
+@njit(cache=True)
+def find_symmetric_pairs_bool_numba(matrix: np.ndarray) -> np.ndarray:
+    """
+    Find all (i, j) pairs where matrix[i,j] AND matrix[j,i], with i < j.
+
+    Used for SARP violation detection in abstract choice - finds items
+    that mutually reveal preference over each other (cycles of length 2).
+
+    Args:
+        matrix: N x N boolean matrix (typically revealed preference matrix R*)
+
+    Returns:
+        2D array of shape (K, 2) containing K symmetric pairs.
+        Returns empty array if no symmetric pairs found.
+
+    Example:
+        If R*[0,1] = True and R*[1,0] = True, returns [[0, 1]]
+    """
+    N = matrix.shape[0]
+
+    # First pass: count symmetric pairs
+    count = 0
+    for i in range(N):
+        for j in range(i + 1, N):
+            if matrix[i, j] and matrix[j, i]:
+                count += 1
+
+    if count == 0:
+        return np.empty((0, 2), dtype=np.int64)
+
+    # Second pass: collect pairs
+    result = np.empty((count, 2), dtype=np.int64)
+    idx = 0
+    for i in range(N):
+        for j in range(i + 1, N):
+            if matrix[i, j] and matrix[j, i]:
+                result[idx, 0] = i
+                result[idx, 1] = j
+                idx += 1
+
+    return result
+
+
+@njit(cache=True)
+def compute_indegree_bool_numba(
+    adjacency: np.ndarray,
+    items: np.ndarray,
+) -> np.ndarray:
+    """
+    Compute in-degrees for items in a boolean adjacency matrix.
+
+    The in-degree of item i is the number of items j (in the items array)
+    where adjacency[j, i] = True (j points to i).
+
+    Used for topological sort in ordinal utility recovery.
+
+    Args:
+        adjacency: N x N boolean adjacency matrix
+        items: 1D array of item indices to consider
+
+    Returns:
+        1D array of in-degrees, one per item in items array
+
+    Example:
+        For topological sort, items with in-degree 0 have no predecessors.
+    """
+    n_items = items.shape[0]
+    in_degrees = np.zeros(n_items, dtype=np.int64)
+
+    for i_idx in range(n_items):
+        item_i = items[i_idx]
+        count = 0
+        for j_idx in range(n_items):
+            item_j = items[j_idx]
+            if item_j != item_i and adjacency[item_j, item_i]:
+                count += 1
+        in_degrees[i_idx] = count
+
+    return in_degrees
+
+
+@njit(cache=True)
+def count_item_in_cycles_numba(
+    menus: np.ndarray,
+    choices: np.ndarray,
+    menu_sizes: np.ndarray,
+    cycle_items: np.ndarray,
+    cycle_offsets: np.ndarray,
+) -> np.ndarray:
+    """
+    Count how many times each observation participates in cycles.
+
+    For Houtman-Maks efficiency, we need to find which observations
+    participate in the most cycles to prioritize removal.
+
+    Args:
+        menus: Flattened 1D array of menu items (use menu_sizes for boundaries)
+        choices: 1D array of chosen item for each observation
+        menu_sizes: 1D array of sizes for each menu
+        cycle_items: Flattened 1D array of items in cycles
+        cycle_offsets: 1D array of start offsets for each cycle in cycle_items
+
+    Returns:
+        1D array of cycle counts, one per observation
+
+    Example:
+        If observation 2's choice appears in 3 different cycles, counts[2] = 3.
+    """
+    n_obs = choices.shape[0]
+    n_cycles = cycle_offsets.shape[0]
+
+    # Initialize counts
+    counts = np.zeros(n_obs, dtype=np.int64)
+
+    # For each cycle, check which observations are involved
+    for c in range(n_cycles):
+        cycle_start = cycle_offsets[c]
+        if c < n_cycles - 1:
+            cycle_end = cycle_offsets[c + 1]
+        else:
+            cycle_end = cycle_items.shape[0]
+
+        # Get items in this cycle
+        for obs in range(n_obs):
+            choice = choices[obs]
+
+            # Check if this observation's choice is in the cycle
+            for idx in range(cycle_start, cycle_end):
+                if cycle_items[idx] == choice:
+                    counts[obs] += 1
+                    break
+
+            # Also check if any menu item is in the cycle
+            menu_start = 0
+            for m in range(obs):
+                menu_start += menu_sizes[m]
+            menu_end = menu_start + menu_sizes[obs]
+
+            for menu_idx in range(menu_start, menu_end):
+                menu_item = menus[menu_idx]
+                for idx in range(cycle_start, cycle_end):
+                    if cycle_items[idx] == menu_item:
+                        counts[obs] += 1
+                        break
+
+    return counts
+
+
+@njit(cache=True)
+def topological_sort_numba(
+    adjacency: np.ndarray,
+    items: np.ndarray,
+) -> np.ndarray:
+    """
+    Perform topological sort on items using Kahn's algorithm (numba-accelerated).
+
+    Returns items in topologically sorted order (sources first).
+    If a cycle exists, returns partial ordering with remaining items at end.
+
+    Args:
+        adjacency: N x N boolean adjacency matrix where adjacency[i,j] = True
+            means i comes before j (i is preferred to j)
+        items: 1D array of item indices to sort
+
+    Returns:
+        1D array of items in sorted order
+    """
+    n_items = items.shape[0]
+    if n_items == 0:
+        return np.empty(0, dtype=np.int64)
+
+    # Compute in-degrees
+    in_degrees = compute_indegree_bool_numba(adjacency, items)
+
+    # Create mapping from item index to position in items array
+    max_item = 0
+    for i in range(n_items):
+        if items[i] > max_item:
+            max_item = items[i]
+
+    item_to_idx = np.full(max_item + 1, -1, dtype=np.int64)
+    for i in range(n_items):
+        item_to_idx[items[i]] = i
+
+    # Initialize queue with items having in-degree 0
+    queue = np.empty(n_items, dtype=np.int64)
+    queue_head = 0
+    queue_tail = 0
+
+    for i in range(n_items):
+        if in_degrees[i] == 0:
+            queue[queue_tail] = i
+            queue_tail += 1
+
+    # Result array
+    result = np.empty(n_items, dtype=np.int64)
+    result_idx = 0
+
+    # Process queue
+    while queue_head < queue_tail:
+        current_idx = queue[queue_head]
+        queue_head += 1
+
+        current_item = items[current_idx]
+        result[result_idx] = current_item
+        result_idx += 1
+
+        # Decrease in-degrees of successors
+        for j_idx in range(n_items):
+            j_item = items[j_idx]
+            if j_item != current_item and adjacency[current_item, j_item]:
+                in_degrees[j_idx] -= 1
+                if in_degrees[j_idx] == 0:
+                    queue[queue_tail] = j_idx
+                    queue_tail += 1
+
+    # If not all items processed, add remaining (cycle detected)
+    if result_idx < n_items:
+        for i in range(n_items):
+            item = items[i]
+            # Check if already in result
+            found = False
+            for j in range(result_idx):
+                if result[j] == item:
+                    found = True
+                    break
+            if not found:
+                result[result_idx] = item
+                result_idx += 1
+
+    return result

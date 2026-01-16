@@ -12,6 +12,7 @@ Given a history of user choices and the options available at each choice, PyReve
 - **Preference recovery**: If consistent, what utility function explains their choices?
 - **Exploitability metrics**: How much could be extracted from a user via arbitrage on their inconsistencies?
 - **Feature independence**: Are choices over group A independent of choices over group B?
+- **Menu-based analysis**: For discrete choices without prices (surveys, votes, recommendations)
 
 ## Installation
 
@@ -87,6 +88,36 @@ print(f"Confusion Metric: {confusion:.3f}")
 | `test_feature_independence(log, [a], [b])` | Are choices in group A separate from group B? |
 | `test_cross_price_effect(log, item1, item2)` | Are these items substitutes or complements? |
 | `transform_to_characteristics(log, A)` | Analyze by attributes (nutrition, specs) not products |
+
+### Menu Choice (No Prices)
+
+For discrete choices without price/budget data (surveys, recommendations, votes):
+
+| Method | Question it answers |
+|--------|---------------------|
+| `validate_menu_sarp(log)` | Are menu choices consistent? (no preference cycles) |
+| `compute_menu_efficiency(log)` | What fraction of choices are consistent? |
+| `fit_menu_preferences(log)` | What's the preference ranking over items? |
+
+```python
+from pyrevealed import MenuChoiceLog, validate_menu_sarp, fit_menu_preferences
+
+# Menu choices: which item was chosen from each menu
+log = MenuChoiceLog(
+    menus=[frozenset({0, 1, 2}), frozenset({1, 2}), frozenset({0, 2})],
+    choices=[0, 1, 0],  # Chose item 0, then 1, then 0
+    item_labels=["Pizza", "Burger", "Salad"]
+)
+
+# Check consistency
+result = validate_menu_sarp(log)
+print(f"Consistent: {result.is_consistent}")
+
+# Recover preference ranking
+prefs = fit_menu_preferences(log)
+if prefs.success:
+    print(f"Preference order: {prefs.preference_order}")
+```
 
 ---
 

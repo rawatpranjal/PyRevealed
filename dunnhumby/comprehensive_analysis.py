@@ -177,10 +177,10 @@ def analyze_warp_violations(
     for key in sample_keys:
         try:
             log = sessions[key].behavior_log
-            is_consistent, violations = check_warp(log)
-            if is_consistent:
+            warp_result = check_warp(log)
+            if warp_result.is_consistent:
                 warp_consistent += 1
-            warp_violations.append(len(violations))
+            warp_violations.append(len(warp_result.violations))
         except Exception:
             continue
 
