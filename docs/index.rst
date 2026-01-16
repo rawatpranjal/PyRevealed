@@ -65,21 +65,38 @@ Quick Example
 
 .. code-block:: python
 
-   from pyrevealed import BehaviorLog, validate_consistency, compute_integrity_score
+   from pyrevealed import BehaviorLog, compute_integrity_score
    import numpy as np
 
-   # Two purchase observations: prices and quantities
    log = BehaviorLog(
        cost_vectors=np.array([[1.0, 2.0], [2.0, 1.0]]),
        action_vectors=np.array([[3.0, 1.0], [1.0, 3.0]])
    )
 
-   # Check if choices are consistent with utility maximization
-   is_consistent = validate_consistency(log)  # True
-
-   # Get integrity score (0 = inconsistent, 1 = perfectly consistent)
    result = compute_integrity_score(log)
-   print(f"Integrity: {result.efficiency_index:.2f}")  # 1.00
+   print(result.summary())
+
+Output:
+
+.. code-block:: text
+
+   ================================================================================
+                            AFRIAT EFFICIENCY INDEX REPORT
+   ================================================================================
+
+   Status: PERFECT (AEI = 1.0)
+
+   Metrics:
+   -------
+     Efficiency Index (AEI) .......... 1.0000
+     Waste Fraction .................. 0.0000
+     Perfectly Consistent ............... Yes
+
+   Interpretation:
+   --------------
+     Perfect consistency - behavior fully rationalized by utility maximization
+
+   ================================================================================
 
 Core Functions
 --------------
