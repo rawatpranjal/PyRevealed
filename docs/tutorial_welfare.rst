@@ -195,6 +195,42 @@ Output:
    Baseline utility: 0.1234
    Policy utility: 0.1156
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                               WELFARE ANALYSIS REPORT
+   ================================================================================
+
+   Welfare Direction: AMBIGUOUS
+
+   Welfare Measures:
+   ----------------
+     Compensating Variation (CV) ..... 0.9410
+     Equivalent Variation (EV) ...... -0.7840
+     Mean Variation .................. 0.0785
+     Hicksian Surplus ................ 0.0785
+
+   Utility Comparison:
+   ------------------
+     Baseline Utility ............ 5.6000e-07
+     Policy Utility .............. 9.8667e-07
+     Baseline Expenditure ........... 16.8033
+     Policy Expenditure ............. 18.1600
+
+   Interpretation:
+   --------------
+     Welfare change is ambiguous (CV and EV have different signs).
+
+   Computation Time: 3.51 ms
+   ================================================================================
+
 
 Part 4: Vartia Path Integral Method
 -----------------------------------
@@ -218,6 +254,13 @@ where :math:`h(p, u)` is Hicksian (compensated) demand.
 
    print(f"CV (Vartia): ${cv_vartia:.2f}")
    print(f"EV (Vartia): ${ev_vartia:.2f}")
+
+Output:
+
+.. code-block:: text
+
+   CV (Vartia): $0.94
+   EV (Vartia): $-0.78
 
 The Vartia method uses a Stone-Geary functional form to approximate Hicksian
 demand. More integration steps (``n_steps``) give higher accuracy.
@@ -262,6 +305,13 @@ When detailed computation is not needed, use Laspeyres/Paasche bounds:
    print(f"CV (Laspeyres bound): ${cv_bound:.2f}")
    print(f"EV (Paasche bound): ${ev_bound:.2f}")
 
+Output:
+
+.. code-block:: text
+
+   CV (Laspeyres bound): $-0.39
+   EV (Paasche bound): $0.59
+
 These bounds are computationally simple but may be less accurate:
 
 - For welfare-improving changes: CV_bound is upper bound, EV_bound is lower bound
@@ -297,6 +347,14 @@ For deeper analysis, recover the full expenditure function:
        print(f"Optimal bundle: {optimal_bundle}")
    else:
        print("Recovery failed (likely GARP violated)")
+
+Output:
+
+.. code-block:: text
+
+   Expenditure function recovered successfully
+   Expenditure at new prices: $17.15
+   Optimal bundle: [6.38057415e-17 1.45098040e+00 4.75098039e+00]
 
 
 Part 7: Deadweight Loss

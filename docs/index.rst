@@ -117,12 +117,7 @@ Core Functions
 
    installation
    quickstart
-   tutorial
-   tutorial_menu_choice
-   tutorial_welfare
-   tutorial_demand_analysis
-   tutorial_advanced
-   tutorial_ecommerce
+   tutorials
    theory
    api
    scaling

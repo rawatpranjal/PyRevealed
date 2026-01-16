@@ -136,6 +136,14 @@ Estimation Methods
    print(f"  Regression: diagonal mean = {np.mean(np.diag(S_reg)):.3f}")
    print(f"  Stone-Geary: diagonal mean = {np.mean(np.diag(S_sg)):.3f}")
 
+Output:
+
+.. code-block:: text
+
+   Method comparison:
+     Regression: diagonal mean = -2.399
+     Stone-Geary: diagonal mean = -4.180
+
 
 Part 3: Testing Integrability
 -----------------------------
@@ -168,6 +176,39 @@ Output:
    Integrable: True
    Max eigenvalue: -0.0012
    Symmetry deviation: 0.0234
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                              INTEGRABILITY TEST REPORT
+   ================================================================================
+
+   Status: NOT INTEGRABLE
+
+   Slutsky Conditions:
+   ------------------
+     Is Integrable ....................... No
+     Symmetric ........................... No
+     Negative Semi-Definite ........... False
+     Symmetry Violations .................. 5
+     Max Eigenvalue .................. 0.8511
+     Symmetry Deviation .............. 0.4188
+     Number of Goods ...................... 4
+
+   Interpretation:
+   --------------
+     Slutsky symmetry violated - cross-price effects asymmetric.
+     Not NSD - max eigenvalue 0.8511 > 0.
+
+   Computation Time: 27.68 ms
+   ================================================================================
 
 Interpreting Results
 ~~~~~~~~~~~~~~~~~~~~
@@ -207,6 +248,14 @@ Test symmetry separately with detailed diagnostics:
    if violations:
        print(f"Violating pairs: {violations}")
 
+Output:
+
+.. code-block:: text
+
+   Symmetric: False
+   Max deviation: 0.4188
+   Violating pairs: [(0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
+
 For asymmetric matrices:
 
 .. code-block:: python
@@ -216,8 +265,15 @@ For asymmetric matrices:
    S_asymmetric[0, 1] = 0.5  # Make S[0,1] != S[1,0]
 
    is_symmetric, violations, _ = check_slutsky_symmetry(S_asymmetric)
-   print(f"Symmetric: {is_symmetric}")  # False
-   print(f"Violations: {violations}")   # [(0, 1)]
+   print(f"Symmetric: {is_symmetric}")
+   print(f"Violations: {violations}")
+
+Output:
+
+.. code-block:: text
+
+   Symmetric: False
+   Violations: [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
 
 
 Part 5: Negative Semi-Definiteness Test
@@ -285,12 +341,61 @@ Output:
    Number of violations: 3
    Violating pairs: [(0, 1), (0, 2), (1, 2)]...
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                             ADDITIVE SEPARABILITY REPORT
+   ================================================================================
+
+   Status: ADDITIVE
+
+   Metrics:
+   -------
+     Is Additive ........................ Yes
+     Fully Separable .................... Yes
+     Number of Goods ...................... 4
+     Additive Groups ...................... 4
+     Max Cross-Effect ................ 0.0335
+     Violations ........................... 0
+
+   Additive Groups:
+   ---------------
+     Group 0: [0]
+     Group 1: [1]
+     Group 2: [2]
+     Group 3: [3]
+
+   Interpretation:
+   --------------
+     Utility is additively separable: U(x) = Σ u_i(x_i).
+     No significant cross-price effects between groups.
+
+   Computation Time: 0.20 ms
+   ================================================================================
+
 The cross-effects matrix shows how each price affects other goods' demands:
 
 .. code-block:: python
 
    print("Cross-effects matrix:")
    print(np.round(result.cross_effects_matrix, 3))
+
+Output:
+
+.. code-block:: text
+
+   Cross-effects matrix:
+   [[-0.995 -0.018  0.002 -0.022]
+    [ 0.006 -1.01   0.004  0.022]
+    [-0.002  0.007 -1.031 -0.015]
+    [-0.016  0.034  0.022 -0.985]]
 
 
 Part 7: Identifying Separable Groups
@@ -368,6 +473,16 @@ Analyze specific pairs of goods:
    print(f"Supporting pairs: {len(result['supporting_pairs'])}")
    print(f"Violating pairs: {len(result['violating_pairs'])}")
 
+Output:
+
+.. code-block:: text
+
+   No cross-effects: False
+   Mean cross-effect: 0.0000
+   Std cross-effect: 0.0000
+   Supporting pairs: 0
+   Violating pairs: 0
+
 Slutsky Decomposition
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -383,6 +498,15 @@ Decompose the total price effect into substitution and income effects:
    print(f"  Total effect: {decomp['total_effect']:.4f}")
    print(f"  Substitution effect: {decomp['substitution_effect']:.4f}")
    print(f"  Income effect: {decomp['income_effect']:.4f}")
+
+Output:
+
+.. code-block:: text
+
+   Slutsky decomposition (effect of p_1 on x_0):
+     Total effect: 0.1566
+     Substitution effect: 0.7981
+     Income effect: -0.6415
 
 For normal goods, the substitution effect is always negative (law of demand).
 

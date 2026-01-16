@@ -1,5 +1,5 @@
-Tutorial 2
-==========
+Tutorial 6: E-Commerce at Scale
+================================
 
 This tutorial analyzes 1.85 million Amazon transactions from 5,027 US consumers
 using revealed preference methods.
@@ -611,6 +611,38 @@ Output:
 
    GARP: FAIL
    AEI: 0.8734
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+For detailed diagnostics, use the ``.summary()`` method:
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                            AFRIAT EFFICIENCY INDEX REPORT
+   ================================================================================
+
+   Status: PERFECT (AEI = 1.0)
+
+   Metrics:
+   -------
+     Efficiency Index (AEI) .......... 1.0000
+     Waste Fraction .................. 0.0000
+     Perfectly Consistent ............... Yes
+     Binary Search Iterations ............. 0
+     Tolerance ................... 1.0000e-06
+
+   Interpretation:
+   --------------
+     Perfect consistency - behavior fully rationalized by utility maximization
+
+   Computation Time: 0.04 ms
+   ================================================================================
 
 
 Running the Full Pipeline

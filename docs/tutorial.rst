@@ -1,5 +1,5 @@
-Tutorial 1
-==========
+Tutorial 1: Budget-Based Analysis
+==================================
 
 This tutorial analyzes 2 years of grocery data from 2,222 households using
 revealed preference methods.
@@ -215,6 +215,37 @@ Output (typical for one household):
 
    GARP violated — 18 contradictions found
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+For detailed diagnostics, use the ``.summary()`` method:
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                               GARP CONSISTENCY REPORT
+   ================================================================================
+
+   Status: CONSISTENT
+
+   Metrics:
+   -------
+     Consistent ......................... Yes
+     Violations ........................... 0
+     Observations ......................... 2
+
+   Interpretation:
+   --------------
+     Behavior is consistent with utility maximization.
+     No revealed preference cycles detected.
+
+   Computation Time: 0.23 ms
+   ================================================================================
+
 Testing All Households
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -316,6 +347,36 @@ Output:
    CCEI ≥ 0.95: 11.2%
    CCEI < 0.70: 5.8%
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                            AFRIAT EFFICIENCY INDEX REPORT
+   ================================================================================
+
+   Status: PERFECT (AEI = 1.0)
+
+   Metrics:
+   -------
+     Efficiency Index (AEI) .......... 1.0000
+     Waste Fraction .................. 0.0000
+     Perfectly Consistent ............... Yes
+     Binary Search Iterations ............. 0
+     Tolerance ................... 1.0000e-06
+
+   Interpretation:
+   --------------
+     Perfect consistency - behavior fully rationalized by utility maximization
+
+   Computation Time: 0.04 ms
+   ================================================================================
+
 Benchmark Comparison
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -386,6 +447,35 @@ Output:
 
    Mean MPI: 0.218
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                               MONEY PUMP INDEX REPORT
+   ================================================================================
+
+   Status: NO EXPLOITABILITY
+
+   Metrics:
+   -------
+     Money Pump Index (MPI) .......... 0.0000
+     Exploitability % ................ 0.0000
+     Number of Cycles ..................... 0
+     Total Expenditure .............. 31.7500
+
+   Interpretation:
+   --------------
+     No exploitability - choices are fully consistent
+
+   Computation Time: 0.02 ms
+   ================================================================================
+
 Mean MPI in this data is 0.2-0.25, with strong negative correlation to CCEI
 (r ≈ -0.85).
 
@@ -422,6 +512,34 @@ Output (typical household):
 .. code-block:: text
 
    Observations to remove: 12.5%
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                              HOUTMAN-MAKS INDEX REPORT
+   ================================================================================
+
+   Status: FULLY CONSISTENT
+
+   Metrics:
+   -------
+     Fraction Removed ................ 0.0000
+     Fraction Consistent ............. 1.0000
+     Observations Removed ................. 0
+
+   Interpretation:
+   --------------
+     All observations are consistent - no removal needed.
+
+   Computation Time: 0.05 ms
+   ================================================================================
 
 CCEI, MPI, and Houtman-Maks capture different aspects of inconsistency.
 
@@ -579,6 +697,39 @@ Output:
    Recovery successful!
    Utility values: [0.000e+00 1.234e-05 2.468e-05 3.702e-05 4.936e-05]...
    Marginal utility of money: [1.000e-06 1.000e-06 1.000e-06 1.000e-06 1.000e-06]...
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                               UTILITY RECOVERY REPORT
+   ================================================================================
+
+   Status: SUCCESS
+   LP Status: Optimization terminated successfully. (HiGHS Status 7: Optimal)
+
+   Metrics:
+   -------
+     Recovery Successful ................ Yes
+     Utility Values Range .. [0.0000, 0.0000]
+     Mean Utility ................ 3.5000e-07
+     Num Observations ..................... 2
+     Mean Marginal Utility ....... 1.0000e-06
+     Lagrange Range ........ [0.0000, 0.0000]
+
+   Interpretation:
+   --------------
+     Utility function successfully recovered.
+     The recovered utility is piecewise linear and concave.
+
+   Computation Time: 1.20 ms
+   ================================================================================
 
 Interpreting Results
 ~~~~~~~~~~~~~~~~~~~~

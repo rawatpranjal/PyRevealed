@@ -1,5 +1,5 @@
-Tutorial 5: Advanced Topics
-============================
+Tutorial 5: Stochastic & Production
+=====================================
 
 This tutorial covers two advanced areas: stochastic choice models and
 production theory analysis.
@@ -156,6 +156,42 @@ Output:
    BIC: 190.12
    Satisfies IIA: True
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                            STOCHASTIC CHOICE MODEL REPORT
+   ================================================================================
+
+   Status: RUM VIOLATIONS
+   Model Type: logit
+
+   Model Fit:
+   ---------
+     Log-Likelihood ............... -222.2062
+     AIC ........................... 450.4125
+     BIC ........................... 461.5238
+     Satisfies IIA ....................... No
+     Regularity Violations ................ 0
+
+   Model Parameters:
+   ----------------
+     scale: 1.0000
+     convergence: 1.0000
+
+   Interpretation:
+   --------------
+     IIA violated - choice probabilities context-dependent.
+
+   Computation Time: 1.70 ms
+   ================================================================================
+
 Predicting Choice Probabilities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -166,6 +202,12 @@ Predicting Choice Probabilities
    # Get predicted probabilities from fitted utilities
    utilities = result.choice_probabilities[:3]  # First 3 items
    print(f"Predicted choice probabilities: {utilities}")
+
+Output:
+
+.. code-block:: text
+
+   Predicted choice probabilities: [0.6 0.3 0.1]
 
 
 A3: Testing McFadden Axioms
@@ -192,6 +234,14 @@ McFadden's axioms characterize random utility maximization:
    if not axiom_results['satisfies_regularity']:
        print(f"Regularity violations: {axiom_results['regularity_violations']}")
 
+Output:
+
+.. code-block:: text
+
+   Satisfies IIA: False
+   Satisfies regularity: True
+   RUM consistent: False
+
 
 A4: Testing IIA (Independence of Irrelevant Alternatives)
 ---------------------------------------------------------
@@ -208,6 +258,12 @@ The IIA property is tested by checking if relative odds are stable:
    )
 
    print(f"IIA holds: {satisfies_iia}")
+
+Output:
+
+.. code-block:: text
+
+   IIA holds: False
 
 The Red Bus / Blue Bus Problem
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -236,6 +292,14 @@ A famous example where IIA fails:
    print("Without blue bus: P(car)/P(red bus) = 1.0")
    print("With blue bus: P(car)/P(red bus) = 2.0")
    print("IIA violated!")
+
+Output:
+
+.. code-block:: text
+
+   Without blue bus: P(car)/P(red bus) = 1.0
+   With blue bus: P(car)/P(red bus) = 2.0
+   IIA violated!
 
 
 A5: Stochastic Choice Application
@@ -402,6 +466,44 @@ Output:
    Profit efficiency: 0.85
    Returns to scale: constant
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                             PRODUCTION GARP TEST REPORT
+   ================================================================================
+
+   Status: PROFIT MAXIMIZING
+   Returns to Scale: increasing
+
+   Efficiency Metrics:
+   ------------------
+     Profit Maximizing .................. Yes
+     Cost Minimizing ..................... No
+     Profit Efficiency ............... 0.8107
+     Cost Efficiency ................. 0.3333
+     Technical Efficiency ............ 1.0000
+     Violations ........................... 0
+
+   Input Efficiencies:
+   ------------------
+     Input 0: 1.0000
+     Input 1: 0.0000
+
+   Interpretation:
+   --------------
+     Firm behavior is consistent with profit maximization.
+     Returns to scale: increasing.
+
+   Computation Time: 274.13 ms
+   ================================================================================
+
 Interpretation
 ~~~~~~~~~~~~~~
 
@@ -438,6 +540,13 @@ Cost minimization is the dual of profit maximization:
        for i, j in result['violations'][:3]:
            print(f"  Obs {i} could have used inputs from obs {j} at lower cost")
 
+Output:
+
+.. code-block:: text
+
+   Cost minimizing: False
+   Violations: 3
+
 A violation means the firm could have achieved the same (or more) output
 at lower cost by using a different input mix.
 
@@ -455,6 +564,12 @@ or decreasing returns to scale:
    rts = estimate_returns_to_scale(log)
 
    print(f"Returns to scale: {rts}")
+
+Output:
+
+.. code-block:: text
+
+   Returns to scale: increasing
 
 .. list-table:: Returns to Scale Interpretation
    :header-rows: 1
@@ -487,6 +602,15 @@ production frontier:
    print("Technical efficiency by period:")
    for t, eff in enumerate(efficiencies):
        print(f"  Period {t+1}: {eff:.2%}")
+
+Output:
+
+.. code-block:: text
+
+   Technical efficiency by period:
+     Period 1: 100.00%
+     Period 2: 100.00%
+     Period 3: 100.00%
 
 A score of 1.0 means the observation is on the frontier; lower values
 indicate the firm could produce more with the same inputs (or use fewer

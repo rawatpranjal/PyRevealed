@@ -1,5 +1,5 @@
-Tutorial 2: Menu-Based Choice Analysis
-=======================================
+Tutorial 2: Menu-Based Choice
+==============================
 
 This tutorial covers discrete choice analysis from menus without prices.
 Useful for surveys, recommendations, voting, and any domain where items
@@ -84,6 +84,16 @@ For recommendation systems, use the convenience method:
        user_id="user_123",
    )
 
+   print(f"Observations: {log.num_observations}")
+   print(f"Unique items: {log.num_items}")
+
+Output:
+
+.. code-block:: text
+
+   Observations: 3
+   Unique items: 6
+
 
 Part 2: Testing WARP
 --------------------
@@ -116,6 +126,35 @@ Output:
    Satisfies WARP: False
    Violations: [(0, 1)]
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                              ABSTRACT WARP TEST REPORT
+   ================================================================================
+
+   Status: CONSISTENT
+
+   Metrics:
+   -------
+     Consistent ......................... Yes
+     Violations ........................... 0
+     Revealed Preferences ................. 4
+
+   Interpretation:
+   --------------
+     No direct preference reversals in menu choices.
+     Satisfies Weak Axiom for abstract choice.
+
+   Computation Time: 0.00 ms
+   ================================================================================
+
 Consistent Example
 ~~~~~~~~~~~~~~~~~~
 
@@ -128,7 +167,13 @@ Consistent Example
    )
 
    result = validate_menu_warp(consistent_log)
-   print(f"Satisfies WARP: {result.is_consistent}")  # True
+   print(f"Satisfies WARP: {result.is_consistent}")
+
+Output:
+
+.. code-block:: text
+
+   Satisfies WARP: True
 
 
 Part 3: Testing SARP
@@ -163,6 +208,35 @@ Output:
 
    Satisfies SARP: False
    Cycles found: [(0, 1, 2)]
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                              ABSTRACT SARP TEST REPORT
+   ================================================================================
+
+   Status: CONSISTENT
+
+   Metrics:
+   -------
+     Consistent ......................... Yes
+     Violations ........................... 0
+     Items ................................ 3
+
+   Interpretation:
+   --------------
+     No preference cycles in menu choices.
+     Choices are rationalizable by a preference ordering.
+
+   Computation Time: 0.12 ms
+   ================================================================================
 
 WARP vs SARP
 ~~~~~~~~~~~~
@@ -221,6 +295,36 @@ Output:
    Rationalizable: True
    Satisfies SARP: True
    Maximality violations: []
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                                CONGRUENCE TEST REPORT
+   ================================================================================
+
+   Status: RATIONALIZABLE
+
+   Metrics:
+   -------
+     Is Congruent ....................... Yes
+     Satisfies SARP ..................... Yes
+     SARP Violations ...................... 0
+     Maximality Violations ................ 0
+
+   Interpretation:
+   --------------
+     Choices are fully rationalizable by a preference ordering.
+     Both SARP and maximality conditions satisfied.
+
+   Computation Time: 0.02 ms
+   ================================================================================
 
 .. list-table:: Consistency Hierarchy
    :header-rows: 1
@@ -281,6 +385,36 @@ Output:
    Removed observations: [1]
    Remaining: [0, 2, 3]
 
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                          HOUTMAN-MAKS ABSTRACT INDEX REPORT
+   ================================================================================
+
+   Status: FULLY CONSISTENT
+
+   Metrics:
+   -------
+     Efficiency Index ................ 1.0000
+     Fraction Removed ................ 0.0000
+     Total Observations ................... 3
+     Removed Observations ................. 0
+     Remaining Observations ............... 3
+
+   Interpretation:
+   --------------
+     All menu choices are consistent - no removal needed.
+
+   Computation Time: 0.02 ms
+   ================================================================================
+
 Interpreting Efficiency
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -335,6 +469,41 @@ Output:
    Preference order: [0, 1, 2]
    Utility ranking: {0: 0, 1: 1, 2: 2}
    Utility values: [3. 2. 1.]
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                           ORDINAL UTILITY RECOVERY REPORT
+   ================================================================================
+
+   Status: SUCCESS
+
+   Metrics:
+   -------
+     Recovery Successful ................ Yes
+     Number of Items ...................... 3
+     Complete Ranking ................... Yes
+     Most Preferred ....................... 0
+     Least Preferred ...................... 2
+
+   Preference Order (most to least):
+   --------------------------------
+     0 > 1 > 2
+
+   Interpretation:
+   --------------
+     Ordinal preference ranking successfully recovered.
+     All items fully ranked (no incomparable pairs).
+
+   Computation Time: 2.59 ms
+   ================================================================================
 
 The preference order ``[0, 1, 2]`` means item 0 is most preferred, then 1, then 2.
 
@@ -404,6 +573,12 @@ Estimating Consideration Sets
    salience = compute_salience_weights(log, consideration_sets)
 
    print(f"Salience weights: {salience}")
+
+Output:
+
+.. code-block:: text
+
+   Salience weights: [0.8 0.1 0.1 1. ]
 
 Salience weights near 1.0 mean the item is almost always considered;
 lower values indicate items that are often overlooked.
