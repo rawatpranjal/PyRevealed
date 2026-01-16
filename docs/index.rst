@@ -91,11 +91,14 @@ Output:
      Efficiency Index (AEI) .......... 1.0000
      Waste Fraction .................. 0.0000
      Perfectly Consistent ............... Yes
+     Binary Search Iterations ............. 0
+     Tolerance ................... 1.0000e-06
 
    Interpretation:
    --------------
      Perfect consistency - behavior fully rationalized by utility maximization
 
+   Computation Time: 0.30 ms
    ================================================================================
 
 Core Functions
