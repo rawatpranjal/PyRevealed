@@ -68,9 +68,22 @@ Quick Example
    from pyrevealed import BehaviorLog, compute_integrity_score
    import numpy as np
 
+   # 5 purchases, 3 goods - prices and quantities
    log = BehaviorLog(
-       cost_vectors=np.array([[1.0, 2.0], [2.0, 1.0]]),
-       action_vectors=np.array([[3.0, 1.0], [1.0, 3.0]])
+       cost_vectors=np.array([
+           [1.0, 2.0, 3.0],
+           [2.0, 1.0, 3.0],
+           [1.5, 1.5, 2.0],
+           [1.2, 1.8, 2.5],
+           [1.8, 1.2, 2.5],
+       ]),
+       action_vectors=np.array([
+           [1, 5, 1],
+           [5, 1, 1],
+           [3, 3, 1],
+           [4, 2, 1],
+           [2, 4, 1],
+       ])
    )
 
    result = compute_integrity_score(log)
@@ -84,21 +97,22 @@ Output:
                             AFRIAT EFFICIENCY INDEX REPORT
    ================================================================================
 
-   Status: PERFECT (AEI = 1.0)
+   Status: MODERATE
 
    Metrics:
    -------
-     Efficiency Index (AEI) .......... 1.0000
-     Waste Fraction .................. 0.0000
-     Perfectly Consistent ............... Yes
-     Binary Search Iterations ............. 0
+     Efficiency Index (AEI) .......... 0.7143
+     Waste Fraction .................. 0.2857
+     Perfectly Consistent ................ No
+     Binary Search Iterations ............ 20
      Tolerance ................... 1.0000e-06
 
    Interpretation:
    --------------
-     Perfect consistency - behavior fully rationalized by utility maximization
+     Moderate consistency - some behavioral anomalies present
+     Approximately 28.6% of budget on inconsistent choices.
 
-   Computation Time: 0.30 ms
+   Computation Time: 0.13 ms
    ================================================================================
 
 Core Functions
