@@ -70,6 +70,12 @@ For a higher-level API:
    print(f"Integrity: {report.integrity_score:.2f}")
    print(f"Confusion: {report.confusion_score:.2f}")
 
+   # Get scikit-learn style score (0-1, higher = better)
+   print(f"Score: {report.score():.2f}")
+
+   # Print detailed summary report
+   print(report.summary())
+
 Output:
 
 .. code-block:: text
@@ -78,6 +84,73 @@ Output:
    Consistent: True
    Integrity: 1.00
    Confusion: 0.00
+   Score: 1.00
+   ================================================================================
+                               BEHAVIORAL AUDIT REPORT
+   ================================================================================
+
+   Overall Status: PASS
+
+   Core Metrics:
+   ------------
+     Consistent (GARP) .................. Yes
+     Integrity Score (AEI) ........... 1.0000
+     Confusion Score (MPI) ........... 0.0000
+
+   Interpretation:
+   --------------
+     Integrity: Perfect consistency - behavior fully rationalized
+     Confusion: No exploitability - choices are fully consistent
+
+   Recommendation:
+   --------------
+     Behavior is highly consistent with utility maximization.
+     User signal is clean and reliable.
+
+Summary and Score Methods
+-------------------------
+
+All result objects have ``summary()`` and ``score()`` methods for easy interpretation:
+
+.. code-block:: python
+
+   from pyrevealed import BehaviorLog, compute_integrity_score, compute_confusion_metric
+   import numpy as np
+
+   log = BehaviorLog(
+       cost_vectors=np.array([[1.0, 2.0], [2.0, 1.0]]),
+       action_vectors=np.array([[3.0, 1.0], [1.0, 3.0]])
+   )
+
+   # Get integrity result
+   result = compute_integrity_score(log)
+
+   # Scikit-learn compatible score (0-1)
+   print(f"Score: {result.score():.2f}")  # 1.00
+
+   # Human-readable summary
+   print(result.summary())
+
+Output:
+
+.. code-block:: text
+
+   Score: 1.00
+   ================================================================================
+                            AFRIAT EFFICIENCY INDEX REPORT
+   ================================================================================
+
+   Status: PERFECT (AEI = 1.0)
+
+   Metrics:
+   -------
+     Efficiency Index (AEI) ........... 1.0000
+     Waste Fraction ................... 0.0000
+     Perfectly Consistent ................ Yes
+
+   Interpretation:
+   --------------
+     Perfect consistency - behavior fully rationalized by utility maximization
 
 Utility Recovery
 ----------------
