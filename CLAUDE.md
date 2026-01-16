@@ -145,14 +145,44 @@ grep -n "github" pyproject.toml docs/conf.py
 
 ### Release Checklist
 
-1. Update version in all 3 files above
-2. Ensure GitHub URLs point to `https://github.com/rawatpranjal/PyRevealed`
-3. Ensure `LICENSE` file exists
-4. Ensure Python version in `docs/tutorial*.rst` matches `pyproject.toml` (`requires-python`)
-5. Commit, push, and verify:
+1. **Bump version** in all 3 files (PyPI rejects duplicate versions!):
+   ```bash
+   # Edit these files with new version X.Y.Z:
+   # - pyproject.toml (line 7)
+   # - src/pyrevealed/__init__.py (line ~400)
+   # - docs/conf.py (line 14)
+   ```
+
+2. **Build and upload to PyPI**:
+   ```bash
+   rm -rf dist/ build/
+   python3 -m build
+   python3 -m twine upload dist/*
+   ```
+
+3. **Rebuild docs** (clean build to avoid caching issues):
+   ```bash
+   rm -rf docs/_build
+   python3 -m sphinx docs docs/_build/html
+   ```
+
+4. **Push to GitHub** (triggers ReadTheDocs rebuild):
+   ```bash
+   git add .
+   git commit -m "Release vX.Y.Z"
+   git push
+   ```
+
+5. **Verify all surfaces**:
    - PyPI: https://pypi.org/project/pyrevealed/
    - ReadTheDocs: https://pyrevealed.readthedocs.io
    - GitHub: https://github.com/rawatpranjal/PyRevealed
+
+### Common Issues
+
+- **PyPI "file already exists"**: You forgot to bump version. PyPI never allows re-uploading the same version.
+- **ReadTheDocs not updating**: Push to GitHub triggers rebuild. Wait 1-2 min. If stuck, check build logs at readthedocs.org.
+- **Local docs not updating**: Delete `docs/_build/` and rebuild. Sphinx caches aggressively.
 
 ## Theory Reference
 

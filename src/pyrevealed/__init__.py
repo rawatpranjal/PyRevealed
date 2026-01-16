@@ -397,7 +397,7 @@ from pyrevealed.algorithms.production import (
     check_production_garp,  # Legacy
 )
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 __all__ = [
     # ==========================================================================
