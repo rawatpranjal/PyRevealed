@@ -50,15 +50,3 @@ Overview
      - Risk aversion, CRRA utility, expected utility axioms
      - Tutorial 1
 
-Recommended Path
-----------------
-
-**Beginners**: Start with Tutorial 1, then Tutorial 2 (Menu-Based Choice).
-
-**Applied researchers**: Tutorial 1 → Tutorial 3 (Welfare) → Tutorial 4 (Demand Analysis).
-
-**ML practitioners**: Tutorial 1 → Tutorial 6 (E-Commerce) for large-scale applications.
-
-**Behavioral researchers**: Tutorial 1 → Tutorial 2 (Menu-Based) → Tutorial 7 (Attention) for bounded rationality applications.
-
-**Finance/Risk researchers**: Tutorial 1 → Tutorial 8 (Risk Analysis) for decision-making under uncertainty.

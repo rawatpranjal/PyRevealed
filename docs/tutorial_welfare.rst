@@ -728,25 +728,25 @@ The deadweight loss averages $30-50 per household annually, representing
 economic inefficiency from the behavioral distortion.
 
 
-Part 9: Best Practices
-----------------------
+Part 9: Notes
+-------------
 
-Choosing a Method
-~~~~~~~~~~~~~~~~~
+Method Selection
+~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
    :widths: 30 70
 
    * - Situation
-     - Recommended Method
+     - Method
    * - GARP-consistent data
-     - Use ``method="exact"`` for best accuracy
+     - ``method="exact"`` for best accuracy
    * - GARP violations
-     - Use ``method="vartia"`` (automatic fallback)
+     - ``method="vartia"`` (automatic fallback)
    * - Quick estimates
-     - Use ``method="bounds"`` for speed
-   * - Research papers
+     - ``method="bounds"`` for speed
+   * - Comparative analysis
      - Report all three for robustness
 
 Handling GARP Violations

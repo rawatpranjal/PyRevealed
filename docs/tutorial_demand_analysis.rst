@@ -1109,8 +1109,8 @@ meat-produce) and complementarity (snacks-beverages). These findings would
 inform pricing, promotions, and product placement strategies
 
 
-Part 10: Best Practices
------------------------
+Part 10: Notes
+--------------
 
 Sample Size Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~

@@ -560,6 +560,147 @@ class RiskProfileResult(ResultDisplayMixin, ResultPlotMixin):
 
 
 @dataclass(frozen=True)
+class ExpectedUtilityResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of Expected Utility axiom test using GRID method.
+
+    Tests whether lottery choices can be rationalized by Expected Utility (EU)
+    theory using the GRID (Generalized Restriction of Infinite Domains) method
+    from Polisson, Quah & Renou (2020).
+
+    Attributes:
+        is_consistent: True if choices satisfy EU axioms
+        risk_attitude: Detected risk attitude ("any", "averse", "seeking", "neutral")
+        violations: List of choice pairs violating EU
+        violation_severity: Severity measure of violations
+        num_choices: Total number of lottery choices tested
+        num_violations: Number of EU violations found
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    is_consistent: bool
+    risk_attitude: str
+    violations: list[tuple[int, int]]
+    violation_severity: float
+    num_choices: int
+    num_violations: int
+    computation_time_ms: float
+
+    def score(self) -> float:
+        """Return consistency score (1 = consistent, lower = more violations)."""
+        if self.num_choices == 0:
+            return 1.0
+        return 1.0 - (self.num_violations / max(1, self.num_choices))
+
+    def summary(self) -> str:
+        """Return formatted summary of the Expected Utility test result."""
+        m = _formatting()
+        lines = [m._format_header("EXPECTED UTILITY TEST RESULT")]
+
+        # Status
+        status = "CONSISTENT" if self.is_consistent else "VIOLATED"
+        lines.append(f"\nStatus: {status}")
+        lines.append(f"Risk Attitude: {self.risk_attitude}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Choices Tested", self.num_choices))
+        lines.append(m._format_metric("Violations Found", self.num_violations))
+        lines.append(m._format_metric("Violation Severity", self.violation_severity))
+        lines.append(m._format_metric("Consistency Score", self.score()))
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation."""
+        return {
+            "is_consistent": self.is_consistent,
+            "risk_attitude": self.risk_attitude,
+            "violations": self.violations,
+            "violation_severity": self.violation_severity,
+            "num_choices": self.num_choices,
+            "num_violations": self.num_violations,
+            "score": self.score(),
+            "computation_time_ms": self.computation_time_ms,
+        }
+
+    def __repr__(self) -> str:
+        indicator = "[+]" if self.is_consistent else "[-]"
+        return f"ExpectedUtilityResult: {indicator} EU-{self.risk_attitude} ({self.num_violations} violations)"
+
+
+@dataclass(frozen=True)
+class RankDependentUtilityResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of Rank-Dependent Utility (RDU) axiom test.
+
+    Tests whether lottery choices can be rationalized by Rank-Dependent
+    Utility theory, which allows for probability weighting.
+
+    Attributes:
+        is_consistent: True if choices satisfy RDU axioms
+        probability_weighting: Detected probability weighting type
+        violations: List of choice pairs violating RDU
+        violation_severity: Severity measure of violations
+        num_choices: Total number of lottery choices tested
+        num_violations: Number of RDU violations found
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    is_consistent: bool
+    probability_weighting: str
+    violations: list[tuple[int, int]]
+    violation_severity: float
+    num_choices: int
+    num_violations: int
+    computation_time_ms: float
+
+    def score(self) -> float:
+        """Return consistency score (1 = consistent, lower = more violations)."""
+        if self.num_choices == 0:
+            return 1.0
+        return 1.0 - (self.num_violations / max(1, self.num_choices))
+
+    def summary(self) -> str:
+        """Return formatted summary of the RDU test result."""
+        m = _formatting()
+        lines = [m._format_header("RANK-DEPENDENT UTILITY TEST RESULT")]
+
+        # Status
+        status = "CONSISTENT" if self.is_consistent else "VIOLATED"
+        lines.append(f"\nStatus: {status}")
+        lines.append(f"Probability Weighting: {self.probability_weighting}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Choices Tested", self.num_choices))
+        lines.append(m._format_metric("Violations Found", self.num_violations))
+        lines.append(m._format_metric("Violation Severity", self.violation_severity))
+        lines.append(m._format_metric("Consistency Score", self.score()))
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation."""
+        return {
+            "is_consistent": self.is_consistent,
+            "probability_weighting": self.probability_weighting,
+            "violations": self.violations,
+            "violation_severity": self.violation_severity,
+            "num_choices": self.num_choices,
+            "num_violations": self.num_violations,
+            "score": self.score(),
+            "computation_time_ms": self.computation_time_ms,
+        }
+
+    def __repr__(self) -> str:
+        indicator = "[+]" if self.is_consistent else "[-]"
+        return f"RankDependentUtilityResult: {indicator} RDU-{self.probability_weighting} ({self.num_violations} violations)"
+
+
+@dataclass(frozen=True)
 class IdealPointResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of ideal point estimation in feature space.
@@ -4743,3 +4884,788 @@ class StatusQuoBiasResult(ResultDisplayMixin, ResultPlotMixin):
         if self.has_status_quo_bias:
             return f"StatusQuoBiasResult(bias={self.default_advantage:.2%})"
         return "StatusQuoBiasResult(no bias)"
+
+
+# =============================================================================
+# PHASE 3 ADDITIONS - RANKING AND PAIRWISE COMPARISON
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class BradleyTerryResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of Bradley-Terry model fitting.
+
+    The Bradley-Terry model represents choice probabilities as:
+        P(i beats j) = pi_i / (pi_i + pi_j)
+
+    where pi_i > 0 is the "strength" parameter for item i.
+
+    This is the core model for RLHF preference learning and can be used
+    to convert pairwise comparisons into a total ordering.
+
+    Attributes:
+        scores: Dict mapping item index to strength score
+        log_likelihood: Log-likelihood of the fitted model
+        converged: Whether optimization converged
+        ranking: Items ordered by strength (highest first)
+        num_comparisons: Total number of pairwise comparisons
+        num_items: Number of unique items
+        computation_time_ms: Time taken in milliseconds
+
+    References:
+        Bradley, R. A., & Terry, M. E. (1952). Rank analysis of incomplete
+        block designs: I. The method of paired comparisons. Biometrika.
+    """
+
+    scores: dict[int, float]
+    log_likelihood: float
+    converged: bool
+    ranking: list[int]
+    num_comparisons: int
+    num_items: int
+    computation_time_ms: float
+
+    def predict_probability(self, item_i: int, item_j: int) -> float:
+        """Predict P(item_i beats item_j)."""
+        if item_i not in self.scores or item_j not in self.scores:
+            return 0.5
+        s_i = self.scores[item_i]
+        s_j = self.scores[item_j]
+        exp_i = np.exp(s_i - max(s_i, s_j))
+        exp_j = np.exp(s_j - max(s_i, s_j))
+        return exp_i / (exp_i + exp_j)
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1.0 if converged, 0.0 otherwise.
+        """
+        return 1.0 if self.converged else 0.0
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("BRADLEY-TERRY MODEL REPORT")]
+
+        # Status
+        status = "CONVERGED" if self.converged else "NOT CONVERGED"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Log-Likelihood", f"{self.log_likelihood:.4f}"))
+        lines.append(m._format_metric("Converged", self.converged))
+        lines.append(m._format_metric("Number of Items", self.num_items))
+        lines.append(m._format_metric("Number of Comparisons", self.num_comparisons))
+
+        # Top-ranked items
+        if self.ranking:
+            lines.append(m._format_section("Top Rankings"))
+            for rank, item in enumerate(self.ranking[:5], 1):
+                score = self.scores.get(item, 0)
+                lines.append(f"  {rank}. Item {item} (score: {score:.4f})")
+            if len(self.ranking) > 5:
+                lines.append(f"  ... and {len(self.ranking) - 5} more items")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        lines.append("  Higher scores indicate stronger items.")
+        lines.append("  P(i beats j) = exp(s_i) / (exp(s_i) + exp(s_j))")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "scores": self.scores,
+            "log_likelihood": self.log_likelihood,
+            "converged": self.converged,
+            "ranking": self.ranking,
+            "num_comparisons": self.num_comparisons,
+            "num_items": self.num_items,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        indicator = "[+]" if self.converged else "[-]"
+        return f"BradleyTerryResult: {indicator} {self.num_items} items, LL={self.log_likelihood:.2f}"
+
+
+@dataclass(frozen=True)
+class RankingComparisonResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of comparing two rankings using multiple metrics.
+
+    Provides Kendall tau, Spearman footrule, and Rank-Biased Overlap
+    to give a complete picture of ranking similarity.
+
+    Attributes:
+        kendall_tau: Kendall tau correlation in [-1, 1]
+        spearman_footrule: Normalized footrule distance in [0, 1]
+        rank_biased_overlap: RBO score in [0, 1]
+        rbo_parameter: The p parameter used for RBO
+        num_common_items: Number of items in both rankings
+        len_ranking1: Length of first ranking
+        len_ranking2: Length of second ranking
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    kendall_tau: float
+    spearman_footrule: float
+    rank_biased_overlap: float
+    rbo_parameter: float
+    num_common_items: int
+    len_ranking1: int
+    len_ranking2: int
+    computation_time_ms: float
+
+    @property
+    def are_similar(self) -> bool:
+        """True if rankings are similar (tau > 0.5 and RBO > 0.5)."""
+        return self.kendall_tau > 0.5 and self.rank_biased_overlap > 0.5
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns average of normalized metrics.
+        """
+        # Kendall tau is in [-1, 1], normalize to [0, 1]
+        tau_norm = (self.kendall_tau + 1) / 2
+        # Footrule is distance, invert
+        footrule_sim = 1 - self.spearman_footrule
+        # RBO is already similarity
+        return (tau_norm + footrule_sim + self.rank_biased_overlap) / 3
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("RANKING COMPARISON REPORT")]
+
+        # Status
+        status = "SIMILAR" if self.are_similar else "DIFFERENT"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Similarity Metrics"))
+        lines.append(m._format_metric("Kendall Tau", f"{self.kendall_tau:.4f}"))
+        lines.append(m._format_metric("Spearman Footrule", f"{self.spearman_footrule:.4f}"))
+        lines.append(m._format_metric("Rank-Biased Overlap", f"{self.rank_biased_overlap:.4f}"))
+        lines.append(m._format_metric("RBO Parameter (p)", f"{self.rbo_parameter:.2f}"))
+
+        # Size info
+        lines.append(m._format_section("Ranking Sizes"))
+        lines.append(m._format_metric("Ranking 1 Length", self.len_ranking1))
+        lines.append(m._format_metric("Ranking 2 Length", self.len_ranking2))
+        lines.append(m._format_metric("Common Items", self.num_common_items))
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.kendall_tau > 0.7:
+            lines.append("  Strong ordinal agreement (Kendall tau > 0.7)")
+        elif self.kendall_tau > 0.3:
+            lines.append("  Moderate ordinal agreement")
+        else:
+            lines.append("  Weak or no ordinal agreement")
+
+        if self.rank_biased_overlap > 0.8:
+            lines.append("  Very similar top items (RBO > 0.8)")
+        elif self.rank_biased_overlap > 0.5:
+            lines.append("  Moderate top agreement (RBO > 0.5)")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "kendall_tau": self.kendall_tau,
+            "spearman_footrule": self.spearman_footrule,
+            "rank_biased_overlap": self.rank_biased_overlap,
+            "rbo_parameter": self.rbo_parameter,
+            "num_common_items": self.num_common_items,
+            "len_ranking1": self.len_ranking1,
+            "len_ranking2": self.len_ranking2,
+            "are_similar": self.are_similar,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        return f"RankingComparisonResult(tau={self.kendall_tau:.3f}, RBO={self.rank_biased_overlap:.3f})"
+
+
+# =============================================================================
+# PHASE 3 ADDITIONS - STOCHASTIC CHOICE EXTENSIONS
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class StochasticTransitivityResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of stochastic transitivity tests (WST/MST/SST).
+
+    Tests whether choice probabilities satisfy stochastic transitivity axioms:
+    - WST (Weak): P(a,b) > 0.5 and P(b,c) > 0.5 => P(a,c) > 0.5
+    - MST (Moderate): P(a,b) > 0.5 and P(b,c) > 0.5 => P(a,c) >= max(P(a,b), P(b,c))
+    - SST (Strong): P(a,b) > 0.5 and P(b,c) > 0.5 => P(a,c) >= min(P(a,b), P(b,c))
+
+    Attributes:
+        satisfies_wst: True if weak stochastic transitivity holds
+        satisfies_mst: True if moderate stochastic transitivity holds
+        satisfies_sst: True if strong stochastic transitivity holds
+        wst_violations: List of (a, b, c) triples violating WST
+        mst_violations: List of (a, b, c) triples violating MST
+        sst_violations: List of (a, b, c) triples violating SST
+        num_testable_triples: Number of triples tested
+        computation_time_ms: Time taken in milliseconds
+
+    References:
+        Luce, R. D. (1959). Individual Choice Behavior.
+        Tversky, A. (1969). Intransitivity of preferences. Psychological Review.
+    """
+
+    satisfies_wst: bool
+    satisfies_mst: bool
+    satisfies_sst: bool
+    wst_violations: list[tuple[int, int, int]]
+    mst_violations: list[tuple[int, int, int]]
+    sst_violations: list[tuple[int, int, int]]
+    num_testable_triples: int
+    computation_time_ms: float
+
+    @property
+    def strongest_satisfied(self) -> str:
+        """Return the strongest transitivity level satisfied."""
+        if self.satisfies_sst:
+            return "SST"
+        elif self.satisfies_mst:
+            return "MST"
+        elif self.satisfies_wst:
+            return "WST"
+        else:
+            return "None"
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1.0 for SST, 0.67 for MST, 0.33 for WST, 0.0 for none.
+        """
+        if self.satisfies_sst:
+            return 1.0
+        elif self.satisfies_mst:
+            return 0.67
+        elif self.satisfies_wst:
+            return 0.33
+        else:
+            return 0.0
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("STOCHASTIC TRANSITIVITY TEST REPORT")]
+
+        # Status
+        lines.append(f"\nStrongest Level Satisfied: {self.strongest_satisfied}")
+
+        # Metrics
+        lines.append(m._format_section("Transitivity Levels"))
+        lines.append(m._format_metric("Weak (WST)", self.satisfies_wst))
+        lines.append(m._format_metric("Moderate (MST)", self.satisfies_mst))
+        lines.append(m._format_metric("Strong (SST)", self.satisfies_sst))
+
+        # Violations
+        lines.append(m._format_section("Violations"))
+        lines.append(m._format_metric("WST Violations", len(self.wst_violations)))
+        lines.append(m._format_metric("MST Violations", len(self.mst_violations)))
+        lines.append(m._format_metric("SST Violations", len(self.sst_violations)))
+        lines.append(m._format_metric("Triples Tested", self.num_testable_triples))
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.satisfies_sst:
+            lines.append("  Choices satisfy Strong Stochastic Transitivity.")
+            lines.append("  This is consistent with a strong utility model.")
+        elif self.satisfies_mst:
+            lines.append("  Choices satisfy Moderate Stochastic Transitivity.")
+            lines.append("  This is consistent with moderate choice consistency.")
+        elif self.satisfies_wst:
+            lines.append("  Choices satisfy only Weak Stochastic Transitivity.")
+            lines.append("  Preferences may have bounded or noisy utility.")
+        else:
+            lines.append("  Choices violate even Weak Stochastic Transitivity.")
+            lines.append("  This suggests substantial preference inconsistency.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "satisfies_wst": self.satisfies_wst,
+            "satisfies_mst": self.satisfies_mst,
+            "satisfies_sst": self.satisfies_sst,
+            "num_wst_violations": len(self.wst_violations),
+            "num_mst_violations": len(self.mst_violations),
+            "num_sst_violations": len(self.sst_violations),
+            "num_testable_triples": self.num_testable_triples,
+            "strongest_satisfied": self.strongest_satisfied,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        return f"StochasticTransitivityResult(strongest={self.strongest_satisfied})"
+
+
+@dataclass(frozen=True)
+class MinimumCostIndexResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of Minimum Cost Index computation.
+
+    The MCI measures the minimum monetary cost to break all GARP cycles.
+    It is an alternative severity measure to AEI that has more direct
+    economic interpretation.
+
+    Attributes:
+        mci_value: Minimum cost to break cycles (0 if consistent)
+        mci_normalized: MCI normalized by total expenditure
+        adjustments: Dict of observation -> expenditure adjustment
+        cycles_broken: Number of cycles eliminated
+        total_expenditure: Total expenditure in data
+        is_consistent: True if no adjustments needed
+        computation_time_ms: Time taken in milliseconds
+
+    References:
+        Dean, M., & Martin, D. (2016). Measuring rationality with the
+        minimum cost of revealed preference violations.
+        Review of Economics and Statistics.
+    """
+
+    mci_value: float
+    mci_normalized: float
+    adjustments: dict[int, float]
+    cycles_broken: int
+    total_expenditure: float
+    is_consistent: bool
+    computation_time_ms: float
+
+    @property
+    def num_adjustments(self) -> int:
+        """Number of observations requiring adjustment."""
+        return len(self.adjustments)
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1 - mci_normalized.
+        """
+        return max(0.0, 1.0 - self.mci_normalized)
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("MINIMUM COST INDEX REPORT")]
+
+        # Status
+        status = "CONSISTENT" if self.is_consistent else "VIOLATIONS FOUND"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("MCI (Absolute)", f"{self.mci_value:.4f}"))
+        lines.append(m._format_metric("MCI (Normalized)", f"{self.mci_normalized:.4f}"))
+        lines.append(m._format_metric("Total Expenditure", f"{self.total_expenditure:.2f}"))
+        lines.append(m._format_metric("Cycles Broken", self.cycles_broken))
+        lines.append(m._format_metric("Observations Adjusted", self.num_adjustments))
+
+        # Top adjustments
+        if self.adjustments:
+            lines.append(m._format_section("Largest Adjustments"))
+            sorted_adj = sorted(self.adjustments.items(), key=lambda x: -abs(x[1]))
+            for obs, adj in sorted_adj[:5]:
+                lines.append(f"  Observation {obs}: {adj:.4f}")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.is_consistent:
+            lines.append("  Data is GARP-consistent, no cost adjustments needed.")
+        else:
+            pct = self.mci_normalized * 100
+            lines.append(f"  Removing violations costs ~{pct:.2f}% of expenditure.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "mci_value": self.mci_value,
+            "mci_normalized": self.mci_normalized,
+            "num_adjustments": self.num_adjustments,
+            "cycles_broken": self.cycles_broken,
+            "total_expenditure": self.total_expenditure,
+            "is_consistent": self.is_consistent,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        return f"MinimumCostIndexResult: {indicator} MCI={self.mci_normalized:.4f}"
+
+
+@dataclass(frozen=True)
+class DecoyEffectResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of decoy/attraction effect detection.
+
+    A decoy effect occurs when adding a dominated alternative D
+    increases the choice share of the dominating alternative T
+    (the "target") relative to a competitor C.
+
+    Attributes:
+        has_decoy_effect: True if significant decoy effects detected
+        decoy_triples: List of (target, competitor, decoy) triples
+        magnitude: Average probability boost to target
+        vulnerabilities: Dict mapping item to decoy vulnerability score
+        num_menus_tested: Number of menu pairs tested
+        computation_time_ms: Time taken in milliseconds
+
+    References:
+        Huber, J., Payne, J. W., & Puto, C. (1982). Adding asymmetrically
+        dominated alternatives. Journal of Consumer Research.
+    """
+
+    has_decoy_effect: bool
+    decoy_triples: list[tuple[int, int, int]]
+    magnitude: float
+    vulnerabilities: dict[int, float]
+    num_menus_tested: int
+    computation_time_ms: float
+
+    @property
+    def num_decoys(self) -> int:
+        """Number of decoy relationships detected."""
+        return len(self.decoy_triples)
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher = more decoy effect.
+
+        Returns the magnitude of decoy effect.
+        """
+        return min(1.0, self.magnitude)
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("DECOY EFFECT ANALYSIS REPORT")]
+
+        # Status
+        status = "DECOY EFFECT DETECTED" if self.has_decoy_effect else "NO DECOY EFFECT"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Has Decoy Effect", self.has_decoy_effect))
+        lines.append(m._format_metric("Decoy Triples Found", self.num_decoys))
+        lines.append(m._format_metric("Average Magnitude", f"{self.magnitude:.2%}"))
+        lines.append(m._format_metric("Menus Tested", self.num_menus_tested))
+
+        # Top decoy triples
+        if self.decoy_triples:
+            lines.append(m._format_section("Decoy Relationships"))
+            for target, comp, decoy in self.decoy_triples[:5]:
+                lines.append(f"  Target {target} boosted vs {comp} by decoy {decoy}")
+
+        # Vulnerable items
+        if self.vulnerabilities:
+            lines.append(m._format_section("Most Vulnerable Items"))
+            sorted_vuln = sorted(self.vulnerabilities.items(), key=lambda x: -x[1])
+            for item, vuln in sorted_vuln[:3]:
+                lines.append(f"  Item {item}: {vuln:.2%} vulnerability")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.has_decoy_effect:
+            lines.append("  Choice behavior is influenced by dominated options.")
+            lines.append("  This violates regularity (rational independence).")
+        else:
+            lines.append("  No significant decoy effects detected.")
+            lines.append("  Choices appear to follow regularity.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "has_decoy_effect": self.has_decoy_effect,
+            "num_decoys": self.num_decoys,
+            "magnitude": self.magnitude,
+            "vulnerabilities": self.vulnerabilities,
+            "num_menus_tested": self.num_menus_tested,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        if self.has_decoy_effect:
+            return f"DecoyEffectResult(n={self.num_decoys}, mag={self.magnitude:.2%})"
+        return "DecoyEffectResult(none detected)"
+
+
+@dataclass(frozen=True)
+class CompromiseEffectResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of compromise effect detection.
+
+    A compromise effect occurs when adding extreme alternatives
+    increases the choice share of middle/compromise options.
+
+    Attributes:
+        has_compromise_effect: True if significant compromise effects detected
+        compromise_items: Items that benefit from being compromise options
+        magnitude: Average probability boost to compromise options
+        extreme_pairs: List of (extreme1, extreme2, compromise) triples
+        num_menus_tested: Number of menu pairs tested
+        computation_time_ms: Time taken in milliseconds
+
+    References:
+        Simonson, I. (1989). Choice based on reasons: The case of
+        attraction and compromise effects. Journal of Consumer Research.
+    """
+
+    has_compromise_effect: bool
+    compromise_items: list[int]
+    magnitude: float
+    extreme_pairs: list[tuple[int, int, int]]
+    num_menus_tested: int
+    computation_time_ms: float
+
+    @property
+    def num_compromises(self) -> int:
+        """Number of compromise relationships detected."""
+        return len(self.extreme_pairs)
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher = more effect."""
+        return min(1.0, self.magnitude)
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("COMPROMISE EFFECT ANALYSIS REPORT")]
+
+        # Status
+        status = "COMPROMISE EFFECT DETECTED" if self.has_compromise_effect else "NO EFFECT"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Has Compromise Effect", self.has_compromise_effect))
+        lines.append(m._format_metric("Compromise Items", len(self.compromise_items)))
+        lines.append(m._format_metric("Average Magnitude", f"{self.magnitude:.2%}"))
+        lines.append(m._format_metric("Menus Tested", self.num_menus_tested))
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.has_compromise_effect:
+            lines.append("  Middle options are preferred when extremes are added.")
+            lines.append("  This indicates extremeness aversion in choices.")
+        else:
+            lines.append("  No significant compromise effects detected.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "has_compromise_effect": self.has_compromise_effect,
+            "compromise_items": self.compromise_items,
+            "num_compromises": self.num_compromises,
+            "magnitude": self.magnitude,
+            "num_menus_tested": self.num_menus_tested,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        if self.has_compromise_effect:
+            return f"CompromiseEffectResult(n={self.num_compromises}, mag={self.magnitude:.2%})"
+        return "CompromiseEffectResult(none detected)"
+
+
+@dataclass(frozen=True)
+class BootstrapCIResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of bootstrap confidence interval computation.
+
+    Provides confidence intervals for RP metrics like AEI, MPI, etc.
+
+    Attributes:
+        point_estimate: The original metric value
+        ci_lower: Lower bound of confidence interval
+        ci_upper: Upper bound of confidence interval
+        confidence_level: Confidence level (e.g., 0.95)
+        metric_name: Name of the metric
+        bootstrap_distribution: Array of bootstrap samples
+        std_error: Standard error of bootstrap distribution
+        n_bootstrap: Number of bootstrap iterations
+        computation_time_ms: Time taken in milliseconds
+
+    References:
+        Efron, B., & Tibshirani, R. J. (1994). An Introduction to the Bootstrap.
+    """
+
+    point_estimate: float
+    ci_lower: float
+    ci_upper: float
+    confidence_level: float
+    metric_name: str
+    bootstrap_distribution: NDArray[np.float64]
+    std_error: float
+    n_bootstrap: int
+    computation_time_ms: float
+
+    @property
+    def ci_width(self) -> float:
+        """Width of confidence interval."""
+        return self.ci_upper - self.ci_lower
+
+    @property
+    def is_precise(self) -> bool:
+        """True if CI width is less than 0.1."""
+        return self.ci_width < 0.1
+
+    def score(self) -> float:
+        """Return the point estimate as score."""
+        return self.point_estimate
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header(f"BOOTSTRAP CI REPORT: {self.metric_name.upper()}")]
+
+        # Status
+        pct = int(self.confidence_level * 100)
+        lines.append(f"\n{pct}% Confidence Interval: [{self.ci_lower:.4f}, {self.ci_upper:.4f}]")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Point Estimate", f"{self.point_estimate:.4f}"))
+        lines.append(m._format_metric("CI Lower", f"{self.ci_lower:.4f}"))
+        lines.append(m._format_metric("CI Upper", f"{self.ci_upper:.4f}"))
+        lines.append(m._format_metric("CI Width", f"{self.ci_width:.4f}"))
+        lines.append(m._format_metric("Standard Error", f"{self.std_error:.4f}"))
+        lines.append(m._format_metric("Bootstrap Samples", self.n_bootstrap))
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.is_precise:
+            lines.append("  Precise estimate (narrow confidence interval).")
+        else:
+            lines.append("  Wide confidence interval - interpret with caution.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "point_estimate": self.point_estimate,
+            "ci_lower": self.ci_lower,
+            "ci_upper": self.ci_upper,
+            "confidence_level": self.confidence_level,
+            "metric_name": self.metric_name,
+            "std_error": self.std_error,
+            "n_bootstrap": self.n_bootstrap,
+            "ci_width": self.ci_width,
+            "computation_time_ms": self.computation_time_ms,
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        pct = int(self.confidence_level * 100)
+        return f"BootstrapCIResult({self.metric_name}: {self.point_estimate:.3f} [{self.ci_lower:.3f}, {self.ci_upper:.3f}] {pct}%)"
+
+
+@dataclass(frozen=True)
+class PredictiveSuccessResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of predictive success computation.
+
+    Measures how well a model predicts choices beyond chance,
+    following Selten (1991)'s measure.
+
+    Attributes:
+        predictive_success: Hit rate minus false alarm rate
+        hit_rate: Proportion of correct predictions
+        false_alarm_rate: Proportion of incorrect predictions
+        model_name: Name of the model tested
+        num_predictions: Number of predictions made
+        computation_time_ms: Time taken in milliseconds
+
+    References:
+        Selten, R. (1991). Properties of a measure of predictive success.
+        Mathematical Social Sciences.
+    """
+
+    predictive_success: float
+    hit_rate: float
+    false_alarm_rate: float
+    model_name: str
+    num_predictions: int
+    computation_time_ms: float
+
+    def score(self) -> float:
+        """Return predictive success as score."""
+        return max(0.0, self.predictive_success)
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header(f"PREDICTIVE SUCCESS: {self.model_name.upper()}")]
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Predictive Success", f"{self.predictive_success:.4f}"))
+        lines.append(m._format_metric("Hit Rate", f"{self.hit_rate:.4f}"))
+        lines.append(m._format_metric("False Alarm Rate", f"{self.false_alarm_rate:.4f}"))
+        lines.append(m._format_metric("Predictions Made", self.num_predictions))
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.predictive_success > 0.5:
+            lines.append("  Model has strong predictive power.")
+        elif self.predictive_success > 0:
+            lines.append("  Model predicts better than chance.")
+        else:
+            lines.append("  Model does not improve on chance.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "predictive_success": self.predictive_success,
+            "hit_rate": self.hit_rate,
+            "false_alarm_rate": self.false_alarm_rate,
+            "model_name": self.model_name,
+            "num_predictions": self.num_predictions,
+            "computation_time_ms": self.computation_time_ms,
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        return f"PredictiveSuccessResult({self.model_name}: {self.predictive_success:.3f})"

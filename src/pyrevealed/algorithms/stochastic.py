@@ -1040,8 +1040,268 @@ def fit_rum_distribution(
 
 
 # =============================================================================
+# STOCHASTIC TRANSITIVITY TESTS (WST/MST/SST)
+# =============================================================================
+
+
+def test_stochastic_transitivity(
+    log: "StochasticChoiceLog",
+    level: str = "all",
+    tolerance: float = 0.01,
+) -> "StochasticTransitivityResult":
+    """
+    Test stochastic transitivity axioms (WST/MST/SST).
+
+    Stochastic transitivity axioms describe how pairwise choice probabilities
+    should be related when forming transitive chains. Let P(a,b) denote the
+    probability of choosing a over b in a binary choice.
+
+    Axiom Definitions:
+    - WST (Weak): P(a,b) > 0.5 and P(b,c) > 0.5 => P(a,c) > 0.5
+    - MST (Moderate): P(a,b) > 0.5 and P(b,c) > 0.5 => P(a,c) >= min(P(a,b), P(b,c))
+    - SST (Strong): P(a,b) > 0.5 and P(b,c) > 0.5 => P(a,c) >= max(P(a,b), P(b,c))
+
+    These form a hierarchy: SST => MST => WST. If a consumer's choices satisfy
+    SST, they also satisfy MST and WST.
+
+    Args:
+        log: StochasticChoiceLog with pairwise choice data
+        level: Which levels to test - "all", "weak", "moderate", or "strong"
+        tolerance: Tolerance for probability comparisons
+
+    Returns:
+        StochasticTransitivityResult with violation details for each level
+
+    Example:
+        >>> from pyrevealed import StochasticChoiceLog, test_stochastic_transitivity
+        >>> log = StochasticChoiceLog(
+        ...     menus=[{0,1}, {1,2}, {0,2}],
+        ...     choice_frequencies=[{0: 60, 1: 40}, {1: 55, 2: 45}, {0: 70, 2: 30}],
+        ...     total_observations_per_menu=[100, 100, 100]
+        ... )
+        >>> result = test_stochastic_transitivity(log)
+        >>> print(f"Strongest level satisfied: {result.strongest_satisfied}")
+
+    References:
+        Luce, R. D. (1959). Individual Choice Behavior: A Theoretical Analysis.
+        Tversky, A. (1969). Intransitivity of preferences. Psychological Review.
+    """
+    from pyrevealed.core.result import StochasticTransitivityResult
+
+    start_time = time.perf_counter()
+
+    # Build pairwise probability matrix
+    items = sorted(log.all_items)
+    n_items = len(items)
+    item_to_idx = {item: idx for idx, item in enumerate(items)}
+
+    # P[i,j] = probability of choosing item i over item j
+    P_matrix = np.full((n_items, n_items), 0.5)
+
+    # Extract pairwise probabilities from menus of size 2
+    for m_idx in range(log.num_menus):
+        menu = log.menus[m_idx]
+        if len(menu) == 2:
+            items_in_menu = list(menu)
+            total = log.total_observations_per_menu[m_idx]
+            if total > 0:
+                i, j = items_in_menu[0], items_in_menu[1]
+                idx_i, idx_j = item_to_idx[i], item_to_idx[j]
+                p_i = log.get_choice_probability(m_idx, i)
+                P_matrix[idx_i, idx_j] = p_i
+                P_matrix[idx_j, idx_i] = 1 - p_i
+
+    # Test all transitivity levels
+    wst_violations: list[tuple[int, int, int]] = []
+    mst_violations: list[tuple[int, int, int]] = []
+    sst_violations: list[tuple[int, int, int]] = []
+    num_testable = 0
+
+    for a_idx in range(n_items):
+        for b_idx in range(n_items):
+            if a_idx == b_idx:
+                continue
+            for c_idx in range(n_items):
+                if c_idx == a_idx or c_idx == b_idx:
+                    continue
+
+                p_ab = P_matrix[a_idx, b_idx]
+                p_bc = P_matrix[b_idx, c_idx]
+                p_ac = P_matrix[a_idx, c_idx]
+
+                # Only test if P(a,b) > 0.5 and P(b,c) > 0.5
+                if p_ab > 0.5 + tolerance and p_bc > 0.5 + tolerance:
+                    num_testable += 1
+                    a, b, c = items[a_idx], items[b_idx], items[c_idx]
+
+                    # WST: P(a,c) > 0.5
+                    if p_ac <= 0.5 + tolerance:
+                        wst_violations.append((a, b, c))
+
+                    # MST: P(a,c) >= min(P(a,b), P(b,c))
+                    if p_ac < min(p_ab, p_bc) - tolerance:
+                        mst_violations.append((a, b, c))
+
+                    # SST: P(a,c) >= max(P(a,b), P(b,c))
+                    if p_ac < max(p_ab, p_bc) - tolerance:
+                        sst_violations.append((a, b, c))
+
+    satisfies_wst = len(wst_violations) == 0
+    satisfies_mst = len(mst_violations) == 0
+    satisfies_sst = len(sst_violations) == 0
+
+    computation_time = (time.perf_counter() - start_time) * 1000
+
+    return StochasticTransitivityResult(
+        satisfies_wst=satisfies_wst,
+        satisfies_mst=satisfies_mst,
+        satisfies_sst=satisfies_sst,
+        wst_violations=wst_violations,
+        mst_violations=mst_violations,
+        sst_violations=sst_violations,
+        num_testable_triples=num_testable,
+        computation_time_ms=computation_time,
+    )
+
+
+# =============================================================================
+# ADDITIVE PERTURBED UTILITY (Fudenberg et al. 2015)
+# =============================================================================
+
+
+def test_additive_perturbed_utility(
+    log: "StochasticChoiceLog",
+    tolerance: float = 0.01,
+) -> dict:
+    """
+    Test if stochastic choices satisfy Additive Perturbed Utility (APU).
+
+    APU models assume the agent maximizes:
+        U(x) - c(p(x))
+
+    where U(x) is utility, p(x) is the choice probability, and c is a
+    strictly convex "cost of attention" function. This generalizes
+    the multinomial logit model.
+
+    Key testable implications:
+    1. Regularity: P(x|A) >= P(x|B) when A subset of B
+    2. Monotonicity in choice probabilities
+    3. Log-odds linearity (for logit special case)
+
+    Args:
+        log: StochasticChoiceLog with choice frequency data
+        tolerance: Tolerance for probability comparisons
+
+    Returns:
+        Dict with test results including:
+        - is_apu_consistent: Whether data is consistent with APU
+        - satisfies_regularity: Whether regularity holds
+        - regularity_violations: List of regularity violations
+        - monotonicity_score: Measure of monotonicity
+
+    Example:
+        >>> from pyrevealed import StochasticChoiceLog, test_additive_perturbed_utility
+        >>> result = test_additive_perturbed_utility(log)
+        >>> if result["is_apu_consistent"]:
+        ...     print("Consistent with APU model")
+
+    References:
+        Fudenberg, D., Iijima, R., & Strzalecki, T. (2015). Stochastic choice
+        and revealed perturbed utility. Econometrica, 83(6), 2371-2409.
+    """
+    start_time = time.perf_counter()
+
+    # Test regularity (necessary condition for APU)
+    regularity_violations = _find_regularity_violations(log, tolerance)
+    satisfies_regularity = len(regularity_violations) == 0
+
+    # Test IIA (logit special case of APU)
+    satisfies_iia = check_independence_irrelevant_alternatives(log, tolerance)
+
+    # Compute monotonicity score
+    # For APU: items with higher utility should have higher choice probabilities
+    # across different menus (after accounting for menu composition)
+    monotonicity_score = _compute_monotonicity_score(log)
+
+    # APU is consistent if regularity holds
+    # (This is a necessary but not sufficient condition)
+    is_apu_consistent = satisfies_regularity
+
+    computation_time = (time.perf_counter() - start_time) * 1000
+
+    return {
+        "is_apu_consistent": is_apu_consistent,
+        "satisfies_regularity": satisfies_regularity,
+        "satisfies_iia": satisfies_iia,
+        "regularity_violations": regularity_violations,
+        "monotonicity_score": monotonicity_score,
+        "is_logit_consistent": satisfies_iia,
+        "computation_time_ms": computation_time,
+    }
+
+
+def _compute_monotonicity_score(log: "StochasticChoiceLog") -> float:
+    """
+    Compute monotonicity score for choice probabilities.
+
+    Higher score indicates more monotonic relationship between
+    item "quality" and choice probabilities.
+    """
+    items = sorted(log.all_items)
+    n_items = len(items)
+
+    if n_items < 2:
+        return 1.0
+
+    # Estimate item quality from average choice probability
+    quality = {}
+    for item in items:
+        probs = []
+        for m_idx in range(log.num_menus):
+            if item in log.menus[m_idx]:
+                probs.append(log.get_choice_probability(m_idx, item))
+        quality[item] = np.mean(probs) if probs else 0.5
+
+    # Count concordant/discordant pairs across menus
+    concordant = 0
+    discordant = 0
+
+    for m_idx in range(log.num_menus):
+        menu_items = list(log.menus[m_idx])
+        for i in range(len(menu_items)):
+            for j in range(i + 1, len(menu_items)):
+                item_i, item_j = menu_items[i], menu_items[j]
+                p_i = log.get_choice_probability(m_idx, item_i)
+                p_j = log.get_choice_probability(m_idx, item_j)
+
+                # Does quality ordering match probability ordering?
+                quality_order = quality[item_i] > quality[item_j]
+                prob_order = p_i > p_j
+
+                if quality_order == prob_order:
+                    concordant += 1
+                else:
+                    discordant += 1
+
+    total = concordant + discordant
+    if total == 0:
+        return 1.0
+
+    return concordant / total
+
+
+# =============================================================================
 # ADDITIONAL LEGACY ALIASES
 # =============================================================================
 
 check_rum_consistency = test_rum_consistency
 """Legacy alias: use test_rum_consistency instead."""
+
+test_wst = test_stochastic_transitivity
+"""Legacy alias: use test_stochastic_transitivity instead."""
+
+check_stochastic_transitivity = test_stochastic_transitivity
+"""Legacy alias: use test_stochastic_transitivity instead."""
+
+check_apu = test_additive_perturbed_utility
+"""Legacy alias: use test_additive_perturbed_utility instead."""

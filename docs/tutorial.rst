@@ -1223,8 +1223,8 @@ efficiency-adjusted behavior, or remove violating observations using the
 Houtman-Maks index.
 
 
-Part 11: Summary and Best Practices
------------------------------------
+Part 11: Summary
+----------------
 
 Key Findings
 ~~~~~~~~~~~~
@@ -1246,8 +1246,8 @@ Key Findings
    * - Lancaster improvement
      - +5% CCEI
 
-Best Practices
-~~~~~~~~~~~~~~
+Notes
+~~~~~
 
 1. Compute power before interpreting GARP results
 2. Report CCEI distribution, not just pass rates

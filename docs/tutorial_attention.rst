@@ -538,8 +538,8 @@ Both tests fail. When the same menu produces different choices, attention can't
 explain the inconsistency - the consumer genuinely seems to have unstable preferences.
 
 
-Part D: Best Practices
-----------------------
+Part D: Notes
+-------------
 
 When to Use Attention Models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

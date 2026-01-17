@@ -223,6 +223,13 @@ from pyrevealed.algorithms.risk import (
     compute_risk_profile,
     check_expected_utility_axioms,
     classify_risk_type,
+    # GRID method for EU/RDU testing
+    LotteryChoice,
+    test_expected_utility,
+    test_rank_dependent_utility,
+    # Legacy aliases
+    check_eu_consistency,
+    check_rdu_consistency,
 )
 
 # Preference anchor / embedding analysis
@@ -433,6 +440,91 @@ from pyrevealed.algorithms.production import (
     check_production_garp,  # Legacy
 )
 
+# =============================================================================
+# PHASE 3 NEW ALGORITHMS
+# =============================================================================
+
+# Ranking and pairwise comparison
+from pyrevealed.algorithms.ranking import (
+    fit_bradley_terry,
+    predict_pairwise_probability,
+    aggregate_rankings,
+    compute_kendall_tau,
+    compute_spearman_footrule,
+    compute_rank_biased_overlap,
+    compare_rankings,
+    # Legacy aliases
+    fit_bt_model,
+    kendall_correlation,
+)
+
+# Context effects (decoy, compromise)
+from pyrevealed.algorithms.context_effects import (
+    detect_decoy_effect,
+    detect_compromise_effect,
+    test_context_effects,
+    # Legacy aliases
+    check_attraction_effect,
+    check_extremeness_aversion,
+)
+
+# Statistical inference
+from pyrevealed.algorithms.inference import (
+    compute_bootstrap_ci,
+    compute_predictive_success,
+    compute_standard_error,
+    test_metric_difference,
+    # Legacy aliases
+    bootstrap_confidence_interval,
+)
+
+# Intertemporal choice
+from pyrevealed.algorithms.intertemporal import (
+    test_exponential_discounting,
+    test_quasi_hyperbolic,
+    recover_discount_factor,
+    test_present_bias,
+    DatedChoice,
+    # Legacy aliases
+    check_exponential_discounting,
+    check_quasi_hyperbolic_discounting,
+)
+
+# Extended stochastic choice
+from pyrevealed.algorithms.stochastic import (
+    test_stochastic_transitivity,
+    test_additive_perturbed_utility,
+    # Legacy aliases
+    test_wst,
+    check_stochastic_transitivity,
+    check_apu,
+)
+
+# Extended GARP
+from pyrevealed.algorithms.garp import (
+    compute_minimum_cost_index,
+)
+
+# Extended welfare
+from pyrevealed.algorithms.welfare import (
+    compute_e_bounds,
+    compute_population_welfare_bounds,
+)
+
+# Phase 3 result types
+from pyrevealed.core.result import (
+    BradleyTerryResult,
+    RankingComparisonResult,
+    StochasticTransitivityResult,
+    MinimumCostIndexResult,
+    DecoyEffectResult,
+    CompromiseEffectResult,
+    BootstrapCIResult,
+    PredictiveSuccessResult,
+    ExpectedUtilityResult,
+    RankDependentUtilityResult,
+)
+
 __version__ = "0.4.2"
 
 __all__ = [
@@ -513,6 +605,12 @@ __all__ = [
     "compute_risk_profile",
     "check_expected_utility_axioms",
     "classify_risk_type",
+    # GRID method for lottery choices (NEW)
+    "LotteryChoice",
+    "test_expected_utility",
+    "test_rank_dependent_utility",
+    "check_eu_consistency",
+    "check_rdu_consistency",
     # Preference anchor
     "find_preference_anchor",
     "validate_embedding_consistency",
@@ -752,6 +850,61 @@ __all__ = [
     # Functions - Swaps index & observation contributions
     "compute_swaps_index",
     "compute_observation_contributions",
+    # ==========================================================================
+    # PHASE 3 ADDITIONS
+    # ==========================================================================
+    # Ranking and pairwise comparison
+    "fit_bradley_terry",
+    "predict_pairwise_probability",
+    "aggregate_rankings",
+    "compute_kendall_tau",
+    "compute_spearman_footrule",
+    "compute_rank_biased_overlap",
+    "compare_rankings",
+    "fit_bt_model",
+    "kendall_correlation",
+    # Context effects
+    "detect_decoy_effect",
+    "detect_compromise_effect",
+    "test_context_effects",
+    "check_attraction_effect",
+    "check_extremeness_aversion",
+    # Statistical inference
+    "compute_bootstrap_ci",
+    "compute_predictive_success",
+    "compute_standard_error",
+    "test_metric_difference",
+    "bootstrap_confidence_interval",
+    # Intertemporal choice
+    "test_exponential_discounting",
+    "test_quasi_hyperbolic",
+    "recover_discount_factor",
+    "test_present_bias",
+    "DatedChoice",
+    "check_exponential_discounting",
+    "check_quasi_hyperbolic_discounting",
+    # Extended stochastic choice
+    "test_stochastic_transitivity",
+    "test_additive_perturbed_utility",
+    "test_wst",
+    "check_stochastic_transitivity",
+    "check_apu",
+    # Extended GARP
+    "compute_minimum_cost_index",
+    # Extended welfare
+    "compute_e_bounds",
+    "compute_population_welfare_bounds",
+    # Phase 3 result types
+    "BradleyTerryResult",
+    "RankingComparisonResult",
+    "StochasticTransitivityResult",
+    "MinimumCostIndexResult",
+    "DecoyEffectResult",
+    "CompromiseEffectResult",
+    "BootstrapCIResult",
+    "PredictiveSuccessResult",
+    "ExpectedUtilityResult",
+    "RankDependentUtilityResult",
     # Convenience
     "get_integrity_score",
 ]

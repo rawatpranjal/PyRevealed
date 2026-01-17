@@ -176,6 +176,35 @@ Output:
    Computation Time: 0.15 ms
    ============================================================
 
+Visualizations
+--------------
+
+PyRevealed includes built-in visualizations for analysis and reporting.
+
+.. raw:: html
+
+   <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 20px 0;">
+
+.. image:: _static/front_budget_sets.png
+   :alt: Budget Sets - visualize budget lines and chosen bundles
+   :width: 100%
+
+.. image:: _static/front_power_analysis.png
+   :alt: Power Analysis - compare against random behavior
+   :width: 100%
+
+.. image:: _static/front_aei_distribution.png
+   :alt: AEI Distribution - population consistency scores
+   :width: 100%
+
+.. image:: _static/front_ccei_sensitivity.png
+   :alt: CCEI Sensitivity - effect of removing outliers
+   :width: 100%
+
+.. raw:: html
+
+   </div>
+
 Core Functions
 --------------
 

@@ -837,8 +837,8 @@ most choices are consistent, and the attention model successfully explains the
 deviations
 
 
-Part 9: Best Practices
-----------------------
+Part 9: Notes
+-------------
 
 When to Use Menu-Based Analysis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -858,21 +858,21 @@ When to Use Menu-Based Analysis
    * - Comparing items directly
      - Budget constraints matter
 
-Tips for Analysis
-~~~~~~~~~~~~~~~~~
+Analysis Notes
+~~~~~~~~~~~~~~
 
-1. **Start with WARP** — it's the weakest test. If WARP fails, SARP will too.
+1. **WARP is the weakest test** — if WARP fails, SARP will too.
 
-2. **Use efficiency index** — don't just report pass/fail. The efficiency
-   score quantifies how close behavior is to rational.
+2. **Efficiency index** — the efficiency score quantifies how close
+   behavior is to rational (beyond pass/fail).
 
-3. **Consider attention models** — apparent inconsistency may reflect
+3. **Attention models** — apparent inconsistency may reflect
    limited attention rather than irrational preferences.
 
-4. **Check sample size** — more observations provide stronger tests but
+4. **Sample size** — more observations provide stronger tests but
    also more opportunities for violations.
 
-5. **Report all metrics** — different metrics capture different aspects
+5. **Multiple metrics** — different metrics capture different aspects
    of consistency:
 
    - WARP/SARP: binary consistency

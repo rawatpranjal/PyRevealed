@@ -1432,48 +1432,48 @@ correlation between true productivity and estimated efficiency validates the
 methodology's ability to benchmark firm performance
 
 
-Part C: Best Practices
-======================
+Part C: Notes
+=============
 
 
-Stochastic Choice Guidelines
-----------------------------
+Stochastic Choice
+-----------------
 
-1. **Check IIA first** — if IIA fails, logit may be inappropriate
+1. **IIA test** — if IIA fails, logit may be inappropriate
 
-2. **Report model fit statistics**:
+2. **Model fit statistics**:
 
    - Log-likelihood
    - AIC/BIC for model comparison
    - Regularity violations
 
-3. **Consider alternatives to logit**:
+3. **Alternatives to logit**:
 
    - Nested logit for grouped alternatives
    - Mixed logit for heterogeneous preferences
    - Probit for flexible substitution
 
-4. **Watch for small samples** — stochastic tests need sufficient
+4. **Sample size** — stochastic tests need sufficient
    observations per menu
 
-Production Analysis Guidelines
-------------------------------
+Production Analysis
+-------------------
 
-1. **Use multiple tests**:
+1. **Multiple tests**:
 
    - Profit maximization (production GARP)
    - Cost minimization (dual test)
    - Technical efficiency (frontier analysis)
 
-2. **Interpret returns to scale carefully**:
+2. **Returns to scale**:
 
    - Requires sufficient variation in scale
    - May be industry-specific
 
-3. **Compare across firms** — relative efficiency is often more
+3. **Relative vs absolute** — relative efficiency is often more
    informative than absolute
 
-4. **Check data quality**:
+4. **Data quality**:
 
    - All prices must be positive
    - All quantities must be non-negative

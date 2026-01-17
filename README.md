@@ -39,6 +39,35 @@ result = compute_integrity_score(log)
 print(f"Integrity: {result.efficiency_index:.2f}")  # 1.00
 ```
 
+## Unified Summary
+
+Get a comprehensive behavioral report with one call:
+
+```python
+from pyrevealed import BehaviorLog, BehavioralSummary
+import numpy as np
+
+# 5 purchases with inconsistent behavior
+log = BehaviorLog(
+    cost_vectors=np.array([
+        [1.0, 2.0, 3.0], [2.0, 1.0, 3.0], [1.5, 1.5, 2.0],
+        [1.2, 1.8, 2.5], [1.8, 1.2, 2.5]
+    ]),
+    action_vectors=np.array([
+        [1, 5, 1], [5, 1, 1], [3, 3, 1], [4, 2, 1], [2, 4, 1]
+    ])
+)
+
+summary = BehavioralSummary.from_log(log)
+print(summary)  # BehavioralSummary: [-] n=5, AEI=0.71, MPI=0.29
+print(summary.summary())  # Full formatted report
+```
+
+All result objects support:
+- `.summary()` - Detailed human-readable report
+- `.short_summary()` - One-liner with [+]/[-] status
+- `.score()` - sklearn-compatible [0,1] score
+
 ## Core Functions
 
 | Function | Returns | Score Meaning |
@@ -78,17 +107,35 @@ print(f"Preference order: {prefs.preference_order}")
 ### Tutorials
 
 1. **[Budget-Based Analysis](https://pyrevealed.readthedocs.io/en/latest/tutorial.html)** - GARP, CCEI, MPI, Bronars power
-2. **[Menu-Based Choice](https://pyrevealed.readthedocs.io/en/latest/tutorial_menu_choice.html)** - WARP, SARP, attention models
+2. **[Menu-Based Choice](https://pyrevealed.readthedocs.io/en/latest/tutorial_menu_choice.html)** - WARP, SARP, Congruence, Houtman-Maks
 3. **[Welfare Analysis](https://pyrevealed.readthedocs.io/en/latest/tutorial_welfare.html)** - CV, EV, deadweight loss
 4. **[Demand Analysis](https://pyrevealed.readthedocs.io/en/latest/tutorial_demand_analysis.html)** - Slutsky matrix, integrability
 5. **[Stochastic & Production](https://pyrevealed.readthedocs.io/en/latest/tutorial_advanced.html)** - Logit, IIA, firm behavior
 6. **[E-Commerce at Scale](https://pyrevealed.readthedocs.io/en/latest/tutorial_ecommerce.html)** - 1.85M Amazon transactions
+7. **[Revealed Attention](https://pyrevealed.readthedocs.io/en/latest/tutorial_attention.html)** - WARP(LA), RAM, consideration sets
+8. **[Risk Analysis](https://pyrevealed.readthedocs.io/en/latest/tutorial_risk.html)** - Risk aversion, expected utility axioms
+
+## Visualizations
+
+Built-in plotting functions (requires `pip install pyrevealed[viz]`):
+
+| Function | Purpose |
+|----------|---------|
+| `plot_budget_sets()` | Budget lines and chosen bundles |
+| `plot_aei_distribution()` | Population consistency scores |
+| `plot_power_analysis()` | Bronars power visualization |
+| `plot_ccei_sensitivity()` | Outlier removal effect |
+| `plot_violation_severity()` | Violation magnitude analysis |
+| `plot_attention_heatmap()` | Consideration set patterns |
 
 ## Features
 
 - **Consistency Testing**: GARP, WARP, SARP axiom verification
 - **Behavioral Metrics**: Afriat Efficiency Index, Money Pump Index
 - **Utility Recovery**: Reconstruct utility functions from choices
+- **Display Features**: statsmodels-style summaries with [+]/[-] indicators
+- **Visualization Suite**: Budget plots, distribution charts, power analysis
+- **Attention Models**: WARP(LA), RAM, consideration set analysis
 - **ML Integration**: sklearn-compatible `PreferenceEncoder`
 - **Multiple Data Types**: Budgets, menus, stochastic choice, production
 - **Production Ready**: Fast parallel processing, validated against R's revealedPrefs

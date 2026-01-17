@@ -131,36 +131,35 @@ Memory Requirements
 
 Memory scales as O(T^2) due to the T x T boolean matrices.
 
-Production Recommendations
---------------------------
+Usage Examples
+--------------
 
-For Real-Time APIs (< 100ms response)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Real-Time APIs
+^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-   # Max ~500 observations for real-time
+   # ~500 observations
    from pyrevealed import check_garp
 
    result = check_garp(session)  # ~25ms at T=500
 
-For Batch Processing
-^^^^^^^^^^^^^^^^^^^^
+Batch Processing
+^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-   # Process up to 10K observations per user
+   # ~10K observations per user
    from pyrevealed import compute_aei
 
-   # Use looser tolerance for speed
    result = compute_aei(session, tolerance=1e-3, max_iterations=20)
 
-For Analytics Pipelines
-^^^^^^^^^^^^^^^^^^^^^^^
+Parallel Processing
+^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-   # Scale to 100K with parallel processing
+   # ~100K with parallel processing
    from pyrevealed import check_garp
    import multiprocessing as mp
 

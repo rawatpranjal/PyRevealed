@@ -398,16 +398,16 @@ Example output:
      Mean risk premium: 2.63%
 
 
-Part 7: Best Practices
-----------------------
+Part 7: Notes
+-------------
 
 Data Collection
 ~~~~~~~~~~~~~~~
 
-1. **Use real trade-offs**: Amounts should be meaningful to the decision-maker
+1. **Real trade-offs**: Amounts should be meaningful to the decision-maker
 2. **Vary safe amounts**: Test multiple certainty levels to map preferences
-3. **Keep probabilities simple**: 50/50, 70/30, etc. are easier to understand
-4. **Include boundary cases**: Some clearly dominated and clearly dominant options
+3. **Simple probabilities**: 50/50, 70/30, etc. are easier to understand
+4. **Boundary cases**: Include clearly dominated and clearly dominant options
 
 Sample Size
 ~~~~~~~~~~~

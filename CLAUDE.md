@@ -208,3 +208,49 @@ Based on Chambers & Echenique (2016) *Revealed Preference Theory*:
 - Stochastic Choice (Ch 13): Random utility models, IIA, regularity
 - Limited Attention (Ch 14): Consideration sets, attention filters
 - Production (Ch 15): Profit maximization, cost minimization tests
+
+## Market Opportunity
+
+### Python's Revealed Preference Void
+
+PyRevealed fills a significant gap in Python's scientific ecosystem:
+
+| Language | Package | Status |
+|----------|---------|--------|
+| **R** | `revealedPrefs` | Active, comprehensive |
+| **Stata** | `checkax`, `aei` | Active, enterprise |
+| **MATLAB** | Varian toolbox | Active, academic |
+| **Python** | PyRevealed | **Only option** |
+
+Before PyRevealed, Python practitioners had to:
+- Port R/Stata code manually
+- Implement algorithms from scratch
+- Use fragmented one-off scripts
+
+### Implementation Coverage
+
+Based on survey of 65+ revealed preference methods from the literature:
+
+| Category | Coverage | Key Methods |
+|----------|----------|-------------|
+| Consistency Scores | 83% | CCEI, MPI, Swaps, Houtman-Maks |
+| Graph Methods | 100% | Floyd-Warshall, cycle detection, centrality |
+| Consideration Sets | 80% | WARP-LA, RAM, attention overload |
+| Stochastic Choice | 71% | RUM, regularity, IIA |
+| Power Analysis | 67% | Bronars power, fast power |
+| Welfare Analysis | 60% | CV/EV, cost recovery |
+| Preference Bounds | 40% | Afriat bounds (E-bounds/i-bounds missing) |
+| Context Effects | 25% | Regularity (decoy/compromise missing) |
+| Pairwise/Ranking | 20% | Condorcet (Bradley-Terry missing) |
+| Temporal Methods | 0% | Not implemented |
+
+**Overall: ~60% of surveyed methods implemented**
+
+See `docs/implementation_status.md` for detailed gap analysis.
+
+### Key Differentiators
+
+1. **ML-Native Design**: sklearn-compatible API, feature extraction for pipelines
+2. **Dual API**: Tech-friendly names (`compute_integrity_score`) + economics terms (`compute_aei`)
+3. **Production-Ready**: Type hints, dataclass results, comprehensive tests
+4. **Unified Framework**: Budget, menu, stochastic, and production analysis in one package
