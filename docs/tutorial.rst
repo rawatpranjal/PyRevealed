@@ -269,6 +269,68 @@ Output:
 Typical GARP pass rates for field data range from 5-15%, reflecting assumption
 violations over long time horizons (see :ref:`important-assumptions`).
 
+Part 3a: Lenient Consistency (Acyclical P)
+------------------------------------------
+
+When GARP fails, it may be due to *strict* preference cycles or merely *weak*
+preference violations. The **Acyclical P** test distinguishes these cases by
+only checking strict preferences.
+
+.. code-block:: python
+
+   from pyrevealed import validate_strict_consistency
+
+   result = validate_strict_consistency(log)
+
+   if result.is_consistent:
+       if result.garp_consistent:
+           print("Fully GARP consistent")
+       else:
+           print("Approximately rational: only weak preference violations")
+   else:
+       print(f"Strict preference cycles found: {len(result.violations)}")
+
+Output (typical household that fails GARP):
+
+.. code-block:: text
+
+   Approximately rational: only weak preference violations
+
+Interpretation
+~~~~~~~~~~~~~~
+
+.. list-table:: Acyclical P vs GARP
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Scenario
+     - GARP
+     - Acyclical P
+   * - Strict preference cycles
+     - Fails
+     - Fails
+   * - Only weak violations
+     - Fails
+     - Passes
+   * - No violations
+     - Passes
+     - Passes
+
+Use this test when:
+
+- GARP fails narrowly and you want to know if violations are "close calls"
+- You believe bundles at similar expenditure levels may be indifferent
+- You want to allow for small measurement error in prices/quantities
+
+.. code-block:: python
+
+   # Detailed analysis
+   print(f"Strict preferences: {result.num_strict_preferences}")
+   print(f"GARP would pass: {result.garp_consistent}")
+
+   if result.violations:
+       print(f"Strict cycle example: {result.violations[0]}")
+
 
 Part 4: Assessing Test Power
 ----------------------------
@@ -314,6 +376,44 @@ Interpreting Power
      - GARP cannot distinguish consistent from random behavior
 
 With 24 observations and 10 goods, power typically exceeds 0.90.
+
+Detailed Bronars Power Analysis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For deeper analysis, use the full result object which includes simulation details:
+
+.. code-block:: python
+
+   from pyrevealed import compute_test_power
+
+   result = compute_test_power(log, n_simulations=1000)
+
+   print(f"Power Index: {result.power_index:.3f}")
+   print(f"Statistically Significant: {result.is_significant}")
+   print(f"Random violations: {result.n_violations}/{result.n_simulations}")
+   print(f"Mean integrity of random: {result.mean_integrity_random:.3f}")
+
+Output:
+
+.. code-block:: text
+
+   Power Index: 0.942
+   Statistically Significant: True
+   Random violations: 942/1000
+   Mean integrity of random: 0.723
+
+The ``mean_integrity_random`` shows the average efficiency score (AEI/CCEI)
+of randomly generated behavior. If your household's CCEI is much higher
+than this baseline, it strongly suggests non-random behavior.
+
+For faster computation (without AEI tracking), use:
+
+.. code-block:: python
+
+   from pyrevealed import compute_test_power_fast
+
+   result = compute_test_power_fast(log, n_simulations=5000)
+   print(f"Power: {result.power_index:.3f}")
 
 
 Part 5: Measuring Efficiency (CCEI)
@@ -543,6 +643,278 @@ Full Summary Report
 
 CCEI, MPI, and Houtman-Maks capture different aspects of inconsistency.
 
+Part 6a: Per-Observation Efficiency (VEI)
+-----------------------------------------
+
+While CCEI gives a single global efficiency score, **Varian's Efficiency Index
+(VEI)** computes individual efficiency scores for each observation. This
+identifies *which specific observations* are problematic.
+
+.. code-block:: python
+
+   from pyrevealed import compute_granular_integrity
+
+   result = compute_granular_integrity(log, efficiency_threshold=0.9)
+
+   print(f"Mean efficiency: {result.mean_efficiency:.3f}")
+   print(f"Worst observation: {result.worst_observation}")
+   print(f"Min efficiency: {result.min_efficiency:.3f}")
+   print(f"Problematic observations: {result.problematic_observations}")
+
+Output:
+
+.. code-block:: text
+
+   Mean efficiency: 0.912
+   Worst observation: 14
+   Min efficiency: 0.723
+   Problematic observations: [7, 14, 21]
+
+Use Cases
+~~~~~~~~~
+
+- **Debugging**: Find which time periods have inconsistent behavior
+- **Outlier detection**: Identify transactions to investigate
+- **Time series analysis**: Track when behavior changed
+- **Data quality**: Detect measurement errors or unusual events
+
+.. code-block:: python
+
+   # Investigate problematic observations
+   for obs_idx in result.problematic_observations:
+       efficiency = result.efficiency_vector[obs_idx]
+       print(f"Observation {obs_idx}: efficiency={efficiency:.3f}")
+       print(f"  Prices: {log.cost_vectors[obs_idx]}")
+       print(f"  Quantities: {log.action_vectors[obs_idx]}")
+
+L2 Variant
+~~~~~~~~~~
+
+For applications where large deviations matter more than small ones, use the
+L2 variant which minimizes squared deviations:
+
+.. code-block:: python
+
+   from pyrevealed import compute_granular_integrity_l2
+
+   result_l2 = compute_granular_integrity_l2(log)
+   print(f"L2 mean efficiency: {result_l2.mean_efficiency:.3f}")
+
+
+Part 6b: Swaps Index
+--------------------
+
+The **Swaps Index** (Apesteguia & Ballester 2015) provides a more interpretable
+measure of inconsistency than CCEI. Instead of asking "how much budget waste
+rationalizes behavior?", it asks "how many preference reversals are needed?"
+
+.. code-block:: python
+
+   from pyrevealed import compute_swaps_index
+
+   result = compute_swaps_index(log)
+
+   print(f"Swaps needed: {result.swaps_count}")
+   print(f"Normalized (0-1): {result.swaps_normalized:.3f}")
+   print(f"Consistent: {result.is_consistent}")
+
+Output (typical household):
+
+.. code-block:: text
+
+   Swaps needed: 3
+   Normalized (0-1): 0.011
+   Consistent: False
+
+Interpretation
+~~~~~~~~~~~~~~
+
+The swaps index is more intuitive than CCEI:
+
+- **CCEI = 0.92** means "need 8% budget waste to rationalize"
+- **Swaps = 3** means "need to flip 3 preference pairs for consistency"
+
+.. list-table:: Swaps Index Interpretation
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Swaps
+     - Interpretation
+   * - 0
+     - GARP consistent
+   * - 1-3
+     - Near-rational (minor inconsistencies)
+   * - 4-10
+     - Moderate inconsistency
+   * - > 10
+     - Substantial inconsistency; verify data quality
+
+Identifying Which Pairs to Swap
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The result includes the specific observation pairs that cause violations:
+
+.. code-block:: python
+
+   if result.swap_pairs:
+       print("Preferences to reverse for consistency:")
+       for obs_i, obs_j in result.swap_pairs:
+           print(f"  Observation {obs_i} vs {obs_j}")
+
+This is useful for understanding *where* the inconsistencies occur—perhaps
+a few outlier periods drive all the violations.
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                                SWAPS INDEX REPORT
+   ================================================================================
+
+   Status: INCONSISTENT (3 swaps needed)
+
+   Metrics:
+   -------
+     Swaps Count .......................... 3
+     Swaps Normalized ................. 0.0109
+     Max Possible Swaps ................. 276
+     Consistent ........................... No
+     Method .......................... greedy
+
+   Swap Pairs:
+   ----------
+     (2, 14)
+     (7, 21)
+     (14, 19)
+
+   Interpretation:
+   --------------
+     3 preference reversals needed for GARP consistency.
+     This is a relatively low number, suggesting near-rational behavior.
+
+   Computation Time: 1.23 ms
+   ================================================================================
+
+
+Part 6c: Observation Contributions
+----------------------------------
+
+When GARP fails, which observations are responsible? **Observation contributions**
+(Varian 1990) identifies the "troublemakers"—useful for outlier detection and
+data quality analysis.
+
+.. code-block:: python
+
+   from pyrevealed import compute_observation_contributions
+
+   result = compute_observation_contributions(log, method="cycle_count")
+
+   print(f"Base AEI: {result.base_aei:.3f}")
+   print(f"Most problematic observations:")
+   for obs_idx, contrib in result.worst_observations[:3]:
+       print(f"  Observation {obs_idx}: {contrib:.1%} of violations")
+
+Output:
+
+.. code-block:: text
+
+   Base AEI: 0.856
+   Most problematic observations:
+     Observation 14: 23.5% of violations
+     Observation 7: 18.2% of violations
+     Observation 21: 12.8% of violations
+
+Methods
+~~~~~~~
+
+Two methods are available:
+
+.. list-table:: Contribution Methods
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - Method
+     - Speed
+     - Use When
+   * - ``"cycle_count"``
+     - Fast (O(n²))
+     - Large datasets, quick diagnostics
+   * - ``"removal"``
+     - Slow (O(n³))
+     - Small datasets, precise impact measurement
+
+The ``"removal"`` method computes how much AEI improves when each observation
+is removed—this gives a direct measure of each observation's impact:
+
+.. code-block:: python
+
+   result = compute_observation_contributions(log, method="removal")
+
+   print(f"Removal impact on AEI:")
+   for obs_idx, impact in list(result.removal_impact.items())[:3]:
+       print(f"  Remove obs {obs_idx}: AEI improves by {impact:.3f}")
+
+Use Cases
+~~~~~~~~~
+
+1. **Data quality**: High-contribution observations may reflect measurement error
+2. **Outlier detection**: Unusual shopping periods (holidays, stockpiling)
+3. **Time series analysis**: Identify when preferences shifted
+4. **Sample selection**: Remove problematic observations for cleaner analysis
+
+.. code-block:: python
+
+   # Investigate the worst observation
+   worst_idx = result.worst_observations[0][0]
+   print(f"Observation {worst_idx} details:")
+   print(f"  Prices: {log.cost_vectors[worst_idx]}")
+   print(f"  Quantities: {log.action_vectors[worst_idx]}")
+   print(f"  Expenditure: ${np.dot(log.cost_vectors[worst_idx], log.action_vectors[worst_idx]):.2f}")
+
+Full Summary Report
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print(result.summary())
+
+.. code-block:: text
+
+   ================================================================================
+                          OBSERVATION CONTRIBUTIONS REPORT
+   ================================================================================
+
+   Status: ANALYSIS COMPLETE
+
+   Overview:
+   --------
+     Total Observations .................. 24
+     Base AEI ......................... 0.8560
+     Method ...................... cycle_count
+
+   Worst Contributors:
+   ------------------
+     Observation 14 ................... 23.5%
+     Observation 7 .................... 18.2%
+     Observation 21 ................... 12.8%
+     Observation 3 ..................... 8.4%
+     Observation 18 .................... 7.1%
+
+   Interpretation:
+   --------------
+     Top 3 observations account for 54.5% of all violation participation.
+     Consider investigating these periods for data quality issues or
+     unusual purchasing patterns.
+
+   Computation Time: 2.45 ms
+   ================================================================================
+
 
 Part 7: Preference Structure (Separability)
 -------------------------------------------
@@ -578,6 +950,71 @@ Output:
 .. code-block:: text
 
    Separable: 68.3%
+
+Part 7a: Homothetic Preferences (HARP)
+--------------------------------------
+
+**HARP (Homothetic Axiom of Revealed Preference)** tests whether demand scales
+proportionally with income. Homothetic preferences mean the consumer buys the
+same *proportions* of goods regardless of budget level—only the scale changes.
+
+.. code-block:: python
+
+   from pyrevealed import validate_proportional_scaling
+
+   result = validate_proportional_scaling(log)
+
+   if result.is_consistent:
+       print("Homothetic preferences: demand scales proportionally")
+   else:
+       print(f"Non-homothetic: {len(result.violations)} scaling violations")
+       print(f"Max expenditure ratio product: {result.max_cycle_product:.3f}")
+
+Output (typical household):
+
+.. code-block:: text
+
+   Non-homothetic: 3 scaling violations
+   Max expenditure ratio product: 1.234
+
+When HARP Matters
+~~~~~~~~~~~~~~~~~
+
+HARP is a **stronger** requirement than GARP. Use it when:
+
+- Aggregating demand across different income levels
+- Extrapolating demand to unobserved budget levels
+- Testing constant-returns-to-scale demand models
+- Validating Cobb-Douglas or CES utility assumptions
+
+.. code-block:: python
+
+   # HARP implies GARP, but not vice versa
+   print(f"HARP satisfied: {result.is_consistent}")
+   print(f"GARP satisfied: {result.garp_result.is_consistent}")
+
+   # Examine expenditure ratios
+   if result.violations:
+       cycle, product = result.violations[0]
+       print(f"Violating cycle: {cycle}")
+       print(f"Ratio product: {product:.4f} (should be <= 1)")
+
+.. list-table:: HARP vs GARP
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Condition
+     - GARP
+     - HARP
+   * - Consistent ordinal preferences
+     - Required
+     - Required
+   * - Proportional budget shares
+     - Not required
+     - Required
+   * - Typical pass rate (field data)
+     - 5-15%
+     - 1-5%
 
 
 Part 8: Cross-Price Effects
@@ -829,14 +1266,16 @@ Function Reference
      - Function
    * - GARP consistency
      - ``validate_consistency()``
+   * - Strict consistency (Acyclical P)
+     - ``validate_strict_consistency()``
    * - CCEI / efficiency index
      - ``compute_integrity_score()``
+   * - Per-observation efficiency (VEI)
+     - ``compute_granular_integrity()``
    * - Bronars power
      - ``compute_test_power()``
    * - Money Pump Index
      - ``compute_confusion_metric()``
-   * - Per-observation CCEI
-     - ``compute_granular_integrity()``
    * - Houtman-Maks Index
      - ``compute_minimal_outlier_fraction()``
    * - Weak separability
@@ -847,6 +1286,141 @@ Function Reference
      - ``test_cross_price_effect()``
    * - Utility recovery
      - ``fit_latent_values()``
+
+
+Part 12: Unified Summary Display
+---------------------------------
+
+For comprehensive analysis in one command, use the ``BehavioralSummary`` class
+which runs all tests and presents results in a unified format.
+
+One-Liner Analysis
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from pyrevealed import BehavioralSummary
+
+   # Run all tests with one command
+   summary = BehavioralSummary.from_log(log)
+
+   # Statsmodels-style text summary
+   print(summary.summary())
+
+Output:
+
+.. code-block:: text
+
+   ============================================================
+                      BEHAVIORAL SUMMARY
+   ============================================================
+
+   Data:
+   -----
+     Observations ............................ 24
+     Goods ................................... 10
+
+   Consistency Tests:
+   ------------------
+     GARP ............................ [+] PASS
+     WARP ............................ [+] PASS
+     SARP ............................ [+] PASS
+
+   Goodness-of-Fit:
+   ----------------
+     Afriat Efficiency (AEI) .......... 0.9500
+     Money Pump Index (MPI) ........... 0.0200
+
+   Interpretation:
+   ---------------
+     Excellent consistency - minor noise or measurement error
+
+   Computation Time: 145.32 ms
+   ============================================================
+
+Quick Status Indicators
+~~~~~~~~~~~~~~~~~~~~~~~
+
+For quick status checks, use ``short_summary()``:
+
+.. code-block:: python
+
+   # Quick one-liner status
+   print(summary.short_summary())
+   # Output: BehavioralSummary: [+] AEI=0.9500, MPI=0.0200
+
+   # Individual results also have short summaries
+   from pyrevealed import validate_consistency, compute_integrity_score
+
+   garp = validate_consistency(log)
+   print(garp.short_summary())
+   # Output: GARP: [+] CONSISTENT
+
+   aei = compute_integrity_score(log)
+   print(aei.short_summary())
+   # Output: AEI: [+] 0.9500 (Excellent)
+
+.. note::
+
+   In Jupyter notebooks, results display as styled HTML cards automatically.
+   Just evaluate a result object in a cell to see rich formatting:
+
+   >>> result = validate_consistency(log)
+   >>> result  # Displays as HTML card with pass/fail indicator
+
+
+Part 13: Diagnostic Visualizations
+----------------------------------
+
+PyRevealed includes visualization functions for deeper analysis of behavioral
+consistency. These are useful for presentations, reports, and debugging.
+
+CCEI Sensitivity Plot
+~~~~~~~~~~~~~~~~~~~~~
+
+The ``plot_ccei_sensitivity()`` function shows how the efficiency index (CCEI/AEI)
+improves as problematic observations are removed:
+
+.. code-block:: python
+
+   from pyrevealed.viz import plot_ccei_sensitivity
+   import matplotlib.pyplot as plt
+
+   # How does AEI change as outliers are removed?
+   fig, ax = plot_ccei_sensitivity(log, max_remove=5)
+   plt.title("CCEI Sensitivity: Impact of Outlier Removal")
+   plt.show()
+
+This visualization helps identify:
+
+- How many observations drive inconsistencies
+- The marginal improvement from removing each outlier
+- Whether a few observations cause most violations
+
+Power Analysis Plot
+~~~~~~~~~~~~~~~~~~~
+
+The ``plot_power_analysis()`` function compares your data's efficiency to
+simulated random behavior:
+
+.. code-block:: python
+
+   from pyrevealed.viz import plot_power_analysis
+   import matplotlib.pyplot as plt
+
+   # Compare observed CCEI to random behavior
+   fig, ax = plot_power_analysis(log, n_simulations=500)
+   plt.title("Power Analysis: Observed vs Random Behavior")
+   plt.show()
+
+This visualization shows:
+
+- Distribution of CCEI for random choices (histogram)
+- Your observed CCEI (vertical line)
+- How far above random your behavior is
+
+If your observed CCEI is well above the random distribution, it strongly suggests
+non-random, preference-driven behavior.
 
 
 See Also

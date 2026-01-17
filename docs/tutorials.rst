@@ -12,6 +12,8 @@ Step-by-step guides covering revealed preference analysis from basics to advance
    tutorial_demand_analysis
    tutorial_advanced
    tutorial_ecommerce
+   tutorial_attention
+   tutorial_risk
 
 Overview
 --------
@@ -41,6 +43,12 @@ Overview
    * - :doc:`6: E-Commerce at Scale <tutorial_ecommerce>`
      - Real e-commerce data, scaling to thousands of users
      - Tutorial 1
+   * - :doc:`7: Revealed Attention <tutorial_attention>`
+     - WARP(LA), RAM, attention filters, consideration sets
+     - Tutorial 2
+   * - :doc:`8: Risk Analysis <tutorial_risk>`
+     - Risk aversion, CRRA utility, expected utility axioms
+     - Tutorial 1
 
 Recommended Path
 ----------------
@@ -50,3 +58,7 @@ Recommended Path
 **Applied researchers**: Tutorial 1 → Tutorial 3 (Welfare) → Tutorial 4 (Demand Analysis).
 
 **ML practitioners**: Tutorial 1 → Tutorial 6 (E-Commerce) for large-scale applications.
+
+**Behavioral researchers**: Tutorial 1 → Tutorial 2 (Menu-Based) → Tutorial 7 (Attention) for bounded rationality applications.
+
+**Finance/Risk researchers**: Tutorial 1 → Tutorial 8 (Risk Analysis) for decision-making under uncertainty.

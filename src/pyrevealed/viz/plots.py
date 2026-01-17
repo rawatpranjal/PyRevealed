@@ -310,3 +310,307 @@ def plot_preference_heatmap(
             )
 
     return fig, ax
+
+
+def plot_ccei_sensitivity(
+    session: ConsumerSession,
+    max_remove: int | None = None,
+    figsize: tuple[int, int] = (10, 6),
+    ax: Any = None,
+) -> tuple[Any, Any]:
+    """
+    Plot CCEI (AEI) vs observations removed (worst-first).
+
+    Shows how efficiency improves as problematic observations are removed.
+    Useful for understanding which observations are driving inconsistencies.
+
+    Args:
+        session: ConsumerSession with price and quantity data
+        max_remove: Maximum number of observations to remove (default: 20% of data)
+        figsize: Figure size as (width, height)
+        ax: Optional matplotlib axes to draw on
+
+    Returns:
+        Tuple of (figure, axes) matplotlib objects
+    """
+    import matplotlib.pyplot as plt
+    from pyrevealed.algorithms.aei import compute_integrity_score
+    from pyrevealed.algorithms.vei import compute_granular_integrity
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=figsize)
+    else:
+        fig = ax.get_figure()
+
+    T = session.num_observations
+    if max_remove is None:
+        max_remove = max(1, int(T * 0.2))
+
+    # Compute per-observation efficiency
+    vei_result = compute_granular_integrity(session)
+    efficiency_vector = vei_result.efficiency_vector
+
+    # Sort by efficiency (worst first)
+    sorted_indices = np.argsort(efficiency_vector)
+
+    # Compute CCEI for each removal level
+    ccei_values = [compute_integrity_score(session).efficiency_index]
+    removed_counts = [0]
+
+    current_mask = np.ones(T, dtype=bool)
+    for i in range(min(max_remove, T - 2)):
+        # Remove worst observation
+        worst_idx = sorted_indices[i]
+        current_mask[worst_idx] = False
+
+        # Create filtered session
+        from pyrevealed.core.session import BehaviorLog
+        filtered_session = BehaviorLog(
+            cost_vectors=session.prices[current_mask],
+            action_vectors=session.quantities[current_mask],
+        )
+
+        if filtered_session.num_observations < 2:
+            break
+
+        ccei = compute_integrity_score(filtered_session).efficiency_index
+        ccei_values.append(ccei)
+        removed_counts.append(i + 1)
+
+    # Plot
+    ax.plot(removed_counts, ccei_values, "o-", color="steelblue", markersize=6)
+    ax.fill_between(removed_counts, ccei_values, alpha=0.3, color="steelblue")
+
+    # Reference lines
+    ax.axhline(1.0, color="green", linestyle="--", alpha=0.7, label="Perfect (1.0)")
+    ax.axhline(0.95, color="orange", linestyle=":", alpha=0.7, label="High (0.95)")
+
+    ax.set_xlim(-0.5, max(removed_counts) + 0.5)
+    ax.set_ylim(min(ccei_values) * 0.95, 1.02)
+    ax.set_xlabel("Observations Removed (worst-first)")
+    ax.set_ylabel("CCEI (Afriat Efficiency Index)")
+    ax.set_title("CCEI Sensitivity to Observation Removal")
+    ax.legend(loc="lower right")
+    ax.grid(True, alpha=0.3)
+
+    return fig, ax
+
+
+def plot_power_analysis(
+    session: ConsumerSession,
+    n_simulations: int = 500,
+    figsize: tuple[int, int] = (10, 6),
+    ax: Any = None,
+) -> tuple[Any, Any]:
+    """
+    Plot observed CCEI against simulated random choice distribution.
+
+    Visualizes Bronars power - how much better than random is the data.
+    A vertical line shows the observed CCEI; the histogram shows what
+    random behavior would produce.
+
+    Args:
+        session: ConsumerSession with price and quantity data
+        n_simulations: Number of random simulations (default: 500)
+        figsize: Figure size as (width, height)
+        ax: Optional matplotlib axes to draw on
+
+    Returns:
+        Tuple of (figure, axes) matplotlib objects
+    """
+    import matplotlib.pyplot as plt
+    from pyrevealed.algorithms.aei import compute_integrity_score
+    from pyrevealed.algorithms.bronars import compute_test_power
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=figsize)
+    else:
+        fig = ax.get_figure()
+
+    # Compute observed CCEI
+    observed_ccei = compute_integrity_score(session).efficiency_index
+
+    # Run power analysis
+    power_result = compute_test_power(session, n_simulations=n_simulations)
+
+    if power_result.simulation_integrity_values is not None:
+        random_ccei = power_result.simulation_integrity_values
+
+        # Plot histogram of random CCEIs
+        ax.hist(
+            random_ccei,
+            bins=30,
+            edgecolor="black",
+            alpha=0.7,
+            color="lightcoral",
+            label=f"Random choice (n={n_simulations})",
+        )
+
+        # Plot observed CCEI
+        ax.axvline(
+            observed_ccei,
+            color="darkblue",
+            linewidth=3,
+            linestyle="-",
+            label=f"Observed CCEI: {observed_ccei:.4f}",
+        )
+
+        # Statistics
+        mean_random = np.mean(random_ccei)
+        ax.axvline(
+            mean_random,
+            color="red",
+            linewidth=2,
+            linestyle="--",
+            label=f"Random mean: {mean_random:.4f}",
+        )
+
+        # Percentile of observed
+        percentile = np.mean(random_ccei <= observed_ccei) * 100
+        ax.text(
+            0.02,
+            0.98,
+            f"Observed is better than {percentile:.1f}% of random",
+            transform=ax.transAxes,
+            verticalalignment="top",
+            fontsize=10,
+            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
+        )
+
+    ax.set_xlim(0, 1.05)
+    ax.set_xlabel("CCEI (Afriat Efficiency Index)")
+    ax.set_ylabel("Count")
+    ax.set_title(f"Power Analysis (Bronars Power = {power_result.power_index:.4f})")
+    ax.legend(loc="upper left")
+    ax.grid(True, alpha=0.3)
+
+    return fig, ax
+
+
+def plot_violation_severity(
+    session: ConsumerSession,
+    result: Any = None,
+    figsize: tuple[int, int] = (10, 6),
+    ax: Any = None,
+) -> tuple[Any, Any]:
+    """
+    Histogram of violation magnitudes (budget fraction wasted).
+
+    Shows the distribution of how severe each GARP violation is,
+    measured by the fraction of budget that could be saved.
+
+    Args:
+        session: ConsumerSession with price and quantity data
+        result: Optional GARPResult (computed if not provided)
+        figsize: Figure size as (width, height)
+        ax: Optional matplotlib axes to draw on
+
+    Returns:
+        Tuple of (figure, axes) matplotlib objects
+    """
+    import matplotlib.pyplot as plt
+    from pyrevealed.algorithms.garp import check_garp
+    from pyrevealed.algorithms.vei import compute_granular_integrity
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=figsize)
+    else:
+        fig = ax.get_figure()
+
+    if result is None:
+        result = check_garp(session)
+
+    # Compute per-observation efficiency (inverse of severity)
+    vei_result = compute_granular_integrity(session)
+    severities = 1.0 - vei_result.efficiency_vector
+
+    # Plot histogram
+    ax.hist(severities, bins=20, edgecolor="black", alpha=0.7, color="salmon")
+
+    # Add mean line
+    mean_severity = np.mean(severities)
+    ax.axvline(
+        mean_severity,
+        color="darkred",
+        linewidth=2,
+        linestyle="--",
+        label=f"Mean severity: {mean_severity:.4f}",
+    )
+
+    # Thresholds
+    ax.axvline(0.05, color="green", linestyle=":", alpha=0.7, label="Low (5%)")
+    ax.axvline(0.15, color="orange", linestyle=":", alpha=0.7, label="High (15%)")
+
+    ax.set_xlim(-0.01, max(severities) * 1.1 + 0.01)
+    ax.set_xlabel("Violation Severity (1 - efficiency)")
+    ax.set_ylabel("Count")
+    ax.set_title("Distribution of Violation Severities")
+    ax.legend(loc="upper right")
+    ax.grid(True, alpha=0.3)
+
+    return fig, ax
+
+
+def plot_budget_intersections(
+    session: ConsumerSession,
+    result: Any = None,
+    figsize: tuple[int, int] = (10, 10),
+    ax: Any = None,
+) -> tuple[Any, Any]:
+    """
+    Heatmap showing which budget pairs intersect with WARP violations marked.
+
+    An intersection at (i, j) means bundle j was affordable at budget i.
+    Red markers highlight pairs with WARP violations.
+
+    Args:
+        session: ConsumerSession with price and quantity data
+        result: Optional GARPResult (computed if not provided)
+        figsize: Figure size as (width, height)
+        ax: Optional matplotlib axes to draw on
+
+    Returns:
+        Tuple of (figure, axes) matplotlib objects
+    """
+    import matplotlib.pyplot as plt
+    from pyrevealed.algorithms.garp import check_garp
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=figsize)
+    else:
+        fig = ax.get_figure()
+
+    if result is None:
+        result = check_garp(session)
+
+    T = session.num_observations
+
+    # Compute intersection matrix: can bundle j be afforded at budget i?
+    intersection_matrix = np.zeros((T, T))
+    for i in range(T):
+        for j in range(T):
+            cost_j_at_i = np.dot(session.prices[i], session.quantities[j])
+            budget_i = session.own_expenditures[i]
+            if cost_j_at_i <= budget_i * 1.0001:  # Small tolerance
+                intersection_matrix[i, j] = 1
+
+    # Create heatmap
+    im = ax.imshow(intersection_matrix, cmap="Blues", aspect="auto")
+    plt.colorbar(im, ax=ax, label="Affordable (1) / Not Affordable (0)")
+
+    # Mark WARP violations in red
+    R = result.direct_revealed_preference
+    for i in range(T):
+        for j in range(T):
+            if i != j and R[i, j] and R[j, i]:  # Mutual preference = WARP violation
+                ax.scatter(j, i, color="red", s=100, marker="x", linewidths=2)
+
+    ax.set_xticks(range(T))
+    ax.set_yticks(range(T))
+    ax.set_xticklabels([f"{i}" for i in range(T)])
+    ax.set_yticklabels([f"{i}" for i in range(T)])
+    ax.set_xlabel("Bundle j")
+    ax.set_ylabel("Budget i")
+    ax.set_title("Budget Intersections (red X = WARP violation)")
+
+    return fig, ax

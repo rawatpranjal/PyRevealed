@@ -248,3 +248,193 @@ class ViolationGraph:
         ax.axis("off")
 
         return fig, ax
+
+    def to_networkx(self) -> nx.DiGraph:
+        """
+        Return the underlying NetworkX DiGraph.
+
+        Useful for custom analysis with NetworkX algorithms.
+
+        Returns:
+            NetworkX DiGraph with nodes as observations and edges as preferences
+
+        Example:
+            >>> graph = ViolationGraph(session, result)
+            >>> G = graph.to_networkx()
+            >>> nx.is_weakly_connected(G)
+            >>> list(nx.simple_cycles(G))
+        """
+        return self.graph
+
+    def to_dict(self) -> dict[str, Any]:
+        """
+        Return JSON-serializable dictionary representation.
+
+        Returns:
+            Dictionary with nodes, edges, violations, and summary statistics
+        """
+        import networkx as nx
+
+        nodes = []
+        for node_id, data in self.graph.nodes(data=True):
+            nodes.append({
+                "id": node_id,
+                "label": data.get("label", str(node_id)),
+                "bundle": data.get("bundle", []),
+                "prices": data.get("prices", []),
+                "expenditure": data.get("expenditure", 0.0),
+            })
+
+        edges = []
+        for u, v, data in self.graph.edges(data=True):
+            edges.append({
+                "source": u,
+                "target": v,
+                "relation": data.get("relation", "weak"),
+            })
+
+        violation_nodes = set()
+        for cycle in self.garp_result.violations:
+            violation_nodes.update(cycle)
+
+        return {
+            "nodes": nodes,
+            "edges": edges,
+            "violations": [list(c) for c in self.garp_result.violations],
+            "violation_nodes": list(violation_nodes),
+            "num_nodes": self.graph.number_of_nodes(),
+            "num_edges": self.graph.number_of_edges(),
+            "is_consistent": self.garp_result.is_consistent,
+            "num_violations": len(self.garp_result.violations),
+        }
+
+    def find_shortest_cycles(self, n: int = 5) -> list[list[int]]:
+        """
+        Find the n shortest cycles in the preference graph.
+
+        Shorter cycles are often more interpretable violations.
+
+        Args:
+            n: Maximum number of cycles to return (default 5)
+
+        Returns:
+            List of cycles sorted by length (shortest first)
+        """
+        import networkx as nx
+
+        all_cycles = list(nx.simple_cycles(self.graph))
+
+        # Sort by cycle length
+        sorted_cycles = sorted(all_cycles, key=len)
+
+        return sorted_cycles[:n]
+
+    def compute_centrality(self, method: str = "betweenness") -> dict[int, float]:
+        """
+        Compute centrality scores for each observation in the preference graph.
+
+        Higher centrality indicates the observation is more "central" to the
+        preference structure. For identifying important observations in violations.
+
+        Args:
+            method: Centrality algorithm to use:
+                - "betweenness": Betweenness centrality (default)
+                - "pagerank": PageRank centrality
+                - "degree": In-degree + out-degree
+                - "eigenvector": Eigenvector centrality
+
+        Returns:
+            Dict mapping observation index to centrality score
+        """
+        import networkx as nx
+
+        if method == "betweenness":
+            return nx.betweenness_centrality(self.graph)
+        elif method == "pagerank":
+            return nx.pagerank(self.graph)
+        elif method == "degree":
+            # Use degree centrality (normalized)
+            return nx.degree_centrality(self.graph)
+        elif method == "eigenvector":
+            try:
+                return nx.eigenvector_centrality(self.graph, max_iter=500)
+            except nx.PowerIterationFailedConvergence:
+                # Fall back to degree if eigenvector doesn't converge
+                return nx.degree_centrality(self.graph)
+        else:
+            return nx.betweenness_centrality(self.graph)
+
+    def get_violation_centrality(self) -> dict[int, float]:
+        """
+        Compute how central each observation is to violations.
+
+        Combines cycle participation with graph centrality.
+
+        Returns:
+            Dict mapping observation index to violation centrality score
+        """
+        import networkx as nx
+
+        # Count how many violation cycles each node participates in
+        cycle_counts: dict[int, int] = {}
+        for node in self.graph.nodes():
+            cycle_counts[node] = 0
+
+        for cycle in self.garp_result.violations:
+            for node in cycle:
+                if node in cycle_counts:
+                    cycle_counts[node] += 1
+
+        # Normalize by max count
+        max_count = max(cycle_counts.values()) if cycle_counts.values() else 1
+        if max_count == 0:
+            max_count = 1  # Avoid division by zero when no violations
+        violation_centrality = {
+            node: count / max_count
+            for node, count in cycle_counts.items()
+        }
+
+        return violation_centrality
+
+    def identify_key_violations(self, n: int = 5) -> list[tuple[int, int, str]]:
+        """
+        Identify the most important edges to remove to eliminate violations.
+
+        Based on edge participation in cycles.
+
+        Args:
+            n: Number of key edges to return
+
+        Returns:
+            List of (source, target, relation_type) tuples sorted by importance
+        """
+        # Count how many cycles each edge participates in
+        edge_counts: dict[tuple[int, int], int] = {}
+
+        for cycle in self.garp_result.violations:
+            # A cycle is stored as [a, b, c, ..., a] or [a, b, c, ...]
+            cycle_list = list(cycle)
+            if len(cycle_list) < 2:
+                continue
+
+            # Get edges in this cycle
+            for i in range(len(cycle_list) - 1):
+                edge = (cycle_list[i], cycle_list[i + 1])
+                edge_counts[edge] = edge_counts.get(edge, 0) + 1
+
+            # Handle wrap-around if not already included
+            if cycle_list[0] != cycle_list[-1]:
+                edge = (cycle_list[-1], cycle_list[0])
+                edge_counts[edge] = edge_counts.get(edge, 0) + 1
+
+        # Sort by count (most participation first)
+        sorted_edges = sorted(edge_counts.items(), key=lambda x: -x[1])
+
+        # Return with relation type
+        result = []
+        for (u, v), _ in sorted_edges[:n]:
+            if self.graph.has_edge(u, v):
+                relation = self.graph[u][v].get("relation", "weak")
+                result.append((u, v, relation))
+
+        return result

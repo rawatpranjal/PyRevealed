@@ -29,10 +29,11 @@ from numpy.typing import NDArray
 
 from pyrevealed.core.types import Cycle
 from pyrevealed.core.mixins import ResultSummaryMixin
+from pyrevealed.core.display import ResultDisplayMixin, ResultPlotMixin
 
 
 @dataclass(frozen=True)
-class GARPResult:
+class GARPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of GARP (Generalized Axiom of Revealed Preference) consistency test.
 
@@ -118,13 +119,20 @@ class GARPResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "consistent" if self.is_consistent else f"{self.num_violations} violations"
-        return f"GARPResult({status}, {self.computation_time_ms:.2f}ms)"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "CONSISTENT" if self.is_consistent else f"{self.num_violations} violations"
+        return f"GARPResult: {indicator} {status} ({self.computation_time_ms:.2f}ms)"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "CONSISTENT" if self.is_consistent else f"{self.num_violations} violations"
+        return f"GARP: {indicator} {status}"
 
 
 @dataclass(frozen=True)
-class AEIResult:
+class AEIResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of Afriat Efficiency Index computation.
 
@@ -213,12 +221,18 @@ class AEIResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        return f"AEIResult(aei={self.efficiency_index:.4f}, {self.computation_time_ms:.2f}ms)"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.efficiency_index >= 0.95 else "[-]"
+        return f"AEIResult: {indicator} AEI={self.efficiency_index:.4f} ({self.computation_time_ms:.2f}ms)"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.efficiency_index >= 0.95 else "[-]"
+        return f"AEI: {indicator} {self.efficiency_index:.4f}"
 
 
 @dataclass(frozen=True)
-class MPIResult:
+class MPIResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of Money Pump Index computation.
 
@@ -316,13 +330,20 @@ class MPIResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "consistent" if self.is_consistent else f"mpi={self.mpi_value:.4f}"
-        return f"MPIResult({status}, {self.computation_time_ms:.2f}ms)"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "CONSISTENT" if self.is_consistent else f"MPI={self.mpi_value:.4f}"
+        return f"MPIResult: {indicator} {status} ({self.computation_time_ms:.2f}ms)"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "0.0000" if self.is_consistent else f"{self.mpi_value:.4f}"
+        return f"MPI: {indicator} {status}"
 
 
 @dataclass(frozen=True)
-class UtilityRecoveryResult:
+class UtilityRecoveryResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of utility recovery via linear programming (Afriat's inequalities).
 
@@ -415,15 +436,22 @@ class UtilityRecoveryResult:
         return result
 
     def __repr__(self) -> str:
-        """Compact string representation."""
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.success else "[-]"
         if self.success:
             n = len(self.utility_values) if self.utility_values is not None else 0
-            return f"UtilityRecoveryResult(success, n={n}, {self.computation_time_ms:.2f}ms)"
-        return f"UtilityRecoveryResult(failed, {self.computation_time_ms:.2f}ms)"
+            return f"UtilityRecoveryResult: {indicator} SUCCESS (n={n}, {self.computation_time_ms:.2f}ms)"
+        return f"UtilityRecoveryResult: {indicator} FAILED ({self.computation_time_ms:.2f}ms)"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.success else "[-]"
+        status = "SUCCESS" if self.success else "FAILED"
+        return f"Utility Recovery: {indicator} {status}"
 
 
 @dataclass(frozen=True)
-class RiskProfileResult:
+class RiskProfileResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of risk profile analysis from choices under uncertainty.
 
@@ -521,12 +549,18 @@ class RiskProfileResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        return f"RiskProfileResult({self.risk_category}, rho={self.risk_aversion_coefficient:.4f})"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.consistency_score >= 0.9 else "[-]"
+        return f"RiskProfileResult: {indicator} {self.risk_category} (rho={self.risk_aversion_coefficient:.4f})"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.consistency_score >= 0.9 else "[-]"
+        return f"Risk Profile: {indicator} {self.risk_category}"
 
 
 @dataclass(frozen=True)
-class IdealPointResult:
+class IdealPointResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of ideal point estimation in feature space.
 
@@ -622,13 +656,19 @@ class IdealPointResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "rational" if self.is_euclidean_rational else f"{self.num_violations} violations"
-        return f"IdealPointResult({status}, dims={self.num_dimensions}, var={self.explained_variance:.4f})"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_euclidean_rational else "[-]"
+        status = "RATIONAL" if self.is_euclidean_rational else f"{self.num_violations} violations"
+        return f"IdealPointResult: {indicator} {status} (dims={self.num_dimensions}, var={self.explained_variance:.4f})"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_euclidean_rational else "[-]"
+        return f"Ideal Point: {indicator} var={self.explained_variance:.4f}"
 
 
 @dataclass(frozen=True)
-class SeparabilityResult:
+class SeparabilityResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of separability test for groups of goods.
 
@@ -722,13 +762,20 @@ class SeparabilityResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "separable" if self.is_separable else "coupled"
-        return f"SeparabilityResult({status}, cross_effect={self.cross_effect_strength:.4f})"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_separable else "[-]"
+        status = "SEPARABLE" if self.is_separable else "COUPLED"
+        return f"SeparabilityResult: {indicator} {status} (cross_effect={self.cross_effect_strength:.4f})"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_separable else "[-]"
+        status = "SEPARABLE" if self.is_separable else "COUPLED"
+        return f"Separability: {indicator} {status}"
 
 
 @dataclass(frozen=True)
-class WARPResult:
+class WARPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of WARP (Weak Axiom of Revealed Preference) consistency test.
 
@@ -800,13 +847,20 @@ class WARPResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "consistent" if self.is_consistent else f"{self.num_violations} violations"
-        return f"WARPResult({status}, {self.computation_time_ms:.2f}ms)"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "CONSISTENT" if self.is_consistent else f"{self.num_violations} violations"
+        return f"WARPResult: {indicator} {status} ({self.computation_time_ms:.2f}ms)"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "PASS" if self.is_consistent else "FAIL"
+        return f"WARP: {indicator} {status}"
 
 
 @dataclass(frozen=True)
-class SARPResult:
+class SARPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of SARP (Strict Axiom of Revealed Preference) consistency test.
 
@@ -877,13 +931,20 @@ class SARPResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "consistent" if self.is_consistent else f"{self.num_violations} violations"
-        return f"SARPResult({status}, {self.computation_time_ms:.2f}ms)"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "CONSISTENT" if self.is_consistent else f"{self.num_violations} violations"
+        return f"SARPResult: {indicator} {status} ({self.computation_time_ms:.2f}ms)"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "PASS" if self.is_consistent else "FAIL"
+        return f"SARP: {indicator} {status}"
 
 
 @dataclass(frozen=True)
-class HoutmanMaksResult:
+class HoutmanMaksResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of Houtman-Maks index computation.
 
@@ -969,10 +1030,16 @@ class HoutmanMaksResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
         if self.is_consistent:
-            return f"HoutmanMaksResult(consistent, {self.computation_time_ms:.2f}ms)"
-        return f"HoutmanMaksResult(remove={self.num_removed}, frac={self.fraction:.4f})"
+            return f"HoutmanMaksResult: {indicator} CONSISTENT ({self.computation_time_ms:.2f}ms)"
+        return f"HoutmanMaksResult: {indicator} remove={self.num_removed} (frac={self.fraction:.4f})"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        return f"Houtman-Maks: {indicator} {1.0 - self.fraction:.4f}"
 
 
 # =============================================================================
@@ -1042,7 +1109,7 @@ priced/optimized independently without cross-effects.
 
 
 @dataclass(frozen=True)
-class BronarsPowerResult:
+class BronarsPowerResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of Bronars' Power Index computation.
 
@@ -1145,13 +1212,19 @@ class BronarsPowerResult:
         return result
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "significant" if self.is_significant else "low power"
-        return f"BronarsPowerResult(power={self.power_index:.4f}, {status})"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_significant else "[-]"
+        status = "SIGNIFICANT" if self.is_significant else "LOW POWER"
+        return f"BronarsPowerResult: {indicator} {status} (power={self.power_index:.4f})"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_significant else "[-]"
+        return f"Power: {indicator} {self.power_index:.4f}"
 
 
 @dataclass(frozen=True)
-class HARPResult:
+class HARPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of HARP (Homothetic Axiom of Revealed Preference) test.
 
@@ -1254,13 +1327,19 @@ class HARPResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "homothetic" if self.is_consistent else f"{self.num_violations} violations"
-        return f"HARPResult({status}, max_prod={self.max_cycle_product:.4f})"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        status = "HOMOTHETIC" if self.is_consistent else f"{self.num_violations} violations"
+        return f"HARPResult: {indicator} {status} (max_prod={self.max_cycle_product:.4f})"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_consistent else "[-]"
+        return f"HARP: {indicator} {'PASS' if self.is_consistent else 'FAIL'}"
 
 
 @dataclass(frozen=True)
-class QuasilinearityResult:
+class QuasilinearityResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of quasilinearity (cyclic monotonicity) test.
 
@@ -1344,13 +1423,19 @@ class QuasilinearityResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        status = "quasilinear" if self.is_quasilinear else f"{self.num_violations} violations"
-        return f"QuasilinearityResult({status})"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_quasilinear else "[-]"
+        status = "QUASILINEAR" if self.is_quasilinear else f"{self.num_violations} violations"
+        return f"QuasilinearityResult: {indicator} {status}"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_quasilinear else "[-]"
+        return f"Quasilinear: {indicator} {'PASS' if self.is_quasilinear else 'FAIL'}"
 
 
 @dataclass(frozen=True)
-class GrossSubstitutesResult:
+class GrossSubstitutesResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of gross substitutes test between two goods.
 
@@ -1448,12 +1533,17 @@ class GrossSubstitutesResult:
         }
 
     def __repr__(self) -> str:
-        """Compact string representation."""
-        return f"GrossSubstitutesResult(g={self.good_g_index}, h={self.good_h_index}, {self.relationship})"
+        """Compact string representation with [+]/[-] indicator."""
+        indicator = "[+]" if self.is_conclusive else "[~]"
+        return f"GrossSubstitutesResult: {indicator} g{self.good_g_index}<->g{self.good_h_index}: {self.relationship}"
+
+    def short_summary(self) -> str:
+        """Return one-liner with [+]/[-] indicator."""
+        return f"Gross Substitutes: g{self.good_g_index}<->g{self.good_h_index}: {self.relationship}"
 
 
 @dataclass(frozen=True)
-class SubstitutionMatrixResult:
+class SubstitutionMatrixResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of pairwise substitution analysis for all goods.
 
@@ -1547,7 +1637,7 @@ class SubstitutionMatrixResult:
 
 
 @dataclass(frozen=True)
-class VEIResult:
+class VEIResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of Varian's Efficiency Index (per-observation efficiency) computation.
 
@@ -1718,7 +1808,7 @@ Provides per-observation integrity scores instead of one global score.
 
 
 @dataclass(frozen=True)
-class DifferentiableResult:
+class DifferentiableResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of differentiable rationality (smooth preferences) test.
 
@@ -1831,7 +1921,7 @@ class DifferentiableResult:
 
 
 @dataclass(frozen=True)
-class AcyclicalPResult:
+class AcyclicalPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of Acyclical P test (strict preference acyclicity).
 
@@ -1947,7 +2037,7 @@ class AcyclicalPResult:
 
 
 @dataclass(frozen=True)
-class GAPPResult:
+class GAPPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of GAPP (Generalized Axiom of Price Preference) test.
 
@@ -2083,7 +2173,7 @@ prefer situations where their desired items are cheaper?
 
 
 @dataclass(frozen=True)
-class LancasterResult:
+class LancasterResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Valuation report from Lancaster characteristics model.
 
@@ -2223,7 +2313,7 @@ including shadow prices (implicit valuations) for product attributes.
 
 
 @dataclass(frozen=True)
-class AbstractWARPResult:
+class AbstractWARPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of WARP (Weak Axiom of Revealed Preference) check for menu-based choices.
 
@@ -2311,7 +2401,7 @@ class AbstractWARPResult:
 
 
 @dataclass(frozen=True)
-class AbstractSARPResult:
+class AbstractSARPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of SARP (Strict Axiom of Revealed Preference) check for menu-based choices.
 
@@ -2401,7 +2491,7 @@ class AbstractSARPResult:
 
 
 @dataclass(frozen=True)
-class CongruenceResult:
+class CongruenceResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of Congruence (full rationalizability) check for menu-based choices.
 
@@ -2506,7 +2596,7 @@ class CongruenceResult:
 
 
 @dataclass(frozen=True)
-class HoutmanMaksAbstractResult:
+class HoutmanMaksAbstractResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of Houtman-Maks efficiency index for menu-based choices.
 
@@ -2612,7 +2702,7 @@ class HoutmanMaksAbstractResult:
 
 
 @dataclass(frozen=True)
-class OrdinalUtilityResult:
+class OrdinalUtilityResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of ordinal utility (preference ranking) recovery for menu-based choices.
 
@@ -2779,7 +2869,7 @@ Contains the recovered ordinal preference ranking over items.
 
 
 @dataclass(frozen=True)
-class IntegrabilityResult:
+class IntegrabilityResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of integrability conditions test (Chapter 6.4-6.5).
 
@@ -2890,7 +2980,7 @@ class IntegrabilityResult:
 
 
 @dataclass(frozen=True)
-class WelfareResult:
+class WelfareResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of welfare analysis (Chapter 7.3-7.4).
 
@@ -3005,7 +3095,7 @@ class WelfareResult:
 
 
 @dataclass(frozen=True)
-class AdditivityResult:
+class AdditivityResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of additive separability test (Chapter 9.3).
 
@@ -3111,7 +3201,7 @@ class AdditivityResult:
 
 
 @dataclass(frozen=True)
-class CompensatedDemandResult:
+class CompensatedDemandResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of compensated (Hicksian) demand analysis (Chapter 10.3).
 
@@ -3219,7 +3309,7 @@ class CompensatedDemandResult:
 
 
 @dataclass(frozen=True)
-class GeneralMetricResult:
+class GeneralMetricResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of general metric space ideal point analysis (Chapter 11.3-11.4).
 
@@ -3326,7 +3416,7 @@ class GeneralMetricResult:
 
 
 @dataclass(frozen=True)
-class StochasticChoiceResult:
+class StochasticChoiceResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of stochastic/random utility model fitting (Chapter 13).
 
@@ -3438,7 +3528,7 @@ class StochasticChoiceResult:
 
 
 @dataclass(frozen=True)
-class AttentionResult:
+class AttentionResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of limited attention model estimation (Chapter 14).
 
@@ -3552,7 +3642,7 @@ class AttentionResult:
 
 
 @dataclass(frozen=True)
-class ProductionGARPResult:
+class ProductionGARPResult(ResultDisplayMixin, ResultPlotMixin):
     """
     Result of production theory GARP test (Chapter 15).
 
@@ -3733,3 +3823,923 @@ Tech-friendly alias for ProductionGARPResult.
 
 Production theory consistency test for firm behavior.
 """
+
+
+# =============================================================================
+# P0: REVEALED ATTENTION RESULTS (Masatlioglu et al. 2012, Cattaneo et al. 2020)
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class WARPLAResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of WARP with Limited Attention test (Masatlioglu et al. 2012).
+
+    WARP(LA) is a weakening of WARP that allows for limited attention.
+    The axiom states: for any nonempty S, there exists x* in S such that
+    for any T including x*, if c(T) is in S and c(T) != c(T\\x*), then c(T) = x*.
+
+    This is equivalent to testing if the revealed preference relation P
+    (where xPy iff exists T with c(T)=x != c(T\\y)) is acyclic.
+
+    Attributes:
+        satisfies_warp_la: True if data satisfies WARP(LA)
+        revealed_preference: List of (x, y) pairs where x is revealed preferred to y
+        transitive_closure: List of (x, y) pairs in the transitive closure of P
+        attention_filter: Dict mapping menus to inferred consideration sets (if consistent)
+        recovered_preference: Tuple representing a compatible preference ordering (if consistent)
+        violations: List of cycles in the revealed preference relation
+        num_observations: Number of choice observations
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    satisfies_warp_la: bool
+    revealed_preference: list[tuple[int, int]]
+    transitive_closure: list[tuple[int, int]]
+    attention_filter: dict[frozenset[int], set[int]] | None
+    recovered_preference: tuple[int, ...] | None
+    violations: list[tuple[int, ...]]
+    num_observations: int
+    computation_time_ms: float
+
+    @property
+    def num_violations(self) -> int:
+        """Number of violation cycles in revealed preference."""
+        return len(self.violations)
+
+    @property
+    def is_consistent(self) -> bool:
+        """Alias for satisfies_warp_la for consistency with other results."""
+        return self.satisfies_warp_la
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1.0 if consistent, 0.0 if violations exist.
+        """
+        return 1.0 if self.satisfies_warp_la else 0.0
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("WARP(LA) TEST REPORT")]
+
+        # Status
+        status = m._format_status(
+            self.satisfies_warp_la,
+            "CONSISTENT WITH LIMITED ATTENTION",
+            "VIOLATIONS FOUND"
+        )
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Satisfies WARP(LA)", self.satisfies_warp_la))
+        lines.append(m._format_metric("Observations", self.num_observations))
+        lines.append(m._format_metric("Revealed Preferences", len(self.revealed_preference)))
+        lines.append(m._format_metric("Transitive Closure Size", len(self.transitive_closure)))
+        lines.append(m._format_metric("Violations", self.num_violations))
+
+        # Show recovered preference if available
+        if self.recovered_preference:
+            lines.append(m._format_section("Recovered Preference"))
+            pref_str = " > ".join(str(x) for x in self.recovered_preference)
+            lines.append(f"  {pref_str}")
+
+        # Show first violation if any
+        if self.violations:
+            lines.append(m._format_section("First Violation Cycle"))
+            cycle_str = " -> ".join(str(x) for x in self.violations[0])
+            lines.append(f"  {cycle_str}")
+            if len(self.violations) > 1:
+                lines.append(f"  ... and {len(self.violations) - 1} more cycles")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.satisfies_warp_la:
+            lines.append("  Behavior is consistent with preference maximization")
+            lines.append("  under limited attention (attention filter model).")
+        else:
+            lines.append("  Behavior cannot be rationalized even with limited attention.")
+            lines.append(f"  Found {self.num_violations} preference cycle(s).")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "satisfies_warp_la": self.satisfies_warp_la,
+            "num_violations": self.num_violations,
+            "violations": [list(c) for c in self.violations],
+            "revealed_preference": self.revealed_preference,
+            "transitive_closure": self.transitive_closure,
+            "recovered_preference": list(self.recovered_preference) if self.recovered_preference else None,
+            "num_observations": self.num_observations,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        status = "consistent" if self.satisfies_warp_la else f"{self.num_violations} violations"
+        return f"WARPLAResult({status}, {self.computation_time_ms:.2f}ms)"
+
+
+@dataclass(frozen=True)
+class RandomAttentionResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of Random Attention Model (RAM) estimation (Cattaneo et al. 2020).
+
+    RAM extends the limited attention model to stochastic choice data.
+    The model assumes a fixed preference ordering and random attention:
+    each item has a probability of being considered, and the choice
+    is the most preferred item among those considered.
+
+    Attributes:
+        is_ram_consistent: True if data is consistent with RAM
+        preference_ranking: Estimated preference ordering (best to worst)
+        attention_bounds: Dict mapping (menu, item) to (lower, upper) attention bounds
+        item_attention_scores: Array of estimated attention probability per item
+        test_statistic: Test statistic for RAM consistency
+        p_value: P-value for the test (if bootstrap performed)
+        compatible_preferences: List of preference orderings compatible with the data
+        assumption: RAM variant used ("monotonic", "independent", "general")
+        num_observations: Number of observations
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    is_ram_consistent: bool
+    preference_ranking: tuple[int, ...] | None
+    attention_bounds: dict[tuple[frozenset[int], int], tuple[float, float]]
+    item_attention_scores: NDArray[np.float64]
+    test_statistic: float
+    p_value: float
+    compatible_preferences: list[tuple[int, ...]]
+    assumption: str
+    num_observations: int
+    computation_time_ms: float
+
+    @property
+    def num_items(self) -> int:
+        """Number of distinct items."""
+        return len(self.item_attention_scores)
+
+    @property
+    def num_compatible_preferences(self) -> int:
+        """Number of preference orderings compatible with data."""
+        return len(self.compatible_preferences)
+
+    def get_attention_ranking(self) -> list[int]:
+        """Return items sorted by attention score (highest first)."""
+        return list(np.argsort(self.item_attention_scores)[::-1])
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1 - test_statistic (capped at 0-1 range).
+        """
+        return max(0.0, min(1.0, 1.0 - self.test_statistic))
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("RANDOM ATTENTION MODEL REPORT")]
+
+        # Status
+        status = m._format_status(
+            self.is_ram_consistent,
+            "RAM CONSISTENT",
+            "RAM INCONSISTENT"
+        )
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("RAM Consistent", self.is_ram_consistent))
+        lines.append(m._format_metric("Assumption", self.assumption))
+        lines.append(m._format_metric("Test Statistic", self.test_statistic))
+        lines.append(m._format_metric("P-Value", self.p_value))
+        lines.append(m._format_metric("Observations", self.num_observations))
+        lines.append(m._format_metric("Compatible Preferences", self.num_compatible_preferences))
+
+        # Show estimated preference if available
+        if self.preference_ranking:
+            lines.append(m._format_section("Estimated Preference"))
+            pref_str = " > ".join(str(x) for x in self.preference_ranking)
+            lines.append(f"  {pref_str}")
+
+        # Attention scores
+        if len(self.item_attention_scores) > 0:
+            lines.append(m._format_section("Attention Scores (top 5)"))
+            sorted_idx = np.argsort(self.item_attention_scores)[::-1]
+            for i in sorted_idx[:5]:
+                lines.append(f"  Item {i}: {self.item_attention_scores[i]:.4f}")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.is_ram_consistent:
+            lines.append("  Stochastic choices are consistent with random attention.")
+            lines.append("  Consumer maximizes fixed preference among considered items.")
+        else:
+            lines.append("  Data cannot be explained by random attention model.")
+            lines.append(f"  Test statistic: {self.test_statistic:.4f}")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "is_ram_consistent": self.is_ram_consistent,
+            "preference_ranking": list(self.preference_ranking) if self.preference_ranking else None,
+            "item_attention_scores": self.item_attention_scores.tolist(),
+            "test_statistic": self.test_statistic,
+            "p_value": self.p_value,
+            "num_compatible_preferences": self.num_compatible_preferences,
+            "assumption": self.assumption,
+            "num_observations": self.num_observations,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        status = "consistent" if self.is_ram_consistent else "inconsistent"
+        return f"RandomAttentionResult({status}, p={self.p_value:.4f})"
+
+
+# =============================================================================
+# P1: RUM CONSISTENCY RESULTS (Block & Marschak 1960, Smeulders et al. 2021)
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class RUMConsistencyResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of Random Utility Model (RUM) consistency test.
+
+    Tests whether stochastic choice data can be rationalized by ANY mixture
+    of preference orderings (i.e., whether a RUM representation exists).
+
+    Uses column generation algorithm from Smeulders et al. (2021) for efficiency.
+
+    Attributes:
+        is_rum_consistent: True if data is RUM-rationalizable
+        distance_to_rum: L1 distance to nearest RUM (0 = perfectly consistent)
+        regularity_satisfied: True if regularity condition holds
+        num_orderings_used: Number of orderings in the sparse representation
+        rationalizing_distribution: Dict mapping preference orderings to probabilities
+        num_iterations: Number of column generation iterations
+        constraint_violations: List of violated constraints (if inconsistent)
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    is_rum_consistent: bool
+    distance_to_rum: float
+    regularity_satisfied: bool
+    num_orderings_used: int
+    rationalizing_distribution: dict[tuple[int, ...], float] | None
+    num_iterations: int
+    constraint_violations: list[str]
+    computation_time_ms: float
+
+    @property
+    def is_consistent(self) -> bool:
+        """Alias for is_rum_consistent."""
+        return self.is_rum_consistent
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1 - distance_to_rum (capped at 0-1).
+        """
+        return max(0.0, 1.0 - min(1.0, self.distance_to_rum))
+
+    def get_top_orderings(self, n: int = 5) -> list[tuple[tuple[int, ...], float]]:
+        """Return top n orderings by probability."""
+        if not self.rationalizing_distribution:
+            return []
+        sorted_orderings = sorted(
+            self.rationalizing_distribution.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+        return sorted_orderings[:n]
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("RUM CONSISTENCY TEST REPORT")]
+
+        # Status
+        status = m._format_status(
+            self.is_rum_consistent,
+            "RUM CONSISTENT",
+            "RUM INCONSISTENT"
+        )
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("RUM Consistent", self.is_rum_consistent))
+        lines.append(m._format_metric("Distance to RUM", self.distance_to_rum))
+        lines.append(m._format_metric("Regularity Satisfied", self.regularity_satisfied))
+        lines.append(m._format_metric("Orderings Used", self.num_orderings_used))
+        lines.append(m._format_metric("Column Gen Iterations", self.num_iterations))
+
+        # Show top orderings if available
+        if self.rationalizing_distribution:
+            lines.append(m._format_section("Top Orderings"))
+            for ordering, prob in self.get_top_orderings(3):
+                pref_str = " > ".join(str(x) for x in ordering)
+                lines.append(f"  {pref_str}: {prob:.4f}")
+
+        # Show violations if any
+        if self.constraint_violations:
+            lines.append(m._format_section("Constraint Violations"))
+            for v in self.constraint_violations[:3]:
+                lines.append(f"  {v}")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.is_rum_consistent:
+            lines.append("  Stochastic choices can be rationalized by a mixture")
+            lines.append("  of utility-maximizing preference orderings.")
+            lines.append(f"  Sparse representation uses {self.num_orderings_used} orderings.")
+        else:
+            lines.append("  Data cannot be explained by ANY random utility model.")
+            lines.append(f"  Distance to nearest RUM: {self.distance_to_rum:.4f}")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        dist_dict = None
+        if self.rationalizing_distribution:
+            dist_dict = {
+                str(k): v for k, v in self.rationalizing_distribution.items()
+            }
+        return {
+            "is_rum_consistent": self.is_rum_consistent,
+            "distance_to_rum": self.distance_to_rum,
+            "regularity_satisfied": self.regularity_satisfied,
+            "num_orderings_used": self.num_orderings_used,
+            "rationalizing_distribution": dist_dict,
+            "num_iterations": self.num_iterations,
+            "constraint_violations": self.constraint_violations,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        status = "consistent" if self.is_rum_consistent else f"dist={self.distance_to_rum:.4f}"
+        return f"RUMConsistencyResult({status}, {self.num_orderings_used} orderings)"
+
+
+# Tech-friendly aliases for new results
+RevealedAttentionResult = WARPLAResult
+"""Tech-friendly alias for WARP(LA) result."""
+
+StochasticAttentionResult = RandomAttentionResult
+"""Tech-friendly alias for Random Attention Model result."""
+
+MixtureRationalityResult = RUMConsistencyResult
+"""Tech-friendly alias for RUM consistency result."""
+
+
+# =============================================================================
+# PHASE 2 EXTENSIONS - REGULARITY, ATTENTION OVERLOAD, SWAPS INDEX, ETC.
+# =============================================================================
+
+
+@dataclass(frozen=True)
+class RegularityViolation(ResultDisplayMixin):
+    """
+    Details of a single regularity violation.
+
+    Regularity states that P(x|A) >= P(x|B) when A is a subset of B.
+    A violation means adding options INCREASED choice probability.
+
+    Attributes:
+        item: The item whose probability increased when options were added
+        subset_menu_idx: Index of the smaller menu A
+        superset_menu_idx: Index of the larger menu B (A ⊂ B)
+        prob_in_subset: P(x|A) - probability in smaller menu
+        prob_in_superset: P(x|B) - probability in larger menu
+        magnitude: P(x|B) - P(x|A), positive means violation
+    """
+
+    item: int
+    subset_menu_idx: int
+    superset_menu_idx: int
+    prob_in_subset: float
+    prob_in_superset: float
+    magnitude: float
+
+
+@dataclass(frozen=True)
+class RegularityResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of standalone regularity test for stochastic choice data.
+
+    Regularity (Luce axiom) states that adding options should never
+    INCREASE choice probability. Violations indicate decoy effects,
+    context-dependent preferences, or consideration set changes.
+
+    Attributes:
+        satisfies_regularity: True if no violations found
+        violations: List of RegularityViolation details
+        worst_violation: The violation with largest magnitude
+        violation_rate: Fraction of testable pairs that violate
+        num_testable_pairs: Total number of subset pairs tested
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    satisfies_regularity: bool
+    violations: list[RegularityViolation]
+    worst_violation: RegularityViolation | None
+    violation_rate: float
+    num_testable_pairs: int
+    computation_time_ms: float
+
+    @property
+    def num_violations(self) -> int:
+        """Number of regularity violations found."""
+        return len(self.violations)
+
+    @property
+    def is_consistent(self) -> bool:
+        """Alias for satisfies_regularity."""
+        return self.satisfies_regularity
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1 - violation_rate.
+        """
+        return 1.0 - self.violation_rate
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("REGULARITY TEST REPORT")]
+
+        # Status
+        status = m._format_status(
+            self.satisfies_regularity,
+            "REGULARITY SATISFIED",
+            "REGULARITY VIOLATED"
+        )
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Satisfies Regularity", self.satisfies_regularity))
+        lines.append(m._format_metric("Violations", self.num_violations))
+        lines.append(m._format_metric("Testable Pairs", self.num_testable_pairs))
+        lines.append(m._format_metric("Violation Rate", f"{self.violation_rate:.2%}"))
+
+        # Show worst violation
+        if self.worst_violation:
+            lines.append(m._format_section("Worst Violation"))
+            wv = self.worst_violation
+            lines.append(f"  Item {wv.item}: P(x|small) = {wv.prob_in_subset:.3f}")
+            lines.append(f"             P(x|large) = {wv.prob_in_superset:.3f}")
+            lines.append(f"  Magnitude: {wv.magnitude:.4f}")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.satisfies_regularity:
+            lines.append("  Choice probabilities decrease with menu expansion.")
+            lines.append("  Consistent with standard random utility models.")
+        else:
+            lines.append("  Adding options sometimes INCREASES choice probability.")
+            lines.append("  Suggests decoy effects or consideration set changes.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        violations_list = []
+        for v in self.violations:
+            violations_list.append({
+                "item": v.item,
+                "subset_menu_idx": v.subset_menu_idx,
+                "superset_menu_idx": v.superset_menu_idx,
+                "prob_in_subset": v.prob_in_subset,
+                "prob_in_superset": v.prob_in_superset,
+                "magnitude": v.magnitude,
+            })
+        return {
+            "satisfies_regularity": self.satisfies_regularity,
+            "num_violations": self.num_violations,
+            "violation_rate": self.violation_rate,
+            "num_testable_pairs": self.num_testable_pairs,
+            "violations": violations_list,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        status = "satisfied" if self.satisfies_regularity else f"{self.num_violations} violations"
+        return f"RegularityResult({status}, rate={self.violation_rate:.2%})"
+
+
+@dataclass(frozen=True)
+class AttentionOverloadResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of attention overload test (Lleras et al. 2017 "When More is Less").
+
+    Tests whether choice quality degrades as menu size increases,
+    indicating cognitive overload.
+
+    Attributes:
+        has_overload: True if significant quality decline detected
+        critical_menu_size: Menu size where overload begins (None if no overload)
+        overload_severity: 0-1 measure of how severe the overload is
+        menu_size_quality: Dict mapping menu size to average quality score
+        regression_slope: Slope of quality ~ log(menu_size) regression
+        p_value: Statistical significance of the slope
+        num_observations: Total observations analyzed
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    has_overload: bool
+    critical_menu_size: int | None
+    overload_severity: float
+    menu_size_quality: dict[int, float]
+    regression_slope: float
+    p_value: float
+    num_observations: int
+    computation_time_ms: float
+
+    @property
+    def is_overloaded(self) -> bool:
+        """Alias for has_overload."""
+        return self.has_overload
+
+    @property
+    def max_quality_size(self) -> int | None:
+        """Menu size with highest quality (optimal menu size)."""
+        if not self.menu_size_quality:
+            return None
+        return max(self.menu_size_quality.keys(), key=lambda k: self.menu_size_quality[k])
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1 - overload_severity.
+        """
+        return 1.0 - self.overload_severity
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("ATTENTION OVERLOAD TEST REPORT")]
+
+        # Status
+        status = "OVERLOAD DETECTED" if self.has_overload else "NO OVERLOAD"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Has Overload", self.has_overload))
+        lines.append(m._format_metric("Overload Severity", f"{self.overload_severity:.2%}"))
+        if self.critical_menu_size is not None:
+            lines.append(m._format_metric("Critical Menu Size", self.critical_menu_size))
+        lines.append(m._format_metric("Regression Slope", self.regression_slope))
+        lines.append(m._format_metric("P-value", self.p_value))
+        lines.append(m._format_metric("Observations", self.num_observations))
+
+        # Quality by menu size
+        if self.menu_size_quality:
+            lines.append(m._format_section("Quality by Menu Size"))
+            for size in sorted(self.menu_size_quality.keys())[:6]:
+                quality = self.menu_size_quality[size]
+                lines.append(f"  Size {size}: {quality:.3f}")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.has_overload:
+            lines.append("  Choice quality declines with larger menus.")
+            if self.critical_menu_size:
+                lines.append(f"  Recommend menus smaller than {self.critical_menu_size} items.")
+        else:
+            lines.append("  No significant quality decline with menu size.")
+            lines.append("  Choice quality remains stable across menu sizes.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "has_overload": self.has_overload,
+            "critical_menu_size": self.critical_menu_size,
+            "overload_severity": self.overload_severity,
+            "menu_size_quality": self.menu_size_quality,
+            "regression_slope": self.regression_slope,
+            "p_value": self.p_value,
+            "num_observations": self.num_observations,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        if self.has_overload:
+            return f"AttentionOverloadResult(overload, critical={self.critical_menu_size})"
+        return f"AttentionOverloadResult(no overload)"
+
+
+@dataclass(frozen=True)
+class SwapsIndexResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of swaps index computation (Apesteguia & Ballester 2015 JPE).
+
+    The swaps index counts the minimum number of preference swaps
+    needed to make the data consistent. More interpretable than AEI.
+
+    Attributes:
+        swaps_count: Minimum swaps for consistency
+        swaps_normalized: 0 = consistent, 1 = maximally inconsistent
+        max_possible_swaps: Maximum possible swaps for this dataset
+        swap_pairs: List of (obs_i, obs_j) pairs to flip
+        is_consistent: True if no swaps needed
+        method: Algorithm used ("greedy" or "optimal")
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    swaps_count: int
+    swaps_normalized: float
+    max_possible_swaps: int
+    swap_pairs: list[tuple[int, int]]
+    is_consistent: bool
+    method: str
+    computation_time_ms: float
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1 - swaps_normalized.
+        """
+        return 1.0 - self.swaps_normalized
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("SWAPS INDEX REPORT")]
+
+        # Status
+        status = "CONSISTENT" if self.is_consistent else f"{self.swaps_count} SWAPS NEEDED"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Swaps Count", self.swaps_count))
+        lines.append(m._format_metric("Swaps Normalized", f"{self.swaps_normalized:.2%}"))
+        lines.append(m._format_metric("Max Possible Swaps", self.max_possible_swaps))
+        lines.append(m._format_metric("Is Consistent", self.is_consistent))
+        lines.append(m._format_metric("Method", self.method))
+
+        # Show swap pairs
+        if self.swap_pairs:
+            lines.append(m._format_section("Swap Pairs"))
+            for i, (obs_i, obs_j) in enumerate(self.swap_pairs[:5]):
+                lines.append(f"  Swap {i+1}: obs {obs_i} <-> obs {obs_j}")
+            if len(self.swap_pairs) > 5:
+                lines.append(f"  ... and {len(self.swap_pairs) - 5} more")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.is_consistent:
+            lines.append("  Data is consistent - no preference swaps needed.")
+        else:
+            lines.append(f"  Need {self.swaps_count} preference flip(s) for consistency.")
+            lines.append(f"  This represents {self.swaps_normalized:.1%} of max possible.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "swaps_count": self.swaps_count,
+            "swaps_normalized": self.swaps_normalized,
+            "max_possible_swaps": self.max_possible_swaps,
+            "swap_pairs": self.swap_pairs,
+            "is_consistent": self.is_consistent,
+            "method": self.method,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        return f"SwapsIndexResult(swaps={self.swaps_count}, normalized={self.swaps_normalized:.2%})"
+
+
+@dataclass(frozen=True)
+class ObservationContributionResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of per-observation contribution analysis (Varian 1990).
+
+    Identifies which observations contribute most to inconsistency.
+
+    Attributes:
+        contributions: Per-observation contribution score (0-1)
+        worst_observations: List of (obs_idx, contribution) sorted by contribution
+        removal_impact: Dict mapping obs_idx to AEI improvement if removed
+        cycle_participation: Dict mapping obs_idx to number of cycles involved
+        base_aei: AEI of the full dataset
+        method: Method used ("removal" or "cycle_count")
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    contributions: NDArray[np.float64]
+    worst_observations: list[tuple[int, float]]
+    removal_impact: dict[int, float]
+    cycle_participation: dict[int, int]
+    base_aei: float
+    method: str
+    computation_time_ms: float
+
+    @property
+    def num_observations(self) -> int:
+        """Number of observations analyzed."""
+        return len(self.contributions)
+
+    @property
+    def num_problematic(self) -> int:
+        """Number of observations with non-zero contribution."""
+        return sum(1 for c in self.contributions if c > 0)
+
+    @property
+    def max_contribution(self) -> float:
+        """Maximum contribution score."""
+        return float(np.max(self.contributions)) if len(self.contributions) > 0 else 0.0
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns the base AEI.
+        """
+        return self.base_aei
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("OBSERVATION CONTRIBUTION REPORT")]
+
+        # Status
+        if self.num_problematic == 0:
+            status = "ALL OBSERVATIONS CONSISTENT"
+        else:
+            status = f"{self.num_problematic} PROBLEMATIC OBSERVATIONS"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Base AEI", self.base_aei))
+        lines.append(m._format_metric("Observations", self.num_observations))
+        lines.append(m._format_metric("Problematic", self.num_problematic))
+        lines.append(m._format_metric("Max Contribution", self.max_contribution))
+        lines.append(m._format_metric("Method", self.method))
+
+        # Worst observations
+        if self.worst_observations:
+            lines.append(m._format_section("Worst Observations"))
+            for obs_idx, contrib in self.worst_observations[:5]:
+                impact = self.removal_impact.get(obs_idx, 0.0)
+                cycles = self.cycle_participation.get(obs_idx, 0)
+                lines.append(f"  Obs {obs_idx}: contribution={contrib:.3f}, "
+                           f"cycles={cycles}, removal_impact={impact:.3f}")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.num_problematic == 0:
+            lines.append("  All observations are consistent.")
+        else:
+            worst_idx, worst_contrib = self.worst_observations[0]
+            lines.append(f"  Observation {worst_idx} is responsible for "
+                       f"{worst_contrib:.1%} of inconsistency.")
+            impact = self.removal_impact.get(worst_idx, 0.0)
+            if impact > 0:
+                lines.append(f"  Removing it would improve AEI by {impact:.3f}.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "contributions": self.contributions.tolist(),
+            "worst_observations": self.worst_observations,
+            "removal_impact": self.removal_impact,
+            "cycle_participation": self.cycle_participation,
+            "base_aei": self.base_aei,
+            "num_observations": self.num_observations,
+            "num_problematic": self.num_problematic,
+            "max_contribution": self.max_contribution,
+            "method": self.method,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        return f"ObservationContributionResult(n={self.num_observations}, problematic={self.num_problematic})"
+
+
+@dataclass(frozen=True)
+class StatusQuoBiasResult(ResultDisplayMixin, ResultPlotMixin):
+    """
+    Result of status quo bias test (Masatlioglu & Ok 2005).
+
+    Tests whether default options are chosen more than rational
+    preference would predict.
+
+    Attributes:
+        has_status_quo_bias: True if significant bias detected
+        default_advantage: Average probability boost for defaults (0-1)
+        bias_by_item: Dict mapping item to its bias measure
+        p_value: Statistical significance
+        num_defaults: Number of menus with identified defaults
+        num_observations: Total observations analyzed
+        computation_time_ms: Time taken in milliseconds
+    """
+
+    has_status_quo_bias: bool
+    default_advantage: float
+    bias_by_item: dict[int, float]
+    p_value: float
+    num_defaults: int
+    num_observations: int
+    computation_time_ms: float
+
+    def score(self) -> float:
+        """Return scikit-learn style score in [0, 1]. Higher is better.
+
+        Returns 1 - default_advantage (less bias = better).
+        """
+        return 1.0 - min(1.0, self.default_advantage)
+
+    def summary(self) -> str:
+        """Return human-readable summary report."""
+        m = ResultSummaryMixin
+        lines = [m._format_header("STATUS QUO BIAS TEST REPORT")]
+
+        # Status
+        status = "BIAS DETECTED" if self.has_status_quo_bias else "NO BIAS"
+        lines.append(f"\nStatus: {status}")
+
+        # Metrics
+        lines.append(m._format_section("Metrics"))
+        lines.append(m._format_metric("Has Status Quo Bias", self.has_status_quo_bias))
+        lines.append(m._format_metric("Default Advantage", f"{self.default_advantage:.2%}"))
+        lines.append(m._format_metric("P-value", self.p_value))
+        lines.append(m._format_metric("Menus with Defaults", self.num_defaults))
+        lines.append(m._format_metric("Observations", self.num_observations))
+
+        # Bias by item
+        if self.bias_by_item:
+            lines.append(m._format_section("Bias by Item"))
+            sorted_items = sorted(self.bias_by_item.items(), key=lambda x: -x[1])
+            for item, bias in sorted_items[:5]:
+                lines.append(f"  Item {item}: {bias:.2%} advantage")
+
+        # Interpretation
+        lines.append(m._format_section("Interpretation"))
+        if self.has_status_quo_bias:
+            lines.append("  Default options are chosen more than preference predicts.")
+            lines.append(f"  Defaults have ~{self.default_advantage:.0%} probability boost.")
+        else:
+            lines.append("  No significant status quo bias detected.")
+            lines.append("  Choices appear preference-driven, not default-driven.")
+
+        lines.append(m._format_footer(self.computation_time_ms))
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {
+            "has_status_quo_bias": self.has_status_quo_bias,
+            "default_advantage": self.default_advantage,
+            "bias_by_item": self.bias_by_item,
+            "p_value": self.p_value,
+            "num_defaults": self.num_defaults,
+            "num_observations": self.num_observations,
+            "computation_time_ms": self.computation_time_ms,
+            "score": self.score(),
+        }
+
+    def __repr__(self) -> str:
+        """Compact string representation."""
+        if self.has_status_quo_bias:
+            return f"StatusQuoBiasResult(bias={self.default_advantage:.2%})"
+        return "StatusQuoBiasResult(no bias)"

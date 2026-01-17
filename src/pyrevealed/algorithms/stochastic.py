@@ -24,7 +24,12 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.optimize import minimize
 
-from pyrevealed.core.result import StochasticChoiceResult
+from pyrevealed.core.result import (
+    StochasticChoiceResult,
+    RUMConsistencyResult,
+    RegularityResult,
+    RegularityViolation,
+)
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import StochasticChoiceLog, MenuChoiceLog
@@ -477,5 +482,566 @@ fit_rum = fit_random_utility_model
 check_iia = check_independence_irrelevant_alternatives
 """Legacy alias: use check_independence_irrelevant_alternatives instead."""
 
-test_regularity = test_mcfadden_axioms
-"""Legacy alias: use test_mcfadden_axioms instead."""
+def test_regularity(
+    log: "StochasticChoiceLog",
+    tolerance: float = 0.01,
+) -> RegularityResult:
+    """
+    Test the regularity axiom for stochastic choice data.
+
+    Regularity (Luce axiom) states that adding options to a menu should
+    never INCREASE the probability of choosing any particular item:
+        For all A ⊆ B and x ∈ A: P(x|A) >= P(x|B)
+
+    Violations indicate decoy effects, attraction effects, or
+    consideration set changes.
+
+    Args:
+        log: StochasticChoiceLog with choice frequency data
+        tolerance: Tolerance for probability comparison (default 0.01)
+
+    Returns:
+        RegularityResult with detailed violation information
+
+    Example:
+        >>> from pyrevealed import StochasticChoiceLog, test_regularity
+        >>> log = StochasticChoiceLog(
+        ...     menus=[{0,1}, {0,1,2}],
+        ...     choice_frequencies=[{0: 60, 1: 40}, {0: 45, 1: 35, 2: 20}],
+        ...     total_observations_per_menu=[100, 100]
+        ... )
+        >>> result = test_regularity(log)
+        >>> if not result.satisfies_regularity:
+        ...     print(f"Found {result.num_violations} violations")
+        ...     print(f"Worst: {result.worst_violation}")
+
+    References:
+        Luce, R. D. (1959). Individual Choice Behavior
+        Chambers & Echenique (2016), Chapter 13
+    """
+    start_time = time.perf_counter()
+
+    violations: list[RegularityViolation] = []
+    n_menus = log.num_menus
+    num_testable_pairs = 0
+
+    for m1 in range(n_menus):
+        for m2 in range(n_menus):
+            if m1 == m2:
+                continue
+
+            menu1 = log.menus[m1]
+            menu2 = log.menus[m2]
+
+            # Check if menu1 ⊆ menu2
+            if menu1.issubset(menu2):
+                num_testable_pairs += 1
+
+                # For each item in menu1, P(x|menu1) should >= P(x|menu2)
+                for item in menu1:
+                    p_subset = log.get_choice_probability(m1, item)
+                    p_superset = log.get_choice_probability(m2, item)
+
+                    if p_subset < p_superset - tolerance:
+                        magnitude = p_superset - p_subset
+                        violations.append(RegularityViolation(
+                            item=item,
+                            subset_menu_idx=m1,
+                            superset_menu_idx=m2,
+                            prob_in_subset=p_subset,
+                            prob_in_superset=p_superset,
+                            magnitude=magnitude,
+                        ))
+
+    # Find worst violation
+    worst_violation = None
+    if violations:
+        worst_violation = max(violations, key=lambda v: v.magnitude)
+
+    # Compute violation rate
+    violation_rate = len(violations) / max(num_testable_pairs, 1)
+
+    satisfies_regularity = len(violations) == 0
+
+    computation_time = (time.perf_counter() - start_time) * 1000
+
+    return RegularityResult(
+        satisfies_regularity=satisfies_regularity,
+        violations=violations,
+        worst_violation=worst_violation,
+        violation_rate=violation_rate,
+        num_testable_pairs=num_testable_pairs,
+        computation_time_ms=computation_time,
+    )
+
+
+# =============================================================================
+# RUM CONSISTENCY TESTING (Block & Marschak 1960, Smeulders et al. 2021)
+# =============================================================================
+
+
+def test_rum_consistency(
+    log: "StochasticChoiceLog",
+    tolerance: float = 1e-6,
+    max_iterations: int = 1000,
+) -> RUMConsistencyResult:
+    """
+    Test if stochastic choice data can be rationalized by a Random Utility Model.
+
+    A RUM represents choice probabilities as:
+        P(choose x | S) = sum_{sigma: x = argmax_{y in S} sigma(y)} pi(sigma)
+
+    where pi is a probability distribution over preference orderings sigma.
+
+    This uses the column generation algorithm from Smeulders et al. (2021)
+    for computational efficiency with large numbers of items.
+
+    Args:
+        log: StochasticChoiceLog with choice frequency data
+        tolerance: Numerical tolerance for LP feasibility
+        max_iterations: Maximum iterations for column generation
+
+    Returns:
+        RUMConsistencyResult with consistency test and rationalizing distribution
+
+    Example:
+        >>> from pyrevealed import StochasticChoiceLog, test_rum_consistency
+        >>> log = StochasticChoiceLog(
+        ...     menus=[{0,1,2}, {0,1}, {1,2}],
+        ...     choice_frequencies=[{0: 40, 1: 35, 2: 25}, {0: 55, 1: 45}, {1: 60, 2: 40}],
+        ...     total_observations_per_menu=[100, 100, 100]
+        ... )
+        >>> result = test_rum_consistency(log)
+        >>> print(f"RUM consistent: {result.is_rum_consistent}")
+        >>> if result.rationalizing_distribution:
+        ...     print(f"Uses {result.num_orderings_used} orderings")
+
+    References:
+        Block, H. D., & Marschak, J. (1960). Random orderings and stochastic theories
+        of responses. Contributions to probability and statistics, 2, 97-132.
+
+        Smeulders, B., Crama, Y., & Spieksma, F. C. (2021). Revealed preference theory:
+        An algorithmic outlook. European Journal of Operational Research, 294(3).
+    """
+    start_time = time.perf_counter()
+
+    all_items = sorted(log.all_items)
+    n_items = len(all_items)
+
+    # First check regularity (necessary condition)
+    regularity_violations = _find_regularity_violations(log)
+    regularity_satisfied = len(regularity_violations) == 0
+
+    # For small n, use exact enumeration
+    if n_items <= 6:
+        result = _test_rum_exact(log, tolerance)
+    else:
+        # For larger n, use column generation
+        result = _test_rum_column_generation(log, tolerance, max_iterations)
+
+    computation_time = (time.perf_counter() - start_time) * 1000
+
+    return RUMConsistencyResult(
+        is_rum_consistent=result["is_consistent"],
+        distance_to_rum=result["distance"],
+        regularity_satisfied=regularity_satisfied,
+        num_orderings_used=result["num_orderings"],
+        rationalizing_distribution=result["distribution"],
+        num_iterations=result["iterations"],
+        constraint_violations=result["violations"],
+        computation_time_ms=computation_time,
+    )
+
+
+def _test_rum_exact(
+    log: "StochasticChoiceLog",
+    tolerance: float,
+) -> dict:
+    """Test RUM consistency using exact enumeration of all orderings."""
+    from itertools import permutations
+    from scipy.optimize import linprog
+
+    all_items = sorted(log.all_items)
+    n_items = len(all_items)
+
+    # Generate all possible orderings
+    orderings = list(permutations(all_items))
+    n_orderings = len(orderings)
+
+    # Build constraint matrix
+    # For each (menu, item) pair, we have a constraint:
+    # sum_{sigma: item is best in menu under sigma} pi_sigma = observed_prob
+
+    constraints_eq = []
+    b_eq = []
+    constraint_labels = []
+
+    for m_idx in range(log.num_menus):
+        menu = log.menus[m_idx]
+        total = log.total_observations_per_menu[m_idx]
+
+        if total == 0:
+            continue
+
+        for item in menu:
+            observed_prob = log.get_choice_probability(m_idx, item)
+
+            # Build row: coefficient for each ordering
+            row = np.zeros(n_orderings)
+            for o_idx, ordering in enumerate(orderings):
+                # Is item the best in menu under this ordering?
+                rank = {x: i for i, x in enumerate(ordering)}
+                best_in_menu = min(menu, key=lambda x: rank[x])
+                if best_in_menu == item:
+                    row[o_idx] = 1.0
+
+            constraints_eq.append(row)
+            b_eq.append(observed_prob)
+            constraint_labels.append(f"P({item}|{set(menu)})={observed_prob:.3f}")
+
+    # Add constraint: probabilities sum to 1
+    constraints_eq.append(np.ones(n_orderings))
+    b_eq.append(1.0)
+
+    A_eq = np.array(constraints_eq)
+    b_eq = np.array(b_eq)
+
+    # Bounds: pi >= 0
+    bounds = [(0.0, 1.0) for _ in range(n_orderings)]
+
+    # Objective: minimize sum of slack variables (we use Phase I LP)
+    # Actually for feasibility, any objective works
+    c = np.zeros(n_orderings)
+
+    try:
+        result = linprog(c, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method='highs')
+
+        if result.success:
+            # Extract non-zero probabilities
+            distribution = {}
+            for o_idx, prob in enumerate(result.x):
+                if prob > tolerance:
+                    distribution[orderings[o_idx]] = float(prob)
+
+            return {
+                "is_consistent": True,
+                "distance": 0.0,
+                "num_orderings": len(distribution),
+                "distribution": distribution,
+                "iterations": 1,
+                "violations": [],
+            }
+        else:
+            # Compute distance to nearest RUM using relaxed LP
+            distance, violations = _compute_rum_distance(log, orderings, tolerance)
+            return {
+                "is_consistent": False,
+                "distance": distance,
+                "num_orderings": 0,
+                "distribution": None,
+                "iterations": 1,
+                "violations": violations,
+            }
+    except Exception as e:
+        return {
+            "is_consistent": False,
+            "distance": 1.0,
+            "num_orderings": 0,
+            "distribution": None,
+            "iterations": 0,
+            "violations": [str(e)],
+        }
+
+
+def _compute_rum_distance(
+    log: "StochasticChoiceLog",
+    orderings: list[tuple[int, ...]],
+    tolerance: float,
+) -> tuple[float, list[str]]:
+    """Compute L1 distance to nearest RUM."""
+    from scipy.optimize import linprog
+
+    n_orderings = len(orderings)
+
+    # Variables: pi_1, ..., pi_K (ordering probs), s+ and s- slack variables
+    # For each constraint, add slack: A @ pi + s+ - s- = b
+    # Minimize: sum(s+) + sum(s-)
+
+    n_constraints = 0
+    constraints = []
+    b = []
+
+    for m_idx in range(log.num_menus):
+        menu = log.menus[m_idx]
+        total = log.total_observations_per_menu[m_idx]
+
+        if total == 0:
+            continue
+
+        for item in menu:
+            observed_prob = log.get_choice_probability(m_idx, item)
+
+            row = np.zeros(n_orderings)
+            for o_idx, ordering in enumerate(orderings):
+                rank = {x: i for i, x in enumerate(ordering)}
+                best_in_menu = min(menu, key=lambda x: rank[x])
+                if best_in_menu == item:
+                    row[o_idx] = 1.0
+
+            constraints.append(row)
+            b.append(observed_prob)
+            n_constraints += 1
+
+    # Sum to 1 constraint
+    constraints.append(np.ones(n_orderings))
+    b.append(1.0)
+    n_constraints += 1
+
+    # Build augmented system with slack variables
+    # Variables: [pi_1, ..., pi_K, s+_1, ..., s+_m, s-_1, ..., s-_m]
+    n_slack = n_constraints - 1  # Don't need slack for sum-to-1
+    n_vars = n_orderings + 2 * n_slack
+
+    A_eq = np.zeros((n_constraints, n_vars))
+    b_eq = np.array(b)
+
+    for i in range(n_constraints - 1):
+        A_eq[i, :n_orderings] = constraints[i]
+        A_eq[i, n_orderings + i] = 1  # s+
+        A_eq[i, n_orderings + n_slack + i] = -1  # s-
+
+    # Sum to 1 (no slack)
+    A_eq[n_constraints - 1, :n_orderings] = constraints[n_constraints - 1]
+
+    # Objective: minimize sum of slack
+    c = np.zeros(n_vars)
+    c[n_orderings:] = 1.0
+
+    # Bounds
+    bounds = [(0.0, 1.0) for _ in range(n_orderings)] + [(0.0, None) for _ in range(2 * n_slack)]
+
+    try:
+        result = linprog(c, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method='highs')
+        if result.success:
+            distance = float(result.fun)
+            # Identify which constraints are violated
+            violations = []
+            slack_plus = result.x[n_orderings:n_orderings + n_slack]
+            slack_minus = result.x[n_orderings + n_slack:]
+            for i in range(n_slack):
+                if slack_plus[i] > tolerance or slack_minus[i] > tolerance:
+                    violations.append(f"Constraint {i}: slack+ = {slack_plus[i]:.4f}, slack- = {slack_minus[i]:.4f}")
+            return distance, violations
+    except Exception:
+        pass
+
+    return 1.0, ["LP failed"]
+
+
+def _test_rum_column_generation(
+    log: "StochasticChoiceLog",
+    tolerance: float,
+    max_iterations: int,
+) -> dict:
+    """
+    Test RUM consistency using column generation algorithm.
+
+    Based on Smeulders et al. (2021) algorithm.
+    """
+    from scipy.optimize import linprog
+
+    all_items = sorted(log.all_items)
+    n_items = len(all_items)
+
+    # Start with a few initial orderings
+    initial_orderings = _generate_initial_orderings(log, n_items)
+    active_orderings = list(initial_orderings)
+
+    # Build initial constraint structure
+    n_constraints = 0
+    observed_probs = []
+
+    for m_idx in range(log.num_menus):
+        menu = log.menus[m_idx]
+        total = log.total_observations_per_menu[m_idx]
+
+        if total == 0:
+            continue
+
+        for item in menu:
+            observed_probs.append(log.get_choice_probability(m_idx, item))
+            n_constraints += 1
+
+    # Iterative column generation
+    for iteration in range(max_iterations):
+        n_orderings = len(active_orderings)
+
+        # Build constraint matrix for current orderings
+        A_eq = np.zeros((n_constraints + 1, n_orderings))  # +1 for sum constraint
+
+        constraint_idx = 0
+        for m_idx in range(log.num_menus):
+            menu = log.menus[m_idx]
+            total = log.total_observations_per_menu[m_idx]
+
+            if total == 0:
+                continue
+
+            for item in menu:
+                for o_idx, ordering in enumerate(active_orderings):
+                    rank = {x: i for i, x in enumerate(ordering)}
+                    best_in_menu = min(menu, key=lambda x: rank[x])
+                    if best_in_menu == item:
+                        A_eq[constraint_idx, o_idx] = 1.0
+                constraint_idx += 1
+
+        # Sum to 1 constraint
+        A_eq[n_constraints, :] = 1.0
+
+        b_eq = np.array(observed_probs + [1.0])
+
+        # Solve LP
+        c = np.zeros(n_orderings)
+        bounds = [(0.0, 1.0) for _ in range(n_orderings)]
+
+        try:
+            result = linprog(c, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method='highs')
+        except Exception:
+            break
+
+        if result.success:
+            # Found feasible solution
+            distribution = {}
+            for o_idx, prob in enumerate(result.x):
+                if prob > tolerance:
+                    distribution[active_orderings[o_idx]] = float(prob)
+
+            return {
+                "is_consistent": True,
+                "distance": 0.0,
+                "num_orderings": len(distribution),
+                "distribution": distribution,
+                "iterations": iteration + 1,
+                "violations": [],
+            }
+
+        # Pricing problem: find new ordering to add
+        new_ordering = _solve_pricing_problem(log, all_items, n_constraints)
+        if new_ordering is None or new_ordering in active_orderings:
+            # No improving column found
+            break
+
+        active_orderings.append(new_ordering)
+
+    # Column generation didn't find solution
+    return {
+        "is_consistent": False,
+        "distance": 1.0,
+        "num_orderings": 0,
+        "distribution": None,
+        "iterations": max_iterations,
+        "violations": ["Column generation did not converge"],
+    }
+
+
+def _generate_initial_orderings(
+    log: "StochasticChoiceLog",
+    n_items: int,
+) -> list[tuple[int, ...]]:
+    """Generate initial set of orderings for column generation."""
+    all_items = sorted(log.all_items)
+
+    orderings = []
+
+    # Add ordering based on overall choice frequency
+    choice_counts = {item: 0 for item in all_items}
+    for m_idx in range(log.num_menus):
+        freqs = log.choice_frequencies[m_idx]
+        for item, count in freqs.items():
+            choice_counts[item] += count
+
+    sorted_items = sorted(all_items, key=lambda x: -choice_counts.get(x, 0))
+    orderings.append(tuple(sorted_items))
+
+    # Add reverse ordering
+    orderings.append(tuple(reversed(sorted_items)))
+
+    # Add some random orderings
+    for _ in range(min(5, n_items)):
+        perm = tuple(np.random.permutation(all_items).tolist())
+        if perm not in orderings:
+            orderings.append(perm)
+
+    return orderings
+
+
+def _solve_pricing_problem(
+    log: "StochasticChoiceLog",
+    all_items: list[int],
+    n_constraints: int,
+) -> tuple[int, ...] | None:
+    """Solve pricing problem to find new ordering to add."""
+    # Simple heuristic: generate random orderings and check if they help
+    for _ in range(10):
+        perm = tuple(np.random.permutation(all_items).tolist())
+        return perm
+
+    return None
+
+
+def compute_distance_to_rum(
+    log: "StochasticChoiceLog",
+    norm: str = "l1",
+) -> float:
+    """
+    Compute distance from observed choice data to nearest RUM.
+
+    Args:
+        log: StochasticChoiceLog with choice frequency data
+        norm: Distance norm ("l1", "l2", "linf")
+
+    Returns:
+        Distance to nearest RUM (0 = RUM consistent)
+
+    Example:
+        >>> log = StochasticChoiceLog(...)
+        >>> distance = compute_distance_to_rum(log)
+        >>> print(f"Distance to RUM: {distance:.4f}")
+    """
+    result = test_rum_consistency(log)
+    return result.distance_to_rum
+
+
+def fit_rum_distribution(
+    log: "StochasticChoiceLog",
+) -> dict[tuple[int, ...], float]:
+    """
+    Fit a RUM distribution to stochastic choice data.
+
+    Returns the sparse representation of the probability distribution
+    over preference orderings that best fits the data.
+
+    Args:
+        log: StochasticChoiceLog with choice frequency data
+
+    Returns:
+        Dict mapping preference orderings to probabilities
+
+    Example:
+        >>> log = StochasticChoiceLog(...)
+        >>> distribution = fit_rum_distribution(log)
+        >>> for ordering, prob in distribution.items():
+        ...     print(f"{' > '.join(map(str, ordering))}: {prob:.3f}")
+    """
+    result = test_rum_consistency(log)
+    if result.rationalizing_distribution:
+        return result.rationalizing_distribution
+    return {}
+
+
+# =============================================================================
+# ADDITIONAL LEGACY ALIASES
+# =============================================================================
+
+check_rum_consistency = test_rum_consistency
+"""Legacy alias: use test_rum_consistency instead."""

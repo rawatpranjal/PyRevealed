@@ -51,6 +51,7 @@ if TYPE_CHECKING:
         CongruenceResult,
         OrdinalUtilityResult,
     )
+    from pyrevealed.core.summary import BehavioralSummary, MenuChoiceSummary
 
 
 @dataclass
@@ -703,3 +704,51 @@ class BehavioralAuditor:
             efficiency_score=eff_result.efficiency_index,
             preference_order=pref_result.preference_order,
         )
+
+    # =========================================================================
+    # UNIFIED SUMMARY
+    # =========================================================================
+
+    def summary(self, log: BehaviorLog) -> "BehavioralSummary":
+        """
+        Generate unified summary of all behavioral tests.
+
+        Runs GARP, WARP, SARP, AEI, MPI, and Houtman-Maks tests and combines
+        results into a single, statsmodels-style summary object.
+
+        Args:
+            log: BehaviorLog containing user's historical actions
+
+        Returns:
+            BehavioralSummary with all test results
+
+        Example:
+            >>> auditor = BehavioralAuditor()
+            >>> summary = auditor.summary(user_log)
+            >>> print(summary.summary())  # Print formatted report
+            >>> summary.score()  # Get aggregate score
+        """
+        from pyrevealed.core.summary import BehavioralSummary
+
+        return BehavioralSummary.from_log(log)
+
+    def menu_summary(self, log: MenuChoiceLog) -> "MenuChoiceSummary":
+        """
+        Generate unified summary of menu-based choice tests.
+
+        Runs WARP, SARP, Congruence, and efficiency tests for menu choice data.
+
+        Args:
+            log: MenuChoiceLog containing menu choices
+
+        Returns:
+            MenuChoiceSummary with all test results
+
+        Example:
+            >>> auditor = BehavioralAuditor()
+            >>> summary = auditor.menu_summary(menu_log)
+            >>> print(summary.summary())
+        """
+        from pyrevealed.core.summary import MenuChoiceSummary
+
+        return MenuChoiceSummary.from_log(log)

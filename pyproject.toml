@@ -78,6 +78,12 @@ packages = ["src/pyrevealed"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --cov=pyrevealed --cov-report=term-missing"
+# Exclude source directory from test collection (functions like test_warp_la are not tests)
+norecursedirs = ["src", "build", "dist", ".git", "papers", "dunnhumby"]
+# Only collect test functions that are in test files (not source API functions)
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
 
 [tool.mypy]
 python_version = "3.10"

@@ -115,6 +115,67 @@ Output:
    Computation Time: 0.13 ms
    ================================================================================
 
+Unified Summary
+---------------
+
+For a quick overview of all consistency tests and metrics at once:
+
+.. code-block:: python
+
+   from pyrevealed import BehaviorLog, BehavioralSummary
+   import numpy as np
+
+   log = BehaviorLog(
+       cost_vectors=np.array([
+           [1.0, 2.0, 3.0],
+           [2.0, 1.0, 3.0],
+           [1.5, 1.5, 2.0],
+       ]),
+       action_vectors=np.array([
+           [1, 5, 1],
+           [5, 1, 1],
+           [3, 3, 1],
+       ])
+   )
+
+   summary = BehavioralSummary.from_log(log)
+   print(summary)
+   # BehavioralSummary: [-] n=3, AEI=0.7143, MPI=0.2857
+
+   print(summary.summary())
+
+Output:
+
+.. code-block:: text
+
+   ============================================================
+                        BEHAVIORAL SUMMARY
+   ============================================================
+
+   Data:
+   -----
+     Observations ......................................... 3
+     Goods ................................................ 3
+
+   Consistency Tests:
+   ------------------
+     GARP .......................................... [-] FAIL
+     WARP .......................................... [-] FAIL
+     SARP .......................................... [-] FAIL
+
+   Goodness-of-Fit:
+   ----------------
+     Afriat Efficiency (AEI) ......................... 0.7143
+     Money Pump Index (MPI) .......................... 0.2857
+     Houtman-Maks Index .............................. 0.3333
+
+   Interpretation:
+   ---------------
+     Moderate consistency - some behavioral anomalies present
+
+   Computation Time: 0.15 ms
+   ============================================================
+
 Core Functions
 --------------
 
@@ -158,6 +219,7 @@ Core Functions
    validation
    troubleshooting
    case_study
+   references
 
 ----
 

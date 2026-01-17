@@ -669,6 +669,174 @@ Example output:
    Average attention: 85.00%
 
 
+At Scale: Content Recommendation Platform
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This example simulates a realistic content recommendation scenario with
+multiple users, position bias, and partial attention effects:
+
+.. code-block:: python
+
+   import numpy as np
+   from pyrevealed import (
+       MenuChoiceLog,
+       validate_menu_warp,
+       validate_menu_sarp,
+       compute_menu_efficiency,
+       fit_menu_preferences,
+       test_attention_rationality,
+   )
+
+   np.random.seed(42)
+
+   # Platform configuration
+   n_items = 10  # Content categories
+   n_users = 5
+   obs_per_user = 20  # Recommendation sessions per user
+   slate_size = 5     # Items shown per session
+
+   item_labels = [
+       "Breaking News", "Sports", "Tech", "Entertainment", "Politics",
+       "Science", "Business", "Health", "Travel", "Food"
+   ]
+
+   # Each user has latent preferences (utilities) over items
+   # Plus some shared popularity component
+   popularity = np.array([2.0, 1.8, 1.5, 2.2, 0.8, 1.0, 1.2, 1.4, 1.6, 1.9])
+
+   all_results = []
+
+   for user_id in range(n_users):
+       # User-specific preference perturbation
+       user_prefs = popularity + np.random.normal(0, 0.5, n_items)
+
+       menus = []
+       choices = []
+
+       for session in range(obs_per_user):
+           # Generate a random slate of items
+           slate_items = np.random.choice(n_items, size=slate_size, replace=False)
+           menu = frozenset(slate_items.tolist())
+           menus.append(menu)
+
+           # Choice probability with position bias and partial attention
+           items = list(menu)
+           base_probs = np.exp(user_prefs[items])
+
+           # Position bias: top positions get attention boost
+           positions = np.arange(len(items))
+           position_weights = 1.0 / (1.0 + 0.3 * positions)
+           np.random.shuffle(position_weights)  # Random ordering in slate
+
+           # Partial attention: user may not see all items (70% attention rate)
+           attention_mask = np.random.random(len(items)) < 0.7
+           if not attention_mask.any():
+               attention_mask[0] = True  # Always consider at least one
+
+           # Combined probability
+           probs = base_probs * position_weights * attention_mask
+           probs /= probs.sum()
+
+           choice = np.random.choice(items, p=probs)
+           choices.append(choice)
+
+       log = MenuChoiceLog(
+           menus=menus,
+           choices=choices,
+           item_labels=item_labels,
+           user_id=f"user_{user_id}",
+       )
+
+       # Analyze this user
+       warp = validate_menu_warp(log)
+       sarp = validate_menu_sarp(log)
+       efficiency = compute_menu_efficiency(log)
+       attention = test_attention_rationality(log)
+
+       all_results.append({
+           "user": f"user_{user_id}",
+           "log": log,
+           "warp_rate": 1.0 if warp.is_consistent else len(warp.violations),
+           "sarp_consistent": sarp.is_consistent,
+           "hm_efficiency": efficiency.efficiency_index,
+           "attention_param": attention.attention_parameter,
+       })
+
+   # Aggregate results
+   print("=" * 60)
+   print("CONTENT RECOMMENDATION PLATFORM - USER BEHAVIOR ANALYSIS")
+   print("=" * 60)
+   print(f"\nConfiguration:")
+   print(f"  Items: {n_items}")
+   print(f"  Users: {n_users}")
+   print(f"  Sessions per user: {obs_per_user}")
+   print(f"  Total observations: {n_users * obs_per_user}")
+
+   print(f"\nPer-User Results:")
+   print("-" * 60)
+   print(f"{'User':<10} {'WARP Viol':<12} {'SARP OK':<10} {'HM Eff':<10} {'Attention':<10}")
+   print("-" * 60)
+
+   warp_violations = []
+   sarp_pass = 0
+   hm_scores = []
+   att_params = []
+
+   for r in all_results:
+       warp_v = 0 if r["warp_rate"] == 1.0 else r["warp_rate"]
+       warp_violations.append(warp_v)
+       sarp_pass += 1 if r["sarp_consistent"] else 0
+       hm_scores.append(r["hm_efficiency"])
+       att_params.append(r["attention_param"])
+
+       print(f"{r['user']:<10} {warp_v:<12} {str(r['sarp_consistent']):<10} "
+             f"{r['hm_efficiency']:.2f}      {r['attention_param']:.2f}")
+
+   print("-" * 60)
+   print(f"\nAggregate Statistics:")
+   print(f"  WARP satisfaction rate: {100 * (n_users - sum(1 for v in warp_violations if v > 0)) / n_users:.0f}%")
+   print(f"  SARP satisfaction rate: {100 * sarp_pass / n_users:.0f}%")
+   print(f"  Mean HM efficiency: {np.mean(hm_scores):.2f}")
+   print(f"  Mean attention parameter: {np.mean(att_params):.2f}")
+
+Example output:
+
+.. code-block:: text
+
+   ============================================================
+   CONTENT RECOMMENDATION PLATFORM - USER BEHAVIOR ANALYSIS
+   ============================================================
+
+   Configuration:
+     Items: 10
+     Users: 5
+     Sessions per user: 20
+     Total observations: 100
+
+   Per-User Results:
+   ------------------------------------------------------------
+   User       WARP Viol    SARP OK    HM Eff     Attention
+   ------------------------------------------------------------
+   user_0     3            False      0.85       0.72
+   user_1     2            False      0.90       0.68
+   user_2     4            False      0.80       0.75
+   user_3     1            False      0.90       0.71
+   user_4     2            False      0.85       0.69
+   ------------------------------------------------------------
+
+   Aggregate Statistics:
+     WARP satisfaction rate: 0%
+     SARP satisfaction rate: 0%
+     Mean HM efficiency: 0.86
+     Mean attention parameter: 0.71
+
+The realistic simulation shows how position bias and limited attention lead to
+apparent inconsistencies (WARP/SARP violations), even when users have stable
+underlying preferences. The Houtman-Maks efficiency (0.80-0.90) indicates that
+most choices are consistent, and the attention model successfully explains the
+deviations
+
+
 Part 9: Best Practices
 ----------------------
 
@@ -737,6 +905,86 @@ Function Reference
      - ``estimate_consideration_sets()``
    * - Salience weights
      - ``compute_salience_weights()``
+
+
+Part 10: Unified Summary Display
+---------------------------------
+
+For comprehensive analysis in one command, use the ``MenuChoiceSummary`` class
+which runs all tests and presents results in a unified format.
+
+One-Liner Analysis
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from pyrevealed import MenuChoiceSummary
+
+   # Run all menu choice tests with one command
+   summary = MenuChoiceSummary.from_log(log)
+
+   # Statsmodels-style text summary
+   print(summary.summary())
+
+Output:
+
+.. code-block:: text
+
+   ============================================================
+                    MENU CHOICE SUMMARY
+   ============================================================
+
+   Data:
+   -----
+     Observations ............................ 50
+     Alternatives ............................ 6
+
+   Consistency Tests:
+   ------------------
+     WARP ............................ [+] PASS
+     SARP ............................ [+] PASS
+     Congruence ...................... [+] PASS
+
+   Goodness-of-Fit:
+   ----------------
+     Houtman-Maks Efficiency .......... 1.0000
+
+   Preference Order:
+   -----------------
+     0 > 1 > 2 > 3 > 4 > 5
+
+   Computation Time: 23.45 ms
+   ============================================================
+
+Quick Status Indicators
+~~~~~~~~~~~~~~~~~~~~~~~
+
+For quick status checks, use ``short_summary()``:
+
+.. code-block:: python
+
+   # Quick one-liner status
+   print(summary.short_summary())
+   # Output: MenuChoiceSummary: [+] WARP, [+] SARP, [+] Congruence, HM=1.00
+
+   # Individual results also have short summaries
+   from pyrevealed import validate_menu_sarp, compute_menu_efficiency
+
+   sarp = validate_menu_sarp(log)
+   print(sarp.short_summary())
+   # Output: SARP: [+] CONSISTENT
+
+   hm = compute_menu_efficiency(log)
+   print(hm.short_summary())
+   # Output: Houtman-Maks: [+] 1.0000 (Fully consistent)
+
+.. note::
+
+   In Jupyter notebooks, results display as styled HTML cards automatically.
+   Just evaluate a result object in a cell to see rich formatting:
+
+   >>> result = validate_menu_sarp(log)
+   >>> result  # Displays as HTML card with pass/fail indicator
 
 
 See Also

@@ -42,6 +42,7 @@ from pyrevealed.lancaster import (
     CharacteristicsLog,
     transform_to_characteristics,
 )
+from pyrevealed.core.summary import BehavioralSummary, MenuChoiceSummary
 
 # =============================================================================
 # DATA CONTAINERS - Tech-friendly names (Primary)
@@ -163,6 +164,18 @@ from pyrevealed.core.result import (
     ConsiderationSetResult,
     ProductionGARPResult,
     FirmBehaviorResult,
+    # New revealed attention result types (P0)
+    WARPLAResult,
+    RandomAttentionResult,
+    # RUM consistency result type (P1)
+    RUMConsistencyResult,
+    # Phase 2 extension result types
+    RegularityResult,
+    RegularityViolation,
+    AttentionOverloadResult,
+    SwapsIndexResult,
+    ObservationContributionResult,
+    StatusQuoBiasResult,
 )
 
 # =============================================================================
@@ -175,6 +188,9 @@ from pyrevealed.algorithms.garp import (
     validate_consistency_weak,
     check_garp,  # Legacy
     check_warp,  # Legacy
+    # Phase 2 extensions
+    compute_swaps_index,
+    compute_observation_contributions,
 )
 
 # Integrity/noise score
@@ -377,6 +393,13 @@ from pyrevealed.algorithms.stochastic import (
     fit_luce_model,
     fit_rum,  # Legacy
     check_iia,  # Legacy
+    # New RUM consistency functions (P1 - Smeulders et al. 2021)
+    test_rum_consistency,
+    compute_distance_to_rum,
+    fit_rum_distribution,
+    check_rum_consistency,  # Legacy alias
+    # Phase 2 extensions - standalone regularity test
+    test_regularity,
 )
 
 # Limited attention (Ch 14)
@@ -386,6 +409,19 @@ from pyrevealed.algorithms.attention import (
     compute_salience_weights,
     test_attention_filter,
     identify_attention,  # Legacy
+    # New WARP-LA functions (P0 - Masatlioglu et al. 2012)
+    test_warp_la,
+    recover_preference_with_attention,
+    validate_attention_filter_consistency,
+    check_warp_la,  # Legacy alias
+    # New RAM functions (P0 - Cattaneo et al. 2020)
+    fit_random_attention_model,
+    test_ram_consistency,
+    estimate_attention_probabilities,
+    compute_attention_bounds,
+    # Phase 2 extensions - attention overload and status quo bias
+    test_attention_overload,
+    test_status_quo_bias,
 )
 
 # Production theory (Ch 15)
@@ -408,6 +444,9 @@ __all__ = [
     "MenuAuditReport",
     "PreferenceEncoder",
     "MenuPreferenceEncoder",
+    # Summary classes
+    "BehavioralSummary",
+    "MenuChoiceSummary",
     # Lancaster Characteristics Model
     "LancasterLog",
     "CharacteristicsLog",
@@ -623,6 +662,11 @@ __all__ = [
     "ConsiderationSetResult",
     "ProductionGARPResult",
     "FirmBehaviorResult",
+    # P0: Revealed Attention result types
+    "WARPLAResult",
+    "RandomAttentionResult",
+    # P1: RUM Consistency result type
+    "RUMConsistencyResult",
     # Integrability (Ch 6.4-6.5)
     "test_integrability",
     "compute_slutsky_matrix",
@@ -663,18 +707,51 @@ __all__ = [
     "fit_luce_model",
     "fit_rum",
     "check_iia",
+    # P1: RUM Consistency (Smeulders et al. 2021)
+    "test_rum_consistency",
+    "compute_distance_to_rum",
+    "fit_rum_distribution",
+    "check_rum_consistency",
     # Limited attention (Ch 14)
     "test_attention_rationality",
     "estimate_consideration_sets",
     "compute_salience_weights",
     "test_attention_filter",
     "identify_attention",
+    # P0: WARP-LA (Masatlioglu et al. 2012)
+    "test_warp_la",
+    "recover_preference_with_attention",
+    "validate_attention_filter_consistency",
+    "check_warp_la",
+    # P0: Random Attention Model (Cattaneo et al. 2020)
+    "fit_random_attention_model",
+    "test_ram_consistency",
+    "estimate_attention_probabilities",
+    "compute_attention_bounds",
     # Production theory (Ch 15)
     "test_profit_maximization",
     "check_cost_minimization",
     "estimate_returns_to_scale",
     "compute_technical_efficiency",
     "check_production_garp",
+    # ==========================================================================
+    # PHASE 2 EXTENSIONS - Quick-Win Diagnostics
+    # ==========================================================================
+    # Result types
+    "RegularityResult",
+    "RegularityViolation",
+    "AttentionOverloadResult",
+    "SwapsIndexResult",
+    "ObservationContributionResult",
+    "StatusQuoBiasResult",
+    # Functions - Regularity test
+    "test_regularity",
+    # Functions - Attention overload & status quo bias
+    "test_attention_overload",
+    "test_status_quo_bias",
+    # Functions - Swaps index & observation contributions
+    "compute_swaps_index",
+    "compute_observation_contributions",
     # Convenience
     "get_integrity_score",
 ]

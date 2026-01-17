@@ -86,7 +86,7 @@ class TestGARPResultMethods:
         """Test repr for consistent result."""
         r = repr(consistent_result)
         assert "GARPResult" in r
-        assert "consistent" in r
+        assert "consistent" in r.lower()
 
     def test_repr_violations(self, violation_result):
         """Test repr for result with violations."""
@@ -212,7 +212,7 @@ class TestMPIResultMethods:
     def test_repr_consistent(self, no_pump_result):
         """Test repr for consistent result."""
         r = repr(no_pump_result)
-        assert "consistent" in r
+        assert "consistent" in r.lower()
 
 
 class TestUtilityRecoveryResultMethods:
