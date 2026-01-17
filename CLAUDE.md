@@ -184,6 +184,27 @@ grep -n "github" pyproject.toml docs/conf.py
 - **ReadTheDocs not updating**: Push to GitHub triggers rebuild. Wait 1-2 min. If stuck, check build logs at readthedocs.org.
 - **Local docs not updating**: Delete `docs/_build/` and rebuild. Sphinx caches aggressively.
 
+### Quick Deploy Commands
+
+When the user says **"release"**, **"deploy"**, or **"push to all surfaces"**, run these commands:
+
+```bash
+# 1. Stage and commit all changes
+git add -A
+git commit -m "Description of changes
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+
+# 2. Push to GitHub (triggers RTD rebuild automatically)
+git push
+
+# 3. Verify surfaces after 1-2 minutes:
+#    - ReadTheDocs: https://pyrevealed.readthedocs.io
+#    - GitHub: https://github.com/rawatpranjal/PyRevealed
+```
+
+**Note**: This does NOT push to PyPI. For a full PyPI release, follow the Release Checklist above (requires version bump).
+
 ## Theory Reference
 
 Based on Chambers & Echenique (2016) *Revealed Preference Theory*:
