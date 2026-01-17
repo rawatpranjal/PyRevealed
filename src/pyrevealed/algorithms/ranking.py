@@ -37,6 +37,7 @@ from scipy.optimize import minimize
 from pyrevealed.core.result import BradleyTerryResult, RankingComparisonResult
 from pyrevealed.core.mixins import ResultSummaryMixin
 from pyrevealed.core.display import ResultDisplayMixin, ResultPlotMixin
+from pyrevealed.core.exceptions import ComputationalLimitError
 
 
 # =============================================================================
@@ -345,10 +346,13 @@ def aggregate_rankings(
 
     elif method == "kemeny":
         # Kemeny: minimize total Kendall tau distance
-        # This is NP-hard, use heuristic for large n
+        # This is NP-hard, exact solution requires factorial enumeration
         if n > 10:
-            # Fall back to Borda for large n
-            return aggregate_rankings(rankings, method="borda")
+            raise ComputationalLimitError(
+                f"Kemeny aggregation is NP-hard and requires factorial enumeration. "
+                f"For n={n} items, this is computationally infeasible (10! = 3.6M, n! grows rapidly). "
+                f"Use method='borda' for a polynomial-time approximation."
+            )
 
         # Brute force for small n (factorial complexity)
         from itertools import permutations

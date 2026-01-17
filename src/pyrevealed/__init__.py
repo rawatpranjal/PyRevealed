@@ -42,7 +42,13 @@ from pyrevealed.lancaster import (
     CharacteristicsLog,
     transform_to_characteristics,
 )
-from pyrevealed.core.summary import BehavioralSummary, MenuChoiceSummary
+from pyrevealed.core.summary import (
+    BehavioralSummary,
+    MenuChoiceSummary,
+    RiskChoiceSummary,
+    StochasticChoiceSummary,
+    ProductionSummary,
+)
 
 # =============================================================================
 # DATA CONTAINERS - Tech-friendly names (Primary)
@@ -176,6 +182,12 @@ from pyrevealed.core.result import (
     SwapsIndexResult,
     ObservationContributionResult,
     StatusQuoBiasResult,
+    # Power analysis results (Beatty & Crawford 2011)
+    SeltenMeasureResult,
+    RelativeAreaResult,
+    SmoothedHitRateResult,
+    BayesianCredibilityResult,
+    OptimalEfficiencyResult,
 )
 
 # =============================================================================
@@ -264,6 +276,27 @@ from pyrevealed.algorithms.bronars import (
     compute_test_power_fast,
     compute_bronars_power,  # Legacy
     compute_bronars_power_fast,  # Legacy
+)
+
+# Power analysis (Beatty & Crawford 2011, Selten)
+from pyrevealed.algorithms.power_analysis import (
+    # Selten's predictive success
+    compute_selten_measure,
+    compute_power_metric,  # Tech-friendly alias
+    # Relative area (test demandingness)
+    compute_relative_area,
+    compute_test_demandingness,  # Tech-friendly alias
+    # Smoothed hit rate (for violators)
+    compute_smoothed_hit_rate,
+    compute_near_miss_score,  # Tech-friendly alias
+    # Generalized predictive success
+    compute_generalized_predictive_success,
+    # Bayesian credibility
+    compute_bayesian_credibility,
+    compute_rationality_posterior,  # Tech-friendly alias
+    # Optimal efficiency (maximize predictive success over e)
+    compute_optimal_efficiency,
+    compute_optimal_predictive_efficiency,  # Tech-friendly alias
 )
 
 # Proportional scaling (HARP)
@@ -623,6 +656,16 @@ __all__ = [
     # Test power (NEW)
     "compute_test_power",
     "compute_test_power_fast",
+    # Power analysis (Beatty & Crawford 2011)
+    "compute_selten_measure",
+    "compute_power_metric",
+    "compute_relative_area",
+    "compute_test_demandingness",
+    "compute_smoothed_hit_rate",
+    "compute_near_miss_score",
+    "compute_generalized_predictive_success",
+    "compute_bayesian_credibility",
+    "compute_rationality_posterior",
     # Proportional scaling (NEW)
     "validate_proportional_scaling",
     # Granular integrity (NEW)
@@ -905,6 +948,11 @@ __all__ = [
     "PredictiveSuccessResult",
     "ExpectedUtilityResult",
     "RankDependentUtilityResult",
+    # Power analysis result types (Beatty & Crawford 2011)
+    "SeltenMeasureResult",
+    "RelativeAreaResult",
+    "SmoothedHitRateResult",
+    "BayesianCredibilityResult",
     # Convenience
     "get_integrity_score",
 ]

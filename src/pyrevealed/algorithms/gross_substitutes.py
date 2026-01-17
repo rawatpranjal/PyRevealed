@@ -691,8 +691,12 @@ def _recover_afriat_utility_for_hicksian(
                 return float(np.min(values))
 
             return utility_fn, U, lambdas, True
-    except Exception:
-        pass
+    except Exception as e:
+        from pyrevealed.core.exceptions import OptimizationError
+
+        raise OptimizationError(
+            f"Afriat utility recovery failed for Hicksian demand. Original error: {e}"
+        ) from e
 
     return None, None, None, False
 
@@ -755,8 +759,12 @@ def _solve_hicksian_at_point(
 
         if result.success:
             return result.x
-    except Exception:
-        pass
+    except Exception as e:
+        from pyrevealed.core.exceptions import OptimizationError
+
+        raise OptimizationError(
+            f"Hicksian demand optimization failed. Original error: {e}"
+        ) from e
 
     return None
 

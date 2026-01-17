@@ -11,6 +11,10 @@ Exception Hierarchy:
     │   ├── ValueRangeError
     │   └── NaNInfError
     ├── OptimizationError
+    ├── SolverError
+    ├── RegressionError
+    ├── StatisticalError
+    ├── ComputationalLimitError
     ├── NotFittedError
     └── InsufficientDataError
 
@@ -146,6 +150,89 @@ class OptimizationError(PyRevealedError):
         1. Check data quality first with compute_integrity_score()
         2. Filter highly inconsistent observations
         3. Scale data to avoid extreme values
+    """
+
+    pass
+
+
+class SolverError(PyRevealedError):
+    """Raised when a linear programming or optimization solver fails.
+
+    This occurs when scipy.optimize.linprog or similar solvers cannot find
+    a feasible solution. Unlike OptimizationError (which covers general
+    numerical optimization), SolverError is specific to LP/MILP solvers.
+
+    Common causes:
+        - Infeasible constraints (no solution exists)
+        - Unbounded problem (solution goes to infinity)
+        - Numerical issues in the constraint matrix
+        - Data violates required consistency conditions
+
+    Suggested fixes:
+        1. Check data consistency with validate_consistency()
+        2. Verify input data doesn't have extreme values
+        3. Ensure problem is well-posed for the algorithm
+    """
+
+    pass
+
+
+class RegressionError(PyRevealedError):
+    """Raised when a statistical regression fails.
+
+    This occurs when OLS, 2SLS, or other regression methods cannot
+    produce valid estimates.
+
+    Common causes:
+        - Singular or near-singular design matrix
+        - Perfect multicollinearity among regressors
+        - Insufficient degrees of freedom
+        - All-zero dependent variable
+
+    Suggested fixes:
+        1. Check for multicollinearity in predictors
+        2. Ensure sufficient observations relative to parameters
+        3. Verify data has variation in both X and Y
+    """
+
+    pass
+
+
+class StatisticalError(PyRevealedError):
+    """Raised when a statistical computation fails.
+
+    This covers failures in statistical tests, p-value calculations,
+    bootstrap procedures, and similar statistical methods.
+
+    Common causes:
+        - Division by zero in test statistics
+        - Degenerate distributions (zero variance)
+        - Bootstrap samples all identical
+        - Invalid degrees of freedom
+
+    Suggested fixes:
+        1. Ensure data has sufficient variation
+        2. Check for degenerate cases (all same value)
+        3. Increase sample size if possible
+    """
+
+    pass
+
+
+class ComputationalLimitError(PyRevealedError):
+    """Raised when a problem exceeds computational feasibility.
+
+    Some algorithms have exponential or factorial complexity and cannot
+    be run on large inputs without specialized solvers.
+
+    Common causes:
+        - Kemeny aggregation for n > 10 alternatives (NP-hard)
+        - RAM search for n > 6 items (factorial enumeration)
+        - Exact Houtman-Maks without ILP solver available
+
+    The error message indicates what solver or approach is needed,
+    or suggests using an approximate method if available as a
+    separate explicit function.
     """
 
     pass

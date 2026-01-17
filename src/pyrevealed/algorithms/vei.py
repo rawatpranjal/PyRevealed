@@ -10,6 +10,7 @@ from scipy.optimize import linprog
 
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import VEIResult
+from pyrevealed.core.exceptions import SolverError, OptimizationError
 
 
 def compute_vei(
@@ -128,13 +129,21 @@ def compute_vei(
             method="highs",
             options={"presolve": True},
         )
-        success = result.success
-        status = result.message
-        e_vector = result.x if success else np.ones(T) * 0.5
-    except Exception as ex:
-        success = False
-        status = str(ex)
-        e_vector = np.ones(T) * 0.5
+        if result.success:
+            success = True
+            status = result.message
+            e_vector = result.x
+        else:
+            raise SolverError(
+                f"LP solver failed to compute VEI. Status: {result.status}, "
+                f"Message: {result.message}"
+            )
+    except SolverError:
+        raise
+    except Exception as e:
+        raise SolverError(
+            f"LP solver failed during VEI computation. Original error: {e}"
+        ) from e
 
     # Clip to [0, 1] for numerical stability
     e_vector = np.clip(e_vector, 0.0, 1.0)
@@ -242,13 +251,21 @@ def compute_vei_l2(
             constraints=constraints,
             options={"ftol": tolerance, "maxiter": 1000},
         )
-        success = result.success
-        status = result.message
-        e_vector = result.x if success else np.ones(T) * 0.5
-    except Exception as ex:
-        success = False
-        status = str(ex)
-        e_vector = np.ones(T) * 0.5
+        if result.success:
+            success = True
+            status = result.message
+            e_vector = result.x
+        else:
+            raise OptimizationError(
+                f"SLSQP optimization failed for VEI L2 computation. "
+                f"Message: {result.message}"
+            )
+    except OptimizationError:
+        raise
+    except Exception as e:
+        raise OptimizationError(
+            f"Optimization failed during VEI L2 computation. Original error: {e}"
+        ) from e
 
     e_vector = np.clip(e_vector, 0.0, 1.0)
 

@@ -15,6 +15,7 @@ from pyrevealed.core.result import (
     ObservationContributionResult,
 )
 from pyrevealed.core.types import Cycle
+from pyrevealed.core.exceptions import ComputationalLimitError
 from pyrevealed.graph.transitive_closure import floyd_warshall_transitive_closure
 from pyrevealed._kernels import bfs_find_path_numba, find_violation_pairs_numba
 
@@ -300,9 +301,13 @@ def compute_swaps_index(
 
     if method == "greedy":
         swap_pairs = _compute_swaps_greedy(R, P, R_star, violations)
+    elif method == "optimal":
+        raise ComputationalLimitError(
+            "Exact ILP-based swaps computation requires an ILP solver (e.g., CPLEX, Gurobi). "
+            "Use method='greedy' for a heuristic approximation."
+        )
     else:
-        # Use greedy as fallback (ILP would require additional dependencies)
-        swap_pairs = _compute_swaps_greedy(R, P, R_star, violations)
+        raise ValueError(f"Unknown method: {method}. Use 'greedy' or 'optimal'.")
 
     # Compute max possible swaps
     T = session.num_observations

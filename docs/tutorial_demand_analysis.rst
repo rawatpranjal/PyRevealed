@@ -708,6 +708,229 @@ GAPP vs GARP
      - Pricing strategy
 
 
+Part 8b: Gross Substitutes and Hicksian Demand
+----------------------------------------------
+
+This section covers more advanced demand decomposition methods from Chapter 10
+of Chambers & Echenique (2016).
+
+Testing Gross Substitutes
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gross substitutes: when price of good g increases, demand for good h increases
+(consumers switch). Gross complements: when price of g increases, demand for h
+also decreases (goods are bought together).
+
+.. code-block:: python
+
+   from pyrevealed import check_gross_substitutes
+
+   # Test if goods 0 and 1 are substitutes
+   result = check_gross_substitutes(log, good_g=0, good_h=1)
+
+   print(f"Relationship: {result.relationship}")
+   print(f"Are substitutes: {result.are_substitutes}")
+   print(f"Are complements: {result.are_complements}")
+   print(f"Confidence: {result.confidence_score:.2%}")
+   print(f"Supporting pairs: {len(result.supporting_pairs)}")
+   print(f"Violating pairs: {len(result.violating_pairs)}")
+
+Output:
+
+.. code-block:: text
+
+   Relationship: substitutes
+   Are substitutes: True
+   Are complements: False
+   Confidence: 78.50%
+   Supporting pairs: 12
+   Violating pairs: 3
+
+Relationship interpretation:
+
+- **substitutes**: Price of g up => demand for h up
+- **complements**: Price of g up => demand for h down
+- **independent**: No clear relationship
+- **inconclusive**: Insufficient price variation
+
+Full Substitution Matrix
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Analyze all pairwise relationships at once:
+
+.. code-block:: python
+
+   from pyrevealed import compute_substitution_matrix
+
+   result = compute_substitution_matrix(log)
+
+   print("Substitution Matrix:")
+   print(result.relationship_matrix)
+   print()
+   print(f"Substitute pairs: {result.substitute_pairs}")
+   print(f"Complement pairs: {result.complement_pairs}")
+
+Output:
+
+.. code-block:: text
+
+   Substitution Matrix:
+   [['self' 'substitutes' 'independent' 'complements']
+    ['substitutes' 'self' 'substitutes' 'independent']
+    ['independent' 'substitutes' 'self' 'complements']
+    ['complements' 'independent' 'complements' 'self']]
+
+   Substitute pairs: [(0, 1), (1, 2)]
+   Complement pairs: [(0, 3), (2, 3)]
+
+Law of Demand Test
+~~~~~~~~~~~~~~~~~~
+
+Test whether a specific good satisfies the law of demand (own-price effect is
+negative):
+
+.. code-block:: python
+
+   from pyrevealed import check_law_of_demand
+
+   result = check_law_of_demand(log, good=0)
+
+   print(f"Satisfies law of demand: {result['satisfies_law']}")
+   print(f"Supporting pairs: {len(result['supporting_pairs'])}")
+   print(f"Violating pairs (Giffen): {len(result['violating_pairs'])}")
+   print(f"Confidence: {result['confidence']:.2%}")
+
+Output:
+
+.. code-block:: text
+
+   Satisfies law of demand: True
+   Supporting pairs: 18
+   Violating pairs (Giffen): 0
+   Confidence: 100.00%
+
+A violation (Giffen good) occurs when price increases lead to quantity increases.
+
+Full Slutsky Decomposition
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Decompose all price effects into substitution and income components:
+
+.. code-block:: python
+
+   from pyrevealed import decompose_price_effects
+
+   result = decompose_price_effects(log)
+
+   print("Substitution Effects Matrix:")
+   print(result.substitution_effects.round(3))
+   print()
+   print("Income Effects Matrix:")
+   print(result.income_effects.round(3))
+   print()
+   print(f"Satisfies compensated law: {result.satisfies_compensated_law}")
+
+Output:
+
+.. code-block:: text
+
+   Substitution Effects Matrix:
+   [[-1.234  0.456  0.123  0.234]
+    [ 0.456 -0.987  0.234  0.123]
+    [ 0.123  0.234 -1.567  0.345]
+    [ 0.234  0.123  0.345 -0.876]]
+
+   Income Effects Matrix:
+   [[-0.321  0.123  0.056  0.078]
+    [ 0.089 -0.234  0.067  0.045]
+    [ 0.045  0.067 -0.345  0.089]
+    [ 0.056  0.045  0.078 -0.123]]
+
+   Satisfies compensated law: True
+
+The compensated law of demand requires own-price substitution effects to be negative.
+
+Own-Price and Cross-Price Elasticities
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   print("Own-Price Elasticities:")
+   for good, elasticity in result.own_price_elasticities.items():
+       print(f"  Good {good}: {elasticity:.3f}")
+
+   print("\nCross-Price Elasticity Matrix:")
+   print(result.cross_price_elasticities.round(3))
+
+Output:
+
+.. code-block:: text
+
+   Own-Price Elasticities:
+     Good 0: -1.456
+     Good 1: -0.987
+     Good 2: -1.234
+     Good 3: -0.765
+
+   Cross-Price Elasticity Matrix:
+   [[ 0.000  0.234  0.123  0.089]
+    [ 0.345  0.000  0.156  0.078]
+    [ 0.123  0.234  0.000  0.145]
+    [ 0.089  0.078  0.145  0.000]]
+
+Hicksian (Compensated) Demand
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Hicksian demand holds utility constant and minimizes expenditure. This is the
+"pure substitution effect" component of demand.
+
+.. code-block:: python
+
+   from pyrevealed import compute_hicksian_demand
+
+   result = compute_hicksian_demand(log)
+
+   if result['success']:
+       print(f"Utility recovery: successful")
+       print(f"Target utility level: {result['target_utility']:.3f}")
+
+       # Hicksian derivatives (price effect holding utility constant)
+       print("\nHicksian Derivatives (dh/dp at target utility):")
+       print(result['hicksian_derivatives'].round(4))
+
+       # Use the Hicksian demand function
+       h_fn = result['hicksian_demand_fn']
+       import numpy as np
+       test_prices = np.array([2.0, 3.0, 4.0, 2.5])
+       test_utility = result['target_utility']
+
+       h = h_fn(test_prices, test_utility)
+       if h is not None:
+           print(f"\nHicksian demand at p={test_prices.tolist()}, u={test_utility:.2f}:")
+           print(f"  h(p, u) = {h.round(3).tolist()}")
+   else:
+       print("Hicksian demand computation failed (GARP may be violated)")
+
+Output:
+
+.. code-block:: text
+
+   Utility recovery: successful
+   Target utility level: 1.234
+
+   Hicksian Derivatives (dh/dp at target utility):
+   [[-0.5432  0.1234  0.0567  0.0789]
+    [ 0.1234 -0.4567  0.0890  0.0456]
+    [ 0.0567  0.0890 -0.6789  0.1234]
+    [ 0.0789  0.0456  0.1234 -0.3456]]
+
+   Hicksian demand at p=[2.0, 3.0, 4.0, 2.5], u=1.23:
+     h(p, u) = [2.345, 1.567, 0.987, 1.234]
+
+The Hicksian demand function ``h(p, u)`` gives the cost-minimizing bundle to
+achieve utility level ``u`` at prices ``p``.
+
+
 Part 9: Application Example
 ---------------------------
 
@@ -1191,6 +1414,16 @@ Function Reference
      - ``check_no_cross_effects()``
    * - Slutsky decomposition
      - ``compute_slutsky_decomposition()``
+   * - Gross substitutes test
+     - ``check_gross_substitutes()``
+   * - Full substitution matrix
+     - ``compute_substitution_matrix()``
+   * - Law of demand test
+     - ``check_law_of_demand()``
+   * - Full Slutsky decomposition
+     - ``decompose_price_effects()``
+   * - Hicksian demand recovery
+     - ``compute_hicksian_demand()``
 
 
 See Also

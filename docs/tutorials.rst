@@ -14,6 +14,9 @@ Step-by-step guides covering revealed preference analysis from basics to advance
    tutorial_ecommerce
    tutorial_attention
    tutorial_risk
+   tutorial_context_effects
+   tutorial_intertemporal
+   tutorial_ranking
 
 Overview
 --------
@@ -49,4 +52,13 @@ Overview
    * - :doc:`8: Risk Analysis <tutorial_risk>`
      - Risk aversion, CRRA utility, expected utility axioms
      - Tutorial 1
+   * - :doc:`9: Context Effects <tutorial_context_effects>`
+     - Decoy effect, compromise effect, menu manipulation
+     - Tutorial 5
+   * - :doc:`10: Intertemporal Choice <tutorial_intertemporal>`
+     - Discounting, present bias, time preferences
+     - Tutorial 1
+   * - :doc:`11: Ranking Analysis <tutorial_ranking>`
+     - Bradley-Terry, Kendall tau, preference aggregation
+     - Tutorial 2
 

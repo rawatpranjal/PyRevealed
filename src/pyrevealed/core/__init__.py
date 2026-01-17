@@ -7,6 +7,22 @@ from pyrevealed.core.result import (
     MPIResult,
     UtilityRecoveryResult,
 )
+from pyrevealed.core.exceptions import (
+    PyRevealedError,
+    DataValidationError,
+    DimensionError,
+    ValueRangeError,
+    NaNInfError,
+    OptimizationError,
+    SolverError,
+    RegressionError,
+    StatisticalError,
+    ComputationalLimitError,
+    NotFittedError,
+    InsufficientDataError,
+    DataQualityWarning,
+    NumericalInstabilityWarning,
+)
 
 __all__ = [
     "ConsumerSession",
@@ -14,4 +30,20 @@ __all__ = [
     "AEIResult",
     "MPIResult",
     "UtilityRecoveryResult",
+    # Exceptions
+    "PyRevealedError",
+    "DataValidationError",
+    "DimensionError",
+    "ValueRangeError",
+    "NaNInfError",
+    "OptimizationError",
+    "SolverError",
+    "RegressionError",
+    "StatisticalError",
+    "ComputationalLimitError",
+    "NotFittedError",
+    "InsufficientDataError",
+    # Warnings
+    "DataQualityWarning",
+    "NumericalInstabilityWarning",
 ]

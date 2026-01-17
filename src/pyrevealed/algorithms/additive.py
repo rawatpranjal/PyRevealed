@@ -41,6 +41,7 @@ from scipy.optimize import linprog
 from scipy import stats
 
 from pyrevealed.core.result import AdditivityResult
+from pyrevealed.core.exceptions import RegressionError, SolverError
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import BehaviorLog
@@ -345,8 +346,11 @@ def compute_cross_effects_regression(
             sigma2 = np.sum(residuals**2) / (T - X.shape[1])
             var_coeffs = sigma2 * np.diag(XtX_inv)
             se_matrix[i, :] = np.sqrt(var_coeffs[1 : N + 1])
-        except np.linalg.LinAlgError:
-            pass
+        except np.linalg.LinAlgError as e:
+            raise RegressionError(
+                f"OLS regression failed for good {i} in cross-effects estimation. "
+                f"Design matrix may be singular. Original error: {e}"
+            ) from e
 
     if include_standard_errors:
         return beta_matrix, se_matrix
@@ -417,8 +421,11 @@ def compute_cross_effects_2sls(
             r2 = 1 - rss / tss if tss > 0 else 0
             k = Z.shape[1]
             first_stage_f[j] = (r2 / (1 - r2)) * (T_eff - k) / (k - 1) if r2 < 1 else 0
-        except np.linalg.LinAlgError:
-            predicted_log_P[:, j] = log_P_current[:, j]
+        except np.linalg.LinAlgError as e:
+            raise RegressionError(
+                f"First stage 2SLS regression failed for price {j}. "
+                f"Instrument matrix may be singular. Original error: {e}"
+            ) from e
 
     # Stage 2: Estimate demand using predicted prices
     X_2sls = np.column_stack([np.ones(T_eff), predicted_log_P, log_m_current])
@@ -437,8 +444,11 @@ def compute_cross_effects_2sls(
             sigma2 = np.sum(residuals**2) / (T_eff - X_2sls.shape[1])
             var_coeffs = sigma2 * np.diag(XtX_inv)
             se_matrix[i, :] = np.sqrt(np.abs(var_coeffs[1 : N + 1]))
-        except np.linalg.LinAlgError:
-            pass
+        except np.linalg.LinAlgError as e:
+            raise RegressionError(
+                f"Second stage 2SLS regression failed for good {i}. "
+                f"Design matrix may be singular. Original error: {e}"
+            ) from e
 
     return beta_matrix, se_matrix, first_stage_f
 
@@ -719,9 +729,17 @@ def _recover_additive_utility_values(
             if result.success:
                 utility_values[i] = result.x
             else:
-                return None
-        except Exception:
-            return None
+                raise SolverError(
+                    f"LP solver failed to recover additive utility for component {i}. "
+                    f"Status: {result.status}, Message: {result.message}"
+                )
+        except SolverError:
+            raise
+        except Exception as e:
+            raise SolverError(
+                f"LP solver failed during additive utility recovery for component {i}. "
+                f"Original error: {e}"
+            ) from e
 
     return utility_values
 

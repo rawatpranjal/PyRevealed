@@ -424,6 +424,28 @@ class BehaviorLog:
                 )
         return logs
 
+    def summary(self, include_power: bool = False) -> "BehavioralSummary":
+        """Run comprehensive analysis and return unified summary.
+
+        This provides a Stata/statsmodels-style summary of all behavioral
+        consistency tests and goodness-of-fit metrics.
+
+        Args:
+            include_power: Whether to include power analysis (default: False).
+                Power analysis computes Bronars power and optimal efficiency
+                via Monte Carlo simulation, which is computationally expensive.
+
+        Returns:
+            BehavioralSummary with GARP, WARP, SARP, AEI, MPI results
+
+        Example:
+            >>> log = BehaviorLog(prices, quantities)
+            >>> print(log.summary())  # Standard report
+            >>> print(log.summary(include_power=True))  # With power analysis
+        """
+        from pyrevealed.core.summary import BehavioralSummary
+        return BehavioralSummary.from_log(self, include_power=include_power)
+
 
 # Alias for RiskSession with tech-friendly name
 @dataclass
@@ -563,6 +585,22 @@ class RiskChoiceLog:
         chose_safe = ~self.choices
         safe_has_lower_ev = self.expected_values > self.safe_values
         return int(np.sum(chose_safe & safe_has_lower_ev))
+
+    def summary(self) -> "RiskChoiceSummary":
+        """Run comprehensive analysis and return unified summary.
+
+        This provides a Stata/statsmodels-style summary of risk profile
+        analysis and Expected Utility axiom tests.
+
+        Returns:
+            RiskChoiceSummary with risk profile and EU axiom results
+
+        Example:
+            >>> log = RiskChoiceLog(safe_values, risky_outcomes, risky_probs, choices)
+            >>> print(log.summary())  # Full report
+        """
+        from pyrevealed.core.summary import RiskChoiceSummary
+        return RiskChoiceSummary.from_log(self)
 
 
 @dataclass
@@ -889,6 +927,27 @@ class MenuChoiceLog:
             user_id=user_id,
         )
 
+    def summary(self) -> "MenuChoiceSummary":
+        """Run comprehensive analysis and return unified summary.
+
+        This provides a Stata/statsmodels-style summary of menu-based
+        choice consistency tests and efficiency metrics.
+
+        Returns:
+            MenuChoiceSummary with WARP, SARP, Congruence, and efficiency results
+
+        Example:
+            >>> log = MenuChoiceLog(menus, choices)
+            >>> print(log.summary())  # Full report
+        """
+        from pyrevealed.core.summary import MenuChoiceSummary
+        return MenuChoiceSummary.from_log(self)
+
+    @property
+    def num_alternatives(self) -> int:
+        """Alias for num_items."""
+        return self.num_items
+
 
 # =============================================================================
 # STOCHASTIC CHOICE DATA (Chapter 13)
@@ -1036,6 +1095,23 @@ class StochasticChoiceLog:
             choice_frequencies.append(dict(freq))
 
         return cls(menus=unique_menus, choice_frequencies=choice_frequencies)
+
+    def summary(self) -> "StochasticChoiceSummary":
+        """Run comprehensive analysis and return unified summary.
+
+        This provides a Stata/statsmodels-style summary of stochastic
+        choice analysis including RUM consistency, regularity, and
+        transitivity tests.
+
+        Returns:
+            StochasticChoiceSummary with RUM, regularity, and transitivity results
+
+        Example:
+            >>> log = StochasticChoiceLog(menus, choice_frequencies)
+            >>> print(log.summary())  # Full report
+        """
+        from pyrevealed.core.summary import StochasticChoiceSummary
+        return StochasticChoiceSummary.from_log(self)
 
 
 # =============================================================================
@@ -1200,6 +1276,23 @@ class ProductionLog:
     def revenue_matrix(self) -> NDArray[np.float64]:
         """T x T matrix where R[i,j] = revenue from outputs j at prices i."""
         return self._revenue_matrix
+
+    def summary(self) -> "ProductionSummary":
+        """Run comprehensive analysis and return unified summary.
+
+        This provides a Stata/statsmodels-style summary of production
+        analysis including profit maximization, cost minimization,
+        and efficiency metrics.
+
+        Returns:
+            ProductionSummary with profit max, cost min, and efficiency results
+
+        Example:
+            >>> log = ProductionLog(input_prices, input_quantities, output_prices, output_quantities)
+            >>> print(log.summary())  # Full report
+        """
+        from pyrevealed.core.summary import ProductionSummary
+        return ProductionSummary.from_log(self)
 
 
 # =============================================================================

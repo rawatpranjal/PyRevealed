@@ -412,6 +412,7 @@ def test_exponential_discounting(
 def test_quasi_hyperbolic(
     choices: list[DatedChoice],
     tolerance: float = 1e-8,
+    beta_grid_size: int = 20,
 ) -> QuasiHyperbolicResult:
     """
     Test if choices are consistent with quasi-hyperbolic (beta-delta) discounting.
@@ -425,9 +426,17 @@ def test_quasi_hyperbolic(
 
     This nests exponential discounting (beta = 1) as a special case.
 
+    The test collects revealed preference constraints from each choice and checks
+    if there exist valid (beta, delta) parameters that satisfy all constraints.
+    For linear utility u(c) = c, choosing (c1, t1) over (c2, t2) implies:
+    - If t1 = 0, t2 > 0: c1 >= beta * delta^t2 * c2
+    - If t1 > 0, t2 = 0: beta * delta^t1 * c1 >= c2
+    - If t1, t2 > 0: delta^t1 * c1 >= delta^t2 * c2 (beta cancels)
+
     Args:
         choices: List of DatedChoice objects
         tolerance: Numerical tolerance
+        beta_grid_size: Number of beta values to test in grid search
 
     Returns:
         QuasiHyperbolicResult with consistency status and parameter bounds
@@ -440,6 +449,9 @@ def test_quasi_hyperbolic(
     References:
         Laibson, D. (1997). Golden eggs and hyperbolic discounting.
         Quarterly Journal of Economics, 112(2), 443-478.
+
+        Echenique, F., Imai, T., & Saito, K. (2020). Testable implications
+        of models of intertemporal choice. AEJ: Microeconomics.
     """
     start_time = time.perf_counter()
 
@@ -459,7 +471,7 @@ def test_quasi_hyperbolic(
             computation_time_ms=computation_time,
         )
 
-    # Test exponential first
+    # Test exponential first (beta = 1 case)
     exp_result = test_exponential_discounting(choices, tolerance)
 
     if exp_result.is_consistent:
@@ -477,58 +489,236 @@ def test_quasi_hyperbolic(
             computation_time_ms=computation_time,
         )
 
-    # If exponential fails, check if beta-delta can explain the data
-    # Look for present-bias pattern: preferring sooner for immediate choices
-    # but later for future choices
+    # Collect revealed preference constraints from choices
+    # Each choice generates constraints on (beta, delta)
+    constraints = _collect_quasi_hyperbolic_constraints(choices, tolerance)
 
-    present_bias_count = 0
-    future_patience_count = 0
+    # Grid search over beta to find feasible (beta, delta) pairs
+    # For each beta, compute bounds on delta
+    feasible_betas = []
+    delta_bounds_by_beta = []
 
-    for choice in choices:
-        t_chosen = choice.dates[choice.chosen]
+    beta_grid = np.linspace(0.01, 1.0, beta_grid_size)
+
+    for beta in beta_grid:
+        delta_lower, delta_upper = _compute_delta_bounds_for_beta(
+            constraints, beta, tolerance
+        )
+        if delta_lower <= delta_upper + tolerance:
+            feasible_betas.append(beta)
+            delta_bounds_by_beta.append((delta_lower, delta_upper))
+
+    # Check consistency and compute parameter bounds
+    violations: list[tuple[int, int]] = []
+
+    if len(feasible_betas) == 0:
+        # No feasible (beta, delta) pair - find violating choices
+        is_consistent = False
+        violations = _find_quasi_hyperbolic_violations(choices, tolerance)
+        beta_lower = 0.0
+        beta_upper = 0.0
+        delta_lower = 0.0
+        delta_upper = 0.0
+        has_present_bias = False
+    else:
+        is_consistent = True
+        beta_lower = min(feasible_betas)
+        beta_upper = max(feasible_betas)
+
+        # Compute overall delta bounds across all feasible betas
+        all_delta_lowers = [b[0] for b in delta_bounds_by_beta]
+        all_delta_uppers = [b[1] for b in delta_bounds_by_beta]
+        delta_lower = min(all_delta_lowers)
+        delta_upper = max(all_delta_uppers)
+
+        # Clamp to valid range
+        delta_lower = max(0.0, min(1.0, delta_lower))
+        delta_upper = max(0.0, min(1.0, delta_upper))
+
+        # Present bias detected if beta < 1 is required
+        has_present_bias = beta_upper < 1.0 - tolerance
+
+    computation_time = (time.perf_counter() - start_time) * 1000
+
+    return QuasiHyperbolicResult(
+        is_consistent=is_consistent,
+        beta_lower=beta_lower,
+        beta_upper=beta_upper,
+        delta_lower=delta_lower,
+        delta_upper=delta_upper,
+        has_present_bias=has_present_bias,
+        violations=violations,
+        num_observations=n_choices,
+        computation_time_ms=computation_time,
+    )
+
+
+def _collect_quasi_hyperbolic_constraints(
+    choices: list[DatedChoice],
+    tolerance: float,
+) -> list[dict]:
+    """
+    Collect revealed preference constraints from choices for beta-delta model.
+
+    Each constraint is a dict with keys:
+    - type: "immediate_vs_future", "future_vs_immediate", or "future_vs_future"
+    - c_chosen, t_chosen: chosen amount and time
+    - c_rejected, t_rejected: rejected amount and time
+    - choice_idx: index of the choice
+    """
+    constraints = []
+
+    for i, choice in enumerate(choices):
         c_chosen = choice.amounts[choice.chosen]
+        t_chosen = choice.dates[choice.chosen]
 
         for j in range(len(choice.amounts)):
             if j == choice.chosen:
                 continue
 
-            t_other = choice.dates[j]
-            c_other = choice.amounts[j]
+            c_rej = choice.amounts[j]
+            t_rej = choice.dates[j]
 
-            # Check if choice involves present (t=0)
-            if min(t_chosen, t_other) == 0:
-                # Immediate choice
-                if t_chosen == 0 and t_other > 0 and c_chosen < c_other:
-                    # Chose less now over more later - present bias
-                    present_bias_count += 1
-            else:
-                # Future choice (both options in future)
-                if t_chosen > t_other and c_chosen > c_other:
-                    # Chose more later over less sooner in future - patient
-                    future_patience_count += 1
+            if c_chosen <= tolerance or c_rej <= tolerance:
+                continue
 
-    has_present_bias = present_bias_count > 0
+            if t_chosen == 0 and t_rej > 0:
+                # Chose immediate over future: c_chosen >= beta * delta^t_rej * c_rej
+                constraints.append({
+                    "type": "immediate_vs_future",
+                    "c_chosen": c_chosen,
+                    "t_chosen": t_chosen,
+                    "c_rejected": c_rej,
+                    "t_rejected": t_rej,
+                    "choice_idx": i,
+                })
+            elif t_chosen > 0 and t_rej == 0:
+                # Chose future over immediate: beta * delta^t_chosen * c_chosen >= c_rej
+                constraints.append({
+                    "type": "future_vs_immediate",
+                    "c_chosen": c_chosen,
+                    "t_chosen": t_chosen,
+                    "c_rejected": c_rej,
+                    "t_rejected": t_rej,
+                    "choice_idx": i,
+                })
+            elif t_chosen > 0 and t_rej > 0:
+                # Both in future: delta^t_chosen * c_chosen >= delta^t_rej * c_rej
+                # This simplifies to: delta^(t_chosen - t_rej) >= c_rej / c_chosen
+                constraints.append({
+                    "type": "future_vs_future",
+                    "c_chosen": c_chosen,
+                    "t_chosen": t_chosen,
+                    "c_rejected": c_rej,
+                    "t_rejected": t_rej,
+                    "choice_idx": i,
+                })
 
-    # Beta-delta can typically rationalize more patterns than exponential
-    # For simplicity, assume quasi-hyperbolic is always consistent if we
-    # allow beta < 1
+    return constraints
 
-    beta_lower = 0.5 if has_present_bias else 0.9
-    beta_upper = 1.0 if not has_present_bias else 0.95
 
-    computation_time = (time.perf_counter() - start_time) * 1000
+def _compute_delta_bounds_for_beta(
+    constraints: list[dict],
+    beta: float,
+    tolerance: float,
+) -> tuple[float, float]:
+    """
+    Compute bounds on delta given a fixed beta value.
 
-    return QuasiHyperbolicResult(
-        is_consistent=True,  # Beta-delta is very flexible
-        beta_lower=beta_lower,
-        beta_upper=beta_upper,
-        delta_lower=0.8,  # Reasonable defaults
-        delta_upper=0.99,
-        has_present_bias=has_present_bias,
-        violations=[],
-        num_observations=n_choices,
-        computation_time_ms=computation_time,
-    )
+    For each constraint type:
+    - immediate_vs_future: c >= beta * delta^t * c' => delta^t <= c / (beta * c')
+      => delta <= (c / (beta * c'))^(1/t)  [upper bound]
+    - future_vs_immediate: beta * delta^t * c >= c' => delta^t >= c' / (beta * c)
+      => delta >= (c' / (beta * c))^(1/t)  [lower bound]
+    - future_vs_future: delta^(t1-t2) >= c2/c1 (if t1 > t2)
+      => delta >= (c2/c1)^(1/(t1-t2))
+    """
+    delta_lower = 0.0
+    delta_upper = 1.0
+
+    for cons in constraints:
+        c_chosen = cons["c_chosen"]
+        t_chosen = cons["t_chosen"]
+        c_rej = cons["c_rejected"]
+        t_rej = cons["t_rejected"]
+
+        if cons["type"] == "immediate_vs_future":
+            # c_chosen >= beta * delta^t_rej * c_rej
+            # delta^t_rej <= c_chosen / (beta * c_rej)
+            ratio = c_chosen / (beta * c_rej)
+            if ratio > 0 and t_rej > 0:
+                implied_upper = ratio ** (1.0 / t_rej)
+                delta_upper = min(delta_upper, implied_upper)
+
+        elif cons["type"] == "future_vs_immediate":
+            # beta * delta^t_chosen * c_chosen >= c_rej
+            # delta^t_chosen >= c_rej / (beta * c_chosen)
+            ratio = c_rej / (beta * c_chosen)
+            if ratio > 0 and t_chosen > 0:
+                implied_lower = ratio ** (1.0 / t_chosen)
+                delta_lower = max(delta_lower, implied_lower)
+
+        elif cons["type"] == "future_vs_future":
+            # delta^t_chosen * c_chosen >= delta^t_rej * c_rej
+            # delta^(t_chosen - t_rej) >= c_rej / c_chosen
+            dt = t_chosen - t_rej
+            ratio = c_rej / c_chosen
+
+            if dt > 0:
+                # Chose later: delta^dt >= ratio => delta >= ratio^(1/dt)
+                implied_lower = ratio ** (1.0 / dt)
+                delta_lower = max(delta_lower, min(1.0, implied_lower))
+            elif dt < 0:
+                # Chose earlier: delta^dt >= ratio => delta <= ratio^(1/dt)
+                implied_upper = ratio ** (1.0 / dt)  # dt negative
+                delta_upper = min(delta_upper, max(0.0, implied_upper))
+
+    # Clamp to valid range
+    delta_lower = max(0.0, delta_lower)
+    delta_upper = min(1.0, delta_upper)
+
+    return delta_lower, delta_upper
+
+
+def _find_quasi_hyperbolic_violations(
+    choices: list[DatedChoice],
+    tolerance: float,
+) -> list[tuple[int, int]]:
+    """
+    Find choice pairs that cannot be rationalized by any (beta, delta).
+
+    Returns list of (choice_idx_1, choice_idx_2) pairs that violate consistency.
+    """
+    violations = []
+    n = len(choices)
+
+    # Simple heuristic: find pairs where constraints from different choices
+    # require incompatible delta ranges for all beta values
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            # Check if choices i and j are mutually inconsistent
+            choice_i = choices[i]
+            choice_j = choices[j]
+
+            # Extract constraints from both choices
+            constraints_i = _collect_quasi_hyperbolic_constraints([choice_i], tolerance)
+            constraints_j = _collect_quasi_hyperbolic_constraints([choice_j], tolerance)
+
+            all_constraints = constraints_i + constraints_j
+
+            # Check if any beta makes these consistent
+            is_consistent = False
+            for beta in np.linspace(0.01, 1.0, 10):
+                dl, du = _compute_delta_bounds_for_beta(all_constraints, beta, tolerance)
+                if dl <= du + tolerance:
+                    is_consistent = True
+                    break
+
+            if not is_consistent:
+                violations.append((i, j))
+
+    return violations
 
 
 # =============================================================================

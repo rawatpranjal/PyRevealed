@@ -294,42 +294,11 @@ def detect_compromise_effect(
                             total_boost += avg_boost
 
     else:
-        # Without attributes, use heuristic: items that appear in many menus
-        # and get higher probability in larger menus are compromise candidates
-
-        for m_idx in range(log.num_menus):
-            menu = log.menus[m_idx]
-            if len(menu) < 3:
-                continue
-
-            menu_items = list(menu)
-            num_menus_tested += 1
-
-            # Check if any item has higher probability than in smaller subsets
-            for item in menu_items:
-                prob_full = log.get_choice_probability(m_idx, item)
-
-                # Check probability in 2-item subsets containing this item
-                other_items = [x for x in menu_items if x != item]
-                avg_pair_prob = 0.0
-                num_pairs = 0
-
-                for other in other_items:
-                    pair_menu = frozenset({item, other})
-                    if pair_menu in menu_to_idx:
-                        pair_idx = menu_to_idx[pair_menu]
-                        pair_prob = log.get_choice_probability(pair_idx, item)
-                        avg_pair_prob += pair_prob
-                        num_pairs += 1
-
-                if num_pairs > 0:
-                    avg_pair_prob /= num_pairs
-                    boost = prob_full - avg_pair_prob
-
-                    if boost > threshold:
-                        if item not in compromise_items:
-                            compromise_items.append(item)
-                        total_boost += boost
+        # attribute_vectors is required for accurate compromise effect detection
+        raise ValueError(
+            "attribute_vectors parameter is required for detect_compromise_effect(). "
+            "Provide an N x K matrix of item attributes to identify 'middle' items."
+        )
 
     # Compute average magnitude
     magnitude = total_boost / len(extreme_pairs) if extreme_pairs else (

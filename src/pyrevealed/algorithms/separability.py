@@ -32,7 +32,7 @@ from scipy.optimize import linprog, minimize
 
 from pyrevealed.core.session import ConsumerSession
 from pyrevealed.core.result import SeparabilityResult
-from pyrevealed.core.exceptions import DataValidationError, ValueRangeError
+from pyrevealed.core.exceptions import DataValidationError, ValueRangeError, SolverError, OptimizationError
 from pyrevealed.algorithms.aei import compute_aei
 
 
@@ -424,10 +424,17 @@ def _solve_afriat_lp(
             U = result.x[:T]
             lambdas = result.x[T:]
             return U, lambdas, True
-    except Exception:
-        pass
-
-    return None, None, False
+        else:
+            raise SolverError(
+                f"LP solver failed for inner Afriat system in separability test. "
+                f"Status: {result.status}, Message: {result.message}"
+            )
+    except SolverError:
+        raise
+    except Exception as e:
+        raise SolverError(
+            f"LP solver failed during inner Afriat recovery. Original error: {e}"
+        ) from e
 
 
 def _solve_outer_afriat_lp(
@@ -497,10 +504,17 @@ def _solve_outer_afriat_lp(
             U = result.x[:T]
             lambdas = result.x[T:]
             return U, lambdas, True
-    except Exception:
-        pass
-
-    return None, None, False
+        else:
+            raise SolverError(
+                f"LP solver failed for outer Afriat system in separability test. "
+                f"Status: {result.status}, Message: {result.message}"
+            )
+    except SolverError:
+        raise
+    except Exception as e:
+        raise SolverError(
+            f"LP solver failed during outer Afriat recovery. Original error: {e}"
+        ) from e
 
 
 def _solve_separability_nonlinear(
@@ -610,10 +624,18 @@ def _solve_separability_nonlinear(
             if is_valid:
                 return True, U, V, lambdas, mus
 
-    except Exception:
-        pass
+        # Solution not valid
+        raise OptimizationError(
+            f"SLSQP optimization failed to find valid separability solution. "
+            f"Message: {result.message}"
+        )
 
-    return False, None, None, None, None
+    except OptimizationError:
+        raise
+    except Exception as e:
+        raise OptimizationError(
+            f"Nonlinear optimization failed during separability test. Original error: {e}"
+        ) from e
 
 
 def _verify_separability_solution(

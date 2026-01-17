@@ -43,6 +43,7 @@ from scipy import stats
 from scipy.optimize import minimize
 
 from pyrevealed.core.result import IntegrabilityResult
+from pyrevealed.core.exceptions import RegressionError
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import BehaviorLog
@@ -241,9 +242,11 @@ def compute_slutsky_matrix_regression(
             # coeffs = [constant, β_i1, ..., β_iN, γ_i]
             beta[i, :] = coeffs[1 : N + 1]
             gamma[i] = coeffs[N + 1]
-        except np.linalg.LinAlgError:
-            # Fallback if regression fails
-            pass
+        except np.linalg.LinAlgError as e:
+            raise RegressionError(
+                f"OLS regression failed for good {i} in Slutsky matrix estimation. "
+                f"Design matrix may be singular. Original error: {e}"
+            ) from e
 
     # Compute Slutsky matrix
     # Use mean values for evaluation point
@@ -458,8 +461,11 @@ def compute_slutsky_with_bootstrap(
                 action_vectors=Q[indices],
             )
             bootstrap_samples[b] = compute_slutsky_matrix(boot_log, method=method)
-        except Exception:
-            bootstrap_samples[b] = np.nan
+        except Exception as e:
+            raise RegressionError(
+                f"Bootstrap iteration {b + 1} failed during Slutsky matrix estimation. "
+                f"Original error: {e}"
+            ) from e
 
     # Compute statistics
     S_mean = np.nanmean(bootstrap_samples, axis=0)
@@ -653,6 +659,7 @@ def test_slutsky_nsd_formal(
     Q = log.action_vectors
 
     bootstrap_max_eigenvalues = []
+    failed_iterations = 0
 
     for _ in range(n_bootstrap):
         indices = np.random.choice(T, size=T, replace=True)
@@ -669,7 +676,27 @@ def test_slutsky_nsd_formal(
             boot_eigenvalues = np.linalg.eigvalsh(S_boot_sym)
             bootstrap_max_eigenvalues.append(np.max(boot_eigenvalues))
         except Exception:
-            pass
+            failed_iterations += 1
+            continue
+
+    # Validate bootstrap sample quality
+    if failed_iterations > n_bootstrap * 0.2:  # >20% failed
+        import warnings
+
+        warnings.warn(
+            f"Bootstrap test: {failed_iterations}/{n_bootstrap} iterations failed. "
+            f"Results may be unreliable.",
+            stacklevel=2,
+        )
+
+    if len(bootstrap_max_eigenvalues) < 10:
+        from pyrevealed.core.exceptions import StatisticalError
+
+        raise StatisticalError(
+            f"Bootstrap test failed: only {len(bootstrap_max_eigenvalues)} valid samples "
+            f"(out of {n_bootstrap} attempts, {failed_iterations} failed). "
+            f"Need at least 10 for meaningful inference."
+        )
 
     bootstrap_max_eigenvalues = np.array(bootstrap_max_eigenvalues)
 

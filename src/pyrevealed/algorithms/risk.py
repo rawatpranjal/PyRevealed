@@ -40,6 +40,7 @@ from pyrevealed.core.result import (
     ExpectedUtilityResult,
     RankDependentUtilityResult,
 )
+from pyrevealed.core.exceptions import SolverError
 
 
 # =============================================================================
@@ -607,51 +608,177 @@ def _violates_independence(
     """
     Check if two lottery choices violate the independence axiom.
 
-    Independence: If A ~ B, then aA + (1-a)C ~ aB + (1-a)C for any C and a in (0,1).
+    Independence Axiom: If L1 ≻ L2, then αL1 + (1-α)L3 ≻ αL2 + (1-α)L3
+    for any lottery L3 and any α ∈ (0,1).
 
-    We check for violations where revealed preferences over similar
-    compound lotteries are inconsistent.
+    This function checks for several types of independence violations:
+
+    1. Direct reversal: Same lottery pair, different preferences across choices
+    2. Compound lottery violation: If choice1 reveals L1 ≻ L2, and choice2 involves
+       compound lotteries mixing L1/L2 with some L3, check consistency
+    3. Betweenness violation: If L1 ≻ L2 and M = αL1 + (1-α)L2 is a mixture,
+       then we should have L1 ≻ M ≻ L2 (not M ≻ L1 or L2 ≻ M)
+
+    Args:
+        choice1: First lottery choice
+        choice2: Second lottery choice
+        tolerance: Numerical tolerance for comparisons
+
+    Returns:
+        True if the two choices together violate Independence
     """
-    # This is a simplified check - full independence checking requires
-    # comparing across multiple observations with shared structure
-
-    # For now, check if the same lottery pair has opposite preferences
     outcomes1 = np.asarray(choice1.outcomes, dtype=np.float64)
     outcomes2 = np.asarray(choice2.outcomes, dtype=np.float64)
+    probs1 = np.asarray(choice1.probabilities, dtype=np.float64)
+    probs2 = np.asarray(choice2.probabilities, dtype=np.float64)
 
-    # Check if shapes match (same lottery structure)
-    if outcomes1.shape != outcomes2.shape:
-        return False
-
-    # Check if outcomes are similar enough to compare
-    if not np.allclose(outcomes1, outcomes2, atol=tolerance):
-        return False
-
-    # If same lotteries but different choices, potential violation
     chosen1 = choice1.chosen if isinstance(choice1.chosen, int) else 0
     chosen2 = choice2.chosen if isinstance(choice2.chosen, int) else 0
 
-    if chosen1 != chosen2:
-        return True
+    # Check 1: Direct preference reversal on identical lotteries
+    if outcomes1.shape == outcomes2.shape:
+        if np.allclose(outcomes1, outcomes2, atol=tolerance):
+            if np.allclose(probs1, probs2, atol=tolerance):
+                # Same lotteries with same probabilities but different choices
+                if chosen1 != chosen2:
+                    return True
+
+    # Check 2: Compound lottery / mixture consistency
+    # If choice1 has lotteries A and B with A chosen,
+    # and choice2 has lotteries that are mixtures αA+(1-α)C and αB+(1-α)C,
+    # then αA+(1-α)C should be chosen over αB+(1-α)C
+    if outcomes1.shape[0] >= 2 and outcomes2.shape[0] >= 2:
+        L1_chosen = outcomes1[chosen1]  # Chosen lottery in choice 1
+        L1_rejected = outcomes1[1 - chosen1] if outcomes1.shape[0] == 2 else None
+
+        if L1_rejected is not None:
+            # Check if any lottery in choice2 is a mixture involving L1_chosen/L1_rejected
+            for j, L2_lottery in enumerate(outcomes2):
+                alpha = _is_mixture_of(L2_lottery, L1_chosen, L1_rejected, tolerance)
+                if alpha is not None and 0 < alpha < 1:
+                    # L2_lottery = α * L1_chosen + (1-α) * L1_rejected
+                    # By Independence, this should be preferred over pure L1_rejected
+                    # and less preferred than pure L1_chosen
+
+                    # Check if we can find the corresponding "other" mixture
+                    for k, L2_other in enumerate(outcomes2):
+                        if k == j:
+                            continue
+                        alpha2 = _is_mixture_of(L2_other, L1_chosen, L1_rejected, tolerance)
+                        if alpha2 is not None:
+                            # Both are mixtures - higher α should be preferred
+                            if alpha > alpha2 + tolerance and chosen2 == k:
+                                # Chose lower-α mixture when higher-α was available
+                                return True
+                            if alpha2 > alpha + tolerance and chosen2 == j:
+                                return True
+
+    # Check 3: Betweenness violation (special case of Independence)
+    # If in choice1, L_A ≻ L_B, and in choice2 we have L_M = αL_A + (1-α)L_B
+    # competing against L_A or L_B, check ordering
+    if outcomes1.shape[0] == 2 and outcomes2.shape[0] >= 2:
+        L_A = outcomes1[chosen1]  # Preferred lottery
+        L_B = outcomes1[1 - chosen1]  # Less preferred
+
+        for j, L2_lottery in enumerate(outcomes2):
+            # Check if L2_lottery is a mixture of L_A and L_B
+            alpha = _is_mixture_of(L2_lottery, L_A, L_B, tolerance)
+            if alpha is not None and 0 < alpha < 1:
+                # L2_lottery = M = α*L_A + (1-α)*L_B
+                # By betweenness: L_A ≻ M ≻ L_B
+
+                # Check if L_A is in choice2
+                for k, other in enumerate(outcomes2):
+                    if k == j:
+                        continue
+                    if np.allclose(other, L_A, atol=tolerance):
+                        # M vs L_A: L_A should be preferred
+                        if chosen2 == j:  # M was chosen over L_A
+                            return True
+                    if np.allclose(other, L_B, atol=tolerance):
+                        # M vs L_B: M should be preferred
+                        if chosen2 == k:  # L_B was chosen over M
+                            return True
 
     return False
+
+
+def _is_mixture_of(
+    lottery: NDArray[np.float64],
+    L_A: NDArray[np.float64],
+    L_B: NDArray[np.float64],
+    tolerance: float = 1e-8,
+) -> float | None:
+    """
+    Check if lottery is a convex combination αL_A + (1-α)L_B.
+
+    Returns α if lottery ≈ αL_A + (1-α)L_B for some α ∈ [0,1], else None.
+    """
+    if lottery.shape != L_A.shape or lottery.shape != L_B.shape:
+        return None
+
+    # lottery = α*L_A + (1-α)*L_B
+    # lottery - L_B = α*(L_A - L_B)
+    diff_AB = L_A - L_B
+    diff_lottery = lottery - L_B
+
+    # Find α by least squares if L_A ≠ L_B
+    norm_diff = np.linalg.norm(diff_AB)
+    if norm_diff < tolerance:
+        # L_A ≈ L_B
+        if np.allclose(lottery, L_A, atol=tolerance):
+            return 0.5  # Any α works
+        return None
+
+    # α = (lottery - L_B) · (L_A - L_B) / ||L_A - L_B||²
+    alpha = np.dot(diff_lottery.flatten(), diff_AB.flatten()) / (norm_diff ** 2)
+
+    # Verify the reconstruction
+    reconstructed = alpha * L_A + (1 - alpha) * L_B
+    if np.allclose(lottery, reconstructed, atol=tolerance):
+        if -tolerance <= alpha <= 1 + tolerance:
+            return float(np.clip(alpha, 0, 1))
+
+    return None
 
 
 def _check_risk_attitude_consistency(
     lottery_choices: list[LotteryChoice],
     risk_attitude: str,
     tolerance: float = 1e-8,
+    grid_size: int = 20,
 ) -> bool:
     """
-    Check if choices are consistent with a specific risk attitude.
+    Check if choices are consistent with a specific risk attitude using LP.
 
     Uses linear programming to check if there exists a utility function
-    of the specified type that rationalizes all choices.
+    of the specified type (concave, convex, or linear) that rationalizes
+    all observed choices.
+
+    The approach:
+    1. Discretize outcome space into grid points x_1 < x_2 < ... < x_n
+    2. Define utility variables u_1, u_2, ..., u_n
+    3. Add choice constraints: E[u(chosen)] >= E[u(rejected)] for each choice
+    4. Add curvature constraints based on risk attitude:
+       - Concave (averse): u_{i+1} - u_i <= u_i - u_{i-1}
+       - Convex (seeking): u_{i+1} - u_i >= u_i - u_{i-1}
+       - Linear (neutral): u_{i+1} - u_i = u_i - u_{i-1}
+    5. Monotonicity: u_i < u_{i+1} (strictly increasing)
+    6. Check if the LP is feasible
+
+    Args:
+        lottery_choices: List of lottery choices
+        risk_attitude: "averse", "seeking", or "neutral"
+        tolerance: Numerical tolerance
+        grid_size: Number of grid points for utility discretization
+
+    Returns:
+        True if choices are consistent with the specified risk attitude
     """
     if len(lottery_choices) == 0:
         return True
 
-    # For risk_neutral, expected value should predict all choices
+    # For risk_neutral, use exact expected value check (simpler and more efficient)
     if risk_attitude == "neutral":
         for choice in lottery_choices:
             outcomes = np.asarray(choice.outcomes, dtype=np.float64)
@@ -668,37 +795,166 @@ def _check_risk_attitude_consistency(
                 return False
         return True
 
-    # For risk_averse or risk_seeking, we use a simplified check
-    # based on certainty equivalents
+    # For risk_averse or risk_seeking, use LP-based concavity/convexity test
+
+    # Collect all unique outcome values and create grid
+    all_outcomes = []
+    for choice in lottery_choices:
+        outcomes = np.asarray(choice.outcomes, dtype=np.float64)
+        all_outcomes.extend(outcomes.flatten().tolist())
+
+    all_outcomes = np.array(all_outcomes)
+    x_min = np.min(all_outcomes)
+    x_max = np.max(all_outcomes)
+
+    # Add margin to avoid boundary issues
+    margin = (x_max - x_min) * 0.05 + 0.01
+    x_min -= margin
+    x_max += margin
+
+    # Create grid points
+    grid_points = np.linspace(x_min, x_max, grid_size)
+
+    # Build LP:
+    # Variables: u_1, u_2, ..., u_n (utility at each grid point)
+    # Objective: minimize 0 (feasibility check)
+    n = grid_size
+
+    # Collect constraints
+    A_ub = []  # Inequality constraints: A_ub @ x <= b_ub
+    b_ub = []
+    A_eq = []  # Equality constraints (for linear utility if needed)
+    b_eq = []
+
+    # 1. Choice constraints: E[u(chosen)] >= E[u(rejected)]
+    # Rewritten as: E[u(rejected)] - E[u(chosen)] <= 0
     for choice in lottery_choices:
         outcomes = np.asarray(choice.outcomes, dtype=np.float64)
         probs = np.asarray(choice.probabilities, dtype=np.float64)
         chosen_idx = choice.chosen if isinstance(choice.chosen, int) else 0
 
         chosen_outcomes = outcomes[chosen_idx]
-        chosen_ev = np.sum(probs * chosen_outcomes)
 
-        for j, other_outcomes in enumerate(outcomes):
+        for j in range(len(outcomes)):
             if j == chosen_idx:
                 continue
 
-            other_ev = np.sum(probs * other_outcomes)
+            other_outcomes = outcomes[j]
 
-            # Risk averse: prefers certainty, should avoid high-variance options
-            # Risk seeking: prefers variance, should pick high-variance options
-            chosen_var = np.sum(probs * (chosen_outcomes - chosen_ev) ** 2)
-            other_var = np.sum(probs * (other_outcomes - other_ev) ** 2)
+            # E[u(other)] - E[u(chosen)] <= -tolerance
+            # Using linear interpolation on grid:
+            # E[u(L)] = sum_k p_k * u(x_k) ≈ sum_k p_k * interpolate(u, x_k)
 
-            if risk_attitude == "averse":
-                # If EV is similar but chose higher variance, inconsistent
-                if abs(chosen_ev - other_ev) < tolerance and chosen_var > other_var + tolerance:
-                    return False
-            elif risk_attitude == "seeking":
-                # If EV is similar but chose lower variance, inconsistent
-                if abs(chosen_ev - other_ev) < tolerance and chosen_var < other_var - tolerance:
-                    return False
+            constraint = np.zeros(n)
 
-    return True
+            # Add contribution from rejected lottery
+            for k, (x, p) in enumerate(zip(other_outcomes, probs)):
+                weights = _interpolation_weights(x, grid_points)
+                constraint += p * weights
+
+            # Subtract contribution from chosen lottery
+            for k, (x, p) in enumerate(zip(chosen_outcomes, probs)):
+                weights = _interpolation_weights(x, grid_points)
+                constraint -= p * weights
+
+            A_ub.append(constraint)
+            b_ub.append(-tolerance)  # Strict inequality margin
+
+    # 2. Monotonicity constraints: u_{i+1} - u_i >= epsilon
+    # Rewritten as: u_i - u_{i+1} <= -epsilon
+    epsilon_mono = 0.01
+    for i in range(n - 1):
+        constraint = np.zeros(n)
+        constraint[i] = 1
+        constraint[i + 1] = -1
+        A_ub.append(constraint)
+        b_ub.append(-epsilon_mono)
+
+    # 3. Curvature constraints based on risk attitude
+    if risk_attitude == "averse":
+        # Concave: u_{i+1} - u_i <= u_i - u_{i-1}
+        # Rewritten: u_{i+1} - 2*u_i + u_{i-1} <= 0
+        for i in range(1, n - 1):
+            constraint = np.zeros(n)
+            constraint[i - 1] = 1
+            constraint[i] = -2
+            constraint[i + 1] = 1
+            A_ub.append(constraint)
+            b_ub.append(0)
+
+    elif risk_attitude == "seeking":
+        # Convex: u_{i+1} - u_i >= u_i - u_{i-1}
+        # Rewritten: -u_{i+1} + 2*u_i - u_{i-1} <= 0
+        for i in range(1, n - 1):
+            constraint = np.zeros(n)
+            constraint[i - 1] = -1
+            constraint[i] = 2
+            constraint[i + 1] = -1
+            A_ub.append(constraint)
+            b_ub.append(0)
+
+    # Convert to arrays
+    A_ub = np.array(A_ub) if A_ub else None
+    b_ub = np.array(b_ub) if b_ub else None
+
+    # Objective: feasibility (minimize 0)
+    c = np.zeros(n)
+
+    # Bounds: utility can be any real number
+    bounds = [(None, None) for _ in range(n)]
+
+    # Solve LP
+    try:
+        result = linprog(
+            c,
+            A_ub=A_ub,
+            b_ub=b_ub,
+            bounds=bounds,
+            method="highs",
+        )
+        return result.success
+    except Exception as e:
+        raise SolverError(
+            f"LP solver failed when checking {risk_attitude} risk attitude consistency. "
+            f"Original error: {e}"
+        ) from e
+
+
+def _interpolation_weights(
+    x: float,
+    grid_points: NDArray[np.float64],
+) -> NDArray[np.float64]:
+    """
+    Compute linear interpolation weights for value x on grid.
+
+    Returns weight vector w such that u(x) ≈ sum_i w_i * u_i
+    where u_i are utility values at grid points.
+    """
+    n = len(grid_points)
+    weights = np.zeros(n)
+
+    # Find bracket
+    if x <= grid_points[0]:
+        weights[0] = 1.0
+    elif x >= grid_points[-1]:
+        weights[-1] = 1.0
+    else:
+        # Find i such that grid_points[i] <= x < grid_points[i+1]
+        idx = np.searchsorted(grid_points, x, side="right") - 1
+        idx = max(0, min(idx, n - 2))
+
+        x_lo = grid_points[idx]
+        x_hi = grid_points[idx + 1]
+
+        if abs(x_hi - x_lo) < 1e-12:
+            weights[idx] = 1.0
+        else:
+            # Linear interpolation: u(x) = (1-t)*u_lo + t*u_hi
+            t = (x - x_lo) / (x_hi - x_lo)
+            weights[idx] = 1 - t
+            weights[idx + 1] = t
+
+    return weights
 
 
 def _detect_probability_weighting(lottery_choices: list[LotteryChoice]) -> str:

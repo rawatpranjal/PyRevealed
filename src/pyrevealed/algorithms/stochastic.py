@@ -30,6 +30,7 @@ from pyrevealed.core.result import (
     RegularityResult,
     RegularityViolation,
 )
+from pyrevealed.core.exceptions import SolverError
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import StochasticChoiceLog, MenuChoiceLog
@@ -742,15 +743,12 @@ def _test_rum_exact(
                 "iterations": 1,
                 "violations": violations,
             }
+    except SolverError:
+        raise
     except Exception as e:
-        return {
-            "is_consistent": False,
-            "distance": 1.0,
-            "num_orderings": 0,
-            "distribution": None,
-            "iterations": 0,
-            "violations": [str(e)],
-        }
+        raise SolverError(
+            f"LP solver failed during RUM exact test. Original error: {e}"
+        ) from e
 
 
 def _compute_rum_distance(
@@ -832,10 +830,17 @@ def _compute_rum_distance(
                 if slack_plus[i] > tolerance or slack_minus[i] > tolerance:
                     violations.append(f"Constraint {i}: slack+ = {slack_plus[i]:.4f}, slack- = {slack_minus[i]:.4f}")
             return distance, violations
-    except Exception:
-        pass
-
-    return 1.0, ["LP failed"]
+        else:
+            raise SolverError(
+                f"LP solver failed when computing RUM distance. Status: {result.status}, "
+                f"Message: {result.message}"
+            )
+    except SolverError:
+        raise
+    except Exception as e:
+        raise SolverError(
+            f"LP solver failed during RUM distance computation. Original error: {e}"
+        ) from e
 
 
 def _test_rum_column_generation(
@@ -906,8 +911,11 @@ def _test_rum_column_generation(
 
         try:
             result = linprog(c, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method='highs')
-        except Exception:
-            break
+        except Exception as e:
+            raise SolverError(
+                f"LP solver failed during RUM column generation at iteration {iteration + 1}. "
+                f"Original error: {e}"
+            ) from e
 
         if result.success:
             # Found feasible solution

@@ -43,6 +43,7 @@ from scipy.optimize import minimize, linprog
 from scipy.integrate import quad_vec
 
 from pyrevealed.core.result import WelfareResult
+from pyrevealed.core.exceptions import SolverError, OptimizationError
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import BehaviorLog
@@ -125,10 +126,17 @@ def _recover_afriat_utility(
             U = result.x[:T]
             lambdas = result.x[T:]
             return U, lambdas, True
-    except Exception:
-        pass
-
-    return None, None, False
+        else:
+            raise SolverError(
+                f"LP solver failed to recover Afriat utility. "
+                f"Status: {result.status}, Message: {result.message}"
+            )
+    except SolverError:
+        raise
+    except Exception as e:
+        raise SolverError(
+            f"LP solver failed when recovering Afriat utility. Original error: {e}"
+        ) from e
 
 
 def _construct_afriat_utility_function(
@@ -191,16 +199,12 @@ def compute_cv_exact(
     Returns:
         Tuple of (cv_value, success_flag)
 
-    Note:
-        If utility recovery fails, falls back to Laspeyres bound.
+    Raises:
+        SolverError: If utility recovery fails
+        OptimizationError: If expenditure minimization fails
     """
-    # Recover utility from baseline data
+    # Recover utility from baseline data (raises SolverError on failure)
     U, lambdas, success = _recover_afriat_utility(baseline_log, tolerance)
-
-    if not success or U is None or lambdas is None:
-        # Fall back to Laspeyres bound
-        cv_bound = compute_cv_bounds(baseline_log, policy_log)
-        return cv_bound, False
 
     # Construct utility function
     utility_fn = _construct_afriat_utility_function(
@@ -254,12 +258,17 @@ def compute_cv_exact(
             expenditure_at_baseline_utility = result.fun
             cv = expenditure_at_baseline_utility - m_policy
             return cv, True
-    except Exception:
-        pass
-
-    # Fall back to Laspeyres bound
-    cv_bound = compute_cv_bounds(baseline_log, policy_log)
-    return cv_bound, False
+        else:
+            raise OptimizationError(
+                f"Expenditure minimization failed for CV computation. "
+                f"Message: {result.message}"
+            )
+    except OptimizationError:
+        raise
+    except Exception as e:
+        raise OptimizationError(
+            f"Optimization failed during CV computation. Original error: {e}"
+        ) from e
 
 
 def compute_ev_exact(
@@ -285,8 +294,9 @@ def compute_ev_exact(
     Returns:
         Tuple of (ev_value, success_flag)
 
-    Note:
-        If utility recovery fails, falls back to Paasche bound.
+    Raises:
+        SolverError: If utility recovery fails
+        OptimizationError: If expenditure minimization fails
     """
     # Recover utility from combined data for better coverage
     combined_P = np.vstack([baseline_log.cost_vectors, policy_log.cost_vectors])
@@ -295,17 +305,9 @@ def compute_ev_exact(
     # Create combined log for utility recovery
     from pyrevealed.core.session import BehaviorLog
 
-    try:
-        combined_log = BehaviorLog(cost_vectors=combined_P, action_vectors=combined_Q)
-        U, lambdas, success = _recover_afriat_utility(combined_log, tolerance)
-    except Exception:
-        success = False
-        U, lambdas = None, None
-
-    if not success or U is None or lambdas is None:
-        # Fall back to Paasche bound
-        ev_bound = compute_ev_bounds(baseline_log, policy_log)
-        return ev_bound, False
+    combined_log = BehaviorLog(cost_vectors=combined_P, action_vectors=combined_Q)
+    # Raises SolverError on failure
+    U, lambdas, success = _recover_afriat_utility(combined_log, tolerance)
 
     # Construct utility function
     utility_fn = _construct_afriat_utility_function(combined_P, combined_Q, U, lambdas)
@@ -354,12 +356,17 @@ def compute_ev_exact(
             expenditure_at_policy_utility = result.fun
             ev = m_baseline - expenditure_at_policy_utility
             return ev, True
-    except Exception:
-        pass
-
-    # Fall back to Paasche bound
-    ev_bound = compute_ev_bounds(baseline_log, policy_log)
-    return ev_bound, False
+        else:
+            raise OptimizationError(
+                f"Expenditure minimization failed for EV computation. "
+                f"Message: {result.message}"
+            )
+    except OptimizationError:
+        raise
+    except Exception as e:
+        raise OptimizationError(
+            f"Optimization failed during EV computation. Original error: {e}"
+        ) from e
 
 
 # =============================================================================
@@ -679,10 +686,16 @@ def recover_expenditure_function(
             )
             if result.success:
                 return result.fun, result.x
-        except Exception:
-            pass
-
-        return float("inf"), None
+            else:
+                raise OptimizationError(
+                    f"Expenditure function minimization failed. Message: {result.message}"
+                )
+        except OptimizationError:
+            raise
+        except Exception as e:
+            raise OptimizationError(
+                f"Expenditure function computation failed. Original error: {e}"
+            ) from e
 
     # Compute utilities at each observation
     observation_utilities = np.array([utility_fn(Q[k]) for k in range(T)])
@@ -752,38 +765,27 @@ def analyze_welfare_change(
     baseline_expenditure = np.mean(baseline_log.total_spend)
     policy_expenditure = np.mean(policy_log.total_spend)
 
-    # Try to recover utility from combined data for accurate utility comparison
+    # Recover utility from combined data for accurate utility comparison
+    # Raises SolverError on failure
     combined_P = np.vstack([baseline_log.cost_vectors, policy_log.cost_vectors])
     combined_Q = np.vstack([baseline_log.action_vectors, policy_log.action_vectors])
 
-    try:
-        from pyrevealed.core.session import BehaviorLog
+    from pyrevealed.core.session import BehaviorLog
 
-        combined_log = BehaviorLog(cost_vectors=combined_P, action_vectors=combined_Q)
-        U, lambdas, success = _recover_afriat_utility(combined_log, tolerance)
-    except Exception:
-        success = False
-        U, lambdas = None, None
+    combined_log = BehaviorLog(cost_vectors=combined_P, action_vectors=combined_Q)
+    U, lambdas, success = _recover_afriat_utility(combined_log, tolerance)
 
-    if success and U is not None and lambdas is not None:
-        utility_fn = _construct_afriat_utility_function(combined_P, combined_Q, U, lambdas)
-        baseline_quantities = np.mean(baseline_log.action_vectors, axis=0)
-        policy_quantities = np.mean(policy_log.action_vectors, axis=0)
-        baseline_utility = utility_fn(baseline_quantities)
-        policy_utility = utility_fn(policy_quantities)
-    else:
-        # Fall back to simple utility index
-        baseline_utility = _estimate_utility_index(baseline_log)
-        policy_utility = _estimate_utility_index(policy_log)
+    utility_fn = _construct_afriat_utility_function(combined_P, combined_Q, U, lambdas)
+    baseline_quantities = np.mean(baseline_log.action_vectors, axis=0)
+    policy_quantities = np.mean(policy_log.action_vectors, axis=0)
+    baseline_utility = utility_fn(baseline_quantities)
+    policy_utility = utility_fn(policy_quantities)
 
     # Compute CV and EV using the specified method
+    # Exact method raises SolverError/OptimizationError on failure
     if method == "exact":
         cv, cv_success = compute_cv_exact(baseline_log, policy_log, tolerance)
         ev, ev_success = compute_ev_exact(baseline_log, policy_log, tolerance)
-        if not cv_success or not ev_success:
-            # Fall back to Vartia if exact method fails
-            cv = compute_cv_vartia(baseline_log, policy_log)
-            ev = compute_ev_vartia(baseline_log, policy_log)
     elif method == "vartia":
         cv = compute_cv_vartia(baseline_log, policy_log)
         ev = compute_ev_vartia(baseline_log, policy_log)
@@ -855,10 +857,8 @@ def compute_compensating_variation(
         Afriat (1967), "The Construction of Utility Functions"
     """
     if method == "exact":
+        # Raises SolverError/OptimizationError on failure
         cv, success = compute_cv_exact(baseline_log, policy_log, tolerance)
-        if not success:
-            # Fall back to Vartia if exact fails
-            cv = compute_cv_vartia(baseline_log, policy_log)
         return cv
     elif method == "vartia":
         return compute_cv_vartia(baseline_log, policy_log)
@@ -904,10 +904,8 @@ def compute_equivalent_variation(
         Afriat (1967), "The Construction of Utility Functions"
     """
     if method == "exact":
+        # Raises SolverError/OptimizationError on failure
         ev, success = compute_ev_exact(baseline_log, policy_log, tolerance)
-        if not success:
-            # Fall back to Vartia if exact fails
-            ev = compute_ev_vartia(baseline_log, policy_log)
         return ev
     elif method == "vartia":
         return compute_ev_vartia(baseline_log, policy_log)
@@ -1231,33 +1229,28 @@ def compute_population_welfare_bounds(
     individual_cvs_lower = []
     individual_cvs_upper = []
 
-    for log in cross_sections:
-        # Compute CV bounds for this consumer
-        try:
-            cv, success = compute_cv_exact(log, log, tolerance)
+    for i, log in enumerate(cross_sections):
+        # Compute CV for this consumer (raises SolverError/OptimizationError on failure)
+        cv, success = compute_cv_exact(log, log, tolerance)
 
-            # Simple heuristic: compare cost of baseline bundle at new prices
-            if log.num_records > 0:
-                avg_bundle = np.mean(log.action_vectors, axis=0)
-                old_cost = np.dot(old_prices, avg_bundle)
-                new_cost = np.dot(new_prices, avg_bundle)
+        # Compare cost of baseline bundle at new prices
+        if log.num_records > 0:
+            avg_bundle = np.mean(log.action_vectors, axis=0)
+            old_cost = np.dot(old_prices, avg_bundle)
+            new_cost = np.dot(new_prices, avg_bundle)
 
-                if new_cost < old_cost - tolerance:
-                    definitely_better += 1
-                    individual_cvs_lower.append(old_cost - new_cost)
-                    individual_cvs_upper.append(old_cost - new_cost)
-                elif new_cost > old_cost + tolerance:
-                    definitely_worse += 1
-                    individual_cvs_lower.append(new_cost - old_cost)
-                    individual_cvs_upper.append(new_cost - old_cost)
-                else:
-                    ambiguous += 1
-                    individual_cvs_lower.append(0.0)
-                    individual_cvs_upper.append(0.0)
-        except Exception:
-            ambiguous += 1
-            individual_cvs_lower.append(0.0)
-            individual_cvs_upper.append(0.0)
+            if new_cost < old_cost - tolerance:
+                definitely_better += 1
+                individual_cvs_lower.append(old_cost - new_cost)
+                individual_cvs_upper.append(old_cost - new_cost)
+            elif new_cost > old_cost + tolerance:
+                definitely_worse += 1
+                individual_cvs_lower.append(new_cost - old_cost)
+                individual_cvs_upper.append(new_cost - old_cost)
+            else:
+                ambiguous += 1
+                individual_cvs_lower.append(0.0)
+                individual_cvs_upper.append(0.0)
 
     # Compute fraction bounds
     frac_better_lower = definitely_better / n_consumers

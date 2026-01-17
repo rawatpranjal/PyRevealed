@@ -38,6 +38,7 @@ from scipy.optimize import minimize, linprog
 
 from pyrevealed.core.session import SpatialSession
 from pyrevealed.core.result import IdealPointResult, GeneralMetricResult
+from pyrevealed.core.exceptions import SolverError
 
 
 def find_ideal_point(
@@ -334,22 +335,9 @@ def check_euclidean_rationality_exact(
             }
 
     except Exception as e:
-        # LP solver error - fall back to heuristic
-        warnings.warn(
-            f"LP solver failed in exact test: {e}. Falling back to heuristic.",
-            UserWarning,
-        )
-        ip_result = find_ideal_point(session)
-
-        return {
-            "is_euclidean_rational": ip_result.is_euclidean_rational,
-            "violating_combination": None,
-            "violation_magnitude": 0.0,
-            "ideal_point": ip_result.ideal_point,
-            "method": "heuristic_fallback",
-            "error": str(e),
-            "computation_time_ms": (time.perf_counter() - start_time) * 1000,
-        }
+        raise SolverError(
+            f"LP solver failed during Euclidean rationality test. Original error: {e}"
+        ) from e
 
 
 def find_ideal_point_heuristic(

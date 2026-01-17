@@ -38,6 +38,11 @@ from pyrevealed.core.result import (
     AttentionOverloadResult,
     StatusQuoBiasResult,
 )
+from pyrevealed.core.exceptions import (
+    ComputationalLimitError,
+    StatisticalError,
+    DataValidationError,
+)
 
 if TYPE_CHECKING:
     from pyrevealed.core.session import MenuChoiceLog, StochasticChoiceLog
@@ -899,8 +904,11 @@ def _find_ram_compatible_preferences(
                 compatible.append(perm)
         return compatible
 
-    # For larger n, use heuristic search
-    return _heuristic_ram_search(log, assumption)
+    # For larger n, exact enumeration is computationally infeasible
+    raise ComputationalLimitError(
+        f"RAM search requires factorial enumeration which is infeasible for n={n_items} items. "
+        f"Maximum supported is 6 items (6! = 720 orderings)."
+    )
 
 
 def _is_ram_compatible(
@@ -994,32 +1002,12 @@ def _check_ram_feasibility_lp(
     try:
         result = linprog(c, A_ub=A_ub, b_ub=b_ub, bounds=bounds, method='highs')
         return result.success
-    except Exception:
-        return True
+    except Exception as e:
+        from pyrevealed.core.exceptions import SolverError
 
-
-def _heuristic_ram_search(
-    log: "StochasticChoiceLog",
-    assumption: str,
-) -> list[tuple[int, ...]]:
-    """Heuristic search for RAM-compatible preferences."""
-    all_items = sorted(log.all_items)
-
-    # Use choice frequencies to estimate preference
-    choice_counts = {item: 0 for item in all_items}
-    for m_idx in range(log.num_menus):
-        freqs = log.choice_frequencies[m_idx]
-        for item, count in freqs.items():
-            choice_counts[item] += count
-
-    # Sort by choice frequency (higher = more preferred)
-    sorted_items = sorted(all_items, key=lambda x: -choice_counts.get(x, 0))
-    candidate = tuple(sorted_items)
-
-    if _is_ram_compatible(log, candidate, assumption):
-        return [candidate]
-
-    return []
+        raise SolverError(
+            f"LP solver failed checking RAM feasibility. Original error: {e}"
+        ) from e
 
 
 def _estimate_ram_attention(
@@ -1254,31 +1242,26 @@ def test_attention_overload(
         # Quality = rate of choices consistent with SARP
         from pyrevealed.algorithms.abstract_choice import validate_menu_sarp
 
-        try:
-            sarp_result = validate_menu_sarp(log)
-            # For each menu size, compute fraction of consistent observations
-            for size, obs_indices in size_groups.items():
-                if not obs_indices:
-                    continue
-                # Simple heuristic: use the revealed preference structure
-                # Count observations where the choice is optimal
-                consistent_count = 0
-                for t in obs_indices:
-                    # If SARP is satisfied overall, all are consistent
-                    if sarp_result.is_consistent:
+        sarp_result = validate_menu_sarp(log)
+        # For each menu size, compute fraction of consistent observations
+        for size, obs_indices in size_groups.items():
+            if not obs_indices:
+                continue
+            # Simple heuristic: use the revealed preference structure
+            # Count observations where the choice is optimal
+            consistent_count = 0
+            for t in obs_indices:
+                # If SARP is satisfied overall, all are consistent
+                if sarp_result.is_consistent:
+                    consistent_count += 1
+                else:
+                    # Check if this observation participates in violations
+                    is_violated = any(
+                        t in cycle for cycle in sarp_result.violations
+                    ) if hasattr(sarp_result, 'violations') else False
+                    if not is_violated:
                         consistent_count += 1
-                    else:
-                        # Check if this observation participates in violations
-                        is_violated = any(
-                            t in cycle for cycle in sarp_result.violations
-                        ) if hasattr(sarp_result, 'violations') else False
-                        if not is_violated:
-                            consistent_count += 1
-                menu_size_quality[size] = consistent_count / len(obs_indices)
-        except Exception:
-            # Fallback: use choice frequency as quality proxy
-            for size, obs_indices in size_groups.items():
-                menu_size_quality[size] = 1.0 / size  # Expected random quality
+            menu_size_quality[size] = consistent_count / len(obs_indices)
     else:
         # Quality = how often high-frequency items are chosen
         choice_counts: dict[int, int] = {}
@@ -1488,8 +1471,10 @@ def test_status_quo_bias(
             from scipy import stats
             try:
                 p_value = 1 - stats.norm.cdf(z_stat)
-            except Exception:
-                p_value = 0.5
+            except Exception as e:
+                raise StatisticalError(
+                    f"Failed to compute p-value for status quo bias test. Original error: {e}"
+                ) from e
         else:
             p_value = 1.0
     else:
