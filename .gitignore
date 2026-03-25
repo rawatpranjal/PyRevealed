@@ -110,3 +110,7 @@ datasets/cache/
 
 # Sphinx documentation
 docs/_build/
+
+# Rust build artifacts
+**/target/
+*.dylib
