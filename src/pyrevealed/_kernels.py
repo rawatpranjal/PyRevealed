@@ -354,6 +354,121 @@ def find_violation_pairs_numba(
 
 
 # =============================================================================
+# KARP'S MINIMUM MEAN-WEIGHT CYCLE
+# =============================================================================
+
+
+@njit(cache=True)
+def karp_min_mean_cycle_numba(
+    weights: np.ndarray,
+    adjacency: np.ndarray,
+) -> tuple[np.float64, np.ndarray]:
+    """
+    Karp's algorithm for minimum mean-weight cycle.
+
+    Finds the cycle with minimum average edge weight in O(V * E) time.
+    For dense graphs (E ~ V^2), this is O(V^3).
+
+    Used for the Money Pump Index: the minimum mean-weight cycle gives
+    the worst-case per-step money pump cost.
+
+    Args:
+        weights: T x T matrix of edge weights (inf for non-edges)
+        adjacency: T x T boolean adjacency matrix
+
+    Returns:
+        Tuple of (min_mean_weight, cycle_array).
+        cycle_array[0] = -1 if no cycle exists.
+        min_mean_weight = inf if no cycle exists.
+    """
+    T = adjacency.shape[0]
+    INF = np.float64(1e18)
+
+    # D[k][v] = minimum weight of a walk of exactly k edges ending at v
+    # We only need D[k] and D[k-1], but for cycle reconstruction we keep all
+    D = np.full((T + 1, T), INF, dtype=np.float64)
+    # Parent tracking for cycle reconstruction
+    parent = np.full((T + 1, T), -1, dtype=np.int64)
+
+    # Base case: 0-edge walks
+    for v in range(T):
+        D[0, v] = 0.0
+
+    # Fill DP table
+    for k in range(1, T + 1):
+        for v in range(T):
+            for u in range(T):
+                if adjacency[u, v] and D[k - 1, u] < INF:
+                    new_cost = D[k - 1, u] + weights[u, v]
+                    if new_cost < D[k, v]:
+                        D[k, v] = new_cost
+                        parent[k, v] = u
+
+    # Find minimum mean cycle:
+    # min over v: max over k in [0,T-1]: (D[T][v] - D[k][v]) / (T - k)
+    best_mean = INF
+    best_v = -1
+
+    for v in range(T):
+        if D[T, v] >= INF:
+            continue
+        worst_k_mean = -INF
+        for k in range(T):
+            if D[k, v] < INF:
+                denom = np.float64(T - k)
+                mean_val = (D[T, v] - D[k, v]) / denom
+                if mean_val > worst_k_mean:
+                    worst_k_mean = mean_val
+        if worst_k_mean < best_mean:
+            best_mean = worst_k_mean
+            best_v = v
+
+    if best_v < 0 or best_mean >= INF:
+        no_cycle = np.empty(1, dtype=np.int64)
+        no_cycle[0] = -1
+        return np.float64(INF), no_cycle
+
+    # Reconstruct cycle by tracing back from best_v at step T
+    # Walk back T steps to find the cycle
+    path = np.empty(T + 1, dtype=np.int64)
+    path[T] = best_v
+    node = best_v
+    for k in range(T, 0, -1):
+        node = parent[k, node]
+        if node < 0:
+            no_cycle = np.empty(1, dtype=np.int64)
+            no_cycle[0] = -1
+            return best_mean, no_cycle
+        path[k - 1] = node
+
+    # Find the cycle within the path by detecting repeated nodes
+    # The path has T+1 nodes; a cycle must exist by pigeonhole
+    visited = np.full(T, -1, dtype=np.int64)
+    cycle_start = -1
+    cycle_end = -1
+
+    for i in range(T + 1):
+        v = path[i]
+        if visited[v] >= 0:
+            cycle_start = visited[v]
+            cycle_end = i
+            break
+        visited[v] = i
+
+    if cycle_start < 0:
+        no_cycle = np.empty(1, dtype=np.int64)
+        no_cycle[0] = -1
+        return best_mean, no_cycle
+
+    cycle_len = cycle_end - cycle_start + 1
+    cycle = np.empty(cycle_len, dtype=np.int64)
+    for i in range(cycle_len):
+        cycle[i] = path[cycle_start + i]
+
+    return best_mean, cycle
+
+
+# =============================================================================
 # QUASILINEARITY CYCLE SUMS
 # =============================================================================
 

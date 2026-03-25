@@ -1,4 +1,10 @@
-"""Afriat Efficiency Index (AEI) computation via binary search."""
+"""Afriat Efficiency Index (AEI/CCEI) computation.
+
+Supports two methods:
+- "discrete" (default): Binary search over the T^2 critical efficiency ratios.
+  Finds the EXACT analytical CCEI with zero floating-point approximation error.
+- "continuous": Legacy binary search over [0,1] interval with tolerance.
+"""
 
 from __future__ import annotations
 
@@ -16,31 +22,33 @@ def compute_aei(
     session: ConsumerSession,
     tolerance: float = 1e-6,
     max_iterations: int = 50,
+    method: str = "discrete",
 ) -> AEIResult:
     """
-    Compute Afriat Efficiency Index using binary search.
+    Compute Afriat Efficiency Index (CCEI).
 
-    The AEI measures how close consumer behavior is to perfect rationality.
-    It is defined as:
+    The AEI measures how close consumer behavior is to perfect rationality:
 
         AEI = sup{e in [0,1] : data satisfies GARP with efficiency e}
 
-    where GARP with efficiency e means we deflate budgets by factor e:
+    where GARP with efficiency e deflates budgets by factor e:
         R_e[i,j] = True iff e * (p_i @ x_i) >= p_i @ x_j
+
+    The critical value e* is guaranteed to equal one of the T^2 efficiency
+    ratios E[i,j] / own_exp[i]. The "discrete" method exploits this by
+    binary searching over these exact ratios, giving the analytical CCEI
+    with zero floating-point error in ~2*log2(T) GARP checks.
 
     Interpretation:
     - AEI = 1.0: Perfectly consistent (satisfies GARP)
     - AEI = 0.5: Consumer wastes ~50% of budget on inconsistent choices
     - AEI = 0.0: Completely irrational behavior
 
-    The algorithm uses binary search to find the supremum efficiently:
-    1. If GARP holds at e=1, return AEI=1.0
-    2. Otherwise, binary search between [0, 1] to find largest e where GARP holds
-
     Args:
         session: ConsumerSession with prices and quantities
-        tolerance: Convergence tolerance for binary search (default: 1e-6)
-        max_iterations: Maximum iterations for binary search (default: 50)
+        tolerance: Convergence tolerance (used by "continuous" method)
+        max_iterations: Max iterations (used by "continuous" method)
+        method: "discrete" (exact, default) or "continuous" (legacy)
 
     Returns:
         AEIResult with efficiency index and supporting data
@@ -72,7 +80,88 @@ def compute_aei(
             computation_time_ms=computation_time,
         )
 
-    # Binary search for AEI
+    if method == "discrete":
+        aei, iterations, last_result = _discrete_binary_search(session)
+    else:
+        aei, iterations, last_result = _continuous_binary_search(
+            session, tolerance, max_iterations
+        )
+
+    if last_result is None:
+        _, last_result = _check_garp_at_efficiency(session, 0.0, tolerance=1e-10)
+
+    computation_time = (time.perf_counter() - start_time) * 1000
+
+    return AEIResult(
+        efficiency_index=aei,
+        is_perfectly_consistent=False,
+        garp_result_at_threshold=last_result,
+        binary_search_iterations=iterations,
+        tolerance=tolerance,
+        computation_time_ms=computation_time,
+    )
+
+
+def _discrete_binary_search(
+    session: ConsumerSession,
+) -> tuple[float, int, GARPResult | None]:
+    """
+    Find exact CCEI by binary search over discrete efficiency ratios.
+
+    The critical e* that breaks/restores GARP must equal one of the T^2
+    ratios E[i,j] / own_exp[i]. Binary searching over this sorted array
+    gives the exact answer in ~2*log2(T) iterations.
+    """
+    E = session.expenditure_matrix
+    own_exp = session.own_expenditures
+
+    # Compute all T^2 efficiency ratios: e at which R_e[i,j] flips
+    # R_e[i,j] = True iff e * own_exp[i] >= E[i,j]
+    # Critical e for (i,j): e = E[i,j] / own_exp[i]
+    ratios = E / own_exp[:, np.newaxis]
+
+    # Filter to (0, 1) range, flatten, deduplicate, sort descending
+    flat = ratios.ravel()
+    mask = (flat > 0) & (flat < 1.0)
+    candidates = np.unique(flat[mask])
+    candidates = np.sort(candidates)[::-1]  # Descending: try high e first
+
+    if len(candidates) == 0:
+        return 0.0, 0, None
+
+    # Binary search over sorted candidates
+    lo, hi = 0, len(candidates) - 1
+    iterations = 0
+    best_e = 0.0
+    best_result: GARPResult | None = None
+
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        e = float(candidates[mid])
+
+        is_consistent, garp_at_e = _check_garp_at_efficiency(
+            session, e, tolerance=1e-10
+        )
+        iterations += 1
+
+        if is_consistent:
+            best_e = e
+            best_result = garp_at_e
+            # Try higher e (lower index in descending array)
+            hi = mid - 1
+        else:
+            # Need lower e (higher index in descending array)
+            lo = mid + 1
+
+    return best_e, iterations, best_result
+
+
+def _continuous_binary_search(
+    session: ConsumerSession,
+    tolerance: float,
+    max_iterations: int,
+) -> tuple[float, int, GARPResult | None]:
+    """Legacy continuous binary search over [0, 1] interval."""
     e_low = 0.0
     e_high = 1.0
     iterations = 0
@@ -82,7 +171,6 @@ def compute_aei(
     while (e_high - e_low > tolerance) and (iterations < max_iterations):
         e_mid = (e_low + e_high) / 2
 
-        # Check GARP at efficiency level e_mid
         is_consistent, garp_at_e = _check_garp_at_efficiency(
             session, e_mid, tolerance=1e-10
         )
@@ -96,26 +184,7 @@ def compute_aei(
 
         iterations += 1
 
-    # Final efficiency index
-    aei = last_consistent_e
-
-    # Get final GARP result at the threshold
-    if last_consistent_result is None:
-        # Edge case: even e=0 doesn't satisfy GARP (shouldn't happen normally)
-        _, last_consistent_result = _check_garp_at_efficiency(
-            session, 0.0, tolerance=1e-10
-        )
-
-    computation_time = (time.perf_counter() - start_time) * 1000
-
-    return AEIResult(
-        efficiency_index=aei,
-        is_perfectly_consistent=False,
-        garp_result_at_threshold=last_consistent_result,
-        binary_search_iterations=iterations,
-        tolerance=tolerance,
-        computation_time_ms=computation_time,
-    )
+    return last_consistent_e, iterations, last_consistent_result
 
 
 def _check_garp_at_efficiency(

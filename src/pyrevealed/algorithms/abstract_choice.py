@@ -290,8 +290,8 @@ def compute_menu_efficiency(log: MenuChoiceLog) -> HoutmanMaksAbstractResult:
     The Houtman-Maks index measures the minimum fraction of observations
     that must be removed to make the remaining data satisfy SARP.
 
-    Uses a greedy algorithm: repeatedly remove the observation that
-    participates in the most violations until SARP is satisfied.
+    Uses SCC decomposition + greedy Feedback Vertex Set for efficient
+    computation instead of iterative SARP re-checking.
 
     Args:
         log: MenuChoiceLog with menus and choices
@@ -308,74 +308,95 @@ def compute_menu_efficiency(log: MenuChoiceLog) -> HoutmanMaksAbstractResult:
         >>> result = compute_menu_efficiency(log)
         >>> print(f"Efficiency: {result.efficiency_index:.2f}")
     """
+    from pyrevealed.graph.scc import find_sccs, greedy_feedback_vertex_set
+
     start_time = time.perf_counter()
 
     n_obs = log.num_observations
-    removed: list[int] = []
-    remaining = list(range(n_obs))
 
-    # Greedy removal until consistent
-    while True:
-        # Create a sub-log with remaining observations
-        sub_menus = [log.menus[i] for i in remaining]
-        sub_choices = [log.choices[i] for i in remaining]
-
-        if len(sub_menus) <= 1:
-            # Single observation is always consistent
-            break
-
-        # Check SARP on remaining
-        from pyrevealed.core.session import MenuChoiceLog as MenuChoiceLogClass
-        sub_log = MenuChoiceLogClass(
-            menus=sub_menus,
-            choices=sub_choices,
-            item_labels=log.item_labels,
+    if n_obs <= 1:
+        computation_time = (time.perf_counter() - start_time) * 1000
+        return HoutmanMaksAbstractResult(
+            efficiency_index=1.0,
+            removed_observations=[],
+            remaining_observations=list(range(n_obs)),
+            num_total=n_obs,
+            computation_time_ms=computation_time,
         )
-        sarp_result = validate_menu_sarp(sub_log)
 
-        if sarp_result.is_consistent:
-            break
+    # Build revealed preference matrix R
+    all_items = log.all_items
+    n_items = max(all_items) + 1 if all_items else 0
 
-        # Find observation participating in most violations
-        # Count violations per observation
-        violation_counts = {i: 0 for i in range(len(remaining))}
+    R = np.zeros((n_items, n_items), dtype=np.bool_)
+    # Track which observation created each preference edge
+    edge_to_obs: dict[tuple[int, int], int] = {}
 
-        # Map items in cycles to observations
-        for cycle in sarp_result.violations:
-            for item in cycle:
-                # Find which observation(s) reveal preference for this item
-                for obs_idx, (menu, choice) in enumerate(zip(sub_menus, sub_choices)):
-                    if choice == item or item in menu:
-                        violation_counts[obs_idx] += 1
+    for t, (menu, choice) in enumerate(zip(log.menus, log.choices)):
+        for item in menu:
+            if item != choice:
+                R[choice, item] = True
+                edge_to_obs[(choice, item)] = t
 
-        # Remove observation with most violations
-        if violation_counts:
-            worst_idx = max(violation_counts, key=lambda k: violation_counts[k])
-            removed.append(remaining[worst_idx])
-            remaining.pop(worst_idx)
-        else:
-            # No clear culprit, remove first observation in a cycle
-            if sarp_result.violations:
-                # Find an observation that created a problematic preference
-                for obs_idx, (menu, choice) in enumerate(zip(sub_menus, sub_choices)):
-                    for cycle in sarp_result.violations:
-                        if choice in cycle:
-                            removed.append(remaining[obs_idx])
-                            remaining.pop(obs_idx)
-                            break
-                    else:
-                        continue
-                    break
-            else:
-                break
+    # Compute transitive closure and check SARP
+    R_star = floyd_warshall_transitive_closure(R)
+
+    # SARP violations: R*[x,y] AND R*[y,x] for x != y
+    violation_matrix = R_star & R_star.T
+    np.fill_diagonal(violation_matrix, False)
+
+    if not np.any(violation_matrix):
+        computation_time = (time.perf_counter() - start_time) * 1000
+        return HoutmanMaksAbstractResult(
+            efficiency_index=1.0,
+            removed_observations=[],
+            remaining_observations=list(range(n_obs)),
+            num_total=n_obs,
+            computation_time_ms=computation_time,
+        )
+
+    # Find SCCs of R — cycles only exist within SCCs
+    n_comp, labels = find_sccs(R)
+    scc_sizes = np.bincount(labels, minlength=n_comp)
+
+    # Find items that need removal via greedy FVS per SCC
+    removed_items: set[int] = set()
+
+    for c in range(n_comp):
+        if scc_sizes[c] <= 1:
+            continue
+
+        scc_nodes = np.where(labels == c)[0]
+
+        # Check if this SCC has SARP violations
+        sub_violation = violation_matrix[np.ix_(scc_nodes, scc_nodes)]
+        if not np.any(sub_violation):
+            continue
+
+        sub_R = R[np.ix_(scc_nodes, scc_nodes)].copy()
+        fvs_local = greedy_feedback_vertex_set(sub_R)
+
+        for local_idx in fvs_local:
+            removed_items.add(int(scc_nodes[local_idx]))
+
+    # Map removed items back to observations
+    # An observation is removed if it created a preference edge involving a removed item
+    removed_obs: list[int] = []
+    removed_obs_set: set[int] = set()
+
+    for (src, dst), obs_idx in edge_to_obs.items():
+        if src in removed_items and obs_idx not in removed_obs_set:
+            removed_obs_set.add(obs_idx)
+            removed_obs.append(obs_idx)
+
+    remaining = [i for i in range(n_obs) if i not in removed_obs_set]
 
     computation_time = (time.perf_counter() - start_time) * 1000
-
-    efficiency = 1.0 - (len(removed) / n_obs) if n_obs > 0 else 1.0
+    efficiency = 1.0 - (len(removed_obs) / n_obs) if n_obs > 0 else 1.0
 
     return HoutmanMaksAbstractResult(
         efficiency_index=efficiency,
-        removed_observations=removed,
+        removed_observations=removed_obs,
         remaining_observations=remaining,
         num_total=n_obs,
         computation_time_ms=computation_time,

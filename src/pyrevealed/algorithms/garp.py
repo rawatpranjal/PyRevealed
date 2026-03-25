@@ -112,6 +112,9 @@ def check_garp(
     )
 
 
+_MAX_REPORTED_VIOLATIONS = 1000
+
+
 def _find_violation_cycles(
     R: NDArray[np.bool_],
     P: NDArray[np.bool_],
@@ -125,7 +128,7 @@ def _find_violation_cycles(
     - Each consecutive pair is connected by revealed preference (R)
     - At least one edge is strict preference (P)
 
-    Uses Numba JIT for fast violation pair finding and path reconstruction.
+    Optimized to scope BFS to within SCCs and cap reported violations.
 
     Args:
         R: Direct revealed preference matrix
@@ -136,10 +139,74 @@ def _find_violation_cycles(
     Returns:
         List of violation cycles as tuples of observation indices
     """
+    from pyrevealed.graph.scc import find_sccs
+
     violations: list[Cycle] = []
     seen_cycles: set[frozenset[int]] = set()
 
-    # Find pairs (i, j) where R*[i,j] and P[j,i] using Numba kernel
+    T = R.shape[0]
+
+    # For small graphs, use the direct approach
+    if T < 10:
+        return _find_violation_cycles_direct(R, P, R_star, violation_matrix)
+
+    # Find SCCs — violations only exist within SCCs
+    n_comp, labels = find_sccs(R)
+    scc_sizes = np.bincount(labels, minlength=n_comp)
+
+    for c in range(n_comp):
+        if scc_sizes[c] <= 1:
+            continue
+        if len(violations) >= _MAX_REPORTED_VIOLATIONS:
+            break
+
+        scc_mask = labels == c
+        scc_nodes = np.where(scc_mask)[0]
+
+        # Check if this SCC has violations
+        sub_violation = violation_matrix[np.ix_(scc_nodes, scc_nodes)]
+        if not np.any(sub_violation):
+            continue
+
+        # Extract local subgraphs for BFS
+        sub_R = np.ascontiguousarray(R[np.ix_(scc_nodes, scc_nodes)], dtype=np.bool_)
+
+        # Find violation pairs within this SCC
+        sub_R_star = np.ascontiguousarray(
+            R_star[np.ix_(scc_nodes, scc_nodes)], dtype=np.bool_
+        )
+        sub_P = np.ascontiguousarray(P[np.ix_(scc_nodes, scc_nodes)], dtype=np.bool_)
+        sub_pairs = find_violation_pairs_numba(sub_R_star, sub_P)
+
+        for idx in range(sub_pairs.shape[0]):
+            if len(violations) >= _MAX_REPORTED_VIOLATIONS:
+                break
+
+            li, lj = int(sub_pairs[idx, 0]), int(sub_pairs[idx, 1])
+
+            # BFS within the small SCC subgraph
+            path = _reconstruct_path_bfs(sub_R, li, lj)
+            if path is not None:
+                # Map local indices back to global
+                global_cycle = tuple(int(scc_nodes[k]) for k in path)
+                cycle_set = frozenset(global_cycle[:-1])
+                if cycle_set not in seen_cycles:
+                    seen_cycles.add(cycle_set)
+                    violations.append(global_cycle)
+
+    return violations
+
+
+def _find_violation_cycles_direct(
+    R: NDArray[np.bool_],
+    P: NDArray[np.bool_],
+    R_star: NDArray[np.bool_],
+    violation_matrix: NDArray[np.bool_],
+) -> list[Cycle]:
+    """Direct violation cycle finding for small graphs (no SCC overhead)."""
+    violations: list[Cycle] = []
+    seen_cycles: set[frozenset[int]] = set()
+
     R_star_c = np.ascontiguousarray(R_star, dtype=np.bool_)
     P_c = np.ascontiguousarray(P, dtype=np.bool_)
     violation_pairs = find_violation_pairs_numba(R_star_c, P_c)
@@ -149,15 +216,10 @@ def _find_violation_cycles(
     for idx in range(violation_pairs.shape[0]):
         i, j = int(violation_pairs[idx, 0]), int(violation_pairs[idx, 1])
 
-        # Reconstruct a path from i to j using R, then add the strict edge back
         path = _reconstruct_path_bfs(R_c, i, j)
-
         if path is not None:
-            # The cycle is: path from i to j, then j -> i (strict preference)
             cycle = tuple(path)
-
-            # Avoid duplicate cycles (same nodes, different starting points)
-            cycle_set = frozenset(cycle[:-1])  # Exclude repeated first node
+            cycle_set = frozenset(cycle[:-1])
             if cycle_set not in seen_cycles:
                 seen_cycles.add(cycle_set)
                 violations.append(cycle)

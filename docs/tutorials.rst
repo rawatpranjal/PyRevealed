@@ -12,6 +12,7 @@ Step-by-step guides covering revealed preference analysis from basics to advance
    tutorial_demand_analysis
    tutorial_advanced
    tutorial_ecommerce
+   tutorial_uber_eats
    tutorial_attention
    tutorial_risk
    tutorial_context_effects
@@ -46,7 +47,10 @@ Overview
    * - :doc:`6: E-Commerce at Scale <tutorial_ecommerce>`
      - Real e-commerce data, scaling to thousands of users
      - Tutorial 1
-   * - :doc:`7: Revealed Attention <tutorial_attention>`
+   * - :doc:`7: Uber Eats at Scale <tutorial_uber_eats>`
+     - Food delivery simulation, parallel processing, production scaling
+     - Tutorial 1
+   * - :doc:`8: Revealed Attention <tutorial_attention>`
      - WARP(LA), RAM, attention filters, consideration sets
      - Tutorial 2
    * - :doc:`8: Risk Analysis <tutorial_risk>`
