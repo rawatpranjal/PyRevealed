@@ -1,0 +1,3 @@
+[workspace]
+members = ["crates/rpt-core", "crates/rpt-python"]
+resolver = "2"

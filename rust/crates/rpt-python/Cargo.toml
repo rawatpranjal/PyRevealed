@@ -1,0 +1,15 @@
+[package]
+name = "rpt-python"
+version = "0.3.0"
+edition = "2021"
+
+[lib]
+name = "_rust_core"
+crate-type = ["cdylib"]
+
+[dependencies]
+rpt-core = { path = "../rpt-core" }
+pyo3 = { version = "0.22", features = ["extension-module"] }
+numpy = "0.22"
+ndarray = "0.16"
+rayon = "1.10"

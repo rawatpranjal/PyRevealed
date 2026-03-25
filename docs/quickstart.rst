@@ -1,10 +1,34 @@
 Quick Start
 ===========
 
-PyRevealed analyzes behavioral consistency across users and time periods.
-The typical workflow: load panel data, run the engine, read the report.
+PyRevealed scores how consistently each user's choices align with rational
+utility maximization. The primary workflow: prepare user data, run the Engine,
+read per-user scores.
 
-1. Load Panel Data
+1. Batch Scoring with Engine
+----------------------------
+
+Score many users in one call (uses Rust backend if installed):
+
+.. code-block:: python
+
+   from pyrevealed.engine import Engine
+   import numpy as np
+
+   # Each user: (prices T x K, quantities T x K)
+   users = [
+       (np.random.rand(20, 5) + 0.1, np.random.rand(20, 5) + 0.1)
+       for _ in range(1000)
+   ]
+
+   engine = Engine(metrics=["garp", "ccei", "mpi", "harp", "hm"])
+   results = engine.analyze_arrays(users)
+
+   # Each result has: is_garp, ccei, mpi, is_harp, hm_consistent, hm_total
+   for r in results[:3]:
+       print(f"GARP={r.is_garp}  CCEI={r.ccei:.3f}  MPI={r.mpi:.3f}")
+
+2. Load Panel Data
 ------------------
 
 From a built-in dataset:

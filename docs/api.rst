@@ -1,6 +1,23 @@
 API
 ===
 
+Engine (Batch Scoring)
+----------------------
+
+Engine
+^^^^^^
+
+.. autoclass:: pyrevealed.Engine
+   :members:
+   :undoc-members:
+
+EngineResult
+^^^^^^^^^^^^
+
+.. autoclass:: pyrevealed.EngineResult
+   :members:
+   :undoc-members:
+
 High-Level Classes
 ------------------
 

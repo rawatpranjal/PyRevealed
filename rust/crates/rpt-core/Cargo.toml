@@ -1,0 +1,8 @@
+[package]
+name = "rpt-core"
+version = "0.1.0"
+edition = "2021"
+description = "Revealed Preference Theory algorithms — pure Rust, no Python dependency"
+
+[dependencies]
+highs = "1"  # HiGHS LP/MILP solver (MIT license)

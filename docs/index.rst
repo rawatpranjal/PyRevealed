@@ -1,7 +1,7 @@
 PyRevealed
 ==========
 
-Revealed preference analysis for panel data. Test behavioral consistency across thousands of users and time periods.
+Rationality scores for every user, at scale. Rust engine, Python interface.
 
 .. raw:: html
 
@@ -9,22 +9,22 @@ Revealed preference analysis for panel data. Test behavioral consistency across 
      <div class="feature-card">
        <span class="feature-icon">&#10003;</span>
        <h3>Consistency Testing</h3>
-       <p>GARP, WARP, SARP axioms. Verify if choices are consistent with utility maximization.</p>
+       <p>GARP, SARP, HARP axioms. Verify if choices are consistent with utility maximization.</p>
      </div>
      <div class="feature-card">
        <span class="feature-icon">&#9673;</span>
        <h3>Efficiency Metrics</h3>
-       <p>AEI (0-1 consistency), MPI (welfare loss), Houtman-Maks (outlier fraction).</p>
+       <p>CCEI (0-1 consistency), MPI (exploitability), Houtman-Maks (outlier fraction).</p>
      </div>
      <div class="feature-card">
        <span class="feature-icon">&#9638;</span>
-       <h3>Panel Analysis</h3>
-       <p>Users x periods x choices. Parallelized engine with aggregate and individual reports.</p>
+       <h3>Batch Scoring</h3>
+       <p>Score millions of users in parallel. Streaming chunks, bounded memory.</p>
      </div>
      <div class="feature-card">
        <span class="feature-icon">&#9889;</span>
-       <h3>Production Ready</h3>
-       <p>Numba-accelerated. Handles 5,000+ observations per user, thousands of users.</p>
+       <h3>Rust Engine</h3>
+       <p>Graph algorithms + HiGHS LP solver in Rust. 40x faster than pure Python.</p>
      </div>
    </div>
 
@@ -34,63 +34,83 @@ Installation
 .. code-block:: bash
 
    pip install pyrevealed
-   pip install pyrevealed[datasets]   # for built-in panel datasets
 
-Panel Analysis Example
-----------------------
+Batch Scoring Example
+---------------------
 
 .. code-block:: python
 
-   from pyrevealed.datasets import load_dunnhumby
+   from pyrevealed.engine import Engine
+   import numpy as np
 
-   panel = load_dunnhumby(n_households=100)   # 85 households, 10 goods, ~50 weeks each
-   report = panel.summary()
-   print(report)
+   # Each user: (prices T x K, quantities T x K)
+   users = [
+       (np.random.rand(20, 5) + 0.1, np.random.rand(20, 5) + 0.1)
+       for _ in range(1000)
+   ]
+
+   engine = Engine(metrics=["garp", "ccei", "mpi", "harp", "hm"])
+   results = engine.analyze_arrays(users)
+
+   for r in results[:5]:
+       print(f"GARP={r.is_garp}  CCEI={r.ccei:.3f}  MPI={r.mpi:.3f}  HARP={r.is_harp}")
 
 .. code-block:: text
 
-   ======================================================================
-                               PANEL SUMMARY
-   ======================================================================
-   No. Users: 85                      GARP Pass Rate: 4.7%
-   Total Observations: 4,174          Mean AEI: 0.8237
-   No. Goods: 10                      Mean MPI: 0.2412
-   Obs/User (mean): 49.1              Computation Time: 4.27 s
-   ======================================================================
+   GARP=False  CCEI=0.755  MPI=0.285  HARP=False
+   GARP=False  CCEI=0.799  MPI=0.241  HARP=False
+   GARP=False  CCEI=0.910  MPI=0.257  HARP=False
+   GARP=False  CCEI=0.785  MPI=0.318  HARP=False
+   GARP=False  CCEI=0.716  MPI=0.356  HARP=False
 
-   Consistency Rates:
-   ----------------------------------------------------------------------
-     GARP ............................................... 4.7% (4 / 85)
-     WARP ............................................... 5.9% (5 / 85)
-     SARP ............................................... 1.2% (1 / 85)
-
-   Efficiency Distribution:
-   ----------------------------------------------------------------------
-                       mean     std     min     25%     50%     75%     max
-     AEI              0.824   0.104   0.598   0.743   0.820   0.906   1.000
-     MPI              0.241   0.125   0.000   0.156   0.235   0.322   0.480
-     HM Index         0.765   0.118   0.444   0.711   0.766   0.833   1.000
-
-   Most Inconsistent (Bottom 5):
-   ----------------------------------------------------------------------
-       1. household_99 ..................... AEI=0.598, MPI=0.412, T=78
-       2. household_17 ..................... AEI=0.624, MPI=0.432, T=64
-       3. household_43 ..................... AEI=0.636, MPI=0.423, T=37
-       4. household_47 ..................... AEI=0.638, MPI=0.372, T=47
-       5. household_77 ..................... AEI=0.638, MPI=0.466, T=62
-   ======================================================================
-
-Supported Data Types
+Single-User Analysis
 --------------------
 
-- **BehaviorLog** --- Budget-based purchases (prices + quantities)
-- **MenuChoiceLog** --- Discrete choices from menus (surveys, voting)
-- **RiskChoiceLog** --- Safe vs. risky gambles (insurance, lotteries)
-- **StochasticChoiceLog** --- Probabilistic choice frequencies
-- **ProductionLog** --- Firm inputs and outputs (profit/cost tests)
-- **BehaviorPanel** --- Multi-user panel container for any of the above
+.. code-block:: python
 
-See :doc:`examples` for working code for each type.
+   from pyrevealed import BehaviorLog, check_garp, compute_aei, compute_mpi
+
+   log = BehaviorLog(cost_vectors=prices, action_vectors=quantities)
+   garp = check_garp(log)
+   aei = compute_aei(log)
+   mpi = compute_mpi(log)
+
+   print(f"Consistent: {garp.is_consistent}")
+   print(f"Efficiency: {aei.efficiency_index:.3f}")
+   print(f"Exploitability: {mpi.mpi_value:.3f}")
+
+Scores
+------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Score
+     - Field
+     - What it measures
+     - Range
+   * - Consistency
+     - ``is_garp``
+     - Are choices rationalizable? (GARP)
+     - bool
+   * - Efficiency
+     - ``ccei``
+     - How close to perfectly rational? (Afriat)
+     - 0--1
+   * - Exploitability
+     - ``mpi``
+     - Value left on the table per choice (Karp cycle)
+     - 0--1
+   * - Homotheticity
+     - ``is_harp``
+     - Do preferences scale with budget?
+     - bool
+   * - Noise fraction
+     - ``hm_consistent / hm_total``
+     - Fraction of rationalizable choices
+     - 0--1
+
+See :doc:`theory` for the economics behind each score.
 
 ----
 

@@ -7,6 +7,33 @@ Core examples showing each data type and analysis pattern.
    :local:
    :depth: 1
 
+Batch Scoring (Engine)
+----------------------
+
+Score thousands of users with the Rust-accelerated Engine:
+
+.. code-block:: python
+
+   from pyrevealed.engine import Engine
+   import numpy as np
+
+   # Simulate 1000 users: 20 observations x 5 goods each
+   rng = np.random.RandomState(42)
+   users = [
+       (rng.rand(20, 5) + 0.1, rng.rand(20, 5) + 0.1)
+       for _ in range(1000)
+   ]
+
+   engine = Engine(metrics=["garp", "ccei", "mpi", "harp", "hm"])
+   results = engine.analyze_arrays(users)
+
+   # Summary
+   n_consistent = sum(1 for r in results if r.is_garp)
+   avg_ccei = np.mean([r.ccei for r in results])
+   print(f"Consistent: {n_consistent}/1000")
+   print(f"Avg CCEI: {avg_ccei:.3f}")
+   print(f"Backend: {engine.backend}")  # 'rust' or 'python'
+
 Budget Panel Analysis
 ---------------------
 

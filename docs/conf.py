@@ -2,9 +2,13 @@
 
 import os
 import sys
+import warnings
 
 # Add source directory to path for autodoc
 sys.path.insert(0, os.path.abspath("../src"))
+
+# Suppress deprecation warnings from contrib module shims during autodoc
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # -- Project information -----------------------------------------------------
 

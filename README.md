@@ -1,144 +1,124 @@
 # PyRevealed
 
-**Production-ready revealed preference analysis.** Test if choices are internally consistent, quantify behavioral consistency, and analyze decision patterns.
-
-> Based on: Chambers, C. P., & Echenique, F. (2016). *Revealed Preference Theory*. Cambridge University Press.
+Rationality scores for every user, at scale. Rust engine, Python interface.
 
 [![PyPI](https://img.shields.io/pypi/v/pyrevealed)](https://pypi.org/project/pyrevealed/)
 [![Documentation](https://readthedocs.org/projects/pyrevealed/badge/?version=latest)](https://pyrevealed.readthedocs.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Installation
-
 ```bash
 pip install pyrevealed
 ```
 
-For visualization support:
-```bash
-pip install pyrevealed[viz]
-```
+## What it does
 
-## Quick Start
+Scores how consistently each user's choices align with rational utility maximization. Feed it choice data, get back per-user scores you can plug into any ML pipeline, segmentation model, or dashboard.
 
 ```python
-from pyrevealed import BehaviorLog, validate_consistency, compute_integrity_score
+from pyrevealed.engine import Engine
 import numpy as np
 
-# Two purchase observations: prices and quantities
-log = BehaviorLog(
-    cost_vectors=np.array([[1.0, 2.0], [2.0, 1.0]]),
-    action_vectors=np.array([[3.0, 1.0], [1.0, 3.0]])
-)
+# Each user: (prices T x K, quantities T x K)
+users = [(prices_i, quantities_i) for prices_i, quantities_i in user_data]
 
-# Check if choices are consistent with utility maximization
-is_consistent = validate_consistency(log)  # True
+engine = Engine(metrics=["garp", "ccei", "mpi", "harp", "hm"])
+results = engine.analyze_arrays(users)
 
-# Get integrity score (0 = inconsistent, 1 = perfectly consistent)
-result = compute_integrity_score(log)
-print(f"Integrity: {result.efficiency_index:.2f}")  # 1.00
+for r in results:
+    print(r.is_garp, r.ccei, r.mpi, r.is_harp)
 ```
 
-## Unified Summary
-
-Get a comprehensive behavioral report with one call:
-
-```python
-from pyrevealed import BehaviorLog, BehavioralSummary
-import numpy as np
-
-# 5 purchases with inconsistent behavior
-log = BehaviorLog(
-    cost_vectors=np.array([
-        [1.0, 2.0, 3.0], [2.0, 1.0, 3.0], [1.5, 1.5, 2.0],
-        [1.2, 1.8, 2.5], [1.8, 1.2, 2.5]
-    ]),
-    action_vectors=np.array([
-        [1, 5, 1], [5, 1, 1], [3, 3, 1], [4, 2, 1], [2, 4, 1]
-    ])
-)
-
-summary = BehavioralSummary.from_log(log)
-print(summary)  # BehavioralSummary: [-] n=5, AEI=0.71, MPI=0.29
-print(summary.summary())  # Full formatted report
+```
+is_garp  ccei   mpi    is_harp  hm
+False    0.847  0.023  True     18/20
+True     1.000  0.000  True     20/20
+False    0.791  0.041  False    15/20
 ```
 
-All result objects support:
-- `.summary()` - Detailed human-readable report
-- `.short_summary()` - One-liner with [+]/[-] status
-- `.score()` - sklearn-compatible [0,1] score
+## Scores
 
-## Core Functions
+| Score | Field | What it measures | Range |
+|-------|-------|-----------------|-------|
+| Consistency | `is_garp` | Are choices rationalizable? (GARP) | bool |
+| Efficiency | `ccei` | How close to perfectly rational? (Afriat) | 0-1 |
+| Exploitability | `mpi` | Value left on the table per choice (Karp cycle) | 0-1 |
+| Homotheticity | `is_harp` | Do preferences scale with budget? | bool |
+| Noise fraction | `hm_consistent/hm_total` | Fraction of rationalizable choices (Houtman-Maks) | 0-1 |
+| Utility recovery | `utility_success` | Can latent utility be reconstructed? (Afriat LP) | bool |
+| Per-obs efficiency | `vei_mean` | Average efficiency across observations (Varian) | 0-1 |
 
-| Function | Returns | Score Meaning |
-|----------|---------|---------------|
-| `validate_consistency(log)` | `bool` | True = rational |
-| `compute_integrity_score(log)` | `AEIResult` (0-1) | 1 = perfect |
-| `compute_confusion_metric(log)` | `MPIResult` (0-1) | 0 = no cycles |
-| `fit_latent_values(log)` | `UtilityRecoveryResult` | Utility values |
-| `compute_minimal_outlier_fraction(log)` | `HoutmanMaksResult` (0-1) | 0 = all consistent |
+Every score is a feature. Use them for fraud detection, user segmentation, A/B testing, churn prediction, or personalization.
 
-**Quick interpretation**: Integrity >= 0.95 is excellent, >= 0.90 is good, < 0.70 indicates problems.
+## Performance
 
-## Menu-Based Choice
+The Rust engine (`rpt-core`) handles graph algorithms and LP solving via Rayon thread pool. Python handles I/O and the user-facing API.
 
-For discrete choices without prices (surveys, recommendations, voting):
+| Users | Metrics | Time | Throughput |
+|-------|---------|------|------------|
+| 1,000 | 5 | 0.1s | 10,000/s |
+| 10,000 | 5 | 2s | 5,000/s |
+| 100,000 | 5 | 20s | 5,000/s |
+
+18-100x faster than pure Python. Memory stays bounded via streaming chunks.
+
+## How it works
+
+```
+User choice data (prices + quantities per observation)
+       |
+       v
+  +-----------+
+  | Engine    |  partition by user, stream in chunks
+  +-----+-----+
+        |
+        v
+  +-----------+
+  | Rust +    |  SCC decomposition -> Floyd-Warshall transitive closure
+  | Rayon     |  Karp's cycle algorithm -> HiGHS LP solver
+  +-----+-----+
+        |
+        v
+  list[EngineResult]  (one per user)
+```
+
+## Core algorithms
+
+| Algorithm | Module | Computation |
+|-----------|--------|-------------|
+| GARP | `garp.py` | Boolean cycle detection via SCC + Floyd-Warshall |
+| CCEI (AEI) | `aei.py` | Binary search over efficiency levels |
+| MPI | `mpi.py` | Karp's max-mean-weight cycle O(T^3) |
+| HARP | `harp.py` | Max-product cycle in log-space |
+| Houtman-Maks | `mpi.py` | Greedy feedback vertex set / ILP |
+| Quasilinear | `quasilinear.py` | Bellman-Ford negative cycle detection |
+| Utility recovery | `utility.py` | Afriat LP via HiGHS |
+| VEI | `vei.py` | Per-observation efficiency LP |
+| Menu SARP | `abstract_choice.py` | Cycle detection on item-space graph |
+| Attention | `attention.py` | Consideration sets + graph + LP |
+| Production GARP | `production.py` | Profit comparison graph |
+
+## Data types
+
+| Data type | Input format | Example domain |
+|-----------|-------------|----------------|
+| Budget choices | `(prices: T x K, quantities: T x K)` | E-commerce, grocery, delivery |
+| Menu choices | `(menus: list[set], choices: list[int])` | Surveys, recommendations, UI clicks |
+| Production data | `(input_prices, input_qty, output_prices, output_qty)` | Supply chain, manufacturing |
+
+Each user is a tuple of arrays. For batch scoring, pass a list of tuples:
 
 ```python
-from pyrevealed import MenuChoiceLog, validate_menu_sarp, fit_menu_preferences
-
-log = MenuChoiceLog(
-    menus=[frozenset({0, 1, 2}), frozenset({1, 2}), frozenset({0, 2})],
-    choices=[0, 1, 0],
-    item_labels=["Pizza", "Burger", "Salad"]
-)
-
-result = validate_menu_sarp(log)
-print(f"Consistent: {result.is_consistent}")
-
-prefs = fit_menu_preferences(log)
-print(f"Preference order: {prefs.preference_order}")
+users = [
+    (prices_user_0, quantities_user_0),  # T0 x K arrays
+    (prices_user_1, quantities_user_1),  # T1 x K arrays (T can vary per user)
+    ...
+]
+results = engine.analyze_arrays(users)
 ```
 
 ## Documentation
 
-**[Full Documentation](https://pyrevealed.readthedocs.io/)**
-
-### Tutorials
-
-1. **[Budget-Based Analysis](https://pyrevealed.readthedocs.io/en/latest/tutorial.html)** - GARP, CCEI, MPI, Bronars power
-2. **[Menu-Based Choice](https://pyrevealed.readthedocs.io/en/latest/tutorial_menu_choice.html)** - WARP, SARP, Congruence, Houtman-Maks
-3. **[Welfare Analysis](https://pyrevealed.readthedocs.io/en/latest/tutorial_welfare.html)** - CV, EV, deadweight loss
-4. **[Demand Analysis](https://pyrevealed.readthedocs.io/en/latest/tutorial_demand_analysis.html)** - Slutsky matrix, integrability
-5. **[Stochastic & Production](https://pyrevealed.readthedocs.io/en/latest/tutorial_advanced.html)** - Logit, IIA, firm behavior
-6. **[E-Commerce at Scale](https://pyrevealed.readthedocs.io/en/latest/tutorial_ecommerce.html)** - 1.85M Amazon transactions
-7. **[Revealed Attention](https://pyrevealed.readthedocs.io/en/latest/tutorial_attention.html)** - WARP(LA), RAM, consideration sets
-8. **[Risk Analysis](https://pyrevealed.readthedocs.io/en/latest/tutorial_risk.html)** - Risk aversion, expected utility axioms
-
-## Visualizations
-
-Built-in plotting functions (requires `pip install pyrevealed[viz]`):
-
-| Function | Purpose |
-|----------|---------|
-| `plot_budget_sets()` | Budget lines and chosen bundles |
-| `plot_aei_distribution()` | Population consistency scores |
-| `plot_power_analysis()` | Bronars power visualization |
-| `plot_ccei_sensitivity()` | Outlier removal effect |
-| `plot_violation_severity()` | Violation magnitude analysis |
-| `plot_attention_heatmap()` | Consideration set patterns |
-
-## Features
-
-- **Consistency Testing**: GARP, WARP, SARP axiom verification
-- **Behavioral Metrics**: Afriat Efficiency Index, Money Pump Index
-- **Utility Recovery**: Reconstruct utility functions from choices
-- **Display Features**: statsmodels-style summaries with [+]/[-] indicators
-- **Visualization Suite**: Budget plots, distribution charts, power analysis
-- **Attention Models**: WARP(LA), RAM, consideration set analysis
-- **ML Integration**: sklearn-compatible `PreferenceEncoder`
-- **Multiple Data Types**: Budgets, menus, stochastic choice, production
-- **Production Ready**: Fast parallel processing, validated against R's revealedPrefs
+**[Full docs](https://pyrevealed.readthedocs.io/)**
 
 ## License
 

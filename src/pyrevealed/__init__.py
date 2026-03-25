@@ -1,40 +1,40 @@
 """
-PyRevealed: Behavioral Signal Analysis for User Understanding.
+PyRevealed: Rationality scores for every user, at scale.
 
-Analyze behavioral consistency using revealed preference theory.
+Graph-based revealed preference algorithms with a Rust engine (Rayon parallel,
+HiGHS LP solver). Feed it choice data, get back per-user scores.
 
-## Tech-Friendly API (Primary)
+## Core API
 
-High-Level Classes:
-    - BehavioralAuditor: Validate behavior consistency (linter for user data)
-    - PreferenceEncoder: Extract latent preferences (encoder for ML pipelines)
+    Engine              Batch scoring for millions of users (Rust backend)
+    BehaviorLog         Data container (prices + quantities)
+    MenuChoiceLog       Data container (menus + choices)
 
-Data Containers:
-    - BehaviorLog: User behavior history (cost/action pairs)
-    - RiskChoiceLog: Choices under uncertainty
-    - EmbeddingChoiceLog: Choices in feature/embedding space
+    validate_consistency()      GARP check (bool)
+    compute_integrity_score()   CCEI efficiency (0-1)
+    compute_confusion_metric()  MPI exploitability (0-1)
+    fit_latent_values()         Afriat utility recovery
+    check_harp()                Homotheticity test
+    compute_vei()               Per-observation efficiency
 
-Functions:
-    - validate_consistency(): Check behavioral consistency
-    - compute_integrity_score(): Compute integrity/noise score
-    - compute_confusion_metric(): Compute confusion/exploitability score
-    - fit_latent_values(): Extract latent preference values
-    - find_preference_anchor(): Find preference anchor in embedding space
-    - test_feature_independence(): Test feature group independence
+## Legacy names (still work)
 
-## Legacy API (Deprecated but supported)
+    ConsumerSession -> BehaviorLog
+    check_garp -> validate_consistency
+    compute_aei -> compute_integrity_score
+    compute_mpi -> compute_confusion_metric
 
-Economics-based names still work for backward compatibility:
-    - ConsumerSession -> BehaviorLog
-    - check_garp -> validate_consistency
-    - compute_aei -> compute_integrity_score
-    - compute_mpi -> compute_confusion_metric
+## Contrib (deprecated, import from pyrevealed.contrib)
+
+    stochastic, risk, spatial, integrability, ranking, context_effects,
+    inference, power_analysis, welfare, additive, separability, etc.
 """
 
 # =============================================================================
-# HIGH-LEVEL CLASSES (Primary API)
+# CORE: Engine + High-Level Classes
 # =============================================================================
 
+from pyrevealed.engine import Engine, EngineResult
 from pyrevealed.auditor import BehavioralAuditor, AuditReport, MenuAuditReport
 from pyrevealed.encoder import PreferenceEncoder, MenuPreferenceEncoder
 from pyrevealed.lancaster import (

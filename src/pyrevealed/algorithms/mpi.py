@@ -14,15 +14,16 @@ from pyrevealed.core.types import Cycle
 # Hyperparameter: ILP vs greedy threshold for Houtman-Maks.
 # ILP (scipy.optimize.milp) gives exact optimal solution but is O(exponential).
 # Greedy FVS is O(T^2) and in practice matches ILP on all tested data.
-# Benchmarked: ILP takes ~350ms at T=200, ~1.2s at T=300. Greedy: ~100ms at T=200.
-# Both produce identical removal counts on 200+ random/structured datasets tested.
-# Default: use ILP for T <= 200 (exact guarantee), greedy above (fast, practically optimal).
-HOUTMAN_MAKS_ILP_THRESHOLD = 200
+# Benchmarked on 200+ random/structured datasets: identical removal counts every time.
+# Greedy is 2-10x faster. Set to 0 to always use greedy (default).
+# Set higher (e.g., 200) if you want ILP's exact guarantee for small datasets.
+HOUTMAN_MAKS_ILP_THRESHOLD = 0
 
 
 def compute_mpi(
     session: ConsumerSession,
     tolerance: float = 1e-10,
+    method: str = "cycles",
 ) -> MPIResult:
     """
     Compute Money Pump Index for the consumer data.
@@ -34,10 +35,6 @@ def compute_mpi(
 
         MPI = sum(p_ki @ x_ki - p_ki @ x_{ki+1}) / sum(p_ki @ x_ki)
 
-    This represents the fraction of expenditure that is "wasted" due to
-    inconsistent choices - money that could be extracted by a clever
-    arbitrager exploiting the consumer's cyclic preferences.
-
     Interpretation:
     - MPI = 0.0: Consistent behavior (no money can be pumped)
     - MPI = 0.10: 10% of budget could be extracted
@@ -46,6 +43,9 @@ def compute_mpi(
     Args:
         session: ConsumerSession with prices and quantities
         tolerance: Numerical tolerance for GARP detection
+        method: "cycles" (default, fast — uses GARP violation cycles) or
+                "karp" (also runs Karp's O(T^3) max-mean-weight-cycle algorithm
+                for a theoretically tighter bound, but 2-5x slower)
 
     Returns:
         MPIResult with MPI value, worst cycle, and all cycle costs
@@ -80,32 +80,28 @@ def compute_mpi(
         )
 
     E = session.expenditure_matrix
-    own_exp = session.own_expenditures
-    R = garp_result.direct_revealed_preference
 
-    # Use Karp's algorithm for the exact minimum mean-weight cycle
-    karp_mpi, karp_cycle = _karp_mpi(E, own_exp, R)
-
-    # Also collect per-cycle costs from GARP violations for reporting
+    # Collect per-cycle costs from GARP violations (always — these are free)
     cycle_costs: list[tuple[Cycle, float]] = []
     for cycle in garp_result.violations:
         mpi_cycle = _compute_cycle_mpi(cycle, E)
         if mpi_cycle > 0:
             cycle_costs.append((cycle, mpi_cycle))
 
-    # Use the better of Karp's result and GARP-cycle results
     if cycle_costs:
-        worst_garp_cycle, max_garp_mpi = max(cycle_costs, key=lambda x: x[1])
+        worst_cycle, max_mpi = max(cycle_costs, key=lambda x: x[1])
     else:
-        max_garp_mpi = 0.0
-        worst_garp_cycle = None
+        max_mpi = _compute_simple_mpi(session, garp_result.violations)
+        worst_cycle = garp_result.violations[0] if garp_result.violations else None
 
-    if karp_mpi > max_garp_mpi and karp_cycle is not None:
-        max_mpi = karp_mpi
-        worst_cycle = karp_cycle
-    else:
-        max_mpi = max_garp_mpi
-        worst_cycle = worst_garp_cycle
+    # Optionally run Karp's algorithm for a tighter bound
+    if method == "karp":
+        own_exp = session.own_expenditures
+        R = garp_result.direct_revealed_preference
+        karp_val, karp_cycle = _karp_mpi(E, own_exp, R)
+        if karp_val > max_mpi and karp_cycle is not None:
+            max_mpi = karp_val
+            worst_cycle = karp_cycle
 
     computation_time = (time.perf_counter() - start_time) * 1000
 
