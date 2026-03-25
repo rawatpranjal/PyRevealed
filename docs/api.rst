@@ -340,7 +340,7 @@ Exceptions and Warnings
 -----------------------
 
 PyRevealed provides custom exceptions that inherit from ``ValueError`` for
-backward compatibility. See :doc:`troubleshooting` for detailed usage examples.
+backward compatibility.
 
 Base Exception
 ^^^^^^^^^^^^^^
@@ -383,3 +383,20 @@ Warnings
 
 .. autoclass:: pyrevealed.NumericalInstabilityWarning
    :show-inheritance:
+
+Troubleshooting
+---------------
+
+**Common Errors**
+
+- ``ValueRangeError: Found non-positive costs`` --- All prices must be > 0. Check for zeros or missing data encoded as 0.
+- ``DimensionError: cost_vectors shape does not match`` --- Prices and quantities must have the same shape (T x N).
+- ``NaNInfError: Found NaN/Inf values`` --- Use ``nan_policy="drop"`` to automatically remove bad rows: ``BehaviorLog(..., nan_policy="drop")``.
+- ``InsufficientDataError: Must have at least 2 observations`` --- Need T >= 2 for meaningful analysis.
+- ``ImportError: pandas is required`` --- Install with ``pip install pyrevealed[datasets]`` for dataset loaders.
+
+**Tips**
+
+- For large panels, the first call may be slow due to Numba JIT compilation. Subsequent calls are fast.
+- If ``compute_integrity_score`` is slow for T > 500, the SCC-optimized path activates automatically.
+- Memory usage scales as O(T^2) per user due to the T x T revealed preference matrices.
