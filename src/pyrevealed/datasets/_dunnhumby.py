@@ -127,6 +127,10 @@ def load_dunnhumby(
 
     # Build per-household sessions
     logs: dict[str, BehaviorLog] = {}
+    period_map: dict[str, tuple[str, str]] | None = None
+    if group_col is not None:
+        period_map = {}
+
     grouped = merged.groupby("household_key")
     hh_keys = list(grouped.groups.keys())
 
@@ -157,6 +161,7 @@ def load_dunnhumby(
                     action_vectors=qty_matrix,
                     user_id=uid,
                 )
+                period_map[uid] = (f"household_{hh_key}", str(int(period_val)))
         else:
             # All weeks together
             qty_pivot = hh_data.pivot_table(
@@ -186,4 +191,5 @@ def load_dunnhumby(
             "min_weeks": min_weeks,
             "period": period,
         },
+        _period_map=period_map,
     )

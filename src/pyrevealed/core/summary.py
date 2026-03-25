@@ -480,6 +480,8 @@ class MenuChoiceSummary(ResultDisplayMixin):
     num_observations: int
     num_alternatives: int
     computation_time_ms: float
+    menu_size_stats: dict[str, float] | None = field(default=None, repr=False)
+    choice_diversity: float | None = field(default=None, repr=False)
 
     @property
     def is_rationalizable(self) -> bool:
@@ -527,6 +529,20 @@ class MenuChoiceSummary(ResultDisplayMixin):
             "Congruence", _ind(self.congruence_result.is_rationalizable), W,
         ))
         lines.append("=" * W)
+
+        # Input Data
+        if self.menu_size_stats is not None:
+            lines.append("")
+            lines.append("Input Data:")
+            lines.append(sep)
+            lines.append(m._format_descriptive_table({"Menu Size": self.menu_size_stats}, W))
+            lines.append("")
+            if self.choice_diversity is not None:
+                items_chosen = int(round(self.choice_diversity * self.num_alternatives))
+                lines.append(m._format_metric(
+                    "Unique Items Chosen", f"{items_chosen} / {self.num_alternatives}", W - 4,
+                ))
+                lines.append(m._format_metric("Choice Diversity", self.choice_diversity, W - 4))
 
         # Consistency Tests with violation counts
         lines.append("")
@@ -624,6 +640,16 @@ class MenuChoiceSummary(ResultDisplayMixin):
         if sarp_result.is_consistent:
             utility_result = fit_menu_preferences(log)
 
+        # Input data stats
+        menu_sizes = np.array([len(m) for m in log.menus], dtype=np.float64)
+        menu_size_stats = {
+            "mean": float(np.mean(menu_sizes)), "std": float(np.std(menu_sizes)),
+            "min": float(np.min(menu_sizes)), "max": float(np.max(menu_sizes)),
+        }
+        items_chosen = len(set(log.choices))
+        n_alt = log.num_alternatives if log.num_alternatives > 0 else 1
+        choice_diversity = items_chosen / n_alt
+
         end_time = time.perf_counter()
         total_time_ms = (end_time - start_time) * 1000
 
@@ -636,6 +662,8 @@ class MenuChoiceSummary(ResultDisplayMixin):
             num_observations=log.num_observations,
             num_alternatives=log.num_alternatives,
             computation_time_ms=total_time_ms,
+            menu_size_stats=menu_size_stats,
+            choice_diversity=choice_diversity,
         )
 
 
@@ -669,6 +697,8 @@ class RiskChoiceSummary(ResultDisplayMixin):
     num_risk_seeking_choices: int
     num_risk_averse_choices: int
     computation_time_ms: float
+    safe_value_stats: dict[str, float] | None = field(default=None, repr=False)
+    risky_ev_stats: dict[str, float] | None = field(default=None, repr=False)
 
     @property
     def risk_category(self) -> str:
@@ -726,6 +756,16 @@ class RiskChoiceSummary(ResultDisplayMixin):
             "EU Axioms", _ind(self.eu_axioms_satisfied), W,
         ))
         lines.append("=" * W)
+
+        # Input Data
+        if self.safe_value_stats is not None and self.risky_ev_stats is not None:
+            lines.append("")
+            lines.append("Input Data:")
+            lines.append(sep)
+            lines.append(m._format_descriptive_table({
+                "Safe Values": self.safe_value_stats,
+                "Risky EV": self.risky_ev_stats,
+            }, W))
 
         # Choice Distribution
         lines.append("")
@@ -831,6 +871,15 @@ class RiskChoiceSummary(ResultDisplayMixin):
         # Check EU axioms
         eu_satisfied, eu_violations = check_expected_utility_axioms(log)
 
+        # Input data stats
+        def _arr_stats(arr: np.ndarray) -> dict[str, float]:
+            return {"mean": float(np.mean(arr)), "std": float(np.std(arr)),
+                    "min": float(np.min(arr)), "max": float(np.max(arr))}
+
+        safe_value_stats = _arr_stats(log.safe_values)
+        risky_evs = np.sum(log.risky_outcomes * log.risky_probabilities, axis=1)
+        risky_ev_stats = _arr_stats(risky_evs)
+
         end_time = time.perf_counter()
         total_time_ms = (end_time - start_time) * 1000
 
@@ -842,6 +891,8 @@ class RiskChoiceSummary(ResultDisplayMixin):
             num_risk_seeking_choices=log.num_risk_seeking_choices,
             num_risk_averse_choices=log.num_risk_averse_choices,
             computation_time_ms=total_time_ms,
+            safe_value_stats=safe_value_stats,
+            risky_ev_stats=risky_ev_stats,
         )
 
 
@@ -879,6 +930,9 @@ class StochasticChoiceSummary(ResultDisplayMixin):
     num_items: int
     total_observations: int
     computation_time_ms: float
+    menu_size_stats: dict[str, float] | None = field(default=None, repr=False)
+    obs_per_menu_stats: dict[str, float] | None = field(default=None, repr=False)
+    mean_choice_entropy: float | None = field(default=None, repr=False)
 
     @property
     def is_rum_consistent(self) -> bool:
@@ -935,6 +989,19 @@ class StochasticChoiceSummary(ResultDisplayMixin):
             "Transitivity", self.strongest_transitivity, W,
         ))
         lines.append("=" * W)
+
+        # Input Data
+        if self.menu_size_stats is not None:
+            lines.append("")
+            lines.append("Input Data:")
+            lines.append(sep)
+            stats_rows: dict[str, dict[str, float]] = {"Menu Size": self.menu_size_stats}
+            if self.obs_per_menu_stats is not None:
+                stats_rows["Obs per Menu"] = self.obs_per_menu_stats
+            lines.append(m._format_descriptive_table(stats_rows, W))
+            if self.mean_choice_entropy is not None:
+                lines.append("")
+                lines.append(m._format_metric("Mean Choice Entropy", f"{self.mean_choice_entropy:.4f}", W - 4))
 
         # Consistency Tests
         lines.append("")
@@ -1056,6 +1123,25 @@ class StochasticChoiceSummary(ResultDisplayMixin):
         obs_per_menu = log.total_observations_per_menu or []
         total_observations = sum(obs_per_menu)
 
+        # Input data stats
+        menu_sizes = np.array([len(m) for m in log.menus], dtype=np.float64)
+        menu_size_stats = {
+            "mean": float(np.mean(menu_sizes)), "std": float(np.std(menu_sizes)),
+            "min": float(np.min(menu_sizes)), "max": float(np.max(menu_sizes)),
+        }
+        obs_arr = np.array(obs_per_menu, dtype=np.float64) if obs_per_menu else np.array([0.0])
+        obs_per_menu_stats = {
+            "mean": float(np.mean(obs_arr)), "std": float(np.std(obs_arr)),
+            "min": float(np.min(obs_arr)), "max": float(np.max(obs_arr)),
+        }
+        entropies = []
+        for freq in log.choice_frequencies:
+            total = sum(freq.values())
+            if total > 0:
+                probs = [c / total for c in freq.values() if c > 0]
+                entropies.append(-sum(p * np.log2(p) for p in probs))
+        mean_choice_entropy = float(np.mean(entropies)) if entropies else 0.0
+
         end_time = time.perf_counter()
         total_time_ms = (end_time - start_time) * 1000
 
@@ -1069,6 +1155,9 @@ class StochasticChoiceSummary(ResultDisplayMixin):
             num_items=log.num_items,
             total_observations=total_observations,
             computation_time_ms=total_time_ms,
+            menu_size_stats=menu_size_stats,
+            obs_per_menu_stats=obs_per_menu_stats,
+            mean_choice_entropy=mean_choice_entropy,
         )
 
 
@@ -1109,6 +1198,9 @@ class ProductionSummary(ResultDisplayMixin):
     num_inputs: int
     num_outputs: int
     computation_time_ms: float
+    input_price_stats: dict[str, float] | None = field(default=None, repr=False)
+    output_price_stats: dict[str, float] | None = field(default=None, repr=False)
+    profit_stats: dict[str, float] | None = field(default=None, repr=False)
 
     @property
     def is_profit_maximizing(self) -> bool:
@@ -1160,6 +1252,20 @@ class ProductionSummary(ResultDisplayMixin):
             "Profit Efficiency", f"{self.profit_efficiency:.4f}", W,
         ))
         lines.append("=" * W)
+
+        # Input Data
+        if self.input_price_stats is not None:
+            lines.append("")
+            lines.append("Input Data:")
+            lines.append(sep)
+            stats_rows: dict[str, dict[str, float]] = {
+                "Input Prices": self.input_price_stats,
+            }
+            if self.output_price_stats is not None:
+                stats_rows["Output Prices"] = self.output_price_stats
+            if self.profit_stats is not None:
+                stats_rows["Profit"] = self.profit_stats
+            lines.append(m._format_descriptive_table(stats_rows, W))
 
         # Consistency Tests
         lines.append("")
@@ -1258,6 +1364,15 @@ class ProductionSummary(ResultDisplayMixin):
         profit_max_result = test_profit_maximization(log)
         cost_min_result = check_cost_minimization(log)
 
+        # Input data stats
+        def _arr_stats(arr: np.ndarray) -> dict[str, float]:
+            return {"mean": float(np.mean(arr)), "std": float(np.std(arr)),
+                    "min": float(np.min(arr)), "max": float(np.max(arr))}
+
+        input_price_stats = _arr_stats(log.input_prices)
+        output_price_stats = _arr_stats(log.output_prices)
+        profit_stats = _arr_stats(log.profit)
+
         end_time = time.perf_counter()
         total_time_ms = (end_time - start_time) * 1000
 
@@ -1272,6 +1387,9 @@ class ProductionSummary(ResultDisplayMixin):
             num_inputs=log.num_inputs,
             num_outputs=log.num_outputs,
             computation_time_ms=total_time_ms,
+            input_price_stats=input_price_stats,
+            output_price_stats=output_price_stats,
+            profit_stats=profit_stats,
         )
 
 
@@ -1303,10 +1421,15 @@ class PanelSummary(ResultDisplayMixin):
     hm_distribution: dict[str, float] | None
     top_inconsistent: list[tuple[str, float, float, int]]  # (uid, aei, mpi, T)
     computation_time_ms: float
+    # Period-level breakdown (None if no period structure)
+    period_stats: list[dict[str, Any]] | None = field(default=None, repr=False)
+    num_periods: int = field(default=0, repr=False)
 
     @classmethod
     def from_summaries(
-        cls, user_summaries: dict[str, "BehavioralSummary"],
+        cls,
+        user_summaries: dict[str, "BehavioralSummary"],
+        period_map: dict[str, tuple[str, str]] | None = None,
     ) -> "PanelSummary":
         """Build PanelSummary from per-user BehavioralSummary results."""
         if not user_summaries:
@@ -1315,7 +1438,7 @@ class PanelSummary(ResultDisplayMixin):
         n = len(user_summaries)
         summaries = list(user_summaries.values())
 
-        # Obs per user
+        # Obs per entry
         obs_counts = np.array([s.num_observations for s in summaries], dtype=np.float64)
         aei_vals = np.array([s.efficiency_index for s in summaries], dtype=np.float64)
         mpi_vals = np.array([s.mpi_value for s in summaries], dtype=np.float64)
@@ -1331,6 +1454,13 @@ class PanelSummary(ResultDisplayMixin):
                 "max": float(np.max(arr)),
             }
 
+        # Count unique users (period_map may have multiple entries per user)
+        if period_map is not None:
+            unique_users = set(u for u, _ in period_map.values())
+            num_users = len(unique_users)
+        else:
+            num_users = n
+
         # GARP pass rate
         garp_pass = sum(1 for s in summaries if s.is_consistent)
 
@@ -1345,18 +1475,17 @@ class PanelSummary(ResultDisplayMixin):
             sarp_pass = sum(1 for s in summaries if s.sarp_result and s.sarp_result.is_consistent)
             sarp_pass_rate = sarp_pass / n
 
-        # Houtman-Maks distribution (only for inconsistent users)
-        hm_distribution = None
+        # Houtman-Maks distribution
         hm_vals = []
         for s in summaries:
             if s.houtman_maks_result is not None:
                 hm_vals.append(1.0 - s.houtman_maks_result.fraction)
             else:
-                hm_vals.append(1.0)  # Consistent => HM = 1.0
+                hm_vals.append(1.0)
         hm_arr = np.array(hm_vals, dtype=np.float64)
         hm_distribution = _dist(hm_arr)
 
-        # Top inconsistent users (sorted by AEI ascending)
+        # Top inconsistent entries (sorted by AEI ascending)
         user_list = list(user_summaries.items())
         user_list.sort(key=lambda x: x[1].efficiency_index)
         top_inconsistent = [
@@ -1367,12 +1496,36 @@ class PanelSummary(ResultDisplayMixin):
         # Total computation time
         total_time = sum(s.computation_time_ms for s in summaries)
 
-        # Num goods (from first user)
+        # Num goods (from first entry)
         num_goods = summaries[0].num_goods
+
+        # Period-level breakdown
+        period_stats = None
+        num_periods = 0
+        if period_map is not None:
+            periods_set = sorted(set(p for _, p in period_map.values()))
+            num_periods = len(periods_set)
+            period_stats = []
+            for period in periods_set:
+                period_keys = [k for k, (_, p) in period_map.items() if p == period]
+                period_summaries = [user_summaries[k] for k in period_keys if k in user_summaries]
+                if not period_summaries:
+                    continue
+                n_p = len(period_summaries)
+                p_garp = sum(1 for s in period_summaries if s.is_consistent)
+                p_aei = np.mean([s.efficiency_index for s in period_summaries])
+                p_mpi = np.mean([s.mpi_value for s in period_summaries])
+                period_stats.append({
+                    "period": period,
+                    "users": n_p,
+                    "garp_pass_rate": p_garp / n_p,
+                    "mean_aei": float(p_aei),
+                    "mean_mpi": float(p_mpi),
+                })
 
         return cls(
             user_summaries=user_summaries,
-            num_users=n,
+            num_users=num_users,
             total_observations=int(np.sum(obs_counts)),
             num_goods=num_goods,
             obs_per_user_stats=_dist(obs_counts),
@@ -1384,6 +1537,8 @@ class PanelSummary(ResultDisplayMixin):
             hm_distribution=hm_distribution,
             top_inconsistent=top_inconsistent,
             computation_time_ms=total_time,
+            period_stats=period_stats,
+            num_periods=num_periods,
         )
 
     def summary(self) -> str:
@@ -1419,6 +1574,11 @@ class PanelSummary(ResultDisplayMixin):
             "Obs/User (mean)", f"{self.obs_per_user_stats['mean']:.1f}",
             "Computation Time", _time_str(self.computation_time_ms), W,
         ))
+        if self.num_periods > 0:
+            lines.append(m._format_two_column_row(
+                "No. Periods", self.num_periods,
+                "Entries (Users x Periods)", len(self.user_summaries), W,
+            ))
         lines.append("=" * W)
 
         # Consistency Rates
@@ -1461,6 +1621,20 @@ class PanelSummary(ResultDisplayMixin):
                 lines.append(m._format_metric(
                     f"  {i+1}. {uid}", f"AEI={aei:.3f}, MPI={mpi:.3f}, T={t}", W - 4,
                 ))
+
+        # Temporal Breakdown (if period data available)
+        if self.period_stats:
+            lines.append("")
+            lines.append("Temporal Breakdown:")
+            lines.append(sep)
+            hdr = f"  {'Period':<12s} {'Users':>6s} {'GARP Pass':>10s} {'Mean AEI':>10s} {'Mean MPI':>10s}"
+            lines.append(hdr)
+            for ps in self.period_stats:
+                garp_pct = f"{ps['garp_pass_rate'] * 100:.1f}%"
+                lines.append(
+                    f"  {ps['period']:<12s} {ps['users']:>6d} {garp_pct:>10s}"
+                    f" {ps['mean_aei']:>10.4f} {ps['mean_mpi']:>10.4f}"
+                )
 
         lines.append("=" * W)
         return "\n".join(lines)

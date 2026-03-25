@@ -42,6 +42,8 @@ class BehaviorPanel:
 
     _logs: dict[str, "BehaviorLog"] = field(repr=False)
     metadata: dict[str, Any] = field(default_factory=dict)
+    _period_map: dict[str, tuple[str, str]] | None = field(default=None, repr=False)
+    """Maps panel key -> (user_id, period). None if no period structure."""
 
     # --- Construction ---
 
@@ -118,9 +120,15 @@ class BehaviorPanel:
             group_cols.append(period_col)
 
         log_dict: dict[str, BehaviorLog] = {}
+        period_map: dict[str, tuple[str, str]] | None = None
+        if period_col is not None:
+            period_map = {}
+
         for keys, group in df.groupby(group_cols, sort=True):
             if isinstance(keys, tuple):
                 uid = "__".join(str(k) for k in keys)
+                if period_map is not None:
+                    period_map[uid] = (str(keys[0]), str(keys[1]))
             else:
                 uid = str(keys)
 
@@ -132,7 +140,7 @@ class BehaviorPanel:
                 user_id=uid,
             )
 
-        return cls(_logs=log_dict)
+        return cls(_logs=log_dict, _period_map=period_map)
 
     # --- Access ---
 
@@ -143,8 +151,37 @@ class BehaviorPanel:
 
     @property
     def num_users(self) -> int:
-        """Number of users in the panel."""
+        """Number of unique users in the panel."""
+        if self._period_map is not None:
+            return len(set(u for u, _ in self._period_map.values()))
         return len(self._logs)
+
+    @property
+    def has_periods(self) -> bool:
+        """True if this panel has period structure."""
+        return self._period_map is not None and len(self._period_map) > 0
+
+    @property
+    def periods(self) -> list[str]:
+        """List of unique periods (empty if no period structure)."""
+        if self._period_map is None:
+            return []
+        return sorted(set(p for _, p in self._period_map.values()))
+
+    @property
+    def num_entries(self) -> int:
+        """Number of entries (user-period combinations or just users)."""
+        return len(self._logs)
+
+    def get_period(self, period: str) -> "BehaviorPanel":
+        """Return panel filtered to a single period."""
+        if self._period_map is None:
+            raise ValueError("Panel has no period structure")
+        filtered = {
+            k: log for k, log in self._logs.items()
+            if self._period_map.get(k, ("", ""))[1] == period
+        }
+        return BehaviorPanel(_logs=filtered, metadata=dict(self.metadata))
 
     def __getitem__(self, user_id: str) -> "BehaviorLog":
         """Get a BehaviorLog by user_id."""
@@ -189,7 +226,7 @@ class BehaviorPanel:
                 include_power=include_power,
             )
 
-        return PanelSummary.from_summaries(user_summaries)
+        return PanelSummary.from_summaries(user_summaries, period_map=self._period_map)
 
     def filter(self, predicate: Callable[["BehaviorLog"], bool]) -> "BehaviorPanel":
         """Return a new panel containing only logs that satisfy predicate."""

@@ -170,8 +170,16 @@ For discrete choices from menus without prices. Common in experiments and survey
    ======================================================================
    No. Observations: 6                WARP: [+] PASS
    No. Alternatives: 4                SARP: [+] PASS
-   Computation Time: 739.31 ms        Congruence: [+] PASS
+   Computation Time: 142.29 ms        Congruence: [+] PASS
    ======================================================================
+
+   Input Data:
+   ----------------------------------------------------------------------
+                           mean   std dev       min       max
+     Menu Size            2.833     0.687     2.000     4.000
+
+     Unique Items Chosen ........................................ 3 / 4
+     Choice Diversity .......................................... 0.7500
 
    Consistency Tests:
    ----------------------------------------------------------------------
@@ -225,8 +233,14 @@ For choices between safe and risky options. Reveals risk attitudes and tests Exp
    No. Observations: 8                Risk Category: Risk Averse
    Risk-Seeking Choices: 3            Risk Aversion (rho): 0.6941
    Risk-Averse Choices: 2             Consistency: 0.6250
-   Computation Time: 0.30 ms          EU Axioms: [+] PASS
+   Computation Time: 0.33 ms          EU Axioms: [+] PASS
    ======================================================================
+
+   Input Data:
+   ----------------------------------------------------------------------
+                           mean   std dev       min       max
+     Safe Values         57.500    11.456    40.000    75.000
+     Risky EV            57.500     8.292    50.000    70.000
 
    Choice Distribution:
    ----------------------------------------------------------------------
