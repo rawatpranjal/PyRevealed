@@ -92,8 +92,8 @@ Large-Scale Benchmarks
      - 5.2s
      - **85.6s**
 
-Algorithmic Complexity Summary
-------------------------------
+Complexity Summary
+------------------
 
 .. list-table::
    :header-rows: 1

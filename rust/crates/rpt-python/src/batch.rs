@@ -11,7 +11,7 @@ use rpt_core::harp::harp_check;
 use rpt_core::houtman_maks::houtman_maks;
 use rpt_core::mpi::{mpi_karp, mpi_fast};
 use rpt_core::utility::recover_utility;
-use rpt_core::vei::compute_vei as run_vei;
+use rpt_core::vei::{compute_vei as run_vei, compute_vei_exact as run_vei_exact};
 
 use crate::convert::extract_user_data;
 
@@ -21,7 +21,7 @@ use crate::convert::extract_user_data;
 /// R/P/closure reused across metrics. MPI uses Karp's max-mean-weight cycle
 /// (theory-correct). CCEI runs last since it may modify graph state.
 #[pyfunction]
-#[pyo3(signature = (prices_list, quantities_list, compute_ccei=true, compute_mpi=false, compute_harp=false, compute_hm=false, compute_utility=false, compute_vei=false, tolerance=1e-10))]
+#[pyo3(signature = (prices_list, quantities_list, compute_ccei=true, compute_mpi=false, compute_harp=false, compute_hm=false, compute_utility=false, compute_vei=false, compute_vei_exact=false, tolerance=1e-10))]
 pub fn analyze_batch<'py>(
     py: Python<'py>,
     prices_list: Vec<PyReadonlyArray2<'py, f64>>,
@@ -32,6 +32,7 @@ pub fn analyze_batch<'py>(
     compute_hm: bool,
     compute_utility: bool,
     compute_vei: bool,
+    compute_vei_exact: bool,
     tolerance: f64,
 ) -> PyResult<Vec<Bound<'py, PyDict>>> {
     let n_users = prices_list.len();
@@ -53,6 +54,8 @@ pub fn analyze_batch<'py>(
         utility_success: bool,
         vei_mean: f64,
         vei_min: f64,
+        vei_exact_mean: f64,
+        vei_exact_min: f64,
         max_scc: u32,
         time_us: u64,
     }
@@ -105,9 +108,17 @@ pub fn analyze_batch<'py>(
                     false
                 };
 
-                // VEI (per-observation efficiency)
+                // VEI (per-observation efficiency, LP relaxation)
                 let (vei_mean, vei_min) = if compute_vei {
                     let vei = run_vei(graph);
+                    (vei.mean_efficiency, vei.min_efficiency)
+                } else {
+                    (1.0, 1.0)
+                };
+
+                // VEI exact (Mononen binary LP + row generation)
+                let (vei_exact_mean, vei_exact_min) = if compute_vei_exact {
+                    let vei = run_vei_exact(graph);
                     (vei.mean_efficiency, vei.min_efficiency)
                 } else {
                     (1.0, 1.0)
@@ -135,6 +146,8 @@ pub fn analyze_batch<'py>(
                     utility_success,
                     vei_mean,
                     vei_min,
+                    vei_exact_mean,
+                    vei_exact_min,
                     max_scc: garp.max_scc_size,
                     time_us,
                 }
@@ -156,6 +169,8 @@ pub fn analyze_batch<'py>(
             dict.set_item("utility_success", r.utility_success).unwrap();
             dict.set_item("vei_mean", r.vei_mean).unwrap();
             dict.set_item("vei_min", r.vei_min).unwrap();
+            dict.set_item("vei_exact_mean", r.vei_exact_mean).unwrap();
+            dict.set_item("vei_exact_min", r.vei_exact_min).unwrap();
             dict.set_item("max_scc", r.max_scc).unwrap();
             dict.set_item("compute_time_us", r.time_us).unwrap();
             dict

@@ -24,8 +24,8 @@ PyRevealed supports a diverse range of empirical applications, each grounded in 
      - SARP / Houtman-Maks
      - Kallus & Udell (2016, *EC*)
 
-Analytical Framework
---------------------
+Implementation Framework
+------------------------
 
 The empirical pipeline for revealed preference analysis follows a standardized four-stage process:
 

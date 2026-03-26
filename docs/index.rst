@@ -54,8 +54,8 @@ PyRevealed implements two primary workflows tailored to the structure of the obs
                     ▼                                           ▼
           Segmentation / Diagnostics                  Segmentation / Diagnostics
 
-Empirical Benchmarks
---------------------
+Performance Benchmarks
+----------------------
 
 In large-scale empirical applications, PyRevealed demonstrates high computational efficiency and provides meaningful behavioral insights:
 
@@ -63,7 +63,7 @@ In large-scale empirical applications, PyRevealed demonstrates high computationa
 * **Consistency Benchmarks:** 
     * In controlled laboratory experiments, agents typically exhibit a **Critical Cost Efficiency Index (CCEI) of ~0.88** (Choi et al., 2014).
     * In digital recommendation environments, the **Houtman-Maks Index** identifies the maximal consistent subset of choices, facilitating the detection of stochastic noise in high-frequency interaction data.
-* **Algorithmic Complexity:** Leverages **O(T²)** algorithms for GARP verification, ensuring stability for long-duration longitudinal datasets where T denotes the number of observations.
+* **Complexity Analysis:** Leverages **O(T²)** algorithms for GARP verification, ensuring stability for long-duration longitudinal datasets where T denotes the number of observations.
 
 Why Revealed Preference?
 ------------------------
