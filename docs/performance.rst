@@ -1,5 +1,5 @@
-Computational Performance and Scalability
-========================================
+Performance
+===========
 
 PyRevealed utilizes a high-performance Rust compute engine (``rpt-core``) designed for large-scale longitudinal choice analysis. The architecture leverages Rayon for thread-level parallelism, SCC-optimized algorithms for transitive closure, and the HiGHS solver for linear programming (LP) tasks.
 

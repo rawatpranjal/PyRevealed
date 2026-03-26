@@ -1,5 +1,5 @@
-Empirical Applications
-======================
+Applications
+============
 
 PyRevealed supports a diverse range of empirical applications, each grounded in established revealed preference research. These implementations demonstrate the library's capacity to process large-scale longitudinal datasets and evaluate behavioral consistency across different choice environments.
 

@@ -454,4 +454,74 @@ mod tests {
             assert!(e >= 0.0 && e <= 1.0, "Efficiency {e} out of [0,1]");
         }
     }
+
+    // --- Exact VEI tests ---
+
+    #[test]
+    fn test_vei_exact_consistent() {
+        let prices = [1.0, 2.0, 2.0, 1.0];
+        let quantities = [4.0, 1.0, 1.0, 4.0];
+        let mut graph = PreferenceGraph::new(2);
+        graph.parse_budget(&prices, &quantities, 2, 2, 1e-10);
+        let vei = compute_vei_exact(&mut graph);
+        assert!(vei.success);
+        assert_eq!(vei.mean_efficiency, 1.0);
+        assert_eq!(vei.min_efficiency, 1.0);
+        assert_eq!(vei.total_inefficiency, 0.0);
+    }
+
+    #[test]
+    fn test_vei_exact_warp_violation() {
+        // 2-obs WARP violation: mutual preference, ratio = 7/8 = 0.875
+        // Exact VEI: remove ONE arc (cost 0.125), so one obs gets e=0.875, other e=1.0
+        // Total inefficiency = 0.125, mean efficiency = (0.875 + 1.0)/2 = 0.9375
+        let prices = [2.0, 1.0, 1.0, 2.0];
+        let quantities = [3.0, 2.0, 2.0, 3.0];
+        let mut graph = PreferenceGraph::new(2);
+        graph.parse_budget(&prices, &quantities, 2, 2, 1e-10);
+        let vei = compute_vei_exact(&mut graph);
+        assert!(vei.success);
+        // One obs has e=0.875, the other e=1.0 (optimizer picks one to reduce)
+        let mut sorted_e = vei.efficiency_vector.clone();
+        sorted_e.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        assert!((sorted_e[0] - 0.875).abs() < 1e-6, "lower e={}", sorted_e[0]);
+        assert!((sorted_e[1] - 1.0).abs() < 1e-6, "upper e={}", sorted_e[1]);
+        assert!((vei.mean_efficiency - 0.9375).abs() < 1e-6);
+        assert!((vei.total_inefficiency - 0.125).abs() < 1e-6);
+    }
+
+    #[test]
+    fn test_vei_exact_bounded() {
+        let prices = [2.0, 1.0, 1.0, 2.0];
+        let quantities = [3.0, 2.0, 2.0, 3.0];
+        let mut graph = PreferenceGraph::new(2);
+        graph.parse_budget(&prices, &quantities, 2, 2, 1e-10);
+        let vei = compute_vei_exact(&mut graph);
+        for &e in &vei.efficiency_vector {
+            assert!(e >= 0.0 && e <= 1.0, "Efficiency {e} out of [0,1]");
+        }
+    }
+
+    #[test]
+    fn test_vei_exact_3obs_cycle() {
+        // 3-obs cycle: each obs can afford the next (circular preferences)
+        // p0=[3,1,1], x0=[2,1,1] → own_exp=8
+        // p1=[1,3,1], x1=[1,2,1] → own_exp=8
+        // p2=[1,1,3], x2=[1,1,2] → own_exp=8
+        // E[0,1]=p0·x1=3+3+1=7, E[1,2]=p1·x2=1+2+6=9... too complex, use simple data
+        //
+        // Simpler: 3 obs, 2 goods, circular strict preferences
+        let prices = [2.0, 1.0, 1.0, 2.0, 1.5, 1.5];
+        let quantities = [3.0, 1.0, 1.0, 3.0, 2.0, 2.0];
+        let mut graph = PreferenceGraph::new(3);
+        graph.parse_budget(&prices, &quantities, 3, 2, 1e-10);
+        let vei = compute_vei_exact(&mut graph);
+        assert!(vei.success);
+        // Should have some efficiency < 1 (GARP violated)
+        assert!(vei.mean_efficiency < 1.0);
+        // All bounded
+        for &e in &vei.efficiency_vector {
+            assert!(e >= 0.0 && e <= 1.0);
+        }
+    }
 }

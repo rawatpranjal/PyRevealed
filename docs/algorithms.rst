@@ -1,5 +1,5 @@
-Algorithm Design
-================
+Algorithms
+==========
 
 .. admonition:: Design Philosophy
 
