@@ -28,76 +28,14 @@ money an arbitrageur could extract from inconsistent shoppers.
 
 **Companion script:** ``applications/01_grocery_scanner.py``
 
-Formal Setup
-------------
+Background
+----------
 
-Notation
-~~~~~~~~
+Revealed preference analysis on grocery data allows researchers to quantify consumer rationality without assuming specific functional forms for utility. For a formal treatment of the underlying axioms and efficiency metrics, see:
 
-A household makes :math:`T` shopping trips. On trip :math:`t`, they face
-prices :math:`p^t \in \mathbb{R}^n_{++}` across :math:`n` product categories
-and purchase quantities :math:`x^t \in \mathbb{R}^n_+`. Their expenditure is
-:math:`p^t \cdot x^t`.
-
-The **budget set** at observation :math:`t` is:
-
-.. math::
-
-   B(p^t, m^t) = \{ x \in \mathbb{R}^n_+ : p^t \cdot x \leq p^t \cdot x^t \}
-
-Bundle :math:`x^t` is **directly revealed preferred** to :math:`x^s` (written
-:math:`x^t \, R_0 \, x^s`) if :math:`x^s` was affordable when :math:`x^t`
-was chosen:
-
-.. math::
-
-   x^t \, R_0 \, x^s \iff p^t \cdot x^t \geq p^t \cdot x^s
-
-The preference is **strict** (:math:`x^t \, P_0 \, x^s`) if the inequality
-is strict. Let :math:`R^*` denote the transitive closure of :math:`R_0`.
-
-GARP
-~~~~
-
-The **Generalized Axiom of Revealed Preference** (Varian, 1982) states:
-
-.. math::
-
-   \text{GARP: } \quad x^t \, R^* \, x^s \implies \lnot (x^s \, P_0 \, x^t)
-
-In words: if :math:`x^t` is transitively revealed preferred to :math:`x^s`,
-then :math:`x^s` cannot be strictly directly revealed preferred to :math:`x^t`.
-GARP holds if and only if there exists a non-satiated utility function
-rationalizing the data (Afriat's theorem, 1967).
-
-Scores
-~~~~~~
-
-When GARP fails, three scores measure *how badly*:
-
-**CCEI** (Afriat Efficiency Index): the largest :math:`e \in [0,1]` such that
-GARP holds when budgets are relaxed by factor :math:`e`:
-
-.. math::
-
-   \text{CCEI} = \sup \left\{ e \in [0,1] : e \cdot (p^t \cdot x^t) \geq p^t \cdot x^s \text{ implies no violations} \right\}
-
-Interpretation: :math:`1 - \text{CCEI}` is the fraction of income wasted by
-choosing inconsistently. CCEI = 1 means perfectly rational.
-
-**MPI** (Money Pump Index, Echenique et al. 2011): the maximum fraction of
-expenditure an arbitrageur could extract by exploiting preference cycles:
-
-.. math::
-
-   \text{MPI} = \max_{\text{cycle } C} \frac{\sum_{(t,s) \in C} \left( p^t \cdot x^t - p^t \cdot x^s \right)}{\sum_{(t,s) \in C} p^t \cdot x^t}
-
-**HM** (Houtman-Maks, 1985): the minimum fraction of observations to remove
-to restore GARP consistency:
-
-.. math::
-
-   \text{HM} = \min \left\{ \frac{|S|}{T} : \text{removing observations } S \text{ makes data GARP-consistent} \right\}
+- :doc:`theory_consistency` — GARP, WARP, and SARP definitions.
+- :doc:`theory_efficiency` — CCEI, MPI, and Houtman-Maks indices.
+- :doc:`theory_foundations` — Maintained assumptions for RP testing.
 
 Data
 ----
@@ -213,37 +151,6 @@ EDA: Household Activity
 
 Households with more active weeks provide more data for GARP testing but
 are also more likely to show violations (more chances for inconsistency).
-
-Algorithm
----------
-
-The GARP test proceeds in three steps:
-
-.. code-block:: text
-
-   GARP-TEST(prices P[T×n], quantities X[T×n]):
-   ─────────────────────────────────────────────
-   1. BUILD PREFERENCE GRAPH                    O(T²)
-      For each pair (t,s):
-        R₀[t,s] ← (pₜ·xₜ ≥ pₜ·xₛ)   // weak RP
-        P₀[t,s] ← (pₜ·xₜ > pₜ·xₛ)   // strict RP
-
-   2. TRANSITIVE CLOSURE                        O(T³)
-      R* ← Floyd-Warshall(R₀)
-      // R*[t,s] = 1 iff there exists a chain
-      // t R₀ k₁ R₀ k₂ ... R₀ s
-
-   3. CHECK FOR VIOLATIONS                      O(T²)
-      For each pair (t,s):
-        if R*[t,s] AND P₀[s,t]:
-          Record violation (t → ... → s → t)
-      Return: is_consistent, violations
-
-   Total: O(T³) dominated by Floyd-Warshall
-
-For CCEI, binary search over :math:`T^2` candidate efficiency ratios
-:math:`e = (p^t \cdot x^s) / (p^t \cdot x^t)`, running GARP at each.
-This yields exact CCEI in :math:`O(T^3 \log T)` time.
 
 Pipeline Walkthrough
 --------------------

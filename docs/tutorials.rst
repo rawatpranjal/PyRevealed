@@ -7,6 +7,7 @@ Step-by-step guides covering revealed preference analysis from basics to advance
    :maxdepth: 1
 
    tutorial
+   tutorial_budget_advanced
    tutorial_menu_choice
    tutorial_welfare
    tutorial_demand_analysis
@@ -30,8 +31,11 @@ Overview
      - Topics
      - Prerequisites
    * - :doc:`1: Budget-Based Analysis <tutorial>`
-     - GARP, CCEI, MPI, Bronars power, separability
+     - GARP, CCEI, MPI, Bronars power
      - Basic Python/NumPy
+   * - :doc:`1a: Advanced Budget <tutorial_budget_advanced>`
+     - Homotheticity, Lancaster model, utility recovery
+     - Tutorial 1
    * - :doc:`2: Menu-Based Choice <tutorial_menu_choice>`
      - WARP, SARP, Congruence, Houtman-Maks, attention models
      - Tutorial 1
@@ -53,16 +57,16 @@ Overview
    * - :doc:`8: Revealed Attention <tutorial_attention>`
      - WARP(LA), RAM, attention filters, consideration sets
      - Tutorial 2
-   * - :doc:`8: Risk Analysis <tutorial_risk>`
+   * - :doc:`9: Risk Analysis <tutorial_risk>`
      - Risk aversion, CRRA utility, expected utility axioms
      - Tutorial 1
-   * - :doc:`9: Context Effects <tutorial_context_effects>`
+   * - :doc:`10: Context Effects <tutorial_context_effects>`
      - Decoy effect, compromise effect, menu manipulation
      - Tutorial 5
-   * - :doc:`10: Intertemporal Choice <tutorial_intertemporal>`
+   * - :doc:`11: Intertemporal Choice <tutorial_intertemporal>`
      - Discounting, present bias, time preferences
      - Tutorial 1
-   * - :doc:`11: Ranking Analysis <tutorial_ranking>`
+   * - :doc:`12: Ranking Analysis <tutorial_ranking>`
      - Bradley-Terry, Kendall tau, preference aggregation
      - Tutorial 2
 

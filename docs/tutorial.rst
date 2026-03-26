@@ -31,43 +31,34 @@ Prerequisites
 Important Assumptions
 ---------------------
 
-Revealed preference tests rely on several assumptions. Real data typically
-violates these to some degree, which affects interpretation.
+Revealed preference tests rely on several core assumptions regarding the stability and rationality of decision-making. For a formal delineation of these assumptions and their implications, see:
 
-.. list-table:: Assumptions Required for RP Testing
+- :doc:`theory_foundations` — Formal assumptions (Stability, Utility Maximization, etc.)
+
+Real data typically violates these to some degree, which affects interpretation:
+
+.. list-table:: Assumptions in Practice (Grocery Data)
    :header-rows: 1
    :widths: 30 35 35
 
    * - Assumption
-     - Grocery Data
+     - Grocery Data Reality
      - Concern Level
    * - Stable preferences
-     - Extended period
+     - Household tastes change over 2 years
      - Medium
    * - Single decision-maker
      - Household, not individual
      - Medium
-   * - Budget exhaustion
-     - Monthly grocery budget
-     - Medium
    * - Category homogeneity
-     - "Milk" = all milk products
+     - "Milk" aggregates all milk products
      - Medium
-   * - No stockpiling
-     - Monthly aggregation mitigates
-     - Low
 
 What GARP Failure Means
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 GARP failure means no single, stable utility function rationalizes the observed
-choices. Common causes:
-
-- Preferences changed over the observation period
-- Multiple household members with different preferences
-- Context-dependent choices (holidays, special occasions)
-- Measurement error in prices or quantities
-- Stockpiling behavior
+choices. For common causes and behavioral interpretations, see :doc:`theory_consistency`.
 
 
 Part 1: The Data
@@ -916,380 +907,17 @@ Full Summary Report
    ================================================================================
 
 
-Part 7: Preference Structure (Separability)
--------------------------------------------
+Part 7: Advanced Topics
+-----------------------
 
-Weak separability tests whether preferences over group A are independent of
-consumption in group B:
+For more complex budget-based analysis, see the following specialized tutorials:
 
-.. math::
+- :doc:`tutorial_budget_advanced` — Homotheticity, Lancaster characteristics model, and utility recovery.
+- :doc:`tutorial_demand_analysis` — Slutsky matrix, integrability, and additive separability.
+- :doc:`tutorial_welfare` — Welfare analysis (CV/EV) and deadweight loss.
 
-   U(x_A, x_B) = V(u_A(x_A), u_B(x_B))
-
-.. code-block:: python
-
-   from pyrevealed import test_feature_independence
-
-   # Define product groups
-   DAIRY = [1, 3, 6]      # Milk, Cheese, Yogurt (indices)
-   PROTEIN = [7, 9]       # Beef, Lunchmeat
-
-   separability_results = []
-   for household_id, session_data in sessions.items():
-       result = test_feature_independence(
-           session_data.behavior_log,
-           group_a=DAIRY,
-           group_b=PROTEIN
-       )
-       separability_results.append(result.is_separable)
-
-   print(f"Separable: {100*np.mean(separability_results):.1f}%")
-
-Output:
-
-.. code-block:: text
-
-   Separable: 68.3%
-
-Part 7a: Homothetic Preferences (HARP)
---------------------------------------
-
-**HARP (Homothetic Axiom of Revealed Preference)** tests whether demand scales
-proportionally with income. Homothetic preferences mean the consumer buys the
-same *proportions* of goods regardless of budget level—only the scale changes.
-
-.. code-block:: python
-
-   from pyrevealed import validate_proportional_scaling
-
-   result = validate_proportional_scaling(log)
-
-   if result.is_consistent:
-       print("Homothetic preferences: demand scales proportionally")
-   else:
-       print(f"Non-homothetic: {len(result.violations)} scaling violations")
-       print(f"Max expenditure ratio product: {result.max_cycle_product:.3f}")
-
-Output (typical household):
-
-.. code-block:: text
-
-   Non-homothetic: 3 scaling violations
-   Max expenditure ratio product: 1.234
-
-When HARP Matters
-~~~~~~~~~~~~~~~~~
-
-HARP is a **stronger** requirement than GARP. Use it when:
-
-- Aggregating demand across different income levels
-- Extrapolating demand to unobserved budget levels
-- Testing constant-returns-to-scale demand models
-- Validating Cobb-Douglas or CES utility assumptions
-
-.. code-block:: python
-
-   # HARP implies GARP, but not vice versa
-   print(f"HARP satisfied: {result.is_consistent}")
-   print(f"GARP satisfied: {result.garp_result.is_consistent}")
-
-   # Examine expenditure ratios
-   if result.violations:
-       cycle, product = result.violations[0]
-       print(f"Violating cycle: {cycle}")
-       print(f"Ratio product: {product:.4f} (should be <= 1)")
-
-.. list-table:: HARP vs GARP
-   :header-rows: 1
-   :widths: 30 35 35
-
-   * - Condition
-     - GARP
-     - HARP
-   * - Consistent ordinal preferences
-     - Required
-     - Required
-   * - Proportional budget shares
-     - Not required
-     - Required
-   * - Typical pass rate (field data)
-     - 5-15%
-     - 1-5%
-
-
-Part 8: Cross-Price Effects
----------------------------
-
-Test whether goods are gross substitutes (:math:`\partial x_j / \partial p_i > 0`)
-or complements (:math:`\partial x_j / \partial p_i < 0`).
-
-.. code-block:: python
-
-   from pyrevealed import test_cross_price_effect
-
-   for household_id, log in sample_logs.items():
-       result = test_cross_price_effect(log, good_g=1, good_h=2)  # Milk vs Bread
-       print(f"Milk-Bread: {result.relationship} (confidence: {result.confidence_score:.2f})")
-
-Output (sample households):
-
-.. code-block:: text
-
-   Milk-Bread: substitutes (confidence: 0.72)
-   Milk-Bread: independent (confidence: 0.45)
-   Milk-Bread: substitutes (confidence: 0.68)
-
-
-Part 9: The Lancaster Model
----------------------------
-
-The Lancaster model assumes utility derives from characteristics (e.g., nutrition)
-rather than products directly: :math:`U(x) = u(Zx)` where :math:`Z` maps products
-to characteristics.
-
-When Does Lancaster Help?
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 50 50
-
-   * - CCEI Increases
-     - CCEI Decreases
-   * - Consumer optimizes over characteristics
-     - Consumer has product-specific preferences
-   * - Products are imperfect substitutes for characteristics
-     - Brand loyalty matters
-   * - Characteristics matrix is well-specified
-     - Characteristics matrix is wrong
-
-.. code-block:: python
-
-   from pyrevealed import transform_to_characteristics
-
-   # Nutritional characteristics: [Protein, Carbs, Fat, Sodium]
-   Z = np.array([
-       [0, 39, 0, 15],      # Soda
-       [8, 12, 8, 120],     # Milk
-       [9, 49, 3, 490],     # Bread
-       [25, 1, 33, 620],    # Cheese
-       # ... etc
-   ])
-
-   lancaster_log = transform_to_characteristics(log, Z)
-   result = validate_consistency(lancaster_log)
-   print(f"Lancaster consistent: {result.is_consistent}")
-
-Output:
-
-.. code-block:: text
-
-   Lancaster consistent: True
-
-Results Comparison
-~~~~~~~~~~~~~~~~~~
-
-.. list-table:: Product Space vs Characteristics Space
-   :header-rows: 1
-   :widths: 35 30 35
-
-   * - Metric
-     - Product Space
-     - Characteristics Space
-   * - Mean CCEI
-     - ~0.84
-     - ~0.89 (+5%)
-   * - GARP pass rate
-     - ~5%
-     - ~8% (+60%)
-
-Households with decreased CCEI in characteristics space have product-specific
-preferences.
-
-
-Part 10: Utility Recovery
--------------------------
-
-For GARP-consistent households, we can recover the utility function that
-rationalizes their choices using Afriat's theorem.
-
-.. code-block:: python
-
-   from pyrevealed import fit_latent_values
-
-   # For a GARP-consistent household
-   result = fit_latent_values(log)
-
-   if result.success:
-       print(f"Recovery successful!")
-       print(f"Utility values: {result.utility_values[:5]}...")  # First 5
-       print(f"Marginal utility of money: {result.lagrange_multipliers[:5]}...")
-   else:
-       print(f"Recovery failed: {result.lp_status}")
-
-Output:
-
-.. code-block:: text
-
-   Recovery successful!
-   Utility values: [0.000e+00 1.234e-05 2.468e-05 3.702e-05 4.936e-05]...
-   Marginal utility of money: [1.000e-06 1.000e-06 1.000e-06 1.000e-06 1.000e-06]...
-
-Full Summary Report
-~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   print(result.summary())
-
-.. code-block:: text
-
-   ================================================================================
-                               UTILITY RECOVERY REPORT
-   ================================================================================
-
-   Status: SUCCESS
-   LP Status: Optimization terminated successfully. (HiGHS Status 7: Optimal)
-
-   Metrics:
-   -------
-     Recovery Successful ................ Yes
-     Utility Values Range .. [0.0000, 0.0000]
-     Mean Utility ................ 3.5000e-07
-     Num Observations ..................... 2
-     Mean Marginal Utility ....... 1.0000e-06
-     Lagrange Range ........ [0.0000, 0.0000]
-
-   Interpretation:
-   --------------
-     Utility function successfully recovered.
-     The recovered utility is piecewise linear and concave.
-
-   Computation Time: 1.20 ms
-   ================================================================================
-
-Interpreting Results
-~~~~~~~~~~~~~~~~~~~~
-
-The recovered values satisfy Afriat's inequalities:
-
-.. math::
-
-   u_s - u_t \leq \lambda_t p_t \cdot (x_s - x_t) \quad \forall s, t
-
-Where:
-
-- :math:`u_t` = utility at observation :math:`t`
-- :math:`\lambda_t` = marginal utility of money at :math:`t`
-- :math:`p_t` = price vector at :math:`t`
-- :math:`x_t` = quantity vector at :math:`t`
-
-.. list-table:: Utility Recovery Interpretation
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Value
-     - Meaning
-   * - ``utility_values``
-     - Ordinal utility indices (relative ranking matters)
-   * - ``lagrange_multipliers``
-     - Marginal utility of money (shadow price of budget)
-   * - ``success=True``
-     - A rationalizing utility function exists
-   * - ``success=False``
-     - GARP violated; no consistent utility exists
-
-Recovery for Inconsistent Households
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-For households that violate GARP, utility recovery will fail:
-
-.. code-block:: python
-
-   # For an inconsistent household
-   result = fit_latent_values(inconsistent_log)
-   print(f"Success: {result.success}")
-   print(f"LP Status: {result.lp_status}")
-
-Output:
-
-.. code-block:: text
-
-   Success: False
-   LP Status: infeasible
-
-To analyze inconsistent households, first compute the CCEI to find the
-efficiency-adjusted behavior, or remove violating observations using the
-Houtman-Maks index.
-
-
-Part 11: Summary
-----------------
-
-Key Findings
-~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 35 65
-
-   * - Metric
-     - Value
-   * - GARP pass rate
-     - 5-15%
-   * - Mean CCEI
-     - 0.80-0.85
-   * - Bronars power
-     - >0.90
-   * - Mean MPI
-     - 0.2-0.25
-   * - Lancaster improvement
-     - +5% CCEI
-
-Notes
-~~~~~
-
-1. Compute power before interpreting GARP results
-2. Report CCEI distribution, not just pass rates
-3. Document aggregation choices
-4. Consider assumption applicability
-5. Compare to published benchmarks (e.g., CKMS 2014)
-
-Function Reference
-~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 50 50
-
-   * - Purpose
-     - Function
-   * - GARP consistency
-     - ``validate_consistency()``
-   * - Strict consistency (Acyclical P)
-     - ``validate_strict_consistency()``
-   * - CCEI / efficiency index
-     - ``compute_integrity_score()``
-   * - Per-observation efficiency (VEI)
-     - ``compute_granular_integrity()``
-   * - Bronars power
-     - ``compute_test_power()``
-   * - Money Pump Index
-     - ``compute_confusion_metric()``
-   * - Houtman-Maks Index
-     - ``compute_minimal_outlier_fraction()``
-   * - Weak separability
-     - ``test_feature_independence()``
-   * - Homotheticity (HARP)
-     - ``validate_proportional_scaling()``
-   * - Cross-price effects
-     - ``test_cross_price_effect()``
-   * - Utility recovery
-     - ``fit_latent_values()``
-
-
-Part 12: Unified Summary Display
----------------------------------
+Part 8: Unified Summary Display
+-------------------------------
 
 For comprehensive analysis in one command, use the ``BehavioralSummary`` class
 which runs all tests and presents results in a unified format.
@@ -1369,7 +997,7 @@ For quick status checks, use ``short_summary()``:
    >>> result  # Displays as HTML card with pass/fail indicator
 
 
-Part 13: Diagnostic Visualizations
+Part 9: Diagnostic Visualizations
 ----------------------------------
 
 PyRevealed includes visualization functions for deeper analysis of behavioral
@@ -1421,6 +1049,66 @@ This visualization shows:
 
 If your observed CCEI is well above the random distribution, it strongly suggests
 non-random, preference-driven behavior.
+
+
+Part 10: Summary
+----------------
+
+Key Findings
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Metric
+     - Typical Field Value
+   * - GARP pass rate
+     - 5-15%
+   * - Mean CCEI
+     - 0.80-0.85
+   * - Bronars power
+     - >0.90
+   * - Mean MPI
+     - 0.2-0.25
+
+Notes
+~~~~~
+
+1. Compute power before interpreting GARP results
+2. Report CCEI distribution, not just pass rates
+3. Document aggregation choices
+4. Compare to published benchmarks (e.g., CKMS 2014)
+
+Function Reference
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Purpose
+     - Function
+   * - GARP consistency
+     - ``validate_consistency()``
+   * - Strict consistency (Acyclical P)
+     - ``validate_strict_consistency()``
+   * - CCEI / efficiency index
+     - ``compute_integrity_score()``
+   * - Per-observation efficiency (VEI)
+     - ``compute_granular_integrity()``
+   * - Bronars power
+     - ``compute_test_power()``
+   * - Money Pump Index
+     - ``compute_confusion_metric()``
+   * - Houtman-Maks Index
+     - ``compute_minimal_outlier_fraction()``
+   * - Swaps Index
+     - ``compute_swaps_index()``
+   * - Observation Contributions
+     - ``compute_observation_contributions()``
+   * - Behavioral Summary
+     - ``BehavioralSummary.from_log()``
 
 
 See Also
