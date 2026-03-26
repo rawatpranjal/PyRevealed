@@ -86,11 +86,8 @@ greedy feedback vertex set heuristic).
 Data
 ----
 
-This application supports two data sources: real RetailRocket click-stream
-data (recommended) and simulated data (for quick experimentation).
-
-Option A: RetailRocket click-stream (real data)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RetailRocket click-stream
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The `RetailRocket <https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset>`_
 dataset contains 2.75M events from an e-commerce platform: views,
@@ -122,9 +119,8 @@ purchased item is the choice. Sessions are split by 30-minute gaps.
 
 .. note::
 
-   The RetailRocket dataset must be downloaded from Kaggle. If unavailable,
-   use Option B (simulated data) below or the companion script's
-   ``--simulate`` flag.
+   The RetailRocket dataset must be downloaded from Kaggle. See the
+   download instructions above.
 
 EDA: RetailRocket
 ~~~~~~~~~~~~~~~~~
@@ -155,55 +151,6 @@ After loading and session reconstruction:
 Most sessions have small menus (3--5 items viewed before purchase),
 which is realistic for e-commerce browse-to-buy funnels. Larger menus
 (10+ items) represent research-heavy purchases.
-
-Option B: Simulated data
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-For quick experimentation without downloading data:
-
-.. code-block:: python
-
-   from pyrevealed import MenuChoiceLog
-   import numpy as np
-
-   rng = np.random.default_rng(42)
-   N_ITEMS = 20  # catalog size
-
-   # Generate a rational user (fixed preference ranking)
-   pref_order = list(rng.permutation(N_ITEMS))
-   pref_rank = {item: rank for rank, item in enumerate(pref_order)}
-
-   menus, choices = [], []
-   for _ in range(50):
-       menu_size = rng.integers(3, 9)
-       menu = frozenset(rng.choice(N_ITEMS, menu_size, replace=False).tolist())
-       choice = min(menu, key=lambda x: pref_rank[x])
-       menus.append(menu)
-       choices.append(choice)
-
-   log = MenuChoiceLog(menus=menus, choices=choices)
-
-Four user types for simulation:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 15 15 40
-
-   * - Type
-     - Fraction
-     - Behavior
-   * - Consistent
-     - 30%
-     - Always picks top-ranked item from menu
-   * - Noisy
-     - 40%
-     - Top-ranked with prob 0.7, else random
-   * - Drifting
-     - 20%
-     - Ranking changes at session midpoint
-   * - Random
-     - 10%
-     - Uniform random choice from menu
 
 Algorithm
 ---------
@@ -260,7 +207,7 @@ Single user
    from pyrevealed.algorithms.abstract_choice import validate_menu_sarp
    from pyrevealed.algorithms.abstract_choice import compute_menu_efficiency
 
-   # Using a loaded user (real or simulated)
+   # Using a loaded user
    sarp = validate_menu_sarp(log)
    print(f"SARP consistent: {sarp.is_consistent}")
    print(f"Violations: {sarp.num_violations}")

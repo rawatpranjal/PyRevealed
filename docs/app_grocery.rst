@@ -135,8 +135,8 @@ Loading
 .. note::
 
    The Dunnhumby dataset requires a Kaggle download. Run
-   ``dunnhumby/download_data.sh`` first. If unavailable, the companion
-   script falls back to simulated data.
+   ``dunnhumby/download_data.sh`` first. See ``dunnhumby/README.md``
+   for details.
 
 EDA: Product Categories
 ~~~~~~~~~~~~~~~~~~~~~~~

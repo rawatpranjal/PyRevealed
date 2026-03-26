@@ -18,7 +18,7 @@ tutorial with formal definitions, pseudocode, EDA, and citations.
      - GARP / CCEI / MPI
      - Dean & Martin (2016 AER)
    * - :doc:`app_llm_alignment`
-     - Simulated budget-line tasks
+     - GPT-4o-mini API (controlled experiment)
      - GARP / CCEI
      - Chen et al. (2023 PNAS)
    * - :doc:`app_recsys`
@@ -58,14 +58,14 @@ Each application has a runnable Python script in ``applications/``:
 
 .. code-block:: bash
 
-   # Grocery: uses real Dunnhumby data if available, else simulates
+   # Grocery: Dunnhumby scanner data (2,222 households)
    python applications/01_grocery_scanner.py --households 200
 
-   # LLM: simulated budget-line tasks for 20 agents
-   python applications/02_llm_alignment.py --agents 20 --tasks 100
+   # LLM: controlled GPT experiment (requires OPENAI_API_KEY)
+   python applications/02_llm_alignment.py --trials 100
 
-   # Recommendation: simulated click-stream (use --simulate), or real data
-   python applications/03_recommendation_clicks.py --users 100 --sessions 50
+   # Recommendation: RetailRocket click-stream (requires Kaggle download)
+   python applications/03_recommendation_clicks.py --max-users 200
 
 Quick reference
 ---------------
