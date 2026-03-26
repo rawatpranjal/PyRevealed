@@ -97,13 +97,17 @@ User choice data (prices + quantities per observation)
 | Attention | `attention.py` | Consideration sets + graph + LP |
 | Production GARP | `production.py` | Profit comparison graph |
 
-## Data types
+## 5 Choice Categories
 
-| Data type | Input format | Example domain |
-|-----------|-------------|----------------|
-| Budget choices | `(prices: T x K, quantities: T x K)` | E-commerce, grocery, delivery |
-| Menu choices | `(menus: list[set], choices: list[int])` | Surveys, recommendations, UI clicks |
-| Production data | `(input_prices, input_qty, output_prices, output_qty)` | Supply chain, manufacturing |
+We test whether observed choices are consistent with rational optimization — without estimating parameters. We answer "does a rational model exist?", not "which model is it?".
+
+| Category | Input format | Example domain | What we test |
+|----------|-------------|----------------|-------------|
+| **Budget** | `(prices T×K, quantities T×K)` | E-commerce, grocery, delivery | GARP, CCEI, MPI, HARP, utility recovery |
+| **Menu** | `(menus: list[set], choices: list[int])` | Surveys, recommendations, UI clicks | SARP, WARP, attention |
+| **Stochastic** | `(menus: list[set], frequencies: list[dict])` | A/B tests, experimental panels | RUM consistency LP, regularity |
+| **Production** | `(input_p, input_q, output_p, output_q)` | Supply chain, manufacturing | Profit maximization GARP |
+| **Intertemporal** | `(amounts, dates, chosen)` | Subscription, savings, loyalty | Discount factor bounds |
 
 Each user is a tuple of arrays. For batch scoring, pass a list of tuples:
 

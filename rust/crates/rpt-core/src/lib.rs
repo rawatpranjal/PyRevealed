@@ -21,6 +21,7 @@ pub mod production;
 pub mod quasilinear;
 pub mod scc;
 pub mod separability;
+pub mod stochastic;
 pub mod types;
 pub mod utility;
 pub mod variants;

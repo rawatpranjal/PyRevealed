@@ -27,7 +27,31 @@ python3 dunnhumby/run_all.py           # Full 2,222 households
 
 ## Architecture
 
-PyRevealed implements revealed preference theory to analyze behavioral consistency.
+PyRevealed tests whether observed choices are consistent with rational optimization — without estimating parameters. We test existence ("does a utility function exist?"), not fit models ("which utility function?"). All graph algorithms and LP solving run in Rust via Rayon; Python handles I/O.
+
+### 5 Choice Categories (by data type)
+
+| Category | Input | What we test | What we DON'T do |
+|---|---|---|---|
+| **Budget Choice** | prices T×K, quantities T×K | GARP, CCEI, MPI, HARP, HM, VEI, utility recovery | Demand estimation |
+| **Menu Choice** | menus + chosen items | SARP, WARP, HM, attention (WARP-LA) | — |
+| **Stochastic Choice** | menus + choice frequencies | RUM LP, regularity, IIA | Logit/probit MLE |
+| **Production Choice** | input/output prices + quantities | Production GARP, CCEI | Production function estimation |
+| **Intertemporal Choice** | amounts + dates + chosen | Discount factor bounds | Discount rate estimation |
+
+### Rust Engine (rpt-core)
+
+```
+User data (any of 5 types)
+    ↓
+PreferenceGraph.parse_*()     ← builds expenditure/preference matrices
+    ↓
+Algorithms (graph + LP)       ← SCC, Floyd-Warshall, HiGHS LP/ILP
+    ↓
+Rayon par_iter (batch)        ← one thread per user, scratchpad reuse
+    ↓
+Engine results
+```
 
 ### Core Data Flow
 
@@ -35,24 +59,83 @@ PyRevealed implements revealed preference theory to analyze behavioral consisten
 BehaviorLog (prices + quantities)     MenuChoiceLog (menus + choices)
     ↓                                      ↓
 ┌───────────────────────────────────────┐  ┌─────────────────────────────────┐
-│ Core Algorithms (algorithms/)         │  │ Abstract Choice (algorithms/)   │
+│ Budget Choice (algorithms/ + Rust)    │  │ Menu Choice (algorithms/ + Rust)│
 │  • garp.py → consistency check        │  │  • abstract_choice.py           │
-│  • aei.py → integrity score (0-1)     │  │    → WARP/SARP/Congruence       │
+│  • aei.py → efficiency score (0-1)    │  │    → WARP/SARP/Congruence       │
 │  • mpi.py → exploitability metric     │  │    → Houtman-Maks efficiency    │
-│  • utility.py → preference recovery   │  │    → Ordinal utility recovery   │
-│  • separability.py → group independence│  │  • attention.py                 │
-└───────────────────────────────────────┘  │    → Limited attention models   │
-    ↓                                      └─────────────────────────────────┘
-Result dataclasses (core/result.py)             ↓
-                                         StochasticChoiceLog (frequencies)
-                                               ↓
-                                         ┌─────────────────────────────────┐
-                                         │ Stochastic (algorithms/)        │
-                                         │  • stochastic.py                │
-                                         │    → Random utility models      │
-                                         │    → IIA/regularity tests       │
-                                         └─────────────────────────────────┘
+│  • utility.py → preference recovery   │  │  • attention.py                 │
+│  • harp.py → homotheticity test       │  │    → Limited attention models   │
+└───────────────────────────────────────┘  └─────────────────────────────────┘
 
+StochasticChoiceLog (frequencies)     ProductionLog (inputs + outputs)
+    ↓                                      ↓
+┌───────────────────────────────────────┐  ┌─────────────────────────────────┐
+│ Stochastic Choice (Rust LP)           │  │ Production Choice (Rust)        │
+│  • RUM consistency LP                 │  │  • production.py                │
+│  • Regularity test                    │  │    → Profit maximization GARP   │
+│  • IIA test                           │  │    → Cost minimization          │
+└───────────────────────────────────────┘  └─────────────────────────────────┘
+
+Intertemporal data (amounts + dates)
+    ↓
+┌───────────────────────────────────────┐
+│ Intertemporal Choice (Rust)           │
+│  • Exponential discounting bounds     │
+└───────────────────────────────────────┘
+```
+
+### Key Modules (algorithms/)
+
+| Module | Category | Computation |
+|---|---|---|
+| garp.py | Budget | SCC + Floyd-Warshall cycle detection |
+| aei.py | Budget | Discrete binary search over efficiency ratios |
+| mpi.py | Budget | Karp's max-mean-weight cycle |
+| harp.py | Budget | Log-space Floyd-Warshall (max-product paths) |
+| utility.py | Budget | Afriat LP via HiGHS |
+| vei.py | Budget | Per-observation efficiency LP |
+| abstract_choice.py | Menu | Floyd-Warshall on item graph |
+| attention.py | Menu | WARP-LA, consideration sets |
+| production.py | Production | Profit graph + Floyd-Warshall |
+| quasilinear.py | Budget | Bellman-Ford negative cycle |
+
+### Contrib (deprecated from core — MLE/estimation, not graph/LP)
+
+Located in `src/pyrevealed/contrib/`. Import shims with DeprecationWarning.
+Stochastic MLE, Risk, Integrability, Ranking, Spatial, etc.
+
+### API Pattern
+
+```python
+from pyrevealed.engine import Engine
+
+# Budget choice (default)
+engine = Engine(metrics=["garp", "ccei", "mpi"])
+results = engine.analyze_arrays(users)
+
+# All data types supported via Engine
+```
+
+Old single-user API still works: `check_garp(log)`, `compute_aei(log)`, etc.
+These auto-route to Rust when available.
+
+### Key Modules (Rust)
+
+```
+rust/crates/rpt-core/src/
+├── garp.rs, ccei.rs, mpi.rs, harp.rs     ← Budget
+├── menu.rs, attention.rs                   ← Menu
+├── stochastic.rs                           ← Stochastic (RUM LP)
+├── production.rs                           ← Production
+├── intertemporal.rs                        ← Intertemporal
+├── graph.rs, closure.rs, scc.rs            ← Infrastructure
+├── lp.rs                                   ← HiGHS LP/ILP solver
+└── 57 tests passing
+```
+
+### Production Data Flow
+
+```
 ProductionLog (inputs + outputs)
     ↓
 ┌───────────────────────────────────────┐
