@@ -330,31 +330,24 @@ Step 4 --- Houtman-Maks (outlier fraction):
 Batch Analysis
 --------------
 
-Scoring all 2,222 households:
+Scoring all 2,222 households via the Rust Engine:
 
 .. code-block:: python
 
-   from pyrevealed import BehaviorLog, validate_consistency, compute_integrity_score
-   from pyrevealed import compute_confusion_metric
-   from pyrevealed.algorithms.mpi import compute_houtman_maks_index
+   from pyrevealed.engine import Engine
 
-   results = []
-   for hh_key, hh_data in households.items():
-       log = hh_data.behavior_log
-       garp = validate_consistency(log)
+   engine = Engine(metrics=["garp", "ccei", "mpi", "hm"])
 
-       if garp.is_consistent:
-           ccei, mpi_val, hm_val = 1.0, 0.0, 0.0
-       else:
-           ccei = compute_integrity_score(log, tolerance=1e-4).efficiency_index
-           mpi_val = compute_confusion_metric(log).mpi_value
-           hm_val = compute_houtman_maks_index(log).fraction
+   # Batch: list of (prices T×K, quantities T×K) — one tuple per household
+   users = [hh.behavior_log.to_engine_tuple() for hh in households.values()]
 
-       results.append({
-           "hh": hh_key, "T": log.num_records,
-           "garp": garp.is_consistent, "ccei": ccei,
-           "mpi": mpi_val, "hm": hm_val,
-       })
+   results = engine.analyze_arrays(users)  # Rust/Rayon parallel scoring
+
+   # Each EngineResult has: .is_garp, .ccei, .mpi, .hm_consistent, .hm_total
+   for hh_key, er in zip(households.keys(), results):
+       hm_frac = 1.0 - (er.hm_consistent / er.hm_total) if er.hm_total > 0 else 0.0
+       print(f"  {hh_key}: GARP={er.is_garp}  CCEI={er.ccei:.3f}"
+             f"  MPI={er.mpi:.3f}  HM={hm_frac:.3f}")
 
 Score distributions across the panel:
 
@@ -422,10 +415,39 @@ For each household, compute CCEI over a sliding 20-week window:
            results.append((start, ccei))
        return results
 
+Time fixed effects
+~~~~~~~~~~~~~~~~~~
+
+Raw CCEI trajectories confound household behavior with the macro price
+environment. If prices are volatile in Q4 (holiday promotions, supply
+shocks), every household's CCEI drops --- not because anyone changed
+their behavior, but because more price variation gives the GARP test
+more power to detect violations.
+
+To separate household-level change from common time effects, the
+companion script uses a **cohort-deviation approach**: compute the
+panel mean CCEI at each window index, then classify each household
+by its deviation from the cohort mean.
+
+.. code-block:: python
+
+   # Cohort mean at each window position (time fixed effect)
+   cohort_mean = {}
+   for i in range(max_windows):
+       vals = [traj[i] for traj in all_trajectories if len(traj) > i]
+       cohort_mean[i] = np.mean(vals)
+
+   # Classify by deviation, not raw level
+   deviations = [ccei[i] - cohort_mean[i] for i in range(len(ccei))]
+
+A household that drops while the cohort stays stable is genuinely
+deteriorating. A household that drops alongside everyone else is
+experiencing a challenging price environment.
+
 Trajectory classification
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Classify each household by the shape of their CCEI trajectory:
+Classify each household by its **deviation from cohort mean** trajectory:
 
 .. list-table::
    :header-rows: 1
@@ -436,16 +458,16 @@ Classify each household by the shape of their CCEI trajectory:
      - Interpretation
    * - Stable
      - std < 0.03
-     - Preferences don't change; reliable customer
+     - Preferences don't change relative to cohort; reliable customer
    * - Improving
      - slope > +0.005
-     - Learning better shopping habits over time
+     - Becoming more consistent relative to peers
    * - Deteriorating
      - slope < -0.005
-     - Choices becoming more erratic; possible life change
+     - Choices becoming more erratic relative to peers; possible life change
    * - Volatile
      - std > 0.03, |slope| < 0.005
-     - Fluctuating consistency; context-dependent shopper
+     - Fluctuating consistency relative to cohort; context-dependent shopper
 
 On Dunnhumby data (households with 30+ weeks):
 
@@ -470,8 +492,11 @@ represent **crossovers** --- behavioral regime changes worth flagging:
    HH-14      deteriorating    1st half: 0.947  →  2nd half: 0.775  (Δ = -0.17)
    HH-17      improving        1st half: 0.639  →  2nd half: 0.780  (Δ = +0.14)
 
-A household dropping from CCEI 0.97 to 0.73 warrants investigation:
-account sharing, life disruption, or response to a pricing change.
+A household dropping from CCEI 0.97 to 0.73 *relative to the cohort*
+warrants investigation: account sharing, life disruption, or
+idiosyncratic price sensitivity. (A raw CCEI drop without cohort
+comparison may simply reflect a period of high price volatility
+affecting all households.)
 
 Interpretation
 --------------

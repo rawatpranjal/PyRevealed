@@ -174,17 +174,54 @@ def classify_trajectory(ccei_values: list[float]) -> tuple[str, float]:
         return "volatile", slope
 
 
+def _compute_cohort_mean(
+    all_trajectories: list[list[float]],
+) -> dict[int, float]:
+    """Compute mean CCEI at each window index across all households.
+
+    This serves as a time fixed effect: if all households' CCEI drops
+    at window index 10, that's a macro price effect, not individual
+    deterioration.
+    """
+    by_index: dict[int, list[float]] = {}
+    for traj in all_trajectories:
+        for i, val in enumerate(traj):
+            by_index.setdefault(i, []).append(val)
+    return {i: np.mean(vals) for i, vals in by_index.items()}
+
+
 def run_temporal_analysis(
     household_logs: list[tuple[str, BehaviorLog]],
     window: int = 20, step: int = 5,
 ) -> list[TemporalResult]:
-    """Rolling-window CCEI for all households with enough data."""
-    results = []
+    """Rolling-window CCEI for all households with enough data.
+
+    Uses a two-pass approach: first compute all raw trajectories, then
+    compute the cohort mean CCEI at each window index (time fixed effect),
+    then classify each household by its *deviation* from the cohort mean.
+    This separates household-level behavioral change from macro price
+    environment effects.
+    """
+    # Pass 1: compute raw trajectories
+    raw: list[tuple[str, list[float]]] = []
     for i, (hid, log) in enumerate(household_logs):
         if log.num_records < window:
             continue
         ccei_values = compute_rolling_ccei(log, window, step)
-        ttype, slope = classify_trajectory(ccei_values)
+        raw.append((hid, ccei_values))
+        if (i + 1) % 100 == 0:
+            print(f"    Temporal: {i+1}/{len(household_logs)}...")
+
+    # Pass 2: cohort mean at each window index (time fixed effect)
+    cohort_mean = _compute_cohort_mean([traj for _, traj in raw])
+
+    # Pass 3: classify by deviation from cohort mean
+    results = []
+    for hid, ccei_values in raw:
+        deviations = [
+            val - cohort_mean.get(i, val) for i, val in enumerate(ccei_values)
+        ]
+        ttype, slope = classify_trajectory(deviations)
         results.append(TemporalResult(
             household_id=hid,
             ccei_trajectory=ccei_values,
@@ -193,8 +230,6 @@ def run_temporal_analysis(
             slope=slope,
             trajectory_type=ttype,
         ))
-        if (i + 1) % 100 == 0:
-            print(f"    Temporal: {i+1}/{len(household_logs)}...")
     return results
 
 

@@ -10,10 +10,10 @@ Introduction
 
 Every recommendation platform generates the same data: users see a
 *menu* of items (search results, playlist tracks, product carousel) and
-*click* one. Across sessions with varying menus, these clicks reveal
-implicit preferences. If a user clicks item A over B in one session but
-B over A in another, their preferences have a cycle --- no fixed ranking
-can explain the choices.
+*click* one. Under the assumption that a click reflects a deliberate
+preference, these sessions can be modeled as menu-choice observations.
+If a user clicks item A over B in one session but B over A in another,
+no fixed ranking can explain the choices --- a SARP violation.
 
 Kallus & Udell (2016) formalized scalable preference learning from
 assortment choice data. Cazzola & Daly (2024) argued that
@@ -103,6 +103,19 @@ add-to-cart, and transactions with timestamps.
 
 **Menu reconstruction:** Items viewed in a session form the menu; the
 purchased item is the choice. Sessions are split by 30-minute gaps.
+
+.. warning::
+
+   **Identification assumption.** Revealed preference theory requires
+   exogenous menus --- the decision-maker faces a given set and chooses.
+   In click-stream data, menus are **endogenous**: the recommendation
+   algorithm curates which items each user sees. SARP violations may
+   reflect the recommender showing different assortments over time, not
+   the user having inconsistent preferences. Additionally, viewing an
+   item is not the same as consciously evaluating it; users may click
+   for comparison or curiosity without deliberate preference revelation.
+   Results should be interpreted as descriptive patterns, not causal
+   evidence of preference inconsistency.
 
 .. code-block:: python
 
@@ -237,21 +250,24 @@ Batch Analysis
 User segmentation
 ~~~~~~~~~~~~~~~~~
 
-Scoring all users and segmenting by consistency:
+Scoring all users via the Rust Engine (batch SARP/HM):
 
 .. code-block:: python
 
-   results = []
-   for uid, log in user_logs.items():
-       sarp = validate_menu_sarp(log)
-       hm = compute_menu_efficiency(log)
-       results.append({
-           "user": uid,
-           "sessions": len(log.choices),
-           "is_sarp": sarp.is_consistent,
-           "violations": sarp.num_violations,
-           "hm_efficiency": hm.efficiency_index,
-       })
+   from pyrevealed.engine import Engine
+
+   engine = Engine()
+
+   # Convert all users to Engine format in one pass
+   uids = list(user_logs.keys())
+   users = [log.to_engine_tuple() for log in user_logs.values()]
+
+   results = engine.analyze_menus(users)  # Rust/Rayon parallel scoring
+
+   # Each MenuResult has: .is_sarp, .n_sarp_violations, .hm_consistent, .hm_total
+   for uid, mr in zip(uids, results):
+       hm_eff = mr.hm_consistent / max(mr.hm_total, 1)
+       print(f"  {uid}: SARP={mr.is_sarp}  HM={hm_eff:.3f}")
 
 Segmentation by HM efficiency:
 
@@ -279,28 +295,37 @@ Segmentation by HM efficiency:
 Temporal Analysis: Churn Detection
 ----------------------------------
 
-The most novel application: tracking SARP consistency over time to detect
-preference drift --- a leading indicator of churn.
+A proposed application: tracking SARP consistency over time to detect
+preference drift --- a potential leading indicator of churn.
 
 Split-half analysis
 ~~~~~~~~~~~~~~~~~~~
 
 For each user, split sessions into first-half and second-half, then
-run SARP on each half separately:
+batch-score each half via the Engine:
 
 .. code-block:: python
 
-   for uid, log in user_logs.items():
+   # Build three batches: full, first-half, second-half
+   full_tuples = [log.to_engine_tuple() for log in user_logs.values()]
+   fh_tuples, sh_tuples = [], []
+   for log in user_logs.values():
        mid = len(log.choices) // 2
-       log_1 = MenuChoiceLog(menus=log.menus[:mid], choices=log.choices[:mid])
-       log_2 = MenuChoiceLog(menus=log.menus[mid:], choices=log.choices[mid:])
+       fh = MenuChoiceLog(menus=log.menus[:mid], choices=log.choices[:mid])
+       sh = MenuChoiceLog(menus=log.menus[mid:], choices=log.choices[mid:])
+       fh_tuples.append(fh.to_engine_tuple())
+       sh_tuples.append(sh.to_engine_tuple())
 
-       hm_full = compute_menu_efficiency(log).efficiency_index
-       hm_1 = compute_menu_efficiency(log_1).efficiency_index
-       hm_2 = compute_menu_efficiency(log_2).efficiency_index
+   # Three batch Engine calls — no per-user Python loops
+   full_results = engine.analyze_menus(full_tuples)
+   fh_results = engine.analyze_menus(fh_tuples)
+   sh_results = engine.analyze_menus(sh_tuples)
 
-       # Preference drift signal:
-       # High per-half consistency + low full consistency = drift
+   # Drift signal per user
+   for mr_full, mr_fh, mr_sh in zip(full_results, fh_results, sh_results):
+       hm_full = mr_full.hm_consistent / max(mr_full.hm_total, 1)
+       hm_1 = mr_fh.hm_consistent / max(mr_fh.hm_total, 1)
+       hm_2 = mr_sh.hm_consistent / max(mr_sh.hm_total, 1)
        drift_signal = (hm_1 + hm_2) / 2 - hm_full
 
 The key insight:
@@ -314,11 +339,11 @@ The key insight:
    Drifting         0.616      1.000      1.000      +0.384
    Random           0.342      0.717      0.717      +0.375
 
-**Drifting users** show perfect consistency within each half but low
-full-sequence consistency. Their preference ranking genuinely changed.
+**Drifting users** show high consistency within each half but low
+full-sequence consistency, suggesting their preference ranking changed.
 This pattern --- high per-window consistency but low full-window
-consistency --- is a **churn leading indicator** that precedes engagement
-drops.
+consistency --- is a **candidate churn signal** worth validating against
+actual engagement data.
 
 Lifecycle classification
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -345,20 +370,14 @@ Classify each user by the shape of their rolling-window HM trajectory:
      - std > 0.05, |slope| < 0.01
      - Context-dependent; emphasize exploration over exploitation
 
-Cross-tabulating true user type with detected lifecycle validates the
-detection method:
+.. note::
 
-.. code-block:: text
-
-               stable  improving  deteriorating  volatile
-   consistent      12          0              0         0
-   noisy            0         13              7         2
-   drifting         0          0              0        10
-   random           2          0              1         3
-
-Consistent users map cleanly to "stable." Drifting users all appear
-as "volatile" --- their per-window consistency is high but the trajectory
-shifts. This is exactly the signal a churn detection system should flag.
+   **Validation gap.** The lifecycle classification is a descriptive
+   segmentation, not a validated predictor. To test whether "deteriorating"
+   users actually churn, join HM trajectories with engagement outcomes
+   (e.g., days since last session) and evaluate predictive power in a
+   time-forward train/test split. Without such validation, the churn
+   detection claim remains a hypothesis.
 
 Sliding window extension
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -384,17 +403,18 @@ Interpretation
 Three use cases from one score
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. **Recommender evaluation**: A/B test two ranking algorithms. The one
-   yielding higher average SARP consistency across users is eliciting
-   more coherent preferences --- not just more clicks.
+1. **Recommender evaluation**: In an A/B test with **randomized menus**,
+   the algorithm yielding higher average SARP consistency elicits more
+   coherent click patterns. (Menu randomization is essential to control
+   for the endogeneity of algorithmic recommendations.)
 
-2. **User segmentation**: High-HM users have learnable, stable preferences.
-   Invest in personalization for them. Low-HM users benefit more from
-   curated defaults and exploration.
+2. **User segmentation**: High-HM users exhibit more predictable click
+   patterns. Low-HM users may benefit more from curated defaults and
+   exploration.
 
-3. **Churn detection**: Monitor sliding-window HM efficiency. A user
-   whose consistency drops is losing a coherent reason to engage ---
-   a leading indicator before engagement metrics move.
+3. **Churn detection (hypothesis)**: Monitor sliding-window HM efficiency.
+   A declining trend may signal preference drift. This requires
+   validation against actual churn labels before deployment.
 
 Comparison with standard metrics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -7,8 +7,8 @@ Based on:
 
 Loads RetailRocket e-commerce click-stream data, reconstructs menu-choice
 observations (items viewed in a session = menu, purchased item = choice),
-and tests SARP consistency per user. Includes rolling-window lifecycle
-analysis for churn detection.
+and batch-scores SARP consistency via the Rust Engine. Includes rolling-
+window lifecycle analysis for churn detection.
 
 Data: RetailRocket (Kaggle, CC-BY-NC-SA 4.0). 2.75M events, 1.4M visitors.
       Download: kaggle datasets download -d retailrocket/ecommerce-dataset
@@ -28,12 +28,13 @@ from dataclasses import dataclass
 import numpy as np
 
 from pyrevealed import MenuChoiceLog
-from pyrevealed.algorithms.abstract_choice import validate_menu_sarp, compute_menu_efficiency
+from pyrevealed.algorithms.abstract_choice import compute_menu_efficiency
 from pyrevealed.datasets import load_retailrocket
+from pyrevealed.engine import Engine
 
 
 # =============================================================================
-# Analysis
+# Batch Analysis (Rust Engine)
 # =============================================================================
 
 @dataclass
@@ -46,42 +47,74 @@ class UserResult:
     hm_efficiency: float
     first_half_hm: float
     second_half_hm: float
-    time_ms: float
+    time_us: int
 
 
-def analyze_user(uid: str, log: MenuChoiceLog) -> UserResult:
-    """Run SARP -> Houtman-Maks -> split-half analysis on one user."""
+def run_engine_batch(
+    user_logs: dict[str, MenuChoiceLog],
+) -> list[UserResult]:
+    """Score all users using the Rust Engine for maximum throughput."""
+    engine = Engine()
+    uids = list(user_logs.keys())
+    logs = list(user_logs.values())
+
+    # --- Full-data batch ---
+    full_tuples = [log.to_engine_tuple() for log in logs]
+    print(f"  Engine backend: {engine.backend}")
+    print(f"  Scoring {len(full_tuples)} users...")
     t0 = time.perf_counter()
-    n = len(log.choices)
-    mid = n // 2
-    n_items = len(set().union(*log.menus))
+    full_results = engine.analyze_menus(full_tuples)
 
-    sarp = validate_menu_sarp(log)
-    hm = compute_menu_efficiency(log)
+    # --- Split-half batches ---
+    # Build first-half and second-half tuples for all users with enough data
+    fh_tuples: list[tuple[list[list[int]], list[int], int]] = []
+    sh_tuples: list[tuple[list[list[int]], list[int], int]] = []
+    split_mask: list[bool] = []  # which users have valid splits
 
-    # Split-half
-    if mid >= 3:
-        log_1 = MenuChoiceLog(menus=log.menus[:mid], choices=log.choices[:mid])
-        log_2 = MenuChoiceLog(menus=log.menus[mid:], choices=log.choices[mid:])
-        hm_1 = compute_menu_efficiency(log_1).efficiency_index
-        hm_2 = compute_menu_efficiency(log_2).efficiency_index
-    else:
-        hm_1 = hm_2 = hm.efficiency_index
+    for log in logs:
+        n = len(log.choices)
+        mid = n // 2
+        if mid >= 3:
+            split_mask.append(True)
+            fh_log = MenuChoiceLog(menus=log.menus[:mid], choices=log.choices[:mid])
+            sh_log = MenuChoiceLog(menus=log.menus[mid:], choices=log.choices[mid:])
+            fh_tuples.append(fh_log.to_engine_tuple())
+            sh_tuples.append(sh_log.to_engine_tuple())
+        else:
+            split_mask.append(False)
 
-    elapsed = (time.perf_counter() - t0) * 1000
+    fh_results = engine.analyze_menus(fh_tuples) if fh_tuples else []
+    sh_results = engine.analyze_menus(sh_tuples) if sh_tuples else []
+    elapsed = time.perf_counter() - t0
+    print(f"  Done in {elapsed:.2f}s ({len(uids)/elapsed:.0f} users/sec)")
 
-    return UserResult(
-        user_id=uid, n_sessions=n, n_items=n_items,
-        is_sarp=sarp.is_consistent,
-        n_violations=len(sarp.violations),
-        hm_efficiency=hm.efficiency_index,
-        first_half_hm=hm_1, second_half_hm=hm_2,
-        time_ms=elapsed,
-    )
+    # --- Assemble UserResult objects ---
+    results: list[UserResult] = []
+    split_idx = 0
+    for i, (uid, log, mr) in enumerate(zip(uids, logs, full_results)):
+        hm_eff = mr.hm_consistent / max(mr.hm_total, 1)
+        n_items = len(set().union(*log.menus))
+
+        if split_mask[i]:
+            fh_hm = fh_results[split_idx].hm_consistent / max(fh_results[split_idx].hm_total, 1)
+            sh_hm = sh_results[split_idx].hm_consistent / max(sh_results[split_idx].hm_total, 1)
+            split_idx += 1
+        else:
+            fh_hm = sh_hm = hm_eff
+
+        results.append(UserResult(
+            user_id=uid, n_sessions=len(log.choices), n_items=n_items,
+            is_sarp=mr.is_sarp,
+            n_violations=mr.n_sarp_violations,
+            hm_efficiency=hm_eff,
+            first_half_hm=fh_hm, second_half_hm=sh_hm,
+            time_us=mr.compute_time_us,
+        ))
+    return results
 
 
 # =============================================================================
-# Rolling-Window Lifecycle
+# Rolling-Window Lifecycle (per-user window slicing — inherently sequential)
 # =============================================================================
 
 @dataclass
@@ -225,7 +258,7 @@ def main() -> None:
     print_banner("RECOMMENDATION CLICKS: RETAILROCKET SARP PANEL")
     print(f"  Papers: Kallus & Udell (2016, EC) + Cazzola & Daly (2024)")
     print(f"  Data: RetailRocket e-commerce click-stream (Kaggle)")
-    print(f"  Pipeline: MenuChoiceLog → SARP → Houtman-Maks → lifecycle")
+    print(f"  Pipeline: Rust Engine → SARP/WARP/HM batch → lifecycle")
     print("=" * 70)
 
     # Load real data
@@ -236,20 +269,14 @@ def main() -> None:
     )
     print(f"  Loaded {len(user_logs)} users")
 
-    # Analyze
-    print_banner("[2/3] RUNNING SARP ANALYSIS", "-", 60)
+    # Batch score with Rust Engine
+    print_banner("[2/3] BATCH SCORING (RUST ENGINE)", "-", 60)
     t0 = time.perf_counter()
-    results = []
-    for i, (uid, log) in enumerate(user_logs.items()):
-        result = analyze_user(uid, log)
-        results.append(result)
-        if (i + 1) % 100 == 0 or (i + 1) == len(user_logs):
-            print(f"    Processed {i+1}/{len(user_logs)} users...")
+    results = run_engine_batch(user_logs)
     wall_time = time.perf_counter() - t0
-
     print_results(results, wall_time)
 
-    # Lifecycle analysis
+    # Lifecycle analysis (per-user window slicing)
     print_banner("[3/3] ROLLING-WINDOW LIFECYCLE", "-", 60)
     lifecycle = []
     for uid, log in user_logs.items():

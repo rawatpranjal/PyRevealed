@@ -109,16 +109,25 @@ The independent variable is the system prompt. Five treatments:
 Trials
 ~~~~~~
 
-- 100 trials per prompt, 5 prompts = 500 API calls total
-- Each trial: random menu of 2--4 packages from {A,B,C,D,E}
+- 60 trials per prompt, 5 prompts, 2 temperatures = 600 API calls total
+- First 10 menus: all C(5,2)=10 pairwise comparisons (guaranteed coverage)
+- Remaining menus: random subsets of size 2--4
 - Same menu sequence across all prompts (controlled comparison)
-- Model: GPT-4o-mini at temperature 0.7
+- Model: GPT-4o-mini at temperature 0.0 (baseline) and 0.7
 
-.. note::
+.. warning::
 
-   Temperature 0.7 introduces stochasticity. At temperature 0, a model
-   with a fixed ranking would always pass SARP trivially. The question
-   is whether the *prompt* amplifies or dampens this noise.
+   **Methodological caveat.** SARP is an axiom for deterministic choice.
+   At temperature 0.7, GPT samples tokens stochastically, so SARP
+   violations may reflect sampling noise rather than genuine preference
+   cycles. A model with a stable 80/20 preference for ``requests`` over
+   ``httpx`` will produce SARP violations purely from minority draws.
+
+   For a rigorous treatment, repeat identical menus to estimate **choice
+   probabilities**, then test with stochastic choice axioms (RUM
+   consistency, regularity) available in ``pyrevealed.contrib.stochastic``.
+   Also run a **temperature-0 baseline**: if violations vanish at temp=0,
+   they are sampling artifacts, not prompt-induced inconsistency.
 
 Algorithm
 ---------
@@ -159,46 +168,63 @@ Running the Experiment
    # Preview without API calls
    python applications/02_llm_alignment.py --dry-run
 
-   # Quick test (20 trials per prompt = 100 API calls)
+   # Quick test (20 trials per prompt)
    export OPENAI_API_KEY=your_key
    python applications/02_llm_alignment.py --trials 20
 
-   # Full experiment (100 trials per prompt = 500 API calls, ~$0.02)
-   python applications/02_llm_alignment.py --trials 100
+   # Full experiment with temp=0 baseline (60 trials × 5 prompts × 2 temps = 600 calls, ~$0.03)
+   python applications/02_llm_alignment.py --trials 60 --baseline
 
    # Reanalyze cached responses
    python applications/02_llm_alignment.py --cached
 
-Expected output:
+Results (GPT-4o-mini, 60 trials per prompt, March 2026):
 
 .. code-block:: text
 
-   PROMPT CONSISTENCY RANKINGS
+   PROMPT CONSISTENCY RANKINGS (temp=0.7)
 
-   Prompt          Valid  SARP Violations   HM eff   Top choice     %
-   -------------- ----- ------ ---------- --------  ------------ ------
-   neutral           98   FAIL         3    0.960      requests  82.7%
-   expert            97   FAIL         5    0.938      requests  75.3%
-   cautious          99   PASS         0    1.000      requests  91.9%
-   innovative        96   FAIL        12    0.854         httpx  68.8%
-   minimal           98   FAIL         7    0.920      requests  71.4%
+   Prompt         Valid   SARP Violations   HM eff   Top choice      %
+   -------------- ----- ------ ---------- -------- ------------ ------
+   neutral           59   PASS          0    1.000        httpx  50.8%
+   expert            60   PASS          0    1.000        httpx  50.0%
+   innovative        53   PASS          0    1.000        httpx  54.7%
+   minimal           60   FAIL          1    0.967        httpx  50.0%
+   cautious          60   FAIL          1    0.950     requests  51.7%
+
+   BASELINE COMPARISON: temp=0 vs temp=0.7
+
+   neutral         temp=0:  0 viol  temp=0.7:  0 viol  → CLEAN
+   expert          temp=0:  0 viol  temp=0.7:  0 viol  → CLEAN
+   cautious        temp=0:  1 viol  temp=0.7:  1 viol  → SIGNAL
+   innovative      temp=0:  0 viol  temp=0.7:  0 viol  → CLEAN
+   minimal         temp=0:  0 viol  temp=0.7:  1 viol  → NOISE
 
 Interpretation
 --------------
 
-What the results mean
+What the results show
 ~~~~~~~~~~~~~~~~~~~~~
 
-- **Cautious prompt**: highest consistency. The stability-first framing
-  gives the model a clear decision rule, producing a fixed ranking.
+The dual-temperature design separates genuine prompt-induced inconsistency
+(SIGNAL) from sampling noise (NOISE):
 
-- **Innovative prompt**: most violations. The "cutting-edge" framing
-  creates tension between the model's default preference (``requests``)
-  and the persona's preference for newer tools (``httpx``), producing
-  menu-dependent choices.
+- **Cautious prompt**: the only prompt with a **genuine SARP violation**
+  (persists at temp=0). The stability-first framing creates a real
+  preference conflict: the model is torn between ``requests`` (stable)
+  and ``urllib3`` (low-level, foundational), producing menu-dependent
+  choices. This contradicts the prior hypothesis that cautious prompts
+  would be most consistent.
 
-- **Neutral vs. minimal**: similar consistency, suggesting the default
-  system prompt adds little beyond no prompt at all.
+- **Innovative prompt**: perfectly consistent despite shifting preferences
+  entirely to ``httpx`` (55%) and ``aiohttp`` (45%). A different ranking
+  than the default, but an internally coherent one.
+
+- **Minimal prompt**: one NOISE violation (temp=0.7 only). At temp=0 it
+  has a fixed ranking; the violation is a sampling artifact.
+
+- **Neutral/expert**: clean at both temperatures. The default model
+  behavior is inherently SARP-consistent.
 
 Practical applications
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -221,10 +247,14 @@ Practical applications
 Limitations
 ~~~~~~~~~~~
 
+- **SARP assumes deterministic choice.** At temperature > 0, the LLM is
+  a stochastic process. SARP violations may be sampling noise, not
+  genuine preference cycles. The correct axioms for probabilistic choice
+  are RUM consistency and regularity (Block & Marschak 1960; Kitamura &
+  Stoye 2018), available in ``pyrevealed.contrib.stochastic``. A temp=0
+  baseline is essential to separate prompt effects from sampling noise.
 - Only tests 5 packages in one domain (HTTP libraries). Real deployments
   involve more items and domains.
-- Temperature 0.7 introduces stochasticity that isn't purely
-  prompt-induced. Compare with temperature 0 baseline.
 - The experiment assumes the LLM follows the "choose one" instruction.
   Parse failures (malformed responses) are excluded from analysis.
 - 100 trials per prompt may be insufficient for rare menu combinations.

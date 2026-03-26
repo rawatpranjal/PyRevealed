@@ -25,6 +25,23 @@ python3 dunnhumby/run_all.py --quick   # 100 households sample
 python3 dunnhumby/run_all.py           # Full 2,222 households
 ```
 
+## Applications
+- to showcase the powerful rust engine batch processing
+- to showcase REAL WORLD APPLICATIONS (zero simulated, real data and concrete usecase)
+- real outputs, run the script and put in real results please.
+
+### Batch-First Rule (Engine-Default)
+Multi-user scoring MUST use `Engine.analyze_arrays()` (budget) or `Engine.analyze_menus()` (discrete).
+No Python for-loops calling per-user algorithm functions (`validate_consistency`, `validate_menu_sarp`,
+`compute_integrity_score`, `compute_menu_efficiency`, etc.) over collections of users.
+
+The Engine handles parallelism via Rust/Rayon. Use `log.to_engine_tuple()` for conversion.
+
+Acceptable single-user patterns:
+- Rolling-window temporal analysis (per-user window slicing)
+- Single-user pipeline walkthroughs for educational purposes
+- Small-N contexts (<10 subjects, e.g., 5 LLM prompts)
+
 ## Architecture
 
 PyRevealed tests whether observed choices are consistent with rational optimization — without estimating parameters. We test existence ("does a utility function exist?"), not fit models ("which utility function?"). All graph algorithms and LP solving run in Rust via Rayon; Python handles I/O.

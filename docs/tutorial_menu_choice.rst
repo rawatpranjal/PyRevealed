@@ -704,7 +704,7 @@ multiple users, position bias, and partial attention effects:
    # Plus some shared popularity component
    popularity = np.array([2.0, 1.8, 1.5, 2.2, 0.8, 1.0, 1.2, 1.4, 1.6, 1.9])
 
-   all_results = []
+   all_logs = []
 
    for user_id in range(n_users):
        # User-specific preference perturbation
@@ -746,19 +746,25 @@ multiple users, position bias, and partial attention effects:
            item_labels=item_labels,
            user_id=f"user_{user_id}",
        )
+       all_logs.append(log)
 
-       # Analyze this user
-       warp = validate_menu_warp(log)
-       sarp = validate_menu_sarp(log)
-       efficiency = compute_menu_efficiency(log)
+   # --- Batch analysis via Rust Engine ---
+   from pyrevealed.engine import Engine
+
+   engine = Engine()
+   user_tuples = [log.to_engine_tuple() for log in all_logs]
+   batch_results = engine.analyze_menus(user_tuples)  # Rust/Rayon parallel
+
+   # Attention analysis not in Engine — per-user (acceptable for small N)
+   all_results = []
+   for i, (log, mr) in enumerate(zip(all_logs, batch_results)):
        attention = test_attention_rationality(log)
-
        all_results.append({
-           "user": f"user_{user_id}",
+           "user": f"user_{i}",
            "log": log,
-           "warp_rate": 1.0 if warp.is_consistent else len(warp.violations),
-           "sarp_consistent": sarp.is_consistent,
-           "hm_efficiency": efficiency.efficiency_index,
+           "warp_violations": mr.n_warp_violations,
+           "sarp_consistent": mr.is_sarp,
+           "hm_efficiency": mr.hm_consistent / max(mr.hm_total, 1),
            "attention_param": attention.attention_parameter,
        })
 
@@ -783,13 +789,12 @@ multiple users, position bias, and partial attention effects:
    att_params = []
 
    for r in all_results:
-       warp_v = 0 if r["warp_rate"] == 1.0 else r["warp_rate"]
-       warp_violations.append(warp_v)
+       warp_violations.append(r["warp_violations"])
        sarp_pass += 1 if r["sarp_consistent"] else 0
        hm_scores.append(r["hm_efficiency"])
        att_params.append(r["attention_param"])
 
-       print(f"{r['user']:<10} {warp_v:<12} {str(r['sarp_consistent']):<10} "
+       print(f"{r['user']:<10} {r['warp_violations']:<12} {str(r['sarp_consistent']):<10} "
              f"{r['hm_efficiency']:.2f}      {r['attention_param']:.2f}")
 
    print("-" * 60)

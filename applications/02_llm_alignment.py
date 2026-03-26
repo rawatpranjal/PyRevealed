@@ -94,18 +94,24 @@ MODEL = "gpt-4o-mini"
 # =============================================================================
 
 def generate_menus(n_trials: int, rng: np.random.Generator) -> list[frozenset[int]]:
-    """Generate random package menus for the experiment.
+    """Generate random package menus with guaranteed pair coverage.
 
-    Each menu is a subset of {0,1,2,3,4} with size 2-4.
-    Ensures good coverage: every pair of packages appears together
-    in at least some menus.
+    First 10 menus: all C(5,2)=10 pairwise comparisons (guarantees every
+    pair is tested at least once). Remaining menus: random subsets of
+    size 2-4 for broader coverage.
     """
-    menus = []
-    for _ in range(n_trials):
+    from itertools import combinations
+
+    # Seed with all pairwise menus for guaranteed coverage
+    menus: list[frozenset[int]] = [frozenset(pair) for pair in combinations(range(N_PACKAGES), 2)]
+    rng.shuffle(menus)  # type: ignore[arg-type]
+
+    # Fill remaining with random menus
+    for _ in range(n_trials - len(menus)):
         size = rng.integers(2, 5)  # 2, 3, or 4 items
         items = rng.choice(N_PACKAGES, size=size, replace=False)
         menus.append(frozenset(items.tolist()))
-    return menus
+    return menus[:n_trials]
 
 
 # =============================================================================
@@ -129,6 +135,7 @@ def parse_choice(response: str, menu: frozenset[int]) -> int | None:
 
 def query_llm(
     system_prompt: str, user_prompt: str, model: str = MODEL,
+    temperature: float = 0.7,
 ) -> str:
     """Query OpenAI API and return the response text."""
     from openai import OpenAI
@@ -141,7 +148,7 @@ def query_llm(
 
     response = client.chat.completions.create(
         model=model, messages=messages,
-        temperature=0.7,  # Some randomness to test consistency
+        temperature=temperature,
         max_tokens=50,
     )
     return response.choices[0].message.content.strip()
@@ -149,14 +156,14 @@ def query_llm(
 
 def run_experiment_live(
     prompt_name: str, system_prompt: str, menus: list[frozenset[int]],
-    model: str = MODEL,
+    model: str = MODEL, temperature: float = 0.7,
 ) -> list[dict]:
     """Run live experiment for one prompt treatment."""
     records = []
     for i, menu in enumerate(menus):
         user_prompt = format_menu_prompt(menu)
         try:
-            response = query_llm(system_prompt, user_prompt, model)
+            response = query_llm(system_prompt, user_prompt, model, temperature)
             choice = parse_choice(response, menu)
         except Exception as e:
             response = f"ERROR: {e}"
@@ -164,8 +171,12 @@ def run_experiment_live(
 
         records.append({
             "prompt_name": prompt_name,
+            "temperature": temperature,
+            "model": model,
             "trial": i,
             "menu": sorted(menu),
+            "system_prompt": system_prompt,
+            "user_prompt": user_prompt,
             "response": response,
             "choice": choice,
             "choice_name": PACKAGES.get(choice, "PARSE_FAIL") if choice is not None else "PARSE_FAIL",
@@ -369,6 +380,10 @@ def main() -> None:
                         help="Trials per prompt (default: 100)")
     parser.add_argument("--model", type=str, default=MODEL,
                         help=f"OpenAI model (default: {MODEL})")
+    parser.add_argument("--temperature", type=float, default=0.7,
+                        help="Sampling temperature (default: 0.7)")
+    parser.add_argument("--baseline", action="store_true",
+                        help="Also run temp=0 baseline for noise separation")
     parser.add_argument("--seed", type=int, default=42,
                         help="Random seed for menu generation (default: 42)")
     parser.add_argument("--dry-run", action="store_true",
@@ -394,10 +409,10 @@ def main() -> None:
     elif args.dry_run:
         # Dry run
         print_banner("[1/2] DRY RUN (no API calls)", "-", 60)
+        menus = generate_menus(args.trials, rng)
         all_records = []
         for pname, sprompt in SYSTEM_PROMPTS.items():
             print(f"\n  Prompt: {pname}")
-            menus = generate_menus(args.trials, rng)
             records = run_experiment_dry(pname, sprompt, menus)
             all_records.extend(records)
         print("\n  Use without --dry-run to make real API calls.")
@@ -412,33 +427,69 @@ def main() -> None:
             return
 
         print_banner("[1/2] RUNNING EXPERIMENT", "-", 60)
-        all_records = []
-        for pname, sprompt in SYSTEM_PROMPTS.items():
-            print(f"\n    Prompt: {pname} ({args.trials} trials)...")
-            menus = generate_menus(args.trials, rng)
-            records = run_experiment_live(pname, sprompt, menus, args.model)
-            all_records.extend(records)
+        # Generate menus ONCE and reuse across all prompts for controlled comparison
+        menus = generate_menus(args.trials, rng)
 
-            valid = sum(1 for r in records if r["choice"] is not None)
-            print(f"    Done: {valid}/{len(records)} valid responses")
+        temperatures = [args.temperature]
+        if args.baseline:
+            temperatures = [0.0, args.temperature]
+            print(f"  Dual-temperature design: temp=0 baseline + temp={args.temperature}")
+
+        all_records = []
+        for temp in temperatures:
+            temp_label = f"temp={temp}"
+            print(f"\n  --- {temp_label} ---")
+            for pname, sprompt in SYSTEM_PROMPTS.items():
+                print(f"    Prompt: {pname} ({args.trials} trials, {temp_label})...")
+                records = run_experiment_live(pname, sprompt, menus, args.model, temp)
+                all_records.extend(records)
+
+                valid = sum(1 for r in records if r["choice"] is not None)
+                print(f"    Done: {valid}/{len(records)} valid responses")
 
         # Save for caching
         save_responses(all_records)
 
-    # Analyze
-    print_banner("[2/2] ANALYZING SARP CONSISTENCY", "-", 60)
-    results = []
-    for pname in SYSTEM_PROMPTS:
-        prompt_records = [r for r in all_records if r["prompt_name"] == pname]
-        if prompt_records:
-            result = analyze_prompt(pname, prompt_records)
-            results.append(result)
-            print(f"    {pname:<14s}: HM={result.hm_efficiency:.3f},"
-                  f" {result.n_violations} violations,"
-                  f" top={result.top_choice}")
+    # Analyze — group by temperature
+    temps_in_data = sorted(set(r.get("temperature", args.temperature) for r in all_records))
 
-    # Report
-    print_results(results)
+    for temp in temps_in_data:
+        temp_records = [r for r in all_records if r.get("temperature", args.temperature) == temp]
+        if not temp_records:
+            continue
+
+        print_banner(f"[2/2] ANALYZING SARP CONSISTENCY (temp={temp})", "-", 60)
+        results = []
+        for pname in SYSTEM_PROMPTS:
+            prompt_records = [r for r in temp_records if r["prompt_name"] == pname]
+            if prompt_records:
+                result = analyze_prompt(pname, prompt_records)
+                results.append(result)
+                print(f"    {pname:<14s}: HM={result.hm_efficiency:.3f},"
+                      f" {result.n_violations} violations,"
+                      f" top={result.top_choice}")
+
+        print_results(results)
+
+    # Baseline comparison if both temps present
+    if len(temps_in_data) == 2:
+        print_banner("BASELINE COMPARISON: temp=0 vs temp=0.7")
+        for pname in SYSTEM_PROMPTS:
+            t0_recs = [r for r in all_records if r["prompt_name"] == pname and r.get("temperature") == 0.0]
+            t7_recs = [r for r in all_records if r["prompt_name"] == pname and r.get("temperature") == temps_in_data[1]]
+            if t0_recs and t7_recs:
+                r0 = analyze_prompt(pname, t0_recs)
+                r7 = analyze_prompt(pname, t7_recs)
+                noise_flag = "NOISE" if r0.n_violations == 0 and r7.n_violations > 0 else ""
+                signal_flag = "SIGNAL" if r0.n_violations > 0 else ""
+                flag = noise_flag or signal_flag or "CLEAN"
+                print(f"  {pname:<14s}  temp=0: {r0.n_violations:2d} viol  "
+                      f"temp={temps_in_data[1]}: {r7.n_violations:2d} viol  → {flag}")
+        print()
+        print("  NOISE  = violations only at temp>0 (sampling artifact)")
+        print("  SIGNAL = violations even at temp=0 (genuine inconsistency)")
+        print("  CLEAN  = no violations at either temperature")
+
     print_banner("DONE", "=", 70)
 
 

@@ -272,6 +272,10 @@ class BehaviorLog:
         """Number of features/goods/actions N."""
         return self.cost_vectors.shape[1]
 
+    def to_engine_tuple(self) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+        """Convert to ``(prices, quantities)`` tuple for ``Engine.analyze_arrays()``."""
+        return (self.cost_vectors, self.action_vectors)
+
     # Legacy property aliases for backward compatibility
     @property
     def expenditure_matrix(self) -> NDArray[np.float64]:
@@ -839,6 +843,10 @@ class MenuChoiceLog:
     def num_items(self) -> int:
         """Number of unique items N."""
         return len(self.all_items)
+
+    def to_engine_tuple(self) -> tuple[list[list[int]], list[int], int]:
+        """Convert to ``(menus, choices, n_items)`` tuple for ``Engine.analyze_menus()``."""
+        return ([sorted(m) for m in self.menus], list(self.choices), self.num_items)
 
     def get_item_label(self, idx: int) -> str:
         """Get label for an item index."""
