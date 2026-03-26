@@ -39,6 +39,8 @@ class EngineResult:
     utility_success: bool = False
     vei_mean: float = 1.0
     vei_min: float = 1.0
+    vei_exact_mean: float = 1.0
+    vei_exact_min: float = 1.0
     max_scc: int = 0
     compute_time_us: int = 0
 
@@ -110,6 +112,7 @@ class Engine:
             "hm": "hm" in self.metrics,
             "utility": "utility" in self.metrics,
             "vei": "vei" in self.metrics,
+            "vei_exact": "vei_exact" in self.metrics,
         }
 
         for start in range(0, n, self.chunk_size):
@@ -177,6 +180,7 @@ class Engine:
             flags.get("hm", False),
             flags.get("utility", False),
             flags.get("vei", False),
+            flags.get("vei_exact", False),
             self.tolerance,
         )
 
@@ -192,6 +196,8 @@ class Engine:
                 utility_success=r.get("utility_success", False),
                 vei_mean=r.get("vei_mean", 1.0),
                 vei_min=r.get("vei_min", 1.0),
+                vei_exact_mean=r.get("vei_exact_mean", 1.0),
+                vei_exact_min=r.get("vei_exact_min", 1.0),
                 max_scc=r["max_scc"],
                 compute_time_us=r["compute_time_us"],
             )

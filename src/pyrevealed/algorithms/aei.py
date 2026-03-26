@@ -71,7 +71,7 @@ def compute_aei(
             import numpy as np
             p = np.ascontiguousarray(session.prices, dtype=np.float64)
             q = np.ascontiguousarray(session.quantities, dtype=np.float64)
-            results = _rust_analyze_batch([p], [q], True, False, False, False, False, False, tolerance)
+            results = _rust_analyze_batch([p], [q], True, False, False, False, False, False, False, tolerance)
             ccei = results[0]["ccei"]
             is_consistent = results[0]["is_garp"]
 

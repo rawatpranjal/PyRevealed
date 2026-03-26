@@ -68,7 +68,7 @@ def compute_mpi(
         try:
             p = np.ascontiguousarray(session.prices, dtype=np.float64)
             q = np.ascontiguousarray(session.quantities, dtype=np.float64)
-            results = _rust_analyze_batch([p], [q], False, True, False, False, False, False, tolerance)
+            results = _rust_analyze_batch([p], [q], False, True, False, False, False, False, False, tolerance)
             mpi_val = results[0]["mpi"]
             is_consistent = results[0]["is_garp"]
 

@@ -23,7 +23,15 @@ ruff format src/
 # Real-world validation (requires Kaggle dataset)
 python3 dunnhumby/run_all.py --quick   # 100 households sample
 python3 dunnhumby/run_all.py           # Full 2,222 households
+
+# Rust rebuild (maturin is the build backend)
+pip install -e .                        # Recompiles Rust automatically
+maturin develop --release               # Direct maturin (faster iteration)
 ```
+
+The Rust binding crate is at `rust/crates/rpt-python/` (not repo root).
+`pip install .` compiles Rust via maturin; `HAS_RUST` fallback in `_rust_backend.py`
+still works if the Rust toolchain is unavailable.
 
 ## Applications
 - to showcase the powerful rust engine batch processing
@@ -103,6 +111,18 @@ Rayon par_iter (batch)        ← one thread per user, scratchpad reuse
 Engine results
 ```
 
+### Backend Parity
+
+Python fallback (`Engine._analyze_chunk_python`) supports GARP + CCEI + MPI only.
+HARP, HM, utility, and VEI require the Rust backend.
+
+Known algorithm differences:
+- **MPI**: Python uses GARP-cycle enumeration; Rust uses Karp's max-mean-weight cycle. Tolerance: 0.05
+- **CCEI**: Both use discrete binary search. Tolerance: 0.01
+- **HM**: Both use greedy FVS with SCC recomputation. Should match exactly.
+
+Cross-backend parity tests: `pytest tests/test_backend_parity.py`
+
 ### Core Data Flow
 
 ```
@@ -143,6 +163,25 @@ ProductionLog (inputs × outputs)          Intertemporal data (amounts × dates)
 | production.py | Production | Profit graph FW — Varian (1984) |
 | quasilinear.py | Budget | Bellman-Ford — C&E (2016) Ch 9 |
 | intertemporal.py | Intertemporal | Bound propagation — Echenique+ (2020) |
+
+### Result Types (`core/results/`)
+
+57 result dataclasses split into submodules by domain:
+
+| Module | Key Classes |
+|--------|-------------|
+| `budget_core.py` | GARPResult, AEIResult, MPIResult, UtilityRecoveryResult |
+| `budget_extended.py` | WARPResult, SARPResult, HoutmanMaksResult, HARPResult, VEIResult, ... |
+| `abstract_choice.py` | AbstractWARPResult, CongruenceResult, OrdinalUtilityResult, ... |
+| `advanced.py` | IntegrabilityResult, WelfareResult, ProductionGARPResult, ... |
+| `diagnostics.py` | RegularityResult, SwapsIndexResult, BradleyTerryResult, ... |
+| `power.py` | SeltenMeasureResult, RelativeAreaResult, OptimalEfficiencyResult, ... |
+| `risk.py` | RiskProfileResult, ExpectedUtilityResult |
+| `spatial.py` | IdealPointResult, SeparabilityResult |
+| `attention.py` | WARPLAResult, RandomAttentionResult, RUMConsistencyResult |
+
+`from pyrevealed.core.result import XxxResult` still works (backward-compat shim).
+31 tech-friendly aliases (e.g. `ConsistencyResult = GARPResult`) live in each submodule.
 
 ### Contrib (deprecated — MLE/estimation)
 
