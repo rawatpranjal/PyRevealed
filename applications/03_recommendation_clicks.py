@@ -170,6 +170,121 @@ def analyze_user(
 
 
 # =============================================================================
+# Rolling-Window Temporal Panel
+# =============================================================================
+
+@dataclass
+class LifecycleResult:
+    user_id: str
+    user_type: str
+    hm_trajectory: list[float]
+    mean_hm: float
+    std_hm: float
+    slope: float
+    lifecycle: str  # stable/improving/deteriorating/volatile
+
+
+def compute_rolling_hm(
+    menus: list[frozenset[int]], choices: list[int],
+    window: int = 15, step: int = 5,
+) -> list[float]:
+    """Compute HM efficiency over rolling windows of sessions."""
+    n = len(menus)
+    if n < window:
+        log = MenuChoiceLog(menus=menus, choices=choices)
+        return [compute_menu_efficiency(log).efficiency_index]
+
+    results = []
+    for start in range(0, n - window + 1, step):
+        end = start + window
+        log = MenuChoiceLog(menus=menus[start:end], choices=choices[start:end])
+        hm = compute_menu_efficiency(log).efficiency_index
+        results.append(hm)
+    return results
+
+
+def classify_lifecycle(hm_values: list[float]) -> tuple[str, float]:
+    """Classify an HM trajectory."""
+    if len(hm_values) < 2:
+        return "stable", 0.0
+    arr = np.array(hm_values)
+    std = arr.std()
+    slope = np.polyfit(np.arange(len(arr)), arr, 1)[0]
+
+    if std < 0.05:
+        return "stable", slope
+    elif slope > 0.01:
+        return "improving", slope
+    elif slope < -0.01:
+        return "deteriorating", slope
+    else:
+        return "volatile", slope
+
+
+def run_lifecycle_analysis(
+    user_data: list[tuple[str, str, list, list]],
+    window: int = 15, step: int = 5,
+) -> list[LifecycleResult]:
+    """Run rolling-window HM analysis for all users."""
+    results = []
+    for uid, utype, menus, choices in user_data:
+        if len(menus) < window:
+            continue
+        hm_traj = compute_rolling_hm(menus, choices, window, step)
+        lifecycle, slope = classify_lifecycle(hm_traj)
+        results.append(LifecycleResult(
+            user_id=uid, user_type=utype,
+            hm_trajectory=hm_traj,
+            mean_hm=np.mean(hm_traj), std_hm=np.std(hm_traj),
+            slope=slope, lifecycle=lifecycle,
+        ))
+    return results
+
+
+def print_lifecycle_results(lifecycle: list[LifecycleResult]) -> None:
+    """Print lifecycle panel analysis."""
+    if not lifecycle:
+        return
+
+    n = len(lifecycle)
+    print_banner("USER LIFECYCLE CLASSIFICATION")
+    print(f"  Users analyzed: {n}")
+
+    print(f"\n  {'Lifecycle':<16s} {'N':>4s} {'%':>7s} {'Mean HM':>8s}"
+          f" {'Std HM':>8s} {'Slope':>8s}")
+    print(f"  {'-'*16} {'-'*4} {'-'*7} {'-'*8} {'-'*8} {'-'*8}")
+    for lc in ["stable", "improving", "deteriorating", "volatile"]:
+        subset = [r for r in lifecycle if r.lifecycle == lc]
+        if not subset:
+            continue
+        pct = len(subset) / n * 100
+        print(f"  {lc:<16s} {len(subset):4d} {pct:6.1f}%"
+              f" {np.mean([r.mean_hm for r in subset]):8.3f}"
+              f" {np.mean([r.std_hm for r in subset]):8.3f}"
+              f" {np.mean([r.slope for r in subset]):+8.4f}")
+
+    # Cross-tabulation: user_type × lifecycle
+    print_banner("CROSS-TAB: TRUE TYPE x DETECTED LIFECYCLE")
+    types = ["consistent", "noisy", "drifting", "random"]
+    lifecycles = ["stable", "improving", "deteriorating", "volatile"]
+    print(f"  {'':>12s}", end="")
+    for lc in lifecycles:
+        print(f" {lc:>13s}", end="")
+    print()
+    print(f"  {'-'*12}", end="")
+    for _ in lifecycles:
+        print(f" {'-'*13}", end="")
+    print()
+    for utype in types:
+        print(f"  {utype:>12s}", end="")
+        subset_type = [r for r in lifecycle if r.user_type == utype]
+        for lc in lifecycles:
+            count = sum(1 for r in subset_type if r.lifecycle == lc)
+            print(f" {count:13d}", end="")
+        print()
+
+
+# =============================================================================
 # Reporting
 # =============================================================================
 
@@ -353,6 +468,12 @@ def main() -> None:
 
     # Report
     print_results(results, wall_time)
+
+    # Lifecycle panel analysis
+    print_banner("[3/3] ROLLING-WINDOW LIFECYCLE ANALYSIS", "-", 60)
+    print(f"  Computing rolling HM (window=15, step=5)...")
+    lifecycle = run_lifecycle_analysis(user_data, window=15, step=5)
+    print_lifecycle_results(lifecycle)
 
     if args.plot:
         print_banner("VISUALIZATION", "-", 60)

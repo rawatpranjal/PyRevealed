@@ -17,6 +17,10 @@ simulated data if the dataset hasn't been downloaded.
 
 Pipeline: BehaviorLog -> GARP -> CCEI -> MPI -> Houtman-Maks -> segment.
 
+Includes panel temporal analysis: rolling-window CCEI tracking per household,
+trajectory classification (stable/improving/deteriorating/volatile), and
+crossover detection.
+
 Usage:
     python applications/01_grocery_scanner.py
     python applications/01_grocery_scanner.py --households 500 --seed 123
@@ -185,6 +189,154 @@ def analyze_household(
         n_weeks=log.num_records, is_consistent=garp.is_consistent,
         ccei=ccei_val, mpi=mpi_val, hm_fraction=hm_val, time_ms=elapsed,
     )
+
+
+# =============================================================================
+# Temporal Panel Analysis
+# =============================================================================
+
+@dataclass
+class TemporalResult:
+    household_id: str
+    ccei_trajectory: list[float]  # CCEI per window
+    window_starts: list[int]      # start index of each window
+    mean_ccei: float
+    std_ccei: float
+    slope: float                  # linear trend
+    trajectory_type: str          # stable/improving/deteriorating/volatile
+
+
+def compute_rolling_ccei(
+    log: BehaviorLog, window: int = 20, step: int = 5,
+) -> list[tuple[int, float]]:
+    """Compute CCEI over rolling windows of observations.
+
+    Returns list of (window_start_index, ccei_value).
+    """
+    T = log.num_records
+    if T < window:
+        return [(0, compute_integrity_score(log, tolerance=1e-4).efficiency_index)]
+
+    results = []
+    for start in range(0, T - window + 1, step):
+        end = start + window
+        window_log = BehaviorLog(
+            cost_vectors=log.cost_vectors[start:end],
+            action_vectors=log.action_vectors[start:end],
+        )
+        garp = validate_consistency(window_log)
+        if garp.is_consistent:
+            ccei = 1.0
+        else:
+            ccei = compute_integrity_score(window_log, tolerance=1e-4).efficiency_index
+        results.append((start, ccei))
+    return results
+
+
+def classify_trajectory(ccei_values: list[float]) -> tuple[str, float]:
+    """Classify a CCEI trajectory and compute linear slope.
+
+    Returns (trajectory_type, slope).
+    """
+    if len(ccei_values) < 2:
+        return "stable", 0.0
+
+    arr = np.array(ccei_values)
+    std = arr.std()
+    # Linear regression: slope via least squares
+    x = np.arange(len(arr))
+    slope = np.polyfit(x, arr, 1)[0]
+
+    if std < 0.03:
+        return "stable", slope
+    elif slope > 0.005:
+        return "improving", slope
+    elif slope < -0.005:
+        return "deteriorating", slope
+    else:
+        return "volatile", slope
+
+
+def run_temporal_analysis(
+    household_logs: list[tuple[str, BehaviorLog]],
+    window: int = 20, step: int = 5,
+) -> list[TemporalResult]:
+    """Run rolling-window CCEI analysis for all households."""
+    results = []
+    for i, (hid, log) in enumerate(household_logs):
+        if log.num_records < window:
+            continue  # skip households with too few observations
+        rolling = compute_rolling_ccei(log, window, step)
+        ccei_values = [c for _, c in rolling]
+        starts = [s for s, _ in rolling]
+        ttype, slope = classify_trajectory(ccei_values)
+        results.append(TemporalResult(
+            household_id=hid,
+            ccei_trajectory=ccei_values,
+            window_starts=starts,
+            mean_ccei=np.mean(ccei_values),
+            std_ccei=np.std(ccei_values),
+            slope=slope,
+            trajectory_type=ttype,
+        ))
+        if (i + 1) % 25 == 0:
+            print(f"    Temporal: {i+1}/{len(household_logs)} households...")
+    return results
+
+
+def print_temporal_results(temporal: list[TemporalResult]) -> None:
+    """Print temporal panel analysis results."""
+    if not temporal:
+        print("  No households with enough observations for temporal analysis.")
+        return
+
+    n = len(temporal)
+    type_counts: dict[str, int] = {}
+    for t in temporal:
+        type_counts[t.trajectory_type] = type_counts.get(t.trajectory_type, 0) + 1
+
+    print_banner("TRAJECTORY CLASSIFICATION")
+    print(f"  Households analyzed: {n}")
+    print(f"\n  {'Type':<16s} {'N':>5s} {'%':>7s} {'Mean CCEI':>10s}"
+          f" {'Std CCEI':>10s} {'Avg Slope':>10s}")
+    print(f"  {'-'*16} {'-'*5} {'-'*7} {'-'*10} {'-'*10} {'-'*10}")
+    for ttype in ["stable", "improving", "deteriorating", "volatile"]:
+        subset = [t for t in temporal if t.trajectory_type == ttype]
+        if not subset:
+            continue
+        count = len(subset)
+        pct = count / n * 100
+        avg_ccei = np.mean([t.mean_ccei for t in subset])
+        avg_std = np.mean([t.std_ccei for t in subset])
+        avg_slope = np.mean([t.slope for t in subset])
+        print(f"  {ttype:<16s} {count:5d} {pct:6.1f}% {avg_ccei:10.3f}"
+              f" {avg_std:10.3f} {avg_slope:+10.4f}")
+
+    # Crossover examples: users whose first-half and second-half classifications differ
+    print_banner("CROSSOVER EXAMPLES")
+    print("  Households whose rationality changed significantly over time:")
+    print(f"\n  {'ID':<12s} {'Type':<16s} {'1st half':>10s} {'2nd half':>10s}"
+          f" {'Delta':>8s} {'Slope':>8s}")
+    print(f"  {'-'*12} {'-'*16} {'-'*10} {'-'*10} {'-'*8} {'-'*8}")
+
+    crossovers = []
+    for t in temporal:
+        if len(t.ccei_trajectory) < 4:
+            continue
+        mid = len(t.ccei_trajectory) // 2
+        first_half = np.mean(t.ccei_trajectory[:mid])
+        second_half = np.mean(t.ccei_trajectory[mid:])
+        delta = second_half - first_half
+        if abs(delta) > 0.05:
+            crossovers.append((t, first_half, second_half, delta))
+
+    crossovers.sort(key=lambda x: abs(x[3]), reverse=True)
+    for t, fh, sh, delta in crossovers[:8]:
+        print(f"  {t.household_id:<12s} {t.trajectory_type:<16s}"
+              f" {fh:10.3f} {sh:10.3f} {delta:+8.3f} {t.slope:+8.4f}")
+
+    if not crossovers:
+        print("  (No significant crossovers found)")
 
 
 # =============================================================================
@@ -364,8 +516,17 @@ def main() -> None:
     # Report
     print_results(results, wall_time, data_source)
 
+    # Temporal panel analysis
+    print_banner("[3/4] TEMPORAL PANEL ANALYSIS", "-", 60)
+    print(f"  Computing rolling-window CCEI (window=20, step=5)...")
+    t0 = time.perf_counter()
+    temporal = run_temporal_analysis(household_logs, window=20, step=5)
+    temporal_time = time.perf_counter() - t0
+    print(f"  Temporal analysis: {temporal_time:.2f}s for {len(temporal)} households")
+    print_temporal_results(temporal)
+
     if args.plot:
-        print_banner("[3/3] VISUALIZATION", "-", 60)
+        print_banner("[4/4] VISUALIZATION", "-", 60)
         plot_results(results)
 
     print_banner("DONE", "=", 70)

@@ -377,6 +377,46 @@ This pattern --- high per-window consistency but low full-window
 consistency --- is a **churn leading indicator** that precedes engagement
 drops.
 
+Lifecycle classification
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Classify each user by the shape of their rolling-window HM trajectory:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 12 40
+
+   * - Lifecycle
+     - Criteria
+     - Action
+   * - Stable
+     - std < 0.05
+     - Reliable user; invest in deep personalization
+   * - Improving
+     - slope > +0.01
+     - Preferences crystallizing; increase recommendation specificity
+   * - Deteriorating
+     - slope < -0.01
+     - Preference erosion; early churn signal
+   * - Volatile
+     - std > 0.05, |slope| < 0.01
+     - Context-dependent; emphasize exploration over exploitation
+
+Cross-tabulating true user type with detected lifecycle validates the
+detection method:
+
+.. code-block:: text
+
+               stable  improving  deteriorating  volatile
+   consistent      12          0              0         0
+   noisy            0         13              7         2
+   drifting         0          0              0        10
+   random           2          0              1         3
+
+Consistent users map cleanly to "stable." Drifting users all appear
+as "volatile" --- their per-window consistency is high but the trajectory
+shifts. This is exactly the signal a churn detection system should flag.
+
 Sliding window extension
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 

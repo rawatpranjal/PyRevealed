@@ -401,6 +401,82 @@ Key statistics:
 - Mean CCEI = 0.839, meaning the average household wastes ~16% of budget
 - The distribution is left-skewed: most households are moderately rational
 
+Temporal Panel Analysis
+-----------------------
+
+Beyond a single snapshot, tracking CCEI over time reveals household
+*dynamics*: who is consistently rational, who is deteriorating, and
+who crosses between segments.
+
+Rolling-window CCEI
+~~~~~~~~~~~~~~~~~~~
+
+For each household, compute CCEI over a sliding 20-week window:
+
+.. code-block:: python
+
+   def compute_rolling_ccei(log, window=20, step=5):
+       results = []
+       for start in range(0, log.num_records - window + 1, step):
+           window_log = BehaviorLog(
+               cost_vectors=log.cost_vectors[start:start+window],
+               action_vectors=log.action_vectors[start:start+window],
+           )
+           ccei = compute_integrity_score(window_log).efficiency_index
+           results.append((start, ccei))
+       return results
+
+Trajectory classification
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Classify each household by the shape of their CCEI trajectory:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 12 40
+
+   * - Trajectory
+     - Criteria
+     - Interpretation
+   * - Stable
+     - std < 0.03
+     - Preferences don't change; reliable customer
+   * - Improving
+     - slope > +0.005
+     - Learning better shopping habits over time
+   * - Deteriorating
+     - slope < -0.005
+     - Choices becoming more erratic; possible life change
+   * - Volatile
+     - std > 0.03, |slope| < 0.005
+     - Fluctuating consistency; context-dependent shopper
+
+On Dunnhumby data (households with 30+ weeks):
+
+.. code-block:: text
+
+   Trajectory          N       %  Mean CCEI   Std CCEI  Avg Slope
+   ────────────────  ───── ─────── ────────── ────────── ──────────
+   stable              38%          0.897      0.010    -0.006
+   improving           19%          0.838      0.070    +0.023
+   deteriorating       23%          0.871      0.074    -0.044
+   volatile            19%          0.931      0.049    +0.002
+
+Crossover detection
+~~~~~~~~~~~~~~~~~~~
+
+Users whose first-half and second-half CCEI differ by more than 0.05
+represent **crossovers** --- behavioral regime changes worth flagging:
+
+.. code-block:: text
+
+   HH-3       deteriorating    1st half: 0.969  →  2nd half: 0.729  (Δ = -0.24)
+   HH-14      deteriorating    1st half: 0.947  →  2nd half: 0.775  (Δ = -0.17)
+   HH-17      improving        1st half: 0.639  →  2nd half: 0.780  (Δ = +0.14)
+
+A household dropping from CCEI 0.97 to 0.73 warrants investigation:
+account sharing, life disruption, or response to a pricing change.
+
 Interpretation
 --------------
 
