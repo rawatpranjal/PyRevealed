@@ -679,6 +679,8 @@ def main():
     generate_power_analysis()
     generate_engine_throughput()
     generate_attention_decay()
+    generate_ccei_algorithm()
+    generate_hm_algorithm()
 
     print(f"\nAll GIFs saved to {OUTPUT_DIR}/")
     for f in sorted(OUTPUT_DIR.glob("*.gif")):

@@ -469,10 +469,10 @@ def plot_power_analysis(
         percentile = np.mean(random_ccei <= observed_ccei) * 100
         ax.text(
             0.02,
-            0.98,
+            0.05,
             f"Observed is better than {percentile:.1f}% of random",
             transform=ax.transAxes,
-            verticalalignment="top",
+            verticalalignment="bottom",
             fontsize=10,
             bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
         )
@@ -483,6 +483,7 @@ def plot_power_analysis(
     ax.set_title(f"Power Analysis (Bronars Power = {power_result.power_index:.4f})")
     ax.legend(loc="upper left")
     ax.grid(True, alpha=0.3)
+    fig.tight_layout()
 
     return fig, ax
 
