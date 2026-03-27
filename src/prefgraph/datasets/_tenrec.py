@@ -96,10 +96,12 @@ def load_tenrec(
     if feedback not in ("like", "follow", "share"):
         raise ValueError(f"feedback must be 'like', 'follow', or 'share', got '{feedback}'")
 
-    # Accumulate per-user click and feedback sequences (vectorized)
-    user_clicks: dict[int, list[int]] = {}
-    user_feedback: dict[int, set[int]] = {}
+    # Accumulate per-user click data with positional feedback.
+    # Each entry is (item_id, had_feedback) so we know whether THIS specific
+    # click had feedback=1, not just whether the item was ever liked.
+    user_click_data: dict[int, list[tuple[int, bool]]] = {}
     n_rows = 0
+    n_users_with_fb = 0
 
     for chunk in pd.read_csv(
         csv_path,
@@ -113,25 +115,26 @@ def load_tenrec(
         if clicked.empty:
             continue
 
-        # Vectorized: split into feedback vs non-feedback
-        has_fb = clicked[clicked[feedback] == 1]
-
-        # Batch append clicks by user
+        # Batch append clicks with positional feedback by user
         for uid, group in clicked.groupby("user_id"):
             uid_int = int(uid)
-            user_clicks.setdefault(uid_int, []).extend(group["item_id"].tolist())
-
-        # Batch record feedback items
-        for uid, group in has_fb.groupby("user_id"):
-            uid_int = int(uid)
-            user_feedback.setdefault(uid_int, set()).update(group["item_id"].tolist())
+            items = group["item_id"].tolist()
+            fbs = group[feedback].tolist()
+            user_click_data.setdefault(uid_int, []).extend(
+                (iid, fb_val == 1) for iid, fb_val in zip(items, fbs)
+            )
 
         if n_rows % 20_000_000 == 0:
             print(f"    ...{n_rows:,} rows processed")
 
+    # Count users that have at least one feedback click
+    for click_data in user_click_data.values():
+        if any(had_fb for _, had_fb in click_data):
+            n_users_with_fb += 1
+
     print(f"  Total rows: {n_rows:,}")
-    print(f"  Users with clicks: {len(user_clicks):,}")
-    print(f"  Users with {feedback}: {len(user_feedback):,}")
+    print(f"  Users with clicks: {len(user_click_data):,}")
+    print(f"  Users with {feedback}: {n_users_with_fb:,}")
 
     # Build menu-choice observations:
     # For each user, walk through their click sequence.
@@ -140,18 +143,18 @@ def load_tenrec(
     user_logs: dict[str, MenuChoiceLog] = {}
     n_qualified = 0
 
-    for uid, clicks in user_clicks.items():
-        fb_set = user_feedback.get(uid)
-        if not fb_set:
+    for uid, click_data in user_click_data.items():
+        # Skip users with no feedback at all
+        if not any(had_fb for _, had_fb in click_data):
             continue
 
         menus = []
         choices = []
         window: list[int] = []
 
-        for iid in clicks:
+        for iid, had_fb in click_data:
             window.append(iid)
-            if iid in fb_set:
+            if had_fb:
                 menu = frozenset(window)
                 if MIN_MENU_SIZE <= len(menu) <= MAX_MENU_SIZE:
                     menus.append(menu)
