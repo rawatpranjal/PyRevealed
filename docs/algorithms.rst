@@ -57,10 +57,16 @@ Budget-Based Methods
 GARP — :math:`O(T^2)` SCC Algorithm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: _static/floyd_warshall.gif
-   :width: 60%
-   :align: center
-   :alt: Floyd-Warshall transitive closure building indirect preferences
+.. raw:: html
+
+   <div style="display: flex; gap: 40px; margin-top: 20px; margin-bottom: 24px; align-items: flex-start; justify-content: center; flex-wrap: wrap;">
+       <div style="flex: 1; min-width: 300px; text-align: center;">
+           <img src="_static/floyd_warshall.gif" style="width: 100%; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+       </div>
+       <div style="flex: 1; min-width: 300px; text-align: center;">
+           <img src="_static/scc_tarjan.gif" style="width: 100%; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+       </div>
+   </div>
 
 **Traditional approach** (pre-2015): Build the direct revealed preference graph
 :math:`G_{R_0}`, compute its transitive closure :math:`R^*` via Floyd-Warshall in
