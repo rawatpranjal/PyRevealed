@@ -3,10 +3,12 @@ E-commerce Benchmarks
 
 We test whether revealed preference features (CCEI, MPI, Houtman-Maks, VEI)
 improve ML models on standard e-commerce prediction tasks. Six public
-datasets, 120K+ users, LightGBM with 5-fold stratified CV. **Result: RP
-features add 0--1% AUC over strong RFM baselines.** The signal is real but
-modest — revealed preference scores capture behavioral patterns correlated
-with, but not independent of, standard spending features.
+datasets, 113K users, LightGBM with 5-fold stratified CV. **Result: RP
+features add 0--2% AUC over strong RFM baselines, with the clearest signal
+on churn prediction (+0.7% Open E-Commerce, +1.8% Online Retail II).**
+The lift is real but modest — most predictive power comes from standard
+spending features. RP scores provide marginally independent signal about
+behavioral consistency that spending statistics alone do not capture.
 
 Results
 -------
@@ -71,13 +73,27 @@ Results
      - 0.941
      - -0.1%
      - 0.855
-   * - H&M
-     - 50,000
+   * - Online Retail II
+     - 443
      - Churn
-     - *pending*
-     - *pending*
-     - *pending*
-     - *pending*
+     - 0.641
+     - 0.652
+     - +1.8%
+     - 0.320
+   * - H&M
+     - 46,757
+     - Churn
+     - 0.778
+     - 0.778
+     - +0.0%
+     - 0.293
+   * - H&M
+     - 46,757
+     - High Spender
+     - 0.763
+     - 0.762
+     - -0.1%
+     - 0.667
 
 *"Baseline" = LightGBM on RFM + spending features. "+RP" = same model with RP features added. Lift = (Combined − Baseline) / Baseline × 100.*
 
