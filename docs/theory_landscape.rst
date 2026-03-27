@@ -1,3 +1,6 @@
+:html_theme.sidebar_secondary.remove:
+:html_theme.sidebar_primary.remove:
+
 Methods
 =======
 
@@ -14,7 +17,7 @@ Every method in PyRevealed, organized by **input data type** (rows) and
        padding: 8px 10px;
    }
    .method-landscape td p { margin-bottom: 0.2em; }
-   .method-landscape .subtype { font-style: italic; font-weight: 600; margin-top: 0.4em; }
+   .method-landscape .subtype { font-style: italic; font-weight: 600; margin-top: 0.6em; display: block; }
    </style>
 
 .. list-table::
@@ -81,10 +84,7 @@ Every method in PyRevealed, organized by **input data type** (rows) and
        |
        | :doc:`Theory </menu/theory_abstract>`
        | :doc:`Tutorial </menu/tutorial_menu_choice>`
-     - | .. raw:: html
-       |
-       |    <span class="subtype">Deterministic</span>
-       |
+     - | *Deterministic*
        | WARP — Samuelson (1938)
        | SARP — Richter (1966)
        | Congruence — Richter (1966)
@@ -93,10 +93,7 @@ Every method in PyRevealed, organized by **input data type** (rows) and
        | Attention overload
        | Status quo bias
        |
-       | .. raw:: html
-       |
-       |    <span class="subtype">Stochastic</span>
-       |
+       | *Stochastic*
        | RAM — Cattaneo et al. (2020)
        | RUM — Block & Marschak (1960)
        | McFadden axioms
@@ -105,27 +102,18 @@ Every method in PyRevealed, organized by **input data type** (rows) and
        | Stochastic transitivity
        | Context effects
        |
-       | .. raw:: html
-       |
-       |    <span class="subtype">Risk</span>
-       |
+       | *Risk*
        | Expected utility — vNM (1944)
        | Rank-dependent utility
      - | Menu HM — H&M (1985)
        | Distance to RUM
        | Predictive success
-     - | .. raw:: html
-       |
-       |    <span class="subtype">Deterministic</span>
-       |
+     - | *Deterministic*
        | Ordinal utility
        | Consideration sets — MNO (2012)
        | Preference w/ attention
        |
-       | .. raw:: html
-       |
-       |    <span class="subtype">Stochastic</span>
-       |
+       | *Stochastic*
        | Attention probabilities
        | Salience weights
        | Choice probabilities
@@ -133,10 +121,7 @@ Every method in PyRevealed, organized by **input data type** (rows) and
        | RUM distribution
        | Bradley-Terry
        |
-       | .. raw:: html
-       |
-       |    <span class="subtype">Risk</span>
-       |
+       | *Risk*
        | Risk profile
      - | Attention bounds
        | RAM parameters
