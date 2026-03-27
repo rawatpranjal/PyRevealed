@@ -122,3 +122,48 @@ If the agent's behavior satisfies SARP, the underlying ordinal preference rankin
 If multiple preference orderings are compatible with the observed data, PrefGraph returns one such consistent ranking.
 
 **References:** Richter (1966), Chambers & Echenique (2016).
+
+
+Item Preference Network Features
+---------------------------------
+
+**Requires:** ``Engine(metrics=[..., "network"])``
+
+The item preference graph :math:`G = (X, R)` has one node per item and a directed edge :math:`x \to y` whenever item :math:`x` was chosen from a menu containing :math:`y`. These features summarize the *shape* of preferences — not whether they're consistent, but how they're distributed across items.
+
+**Graph Density** (``r_density``)
+
+.. math::
+
+   \rho = \frac{|\{(x,y) : x \, R \, y, \, x \neq y\}|}{|X|(|X|-1)}
+
+Fraction of item pairs where a direct preference has been expressed. High density means extensive comparison coverage — the consumer has "ranked" most item pairs through their choices. Low density means limited exploration: many item pairs have never been directly compared.
+
+**Preference Entropy** (``pref_entropy``)
+
+Shannon entropy of the out-degree distribution, where :math:`d^+(x)` is the number of items that :math:`x` has been chosen over:
+
+.. math::
+
+   H = -\sum_{x \in X} \frac{d^+(x)}{D} \log_2 \frac{d^+(x)}{D}, \quad D = \sum_{x} d^+(x)
+
+Measures preference diversity. High entropy means choices are spread across many items (an explorer). Low entropy means one or two items dominate all choices (a loyalist). Distinct from SARP consistency — a consumer can have high entropy and still be perfectly consistent if their many choices never contradict.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Value
+     - Interpretation
+   * - High (near :math:`\log_2 |X|`)
+     - Preferences distributed evenly across items. Variety-seeking behavior.
+   * - Low (near 0)
+     - Preferences concentrated on one or two dominant items. Strong loyalty.
+
+**Choice Diversity** (``choice_diversity``)
+
+.. math::
+
+   \text{diversity} = \frac{|\{c(B_t) : t = 1, \ldots, T\}|}{T}
+
+Fraction of sessions that resulted in a *distinct* item choice. Ranges from :math:`1/T` (always picks the same item) to 1.0 (every session picks a different item). A direct measure of exploration rate, independent of menu composition or consistency.

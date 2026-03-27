@@ -168,3 +168,58 @@ Power is estimated by simulating a cohort of "synthetic agents" who make random 
    A high CCEI (or AEI) observed in a low-power environment must be interpreted with caution, as it may be a spurious artifact of non-overlapping budget sets.
 
 **Reference:** Bronars (1987).
+
+
+Preference Graph Network Features
+----------------------------------
+
+**Requires:** ``Engine(metrics=[..., "network"])``
+
+The preference graph :math:`G = (V, E)` has one node per observation and directed edges from the revealed preference relation :math:`R`. These features summarize its topology and edge-weight distribution — capturing signals orthogonal to consistency scores. Empirically validated as uncorrelated (max :math:`|r| < 0.3`) with CCEI, MPI, and VEI across multiple datasets.
+
+**Graph Density** (``r_density``)
+
+.. math::
+
+   \rho = \frac{|\{(i,j) : x^i \, R \, x^j, \, i \neq j\}|}{T(T-1)}
+
+The fraction of observation pairs where one bundle is revealed preferred to the other. High density means budgets overlap heavily — many shopping trips are comparable. Low density means distinct price regimes with limited overlap. Closely related to Bronars power: sparse graphs provide weak tests of rationality.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Value
+     - Interpretation
+   * - > 0.5
+     - Dense: most observation pairs are comparable. Rich data for preference inference.
+   * - [0.2, 0.5]
+     - Moderate overlap. Typical for monthly aggregated e-commerce data.
+   * - < 0.2
+     - Sparse: few observations share budget overlap. Consistency tests have low power.
+
+**Out-Degree Dispersion** (``r_out_degree_std``)
+
+Standard deviation of :math:`\text{deg}^+(i) = |\{j : x^i \, R \, x^j\}|` across observations. Measures unevenness in how many alternatives each shopping trip dominates. High values indicate that some trips occurred during high-income or stable-price periods (dominating many alternatives) while others were constrained.
+
+**Degree Gini** (``degree_gini``)
+
+Gini coefficient of the total degree distribution :math:`\text{deg}(i) = \text{deg}^+(i) + \text{deg}^-(i)`. Measures concentration of preference information. High Gini means a few "hub" observations are disproportionately central — removing them would collapse the graph's structure.
+
+**Edge-Weight Distribution** (``ew_mean``, ``ew_std``, ``ew_skew``)
+
+Requires ``"harp"`` in metrics (edge weights come from HARP's log-ratio computation). For each edge :math:`(i,j)` in :math:`R`:
+
+.. math::
+
+   w_{ij} = \ln \frac{p^i \cdot x^i}{p^i \cdot x^j}
+
+This is the log of how much the consumer *actually* spent relative to what bundle :math:`j` would have cost. These weights decompose into substitution and income effects:
+
+- ``ew_mean``: Average substitution tendency. Negative values suggest choosing expensive bundles (brand loyalty, quality preference). Near-zero suggests price-elastic behavior.
+- ``ew_std``: **Behavioral volatility** — the most orthogonal feature found empirically. High values mean the consumer's price sensitivity varies drastically across trips. Low values mean a consistent "type" of shopper.
+- ``ew_skew``: Direction of outlier behavior. Positive skew = occasional extreme underspending (missed deals). Negative skew = occasional extreme overspending (splurges).
+
+.. note::
+
+   Edge-weight features capture substitution vs income effect patterns — a fundamentally different signal dimension from consistency scores. A consumer can be perfectly GARP-consistent (CCEI = 1.0) but have wildly varying substitution patterns (high ``ew_std``), or vice versa.
