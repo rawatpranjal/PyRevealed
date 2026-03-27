@@ -93,6 +93,7 @@ class BenchmarkResult:
     top_features: list | None = None
     auc_lift: float = 0.0
     auc_lift_pct: float = 0.0
+    wall_time_s: float = 0.0  # Total wall time for this benchmark (data + features + model)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -110,6 +111,9 @@ def run_three_way(
 
     Three models: (a) RP only, (b) Baseline only, (c) RP + Baseline.
     """
+    import time as _time
+    _t0 = _time.time()
+
     import lightgbm as lgb
     from sklearn.model_selection import StratifiedKFold, KFold
     from sklearn.metrics import (
@@ -271,4 +275,5 @@ def run_three_way(
         result.r2_base_train = in_sample["base"]
         result.r2_combined_train = in_sample["combined"]
 
+    result.wall_time_s = _time.time() - _t0
     return result

@@ -150,6 +150,20 @@ def print_summary(results: list[BenchmarkResult]) -> None:
             )
         print("  " + "-" * 86)
 
+    # Timing
+    timed_results = [r for r in results if r.wall_time_s > 0]
+    if timed_results:
+        print("\n  Execution Time (model training only, excludes data loading)")
+        print("  " + "-" * 60)
+        print(f"  {'Dataset':<18} {'Target':<18} {'N':>6}  {'Time':>8}")
+        print("  " + "-" * 60)
+        for r in timed_results:
+            print(f"  {r.dataset:<18} {r.target:<18} {r.n_users:>6}  {r.wall_time_s:>7.1f}s")
+        total_model_time = sum(r.wall_time_s for r in timed_results)
+        print("  " + "-" * 60)
+        print(f"  {'Total':<18} {'':<18} {sum(r.n_users for r in results):>6}  {total_model_time:>7.1f}s")
+        print("  " + "-" * 60)
+
     # Feature importance summary
     combined_cls = [r for r in cls_results if r.top_features]
     if combined_cls:
