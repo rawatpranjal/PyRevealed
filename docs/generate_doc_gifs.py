@@ -70,20 +70,21 @@ def generate_budget_hero():
         for idx, (ax, sc) in enumerate(zip(axes, scenarios)):
             ax.clear()
             ax.set_facecolor(PALETTE["bg"])
-            ax.set_title(sc["title"], fontsize=13, fontweight="bold", pad=26, loc="left", color=sc["accent"])
-            
+            ax.set_title(sc["title"], fontsize=13, fontweight="bold", pad=8, loc="left", color=sc["accent"])
+
             prices, quants = sc["prices"], sc["quants"]
             expenditures = np.sum(prices * quants, axis=1)
             n_total = len(prices)
             obs_colors = ["#5b8def", "#8e44ad", "#27ae60", "#e74c3c"]
-            
+
             ax.set_xlim(-0.2, 8.5)
             ax.set_ylim(-0.2, 8.5)
             if idx == 2:
                 ax.set_xlabel("Good 1", fontsize=11)
             ax.set_ylabel("Good 2", fontsize=11)
             ax.grid(True, alpha=0.15, color=PALETTE["grid"])
-            ax.text(0.00, 1.02, sc["desc"], transform=ax.transAxes, fontsize=10, style="italic")
+            ax.text(0.00, -0.10, sc["desc"], transform=ax.transAxes, fontsize=9,
+                    style="italic", color=PALETTE["secondary"], va="top")
 
             budget_prefs = []
             for i in range(n_total):
@@ -154,9 +155,9 @@ def generate_menu_hero():
     ]
     
     TOTAL_FRAMES = 85
-    fig, axes = plt.subplots(3, 1, figsize=(7, 11.5), facecolor=PALETTE["bg"])
-    plt.subplots_adjust(hspace=0.65, top=0.92, bottom=0.06, left=0.1, right=0.95)
-    
+    fig, axes = plt.subplots(3, 1, figsize=(7, 12.5), facecolor=PALETTE["bg"])
+    plt.subplots_adjust(hspace=1.0, top=0.96, bottom=0.05, left=0.1, right=0.95)
+
     all_items = ["A", "B", "C", "D"]
     item_colors = {"A": "#5b8def", "B": "#e67e22", "C": "#27ae60", "D": "#8e44ad"}
 
@@ -164,8 +165,9 @@ def generate_menu_hero():
         for idx, (ax, sc) in enumerate(zip(axes, scenarios)):
             ax.clear()
             ax.set_facecolor(PALETTE["bg"])
-            ax.set_title(sc["title"], fontsize=13, fontweight="bold", pad=26, loc="left", color=sc["accent"])
-            ax.text(0.00, 1.02, sc["desc"], transform=ax.transAxes, fontsize=10, style="italic")
+            ax.set_title(sc["title"], fontsize=13, fontweight="bold", pad=8, loc="left", color=sc["accent"])
+            ax.text(0.00, -0.10, sc["desc"], transform=ax.transAxes, fontsize=9,
+                    style="italic", color=PALETTE["secondary"], va="top")
             
             menus = sc["menus"]
             n_total = len(menus)
@@ -704,7 +706,7 @@ def generate_ccei_algorithm():
             phase_text = "Phase 3: Critical Efficiency Threshold"
             desc = f"At $e$ = 0.875, choices strictly separate.\nCCEI = 0.875 (Budgets shrunk by min 12.5%)."
             
-        ax.text(0.00, 1.09, phase_text, transform=ax.transAxes, fontsize=12, fontweight="bold", color=PALETTE["text"])
+        ax.text(0.00, 1.09, phase_text, transform=ax.transAxes, fontsize=12, fontweight="bold", color="#333333")
         ax.text(0.00, 1.02, desc, transform=ax.transAxes, fontsize=11, style="italic")
         
         colors = ["#5b8def", "#8e44ad"]
@@ -778,7 +780,7 @@ def generate_hm_algorithm():
             active_nodes = [2, 3, 4, 5]
             highlight_cycles = False
             
-        ax.text(0.00, 1.09, phase_text, transform=ax.transAxes, fontsize=12, fontweight="bold", color=PALETTE["text"])
+        ax.text(0.00, 1.09, phase_text, transform=ax.transAxes, fontsize=12, fontweight="bold", color="#333333")
         ax.text(0.00, 1.02, desc, transform=ax.transAxes, fontsize=11, style="italic")
         
         for u, v in edges:
