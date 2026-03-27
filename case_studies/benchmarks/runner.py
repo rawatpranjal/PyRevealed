@@ -27,8 +27,10 @@ from case_studies.benchmarks.core.reporting import print_summary, save_results, 
 AVAILABLE_DATASETS = {
     "dunnhumby": "case_studies.benchmarks.datasets.dunnhumby_bench",
     "open_ecommerce": "case_studies.benchmarks.datasets.open_ecommerce_bench",
+    "online_retail_ii": "case_studies.benchmarks.datasets.online_retail_ii_bench",
     "instacart": "case_studies.benchmarks.datasets.instacart_bench",
     "rees46": "case_studies.benchmarks.datasets.rees46_bench",
+    "hm": "case_studies.benchmarks.datasets.hm_bench",
 }
 
 
@@ -46,9 +48,14 @@ def run_dataset(name: str, max_users: int | None = None) -> list[BenchmarkResult
     elif name == "open_ecommerce":
         if max_users:
             kwargs["n_users"] = max_users
+    elif name == "online_retail_ii":
+        if max_users:
+            kwargs["n_customers"] = max_users
     elif name == "instacart":
         kwargs["max_users"] = max_users or 50000
     elif name == "rees46":
+        kwargs["max_users"] = max_users or 50000
+    elif name == "hm":
         kwargs["max_users"] = max_users or 50000
 
     try:

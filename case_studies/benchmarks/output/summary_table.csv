@@ -1,11 +1,4 @@
 Dataset,Target,N,Task,AUC (RP only),AUC (Baseline),AUC (Combined),Lift %,RMSE (RP only),RMSE (Baseline),RMSE (Combined),R2 (Combined)
-Dunnhumby,Churn,2222,class,0.580,0.748,0.730,-2.4%,,,,
-Dunnhumby,High Spender,2222,class,0.917,0.958,0.959,+0.1%,,,,
-Dunnhumby,Spend Change,2222,regre,,,,,7.4887,6.8802,6.8550,0.127
-Open E-Commerce,High Spender,4694,class,0.917,0.950,0.951,+0.2%,,,,
-Open E-Commerce,Churn,4694,class,0.718,0.841,0.847,+0.7%,,,,
-Open E-Commerce,Spend Change,4694,regre,,,,,100.0109,93.4055,93.9588,0.121
-Instacart,Spend Drop,50000,class,0.610,0.665,0.666,+0.2%,,,,
-Instacart,High Value,50000,class,0.908,0.967,0.967,+0.0%,,,,
-Instacart,Basket Size,50000,regre,,,,,5.4214,3.4243,3.4262,0.702
-REES46,High Engagement,8832,class,0.753,0.942,0.941,-0.1%,,,,
+H&M,High Spender,200,class,0.633,0.765,0.753,-1.5%,,,,
+H&M,Churn,200,class,0.504,0.844,0.850,+0.7%,,,,
+H&M,Spend Change,200,regre,,,,,0.4906,0.3594,0.3645,0.402

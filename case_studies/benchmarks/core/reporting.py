@@ -85,6 +85,28 @@ def print_summary(results: list[BenchmarkResult]) -> None:
             )
         print("  " + "-" * 100)
 
+        print("\n  Classification Tasks — AUC-PR (Average Precision, better for imbalanced targets)")
+        print("  " + "-" * 100)
+        print(f"  {'Dataset':<18} {'Target':<18} {'N':>6} {'%pos':>5}  {'RP only':>10}  {'Baseline':>10}  {'Combined':>10}")
+        print("  " + "-" * 100)
+        for r in cls_results:
+            print(
+                f"  {r.dataset:<18} {r.target:<18} {r.n_users:>6} {r.positive_rate:>5.1%}  "
+                f"{r.ap_rp:>10.3f}  {r.ap_base:>10.3f}  {r.ap_combined:>10.3f}"
+            )
+        print("  " + "-" * 100)
+
+        print("\n  Classification Tasks — Log Loss (lower = better calibration)")
+        print("  " + "-" * 100)
+        print(f"  {'Dataset':<18} {'Target':<18}  {'RP only':>10}  {'Baseline':>10}  {'Combined':>10}")
+        print("  " + "-" * 100)
+        for r in cls_results:
+            print(
+                f"  {r.dataset:<18} {r.target:<18}  "
+                f"{r.logloss_rp:>10.4f}  {r.logloss_base:>10.4f}  {r.logloss_combined:>10.4f}"
+            )
+        print("  " + "-" * 100)
+
         print("\n  Classification Tasks — In-Sample AUC-ROC (overfitting check)")
         print("  " + "-" * 80)
         print(f"  {'Dataset':<18} {'Target':<18}  {'RP only':>10}  {'Baseline':>10}  {'Combined':>10}")
