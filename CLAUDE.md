@@ -8,7 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Documentation Rules
 
-- **RTD nav tab names must be single words.** Current order: Budgets, Menus, Algorithms, Performance, Applications, Methods, API, References. Methods/API/References are intentionally pushed right so they overflow into "More" on narrow viewports. Applications wraps Production + Intertemporal.
+- **RTD nav tab names must be single words.** Current order: Quickstart, Budgets, Menus, Algorithms, Performance, Applications, Methods, API, References. Methods/API/References are intentionally pushed right so they overflow into "More" on narrow viewports. Applications wraps Production + Intertemporal.
+- **README is user-forward.** Paste-and-run example first (using `load_demo`), then Scores, "Which API?", Choice Categories, Performance. Architecture details live in RTD only.
+- **CHANGELOG.md** lives at repo root. Update it when making user-visible changes.
 
 ## Build & Test Commands
 
@@ -28,9 +30,6 @@ mypy src/
 ruff check src/
 ruff format src/
 
-  remote: This repository moved. Please use the new location:
-     remote:   https://github.com/rawatpranjal/PyRevealed.git
-     
 # Real-world validation (requires Kaggle dataset)
 python3 case_studies/dunnhumby/run_all.py --quick   # 100 households sample
 python3 case_studies/dunnhumby/run_all.py           # Full 2,222 households
