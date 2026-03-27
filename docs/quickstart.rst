@@ -90,34 +90,43 @@ PyRevealed has two APIs. Use whichever fits your task:
 Your Own Data
 -------------
 
-Your data needs to be ``(prices T*K, quantities T*K)`` per user, where T = observations and K = goods.
-
-**From a DataFrame:**
+**Fastest path** — ``analyze()`` takes a DataFrame and returns a DataFrame:
 
 .. code-block:: python
 
-   import numpy as np
+   import pyrevealed as rp
+
+   # Wide format (one row per observation, items as columns)
+   results = rp.analyze(df, user_col="user_id",
+                        cost_cols=["price_A", "price_B"],
+                        action_cols=["qty_A", "qty_B"])
+
+   # Long format (transaction logs — one row per item per time)
+   results = rp.analyze(df, user_col="user_id", item_col="product",
+                        cost_col="price", action_col="quantity", time_col="week")
+
+   # Menu/click data
+   results = rp.analyze(df, user_col="user_id",
+                        menu_col="shown_items", choice_col="clicked")
+
+   print(results[["is_garp", "ccei", "mpi"]].describe())
+
+Format is auto-detected from which parameters you provide. Default metrics: ``garp``, ``ccei``, ``mpi``.
+Customize with ``metrics=["garp", "ccei", "mpi", "hm", "harp"]``.
+
+**Power-user path** — ``BehaviorPanel`` for full control:
+
+.. code-block:: python
+
+   from pyrevealed import BehaviorPanel
    from pyrevealed.engine import Engine
 
-   # Suppose df has columns: user_id, obs_id, price_good_0, ..., qty_good_0, ...
-   price_cols = [c for c in df.columns if c.startswith("price_")]
-   qty_cols = [c for c in df.columns if c.startswith("qty_")]
+   panel = BehaviorPanel.from_dataframe(df, user_col="user_id",
+                                        cost_cols=["price_A", "price_B"],
+                                        action_cols=["qty_A", "qty_B"])
 
-   users = []
-   for uid, group in df.groupby("user_id"):
-       prices = group[price_cols].values.astype(np.float64)
-       quantities = group[qty_cols].values.astype(np.float64)
-       users.append((prices, quantities))
-
-   results = Engine(metrics=["garp", "ccei", "mpi"]).analyze_arrays(users)
-
-**Into pandas:**
-
-.. code-block:: python
-
-   import pandas as pd
-   df = pd.DataFrame([r.to_dict() for r in results])
-   print(df[["is_garp", "ccei", "mpi"]].describe())
+   engine = Engine(metrics=["garp", "ccei", "mpi", "harp", "hm"])
+   results = engine.analyze_arrays(panel.to_engine_tuples())
 
 Next Steps
 ----------

@@ -205,7 +205,8 @@ class BehaviorLog:
             raise DimensionError(
                 f"cost_vectors must be a 2D array (T x N), got {self.cost_vectors.ndim}D "
                 f"with shape {self.cost_vectors.shape}. "
-                f"Hint: Use .reshape(-1, N) to convert 1D arrays."
+                f"Hint: Use .reshape(-1, N) to convert 1D arrays, "
+                f"or pyrevealed.analyze(df, ...) for DataFrames."
             )
         if self.cost_vectors.shape[0] < 1:
             raise InsufficientDataError(

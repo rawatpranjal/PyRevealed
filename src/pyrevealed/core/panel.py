@@ -275,6 +275,34 @@ class MenuChoicePanel:
         """Create panel from a dict of user_id -> MenuChoiceLog."""
         return cls(_logs=dict(logs))
 
+    @classmethod
+    def from_dataframe(
+        cls,
+        df: Any,
+        user_col: str,
+        menu_col: str = "menu",
+        choice_col: str = "choice",
+    ) -> "MenuChoicePanel":
+        """Create panel from a pandas DataFrame with menu choice data.
+
+        Groups by user_col and creates one MenuChoiceLog per user.
+
+        Args:
+            df: pandas DataFrame with menu and choice columns
+            user_col: Column name for user IDs
+            menu_col: Column containing sets/lists of item indices
+            choice_col: Column containing the chosen item index
+        """
+        from pyrevealed.core.session import MenuChoiceLog
+
+        log_dict: dict[str, "MenuChoiceLog"] = {}
+        for uid, group in df.groupby(user_col, sort=True):
+            uid_str = str(uid)
+            log_dict[uid_str] = MenuChoiceLog.from_dataframe(
+                group, menu_col=menu_col, choice_col=choice_col, user_id=uid_str
+            )
+        return cls(_logs=log_dict)
+
     @property
     def user_ids(self) -> list[str]:
         return list(self._logs.keys())

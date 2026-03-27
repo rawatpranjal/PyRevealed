@@ -35,6 +35,29 @@ EngineResult: [+] GARP-consistent  ccei=1.0000  hm=15/15  (35us)
 
 Every score is a feature. Use them for fraud detection, user segmentation, A/B testing, churn prediction, or personalization.
 
+## Your Data
+
+Have a pandas DataFrame? One line:
+
+```python
+import pyrevealed as rp
+
+# Transaction logs (one row per item per time)
+results = rp.analyze(df, user_col="user_id", item_col="product",
+                     cost_col="price", action_col="quantity", time_col="week")
+
+# Wide format (one row per observation, items as columns)
+results = rp.analyze(df, user_col="user_id",
+                     cost_cols=["price_A", "price_B"],
+                     action_cols=["qty_A", "qty_B"])
+
+# Menu/click data
+results = rp.analyze(df, user_col="user_id",
+                     menu_col="shown_items", choice_col="clicked")
+```
+
+Returns a pandas DataFrame with one row per user. Customize with `metrics=["garp", "ccei", "mpi", "hm"]`.
+
 ## Scores
 
 | Score | Field | What it measures | Range |

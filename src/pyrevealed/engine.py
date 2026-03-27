@@ -215,7 +215,8 @@ class Engine:
             raise TypeError(
                 f"users must be a list of (prices, quantities) tuples, "
                 f"got {type(users).__name__}. "
-                f"Hint: Wrap a single user as [(prices, quantities)]."
+                f"Hint: Wrap a single user as [(prices, quantities)]. "
+                f"If you have a pandas DataFrame, use pyrevealed.analyze(df, ...) instead."
             )
         if len(users) == 0:
             raise DataValidationError("users list is empty. Provide at least one (prices, quantities) tuple.")
@@ -238,12 +239,14 @@ class Engine:
             if p.ndim != 2:
                 raise DimensionError(
                     f"users[{i}]: prices must be 2D (T x K), got {p.ndim}D with shape {p.shape}. "
-                    f"Hint: Use prices.reshape(-1, K) for 1D arrays."
+                    f"Hint: Use prices.reshape(-1, K) for 1D arrays, "
+                    f"or pyrevealed.analyze(df, ...) for DataFrames."
                 )
             if q.ndim != 2:
                 raise DimensionError(
                     f"users[{i}]: quantities must be 2D (T x K), got {q.ndim}D with shape {q.shape}. "
-                    f"Hint: Use quantities.reshape(-1, K) for 1D arrays."
+                    f"Hint: Use quantities.reshape(-1, K) for 1D arrays, "
+                    f"or pyrevealed.analyze(df, ...) for DataFrames."
                 )
             if p.shape != q.shape:
                 raise DimensionError(
