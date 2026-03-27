@@ -92,7 +92,54 @@ Results
      - +0.0%
      - 0.137
 
-*Baseline = LightGBM on RFM + spending features. +RP = same model with RP features added. Lift = (Combined - Baseline) / Baseline x 100. Runtime: 19 min on M1 Mac.*
+*Baseline = LightGBM on RFM + spending features. +RP = same model with RP features added. Lift = (Combined - Baseline) / Baseline x 100.*
+
+Timing
+------
+
+Total wall time: **19 min** on M1 Mac (data on external USB drive via symlink).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 8 12 12
+
+   * - Dataset
+     - N
+     - Data + Features
+     - Model (14 tasks)
+   * - Dunnhumby
+     - 2,222
+     - 6s
+     - 12s
+   * - Open E-Commerce
+     - 4,694
+     - 16s
+     - 12s
+   * - H&M
+     - 46,757
+     - 169s
+     - 21s
+   * - Instacart
+     - 50,000
+     - 92s
+     - 27s
+   * - REES46
+     - 8,832
+     - 709s
+     - 4s
+   * - Taobao
+     - 4,239
+     - 94s
+     - 4s
+
+REES46 and Taobao dominate wall time due to raw CSV parsing (110M and 100M
+events). Converting to Parquet would cut data loading by 5--10x:
+
+.. code-block:: python
+
+   # With pyarrow installed, analyze directly from Parquet
+   results = rp.analyze("users.parquet", user_col="user_id",
+                        cost_cols=["p1", "p2"], action_cols=["q1", "q2"])
 
 Price Assumptions
 -----------------
