@@ -28,6 +28,7 @@ from pyrevealed.datasets._online_retail_ii import load_online_retail_ii
 from pyrevealed.datasets._hm import load_hm
 from pyrevealed.datasets._pakistan import load_pakistan
 from pyrevealed.datasets._favorita import load_favorita
+from pyrevealed.datasets._taobao import load_taobao
 
 
 def list_datasets() -> list[dict[str, str]]:
