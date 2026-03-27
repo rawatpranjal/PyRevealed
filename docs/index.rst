@@ -20,8 +20,8 @@ You have data on what people chose. PyRevealed tests whether those choices are r
      </div>
      <div class="feature-card">
        <h3>Two API Layers</h3>
-       <p><strong>Engine</strong> for batch scoring — Rust/Rayon parallelism, thousands of users per second. <strong>Functions</strong> for single-user deep dives — detailed results, utility recovery, welfare bounds.</p>
-       <p>Results are dataclasses with <code>.to_dict()</code> and <code>.summary()</code>, ready for pandas or sklearn pipelines.</p>
+       <p><strong>Engine</strong> — batch scoring via Rust/Rayon. <strong>Functions</strong> — single-user deep dives.</p>
+       <p>Results are dataclasses with <code>.to_dict()</code> / <code>.summary()</code>, pandas and sklearn ready.</p>
      </div>
      <div class="feature-card">
        <h3>Algorithms</h3>
