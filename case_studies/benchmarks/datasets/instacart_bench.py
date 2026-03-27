@@ -12,22 +12,22 @@ from case_studies.benchmarks.core.evaluation import run_three_way, BenchmarkResu
 
 DATASET_NAME = "Instacart"
 
-# Instacart has 21 departments — we aggregate quantities at department level.
-# Prices are not available so we use uniform prices (quantity-only consistency).
-NUM_DEPARTMENTS = 21
+# Instacart has 134 aisles — we aggregate quantities at aisle level.
+# Prices are heuristic per-aisle (keyword-based on aisle names, $1.50-$14.00).
+NUM_AISLES = 134
 
 
 def load_and_prepare(data_dir=None, max_users=50000):
     """Load Instacart and prepare train/target splits.
 
-    Since Instacart doesn't have price data, we use uniform prices ($1 per unit).
-    This reduces GARP to checking whether the consumer buys strictly dominated
-    bundles — a well-precedented approach when prices are unavailable.
+    Aggregates at the aisle level (134 aisles) with heuristic per-aisle
+    prices based on aisle names. This gives real price variation for
+    meaningful GARP/CCEI/MPI analysis.
 
     Args:
         data_dir: Path to Instacart data directory containing orders.csv,
-            order_products__prior.csv, products.csv, departments.csv.
-        max_users: Cap on number of users (default: 5000 for speed).
+            order_products__prior.csv, products.csv, aisles.csv.
+        max_users: Cap on number of users (default: 50000).
     """
     from prefgraph.datasets._instacart import load_instacart
 

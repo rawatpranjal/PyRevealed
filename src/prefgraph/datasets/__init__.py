@@ -76,9 +76,9 @@ def list_datasets() -> list[dict[str, str]]:
         },
         {
             "name": "instacart",
-            "description": "Grocery orders from 200K+ users across 21 departments",
+            "description": "Grocery orders from 200K+ users across 134 aisles",
             "source": "Kaggle (instacart/market-basket-analysis)",
-            "goods": "21 departments (uniform prices)",
+            "goods": "134 aisles (heuristic per-aisle prices)",
             "observations": "~15-100 orders per user",
         },
         {
