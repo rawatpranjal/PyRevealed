@@ -35,7 +35,7 @@ def generate_budget_hero():
     expenditures = np.sum(prices * quants, axis=1)  # [8, 8]
     colors = ["#5b8def", "#8e44ad"]
     CCEI_FINAL = 0.875
-    TOTAL_FRAMES = 40
+    TOTAL_FRAMES = 48
 
     fig, ax = plt.subplots(1, 1, figsize=(7, 5), facecolor=PALETTE["bg"])
     plt.subplots_adjust(top=0.88, bottom=0.12, left=0.10, right=0.95)
@@ -74,29 +74,33 @@ def generate_budget_hero():
         ax.tick_params(labelsize=9)
         ax.grid(True, alpha=0.15, color=PALETTE["grid"])
 
-        # Phase logic
+        # Phase logic — gaps between text phases so the viewer can breathe
         if frame < 5:
-            # Act 1a: Show both trips
             phase = "show"
-        elif frame < 10:
-            # Act 1b: Highlight x1 inside budget 2
+        elif frame < 9:
             phase = "arrow1"
+        elif frame < 11:
+            phase = "gap1"       # arrows stay, text gone
         elif frame < 15:
-            # Act 1c: Highlight x2 inside budget 1
             phase = "arrow2"
-        elif frame < 20:
-            # Act 1d: Contradiction
+        elif frame < 17:
+            phase = "gap2"       # both arrows, text gone
+        elif frame < 21:
             phase = "contradiction"
-        elif frame < 32:
-            # Act 2: Shrink budgets
+        elif frame < 23:
+            phase = "gap3"       # red arrows, text gone
+        elif frame < 35:
             phase = "shrink"
         else:
-            # Act 3: Final score
             phase = "final"
+
+        # Which arrows to show (carry forward through gaps)
+        show_arrow1 = phase not in ("show",)
+        show_arrow2 = phase not in ("show", "arrow1", "gap1")
 
         # Compute current efficiency level
         if phase == "shrink":
-            progress = (frame - 20) / 11.0
+            progress = (frame - 23) / 11.0
             e = 1.0 - progress * (1.0 - CCEI_FINAL)
         elif phase == "final":
             e = CCEI_FINAL
@@ -104,10 +108,10 @@ def generate_budget_hero():
             e = 1.0
 
         # Title
-        if phase in ("show", "arrow1", "arrow2"):
+        if phase in ("show", "arrow1", "arrow2", "gap1", "gap2"):
             ax.set_title("Is this shopper rational?", fontsize=14,
                          fontweight="bold", pad=10, color=PALETTE["edge"])
-        elif phase == "contradiction":
+        elif phase in ("contradiction", "gap3"):
             ax.set_title("Contradiction found", fontsize=14,
                          fontweight="bold", pad=10, color=PALETTE["highlight"])
         elif phase == "shrink":
@@ -132,18 +136,14 @@ def generate_budget_hero():
             ax.annotate(label, (quants[t, 0] + 0.25, quants[t, 1] + 0.2),
                         fontsize=10, fontweight="bold", color=colors[t])
 
-        # Preference arrows
-        arrow_color = PALETTE["edge"]
-        if phase in ("arrow1", "arrow2", "contradiction"):
-            if phase == "contradiction":
-                arrow_color = PALETTE["highlight"]
-            # Arrow: Trip 1 could afford Trip 2's bundle
+        # Preference arrows (persist through gap phases)
+        arrow_color = PALETTE["highlight"] if phase in ("contradiction", "gap3") else PALETTE["edge"]
+        if show_arrow1:
             _draw_arrow(ax, quants[0, 0], quants[0, 1],
                         quants[1, 0], quants[1, 1], color=arrow_color, lw=2.0)
-            if phase in ("arrow2", "contradiction"):
-                # Arrow: Trip 2 could afford Trip 1's bundle
-                _draw_arrow(ax, quants[1, 0], quants[1, 1],
-                            quants[0, 0], quants[0, 1], color=arrow_color, lw=2.0)
+        if show_arrow2:
+            _draw_arrow(ax, quants[1, 0], quants[1, 1],
+                        quants[0, 0], quants[0, 1], color=arrow_color, lw=2.0)
 
         # Phase-specific annotations
         if phase == "arrow1":
@@ -189,7 +189,7 @@ def generate_menu_hero():
         "Tablet": "#e67e22",
         "Phone": "#27ae60",
     }
-    TOTAL_FRAMES = 36
+    TOTAL_FRAMES = 46
 
     fig, ax = plt.subplots(1, 1, figsize=(7, 5), facecolor=PALETTE["bg"])
     plt.subplots_adjust(top=0.88, bottom=0.08, left=0.05, right=0.95)
@@ -216,23 +216,35 @@ def generate_menu_hero():
         ax.set_ylim(-4.2, 1.2)
         ax.axis("off")
 
-        # Phase logic
+        # Phase logic — gaps between text phases for breathing room
         if frame < 5:
             phase = "row1"
             n_rows = 1
-        elif frame < 10:
+        elif frame < 9:
             phase = "row2"
+            n_rows = 2
+        elif frame < 11:
+            phase = "gap1"       # 2 rows visible, no annotation
             n_rows = 2
         elif frame < 16:
             phase = "contradiction"
             n_rows = 2
-        elif frame < 20:
+        elif frame < 18:
+            phase = "gap2"       # 2 rows, no annotation
+            n_rows = 2
+        elif frame < 22:
             phase = "row3"
             n_rows = 3
         elif frame < 24:
+            phase = "gap3"       # 3 rows, no annotation
+            n_rows = 3
+        elif frame < 28:
             phase = "row4"
             n_rows = 4
         elif frame < 30:
+            phase = "gap4"       # 4 rows, no annotation
+            n_rows = 4
+        elif frame < 36:
             phase = "summary"
             n_rows = 4
         else:
@@ -240,16 +252,13 @@ def generate_menu_hero():
             n_rows = 4
 
         # Title
-        if phase in ("row1",):
+        if phase in ("row1", "row2", "gap1"):
             ax.set_title("Is this user's clicking rational?", fontsize=14,
                          fontweight="bold", pad=10, color=PALETTE["edge"])
-        elif phase == "row2":
-            ax.set_title("Is this user's clicking rational?", fontsize=14,
-                         fontweight="bold", pad=10, color=PALETTE["edge"])
-        elif phase == "contradiction":
+        elif phase in ("contradiction", "gap2"):
             ax.set_title("Contradiction found", fontsize=14,
                          fontweight="bold", pad=10, color=PALETTE["highlight"])
-        elif phase in ("row3", "row4"):
+        elif phase in ("row3", "row4", "gap3", "gap4"):
             ax.set_title("Check remaining menus...", fontsize=14,
                          fontweight="bold", pad=10, color=PALETTE["edge"])
         elif phase == "summary":
