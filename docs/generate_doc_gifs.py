@@ -53,8 +53,8 @@ def generate_budget_hero():
     ]
 
     TOTAL_FRAMES = 85
-    fig, axes = plt.subplots(3, 1, figsize=(7, 10.5), facecolor=PALETTE["bg"])
-    plt.subplots_adjust(hspace=0.45, top=0.96, bottom=0.06, left=0.1, right=0.95)
+    fig, axes = plt.subplots(3, 1, figsize=(7, 11.5), facecolor=PALETTE["bg"])
+    plt.subplots_adjust(hspace=0.65, top=0.92, bottom=0.06, left=0.1, right=0.95)
 
     def _draw_arrow(ax, x0, y0, x1, y1, color, lw=1.5):
         dx, dy = x1 - x0, y1 - y0
@@ -70,7 +70,7 @@ def generate_budget_hero():
         for idx, (ax, sc) in enumerate(zip(axes, scenarios)):
             ax.clear()
             ax.set_facecolor(PALETTE["bg"])
-            ax.set_title(sc["title"], fontsize=13, fontweight="bold", pad=8, loc="left", color=sc["accent"])
+            ax.set_title(sc["title"], fontsize=13, fontweight="bold", pad=26, loc="left", color=sc["accent"])
             
             prices, quants = sc["prices"], sc["quants"]
             expenditures = np.sum(prices * quants, axis=1)
@@ -83,7 +83,7 @@ def generate_budget_hero():
                 ax.set_xlabel("Good 1", fontsize=11)
             ax.set_ylabel("Good 2", fontsize=11)
             ax.grid(True, alpha=0.15, color=PALETTE["grid"])
-            ax.text(0.01, 1.05, sc["desc"], transform=ax.transAxes, fontsize=10, style="italic")
+            ax.text(0.00, 1.02, sc["desc"], transform=ax.transAxes, fontsize=10, style="italic")
 
             budget_prefs = []
             for i in range(n_total):
@@ -124,7 +124,7 @@ def generate_budget_hero():
                         bbox=dict(boxstyle="round,pad=0.3", facecolor="white", edgecolor=sc["accent"], alpha=alpha))
 
     print("  Generating budget_hero.gif...")
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=250)
+    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=400)
     anim.save(OUTPUT_DIR / "budget_hero.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
 
@@ -154,8 +154,8 @@ def generate_menu_hero():
     ]
     
     TOTAL_FRAMES = 85
-    fig, axes = plt.subplots(3, 1, figsize=(7, 10.5), facecolor=PALETTE["bg"])
-    plt.subplots_adjust(hspace=0.45, top=0.96, bottom=0.06, left=0.1, right=0.95)
+    fig, axes = plt.subplots(3, 1, figsize=(7, 11.5), facecolor=PALETTE["bg"])
+    plt.subplots_adjust(hspace=0.65, top=0.92, bottom=0.06, left=0.1, right=0.95)
     
     all_items = ["A", "B", "C", "D"]
     item_colors = {"A": "#5b8def", "B": "#e67e22", "C": "#27ae60", "D": "#8e44ad"}
@@ -164,8 +164,8 @@ def generate_menu_hero():
         for idx, (ax, sc) in enumerate(zip(axes, scenarios)):
             ax.clear()
             ax.set_facecolor(PALETTE["bg"])
-            ax.set_title(sc["title"], fontsize=13, fontweight="bold", pad=8, loc="left", color=sc["accent"])
-            ax.text(0.01, 1.05, sc["desc"], transform=ax.transAxes, fontsize=10, style="italic")
+            ax.set_title(sc["title"], fontsize=13, fontweight="bold", pad=26, loc="left", color=sc["accent"])
+            ax.text(0.00, 1.02, sc["desc"], transform=ax.transAxes, fontsize=10, style="italic")
             
             menus = sc["menus"]
             n_total = len(menus)
@@ -232,7 +232,7 @@ def generate_menu_hero():
                         bbox=dict(boxstyle="round,pad=0.3", facecolor="white", edgecolor=sc["accent"], alpha=alpha))
 
     print("  Generating menu_hero.gif...")
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=250)
+    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=400)
     anim.save(OUTPUT_DIR / "menu_hero.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
 
@@ -348,12 +348,12 @@ def generate_floyd_warshall():
             ax.text(pos[i][0], pos[i][1], labels[i], ha="center", va="center", fontsize=11,
                     color=PALETTE["node_text"], fontweight="bold", zorder=11)
 
-        ax.set_title("1. Traditional: Floyd-Warshall", fontsize=13, fontweight="bold", color="#333", pad=20)
+        ax.set_title("1. Traditional: Floyd-Warshall", fontsize=13, fontweight="bold", color="#333", pad=26)
         ax.text(0, -2.8, k_label, ha="center", fontsize=11, fontweight="bold", color=PALETTE["python"] if "Search" in k_label else PALETTE["edge"])
         ax.text(0, -3.2, desc, ha="center", fontsize=10, style="italic", color=PALETTE["secondary"])
 
     total_frames = 6 + n*4 + 10
-    anim = FuncAnimation(fig, update, frames=total_frames, interval=500)
+    anim = FuncAnimation(fig, update, frames=total_frames, interval=750)
     anim.save(OUTPUT_DIR / "floyd_warshall.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
     print("  floyd_warshall.gif updated with pedagogical flow")
@@ -462,11 +462,11 @@ def generate_scc_tarjan():
             ax.text(pos[i][0], pos[i][1], labels[i], ha="center", va="center", fontsize=11,
                     color=PALETTE["node_text"], fontweight="bold", zorder=11)
 
-        ax.set_title("2. Modern Engine: Tarjan's SCC", fontsize=13, fontweight="bold", color="#333", pad=20)
+        ax.set_title("2. Modern Engine: Tarjan's SCC", fontsize=13, fontweight="bold", color="#333", pad=26)
         ax.text(0, -3.4, subtitle, ha="center", fontsize=11, fontweight="bold", color=PALETTE["highlight"] if "Flag" in subtitle else PALETTE["edge"])
         ax.text(0, -3.8, desc, ha="center", fontsize=10, style="italic", color=PALETTE["secondary"])
 
-    anim = FuncAnimation(fig, update, frames=34, interval=450)
+    anim = FuncAnimation(fig, update, frames=34, interval=750)
     anim.save(OUTPUT_DIR / "scc_tarjan.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
     print("  scc_tarjan.gif updated with pedagogical flow")
@@ -522,7 +522,7 @@ def generate_power_analysis():
         ax.set_title("Power Analysis: Observed vs Random", fontsize=12, fontweight="bold")
         fig.tight_layout()
 
-    anim = FuncAnimation(fig, update, frames=total, interval=120)
+    anim = FuncAnimation(fig, update, frames=total, interval=350)
     anim.save(OUTPUT_DIR / "power_analysis.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
     print("  power_analysis.gif")
@@ -586,7 +586,7 @@ def generate_engine_throughput():
 
         fig.tight_layout()
 
-    anim = FuncAnimation(fig, update, frames=n_frames + hold_frames, interval=80)
+    anim = FuncAnimation(fig, update, frames=n_frames + hold_frames, interval=150)
     anim.save(OUTPUT_DIR / "engine_throughput.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
     print("  engine_throughput.gif")
@@ -659,7 +659,7 @@ def generate_attention_decay():
         ax.set_title("Position-Based Attention Decay", fontsize=12, fontweight="bold")
         fig.tight_layout()
 
-    anim = FuncAnimation(fig, update, frames=total, interval=200)
+    anim = FuncAnimation(fig, update, frames=total, interval=350)
     anim.save(OUTPUT_DIR / "attention_decay.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
     print("  attention_decay.gif")
