@@ -4,6 +4,11 @@ Grocery Scanner Data
 Score household shopping behavior for economic rationality using
 revealed preference theory on loyalty-card scanner data.
 
+.. image:: ../_static/app_grocery_hero.jpg
+   :width: 70%
+   :align: center
+   :alt: Supermarket grocery aisle
+
 Introduction
 ------------
 

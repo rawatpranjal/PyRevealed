@@ -93,5 +93,7 @@ PyRevealed's methodology is grounded in the formal frameworks established in `Ch
    performance
    applications
    theory_landscape
+   production/index
+   intertemporal/index
    api
    references

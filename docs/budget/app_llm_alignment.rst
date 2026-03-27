@@ -4,6 +4,11 @@ LLM Prompt Consistency
 A controlled experiment testing whether different system prompts cause
 LLMs to make inconsistent choices when selecting from package menus.
 
+.. image:: ../_static/app_llm_hero.jpg
+   :width: 70%
+   :align: center
+   :alt: AI language model
+
 Introduction
 ------------
 

@@ -19,19 +19,3 @@ Menus
    :maxdepth: 1
 
    menu/app_recsys
-
-Production
-----------
-
-.. toctree::
-   :maxdepth: 1
-
-   production/index
-
-Intertemporal
--------------
-
-.. toctree::
-   :maxdepth: 1
-
-   intertemporal/index

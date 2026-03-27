@@ -5,6 +5,11 @@ Test whether users' click patterns from recommendation menus reveal
 consistent preferences, and use consistency scores for segmentation
 and churn detection.
 
+.. image:: ../_static/app_recsys_hero.jpg
+   :width: 70%
+   :align: center
+   :alt: E-commerce product browsing
+
 Introduction
 ------------
 
