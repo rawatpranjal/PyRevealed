@@ -416,7 +416,7 @@ Classify each user by the shape of their rolling-window HM trajectory:
      - slope < -0.01
      - Preference erosion; early churn signal
    * - Volatile
-     - std > 0.05, |slope| < 0.01
+     - std > 0.05, \|slope\| < 0.01
      - Context-dependent; emphasize exploration over exploitation
 
 .. note::

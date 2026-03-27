@@ -581,7 +581,7 @@ Classify each household by its **deviation from cohort mean** trajectory:
      - slope < -0.005
      - Choices becoming more erratic relative to peers; possible life change
    * - Volatile
-     - std > 0.03, |slope| < 0.005
+     - std > 0.03, \|slope\| < 0.005
      - Fluctuating consistency relative to cohort; context-dependent shopper
 
 On Dunnhumby data (households with 30+ weeks):
