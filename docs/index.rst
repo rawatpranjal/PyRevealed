@@ -20,7 +20,7 @@ You have data on what people chose. PyRevealed tests whether those choices are r
      </div>
      <div class="feature-card">
        <h3>Dual API Design</h3>
-       <p>Tech-friendly names (<code>compute_integrity_score</code>) alongside economics terms (<code>compute_aei</code>). 57 result dataclasses with <code>.to_dict()</code> and <code>.summary()</code>. sklearn-compatible for ML pipelines.</p>
+       <p>Every method has two names — pick whichever reads naturally in your code. 57 result dataclasses with <code>.to_dict()</code> and <code>.summary()</code>. sklearn-compatible for ML pipelines.</p>
      </div>
      <div class="feature-card">
        <h3>Algorithms</h3>
