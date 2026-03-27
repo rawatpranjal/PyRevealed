@@ -1,30 +1,1343 @@
 [
   {
+    "dataset": "Dunnhumby",
+    "target": "Churn",
+    "task_type": "classification",
+    "n_users": 2222,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.06795679567956796,
+    "auc_rp": 0.6464310099991677,
+    "auc_base": 0.7516333997357671,
+    "auc_combined": 0.7360630654142204,
+    "auc_rp_std": 0.03270642391600265,
+    "auc_base_std": 0.0150424764289589,
+    "auc_combined_std": 0.022426785952704878,
+    "ap_rp": 0.14614524539514595,
+    "ap_base": 0.18351345240651842,
+    "ap_combined": 0.1604413745537787,
+    "logloss_rp": 0.24412255788585407,
+    "logloss_base": 0.22485015067035447,
+    "logloss_combined": 0.23056326778889336,
+    "f1_rp": 0.0,
+    "f1_base": 0.0,
+    "f1_combined": 0.0,
+    "auc_rp_train": 0.9405604356599013,
+    "auc_base_train": 0.93939326108576,
+    "auc_combined_train": 0.966193507951177,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "spend_slope",
+        204
+      ],
+      [
+        "ew_std",
+        159
+      ],
+      [
+        "strict_pref_density",
+        143
+      ],
+      [
+        "min_spend",
+        131
+      ],
+      [
+        "herfindahl",
+        121
+      ],
+      [
+        "ew_skew",
+        115
+      ],
+      [
+        "std_spend",
+        113
+      ],
+      [
+        "degree_gini",
+        111
+      ],
+      [
+        "top_category_share",
+        107
+      ],
+      [
+        "r_density",
+        106
+      ],
+      [
+        "mean_basket_size",
+        103
+      ],
+      [
+        "spend_cv",
+        91
+      ],
+      [
+        "max_spend",
+        85
+      ],
+      [
+        "mean_abs_spend_change",
+        81
+      ],
+      [
+        "pref_graph_density",
+        81
+      ]
+    ],
+    "auc_lift": -0.015570334321546753,
+    "auc_lift_pct": -2.071533054148528,
+    "wall_time_s": 8.075168132781982
+  },
+  {
+    "dataset": "Dunnhumby",
+    "target": "High Spender",
+    "task_type": "classification",
+    "n_users": 2222,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.3334833483348335,
+    "auc_rp": 0.9368298369647453,
+    "auc_base": 0.9597476774467524,
+    "auc_combined": 0.9598445148395267,
+    "auc_rp_std": 0.005304427245390109,
+    "auc_base_std": 0.004641862933882289,
+    "auc_combined_std": 0.002599311461644578,
+    "ap_rp": 0.8801682246037105,
+    "ap_base": 0.9315584176211337,
+    "ap_combined": 0.9308896278026628,
+    "logloss_rp": 0.30603038580852915,
+    "logloss_base": 0.2455472310371615,
+    "logloss_combined": 0.24625354497217056,
+    "f1_rp": 0.7914949674556445,
+    "f1_base": 0.8409898898340737,
+    "f1_combined": 0.831908893566687,
+    "auc_rp_train": 0.9690164485644068,
+    "auc_base_train": 0.9795930641021084,
+    "auc_combined_train": 0.9842703939509084,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "total_spend",
+        297
+      ],
+      [
+        "spend_slope",
+        174
+      ],
+      [
+        "ew_skew",
+        130
+      ],
+      [
+        "r_out_degree_std",
+        127
+      ],
+      [
+        "spend_cv",
+        111
+      ],
+      [
+        "mean_spend",
+        103
+      ],
+      [
+        "pref_graph_density",
+        99
+      ],
+      [
+        "max_spend",
+        95
+      ],
+      [
+        "harp_severity",
+        93
+      ],
+      [
+        "mean_basket_size",
+        89
+      ],
+      [
+        "ccei",
+        86
+      ],
+      [
+        "hm_ratio",
+        73
+      ],
+      [
+        "mpi",
+        71
+      ],
+      [
+        "ew_mean",
+        70
+      ],
+      [
+        "std_spend",
+        67
+      ]
+    ],
+    "auc_lift": 9.683739277432935e-05,
+    "auc_lift_pct": 0.010089880397725886,
+    "wall_time_s": 6.381577968597412
+  },
+  {
+    "dataset": "Dunnhumby",
+    "target": "Spend Change",
+    "task_type": "regression",
+    "n_users": 2222,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.0,
+    "auc_rp": 0.0,
+    "auc_base": 0.0,
+    "auc_combined": 0.0,
+    "auc_rp_std": 0.0,
+    "auc_base_std": 0.0,
+    "auc_combined_std": 0.0,
+    "ap_rp": 0.0,
+    "ap_base": 0.0,
+    "ap_combined": 0.0,
+    "logloss_rp": 0.0,
+    "logloss_base": 0.0,
+    "logloss_combined": 0.0,
+    "f1_rp": 0.0,
+    "f1_base": 0.0,
+    "f1_combined": 0.0,
+    "auc_rp_train": 0.0,
+    "auc_base_train": 0.0,
+    "auc_combined_train": 0.0,
+    "rmse_rp": 7.4058572905981155,
+    "rmse_base": 6.849127263467809,
+    "rmse_combined": 6.893036688958437,
+    "r2_rp": -0.017611433954968912,
+    "r2_base": 0.12874997149851647,
+    "r2_combined": 0.11785120682527188,
+    "r2_rp_train": 0.27669200019960927,
+    "r2_base_train": 0.3608968850070646,
+    "r2_combined_train": 0.4038763497413129,
+    "top_features": [
+      [
+        "spend_slope",
+        188
+      ],
+      [
+        "std_spend",
+        148
+      ],
+      [
+        "mean_basket_size",
+        147
+      ],
+      [
+        "mean_abs_spend_change",
+        138
+      ],
+      [
+        "mean_spend",
+        108
+      ],
+      [
+        "ew_std",
+        108
+      ],
+      [
+        "degree_gini",
+        90
+      ],
+      [
+        "max_spend",
+        89
+      ],
+      [
+        "ew_mean",
+        86
+      ],
+      [
+        "herfindahl",
+        82
+      ],
+      [
+        "min_spend",
+        73
+      ],
+      [
+        "strict_pref_density",
+        73
+      ],
+      [
+        "r_density",
+        63
+      ],
+      [
+        "harp_severity",
+        60
+      ],
+      [
+        "scc_ratio",
+        55
+      ]
+    ],
+    "auc_lift": 0.0,
+    "auc_lift_pct": 0.0,
+    "wall_time_s": 6.188900947570801
+  },
+  {
+    "dataset": "Open E-Commerce",
+    "target": "High Spender",
+    "task_type": "classification",
+    "n_users": 4694,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.3334043459735833,
+    "auc_rp": 0.9371911768008246,
+    "auc_base": 0.950321976951893,
+    "auc_combined": 0.9508687441945922,
+    "auc_rp_std": 0.0072848900888081,
+    "auc_base_std": 0.007919691721414964,
+    "auc_combined_std": 0.0070111150033378205,
+    "ap_rp": 0.885200450746056,
+    "ap_base": 0.9137166286950057,
+    "ap_combined": 0.9146299640541912,
+    "logloss_rp": 0.3003423082827129,
+    "logloss_base": 0.266785891015161,
+    "logloss_combined": 0.26563460641169667,
+    "f1_rp": 0.7933601019390172,
+    "f1_base": 0.8185549472670701,
+    "f1_combined": 0.820421160342746,
+    "auc_rp_train": 0.9593161775291844,
+    "auc_base_train": 0.9671023518011961,
+    "auc_combined_train": 0.9724914920403481,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "spend_slope",
+        312
+      ],
+      [
+        "total_spend",
+        219
+      ],
+      [
+        "r_out_degree_std",
+        190
+      ],
+      [
+        "max_spend",
+        120
+      ],
+      [
+        "ew_skew",
+        101
+      ],
+      [
+        "n_obs",
+        100
+      ],
+      [
+        "n_scc",
+        97
+      ],
+      [
+        "spend_cv",
+        96
+      ],
+      [
+        "pref_graph_density",
+        96
+      ],
+      [
+        "ccei",
+        94
+      ],
+      [
+        "std_spend",
+        91
+      ],
+      [
+        "strict_pref_density",
+        91
+      ],
+      [
+        "mpi",
+        84
+      ],
+      [
+        "degree_gini",
+        77
+      ],
+      [
+        "ew_mean",
+        71
+      ]
+    ],
+    "auc_lift": 0.0005467672426991976,
+    "auc_lift_pct": 0.05753494667701197,
+    "wall_time_s": 8.327797889709473
+  },
+  {
+    "dataset": "Open E-Commerce",
+    "target": "Churn",
+    "task_type": "classification",
+    "n_users": 4694,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.054324669791222836,
+    "auc_rp": 0.7963651844031843,
+    "auc_base": 0.8461575840712389,
+    "auc_combined": 0.8443333677865146,
+    "auc_rp_std": 0.01964163317902412,
+    "auc_base_std": 0.01604960089873239,
+    "auc_combined_std": 0.014402445254767499,
+    "ap_rp": 0.24040215845272012,
+    "ap_base": 0.2876800332645724,
+    "ap_combined": 0.28820351919973,
+    "logloss_rp": 0.17922510774124045,
+    "logloss_base": 0.1663023359279993,
+    "logloss_combined": 0.16740847963107072,
+    "f1_rp": 0.09342801448064605,
+    "f1_base": 0.09623617726760136,
+    "f1_combined": 0.11028264913774047,
+    "auc_rp_train": 0.927483225775104,
+    "auc_base_train": 0.9409432437088374,
+    "auc_combined_train": 0.9576171987154853,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "spend_slope",
+        240
+      ],
+      [
+        "r_out_degree_std",
+        129
+      ],
+      [
+        "mean_basket_size",
+        127
+      ],
+      [
+        "mean_abs_spend_change",
+        115
+      ],
+      [
+        "ew_mean",
+        108
+      ],
+      [
+        "top_category_share",
+        106
+      ],
+      [
+        "herfindahl",
+        96
+      ],
+      [
+        "ew_std",
+        96
+      ],
+      [
+        "min_spend",
+        94
+      ],
+      [
+        "scc_mean_size",
+        94
+      ],
+      [
+        "strict_pref_density",
+        92
+      ],
+      [
+        "pref_graph_density",
+        90
+      ],
+      [
+        "n_obs",
+        89
+      ],
+      [
+        "spend_cv",
+        89
+      ],
+      [
+        "r_density",
+        87
+      ]
+    ],
+    "auc_lift": -0.0018242162847242893,
+    "auc_lift_pct": -0.21558824491617468,
+    "wall_time_s": 8.750165224075317
+  },
+  {
+    "dataset": "Open E-Commerce",
+    "target": "Spend Change",
+    "task_type": "regression",
+    "n_users": 4694,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.0,
+    "auc_rp": 0.0,
+    "auc_base": 0.0,
+    "auc_combined": 0.0,
+    "auc_rp_std": 0.0,
+    "auc_base_std": 0.0,
+    "auc_combined_std": 0.0,
+    "ap_rp": 0.0,
+    "ap_base": 0.0,
+    "ap_combined": 0.0,
+    "logloss_rp": 0.0,
+    "logloss_base": 0.0,
+    "logloss_combined": 0.0,
+    "f1_rp": 0.0,
+    "f1_base": 0.0,
+    "f1_combined": 0.0,
+    "auc_rp_train": 0.0,
+    "auc_base_train": 0.0,
+    "auc_combined_train": 0.0,
+    "rmse_rp": 99.70628122293408,
+    "rmse_base": 93.32600039435503,
+    "rmse_combined": 93.66844085850803,
+    "r2_rp": 0.010712385824637538,
+    "r2_base": 0.13393592728336307,
+    "r2_combined": 0.1282651670931012,
+    "r2_rp_train": 0.2318508382851595,
+    "r2_base_train": 0.35323123048552285,
+    "r2_combined_train": 0.375498067512938,
+    "top_features": [
+      [
+        "spend_slope",
+        254
+      ],
+      [
+        "std_spend",
+        182
+      ],
+      [
+        "mean_basket_size",
+        133
+      ],
+      [
+        "r_out_degree_std",
+        123
+      ],
+      [
+        "mean_abs_spend_change",
+        121
+      ],
+      [
+        "max_spend",
+        120
+      ],
+      [
+        "spend_cv",
+        97
+      ],
+      [
+        "ew_mean",
+        96
+      ],
+      [
+        "mean_spend",
+        78
+      ],
+      [
+        "min_spend",
+        71
+      ],
+      [
+        "n_obs",
+        63
+      ],
+      [
+        "ew_skew",
+        58
+      ],
+      [
+        "ew_std",
+        56
+      ],
+      [
+        "n_scc",
+        50
+      ],
+      [
+        "scc_mean_size",
+        49
+      ]
+    ],
+    "auc_lift": 0.0,
+    "auc_lift_pct": 0.0,
+    "wall_time_s": 6.277011871337891
+  },
+  {
+    "dataset": "H&M",
+    "target": "High Spender",
+    "task_type": "classification",
+    "n_users": 46757,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.33329768804670956,
+    "auc_rp": 0.7248057651926066,
+    "auc_base": 0.7633397159922115,
+    "auc_combined": 0.7625514188383393,
+    "auc_rp_std": 0.0025802730068232925,
+    "auc_base_std": 0.003645607635779494,
+    "auc_combined_std": 0.0031983693743774287,
+    "ap_rp": 0.607623195273091,
+    "ap_base": 0.6674708247786713,
+    "ap_combined": 0.6665258356280443,
+    "logloss_rp": 0.5556708092392444,
+    "logloss_base": 0.5235375994138911,
+    "logloss_combined": 0.5240495127832892,
+    "f1_rp": 0.47972374074190105,
+    "f1_base": 0.5458566871104822,
+    "f1_combined": 0.5439489083839222,
+    "auc_rp_train": 0.7452910614464512,
+    "auc_base_train": 0.7760140658039314,
+    "auc_combined_train": 0.7782010191386731,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "total_spend",
+        515
+      ],
+      [
+        "spend_slope",
+        288
+      ],
+      [
+        "r_out_degree_std",
+        211
+      ],
+      [
+        "mean_basket_size",
+        175
+      ],
+      [
+        "mean_spend",
+        129
+      ],
+      [
+        "top_category_share",
+        99
+      ],
+      [
+        "herfindahl",
+        92
+      ],
+      [
+        "n_obs",
+        87
+      ],
+      [
+        "spend_cv",
+        81
+      ],
+      [
+        "min_spend",
+        76
+      ],
+      [
+        "pref_graph_density",
+        67
+      ],
+      [
+        "mean_abs_spend_change",
+        64
+      ],
+      [
+        "ew_skew",
+        62
+      ],
+      [
+        "ew_mean",
+        61
+      ],
+      [
+        "std_spend",
+        58
+      ]
+    ],
+    "auc_lift": -0.0007882971538721861,
+    "auc_lift_pct": -0.10326950600854487,
+    "wall_time_s": 14.25914978981018
+  },
+  {
+    "dataset": "H&M",
+    "target": "Churn",
+    "task_type": "classification",
+    "n_users": 46757,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.11523408259725816,
+    "auc_rp": 0.7385493772032433,
+    "auc_base": 0.7782899921550516,
+    "auc_combined": 0.7778167917585315,
+    "auc_rp_std": 0.002564272443114933,
+    "auc_base_std": 0.00238246982610191,
+    "auc_combined_std": 0.0030140491288673747,
+    "ap_rp": 0.2607658841539636,
+    "ap_base": 0.29234414053549906,
+    "ap_combined": 0.2923764490174091,
+    "logloss_rp": 0.3176080529719555,
+    "logloss_base": 0.300368795414829,
+    "logloss_combined": 0.300602992764112,
+    "f1_rp": 0.012807590561401067,
+    "f1_base": 0.03203781499136745,
+    "f1_combined": 0.035197081167206413,
+    "auc_rp_train": 0.7690869495955273,
+    "auc_base_train": 0.7986471835864458,
+    "auc_combined_train": 0.8040810229796139,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "mean_basket_size",
+        277
+      ],
+      [
+        "total_spend",
+        261
+      ],
+      [
+        "spend_slope",
+        213
+      ],
+      [
+        "r_out_degree_std",
+        178
+      ],
+      [
+        "herfindahl",
+        140
+      ],
+      [
+        "mean_spend",
+        113
+      ],
+      [
+        "top_category_share",
+        105
+      ],
+      [
+        "std_spend",
+        90
+      ],
+      [
+        "max_spend",
+        87
+      ],
+      [
+        "spend_cv",
+        84
+      ],
+      [
+        "ew_skew",
+        83
+      ],
+      [
+        "lambda_mean",
+        81
+      ],
+      [
+        "mean_abs_spend_change",
+        76
+      ],
+      [
+        "pref_graph_density",
+        75
+      ],
+      [
+        "ew_mean",
+        72
+      ]
+    ],
+    "auc_lift": -0.0004732003965201015,
+    "auc_lift_pct": -0.06080001044467113,
+    "wall_time_s": 12.636231899261475
+  },
+  {
+    "dataset": "H&M",
+    "target": "Spend Change",
+    "task_type": "regression",
+    "n_users": 46757,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.0,
+    "auc_rp": 0.0,
+    "auc_base": 0.0,
+    "auc_combined": 0.0,
+    "auc_rp_std": 0.0,
+    "auc_base_std": 0.0,
+    "auc_combined_std": 0.0,
+    "ap_rp": 0.0,
+    "ap_base": 0.0,
+    "ap_combined": 0.0,
+    "logloss_rp": 0.0,
+    "logloss_base": 0.0,
+    "logloss_combined": 0.0,
+    "f1_rp": 0.0,
+    "f1_base": 0.0,
+    "f1_combined": 0.0,
+    "auc_rp_train": 0.0,
+    "auc_base_train": 0.0,
+    "auc_combined_train": 0.0,
+    "rmse_rp": 0.1207642639895716,
+    "rmse_base": 0.11513729517296141,
+    "rmse_combined": 0.11501504914805212,
+    "r2_rp": 0.24072866913572172,
+    "r2_base": 0.30976284881556443,
+    "r2_combined": 0.3112466443079476,
+    "r2_rp_train": 0.26236713665972367,
+    "r2_base_train": 0.3365750583020737,
+    "r2_combined_train": 0.3420074567159267,
+    "top_features": [
+      [
+        "total_spend",
+        339
+      ],
+      [
+        "mean_basket_size",
+        308
+      ],
+      [
+        "spend_slope",
+        274
+      ],
+      [
+        "r_out_degree_std",
+        221
+      ],
+      [
+        "mean_spend",
+        195
+      ],
+      [
+        "herfindahl",
+        129
+      ],
+      [
+        "n_obs",
+        111
+      ],
+      [
+        "top_category_share",
+        93
+      ],
+      [
+        "ew_mean",
+        89
+      ],
+      [
+        "max_spend",
+        81
+      ],
+      [
+        "ew_std",
+        73
+      ],
+      [
+        "ew_skew",
+        68
+      ],
+      [
+        "pref_graph_density",
+        63
+      ],
+      [
+        "std_spend",
+        62
+      ],
+      [
+        "mean_abs_spend_change",
+        62
+      ]
+    ],
+    "auc_lift": 0.0,
+    "auc_lift_pct": 0.0,
+    "wall_time_s": 12.317373991012573
+  },
+  {
+    "dataset": "Instacart",
+    "target": "Spend Drop",
+    "task_type": "classification",
+    "n_users": 50000,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.1107,
+    "auc_rp": 0.6227625820618938,
+    "auc_base": 0.665601549527246,
+    "auc_combined": 0.6664294491439986,
+    "auc_rp_std": 0.005713306695190685,
+    "auc_base_std": 0.008861014338007251,
+    "auc_combined_std": 0.008528671746689137,
+    "ap_rp": 0.16138280952506903,
+    "ap_base": 0.19677835623442025,
+    "ap_combined": 0.1976863112286827,
+    "logloss_rp": 0.33882440967673566,
+    "logloss_base": 0.33063728337261067,
+    "logloss_combined": 0.3304424917061689,
+    "f1_rp": 0.0,
+    "f1_base": 0.0,
+    "f1_combined": 0.0,
+    "auc_rp_train": 0.6684031765389808,
+    "auc_base_train": 0.7007693900920418,
+    "auc_combined_train": 0.7082709531394575,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "spend_slope",
+        328
+      ],
+      [
+        "mean_abs_spend_change",
+        156
+      ],
+      [
+        "herfindahl",
+        155
+      ],
+      [
+        "r_out_degree_std",
+        141
+      ],
+      [
+        "spend_cv",
+        132
+      ],
+      [
+        "ew_std",
+        124
+      ],
+      [
+        "std_spend",
+        123
+      ],
+      [
+        "n_active_categories",
+        123
+      ],
+      [
+        "scc_mean_size",
+        120
+      ],
+      [
+        "ew_skew",
+        119
+      ],
+      [
+        "ew_mean",
+        112
+      ],
+      [
+        "degree_gini",
+        103
+      ],
+      [
+        "total_spend",
+        100
+      ],
+      [
+        "mean_spend",
+        95
+      ],
+      [
+        "util_gini",
+        91
+      ]
+    ],
+    "auc_lift": 0.0008278996167525587,
+    "auc_lift_pct": 0.12438366727670443,
+    "wall_time_s": 12.207860946655273
+  },
+  {
+    "dataset": "Instacart",
+    "target": "High Value",
+    "task_type": "classification",
+    "n_users": 50000,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.33076,
+    "auc_rp": 0.9629842141175674,
+    "auc_base": 0.966372364478729,
+    "auc_combined": 0.9665304817452094,
+    "auc_rp_std": 0.000842591455255839,
+    "auc_base_std": 0.0007511327706191006,
+    "auc_combined_std": 0.0008583075153547397,
+    "ap_rp": 0.9344469535743813,
+    "ap_base": 0.9406477878818009,
+    "ap_combined": 0.9408602899706349,
+    "logloss_rp": 0.23157716811891893,
+    "logloss_base": 0.2191156059052211,
+    "logloss_combined": 0.21866100332007393,
+    "f1_rp": 0.8455816580254591,
+    "f1_base": 0.8546414069384548,
+    "f1_combined": 0.8551787853020922,
+    "auc_rp_train": 0.9661187677097425,
+    "auc_base_train": 0.9686535324355449,
+    "auc_combined_train": 0.9691290683748612,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "total_spend",
+        682
+      ],
+      [
+        "spend_slope",
+        307
+      ],
+      [
+        "spend_cv",
+        191
+      ],
+      [
+        "r_out_degree_std",
+        147
+      ],
+      [
+        "pref_graph_density",
+        135
+      ],
+      [
+        "mean_spend",
+        107
+      ],
+      [
+        "ew_mean",
+        99
+      ],
+      [
+        "mean_abs_spend_change",
+        95
+      ],
+      [
+        "ew_std",
+        90
+      ],
+      [
+        "max_spend",
+        84
+      ],
+      [
+        "n_obs",
+        62
+      ],
+      [
+        "util_gini",
+        61
+      ],
+      [
+        "util_range",
+        55
+      ],
+      [
+        "util_cv",
+        55
+      ],
+      [
+        "mean_basket_size",
+        53
+      ]
+    ],
+    "auc_lift": 0.00015811726648040647,
+    "auc_lift_pct": 0.016361940002878345,
+    "wall_time_s": 12.754686117172241
+  },
+  {
+    "dataset": "Instacart",
+    "target": "Basket Size",
+    "task_type": "regression",
+    "n_users": 50000,
+    "n_rp_features": 59,
+    "n_base_features": 13,
+    "positive_rate": 0.0,
+    "auc_rp": 0.0,
+    "auc_base": 0.0,
+    "auc_combined": 0.0,
+    "auc_rp_std": 0.0,
+    "auc_base_std": 0.0,
+    "auc_combined_std": 0.0,
+    "ap_rp": 0.0,
+    "ap_base": 0.0,
+    "ap_combined": 0.0,
+    "logloss_rp": 0.0,
+    "logloss_base": 0.0,
+    "logloss_combined": 0.0,
+    "f1_rp": 0.0,
+    "f1_base": 0.0,
+    "f1_combined": 0.0,
+    "auc_rp_train": 0.0,
+    "auc_base_train": 0.0,
+    "auc_combined_train": 0.0,
+    "rmse_rp": 3.524153213169759,
+    "rmse_base": 3.423413285893658,
+    "rmse_combined": 3.4226538432774958,
+    "r2_rp": 0.6848382873408436,
+    "r2_base": 0.7026095035462242,
+    "r2_combined": 0.7027413626965664,
+    "r2_rp_train": 0.6975916010070431,
+    "r2_base_train": 0.7137688980481229,
+    "r2_combined_train": 0.7154511369416621,
+    "top_features": [
+      [
+        "mean_spend",
+        462
+      ],
+      [
+        "spend_slope",
+        421
+      ],
+      [
+        "mean_basket_size",
+        226
+      ],
+      [
+        "max_spend",
+        142
+      ],
+      [
+        "std_spend",
+        129
+      ],
+      [
+        "util_mean",
+        120
+      ],
+      [
+        "mean_abs_spend_change",
+        117
+      ],
+      [
+        "total_spend",
+        110
+      ],
+      [
+        "spend_cv",
+        102
+      ],
+      [
+        "ew_std",
+        88
+      ],
+      [
+        "util_std",
+        73
+      ],
+      [
+        "min_spend",
+        72
+      ],
+      [
+        "scc_mean_size",
+        62
+      ],
+      [
+        "util_range",
+        61
+      ],
+      [
+        "herfindahl",
+        55
+      ]
+    ],
+    "auc_lift": 0.0,
+    "auc_lift_pct": 0.0,
+    "wall_time_s": 11.934042930603027
+  },
+  {
+    "dataset": "REES46",
+    "target": "High Engagement",
+    "task_type": "classification",
+    "n_users": 8832,
+    "n_rp_features": 27,
+    "n_base_features": 10,
+    "positive_rate": 0.09567481884057971,
+    "auc_rp": 0.9952829347978709,
+    "auc_base": 0.9960130707154994,
+    "auc_combined": 0.9959016006839441,
+    "auc_rp_std": 0.0005091694302465862,
+    "auc_base_std": 0.000334210565634889,
+    "auc_combined_std": 0.00013421060979860276,
+    "ap_rp": 0.9601242164392385,
+    "ap_base": 0.9662563345583358,
+    "ap_combined": 0.9652923641168574,
+    "logloss_rp": 0.05224514498838562,
+    "logloss_base": 0.04152293905685678,
+    "logloss_combined": 0.04088384972357843,
+    "f1_rp": 0.8539805339655443,
+    "f1_base": 0.8644170630011152,
+    "f1_combined": 0.8616865175459246,
+    "auc_rp_train": 0.9975867589566774,
+    "auc_base_train": 0.9978330171143494,
+    "auc_combined_train": 0.9984931134395167,
+    "rmse_rp": 0.0,
+    "rmse_base": 0.0,
+    "rmse_combined": 0.0,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "r2_rp_train": 0.0,
+    "r2_base_train": 0.0,
+    "r2_combined_train": 0.0,
+    "top_features": [
+      [
+        "n_sessions",
+        250
+      ],
+      [
+        "menu_transitivity",
+        111
+      ],
+      [
+        "choice_diversity",
+        108
+      ],
+      [
+        "pref_entropy",
+        107
+      ],
+      [
+        "choice_entropy_norm",
+        104
+      ],
+      [
+        "r_density",
+        102
+      ],
+      [
+        "items_per_session",
+        100
+      ],
+      [
+        "n_unique_choices",
+        95
+      ],
+      [
+        "mean_menu_size",
+        73
+      ],
+      [
+        "std_menu_size",
+        72
+      ],
+      [
+        "choice_concentration",
+        63
+      ],
+      [
+        "choice_entropy",
+        59
+      ],
+      [
+        "max_choice_freq",
+        49
+      ],
+      [
+        "n_unique_items",
+        44
+      ],
+      [
+        "menu_pref_density",
+        42
+      ]
+    ],
+    "auc_lift": -0.00011147003155531632,
+    "auc_lift_pct": -0.011191623366472522,
+    "wall_time_s": 6.748500108718872
+  },
+  {
     "dataset": "Taobao",
     "target": "High Engagement",
     "task_type": "classification",
     "n_users": 4239,
-    "n_rp_features": 24,
+    "n_rp_features": 27,
     "n_base_features": 10,
     "positive_rate": 0.021467327199811276,
-    "auc_rp": 0.9253661865628556,
+    "auc_rp": 0.923172338476714,
     "auc_base": 0.912976281143026,
-    "auc_combined": 0.9148483821642992,
-    "auc_rp_std": 0.008014702371028245,
+    "auc_combined": 0.9182773504021802,
+    "auc_rp_std": 0.007437571855932792,
     "auc_base_std": 0.01081996833963189,
-    "auc_combined_std": 0.010278255457805459,
-    "ap_rp": 0.14792611031742475,
+    "auc_combined_std": 0.007823000827150926,
+    "ap_rp": 0.16138261905080195,
     "ap_base": 0.13784036621334558,
-    "ap_combined": 0.13576960304311556,
-    "logloss_rp": 0.07231100797045442,
+    "ap_combined": 0.14793337155795608,
+    "logloss_rp": 0.07302351478324412,
     "logloss_base": 0.07177263942837335,
-    "logloss_combined": 0.07191450482256403,
+    "logloss_combined": 0.07102543299864719,
     "f1_rp": 0.0,
     "f1_base": 0.0,
     "f1_combined": 0.0,
-    "auc_rp_train": 0.9670833024256362,
+    "auc_rp_train": 0.9701762798435893,
     "auc_base_train": 0.9688967011773183,
-    "auc_combined_train": 0.9794750813313976,
+    "auc_combined_train": 0.9826144202952304,
     "rmse_rp": 0.0,
     "rmse_base": 0.0,
     "rmse_combined": 0.0,
@@ -37,95 +1350,95 @@
     "top_features": [
       [
         "menu_transitivity",
-        283
+        210
+      ],
+      [
+        "pref_entropy",
+        204
       ],
       [
         "std_menu_size",
-        209
+        180
+      ],
+      [
+        "r_density",
+        152
       ],
       [
         "choice_entropy_norm",
-        165
-      ],
-      [
-        "menu_pref_density",
-        150
-      ],
-      [
-        "max_menu_size",
-        133
-      ],
-      [
-        "mean_menu_size",
-        111
-      ],
-      [
-        "menu_util_range",
-        104
+        130
       ],
       [
         "n_sessions",
-        101
+        115
+      ],
+      [
+        "max_menu_size",
+        109
       ],
       [
         "choice_concentration",
-        98
+        97
       ],
       [
-        "items_per_session",
-        73
+        "menu_util_range",
+        85
       ],
       [
         "min_menu_size",
-        72
+        73
+      ],
+      [
+        "mean_menu_size",
+        71
+      ],
+      [
+        "menu_pref_density",
+        68
+      ],
+      [
+        "items_per_session",
+        58
       ],
       [
         "scc_ratio",
-        69
-      ],
-      [
-        "max_choice_freq",
-        63
+        56
       ],
       [
         "n_unique_items",
-        50
-      ],
-      [
-        "menu_util_std",
-        38
+        43
       ]
     ],
-    "auc_lift": 0.0018721010212732203,
-    "auc_lift_pct": 0.2050547270438824,
-    "wall_time_s": 6.752454996109009
+    "auc_lift": 0.00530106925915419,
+    "auc_lift_pct": 0.5806360327912757,
+    "wall_time_s": 6.352386951446533
   },
   {
     "dataset": "Tenrec",
     "target": "High Engagement",
     "task_type": "classification",
     "n_users": 50000,
-    "n_rp_features": 24,
+    "n_rp_features": 27,
     "n_base_features": 10,
     "positive_rate": 0.26974,
-    "auc_rp": 0.9930875403834513,
+    "auc_rp": 0.9931488121838706,
     "auc_base": 0.9931855177856551,
-    "auc_combined": 0.9932145372202985,
-    "auc_rp_std": 0.0002346405638390738,
+    "auc_combined": 0.9931089874798189,
+    "auc_rp_std": 0.0003730189500407208,
     "auc_base_std": 0.00030588173097664963,
-    "auc_combined_std": 0.00032203940164356355,
-    "ap_rp": 0.9822340421289404,
+    "auc_combined_std": 0.0003518064382431276,
+    "ap_rp": 0.9827088398084785,
     "ap_base": 0.9827551944958628,
-    "ap_combined": 0.9828175697449086,
-    "logloss_rp": 0.07715509257468611,
+    "ap_combined": 0.9825735843431682,
+    "logloss_rp": 0.07598196597739418,
     "logloss_base": 0.07481078180566599,
-    "logloss_combined": 0.07464341100799893,
-    "f1_rp": 0.9042574558264264,
+    "logloss_combined": 0.07442098137358967,
+    "f1_rp": 0.906328402438688,
     "f1_base": 0.9049989911012192,
-    "f1_combined": 0.9050671562770823,
-    "auc_rp_train": 0.9937493536283626,
+    "f1_combined": 0.9047122936949622,
+    "auc_rp_train": 0.9941065111127815,
     "auc_base_train": 0.9940717340367328,
-    "auc_combined_train": 0.9940891337433849,
+    "auc_combined_train": 0.994190302219228,
     "rmse_rp": 0.0,
     "rmse_base": 0.0,
     "rmse_combined": 0.0,
@@ -137,68 +1450,68 @@
     "r2_combined_train": 0.0,
     "top_features": [
       [
+        "pref_entropy",
+        263
+      ],
+      [
         "n_sessions",
-        244
+        246
       ],
       [
         "std_menu_size",
-        241
+        170
       ],
       [
         "mean_menu_size",
-        155
-      ],
-      [
-        "menu_pref_density",
-        123
+        127
       ],
       [
         "max_menu_size",
-        112
-      ],
-      [
-        "n_unique_items",
-        111
-      ],
-      [
-        "choice_entropy_norm",
-        107
-      ],
-      [
-        "menu_transitivity",
-        102
+        100
       ],
       [
         "n_unique_choices",
-        93
+        99
       ],
       [
-        "items_per_session",
-        55
+        "r_density",
+        90
+      ],
+      [
+        "n_unique_items",
+        82
+      ],
+      [
+        "menu_transitivity",
+        79
+      ],
+      [
+        "choice_diversity",
+        74
+      ],
+      [
+        "choice_entropy_norm",
+        61
       ],
       [
         "choice_concentration",
-        43
+        49
       ],
       [
         "choice_entropy",
-        42
+        44
       ],
       [
-        "max_choice_freq",
-        36
+        "items_per_session",
+        41
       ],
       [
-        "min_menu_size",
-        26
-      ],
-      [
-        "n_scc",
-        26
+        "menu_pref_density",
+        33
       ]
     ],
-    "auc_lift": 2.9019434643395847e-05,
-    "auc_lift_pct": 0.00292185438910706,
-    "wall_time_s": 6.958524942398071
+    "auc_lift": -7.653030583620879e-05,
+    "auc_lift_pct": -0.007705539847866089,
+    "wall_time_s": 7.650809049606323
   }
 ]

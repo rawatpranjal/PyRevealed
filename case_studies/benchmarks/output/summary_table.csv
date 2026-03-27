@@ -1,3 +1,16 @@
-Dataset,Target,N,Task,AUC (RP only),AUC (Baseline),AUC (Combined),Lift %
-Taobao,High Engagement,4239,class,0.925,0.913,0.915,+0.2%
-Tenrec,High Engagement,50000,class,0.993,0.993,0.993,+0.0%
+Dataset,Target,N,Task,AUC (RP only),AUC (Baseline),AUC (Combined),Lift %,RMSE (RP only),RMSE (Baseline),RMSE (Combined),R2 (Combined)
+Dunnhumby,Churn,2222,class,0.646,0.752,0.736,-2.1%,,,,
+Dunnhumby,High Spender,2222,class,0.937,0.960,0.960,+0.0%,,,,
+Dunnhumby,Spend Change,2222,regre,,,,,7.4059,6.8491,6.8930,0.118
+Open E-Commerce,High Spender,4694,class,0.937,0.950,0.951,+0.1%,,,,
+Open E-Commerce,Churn,4694,class,0.796,0.846,0.844,-0.2%,,,,
+Open E-Commerce,Spend Change,4694,regre,,,,,99.7063,93.3260,93.6684,0.128
+H&M,High Spender,46757,class,0.725,0.763,0.763,-0.1%,,,,
+H&M,Churn,46757,class,0.739,0.778,0.778,-0.1%,,,,
+H&M,Spend Change,46757,regre,,,,,0.1208,0.1151,0.1150,0.311
+Instacart,Spend Drop,50000,class,0.623,0.666,0.666,+0.1%,,,,
+Instacart,High Value,50000,class,0.963,0.966,0.967,+0.0%,,,,
+Instacart,Basket Size,50000,regre,,,,,3.5242,3.4234,3.4227,0.703
+REES46,High Engagement,8832,class,0.995,0.996,0.996,-0.0%,,,,
+Taobao,High Engagement,4239,class,0.923,0.913,0.918,+0.6%,,,,
+Tenrec,High Engagement,50000,class,0.993,0.993,0.993,-0.0%,,,,
