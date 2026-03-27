@@ -110,6 +110,14 @@ div.math {
     }
 }
 
+/* GIF captions */
+.gif-caption {
+    font-size: 0.9em;
+    color: var(--pst-color-text-muted);
+    line-height: 1.5;
+    margin-top: 8px;
+}
+
 /* Feature cards with depth */
 .feature-card {
     padding: 28px;
@@ -405,12 +413,8 @@ div.math {
    SIDEBAR — hide "On this page" label
    ============================================ */
 
-/* pydata sphinx theme renders the page-toc label with these selectors */
-.bd-sidebar-primary .toc-title-container,
-.bd-sidebar-primary .toc-title,
-.bd-sidebar-primary .sidebar-primary-item > p.sidebar-label,
-.bd-sidebar-primary nav.page-toc > p,
-#pst-page-navigation-heading-0 {
+/* pydata sphinx theme renders the page-toc label as .tocsection.onthispage */
+.bd-sidebar-primary .tocsection.onthispage {
     display: none !important;
 }
 
