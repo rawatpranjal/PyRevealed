@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install from PyPI
-        run: pip install pyrevealed==0.5.3
+        run: pip install "pyrevealed[datasets]==0.5.3"
       - name: Verify
         run: |
           python -c "
