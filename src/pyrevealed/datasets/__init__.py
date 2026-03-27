@@ -22,6 +22,7 @@ from pyrevealed.datasets._retailrocket import load_retailrocket
 from pyrevealed.datasets._instacart import load_instacart
 from pyrevealed.datasets._yoochoose import load_yoochoose
 from pyrevealed.datasets._olist import load_olist
+from pyrevealed.datasets._m5 import load_m5
 from pyrevealed.datasets._rees46 import load_rees46
 
 
@@ -82,6 +83,13 @@ def list_datasets() -> list[dict[str, str]]:
             "observations": "~5-50 sessions per user",
         },
         {
+            "name": "m5",
+            "description": "Walmart item sales across 10 stores, 3 states, 1941 days",
+            "source": "Kaggle (m5-forecasting-accuracy)",
+            "goods": "7 departments",
+            "observations": "~277 weeks per store",
+        },
+        {
             "name": "olist",
             "description": "Brazilian e-commerce orders from 96K customers across marketplaces",
             "source": "Kaggle (olistbr/brazilian-ecommerce)",
@@ -107,6 +115,7 @@ __all__ = [
     "load_instacart",
     "load_yoochoose",
     "load_olist",
+    "load_m5",
     "load_rees46",
     "list_datasets",
 ]

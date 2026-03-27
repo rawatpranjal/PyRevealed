@@ -25,11 +25,12 @@ def results_to_summary_table(results: list[BenchmarkResult]) -> pd.DataFrame:
             "Task": r.task_type[:5],
         }
         if r.task_type == "classification":
+            pct_lift = (r.auc_combined - r.auc_base) / max(r.auc_base, 0.5) * 100 if r.auc_base > 0 else 0
             row.update({
                 "AUC (RP only)": f"{r.auc_rp:.3f}",
                 "AUC (Baseline)": f"{r.auc_base:.3f}",
                 "AUC (Combined)": f"{r.auc_combined:.3f}",
-                "AUC Lift": f"{r.auc_lift:+.3f}",
+                "Lift %": f"{pct_lift:+.1f}%",
             })
         else:
             row.update({
@@ -69,13 +70,18 @@ def print_summary(results: list[BenchmarkResult]) -> None:
     if cls_results:
         print("\n  Classification Tasks — Out-of-Sample AUC-ROC (5-fold Stratified CV)")
         print("  " + "-" * 100)
-        print(f"  {'Dataset':<18} {'Target':<18} {'N':>6} {'%pos':>5}  {'RP only':>10}  {'Baseline':>10}  {'Combined':>10}  {'Lift':>7}")
+        print(f"  {'Dataset':<18} {'Target':<18} {'N':>6} {'%pos':>5}  {'RP only':>10}  {'Baseline':>10}  {'Combined':>10}  {'Lift %':>7}")
         print("  " + "-" * 100)
         for r in cls_results:
+            # Lift as percentage of baseline
+            if r.auc_base > 0 and r.auc_base != 0.5:
+                pct_lift = (r.auc_combined - r.auc_base) / r.auc_base * 100
+            else:
+                pct_lift = 0.0
             print(
                 f"  {r.dataset:<18} {r.target:<18} {r.n_users:>6} {r.positive_rate:>5.1%}  "
                 f"{r.auc_rp:>.3f}±{r.auc_rp_std:.3f}  {r.auc_base:>.3f}±{r.auc_base_std:.3f}  "
-                f"{r.auc_combined:>.3f}±{r.auc_combined_std:.3f}  {r.auc_lift:>+7.3f}"
+                f"{r.auc_combined:>.3f}±{r.auc_combined_std:.3f}  {pct_lift:>+6.1f}%"
             )
         print("  " + "-" * 100)
 

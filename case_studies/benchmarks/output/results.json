@@ -1,27 +1,27 @@
 [
   {
-    "dataset": "Dunnhumby",
-    "target": "Churn",
+    "dataset": "M5 Walmart",
+    "target": "High Demand",
     "task_type": "classification",
-    "n_users": 2222,
+    "n_users": 70,
     "n_rp_features": 14,
-    "n_base_features": 12,
-    "positive_rate": 0.06795679567956796,
-    "auc_rp": 0.5856518397104077,
-    "auc_base": 0.7404192778594509,
-    "auc_combined": 0.7172597223865073,
-    "auc_rp_std": 0.01392704082513804,
-    "auc_base_std": 0.01806760315371378,
-    "auc_combined_std": 0.007449213796793062,
-    "acc_rp": 0.9311438404696831,
-    "acc_base": 0.9284451867597936,
-    "acc_combined": 0.9279957485575464,
-    "f1_rp": 0.0,
-    "f1_base": 0.03305019305019305,
-    "f1_combined": 0.022539682539682537,
-    "auc_rp_train": 0.9542707397328609,
-    "auc_base_train": 0.9843278833209155,
-    "auc_combined_train": 0.9887695421797705,
+    "n_base_features": 13,
+    "positive_rate": 0.32857142857142857,
+    "auc_rp": 0.8172222222222221,
+    "auc_base": 1.0,
+    "auc_combined": 1.0,
+    "auc_rp_std": 0.08240969618128288,
+    "auc_base_std": 0.0,
+    "auc_combined_std": 0.0,
+    "acc_rp": 0.7428571428571429,
+    "acc_base": 0.9,
+    "acc_combined": 0.9,
+    "f1_rp": 0.44974358974358974,
+    "f1_base": 0.7532467532467533,
+    "f1_combined": 0.7532467532467533,
+    "auc_rp_train": 0.8177613320999075,
+    "auc_base_train": 1.0,
+    "auc_combined_train": 1.0,
     "rmse_rp": 0.0,
     "rmse_base": 0.0,
     "rmse_combined": 0.0,
@@ -33,171 +33,75 @@
     "r2_combined_train": 0.0,
     "top_features": [
       [
-        "std_spend",
-        127
-      ],
-      [
-        "spend_slope",
-        121
-      ],
-      [
-        "spend_cv",
-        113
-      ],
-      [
-        "herfindahl",
-        98
-      ],
-      [
         "total_spend",
-        90
+        41
       ],
       [
         "max_spend",
-        85
-      ],
-      [
-        "mean_basket_size",
-        78
-      ],
-      [
-        "top_category_share",
-        78
-      ],
-      [
-        "min_spend",
-        77
-      ],
-      [
-        "scc_ratio",
-        73
-      ],
-      [
-        "n_obs",
-        68
-      ],
-      [
-        "ccei",
-        67
-      ],
-      [
-        "n_violations",
-        61
-      ],
-      [
-        "violation_density",
-        60
-      ],
-      [
-        "mpi",
-        54
-      ]
-    ],
-    "auc_lift": -0.023159555472943683
-  },
-  {
-    "dataset": "Dunnhumby",
-    "target": "High Spender",
-    "task_type": "classification",
-    "n_users": 2222,
-    "n_rp_features": 14,
-    "n_base_features": 12,
-    "positive_rate": 0.3334833483348335,
-    "auc_rp": 0.9187233341300999,
-    "auc_base": 0.9587744843560643,
-    "auc_combined": 0.9597689265168405,
-    "auc_rp_std": 0.006957955218368145,
-    "auc_base_std": 0.004291714761673838,
-    "auc_combined_std": 0.0034711650932943714,
-    "acc_rp": 0.8456250632655127,
-    "acc_base": 0.8933302965887236,
-    "acc_combined": 0.8937868205283935,
-    "f1_rp": 0.7619676202930036,
-    "f1_base": 0.8371970341818722,
-    "f1_combined": 0.8381293407532414,
-    "auc_rp_train": 0.9617361978675459,
-    "auc_base_train": 0.9877986661454446,
-    "auc_combined_train": 0.9900858467260969,
-    "rmse_rp": 0.0,
-    "rmse_base": 0.0,
-    "rmse_combined": 0.0,
-    "r2_rp": 0.0,
-    "r2_base": 0.0,
-    "r2_combined": 0.0,
-    "r2_rp_train": 0.0,
-    "r2_base_train": 0.0,
-    "r2_combined_train": 0.0,
-    "top_features": [
-      [
-        "total_spend",
-        237
-      ],
-      [
-        "spend_cv",
-        109
-      ],
-      [
-        "spend_slope",
-        108
+        40
       ],
       [
         "mean_spend",
-        99
-      ],
-      [
-        "n_obs",
-        84
-      ],
-      [
-        "ccei",
-        84
-      ],
-      [
-        "mean_basket_size",
-        74
-      ],
-      [
-        "max_spend",
-        72
+        8
       ],
       [
         "std_spend",
-        71
+        8
       ],
       [
-        "hm_ratio",
-        69
+        "min_spend",
+        3
       ],
       [
-        "n_violations",
-        62
+        "n_obs",
+        0
       ],
       [
-        "mpi",
-        57
-      ],
-      [
-        "violation_density",
-        54
+        "mean_basket_size",
+        0
       ],
       [
         "herfindahl",
-        51
+        0
       ],
       [
         "top_category_share",
-        46
+        0
+      ],
+      [
+        "n_active_categories",
+        0
+      ],
+      [
+        "spend_slope",
+        0
+      ],
+      [
+        "spend_cv",
+        0
+      ],
+      [
+        "mean_abs_spend_change",
+        0
+      ],
+      [
+        "is_garp",
+        0
+      ],
+      [
+        "n_violations",
+        0
       ]
     ],
-    "auc_lift": 0.0009944421607762655
+    "auc_lift": 0.0
   },
   {
-    "dataset": "Dunnhumby",
-    "target": "Spend Change",
+    "dataset": "M5 Walmart",
+    "target": "Demand Change",
     "task_type": "regression",
-    "n_users": 2222,
+    "n_users": 70,
     "n_rp_features": 14,
-    "n_base_features": 12,
+    "n_base_features": 13,
     "positive_rate": 0.0,
     "auc_rp": 0.0,
     "auc_base": 0.0,
@@ -214,647 +118,71 @@
     "auc_rp_train": 0.0,
     "auc_base_train": 0.0,
     "auc_combined_train": 0.0,
-    "rmse_rp": 7.463597432005652,
-    "rmse_base": 6.903632035604673,
-    "rmse_combined": 6.8150075245273225,
-    "r2_rp": -0.03301890295375154,
-    "r2_base": 0.1150896303351528,
-    "r2_combined": 0.1380706847549348,
-    "r2_rp_train": 0.2192249696723303,
-    "r2_base_train": 0.4244239333407611,
-    "r2_combined_train": 0.4616641725295214,
+    "rmse_rp": 3345.0242738524234,
+    "rmse_base": 2744.2655543858064,
+    "rmse_combined": 2726.3669514081143,
+    "r2_rp": -0.10644562619763656,
+    "r2_base": 0.22010034698144523,
+    "r2_combined": 0.24678181271257782,
+    "r2_rp_train": 0.06617470101762435,
+    "r2_base_train": 0.4516025471224002,
+    "r2_combined_train": 0.4539141475806139,
     "top_features": [
       [
-        "std_spend",
-        172
+        "spend_cv",
+        31
       ],
       [
         "spend_slope",
-        148
-      ],
-      [
-        "mean_basket_size",
-        142
-      ],
-      [
-        "mean_spend",
-        113
-      ],
-      [
-        "herfindahl",
-        112
-      ],
-      [
-        "max_spend",
-        97
-      ],
-      [
-        "total_spend",
-        72
-      ],
-      [
-        "top_category_share",
-        60
-      ],
-      [
-        "hm_ratio",
-        58
-      ],
-      [
-        "min_spend",
-        56
-      ],
-      [
-        "mpi",
-        56
-      ],
-      [
-        "spend_cv",
-        54
-      ],
-      [
-        "n_obs",
-        53
-      ],
-      [
-        "scc_ratio",
-        53
-      ],
-      [
-        "n_violations",
-        44
-      ]
-    ],
-    "auc_lift": 0.0
-  },
-  {
-    "dataset": "UCI Retail",
-    "target": "LTV Tier",
-    "task_type": "classification",
-    "n_users": 134,
-    "n_rp_features": 14,
-    "n_base_features": 12,
-    "positive_rate": 0.3358208955223881,
-    "auc_rp": 0.5665214233841686,
-    "auc_base": 0.9069716775599128,
-    "auc_combined": 0.911909949164851,
-    "auc_rp_std": 0.09766197358412361,
-    "auc_base_std": 0.04135826378737869,
-    "auc_combined_std": 0.0517795866970956,
-    "acc_rp": 0.6179487179487179,
-    "acc_base": 0.8128205128205128,
-    "acc_combined": 0.8202279202279202,
-    "f1_rp": 0.042105263157894736,
-    "f1_base": 0.7190849673202615,
-    "f1_combined": 0.7203921568627452,
-    "auc_rp_train": 0.5956304619225967,
-    "auc_base_train": 0.9805243445692884,
-    "auc_combined_train": 0.9812734082397003,
-    "rmse_rp": 0.0,
-    "rmse_base": 0.0,
-    "rmse_combined": 0.0,
-    "r2_rp": 0.0,
-    "r2_base": 0.0,
-    "r2_combined": 0.0,
-    "r2_rp_train": 0.0,
-    "r2_base_train": 0.0,
-    "r2_combined_train": 0.0,
-    "top_features": [
-      [
-        "total_spend",
-        49
-      ],
-      [
-        "max_spend",
-        48
-      ],
-      [
-        "spend_cv",
-        37
-      ],
-      [
-        "std_spend",
         28
       ],
       [
         "min_spend",
-        23
+        16
       ],
       [
-        "herfindahl",
-        22
-      ],
-      [
-        "spend_slope",
-        20
-      ],
-      [
-        "top_category_share",
-        18
-      ],
-      [
-        "mean_spend",
+        "max_spend",
         12
       ],
       [
-        "n_obs",
-        10
-      ],
-      [
-        "mean_basket_size",
-        8
-      ],
-      [
-        "n_active_categories",
-        7
-      ],
-      [
-        "is_garp",
-        0
-      ],
-      [
-        "n_violations",
-        0
-      ],
-      [
-        "ccei",
-        0
-      ]
-    ],
-    "auc_lift": 0.004938271604938205
-  },
-  {
-    "dataset": "UCI Retail",
-    "target": "Churn",
-    "task_type": "classification",
-    "n_users": 134,
-    "n_rp_features": 14,
-    "n_base_features": 12,
-    "positive_rate": 0.09701492537313433,
-    "auc_rp": 0.5233888888888888,
-    "auc_base": 0.5026666666666666,
-    "auc_combined": 0.4910555555555556,
-    "auc_rp_std": 0.16163434193829956,
-    "auc_base_std": 0.1057340012122197,
-    "auc_combined_std": 0.15007389126529028,
-    "acc_rp": 0.9031339031339032,
-    "acc_base": 0.9031339031339032,
-    "acc_combined": 0.9031339031339032,
-    "f1_rp": 0.0,
-    "f1_base": 0.0,
-    "f1_combined": 0.0,
-    "auc_rp_train": 0.5801017164653528,
-    "auc_base_train": 0.9980928162746345,
-    "auc_combined_train": 0.9993642720915449,
-    "rmse_rp": 0.0,
-    "rmse_base": 0.0,
-    "rmse_combined": 0.0,
-    "r2_rp": 0.0,
-    "r2_base": 0.0,
-    "r2_combined": 0.0,
-    "r2_rp_train": 0.0,
-    "r2_base_train": 0.0,
-    "r2_combined_train": 0.0,
-    "top_features": [
-      [
-        "total_spend",
-        39
-      ],
-      [
-        "top_category_share",
-        36
-      ],
-      [
-        "spend_slope",
-        30
+        "max_scc",
+        6
       ],
       [
         "std_spend",
-        27
-      ],
-      [
-        "n_active_categories",
-        26
-      ],
-      [
-        "spend_cv",
-        26
-      ],
-      [
-        "mean_spend",
-        21
-      ],
-      [
-        "mean_basket_size",
-        21
-      ],
-      [
-        "herfindahl",
-        21
-      ],
-      [
-        "max_spend",
-        16
-      ],
-      [
-        "min_spend",
-        14
-      ],
-      [
-        "scc_ratio",
-        9
-      ],
-      [
-        "n_obs",
-        3
-      ],
-      [
-        "is_garp",
-        0
-      ],
-      [
-        "n_violations",
-        0
-      ]
-    ],
-    "auc_lift": -0.011611111111111017
-  },
-  {
-    "dataset": "UCI Retail",
-    "target": "Order Frequency",
-    "task_type": "regression",
-    "n_users": 134,
-    "n_rp_features": 14,
-    "n_base_features": 12,
-    "positive_rate": 0.0,
-    "auc_rp": 0.0,
-    "auc_base": 0.0,
-    "auc_combined": 0.0,
-    "auc_rp_std": 0.0,
-    "auc_base_std": 0.0,
-    "auc_combined_std": 0.0,
-    "acc_rp": 0.0,
-    "acc_base": 0.0,
-    "acc_combined": 0.0,
-    "f1_rp": 0.0,
-    "f1_base": 0.0,
-    "f1_combined": 0.0,
-    "auc_rp_train": 0.0,
-    "auc_base_train": 0.0,
-    "auc_combined_train": 0.0,
-    "rmse_rp": 0.4130457962621218,
-    "rmse_base": 0.414506806979856,
-    "rmse_combined": 0.41142587774342443,
-    "r2_rp": 0.22452442960818378,
-    "r2_base": 0.21630273278022863,
-    "r2_combined": 0.2283158767120872,
-    "r2_rp_train": 0.2755330289201521,
-    "r2_base_train": 0.5600979939589137,
-    "r2_combined_train": 0.5607175914035842,
-    "top_features": [
-      [
-        "n_obs",
-        40
-      ],
-      [
-        "herfindahl",
-        40
-      ],
-      [
-        "min_spend",
-        26
-      ],
-      [
-        "mean_basket_size",
-        26
-      ],
-      [
-        "top_category_share",
-        25
-      ],
-      [
-        "spend_cv",
-        23
-      ],
-      [
-        "n_active_categories",
-        21
-      ],
-      [
-        "total_spend",
-        20
-      ],
-      [
-        "std_spend",
-        20
-      ],
-      [
-        "spend_slope",
-        19
-      ],
-      [
-        "mean_spend",
-        16
-      ],
-      [
-        "scc_ratio",
         5
       ],
       [
-        "max_spend",
-        3
-      ],
-      [
-        "is_garp",
-        0
-      ],
-      [
-        "n_violations",
-        0
-      ]
-    ],
-    "auc_lift": 0.0
-  },
-  {
-    "dataset": "Instacart",
-    "target": "Spend Drop",
-    "task_type": "classification",
-    "n_users": 5000,
-    "n_rp_features": 14,
-    "n_base_features": 12,
-    "positive_rate": 0.1178,
-    "auc_rp": 0.5777452274492821,
-    "auc_base": 0.6355310476421098,
-    "auc_combined": 0.642093566516278,
-    "auc_rp_std": 0.04187576953229105,
-    "auc_base_std": 0.01522433842962302,
-    "auc_combined_std": 0.014891401867494387,
-    "acc_rp": 0.8822000000000001,
-    "acc_base": 0.8812,
-    "acc_combined": 0.8821999999999999,
-    "f1_rp": 0.0,
-    "f1_base": 0.006504065040650407,
-    "f1_combined": 0.03276462524383297,
-    "auc_rp_train": 0.6725445992981738,
-    "auc_base_train": 0.8691365812971815,
-    "auc_combined_train": 0.8772981883922698,
-    "rmse_rp": 0.0,
-    "rmse_base": 0.0,
-    "rmse_combined": 0.0,
-    "r2_rp": 0.0,
-    "r2_base": 0.0,
-    "r2_combined": 0.0,
-    "r2_rp_train": 0.0,
-    "r2_base_train": 0.0,
-    "r2_combined_train": 0.0,
-    "top_features": [
-      [
-        "spend_slope",
-        194
-      ],
-      [
-        "spend_cv",
-        159
-      ],
-      [
-        "herfindahl",
-        149
-      ],
-      [
-        "mean_spend",
-        147
-      ],
-      [
         "total_spend",
-        129
-      ],
-      [
-        "scc_ratio",
-        113
-      ],
-      [
-        "top_category_share",
-        106
-      ],
-      [
-        "std_spend",
-        99
-      ],
-      [
-        "n_active_categories",
-        69
+        2
       ],
       [
         "n_obs",
-        68
-      ],
-      [
-        "max_scc",
-        47
-      ],
-      [
-        "max_spend",
-        43
-      ],
-      [
-        "mean_basket_size",
-        42
-      ],
-      [
-        "min_spend",
-        35
-      ],
-      [
-        "is_garp",
         0
-      ]
-    ],
-    "auc_lift": 0.006562518874168255
-  },
-  {
-    "dataset": "Instacart",
-    "target": "High Value",
-    "task_type": "classification",
-    "n_users": 5000,
-    "n_rp_features": 14,
-    "n_base_features": 12,
-    "positive_rate": 0.3298,
-    "auc_rp": 0.8946187806522495,
-    "auc_base": 0.9622181948532651,
-    "auc_combined": 0.962089197920724,
-    "auc_rp_std": 0.01076812816840633,
-    "auc_base_std": 0.007834318379944104,
-    "auc_combined_std": 0.007245447250684361,
-    "acc_rp": 0.8374,
-    "acc_base": 0.9006000000000001,
-    "acc_combined": 0.9029999999999999,
-    "f1_rp": 0.734096920639207,
-    "f1_base": 0.8476789360390514,
-    "f1_combined": 0.8512612826255277,
-    "auc_rp_train": 0.9050459490111746,
-    "auc_base_train": 0.978806865758237,
-    "auc_combined_train": 0.9790470120248672,
-    "rmse_rp": 0.0,
-    "rmse_base": 0.0,
-    "rmse_combined": 0.0,
-    "r2_rp": 0.0,
-    "r2_base": 0.0,
-    "r2_combined": 0.0,
-    "r2_rp_train": 0.0,
-    "r2_base_train": 0.0,
-    "r2_combined_train": 0.0,
-    "top_features": [
-      [
-        "total_spend",
-        316
-      ],
-      [
-        "spend_slope",
-        186
-      ],
-      [
-        "spend_cv",
-        132
-      ],
-      [
-        "herfindahl",
-        104
-      ],
-      [
-        "n_obs",
-        99
-      ],
-      [
-        "top_category_share",
-        95
       ],
       [
         "mean_spend",
-        90
-      ],
-      [
-        "std_spend",
-        90
-      ],
-      [
-        "scc_ratio",
-        88
-      ],
-      [
-        "max_spend",
-        65
-      ],
-      [
-        "n_active_categories",
-        46
-      ],
-      [
-        "max_scc",
-        44
-      ],
-      [
-        "min_spend",
-        26
-      ],
-      [
-        "mean_basket_size",
-        19
-      ],
-      [
-        "is_garp",
         0
-      ]
-    ],
-    "auc_lift": -0.00012899693254109224
-  },
-  {
-    "dataset": "Instacart",
-    "target": "Basket Size",
-    "task_type": "regression",
-    "n_users": 5000,
-    "n_rp_features": 14,
-    "n_base_features": 12,
-    "positive_rate": 0.0,
-    "auc_rp": 0.0,
-    "auc_base": 0.0,
-    "auc_combined": 0.0,
-    "auc_rp_std": 0.0,
-    "auc_base_std": 0.0,
-    "auc_combined_std": 0.0,
-    "acc_rp": 0.0,
-    "acc_base": 0.0,
-    "acc_combined": 0.0,
-    "f1_rp": 0.0,
-    "f1_base": 0.0,
-    "f1_combined": 0.0,
-    "auc_rp_train": 0.0,
-    "auc_base_train": 0.0,
-    "auc_combined_train": 0.0,
-    "rmse_rp": 5.508673954446399,
-    "rmse_base": 3.402905162316329,
-    "rmse_combined": 3.4005640090036424,
-    "r2_rp": 0.21654318054975413,
-    "r2_base": 0.7006243663196943,
-    "r2_combined": 0.7010482938899936,
-    "r2_rp_train": 0.2466057502232093,
-    "r2_base_train": 0.7642524039602975,
-    "r2_combined_train": 0.7648132432390404,
-    "top_features": [
-      [
-        "mean_spend",
-        294
-      ],
-      [
-        "spend_slope",
-        205
-      ],
-      [
-        "std_spend",
-        143
-      ],
-      [
-        "spend_cv",
-        126
-      ],
-      [
-        "total_spend",
-        94
-      ],
-      [
-        "top_category_share",
-        91
       ],
       [
         "mean_basket_size",
-        79
-      ],
-      [
-        "max_spend",
-        75
-      ],
-      [
-        "min_spend",
-        66
+        0
       ],
       [
         "herfindahl",
-        65
+        0
       ],
       [
-        "scc_ratio",
-        63
-      ],
-      [
-        "n_obs",
-        51
-      ],
-      [
-        "max_scc",
-        26
+        "top_category_share",
+        0
       ],
       [
         "n_active_categories",
-        22
+        0
+      ],
+      [
+        "mean_abs_spend_change",
+        0
       ],
       [
         "is_garp",

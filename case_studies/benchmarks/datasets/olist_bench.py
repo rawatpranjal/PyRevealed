@@ -1,4 +1,4 @@
-"""Dunnhumby grocery benchmark: churn, high-spender, spend-change prediction."""
+"""Olist Brazilian E-Commerce benchmark: LTV tier, churn, spend change."""
 
 from __future__ import annotations
 
@@ -8,28 +8,19 @@ import numpy as np
 import pandas as pd
 
 from case_studies.benchmarks.config import TRAIN_FRACTION, MIN_OBS_BUDGET
-from case_studies.benchmarks.core.features import extract_budget_baseline, extract_budget_rp, extract_budget_rp_deep
+from case_studies.benchmarks.core.features import extract_budget_baseline, extract_budget_rp
 from case_studies.benchmarks.core.evaluation import run_three_way, BenchmarkResult
 
 
-DATASET_NAME = "Dunnhumby"
-DEFAULT_DATA_DIR = str(Path(__file__).resolve().parents[2] / "dunnhumby" / "data")
+DATASET_NAME = "Olist"
 
 
-def load_and_prepare(data_dir=None, n_households=None):
-    """Load Dunnhumby and prepare train/target splits.
-
-    Returns:
-        Tuple of (X_rp, X_base, targets_dict, user_ids)
-        where targets_dict maps target_name -> (y_array, task_type)
-    """
-    from pyrevealed.datasets import load_dunnhumby
-
-    if data_dir is None:
-        data_dir = DEFAULT_DATA_DIR
+def load_and_prepare(data_dir=None, max_users=None):
+    """Load Olist and prepare train/target splits."""
+    from pyrevealed.datasets._olist import load_olist
 
     print(f"\n[{DATASET_NAME}] Loading dataset...")
-    panel = load_dunnhumby(data_dir=data_dir, n_households=n_households, min_weeks=MIN_OBS_BUDGET)
+    panel = load_olist(data_dir=data_dir, n_customers=max_users, min_orders=4)
 
     user_ids = []
     train_tuples = []
@@ -39,11 +30,11 @@ def load_and_prepare(data_dir=None, n_households=None):
 
     for uid, log in panel._logs.items():
         T = log.num_records
-        if T < MIN_OBS_BUDGET:
+        if T < 4:
             continue
 
         split = int(T * TRAIN_FRACTION)
-        if split < 5 or (T - split) < 3:
+        if split < 2 or (T - split) < 2:
             continue
 
         prices_train = log.cost_vectors[:split]
@@ -54,12 +45,12 @@ def load_and_prepare(data_dir=None, n_households=None):
         train_tuples.append((prices_train, qty_train))
         user_ids.append(uid)
 
-        train_spend_per_obs = np.sum(prices_train * qty_train, axis=1)
-        test_spend_per_obs = np.sum(prices_test * qty_test, axis=1)
+        train_spend = np.sum(prices_train * qty_train, axis=1)
+        test_spend = np.sum(prices_test * qty_test, axis=1)
 
-        train_mean_spends.append(float(np.mean(train_spend_per_obs)))
-        test_mean_spends.append(float(np.mean(test_spend_per_obs)))
-        test_total_spends.append(float(np.sum(test_spend_per_obs)))
+        train_mean_spends.append(float(np.mean(train_spend)))
+        test_mean_spends.append(float(np.mean(test_spend)))
+        test_total_spends.append(float(np.sum(test_spend)))
 
     train_mean_spends = np.array(train_mean_spends)
     test_mean_spends = np.array(test_mean_spends)
@@ -67,44 +58,40 @@ def load_and_prepare(data_dir=None, n_households=None):
 
     print(f"  Users: {len(user_ids)}")
 
-    # Extract features
+    if len(user_ids) < 20:
+        print(f"  Too few users for meaningful benchmark, skipping.")
+        return None, None, {}, user_ids
+
     print(f"  Extracting baseline features...")
     X_base = extract_budget_baseline(train_tuples, user_ids)
 
     print(f"  Extracting RP features via Engine...")
-    X_rp_engine = extract_budget_rp(train_tuples, user_ids)
+    X_rp = extract_budget_rp(train_tuples, user_ids)
 
-    print(f"  Extracting deep RP features (Auditor + Encoder + Rolling)...")
-    X_rp_deep = extract_budget_rp_deep(train_tuples, user_ids)
-
-    # Combine all RP features
-    X_rp = pd.concat([X_rp_engine, X_rp_deep], axis=1)
-
-    # --- Targets ---
-
-    # Churn: mean spend dropped by >50% from train to test window
-    spend_ratio = test_mean_spends / np.maximum(train_mean_spends, 1e-6)
-    churn = (spend_ratio < 0.5).astype(int)
-
-    # High spender: top tercile of test-window total spend
+    # Targets
     threshold = np.percentile(test_total_spends, 66.67)
     high_spender = (test_total_spends > threshold).astype(int)
 
-    # Spend change: difference in mean spend (regression)
+    spend_ratio = test_mean_spends / np.maximum(train_mean_spends, 1e-6)
+    churn = (spend_ratio < 0.5).astype(int)
+
     spend_change = test_mean_spends - train_mean_spends
 
     targets_dict = {
-        "Churn": (churn, "classification"),
         "High Spender": (high_spender, "classification"),
+        "Churn": (churn, "classification"),
         "Spend Change": (spend_change, "regression"),
     }
 
     return X_rp, X_base, targets_dict, user_ids
 
 
-def run_benchmark(data_dir=None, n_households=None) -> list[BenchmarkResult]:
-    """Run all Dunnhumby benchmarks."""
-    X_rp, X_base, targets_dict, user_ids = load_and_prepare(data_dir, n_households)
+def run_benchmark(data_dir=None, max_users=None) -> list[BenchmarkResult]:
+    """Run all Olist benchmarks."""
+    X_rp, X_base, targets_dict, user_ids = load_and_prepare(data_dir, max_users)
+
+    if X_rp is None:
+        return []
 
     results = []
     for target_name, (y, task_type) in targets_dict.items():

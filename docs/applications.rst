@@ -11,6 +11,7 @@ Budgets
 
    budget/app_grocery
    budget/app_llm_alignment
+   budget/app_llm_benchmark
 
 Menus
 -----

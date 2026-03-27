@@ -30,6 +30,9 @@ AVAILABLE_DATASETS = {
     "retailrocket": "case_studies.benchmarks.datasets.retailrocket_bench",
     "instacart": "case_studies.benchmarks.datasets.instacart_bench",
     "yoochoose": "case_studies.benchmarks.datasets.yoochoose_bench",
+    "olist": "case_studies.benchmarks.datasets.olist_bench",
+    "m5": "case_studies.benchmarks.datasets.m5_bench",
+    "rees46": "case_studies.benchmarks.datasets.rees46_bench",
 }
 
 
@@ -52,6 +55,13 @@ def run_dataset(name: str, max_users: int | None = None) -> list[BenchmarkResult
             kwargs["max_users"] = max_users
     elif name in ("instacart", "yoochoose"):
         kwargs["max_users"] = max_users or 5000
+    elif name == "olist":
+        if max_users:
+            kwargs["max_users"] = max_users
+    elif name == "m5":
+        pass  # M5 has fixed store count
+    elif name == "rees46":
+        kwargs["max_users"] = max_users or 10000
 
     try:
         return mod.run_benchmark(**kwargs)
