@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Workflow Rules
 
 - **Always commit and push after completing changes.** Do not wait for the user to ask — commit and push to main automatically when work is done.
+- **Never add Co-Authored-By or any Claude attribution to commit messages.**
 
 ## Documentation Rules
 
