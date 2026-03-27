@@ -119,6 +119,7 @@ Based on Chambers & Echenique (2016) `Revealed Preference Theory <https://www.am
    applications
    algorithms
    performance
+   examples
    theory_landscape
    api
    references
