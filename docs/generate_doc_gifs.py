@@ -7,10 +7,36 @@ import matplotlib.patches as mpatches
 from matplotlib.animation import FuncAnimation
 from pathlib import Path
 
+from PIL import Image
+import io
+
 plt.switch_backend("Agg")
 
 OUTPUT_DIR = Path(__file__).parent / "_static"
 DPI = 100
+
+# Durations for variable-speed algorithm GIFs
+SLOW_MS = 3000   # text-change frames (phase transitions, new explanations)
+FAST_MS = 600    # visual-only frames (edges appearing, nodes moving)
+
+
+def _save_gif_variable_speed(fig, update_fn, total_frames, text_frames,
+                              output_path, slow_ms=SLOW_MS, fast_ms=FAST_MS):
+    """Save GIF with slow duration on text-change frames, fast on visual-only."""
+    pil_frames = []
+    durations = []
+    for f in range(total_frames):
+        update_fn(f)
+        buf = io.BytesIO()
+        fig.savefig(buf, format="png", dpi=DPI, facecolor=fig.get_facecolor())
+        buf.seek(0)
+        img = Image.open(buf).convert("RGB")
+        pil_frames.append(img.copy())
+        durations.append(slow_ms if f in text_frames else fast_ms)
+    pil_frames[0].save(
+        output_path, save_all=True, append_images=pil_frames[1:],
+        duration=durations, loop=0, optimize=False,
+    )
 PALETTE = {
     "bg": "#fafafa",
     "edge": "#4a4a4a",
@@ -523,9 +549,15 @@ def generate_floyd_warshall():
                 "Now check: any $i R^* j$ with $j P_0 i$?  "
                 "\u2192 GARP violation")
 
+    # Text-change frames: phase starts + each FW pivot sub-phase boundary
+    text_frames = {0, 90}
+    for k in range(n):
+        base = 30 + k * 12
+        text_frames.update({base, base + 4, base + 8})
+
     print("  Generating floyd_warshall.gif...")
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=INTERVAL)
-    anim.save(OUTPUT_DIR / "floyd_warshall.gif", writer="pillow", dpi=DPI)
+    _save_gif_variable_speed(fig, update, TOTAL_FRAMES, text_frames,
+                              OUTPUT_DIR / "floyd_warshall.gif")
     plt.close(fig)
 
 
@@ -727,9 +759,12 @@ def generate_scc_tarjan():
                 "O(T\u00b2) SCC check  vs  O(T\u00b3) Floyd-Warshall  "
                 "\u2014  1000\u00d7 faster at T=10,000")
 
+    # Text-change frames: phase starts + sub-phase text transitions
+    text_frames = {0, 30, 43, 60, 73, 90}
+
     print("  Generating scc_tarjan.gif...")
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=INTERVAL)
-    anim.save(OUTPUT_DIR / "scc_tarjan.gif", writer="pillow", dpi=DPI)
+    _save_gif_variable_speed(fig, update, TOTAL_FRAMES, text_frames,
+                              OUTPUT_DIR / "scc_tarjan.gif")
     plt.close(fig)
 
 
@@ -1291,9 +1326,12 @@ def generate_ccei_algorithm():
 
             _draw_meter(e, is_done=True)
 
+    # Text-change frames: phase starts + sub-phase text transitions
+    text_frames = {0, 25, 37, 43, 50, 65, 105, 120}
+
     print("  Generating ccei_algorithm.gif...")
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=INTERVAL)
-    anim.save(OUTPUT_DIR / "ccei_algorithm.gif", writer="pillow", dpi=DPI)
+    _save_gif_variable_speed(fig, update, TOTAL_FRAMES, text_frames,
+                              OUTPUT_DIR / "ccei_algorithm.gif")
     plt.close(fig)
 
 # ---------------------------------------------------------------------------
@@ -1606,9 +1644,12 @@ def generate_hm_algorithm():
             score_txt.set_alpha(alpha_score)
             counter_txt.set_text("80% of observations satisfy GARP")
 
+    # Text-change frames: phase starts + sub-phase text transitions
+    text_frames = {0, 25, 55, 67, 80, 90, 100, 108, 125}
+
     print("  Generating hm_algorithm.gif...")
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=INTERVAL)
-    anim.save(OUTPUT_DIR / "hm_algorithm.gif", writer="pillow", dpi=DPI)
+    _save_gif_variable_speed(fig, update, TOTAL_FRAMES, text_frames,
+                              OUTPUT_DIR / "hm_algorithm.gif")
     plt.close(fig)
 
 
