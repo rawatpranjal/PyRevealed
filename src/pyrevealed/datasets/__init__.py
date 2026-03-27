@@ -26,6 +26,7 @@ from pyrevealed.datasets._m5 import load_m5
 from pyrevealed.datasets._rees46 import load_rees46
 from pyrevealed.datasets._online_retail_ii import load_online_retail_ii
 from pyrevealed.datasets._hm import load_hm
+from pyrevealed.datasets._pakistan import load_pakistan
 
 
 def list_datasets() -> list[dict[str, str]]:
@@ -119,6 +120,13 @@ def list_datasets() -> list[dict[str, str]]:
             "goods": "20 product groups (article prefix)",
             "observations": "~6-24 months per customer",
         },
+        {
+            "name": "pakistan",
+            "description": "Pakistan e-commerce transactions with real prices across 16 product categories",
+            "source": "Kaggle (zusmani/pakistans-largest-ecommerce-dataset)",
+            "goods": "16 product categories (real PKR prices)",
+            "observations": "Monthly aggregation, min 5 months per customer",
+        },
     ]
 
 
@@ -135,5 +143,6 @@ __all__ = [
     "load_rees46",
     "load_online_retail_ii",
     "load_hm",
+    "load_pakistan",
     "list_datasets",
 ]
