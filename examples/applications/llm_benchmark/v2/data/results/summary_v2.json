@@ -1,0 +1,3313 @@
+{
+  "support_ticket": {
+    "support_ticket_v00_clear__aggressive": {
+      "vignette_id": "support_ticket_v00_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 6,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v00_clear__chain_of_thought": {
+      "vignette_id": "support_ticket_v00_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v00_clear__conservative": {
+      "vignette_id": "support_ticket_v00_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 9,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v00_clear__decision_tree": {
+      "vignette_id": "support_ticket_v00_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.9333,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v00_clear__minimal": {
+      "vignette_id": "support_ticket_v00_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v01_clear__aggressive": {
+      "vignette_id": "support_ticket_v01_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v01_clear__chain_of_thought": {
+      "vignette_id": "support_ticket_v01_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            3,
+            4
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 4,
+          "triple_choice": 3,
+          "added_item": 0
+        }
+      ]
+    },
+    "support_ticket_v01_clear__conservative": {
+      "vignette_id": "support_ticket_v01_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v01_clear__decision_tree": {
+      "vignette_id": "support_ticket_v01_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v01_clear__minimal": {
+      "vignette_id": "support_ticket_v01_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v02_clear__aggressive": {
+      "vignette_id": "support_ticket_v02_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v02_clear__chain_of_thought": {
+      "vignette_id": "support_ticket_v02_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v02_clear__conservative": {
+      "vignette_id": "support_ticket_v02_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v02_clear__decision_tree": {
+      "vignette_id": "support_ticket_v02_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v02_clear__minimal": {
+      "vignette_id": "support_ticket_v02_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v03_binary__aggressive": {
+      "vignette_id": "support_ticket_v03_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v03_binary__chain_of_thought": {
+      "vignette_id": "support_ticket_v03_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v03_binary__conservative": {
+      "vignette_id": "support_ticket_v03_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 13,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v03_binary__decision_tree": {
+      "vignette_id": "support_ticket_v03_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v03_binary__minimal": {
+      "vignette_id": "support_ticket_v03_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v04_binary__aggressive": {
+      "vignette_id": "support_ticket_v04_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 0,
+          "added_item": 1
+        }
+      ]
+    },
+    "support_ticket_v04_binary__chain_of_thought": {
+      "vignette_id": "support_ticket_v04_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v04_binary__conservative": {
+      "vignette_id": "support_ticket_v04_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 8,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v04_binary__decision_tree": {
+      "vignette_id": "support_ticket_v04_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v04_binary__minimal": {
+      "vignette_id": "support_ticket_v04_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v05_binary__aggressive": {
+      "vignette_id": "support_ticket_v05_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v05_binary__chain_of_thought": {
+      "vignette_id": "support_ticket_v05_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v05_binary__conservative": {
+      "vignette_id": "support_ticket_v05_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 13,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v05_binary__decision_tree": {
+      "vignette_id": "support_ticket_v05_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v05_binary__minimal": {
+      "vignette_id": "support_ticket_v05_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v06_ambiguous__aggressive": {
+      "vignette_id": "support_ticket_v06_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v06_ambiguous__chain_of_thought": {
+      "vignette_id": "support_ticket_v06_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v06_ambiguous__conservative": {
+      "vignette_id": "support_ticket_v06_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 9,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v06_ambiguous__decision_tree": {
+      "vignette_id": "support_ticket_v06_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v06_ambiguous__minimal": {
+      "vignette_id": "support_ticket_v06_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v07_ambiguous__aggressive": {
+      "vignette_id": "support_ticket_v07_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v07_ambiguous__chain_of_thought": {
+      "vignette_id": "support_ticket_v07_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v07_ambiguous__conservative": {
+      "vignette_id": "support_ticket_v07_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 9,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v07_ambiguous__decision_tree": {
+      "vignette_id": "support_ticket_v07_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v07_ambiguous__minimal": {
+      "vignette_id": "support_ticket_v07_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v08_adversarial__aggressive": {
+      "vignette_id": "support_ticket_v08_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v08_adversarial__chain_of_thought": {
+      "vignette_id": "support_ticket_v08_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v08_adversarial__conservative": {
+      "vignette_id": "support_ticket_v08_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v08_adversarial__decision_tree": {
+      "vignette_id": "support_ticket_v08_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v08_adversarial__minimal": {
+      "vignette_id": "support_ticket_v08_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "support_ticket_v09_adversarial__aggressive": {
+      "vignette_id": "support_ticket_v09_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v09_adversarial__chain_of_thought": {
+      "vignette_id": "support_ticket_v09_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v09_adversarial__conservative": {
+      "vignette_id": "support_ticket_v09_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v09_adversarial__decision_tree": {
+      "vignette_id": "support_ticket_v09_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "support_ticket_v09_adversarial__minimal": {
+      "vignette_id": "support_ticket_v09_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    }
+  },
+  "alert_triage": {
+    "alert_triage_v00_clear__aggressive": {
+      "vignette_id": "alert_triage_v00_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v00_clear__chain_of_thought": {
+      "vignette_id": "alert_triage_v00_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v00_clear__conservative": {
+      "vignette_id": "alert_triage_v00_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v00_clear__decision_tree": {
+      "vignette_id": "alert_triage_v00_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 8,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v00_clear__minimal": {
+      "vignette_id": "alert_triage_v00_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v01_clear__aggressive": {
+      "vignette_id": "alert_triage_v01_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v01_clear__chain_of_thought": {
+      "vignette_id": "alert_triage_v01_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v01_clear__conservative": {
+      "vignette_id": "alert_triage_v01_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.7857,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            3,
+            4
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 3,
+          "triple_choice": 4,
+          "added_item": 0
+        }
+      ]
+    },
+    "alert_triage_v01_clear__decision_tree": {
+      "vignette_id": "alert_triage_v01_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v01_clear__minimal": {
+      "vignette_id": "alert_triage_v01_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v02_clear__aggressive": {
+      "vignette_id": "alert_triage_v02_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v02_clear__chain_of_thought": {
+      "vignette_id": "alert_triage_v02_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v02_clear__conservative": {
+      "vignette_id": "alert_triage_v02_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v02_clear__decision_tree": {
+      "vignette_id": "alert_triage_v02_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v02_clear__minimal": {
+      "vignette_id": "alert_triage_v02_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v03_binary__aggressive": {
+      "vignette_id": "alert_triage_v03_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v03_binary__chain_of_thought": {
+      "vignette_id": "alert_triage_v03_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v03_binary__conservative": {
+      "vignette_id": "alert_triage_v03_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v03_binary__decision_tree": {
+      "vignette_id": "alert_triage_v03_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v03_binary__minimal": {
+      "vignette_id": "alert_triage_v03_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v04_binary__aggressive": {
+      "vignette_id": "alert_triage_v04_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 10,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v04_binary__chain_of_thought": {
+      "vignette_id": "alert_triage_v04_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v04_binary__conservative": {
+      "vignette_id": "alert_triage_v04_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v04_binary__decision_tree": {
+      "vignette_id": "alert_triage_v04_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v04_binary__minimal": {
+      "vignette_id": "alert_triage_v04_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v05_binary__aggressive": {
+      "vignette_id": "alert_triage_v05_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 11,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v05_binary__chain_of_thought": {
+      "vignette_id": "alert_triage_v05_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v05_binary__conservative": {
+      "vignette_id": "alert_triage_v05_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v05_binary__decision_tree": {
+      "vignette_id": "alert_triage_v05_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v05_binary__minimal": {
+      "vignette_id": "alert_triage_v05_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v06_ambiguous__aggressive": {
+      "vignette_id": "alert_triage_v06_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v06_ambiguous__chain_of_thought": {
+      "vignette_id": "alert_triage_v06_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v06_ambiguous__conservative": {
+      "vignette_id": "alert_triage_v06_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v06_ambiguous__decision_tree": {
+      "vignette_id": "alert_triage_v06_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v06_ambiguous__minimal": {
+      "vignette_id": "alert_triage_v06_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            3,
+            4
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 4,
+          "triple_choice": 3,
+          "added_item": 0
+        }
+      ]
+    },
+    "alert_triage_v07_ambiguous__aggressive": {
+      "vignette_id": "alert_triage_v07_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v07_ambiguous__chain_of_thought": {
+      "vignette_id": "alert_triage_v07_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v07_ambiguous__conservative": {
+      "vignette_id": "alert_triage_v07_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v07_ambiguous__decision_tree": {
+      "vignette_id": "alert_triage_v07_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v07_ambiguous__minimal": {
+      "vignette_id": "alert_triage_v07_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v08_adversarial__aggressive": {
+      "vignette_id": "alert_triage_v08_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v08_adversarial__chain_of_thought": {
+      "vignette_id": "alert_triage_v08_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v08_adversarial__conservative": {
+      "vignette_id": "alert_triage_v08_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v08_adversarial__decision_tree": {
+      "vignette_id": "alert_triage_v08_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v08_adversarial__minimal": {
+      "vignette_id": "alert_triage_v08_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v09_adversarial__aggressive": {
+      "vignette_id": "alert_triage_v09_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v09_adversarial__chain_of_thought": {
+      "vignette_id": "alert_triage_v09_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v09_adversarial__conservative": {
+      "vignette_id": "alert_triage_v09_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v09_adversarial__decision_tree": {
+      "vignette_id": "alert_triage_v09_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "alert_triage_v09_adversarial__minimal": {
+      "vignette_id": "alert_triage_v09_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    }
+  },
+  "content_review": {
+    "content_review_v00_clear__aggressive": {
+      "vignette_id": "content_review_v00_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 12,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v00_clear__chain_of_thought": {
+      "vignette_id": "content_review_v00_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v00_clear__conservative": {
+      "vignette_id": "content_review_v00_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.9333,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 1,
+          "triple_choice": 2,
+          "added_item": 0
+        }
+      ]
+    },
+    "content_review_v00_clear__decision_tree": {
+      "vignette_id": "content_review_v00_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 9,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v00_clear__minimal": {
+      "vignette_id": "content_review_v00_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v01_clear__aggressive": {
+      "vignette_id": "content_review_v01_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 1,
+          "triple_choice": 2,
+          "added_item": 0
+        }
+      ]
+    },
+    "content_review_v01_clear__chain_of_thought": {
+      "vignette_id": "content_review_v01_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 0,
+          "added_item": 1
+        }
+      ]
+    },
+    "content_review_v01_clear__conservative": {
+      "vignette_id": "content_review_v01_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.9333,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 1,
+          "triple_choice": 2,
+          "added_item": 0
+        }
+      ]
+    },
+    "content_review_v01_clear__decision_tree": {
+      "vignette_id": "content_review_v01_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 9,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.5556,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            3,
+            4
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 3,
+          "triple_choice": 4,
+          "added_item": 0
+        }
+      ]
+    },
+    "content_review_v01_clear__minimal": {
+      "vignette_id": "content_review_v01_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.9333,
+      "n_iia_violations": 2,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 1,
+          "triple_choice": 2,
+          "added_item": 0
+        },
+        {
+          "pair_menu": [
+            0,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 0,
+          "triple_choice": 2,
+          "added_item": 1
+        }
+      ]
+    },
+    "content_review_v02_clear__aggressive": {
+      "vignette_id": "content_review_v02_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 11,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v02_clear__chain_of_thought": {
+      "vignette_id": "content_review_v02_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 11,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v02_clear__conservative": {
+      "vignette_id": "content_review_v02_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 13,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v02_clear__decision_tree": {
+      "vignette_id": "content_review_v02_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 9,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v02_clear__minimal": {
+      "vignette_id": "content_review_v02_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v03_binary__aggressive": {
+      "vignette_id": "content_review_v03_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v03_binary__chain_of_thought": {
+      "vignette_id": "content_review_v03_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "content_review_v03_binary__conservative": {
+      "vignette_id": "content_review_v03_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v03_binary__decision_tree": {
+      "vignette_id": "content_review_v03_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "content_review_v03_binary__minimal": {
+      "vignette_id": "content_review_v03_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v04_binary__aggressive": {
+      "vignette_id": "content_review_v04_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v04_binary__chain_of_thought": {
+      "vignette_id": "content_review_v04_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v04_binary__conservative": {
+      "vignette_id": "content_review_v04_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v04_binary__decision_tree": {
+      "vignette_id": "content_review_v04_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v04_binary__minimal": {
+      "vignette_id": "content_review_v04_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v05_binary__aggressive": {
+      "vignette_id": "content_review_v05_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v05_binary__chain_of_thought": {
+      "vignette_id": "content_review_v05_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v05_binary__conservative": {
+      "vignette_id": "content_review_v05_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.9333,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v05_binary__decision_tree": {
+      "vignette_id": "content_review_v05_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v05_binary__minimal": {
+      "vignette_id": "content_review_v05_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v06_ambiguous__aggressive": {
+      "vignette_id": "content_review_v06_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v06_ambiguous__chain_of_thought": {
+      "vignette_id": "content_review_v06_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v06_ambiguous__conservative": {
+      "vignette_id": "content_review_v06_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v06_ambiguous__decision_tree": {
+      "vignette_id": "content_review_v06_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v06_ambiguous__minimal": {
+      "vignette_id": "content_review_v06_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v07_ambiguous__aggressive": {
+      "vignette_id": "content_review_v07_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v07_ambiguous__chain_of_thought": {
+      "vignette_id": "content_review_v07_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v07_ambiguous__conservative": {
+      "vignette_id": "content_review_v07_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v07_ambiguous__decision_tree": {
+      "vignette_id": "content_review_v07_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v07_ambiguous__minimal": {
+      "vignette_id": "content_review_v07_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v08_adversarial__aggressive": {
+      "vignette_id": "content_review_v08_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v08_adversarial__chain_of_thought": {
+      "vignette_id": "content_review_v08_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v08_adversarial__conservative": {
+      "vignette_id": "content_review_v08_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v08_adversarial__decision_tree": {
+      "vignette_id": "content_review_v08_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v08_adversarial__minimal": {
+      "vignette_id": "content_review_v08_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v09_adversarial__aggressive": {
+      "vignette_id": "content_review_v09_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v09_adversarial__chain_of_thought": {
+      "vignette_id": "content_review_v09_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v09_adversarial__conservative": {
+      "vignette_id": "content_review_v09_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v09_adversarial__decision_tree": {
+      "vignette_id": "content_review_v09_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "content_review_v09_adversarial__minimal": {
+      "vignette_id": "content_review_v09_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    }
+  },
+  "job_screen": {
+    "job_screen_v00_clear__aggressive": {
+      "vignette_id": "job_screen_v00_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v00_clear__chain_of_thought": {
+      "vignette_id": "job_screen_v00_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v00_clear__conservative": {
+      "vignette_id": "job_screen_v00_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v00_clear__decision_tree": {
+      "vignette_id": "job_screen_v00_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 13,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.9231,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 1,
+          "triple_choice": 2,
+          "added_item": 0
+        }
+      ]
+    },
+    "job_screen_v00_clear__minimal": {
+      "vignette_id": "job_screen_v00_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v01_clear__aggressive": {
+      "vignette_id": "job_screen_v01_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v01_clear__chain_of_thought": {
+      "vignette_id": "job_screen_v01_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v01_clear__conservative": {
+      "vignette_id": "job_screen_v01_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v01_clear__decision_tree": {
+      "vignette_id": "job_screen_v01_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v01_clear__minimal": {
+      "vignette_id": "job_screen_v01_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v02_clear__aggressive": {
+      "vignette_id": "job_screen_v02_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v02_clear__chain_of_thought": {
+      "vignette_id": "job_screen_v02_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v02_clear__conservative": {
+      "vignette_id": "job_screen_v02_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v02_clear__decision_tree": {
+      "vignette_id": "job_screen_v02_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 13,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.9231,
+      "n_iia_violations": 2,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 1,
+          "triple_choice": 2,
+          "added_item": 0
+        },
+        {
+          "pair_menu": [
+            0,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 0,
+          "triple_choice": 2,
+          "added_item": 1
+        }
+      ]
+    },
+    "job_screen_v02_clear__minimal": {
+      "vignette_id": "job_screen_v02_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v03_binary__aggressive": {
+      "vignette_id": "job_screen_v03_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v03_binary__chain_of_thought": {
+      "vignette_id": "job_screen_v03_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v03_binary__conservative": {
+      "vignette_id": "job_screen_v03_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v03_binary__decision_tree": {
+      "vignette_id": "job_screen_v03_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v03_binary__minimal": {
+      "vignette_id": "job_screen_v03_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v04_binary__aggressive": {
+      "vignette_id": "job_screen_v04_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "job_screen_v04_binary__chain_of_thought": {
+      "vignette_id": "job_screen_v04_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "job_screen_v04_binary__conservative": {
+      "vignette_id": "job_screen_v04_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v04_binary__decision_tree": {
+      "vignette_id": "job_screen_v04_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v04_binary__minimal": {
+      "vignette_id": "job_screen_v04_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 1,
+          "added_item": 0
+        }
+      ]
+    },
+    "job_screen_v05_binary__aggressive": {
+      "vignette_id": "job_screen_v05_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v05_binary__chain_of_thought": {
+      "vignette_id": "job_screen_v05_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v05_binary__conservative": {
+      "vignette_id": "job_screen_v05_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "job_screen_v05_binary__decision_tree": {
+      "vignette_id": "job_screen_v05_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 2,
+      "hm_efficiency": 0.6667,
+      "n_iia_violations": 2,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 1,
+          "added_item": 0
+        },
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "job_screen_v05_binary__minimal": {
+      "vignette_id": "job_screen_v05_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v06_ambiguous__aggressive": {
+      "vignette_id": "job_screen_v06_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v06_ambiguous__chain_of_thought": {
+      "vignette_id": "job_screen_v06_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v06_ambiguous__conservative": {
+      "vignette_id": "job_screen_v06_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v06_ambiguous__decision_tree": {
+      "vignette_id": "job_screen_v06_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v06_ambiguous__minimal": {
+      "vignette_id": "job_screen_v06_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v07_ambiguous__aggressive": {
+      "vignette_id": "job_screen_v07_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "job_screen_v07_ambiguous__chain_of_thought": {
+      "vignette_id": "job_screen_v07_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v07_ambiguous__conservative": {
+      "vignette_id": "job_screen_v07_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v07_ambiguous__decision_tree": {
+      "vignette_id": "job_screen_v07_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v07_ambiguous__minimal": {
+      "vignette_id": "job_screen_v07_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "job_screen_v08_adversarial__aggressive": {
+      "vignette_id": "job_screen_v08_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v08_adversarial__chain_of_thought": {
+      "vignette_id": "job_screen_v08_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v08_adversarial__conservative": {
+      "vignette_id": "job_screen_v08_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 2,
+      "hm_efficiency": 0.6,
+      "n_iia_violations": 2,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 1,
+          "triple_choice": 2,
+          "added_item": 0
+        },
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "job_screen_v08_adversarial__decision_tree": {
+      "vignette_id": "job_screen_v08_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "job_screen_v08_adversarial__minimal": {
+      "vignette_id": "job_screen_v08_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v09_adversarial__aggressive": {
+      "vignette_id": "job_screen_v09_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v09_adversarial__chain_of_thought": {
+      "vignette_id": "job_screen_v09_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v09_adversarial__conservative": {
+      "vignette_id": "job_screen_v09_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v09_adversarial__decision_tree": {
+      "vignette_id": "job_screen_v09_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "job_screen_v09_adversarial__minimal": {
+      "vignette_id": "job_screen_v09_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 1,
+          "added_item": 0
+        }
+      ]
+    }
+  },
+  "procurement": {
+    "procurement_v00_clear__aggressive": {
+      "vignette_id": "procurement_v00_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v00_clear__chain_of_thought": {
+      "vignette_id": "procurement_v00_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v00_clear__conservative": {
+      "vignette_id": "procurement_v00_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v00_clear__decision_tree": {
+      "vignette_id": "procurement_v00_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v00_clear__minimal": {
+      "vignette_id": "procurement_v00_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 13,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v01_clear__aggressive": {
+      "vignette_id": "procurement_v01_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v01_clear__chain_of_thought": {
+      "vignette_id": "procurement_v01_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v01_clear__conservative": {
+      "vignette_id": "procurement_v01_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v01_clear__decision_tree": {
+      "vignette_id": "procurement_v01_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v01_clear__minimal": {
+      "vignette_id": "procurement_v01_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v02_clear__aggressive": {
+      "vignette_id": "procurement_v02_clear",
+      "prompt_name": "aggressive",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v02_clear__chain_of_thought": {
+      "vignette_id": "procurement_v02_clear",
+      "prompt_name": "chain_of_thought",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v02_clear__conservative": {
+      "vignette_id": "procurement_v02_clear",
+      "prompt_name": "conservative",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            1
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 0,
+          "triple_choice": 1,
+          "added_item": 2
+        }
+      ]
+    },
+    "procurement_v02_clear__decision_tree": {
+      "vignette_id": "procurement_v02_clear",
+      "prompt_name": "decision_tree",
+      "tier": "clear",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v02_clear__minimal": {
+      "vignette_id": "procurement_v02_clear",
+      "prompt_name": "minimal",
+      "tier": "clear",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v03_binary__aggressive": {
+      "vignette_id": "procurement_v03_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v03_binary__chain_of_thought": {
+      "vignette_id": "procurement_v03_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v03_binary__conservative": {
+      "vignette_id": "procurement_v03_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v03_binary__decision_tree": {
+      "vignette_id": "procurement_v03_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v03_binary__minimal": {
+      "vignette_id": "procurement_v03_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v04_binary__aggressive": {
+      "vignette_id": "procurement_v04_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v04_binary__chain_of_thought": {
+      "vignette_id": "procurement_v04_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 1,
+          "added_item": 0
+        }
+      ]
+    },
+    "procurement_v04_binary__conservative": {
+      "vignette_id": "procurement_v04_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 1,
+          "added_item": 0
+        }
+      ]
+    },
+    "procurement_v04_binary__decision_tree": {
+      "vignette_id": "procurement_v04_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 12,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v04_binary__minimal": {
+      "vignette_id": "procurement_v04_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 1,
+          "added_item": 0
+        }
+      ]
+    },
+    "procurement_v05_binary__aggressive": {
+      "vignette_id": "procurement_v05_binary",
+      "prompt_name": "aggressive",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v05_binary__chain_of_thought": {
+      "vignette_id": "procurement_v05_binary",
+      "prompt_name": "chain_of_thought",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v05_binary__conservative": {
+      "vignette_id": "procurement_v05_binary",
+      "prompt_name": "conservative",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v05_binary__decision_tree": {
+      "vignette_id": "procurement_v05_binary",
+      "prompt_name": "decision_tree",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v05_binary__minimal": {
+      "vignette_id": "procurement_v05_binary",
+      "prompt_name": "minimal",
+      "tier": "binary",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 0,
+          "triple_choice": 3,
+          "added_item": 4
+        }
+      ]
+    },
+    "procurement_v06_ambiguous__aggressive": {
+      "vignette_id": "procurement_v06_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 2,
+          "triple_choice": 1,
+          "added_item": 0
+        }
+      ]
+    },
+    "procurement_v06_ambiguous__chain_of_thought": {
+      "vignette_id": "procurement_v06_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v06_ambiguous__conservative": {
+      "vignette_id": "procurement_v06_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v06_ambiguous__decision_tree": {
+      "vignette_id": "procurement_v06_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v06_ambiguous__minimal": {
+      "vignette_id": "procurement_v06_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v07_ambiguous__aggressive": {
+      "vignette_id": "procurement_v07_ambiguous",
+      "prompt_name": "aggressive",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v07_ambiguous__chain_of_thought": {
+      "vignette_id": "procurement_v07_ambiguous",
+      "prompt_name": "chain_of_thought",
+      "tier": "ambiguous",
+      "n_observations": 14,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v07_ambiguous__conservative": {
+      "vignette_id": "procurement_v07_ambiguous",
+      "prompt_name": "conservative",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v07_ambiguous__decision_tree": {
+      "vignette_id": "procurement_v07_ambiguous",
+      "prompt_name": "decision_tree",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v07_ambiguous__minimal": {
+      "vignette_id": "procurement_v07_ambiguous",
+      "prompt_name": "minimal",
+      "tier": "ambiguous",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v08_adversarial__aggressive": {
+      "vignette_id": "procurement_v08_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v08_adversarial__chain_of_thought": {
+      "vignette_id": "procurement_v08_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v08_adversarial__conservative": {
+      "vignette_id": "procurement_v08_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v08_adversarial__decision_tree": {
+      "vignette_id": "procurement_v08_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v08_adversarial__minimal": {
+      "vignette_id": "procurement_v08_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v09_adversarial__aggressive": {
+      "vignette_id": "procurement_v09_adversarial",
+      "prompt_name": "aggressive",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v09_adversarial__chain_of_thought": {
+      "vignette_id": "procurement_v09_adversarial",
+      "prompt_name": "chain_of_thought",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v09_adversarial__conservative": {
+      "vignette_id": "procurement_v09_adversarial",
+      "prompt_name": "conservative",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 3,
+      "hm_efficiency": 0.8,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            1,
+            2
+          ],
+          "triple_menu": [
+            0,
+            1,
+            2
+          ],
+          "pair_choice": 1,
+          "triple_choice": 2,
+          "added_item": 0
+        }
+      ]
+    },
+    "procurement_v09_adversarial__decision_tree": {
+      "vignette_id": "procurement_v09_adversarial",
+      "prompt_name": "decision_tree",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": true,
+      "n_sarp_violations": 0,
+      "hm_efficiency": 1.0,
+      "n_iia_violations": 0,
+      "iia_details": []
+    },
+    "procurement_v09_adversarial__minimal": {
+      "vignette_id": "procurement_v09_adversarial",
+      "prompt_name": "minimal",
+      "tier": "adversarial",
+      "n_observations": 15,
+      "is_sarp": false,
+      "n_sarp_violations": 1,
+      "hm_efficiency": 0.8667,
+      "n_iia_violations": 1,
+      "iia_details": [
+        {
+          "pair_menu": [
+            0,
+            3
+          ],
+          "triple_menu": [
+            0,
+            3,
+            4
+          ],
+          "pair_choice": 3,
+          "triple_choice": 0,
+          "added_item": 4
+        }
+      ]
+    }
+  }
+}
