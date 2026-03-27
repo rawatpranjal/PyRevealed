@@ -34,7 +34,8 @@ HiGHS LP solver). Feed it choice data, get back per-user scores.
 # CORE: Engine + High-Level Classes
 # =============================================================================
 
-from pyrevealed.engine import Engine, EngineResult
+from pyrevealed.engine import Engine, EngineResult, MenuResult, results_to_dataframe
+from pyrevealed.datasets._demo import load_demo
 from pyrevealed.auditor import BehavioralAuditor, AuditReport, MenuAuditReport
 from pyrevealed.encoder import PreferenceEncoder, MenuPreferenceEncoder
 from pyrevealed.lancaster import (
@@ -566,6 +567,14 @@ from pyrevealed.core.result import (
 __version__ = "0.5.1"
 
 __all__ = [
+    # ==========================================================================
+    # ENGINE + BATCH API
+    # ==========================================================================
+    "Engine",
+    "EngineResult",
+    "MenuResult",
+    "results_to_dataframe",
+    "load_demo",
     # ==========================================================================
     # HIGH-LEVEL CLASSES (Primary API)
     # ==========================================================================

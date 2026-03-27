@@ -14,6 +14,7 @@ Note:
     when the data is not found.
 """
 
+from pyrevealed.datasets._demo import load_demo
 from pyrevealed.datasets._dunnhumby import load_dunnhumby
 from pyrevealed.datasets._open_ecommerce import load_open_ecommerce
 from pyrevealed.datasets._uci_retail import load_uci_retail
@@ -59,6 +60,7 @@ def list_datasets() -> list[dict[str, str]]:
 
 
 __all__ = [
+    "load_demo",
     "load_dunnhumby",
     "load_open_ecommerce",
     "load_uci_retail",

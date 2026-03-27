@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath("../src"))
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Mock the compiled Rust extension so autodoc works without Rust toolchain (RTD)
-autodoc_mock_imports = ["pyrevealed._rust_core"]
+autodoc_mock_imports = ["pyrevealed._rust_core", "numba"]
 
 # -- Project information -----------------------------------------------------
 

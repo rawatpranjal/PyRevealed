@@ -233,6 +233,18 @@ class BehaviorPanel:
         filtered = {uid: log for uid, log in self._logs.items() if predicate(log)}
         return BehaviorPanel(_logs=filtered, metadata=dict(self.metadata))
 
+    def to_engine_tuples(self) -> list[tuple[np.ndarray, np.ndarray]]:
+        """Convert all logs to Engine-compatible format.
+
+        Returns:
+            List of (prices, quantities) tuples for Engine.analyze_arrays().
+
+        Example:
+            >>> engine = Engine(metrics=["garp", "ccei"])
+            >>> results = engine.analyze_arrays(panel.to_engine_tuples())
+        """
+        return [log.to_engine_tuple() for log in self._logs.values()]
+
 
 @dataclass
 class MenuChoicePanel:
@@ -286,6 +298,14 @@ class MenuChoicePanel:
     def __repr__(self) -> str:
         total_obs = sum(log.num_observations for log in self._logs.values())
         return f"MenuChoicePanel(users={self.num_users}, total_obs={total_obs})"
+
+    def to_engine_tuples(self) -> list[tuple[list[list[int]], list[int], int]]:
+        """Convert all logs to Engine-compatible format.
+
+        Returns:
+            List of (menus, choices, n_items) tuples for Engine.analyze_menus().
+        """
+        return [log.to_engine_tuple() for log in self._logs.values()]
 
     def filter(self, predicate: Callable[["MenuChoiceLog"], bool]) -> "MenuChoicePanel":
         filtered = {uid: log for uid, log in self._logs.items() if predicate(log)}

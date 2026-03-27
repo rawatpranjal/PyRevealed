@@ -16,8 +16,8 @@ Usage:
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, fields
+from typing import Any, Optional
 
 import numpy as np
 
@@ -44,6 +44,22 @@ class EngineResult:
     max_scc: int = 0
     compute_time_us: int = 0
 
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {f.name: getattr(self, f.name) for f in fields(self)}
+
+    def __repr__(self) -> str:
+        indicator = "[+]" if self.is_garp else "[-]"
+        status = "GARP-consistent" if self.is_garp else f"{self.n_violations} violations"
+        parts = [f"EngineResult: {indicator} {status}"]
+        parts.append(f"ccei={self.ccei:.4f}")
+        if self.mpi > 0.0:
+            parts.append(f"mpi={self.mpi:.4f}")
+        if self.hm_total > 0:
+            parts.append(f"hm={self.hm_consistent}/{self.hm_total}")
+        parts.append(f"({self.compute_time_us}us)")
+        return "  ".join(parts)
+
 
 @dataclass
 class MenuResult:
@@ -58,6 +74,19 @@ class MenuResult:
     max_scc: int = 0
     compute_time_us: int = 0
 
+    def to_dict(self) -> dict[str, Any]:
+        """Return dictionary representation for serialization."""
+        return {f.name: getattr(self, f.name) for f in fields(self)}
+
+    def __repr__(self) -> str:
+        indicator = "[+]" if self.is_sarp else "[-]"
+        status = "SARP-consistent" if self.is_sarp else f"{self.n_sarp_violations} SARP violations"
+        parts = [f"MenuResult: {indicator} {status}"]
+        if self.hm_total > 0:
+            parts.append(f"hm={self.hm_consistent}/{self.hm_total}")
+        parts.append(f"({self.compute_time_us}us)")
+        return "  ".join(parts)
+
 
 class Engine:
     """Analyzes revealed preference for millions of users.
@@ -71,7 +100,7 @@ class Engine:
         tolerance: Numerical tolerance for GARP comparisons.
     """
 
-    SUPPORTED_METRICS = {"garp", "ccei", "mpi", "harp", "hm", "utility", "vei"}
+    SUPPORTED_METRICS = {"garp", "ccei", "mpi", "harp", "hm", "utility", "vei", "vei_exact"}
 
     def __init__(
         self,
@@ -79,10 +108,108 @@ class Engine:
         chunk_size: int = 50_000,
         tolerance: float = 1e-10,
     ):
+        unknown = set(metrics) - self.SUPPORTED_METRICS
+        if unknown:
+            raise ValueError(
+                f"Unknown metrics: {sorted(unknown)}. "
+                f"Supported: {sorted(self.SUPPORTED_METRICS)}"
+            )
         self.metrics = list(metrics)
         self.chunk_size = chunk_size
         self.tolerance = tolerance
         self.backend = "rust" if HAS_RUST else "python"
+
+    # ------------------------------------------------------------------
+    # Input validation
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _validate_budget_input(users: Any) -> None:
+        """Validate input for analyze_arrays()."""
+        from pyrevealed.core.exceptions import DataValidationError, DimensionError
+
+        if not isinstance(users, (list, tuple)):
+            raise TypeError(
+                f"users must be a list of (prices, quantities) tuples, "
+                f"got {type(users).__name__}. "
+                f"Hint: Wrap a single user as [(prices, quantities)]."
+            )
+        if len(users) == 0:
+            raise DataValidationError("users list is empty. Provide at least one (prices, quantities) tuple.")
+
+        for i, item in enumerate(users):
+            if not isinstance(item, (list, tuple)) or len(item) != 2:
+                length_hint = f" of length {len(item)}" if hasattr(item, '__len__') else ""
+                raise DataValidationError(
+                    f"users[{i}] must be a (prices, quantities) tuple of length 2, "
+                    f"got {type(item).__name__}{length_hint}. "
+                    f"Hint: Each element is (np.ndarray T*K, np.ndarray T*K)."
+                )
+            p, q = item
+            if not isinstance(p, np.ndarray) or not isinstance(q, np.ndarray):
+                raise TypeError(
+                    f"users[{i}]: prices and quantities must be numpy arrays, "
+                    f"got ({type(p).__name__}, {type(q).__name__}). "
+                    f"Hint: Convert with np.asarray(data)."
+                )
+            if p.ndim != 2:
+                raise DimensionError(
+                    f"users[{i}]: prices must be 2D (T x K), got {p.ndim}D with shape {p.shape}. "
+                    f"Hint: Use prices.reshape(-1, K) for 1D arrays."
+                )
+            if q.ndim != 2:
+                raise DimensionError(
+                    f"users[{i}]: quantities must be 2D (T x K), got {q.ndim}D with shape {q.shape}. "
+                    f"Hint: Use quantities.reshape(-1, K) for 1D arrays."
+                )
+            if p.shape != q.shape:
+                raise DimensionError(
+                    f"users[{i}]: prices shape {p.shape} != quantities shape {q.shape}. "
+                    f"Both must be (T, K) with matching dimensions."
+                )
+
+    @staticmethod
+    def _validate_menu_input(users: Any) -> None:
+        """Validate input for analyze_menus()."""
+        from pyrevealed.core.exceptions import DataValidationError
+
+        if not isinstance(users, (list, tuple)):
+            raise TypeError(
+                f"users must be a list of (menus, choices, n_items) tuples, "
+                f"got {type(users).__name__}."
+            )
+        if len(users) == 0:
+            raise DataValidationError("users list is empty. Provide at least one (menus, choices, n_items) tuple.")
+
+        for i, item in enumerate(users):
+            if not isinstance(item, (list, tuple)) or len(item) != 3:
+                length_hint = f" of length {len(item)}" if hasattr(item, '__len__') else ""
+                raise DataValidationError(
+                    f"users[{i}] must be a (menus, choices, n_items) tuple of length 3, "
+                    f"got {type(item).__name__}{length_hint}. "
+                    f"Hint: Each element is (list[list[int]], list[int], int)."
+                )
+            menus, choices, n_items = item
+            if not isinstance(menus, (list, tuple)):
+                raise TypeError(f"users[{i}]: menus must be a list of lists, got {type(menus).__name__}.")
+            if not isinstance(choices, (list, tuple)):
+                raise TypeError(f"users[{i}]: choices must be a list, got {type(choices).__name__}.")
+            if not isinstance(n_items, int) or n_items < 1:
+                raise DataValidationError(f"users[{i}]: n_items must be a positive integer, got {n_items!r}.")
+            if len(menus) != len(choices):
+                raise DataValidationError(
+                    f"users[{i}]: len(menus)={len(menus)} != len(choices)={len(choices)}. "
+                    f"Each menu observation must have exactly one choice."
+                )
+            for j, (menu, choice) in enumerate(zip(menus, choices)):
+                if choice not in menu:
+                    raise DataValidationError(
+                        f"users[{i}], observation {j}: choice {choice} not in menu {menu}."
+                    )
+
+    # ------------------------------------------------------------------
+    # Budget analysis
+    # ------------------------------------------------------------------
 
     def analyze_arrays(
         self,
@@ -92,7 +219,7 @@ class Engine:
         """Analyze users from a list of array pairs.
 
         Args:
-            users: For budget data: list of (prices T×K, quantities T×K).
+            users: For budget data: list of (prices T*K, quantities T*K).
             data_type: "budget" (default). "menu" and "production" not yet implemented.
 
         Returns list of EngineResult, one per user.
@@ -102,6 +229,8 @@ class Engine:
                 f"data_type='{data_type}' not yet implemented. "
                 "Only 'budget' is currently supported."
             )
+
+        self._validate_budget_input(users)
 
         n = len(users)
         all_results: list[EngineResult] = []
@@ -236,6 +365,10 @@ class Engine:
             ))
         return results
 
+    # ------------------------------------------------------------------
+    # Menu analysis
+    # ------------------------------------------------------------------
+
     def analyze_menus(
         self,
         users: list[tuple[list[list[int]], list[int], int]],
@@ -257,6 +390,8 @@ class Engine:
             ]
             results = engine.analyze_menus(users)
         """
+        self._validate_menu_input(users)
+
         n = len(users)
         all_results: list[MenuResult] = []
 
@@ -314,3 +449,36 @@ class Engine:
     def __repr__(self) -> str:
         return (f"Engine(backend={self.backend!r}, "
                 f"metrics={self.metrics}, chunk_size={self.chunk_size})")
+
+
+# ------------------------------------------------------------------
+# DataFrame conversion
+# ------------------------------------------------------------------
+
+def results_to_dataframe(
+    results: list[EngineResult] | list[MenuResult],
+    user_ids: list[str] | None = None,
+) -> Any:
+    """Convert Engine results to a pandas DataFrame.
+
+    Args:
+        results: List of EngineResult or MenuResult from Engine.
+        user_ids: Optional user ID labels for the index.
+
+    Returns:
+        pandas.DataFrame with one row per user.
+    """
+    try:
+        import pandas as pd
+    except ImportError:
+        raise ImportError(
+            "pandas is required for results_to_dataframe(). "
+            "Install with: pip install pandas"
+        ) from None
+
+    rows = [r.to_dict() for r in results]
+    df = pd.DataFrame(rows)
+    if user_ids is not None:
+        df.index = user_ids
+        df.index.name = "user_id"
+    return df
