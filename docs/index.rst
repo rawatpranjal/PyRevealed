@@ -58,8 +58,8 @@ Most approaches assume a model of preferences first, then fit parameters. Reveal
      </div>
    </div>
 
-Two Workflows
--------------
+Two Core Data Types
+-------------------
 
 .. code-block:: text
 
