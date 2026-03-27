@@ -32,8 +32,8 @@ ruff format src/
      remote:   https://github.com/rawatpranjal/PyRevealed.git
      
 # Real-world validation (requires Kaggle dataset)
-python3 dunnhumby/run_all.py --quick   # 100 households sample
-python3 dunnhumby/run_all.py           # Full 2,222 households
+python3 case_studies/dunnhumby/run_all.py --quick   # 100 households sample
+python3 case_studies/dunnhumby/run_all.py           # Full 2,222 households
 
 # Rust rebuild (maturin is the build backend)
 pip install -e .                        # Recompiles Rust automatically
