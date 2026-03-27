@@ -1,19 +1,40 @@
 LLM Enterprise Consistency Benchmark
 =====================================
 
-Applying SARP and Houtman-Maks to measure whether LLM decision-making
-is rationalizable across 5 enterprise deployment scenarios.
+Demonstrated application of PyRevealed's discrete choice axioms (SARP,
+Houtman-Maks, IIA) to audit LLM decision-making across 5 enterprise
+deployment scenarios. 13,750 API decisions, two experiment iterations.
 
-Why This Measurement Matters
-----------------------------
+What PyRevealed Reveals That Other Tools Don't
+-----------------------------------------------
 
-Accuracy benchmarks test whether an LLM gets the *right* answer.
-Consistency benchmarks test whether it has a *coherent* policy.
+Standard LLM evaluation measures **accuracy** (% correct) and **latency**
+(ms per call). Neither detects a failure mode that matters in production:
+**menu-dependent preferences**.
 
-SARP (Strong Axiom of Revealed Preference) tests whether a fixed ranking
-over actions exists that explains all choices. Houtman-Maks quantifies
-what fraction of behavior is rationalizable. Standard tools in behavioral
-economics since Varian (1982), applied here to LLM deployment evaluation.
+An LLM might correctly handle 90% of support tickets. But when presented
+with {escalate, auto-reply}, it picks escalate — and when presented with
+{escalate, auto-reply, bug-ticket}, it switches to auto-reply. The third
+option changed the ranking. No accuracy benchmark catches this.
+
+PyRevealed's ``validate_menu_sarp()`` tests exactly this: given a set of
+choices from varying menus, does a consistent ranking exist? If not,
+``compute_menu_efficiency()`` quantifies how much of the behavior is
+rationalizable. These are the same tools economists use to test whether
+human consumers are rational (Varian 1982), now applied to LLM deployment.
+
+**What you get that you can't get elsewhere:**
+
+- **SARP pass rate**: Does the LLM have a stable action ranking for this
+  input? Binary, per-vignette.
+- **Houtman-Maks efficiency**: What fraction of actions can be consistently
+  ranked? Tells you which items participate in cycles.
+- **IIA violation detection**: Does adding a third option flip the preference
+  between two others? The "decoy effect" — classic in behavioral economics,
+  unmeasured in LLM evaluation until now.
+- **Preference graph structure**: Which action pairs create cycles? Which
+  items are in the same strongly connected component? Directly actionable
+  for guardrail design.
 
 Scenarios and Prompts
 ---------------------
@@ -198,38 +219,63 @@ IIA violations (menu-dependence):
 *IIA = Independence of Irrelevant Alternatives. A violation means adding a
 third option to a pairwise menu changed which of two options is preferred.*
 
-What We Learned (v2)
+Suggestive Takeaways
 ~~~~~~~~~~~~~~~~~~~~
 
-- **gpt-4o-mini is 60--100% SARP-consistent per vignette.** When input is
-  held constant, most action rankings are transitive. The v1 "universal failure"
-  was a design artifact.
+These results are from synthetic vignettes and a single model family.
+They are illustrative, not definitive. But they suggest patterns that
+would be invisible without revealed preference tools:
 
-- **Job screening is the hardest scenario** (74% mean pass rate, 15 IIA
-  violations). Resume evaluation creates the most menu-dependent decisions.
+- **LLMs exhibit decoy effects.** Adding a third option to a menu changes
+  which of two actions the LLM prefers — 15 times in job screening alone.
+  This is the Independence of Irrelevant Alternatives (IIA) violation that
+  behavioral economists study in human choice. No standard LLM benchmark
+  measures this. ``validate_menu_sarp()`` catches it automatically.
 
-- **Content review "clear" vignettes only pass 60%.** Even supposedly
-  unambiguous posts produce menu-dependent moderation decisions — the
-  LLM's severity judgment shifts when alternative actions are shown.
+- **"Clear" inputs aren't.** Content moderation vignettes designed to be
+  unambiguous still produce menu-dependent decisions 40% of the time. The
+  LLM's severity judgment shifts when you change which alternative actions
+  are shown. A deployment team would never discover this with accuracy
+  testing alone.
 
-- **Decision tree prompts hurt consistency on job screening** (60% pass
-  rate vs 80% for aggressive/conservative/CoT). Explicit if/then rules
-  create more edge cases than they resolve.
+- **Some prompt strategies create more decision boundaries to trip over.**
+  Decision-tree prompts score 60% SARP-consistent on job screening (vs 80%
+  for simpler prompts). The explicit rules create edge cases where menu
+  composition determines which rule fires. ``compute_menu_efficiency()``
+  identifies exactly which action pairs participate in the resulting cycles.
 
-- **Conservative prompts hurt consistency on content review and procurement**
-  (70% each). Risk-averse escalation policies create more decision boundaries
-  to trip over.
+- **Scenario difficulty varies in non-obvious ways.** Alert triage (92%) is
+  easier than support routing (88%) which is easier than job screening (74%).
+  This ranking doesn't follow from the scenarios' apparent complexity — it
+  follows from the preference graph structure, which only SARP reveals.
 
-- **IIA violations are concentrated in job screening and content review.**
-  These scenarios have the most subjective decision boundaries, where the
-  presence of a third option acts as a "decoy" shifting the pairwise ranking.
+- **The experimental design itself matters.** v1 (different input per trial)
+  showed 0% SARP pass rate; v2 (same input, varied menus) showed 60--100%.
+  The difference is entirely methodological. Revealed preference theory
+  provides the framework to design the right test — pooled vs per-vignette
+  SARP are different questions with different answers.
 
-- **Binary and adversarial vignettes produce the most failures**, as expected.
-  But the surprise is content_review: "clear" vignettes (60%) are *harder*
-  than ambiguous ones (100%). Moderation has no truly unambiguous cases.
+What This Means for Practitioners
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- **Alert triage is the most consistent scenario** (92% mean). Infrastructure
-  alerts have the clearest severity ordering.
+If you deploy an LLM as a decision system (triage, moderation, screening):
+
+- **Audit before deployment.** Run the per-vignette SARP test on your
+  specific inputs. A 70% pass rate means 30% of inputs produce decisions
+  that depend on which options you show — not just on the input itself.
+
+- **Identify fragile action pairs.** SARP violations tell you exactly which
+  pairs of actions form preference cycles. Add guardrails (confidence
+  thresholds, human review) specifically for those pairs.
+
+- **Test prompt candidates on consistency, not just accuracy.** Two prompts
+  can have identical accuracy but different SARP pass rates. The one with
+  higher consistency produces more predictable behavior in production.
+
+- **Measure IIA before designing menus.** If your system shows the LLM
+  different action sets in different contexts (e.g., filtering options by
+  eligibility), IIA violations mean the filtered set changes the outcome
+  — not just the available options.
 
 Reproduce
 ---------
