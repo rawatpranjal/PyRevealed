@@ -1,17 +1,4 @@
 Dataset,Target,N,Task,AUC (RP only),AUC (Baseline),AUC (Combined),Lift %,RMSE (RP only),RMSE (Baseline),RMSE (Combined),R2 (Combined)
-Dunnhumby,Churn,2222,class,0.580,0.748,0.730,-2.4%,,,,
-Dunnhumby,High Spender,2222,class,0.917,0.958,0.959,+0.1%,,,,
-Dunnhumby,Spend Change,2222,regre,,,,,7.4887,6.8802,6.8550,0.127
-Open E-Commerce,High Spender,4694,class,0.917,0.950,0.951,+0.2%,,,,
-Open E-Commerce,Churn,4694,class,0.718,0.841,0.847,+0.7%,,,,
-Open E-Commerce,Spend Change,4694,regre,,,,,100.0109,93.4055,93.9588,0.121
-Online Retail II,High Spender,443,class,0.705,0.927,0.924,-0.3%,,,,
-Online Retail II,Churn,443,class,0.605,0.641,0.652,+1.8%,,,,
-Online Retail II,Spend Change,443,regre,,,,,130.8319,135.0304,135.2724,-0.057
-Instacart,Spend Drop,50000,class,0.610,0.665,0.666,+0.2%,,,,
-Instacart,High Value,50000,class,0.908,0.967,0.967,+0.0%,,,,
-Instacart,Basket Size,50000,regre,,,,,5.4214,3.4243,3.4262,0.702
-REES46,High Engagement,8832,class,0.753,0.942,0.941,-0.1%,,,,
-H&M,High Spender,46757,class,0.629,0.763,0.762,-0.1%,,,,
-H&M,Churn,46757,class,0.593,0.778,0.778,+0.0%,,,,
-H&M,Spend Change,46757,regre,,,,,0.1370,0.1153,0.1153,0.308
+Pakistan,High Spender,300,class,0.617,0.688,0.677,-1.5%,,,,
+Pakistan,Churn,300,class,0.557,0.818,0.811,-0.9%,,,,
+Pakistan,Spend Change,300,regre,,,,,13649.3414,14115.7400,14176.4682,-0.244
