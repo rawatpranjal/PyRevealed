@@ -21,6 +21,8 @@ from pyrevealed.datasets._uci_retail import load_uci_retail
 from pyrevealed.datasets._retailrocket import load_retailrocket
 from pyrevealed.datasets._instacart import load_instacart
 from pyrevealed.datasets._yoochoose import load_yoochoose
+from pyrevealed.datasets._olist import load_olist
+from pyrevealed.datasets._rees46 import load_rees46
 
 
 def list_datasets() -> list[dict[str, str]]:
@@ -79,6 +81,20 @@ def list_datasets() -> list[dict[str, str]]:
             "goods": "Menu-based (items clicked per session)",
             "observations": "~5-50 sessions per user",
         },
+        {
+            "name": "olist",
+            "description": "Brazilian e-commerce orders from 96K customers across marketplaces",
+            "source": "Kaggle (olistbr/brazilian-ecommerce)",
+            "goods": "20 product categories",
+            "observations": "~4-12 months per repeat customer",
+        },
+        {
+            "name": "rees46",
+            "description": "Multi-category eCommerce behavior (view/cart/purchase) from Oct-Nov 2019",
+            "source": "Kaggle (mkechinov/ecommerce-behavior-data-from-multi-category-store)",
+            "goods": "Menu-based (items viewed per session)",
+            "observations": "~5-50 sessions per user",
+        },
     ]
 
 
@@ -90,5 +106,7 @@ __all__ = [
     "load_retailrocket",
     "load_instacart",
     "load_yoochoose",
+    "load_olist",
+    "load_rees46",
     "list_datasets",
 ]
