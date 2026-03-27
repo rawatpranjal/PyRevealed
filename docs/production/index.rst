@@ -31,10 +31,10 @@ Theory
 
    theory_production
 
-Tutorials
----------
+Examples
+--------
 
 .. toctree::
    :maxdepth: 1
 
-   tutorial_production
+   examples

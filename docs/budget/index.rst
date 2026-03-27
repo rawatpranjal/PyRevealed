@@ -35,19 +35,6 @@ Theory
    theory_advanced
    theory_spatial
 
-Tutorials
----------
-
-.. toctree::
-   :maxdepth: 1
-
-   tutorial
-   tutorial_budget_advanced
-   tutorial_welfare
-   tutorial_demand_analysis
-   tutorial_ecommerce
-   tutorial_uber_eats
-
 Examples
 --------
 

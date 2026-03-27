@@ -2,12 +2,18 @@
 
 ## [0.5.3] - 2026-03-27
 
-### Fixed
-- Linux/Windows install broken — v0.5.2 shipped with only 1 macOS wheel; all other platforms fell back to source build requiring Rust toolchain
-
 ### Added
+- `rp.analyze()` one-liner API — auto-detects long, wide, and menu formats from a DataFrame
+- `nan_policy` parameter ("raise"/"warn"/"drop") for `analyze()` and `BehaviorLog`
+- `load_pakistan()`, `load_favorita()`, `load_taobao()` dataset loaders
+- 6-dataset e-commerce benchmark: 162K users, 14 tasks, RP features add 0–0.7% AUC
+- LLM benchmark v2 Stage 1: 3,750 decisions, per-vignette SARP pass rates 60–100%
+- Smart error messages with fuzzy column-name suggestions and type-conversion hints
 - Python 3.13 wheels for all platforms
-- Rust build now optional for source installs — pure-Python fallback activates automatically via setuptools-rust
+- Rust build now optional for source installs — pure-Python fallback via setuptools-rust
+
+### Fixed
+- Linux/Windows install broken — v0.5.2 only shipped macOS wheel
 
 ## [0.5.2] - 2026-03-26
 

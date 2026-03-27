@@ -131,7 +131,7 @@ Customize with ``metrics=["garp", "ccei", "mpi", "hm", "harp"]``.
 Next Steps
 ----------
 
-- :doc:`budget/tutorial` — budget choice analysis in depth
-- :doc:`menu/tutorial_menu_choice` — menu/discrete choice analysis
+- :doc:`budget/examples` — budget choice examples (Engine, single-user, HARP, VEI, utility, power)
+- :doc:`menu/examples` — menu choice examples (SARP, attention, stochastic, risk, ranking)
 - :doc:`api` — full API reference
 - :doc:`performance` — benchmarks and scaling

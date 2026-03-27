@@ -1,6 +1,11 @@
 API
 ===
 
+One-Liner API
+-------------
+
+.. autofunction:: pyrevealed.analyze
+
 Engine (Batch Scoring)
 ----------------------
 
@@ -353,6 +358,28 @@ Dataset Loaders
 
 .. autofunction:: pyrevealed.datasets.load_uci_retail
 
+.. autofunction:: pyrevealed.datasets.load_retailrocket
+
+.. autofunction:: pyrevealed.datasets.load_instacart
+
+.. autofunction:: pyrevealed.datasets.load_yoochoose
+
+.. autofunction:: pyrevealed.datasets.load_olist
+
+.. autofunction:: pyrevealed.datasets.load_m5
+
+.. autofunction:: pyrevealed.datasets.load_rees46
+
+.. autofunction:: pyrevealed.datasets.load_online_retail_ii
+
+.. autofunction:: pyrevealed.datasets.load_hm
+
+.. autofunction:: pyrevealed.datasets.load_pakistan
+
+.. autofunction:: pyrevealed.datasets.load_favorita
+
+.. autofunction:: pyrevealed.datasets.load_taobao
+
 .. autofunction:: pyrevealed.datasets.list_datasets
 
 Exceptions and Warnings
@@ -410,7 +437,7 @@ Troubleshooting
 
 - ``ValueRangeError: Found non-positive costs`` --- All prices must be > 0. Check for zeros or missing data encoded as 0.
 - ``DimensionError: cost_vectors shape does not match`` --- Prices and quantities must have the same shape (T x N).
-- ``NaNInfError: Found NaN/Inf values`` --- Use ``nan_policy="drop"`` to automatically remove bad rows: ``BehaviorLog(..., nan_policy="drop")``.
+- ``NaNInfError: Found NaN/Inf values`` --- Use ``nan_policy="drop"`` to automatically remove bad rows: ``rp.analyze(df, ..., nan_policy="drop")`` or ``BehaviorLog(..., nan_policy="drop")``.
 - ``InsufficientDataError: Must have at least 2 observations`` --- Need T >= 2 for meaningful analysis.
 - ``ImportError: pandas is required`` --- Install with ``pip install pyrevealed[datasets]`` for dataset loaders.
 

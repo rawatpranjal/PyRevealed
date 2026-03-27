@@ -49,16 +49,11 @@ Theory
    theory_attention
    theory_stochastic
 
-Tutorials
----------
+Examples
+--------
 
 .. toctree::
    :maxdepth: 1
 
-   tutorial_menu_choice
-   tutorial_attention
-   tutorial_stochastic
-   tutorial_risk
-   tutorial_context_effects
-   tutorial_ranking
+   examples
 

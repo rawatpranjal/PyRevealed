@@ -103,9 +103,72 @@ Benchmarked on synthetic data, T=15 observations, 10 goods, M1 Mac:
 
 Empirical benchmarks: CCEI ≈ 0.88 in lab experiments (Choi et al., 2014); HM ≈ 0.70–0.85 in recommendation click data.
 
+E-commerce Benchmarks
+---------------------
+
+Six public datasets, 162K users, LightGBM with 5-fold stratified CV.
+Full results: :doc:`benchmarks_ecommerce`.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 10 18 12 12
+
+   * - Dataset
+     - N
+     - Target
+     - Baseline
+     - +RP
+   * - Dunnhumby
+     - 2,222
+     - High Spender
+     - 0.958
+     - 0.959
+   * - Open E-Commerce
+     - 4,694
+     - Churn
+     - 0.841
+     - **0.847**
+   * - H&M
+     - 46,757
+     - High Spender
+     - 0.763
+     - 0.762
+   * - Instacart
+     - 50,000
+     - High Value
+     - 0.967
+     - 0.967
+   * - REES46
+     - 8,832
+     - High Engagement
+     - 0.941
+     - 0.941
+   * - Taobao
+     - 4,239
+     - High Engagement
+     - 0.907
+     - **0.913**
+
+RP features add 0–0.7% AUC over strong RFM baselines. The lift is real but modest.
+
+Reading List (2020+)
+--------------------
+
+Recent applied work using revealed preference methods on real-world data:
+
+- **Chen et al. (2024)** — "Rationality of LLMs." CCEI testing on GPT budget-allocation tasks. *PNAS*.
+- **Cazzola & Daly (2024)** — "Rank-preference consistency in recommender systems." SARP as evaluation metric. *Working paper*.
+- **Deb, Kitamura, Quah & Stoye (2023)** — GAPP: price-preference tests + population welfare bounds. *Review of Economic Studies*.
+- **Demuynck & Rehbeck (2023)** — Integer programming for goodness-of-fit measures at scale. *Economic Theory*.
+- **Smeulders, Crama & Spieksma (2021)** — Collective rationality tests via integer programming. *Operations Research*.
+- **Cattaneo, Ma, Masatlioglu & Suleymanov (2020)** — Random Attention Model: stochastic WARP violations from inattention. *Journal of Political Economy*.
+- **Echenique, Imai & Saito (2020)** — Testable restrictions on time preferences. *AEJ: Micro*.
+
+See :doc:`references` for the full bibliography.
+
 ----
 
-Based on Chambers & Echenique (2016) `Revealed Preference Theory <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_. See :doc:`theory_landscape` for the full method map.
+Implements the framework of Chambers & Echenique (2016) `Revealed Preference Theory <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_ (Cambridge University Press, Econometric Society Monographs). See :doc:`theory_landscape` for the full method map.
 
 .. toctree::
    :maxdepth: 2

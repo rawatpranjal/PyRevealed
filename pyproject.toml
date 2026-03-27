@@ -20,7 +20,9 @@ keywords = [
     "ccei",
     "utility-maximization",
     "choice-theory",
-    "econometrics"
+    "econometrics",
+    "datasets",
+    "benchmark"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

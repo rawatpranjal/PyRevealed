@@ -16,10 +16,10 @@ Based on Echenique, Imai & Saito (2020, *AEJ: Micro*) and Laibson (1997, *QJE*).
        test_exponential_discounting, recover_discount_factor
    )
 
-Tutorials
----------
+Examples
+--------
 
 .. toctree::
    :maxdepth: 1
 
-   tutorial_intertemporal
+   examples

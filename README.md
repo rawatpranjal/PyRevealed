@@ -56,7 +56,7 @@ results = rp.analyze(df, user_col="user_id",
                      menu_col="shown_items", choice_col="clicked")
 ```
 
-Returns a pandas DataFrame with one row per user. Customize with `metrics=["garp", "ccei", "mpi", "hm"]`.
+Returns a pandas DataFrame with one row per user. Customize with `metrics=["garp", "ccei", "mpi", "hm"]`. Handle missing data with `nan_policy="drop"`.
 
 ## Scores
 
@@ -120,7 +120,11 @@ The Rust engine (`rpt-core`) handles graph algorithms and LP solving via Rayon t
 
 ## Documentation
 
-**[Full docs](https://pyrevealed.readthedocs.io/)** — tutorials, theory, API reference, application examples.
+**[Full docs](https://pyrevealed.readthedocs.io/)** — examples, theory, API reference, application case studies.
+
+**[6-dataset benchmark](https://pyrevealed.readthedocs.io/en/latest/benchmarks_ecommerce.html)** — 162K users, 14 tasks. RP features add 0–0.7% AUC over RFM baselines.
+
+**[15 dataset loaders](https://pyrevealed.readthedocs.io/en/latest/api.html#dataset-loaders)** — Dunnhumby, Instacart, H&M, Taobao, and 11 more real-world datasets.
 
 ## License
 

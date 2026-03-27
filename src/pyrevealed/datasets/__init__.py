@@ -136,6 +136,13 @@ def list_datasets() -> list[dict[str, str]]:
             "goods": "33 product families (uniform prices)",
             "observations": "~200+ weeks per store",
         },
+        {
+            "name": "taobao",
+            "description": "Taobao user behavior: 100M click/purchase events from ~1M users",
+            "source": "Kaggle (marwa80/userbehavior)",
+            "goods": "Menu-based (daily viewed → purchased items)",
+            "observations": "~5-50 purchase-days per user",
+        },
     ]
 
 
@@ -154,5 +161,6 @@ __all__ = [
     "load_hm",
     "load_pakistan",
     "load_favorita",
+    "load_taobao",
     "list_datasets",
 ]
