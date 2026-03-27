@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from case_studies.benchmarks.core.evaluation import BenchmarkResult
+from case_studies.benchmarks.core.evaluation import BenchmarkResult, compute_lift_pct
 
 
 def results_to_summary_table(results: list[BenchmarkResult]) -> pd.DataFrame:
@@ -25,7 +25,7 @@ def results_to_summary_table(results: list[BenchmarkResult]) -> pd.DataFrame:
             "Task": r.task_type[:5],
         }
         if r.task_type == "classification":
-            pct_lift = (r.auc_combined - r.auc_base) / max(r.auc_base, 0.5) * 100 if r.auc_base > 0 else 0
+            pct_lift = compute_lift_pct(r.auc_combined, r.auc_base)
             row.update({
                 "AUC (RP only)": f"{r.auc_rp:.3f}",
                 "AUC (Baseline)": f"{r.auc_base:.3f}",
@@ -71,7 +71,7 @@ def print_summary(results: list[BenchmarkResult]) -> None:
     print(f"\n  {len(results)} tasks across {len(set(r.dataset for r in results))} datasets, "
           f"{total_n:,} total users.")
     if cls_results:
-        lifts = [(r.auc_combined - r.auc_base) / max(r.auc_base, 0.5) * 100
+        lifts = [compute_lift_pct(r.auc_combined, r.auc_base)
                  for r in cls_results if r.auc_base > 0.5]
         if lifts:
             print(f"  Marginal lift from RP features: {min(lifts):+.1f}% to {max(lifts):+.1f}% AUC.")
@@ -84,7 +84,7 @@ def print_summary(results: list[BenchmarkResult]) -> None:
         print(f"  {'Dataset':<18} {'Target':<18} {'N':>6} {'%pos':>5}  {'Baseline':>10}  {'+RP':>10}  {'Lift%':>7}  {'AUC-PR':>7}")
         print("  " + "-" * 88)
         for r in cls_results:
-            pct_lift = (r.auc_combined - r.auc_base) / max(r.auc_base, 0.5) * 100 if r.auc_base > 0.5 else 0.0
+            pct_lift = compute_lift_pct(r.auc_combined, r.auc_base)
             print(
                 f"  {r.dataset:<18} {r.target:<18} {r.n_users:>6} {r.positive_rate:>5.1%}  "
                 f"{r.auc_base:>.3f}±{r.auc_base_std:.3f}  {r.auc_combined:>.3f}±{r.auc_combined_std:.3f}  "

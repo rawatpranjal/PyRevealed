@@ -5,6 +5,10 @@ N_FOLDS = 5
 TRAIN_FRACTION = 0.7  # First 70% of observations for features, last 30% for targets
 MIN_OBS_BUDGET = 10  # Minimum observations per user for budget datasets
 MIN_OBS_MENU = 5  # Minimum sessions per user for menu datasets
+MIN_TRAIN_BUDGET = 5  # Minimum training observations for budget datasets
+MIN_TEST_BUDGET = 3  # Minimum test observations for budget datasets
+MIN_TRAIN_MENU = 3  # Minimum training observations for menu datasets
+MIN_TEST_MENU = 2  # Minimum test observations for menu datasets
 
 # LightGBM hyperparameters (shared across all benchmarks)
 LGBM_CLASSIFIER_PARAMS = {

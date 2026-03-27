@@ -197,7 +197,7 @@ Appendix: Pipeline
      -> BehaviorPanel / MenuChoiceLog per user
      -> Temporal split: first 70% -> features, last 30% -> targets
      -> Feature extraction:
-          Baseline (14): RFM, category concentration, temporal trends
+          Baseline (13): RFM, category concentration, temporal trends
           RP (11): CCEI, MPI, HM ratio, VEI, GARP, HARP, SCC ratio
      -> LightGBM (num_leaves=15, n_estimators=100, reg_alpha=0.1)
      -> 5-fold stratified CV

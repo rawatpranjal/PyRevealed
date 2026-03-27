@@ -99,6 +99,13 @@ class BenchmarkResult:
         return asdict(self)
 
 
+def compute_lift_pct(auc_combined: float, auc_base: float) -> float:
+    """Compute percentage lift of combined over baseline AUC."""
+    if auc_base > 0.5:
+        return (auc_combined - auc_base) / auc_base * 100
+    return 0.0
+
+
 def run_three_way(
     X_rp: pd.DataFrame,
     X_base: pd.DataFrame,
@@ -127,10 +134,24 @@ def run_three_way(
 
     # Align indices
     common_idx = X_rp.index.intersection(X_base.index)
+    n_dropped_rp = len(X_rp) - len(common_idx)
+    n_dropped_base = len(X_base) - len(common_idx)
+    if n_dropped_rp > 0 or n_dropped_base > 0:
+        warnings.warn(
+            f"Dropped {n_dropped_rp} RP-only and {n_dropped_base} baseline-only users "
+            f"during index alignment ({len(common_idx)} remaining)"
+        )
     X_rp = X_rp.loc[common_idx]
     X_base = X_base.loc[common_idx]
 
     # Handle NaN/inf
+    n_nan_rp = int(X_rp.isna().sum().sum() + np.isinf(X_rp.values).sum())
+    n_nan_base = int(X_base.isna().sum().sum() + np.isinf(X_base.values).sum())
+    if n_nan_rp > 0 or n_nan_base > 0:
+        warnings.warn(
+            f"Imputed {n_nan_rp} NaN/Inf values in RP features, "
+            f"{n_nan_base} in baseline features"
+        )
     X_rp = X_rp.fillna(X_rp.median()).replace([np.inf, -np.inf], 0)
     X_base = X_base.fillna(X_base.median()).replace([np.inf, -np.inf], 0)
 
@@ -259,8 +280,7 @@ def run_three_way(
         result.f1_base = float(np.mean(fold_metrics["base"]["f1"]))
         result.f1_combined = float(np.mean(fold_metrics["combined"]["f1"]))
         result.auc_lift = result.auc_combined - result.auc_base
-        if result.auc_base > 0.5:
-            result.auc_lift_pct = (result.auc_combined - result.auc_base) / result.auc_base * 100
+        result.auc_lift_pct = compute_lift_pct(result.auc_combined, result.auc_base)
         result.auc_rp_train = in_sample["rp"]
         result.auc_base_train = in_sample["base"]
         result.auc_combined_train = in_sample["combined"]

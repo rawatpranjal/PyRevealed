@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from pyrevealed.core.session import MenuChoiceLog
 
-from case_studies.benchmarks.config import TRAIN_FRACTION, MIN_OBS_MENU
+from case_studies.benchmarks.config import TRAIN_FRACTION, MIN_OBS_MENU, MIN_TRAIN_MENU, MIN_TEST_MENU
 from case_studies.benchmarks.core.features import extract_menu_baseline, extract_menu_rp
 from case_studies.benchmarks.core.evaluation import run_three_way, BenchmarkResult
 
@@ -47,7 +47,7 @@ def load_and_prepare(data_dir=None, max_users=50000):
         if T < MIN_OBS_MENU:
             continue
         split = int(T * TRAIN_FRACTION)
-        if split < 3 or (T - split) < 2:
+        if split < MIN_TRAIN_MENU or (T - split) < MIN_TEST_MENU:
             continue
 
         train_log, test_log = _split_menu_log(log, TRAIN_FRACTION)
@@ -56,7 +56,8 @@ def load_and_prepare(data_dir=None, max_users=50000):
         targets["high_engagement"].append(len(test_log.choices))
 
     engagement = np.array(targets["high_engagement"])
-    high_eng = (engagement > np.median(engagement)).astype(int)
+    threshold = np.percentile(engagement, 66.67)
+    high_eng = (engagement > threshold).astype(int)
 
     print(f"  Users: {len(user_ids)}")
     if len(user_ids) < 30:

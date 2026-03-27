@@ -7,8 +7,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from case_studies.benchmarks.config import TRAIN_FRACTION, MIN_OBS_BUDGET
-from case_studies.benchmarks.core.features import extract_budget_baseline, extract_budget_rp, extract_budget_rp_deep
+from case_studies.benchmarks.config import TRAIN_FRACTION, MIN_OBS_BUDGET, MIN_TRAIN_BUDGET, MIN_TEST_BUDGET
+from case_studies.benchmarks.core.features import extract_budget_baseline, extract_budget_rp
 from case_studies.benchmarks.core.evaluation import run_three_way, BenchmarkResult
 
 
@@ -43,7 +43,7 @@ def load_and_prepare(data_dir=None, n_households=None):
             continue
 
         split = int(T * TRAIN_FRACTION)
-        if split < 5 or (T - split) < 3:
+        if split < MIN_TRAIN_BUDGET or (T - split) < MIN_TEST_BUDGET:
             continue
 
         prices_train = log.cost_vectors[:split]
@@ -74,11 +74,7 @@ def load_and_prepare(data_dir=None, n_households=None):
     print(f"  Extracting RP features via Engine...")
     X_rp_engine = extract_budget_rp(train_tuples, user_ids)
 
-    print(f"  Extracting deep RP features (Auditor + Encoder + Rolling)...")
-    X_rp_deep = extract_budget_rp_deep(train_tuples, user_ids)
-
-    # Combine all RP features
-    X_rp = pd.concat([X_rp_engine, X_rp_deep], axis=1)
+    X_rp = X_rp_engine
 
     # --- Targets ---
 
