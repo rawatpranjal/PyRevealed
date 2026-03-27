@@ -19,16 +19,16 @@ You have data on what people chose. PyRevealed tests whether those choices are r
        <p>Optimized Rust backend utilizing graph-theoretic algorithms and HiGHS linear programming, parallelized via Rayon for high-throughput processing.</p>
      </div>
      <div class="feature-card">
-       <h3>Dual API Design</h3>
-       <p>Every method has two names — pick whichever reads naturally in your code. 57 result dataclasses with <code>.to_dict()</code> and <code>.summary()</code>. sklearn-compatible for ML pipelines.</p>
+       <h3>Dual API</h3>
+       <p>Every method has two names — pick whichever reads naturally in your code. Results are dataclasses with <code>.to_dict()</code> and <code>.summary()</code>, ready for pandas or sklearn pipelines.</p>
      </div>
      <div class="feature-card">
        <h3>Algorithms</h3>
-       <p>Floyd-Warshall transitive closure, Tarjan SCC, Karp's max-mean cycle, HiGHS LP/ILP, greedy FVS, Bellman-Ford, and binary search. Grounded in Chambers &amp; Echenique (2016).</p>
+       <p>Graph closure, cycle detection, linear programming, and combinatorial search — all implemented in Rust. Covers 60% of the methods surveyed in Chambers &amp; Echenique (2016).</p>
      </div>
      <div class="feature-card">
-       <h3>Post-Estimation Diagnostics</h3>
-       <p>Utility recovery via Afriat LP, welfare analysis (CV/EV), Slutsky symmetry tests, power analysis (Bronars, Selten), separability testing, and ordinal preference ranking.</p>
+       <h3>Post-Estimation</h3>
+       <p>Once you have a consistency score, go further: recover the underlying utility function, compute welfare bounds, test for separability, or measure statistical power.</p>
      </div>
    </div>
 
