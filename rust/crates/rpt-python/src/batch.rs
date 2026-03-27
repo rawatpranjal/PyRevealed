@@ -45,6 +45,137 @@ fn compute_vei_stats(efficiencies: &[f64]) -> (f64, f64, f64) {
     (std, q25, q75)
 }
 
+/// Compute graph network features from the R matrix and edge weights.
+/// Returns (r_density, r_out_degree_std, degree_gini, ew_mean, ew_std, ew_skew).
+/// Edge-weight fields are 0.0 if weights have not been computed.
+fn compute_graph_stats(graph: &PreferenceGraph) -> (f64, f64, f64, f64, f64, f64) {
+    let t = graph.t;
+    if t < 2 {
+        return (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    }
+    let n_possible = (t * (t - 1)) as f64;
+
+    // --- R-based features ---
+    let mut out_deg = vec![0u32; t];
+    let mut in_deg = vec![0u32; t];
+    let mut r_edges: u64 = 0;
+    for i in 0..t {
+        for j in 0..t {
+            if i != j && graph.r[i * t + j] {
+                r_edges += 1;
+                out_deg[i] += 1;
+                in_deg[j] += 1;
+            }
+        }
+    }
+    let r_density = r_edges as f64 / n_possible;
+
+    // Out-degree std
+    let out_mean = r_edges as f64 / t as f64;
+    let out_var = out_deg.iter().map(|&d| {
+        let diff = d as f64 - out_mean;
+        diff * diff
+    }).sum::<f64>() / t as f64;
+    let r_out_degree_std = out_var.sqrt();
+
+    // Degree Gini: Gini of total_degree = out_deg + in_deg
+    let mut total_deg: Vec<f64> = (0..t).map(|i| (out_deg[i] + in_deg[i]) as f64).collect();
+    let deg_sum: f64 = total_deg.iter().sum();
+    let degree_gini = if deg_sum > 0.0 {
+        total_deg.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        let n = t as f64;
+        let weighted_sum: f64 = total_deg.iter().enumerate()
+            .map(|(i, &d)| (i as f64 + 1.0) * d)
+            .sum();
+        (2.0 * weighted_sum - (n + 1.0) * deg_sum) / (n * deg_sum)
+    } else {
+        0.0
+    };
+
+    // --- Edge-weight features (only if HARP has been computed) ---
+    let (ew_mean, ew_std, ew_skew) = if graph.has_weights && r_edges > 0 {
+        let mut weights = Vec::with_capacity(r_edges as usize);
+        for i in 0..t {
+            for j in 0..t {
+                if i != j && graph.r[i * t + j] {
+                    let w = graph.edge_weights[i * t + j];
+                    if w.is_finite() {
+                        weights.push(w);
+                    }
+                }
+            }
+        }
+        if weights.is_empty() {
+            (0.0, 0.0, 0.0)
+        } else {
+            let n = weights.len() as f64;
+            let mean = weights.iter().sum::<f64>() / n;
+            let var = weights.iter().map(|&w| (w - mean).powi(2)).sum::<f64>() / n;
+            let std = var.sqrt();
+            let skew = if std > 1e-12 {
+                weights.iter().map(|&w| ((w - mean) / std).powi(3)).sum::<f64>() / n
+            } else {
+                0.0
+            };
+            (mean, std, skew)
+        }
+    } else {
+        (0.0, 0.0, 0.0)
+    };
+
+    (r_density, r_out_degree_std, degree_gini, ew_mean, ew_std, ew_skew)
+}
+
+/// Compute menu-specific network features from the R matrix and choices.
+/// Returns (r_density, pref_entropy, choice_diversity).
+fn compute_menu_graph_stats(graph: &PreferenceGraph, choices: &[usize]) -> (f64, f64, f64) {
+    let t = graph.t;
+    if t < 2 {
+        return (0.0, 0.0, 0.0);
+    }
+    let n_possible = (t * (t - 1)) as f64;
+
+    // R density
+    let mut r_edges: u64 = 0;
+    let mut out_deg = vec![0u32; t];
+    for i in 0..t {
+        for j in 0..t {
+            if i != j && graph.r[i * t + j] {
+                r_edges += 1;
+                out_deg[i] += 1;
+            }
+        }
+    }
+    let r_density = if n_possible > 0.0 { r_edges as f64 / n_possible } else { 0.0 };
+
+    // Preference entropy: Shannon entropy of out-degree distribution
+    let deg_sum: f64 = out_deg.iter().map(|&d| d as f64).sum();
+    let pref_entropy = if deg_sum > 0.0 {
+        out_deg.iter()
+            .filter(|&&d| d > 0)
+            .map(|&d| {
+                let p = d as f64 / deg_sum;
+                -p * p.ln() / std::f64::consts::LN_2
+            })
+            .sum()
+    } else {
+        0.0
+    };
+
+    // Choice diversity: unique choices / total choices
+    let n_choices = choices.len();
+    let choice_diversity = if n_choices > 0 {
+        let mut sorted = choices.to_vec();
+        sorted.sort_unstable();
+        sorted.dedup();
+        sorted.len() as f64 / n_choices as f64
+    } else {
+        0.0
+    };
+
+    (r_density, pref_entropy, choice_diversity)
+}
+
 /// Metric flags controlling which analyses to run.
 #[derive(Clone, Copy)]
 struct MetricFlags {
@@ -83,6 +214,13 @@ struct UserOut {
     n_scc: u32,
     harp_severity: f64,
     scc_mean_size: f64,
+    // Network/graph features
+    r_density: f64,
+    r_out_degree_std: f64,
+    degree_gini: f64,
+    ew_mean: f64,
+    ew_std: f64,
+    ew_skew: f64,
 }
 
 /// Process a batch of users in parallel using Rayon. Shared by both
@@ -154,6 +292,10 @@ fn process_users_parallel(
                     (1.0, 1.0, 0.0, 1.0, 1.0)
                 };
 
+                // Graph network features — compute before CCEI which may modify state
+                let (r_density, r_out_degree_std, degree_gini, ew_mean, ew_std, ew_skew) =
+                    compute_graph_stats(graph);
+
                 let ccei = if flags.ccei && !garp.is_consistent {
                     ccei_search(graph, tolerance).ccei
                 } else if garp.is_consistent {
@@ -195,6 +337,12 @@ fn process_users_parallel(
                     n_scc,
                     harp_severity,
                     scc_mean_size,
+                    r_density,
+                    r_out_degree_std,
+                    degree_gini,
+                    ew_mean,
+                    ew_std,
+                    ew_skew,
                 }
             },
         )
@@ -230,6 +378,12 @@ fn results_to_pydicts<'py>(py: Python<'py>, results: Vec<UserOut>) -> Vec<Bound<
             dict.set_item("n_scc", r.n_scc).unwrap();
             dict.set_item("harp_severity", r.harp_severity).unwrap();
             dict.set_item("scc_mean_size", r.scc_mean_size).unwrap();
+            dict.set_item("r_density", r.r_density).unwrap();
+            dict.set_item("r_out_degree_std", r.r_out_degree_std).unwrap();
+            dict.set_item("degree_gini", r.degree_gini).unwrap();
+            dict.set_item("ew_mean", r.ew_mean).unwrap();
+            dict.set_item("ew_std", r.ew_std).unwrap();
+            dict.set_item("ew_skew", r.ew_skew).unwrap();
             dict
         })
         .collect()
@@ -308,6 +462,9 @@ pub fn analyze_menu_batch<'py>(
         hm_total: u32,
         max_scc: u32,
         n_scc: u32,
+        r_density: f64,
+        pref_entropy: f64,
+        choice_diversity: f64,
         time_us: u64,
     }
 
@@ -336,6 +493,9 @@ pub fn analyze_menu_batch<'py>(
                     false
                 };
 
+                let (r_density, pref_entropy, choice_diversity) =
+                    compute_menu_graph_stats(graph, choices);
+
                 let time_us = start.elapsed().as_micros() as u64;
 
                 MenuOut {
@@ -348,6 +508,9 @@ pub fn analyze_menu_batch<'py>(
                     hm_total: hm_t as u32,
                     max_scc: sarp.max_scc_size,
                     n_scc: sarp.n_components,
+                    r_density,
+                    pref_entropy,
+                    choice_diversity,
                     time_us,
                 }
             },
@@ -367,6 +530,9 @@ pub fn analyze_menu_batch<'py>(
             dict.set_item("hm_total", r.hm_total).unwrap();
             dict.set_item("max_scc", r.max_scc).unwrap();
             dict.set_item("n_scc", r.n_scc).unwrap();
+            dict.set_item("r_density", r.r_density).unwrap();
+            dict.set_item("pref_entropy", r.pref_entropy).unwrap();
+            dict.set_item("choice_diversity", r.choice_diversity).unwrap();
             dict.set_item("compute_time_us", r.time_us).unwrap();
             dict
         })

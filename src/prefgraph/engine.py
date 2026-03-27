@@ -77,6 +77,12 @@ class EngineResult:
     n_scc: int = 0
     harp_severity: float = 1.0
     scc_mean_size: float = 0.0
+    r_density: float = 0.0
+    r_out_degree_std: float = 0.0
+    degree_gini: float = 0.0
+    ew_mean: float = 0.0
+    ew_std: float = 0.0
+    ew_skew: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
         """Return dictionary representation for serialization."""
@@ -103,6 +109,11 @@ class EngineResult:
             lines.append(f"  HARP:  violated (severity={self.harp_severity:.4f})")
         if self.max_scc > 1:
             lines.append(f"  SCC:   {self.n_scc} components, max={self.max_scc}, mean={self.scc_mean_size:.1f}")
+        if self.r_density > 0:
+            parts = [f"density={self.r_density:.3f}", f"deg_std={self.r_out_degree_std:.2f}", f"gini={self.degree_gini:.3f}"]
+            if self.ew_std > 0:
+                parts.append(f"ew_std={self.ew_std:.3f}")
+            lines.append(f"  Graph: {', '.join(parts)}")
         lines.append(f"  Time:  {self.compute_time_us}us")
         return "\n".join(lines)
 
@@ -149,6 +160,9 @@ class MenuResult:
     hm_total: int = 0
     max_scc: int = 0
     n_scc: int = 0
+    r_density: float = 0.0
+    pref_entropy: float = 0.0
+    choice_diversity: float = 0.0
     compute_time_us: int = 0
 
     def to_dict(self) -> dict[str, Any]:
@@ -437,6 +451,12 @@ class Engine:
                 n_scc=r.get("n_scc", 0),
                 harp_severity=r.get("harp_severity", 1.0),
                 scc_mean_size=r.get("scc_mean_size", 0.0),
+                r_density=r.get("r_density", 0.0),
+                r_out_degree_std=r.get("r_out_degree_std", 0.0),
+                degree_gini=r.get("degree_gini", 0.0),
+                ew_mean=r.get("ew_mean", 0.0),
+                ew_std=r.get("ew_std", 0.0),
+                ew_skew=r.get("ew_skew", 0.0),
             )
             for r in raw_results
         ]
@@ -526,6 +546,9 @@ class Engine:
                         hm_total=r["hm_total"],
                         max_scc=r["max_scc"],
                         n_scc=r.get("n_scc", 0),
+                        r_density=r.get("r_density", 0.0),
+                        pref_entropy=r.get("pref_entropy", 0.0),
+                        choice_diversity=r.get("choice_diversity", 0.0),
                         compute_time_us=r["compute_time_us"],
                     )
                     for r in raw
@@ -697,6 +720,12 @@ class Engine:
                 n_scc=r.get("n_scc", 0),
                 harp_severity=r.get("harp_severity", 1.0),
                 scc_mean_size=r.get("scc_mean_size", 0.0),
+                r_density=r.get("r_density", 0.0),
+                r_out_degree_std=r.get("r_out_degree_std", 0.0),
+                degree_gini=r.get("degree_gini", 0.0),
+                ew_mean=r.get("ew_mean", 0.0),
+                ew_std=r.get("ew_std", 0.0),
+                ew_skew=r.get("ew_skew", 0.0),
             )
             for _, r in raw_results
         ]
