@@ -297,6 +297,209 @@ Key statistics:
 - Mean CCEI = 0.839, meaning the average household wastes ~16% of budget
 - The distribution is left-skewed: most households are moderately rational
 
+Beyond Consistency Scores
+-------------------------
+
+GARP and CCEI answer one question: *is behavior consistent?* PyRevealed
+goes much further. On the same data, without re-estimation, you can
+assess test power, diagnose individual observations, test preference
+structure, recover utility, and measure welfare.
+
+Power analysis
+~~~~~~~~~~~~~~
+
+A GARP pass is only meaningful if the test had enough power to detect
+violations. Bronars (1987) simulates random behavior on the same budget
+sets; the fraction that violates GARP is the test's **power**.
+
+.. code-block:: python
+
+   from pyrevealed.contrib.bronars import compute_bronars_power
+   from pyrevealed.contrib.power_analysis import compute_selten_measure
+
+   bp = compute_bronars_power(log, n_simulations=500, random_seed=42)
+   sm = compute_selten_measure(log, n_simulations=500, random_seed=42)
+
+Sample households from the panel:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 8 8 10 10
+
+   * - HH
+     - T
+     - CCEI
+     - Bronars Power
+     - Selten m
+   * - 9
+     - 15
+     - 1.000
+     - 0.348
+     - 0.335
+   * - 5
+     - 13
+     - 0.973
+     - 0.635
+     - 0.000
+   * - 4
+     - 25
+     - 0.946
+     - 0.800
+     - 0.000
+   * - 1
+     - 60
+     - 0.854
+     - 1.000
+     - 0.000
+   * - 8
+     - 63
+     - 0.699
+     - 1.000
+     - 0.000
+
+Household 9 passes GARP but with **power = 0.35** --- only 35% of random
+consumers would fail on those budgets. Household 1's failure at
+**power = 1.0** is definitive: every random consumer also fails, so the
+violation is not due to a lenient test.
+
+Per-observation diagnostics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+VEI (Varian 1990) assigns each observation its own efficiency score via
+per-observation LP. Swaps (Apesteguia & Ballester 2015) counts the
+minimum adjacent swaps to restore consistency.
+
+.. code-block:: python
+
+   from pyrevealed.algorithms.vei import compute_vei
+   from pyrevealed.algorithms.mpi import compute_houtman_maks_index
+
+   vei = compute_vei(log)
+   hm  = compute_houtman_maks_index(log)
+
+For household 1 (T=60, CCEI=0.854):
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20
+
+   * - Metric
+     - Value
+   * - VEI mean
+     - 1.000
+   * - VEI min
+     - 1.000
+   * - HM removed
+     - 19 / 60 (31.7%)
+   * - Swaps
+     - 0
+
+VEI = 1.0 everywhere means violations are distributed across many
+observation pairs (no single outlier). HM = 31.7% means removing 19 of
+60 weeks restores full consistency.
+
+Structural tests
+~~~~~~~~~~~~~~~~
+
+Test what *kind* of utility function could generate the data:
+
+.. code-block:: python
+
+   from pyrevealed.algorithms.harp import check_harp
+   from pyrevealed.algorithms.quasilinear import check_quasilinearity
+   from pyrevealed.contrib.additive import test_additive_separability
+
+   harp = check_harp(log)
+   ql   = check_quasilinearity(log)
+   sep  = test_additive_separability(log)
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 10 12 30
+
+   * - Test
+     - Pass
+     - Detail
+     - Meaning
+   * - HARP (homothetic)
+     - No
+     - 48 violations
+     - Preferences don't scale with income
+   * - Quasilinear
+     - No
+     - 114K violations
+     - Income effects matter
+   * - Additive separable
+     - No
+     - 1 group
+     - Cross-category interactions exist
+
+All three fail for household 1, consistent with a general utility function
+with income effects and cross-price substitution between categories.
+
+Utility recovery and welfare
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For GARP-consistent households, recover latent utility values via
+Afriat's LP, then measure welfare impact of price changes:
+
+.. code-block:: python
+
+   from pyrevealed import recover_utility
+   from pyrevealed.contrib.welfare import analyze_welfare_change
+
+   # Household 9 (GARP-consistent, T=15)
+   u = recover_utility(log)  # Afriat LP
+   # Simulate 10% price increase in category 0
+   w = analyze_welfare_change(baseline_log, policy_log)
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20
+
+   * - Metric
+     - Value
+   * - Utility recovery
+     - Success
+   * - HARP (homothetic)
+     - Pass
+   * - Bronars power
+     - 0.348
+   * - CV (10% price increase)
+     - --$0.61
+   * - EV (10% price increase)
+     - +$0.60
+   * - Baseline expenditure
+     - $13.82
+
+Full pipeline summary
+~~~~~~~~~~~~~~~~~~~~~
+
+Everything above runs on a single ``BehaviorLog``, no re-estimation needed:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 25 25
+
+   * - Category
+     - Methods
+     - Returns
+   * - **Test**
+     - GARP, WARP, SARP, HARP, quasilinear, separability
+     - bool + violations
+   * - **Score**
+     - CCEI, MPI, VEI, Houtman-Maks, Swaps, Bronars power
+     - float (0--1)
+   * - **Recover**
+     - Utility (Afriat LP), demand, Slutsky matrix
+     - vectors / matrices
+   * - **Welfare**
+     - CV, EV, deadweight loss, expenditure function
+     - dollar values
+   * - **Structure**
+     - Additive groups, cross-price effects, Lancaster characteristics
+     - partitions / matrices
+
 Temporal Panel Analysis
 -----------------------
 
@@ -490,4 +693,4 @@ References
 
    :doc:`theory_consistency` for the full mathematical treatment of GARP.
    :doc:`theory_efficiency` for proofs of CCEI and MPI properties.
-   :doc:`api` for the complete function reference.
+   :doc:`/api` for the complete function reference.

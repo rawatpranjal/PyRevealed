@@ -5,7 +5,7 @@ PyRevealed has been validated on real-world data from the **Dunnhumby "The Compl
 
 .. note::
 
-   For a complete walkthrough with code examples, see the :doc:`tutorial`.
+   For a complete walkthrough with code examples, see the :doc:`budget/tutorial`.
 
 Key Findings
 ------------
@@ -83,6 +83,6 @@ Running the Analysis
 See Also
 --------
 
-- :doc:`tutorial` — Full teaching tutorial with step-by-step code
+- :doc:`budget/tutorial` — Full teaching tutorial with step-by-step code
 - :doc:`quickstart` — Getting started with your own data
 - :doc:`api` — Complete API reference

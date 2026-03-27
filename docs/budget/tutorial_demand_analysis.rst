@@ -1431,5 +1431,5 @@ See Also
 
 - :doc:`tutorial` — GARP consistency and efficiency indices
 - :doc:`tutorial_welfare` — Welfare analysis using demand functions
-- :doc:`api` — Full API documentation
-- :doc:`theory` — Mathematical foundations (Chapters 6, 9)
+- :doc:`/api` — Full API documentation
+- :doc:`/budget/theory_advanced` — Mathematical foundations (Chapters 6, 9)

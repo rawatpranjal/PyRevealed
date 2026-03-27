@@ -24,6 +24,10 @@ PyRevealed is a high-performance computational library designed for the axiomati
 
    pip install pyrevealed
 
+.. image:: _static/landing_hero.gif
+   :width: 100%
+   :alt: PyRevealed analyzes budget and menu choices to reveal preferences and score consistency
+
 Analytical Overview
 -------------------
 
@@ -72,15 +76,17 @@ Unlike traditional econometric models that assume specific functional forms for 
 
 ----
 
-PyRevealed's methodology is grounded in the formal frameworks established in `Chambers & Echenique (2016) <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_. For detailed implementations and case studies, see the :doc:`applications` section.
+PyRevealed's methodology is grounded in the formal frameworks established in `Chambers & Echenique (2016) <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_. See the :doc:`theory_landscape` for a complete map of all methods organized by data type and output type.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :hidden:
 
-   applications
-   examples
-   theory
+   theory_landscape
+   budget/index
+   menu/index
+   production/index
+   intertemporal/index
    algorithms
    performance
    api

@@ -804,5 +804,5 @@ See Also
 
 - :doc:`tutorial` — GARP consistency and utility recovery
 - :doc:`tutorial_demand_analysis` — Slutsky decomposition and integrability
-- :doc:`api` — Full API documentation
-- :doc:`theory` — Mathematical foundations (Chapter 7)
+- :doc:`/api` — Full API documentation
+- :doc:`/budget/theory_advanced` — Mathematical foundations (Chapter 7)

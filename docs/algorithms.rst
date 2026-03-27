@@ -57,6 +57,11 @@ Budget-Based Methods
 GARP — :math:`O(T^2)` SCC Algorithm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. image:: _static/floyd_warshall.gif
+   :width: 60%
+   :align: center
+   :alt: Floyd-Warshall transitive closure building indirect preferences
+
 **Traditional approach** (pre-2015): Build the direct revealed preference graph
 :math:`G_{R_0}`, compute its transitive closure :math:`R^*` via Floyd-Warshall in
 :math:`O(T^3)`, then check :math:`\neg(i R^* j \wedge j P_0 i)` for all pairs.

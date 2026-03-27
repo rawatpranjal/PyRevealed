@@ -615,6 +615,6 @@ Function Reference
 See Also
 --------
 
-- :doc:`tutorial` - Budget-based analysis fundamentals
-- :doc:`tutorial_risk` - Risk preferences under uncertainty
-- :doc:`api` - Full API documentation
+- :doc:`/budget/tutorial` - Budget-based analysis fundamentals
+- :doc:`/menu/tutorial_risk` - Risk preferences under uncertainty
+- :doc:`/api` - Full API documentation

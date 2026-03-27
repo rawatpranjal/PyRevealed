@@ -26,6 +26,11 @@ Prerequisites
    inconsistent data.
 
 
+.. image:: ../_static/attention_decay.gif
+   :width: 60%
+   :align: center
+   :alt: Position-based attention decay across menu items
+
 Part A: Deterministic Attention (WARP-LA)
 -----------------------------------------
 
@@ -994,6 +999,6 @@ See Also
 --------
 
 - :doc:`tutorial_menu_choice` - Menu-based choice fundamentals (WARP, SARP)
-- :doc:`tutorial_advanced` - Stochastic choice models (RUM, IIA)
-- :doc:`theory_extensions` - Mathematical foundations of limited attention
-- :doc:`references` - Academic papers on attention models
+- :doc:`tutorial_stochastic` - Stochastic choice models (RUM, IIA)
+- :doc:`theory_attention` - Mathematical foundations of limited attention
+- :doc:`/references` - Academic papers on attention models

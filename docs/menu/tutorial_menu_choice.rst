@@ -995,7 +995,7 @@ For quick status checks, use ``short_summary()``:
 See Also
 --------
 
-- :doc:`tutorial` — Budget-based revealed preference (GARP, CCEI)
-- :doc:`tutorial_advanced` — Stochastic choice models
-- :doc:`api` — Full API documentation
-- :doc:`theory` — Mathematical foundations (Chapters 1-2, 14)
+- :doc:`/budget/tutorial` — Budget-based revealed preference (GARP, CCEI)
+- :doc:`tutorial_stochastic` — Stochastic choice models
+- :doc:`/api` — Full API documentation
+- :doc:`theory_abstract` — Mathematical foundations (Chapters 1-2, 14)

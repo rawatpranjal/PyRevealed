@@ -1,10 +1,6 @@
 Examples
 ========
 
-.. contents:: On this page
-   :local:
-   :depth: 1
-
 Batch Scoring (Engine)
 ----------------------
 
@@ -224,6 +220,39 @@ If data is GARP-consistent, recover latent utility values via Afriat's LP:
    Success: True
    Utility values: [0. 0.]
    Lagrange multipliers: [1.e-06 1.e-06]
+
+Power Analysis
+--------------
+
+Assess whether a GARP result is statistically meaningful. Bronars power
+measures what fraction of random consumers would fail on the same budgets:
+
+.. code-block:: python
+
+   from pyrevealed import BehaviorLog
+   from pyrevealed.contrib.bronars import compute_bronars_power
+   from pyrevealed.contrib.power_analysis import compute_selten_measure
+   import numpy as np
+
+   prices = np.array([[1.0, 2.0], [2.0, 1.0]])
+   quantities = np.array([[4.0, 1.0], [1.0, 4.0]])
+   log = BehaviorLog(cost_vectors=prices, action_vectors=quantities)
+
+   bp = compute_bronars_power(log, n_simulations=500, random_seed=42)
+   print(f"Bronars power: {bp.power_index:.3f}")
+   print(f"Significant: {bp.is_significant}")
+
+   sm = compute_selten_measure(log, n_simulations=500, random_seed=42)
+   print(f"Selten m: {sm.measure:.3f}  (m = pass_rate - relative_area)")
+
+.. code-block:: text
+
+   Bronars power: 0.344
+   Significant: False
+   Selten m: 0.344  (m = pass_rate - relative_area)
+
+With only 2 observations, power is low --- most random consumers also
+pass GARP. With 50+ observations, power approaches 1.0.
 
 Quasilinear Utility
 -------------------

@@ -8,6 +8,11 @@ Scalability and Throughput
 
 The engine exhibits linear scalability with respect to the number of agents. The workload is highly parallelizable, and memory consumption remains bounded through the use of streaming data chunks.
 
+.. image:: _static/engine_throughput.gif
+   :width: 70%
+   :align: center
+   :alt: Rust vs Python engine throughput comparison
+
 .. image:: _static/perf_throughput.png
    :width: 100%
    :alt: Throughput characteristics across agent cohorts

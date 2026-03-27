@@ -546,5 +546,5 @@ See Also
 --------
 
 - :doc:`tutorial_menu_choice` - Menu-based choice fundamentals
-- :doc:`tutorial_advanced` - Stochastic choice models
-- :doc:`api` - Full API documentation
+- :doc:`tutorial_stochastic` - Stochastic choice models
+- :doc:`/api` - Full API documentation

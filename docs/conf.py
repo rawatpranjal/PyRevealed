@@ -42,9 +42,10 @@ html_favicon = "_static/logo.svg"
 
 html_theme_options = {
     "github_url": "https://github.com/rawatpranjal/PyRevealed",
-    "show_toc_level": 1,
+    "show_toc_level": 2,
     "navigation_with_keys": True,
     "show_prev_next": False,
+    "secondary_sidebar_items": [],
 }
 
 # -- Extension configuration -------------------------------------------------

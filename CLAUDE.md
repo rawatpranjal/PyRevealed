@@ -20,6 +20,9 @@ mypy src/
 ruff check src/
 ruff format src/
 
+  remote: This repository moved. Please use the new location:
+     remote:   https://github.com/rawatpranjal/PyRevealed.git
+     
 # Real-world validation (requires Kaggle dataset)
 python3 dunnhumby/run_all.py --quick   # 100 households sample
 python3 dunnhumby/run_all.py           # Full 2,222 households

@@ -1028,6 +1028,11 @@ This visualization helps identify:
 Power Analysis Plot
 ~~~~~~~~~~~~~~~~~~~
 
+.. image:: ../_static/power_analysis.gif
+   :width: 70%
+   :align: center
+   :alt: Power analysis — random CCEI distribution building up with observed score
+
 The ``plot_power_analysis()`` function compares your data's efficiency to
 simulated random behavior:
 
@@ -1115,5 +1120,5 @@ See Also
 --------
 
 - :doc:`tutorial_ecommerce` — E-commerce application
-- :doc:`api` — API documentation
-- :doc:`theory` — Mathematical foundations
+- :doc:`/api` — API documentation
+- :doc:`/budget/theory_consistency` — Mathematical foundations

@@ -290,6 +290,6 @@ Paired Comparisons
 See Also
 --------
 
-- :doc:`theory` - Mathematical foundations
-- :doc:`tutorials` - Step-by-step guides
+- :doc:`theory_landscape` - Mathematical foundations
+- :doc:`budget/index` - Step-by-step guides
 - :doc:`api` - API documentation

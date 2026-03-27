@@ -363,6 +363,28 @@ div.math {
 }
 
 /* ============================================
+   METHOD LANDSCAPE TABLE
+   ============================================ */
+
+.method-landscape td,
+.method-landscape th {
+    font-size: 0.85em;
+    vertical-align: top;
+    line-height: 1.5;
+    padding: 8px 10px;
+}
+
+.method-landscape td p {
+    margin-bottom: 0.2em;
+}
+
+.method-landscape .subtype {
+    font-style: italic;
+    font-weight: 600;
+    margin-top: 0.4em;
+}
+
+/* ============================================
    DARK MODE OVERRIDES
    ============================================ */
 

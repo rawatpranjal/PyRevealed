@@ -277,5 +277,5 @@ References
 
 .. seealso::
 
-   :doc:`app_recsys` for SARP on real recommendation click data.
-   :doc:`theory_abstract` for the mathematical foundations of SARP.
+   :doc:`/menu/app_recsys` for SARP on real recommendation click data.
+   :doc:`/menu/theory_abstract` for the mathematical foundations of SARP.

@@ -292,6 +292,50 @@ Segmentation by HM efficiency:
      - ~30%
      - Invest in curation and defaults
 
+Beyond SARP: What Else Can You Measure?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After SARP and HM, the same ``MenuChoiceLog`` supports further analysis:
+
+.. code-block:: python
+
+   from pyrevealed.algorithms.abstract_choice import recover_ordinal_utility
+   from pyrevealed.algorithms.attention import test_warp_la
+
+   # Recover a preference ranking (requires SARP-consistent subset)
+   u = recover_ordinal_utility(log)
+
+   # Can violations be explained by limited attention?
+   wla = test_warp_la(log)
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 22 28
+
+   * - Method
+     - Returns
+     - Interpretation
+   * - ``recover_ordinal_utility``
+     - Ranking + utility values
+     - Best-fit item ordering from choices
+   * - ``test_warp_la``
+     - bool + attention filters
+     - Are violations due to inattention, not irrationality?
+   * - ``check_congruence``
+     - bool
+     - Full rationalizability (SARP + maximality)
+   * - ``fit_random_attention_model``
+     - Attention probabilities
+     - P(item considered) per item
+   * - ``fit_rum``
+     - Choice probabilities
+     - Random utility model (Luce/logit)
+
+When SARP fails but WARP-LA passes, the user has consistent underlying
+preferences --- they just didn't notice some items. This distinction
+matters: inattentive users benefit from better UI placement, not
+different recommendations.
+
 Temporal Analysis: Churn Detection
 ----------------------------------
 
@@ -480,4 +524,4 @@ References
 
    :doc:`tutorial_menu_choice` for the full menu-choice tutorial.
    :doc:`theory_abstract` for the mathematical foundations of SARP.
-   :doc:`app_grocery` for budget-based GARP analysis (the continuous-choice analog).
+   :doc:`/budget/app_grocery` for budget-based GARP analysis (the continuous-choice analog).

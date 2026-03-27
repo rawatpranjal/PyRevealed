@@ -6,6 +6,11 @@ This section delineates the formal definitions and axiomatic properties of revea
 GARP (Generalized Axiom of Revealed Preference)
 -----------------------------------------------
 
+.. image:: ../_static/garp_violation.gif
+   :width: 55%
+   :align: center
+   :alt: GARP violation detection — building preference graph then tracing violation cycle
+
 **Reference Implementation:** ``validate_consistency(log)``
 
 The Generalized Axiom of Revealed Preference (GARP) constitutes the central behavioral benchmark for optimizing agents.

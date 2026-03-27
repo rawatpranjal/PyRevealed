@@ -457,6 +457,6 @@ Function Reference
 See Also
 --------
 
-- :doc:`tutorial_advanced` - Stochastic choice fundamentals (RUM, IIA)
+- :doc:`tutorial_stochastic` - Stochastic choice fundamentals (RUM, IIA)
 - :doc:`tutorial_attention` - Limited attention models
-- :doc:`api` - Full API documentation
+- :doc:`/api` - Full API documentation
