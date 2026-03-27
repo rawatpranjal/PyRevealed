@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 # Add parent directories for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.pyrevealed import validate_consistency, compute_integrity_score
 

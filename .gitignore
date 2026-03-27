@@ -92,17 +92,18 @@ Thumbs.db
 
 # Project specific
 *.pdf
-!chapters/*.pdf
+!references/chapters/*.pdf
 
-# Dunnhumby integration tests (large datasets)
-dunnhumby/data/
-dunnhumby/cache/
-dunnhumby/output/
+# Case studies (large datasets)
+case_studies/dunnhumby/data/
+case_studies/dunnhumby/cache/
+case_studies/dunnhumby/output/
+case_studies/datasets/*/data/
+case_studies/datasets/*/output/
+case_studies/datasets/cache/
 
-# Datasets (downloaded from external sources)
-datasets/*/data/
-datasets/*/output/
-datasets/cache/
+# Benchmark outputs
+benchmarks/output/
 
 # Generated outputs
 *.png

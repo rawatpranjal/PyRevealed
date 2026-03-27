@@ -26,7 +26,7 @@ money an arbitrageur could extract from inconsistent shoppers.
 - Exploratory analysis of real scanner data (Dunnhumby, 2,222 households)
 - How to segment customers by rationality and interpret the scores
 
-**Companion script:** ``applications/01_grocery_scanner.py``
+**Companion script:** ``examples/applications/01_grocery_scanner.py``
 
 Background
 ----------
@@ -73,7 +73,7 @@ Loading
 .. note::
 
    The Dunnhumby dataset requires a Kaggle download. Run
-   ``dunnhumby/download_data.sh`` first. See ``dunnhumby/README.md``
+   ``case_studies/dunnhumby/download_data.sh`` first. See ``case_studies/dunnhumby/README.md``
    for details.
 
 EDA: Product Categories

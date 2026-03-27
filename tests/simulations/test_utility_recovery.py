@@ -20,7 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sim.generators import generate_rational_data, generate_irrational_data
+from .generators import generate_rational_data, generate_irrational_data
 from src.pyrevealed import ConsumerSession
 from src.pyrevealed.algorithms.garp import check_garp
 from src.pyrevealed.algorithms.utility import (

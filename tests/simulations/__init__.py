@@ -7,27 +7,27 @@ Provides synthetic data generators for:
 - General rational/irrational consumer data
 """
 
-from sim.risk_scenarios import (
+from .risk_scenarios import (
     generate_gambler,
     generate_investor,
     generate_risk_neutral,
     generate_mixed_risk_population,
     generate_lottery_choice_experiment,
 )
-from sim.spatial_scenarios import (
+from .spatial_scenarios import (
     generate_euclidean_user,
     generate_noisy_user,
     generate_multi_ideal_user,
     generate_recommendation_scenario,
     generate_dating_app_scenario,
 )
-from sim.separability_scenarios import (
+from .separability_scenarios import (
     generate_separable_superapp,
     generate_cannibalized_superapp,
     generate_mixed_superapp,
     generate_amazon_scenario,
 )
-from sim.generators import (
+from .generators import (
     generate_rational_data,
     generate_irrational_data,
     generate_garp_violation_cycle,

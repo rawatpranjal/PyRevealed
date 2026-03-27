@@ -22,7 +22,7 @@ Prerequisites
 
 .. note::
 
-   The full code for this tutorial is available in the ``dunnhumby/`` directory
+   The full code for this tutorial is available in the ``case_studies/dunnhumby/`` directory
    of the PyRevealed repository.
 
 

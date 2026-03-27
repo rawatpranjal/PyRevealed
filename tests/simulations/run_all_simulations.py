@@ -41,7 +41,7 @@ def run_all_simulations() -> bool:
     print(" [1/4] GARP CONSISTENCY TESTS")
     print("=" * 80)
     try:
-        from sim.test_garp_consistency import run_all_tests as run_garp_tests
+        from .test_garp_consistency import run_all_tests as run_garp_tests
         results["GARP"] = run_garp_tests()
     except Exception as e:
         print(f"ERROR: {e}")
@@ -52,7 +52,7 @@ def run_all_simulations() -> bool:
     print(" [2/4] AFRIAT EFFICIENCY INDEX (AEI) TESTS")
     print("=" * 80)
     try:
-        from sim.test_aei_accuracy import run_all_tests as run_aei_tests
+        from .test_aei_accuracy import run_all_tests as run_aei_tests
         results["AEI"] = run_aei_tests()
     except Exception as e:
         print(f"ERROR: {e}")
@@ -63,7 +63,7 @@ def run_all_simulations() -> bool:
     print(" [3/4] MONEY PUMP INDEX (MPI) TESTS")
     print("=" * 80)
     try:
-        from sim.test_mpi_calculation import run_all_tests as run_mpi_tests
+        from .test_mpi_calculation import run_all_tests as run_mpi_tests
         results["MPI"] = run_mpi_tests()
     except Exception as e:
         print(f"ERROR: {e}")
@@ -74,7 +74,7 @@ def run_all_simulations() -> bool:
     print(" [4/4] UTILITY RECOVERY TESTS")
     print("=" * 80)
     try:
-        from sim.test_utility_recovery import run_all_tests as run_utility_tests
+        from .test_utility_recovery import run_all_tests as run_utility_tests
         results["Utility"] = run_utility_tests()
     except Exception as e:
         print(f"ERROR: {e}")

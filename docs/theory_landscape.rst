@@ -1,5 +1,5 @@
-Method Landscape
-================
+Methods
+=======
 
 Every method in PyRevealed, organized by **input data type** (rows) and
 **output type** (columns). This table is a complete roadmap of the library.

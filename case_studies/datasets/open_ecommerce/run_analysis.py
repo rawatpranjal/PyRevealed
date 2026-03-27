@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 # Add parent directories for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.pyrevealed import (
     validate_consistency,

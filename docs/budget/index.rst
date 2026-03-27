@@ -1,5 +1,5 @@
-Budget Choice
-=============
+Budgets
+=======
 
 **Input:** ``BehaviorLog`` — prices × quantities (continuous budget sets)
 

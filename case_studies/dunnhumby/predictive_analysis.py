@@ -21,7 +21,7 @@ from scipy import stats
 
 warnings.filterwarnings('ignore')
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.pyrevealed import (
     BehaviorLog,

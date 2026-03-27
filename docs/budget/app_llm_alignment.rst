@@ -28,7 +28,7 @@ a shortlist) --- and vary the **system prompt** rather than the model.
 - How to measure prompt-induced inconsistency with Houtman-Maks
 - A practical pipeline for auditing prompts before deployment
 
-**Companion script:** ``applications/02_llm_alignment.py``
+**Companion script:** ``examples/applications/02_llm_alignment.py``
 
 Formal Setup
 ------------
@@ -166,17 +166,17 @@ Running the Experiment
 .. code-block:: bash
 
    # Preview without API calls
-   python applications/02_llm_alignment.py --dry-run
+   python examples/applications/02_llm_alignment.py --dry-run
 
    # Quick test (20 trials per prompt)
    export OPENAI_API_KEY=your_key
-   python applications/02_llm_alignment.py --trials 20
+   python examples/applications/02_llm_alignment.py --trials 20
 
    # Full experiment with temp=0 baseline (60 trials × 5 prompts × 2 temps = 600 calls, ~$0.03)
-   python applications/02_llm_alignment.py --trials 60 --baseline
+   python examples/applications/02_llm_alignment.py --trials 60 --baseline
 
    # Reanalyze cached responses
-   python applications/02_llm_alignment.py --cached
+   python examples/applications/02_llm_alignment.py --cached
 
 Results (GPT-4o-mini, 60 trials per prompt, March 2026):
 

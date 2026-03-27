@@ -1,3 +1,5 @@
+:html_theme.sidebar_secondary.remove:
+
 PyRevealed
 ==========
 
@@ -76,18 +78,17 @@ Unlike traditional econometric models that assume specific functional forms for 
 
 ----
 
-PyRevealed's methodology is grounded in the formal frameworks established in `Chambers & Echenique (2016) <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_. See the :doc:`theory_landscape` for a complete map of all methods organized by data type and output type.
+PyRevealed's methodology is grounded in the formal frameworks established in `Chambers & Echenique (2016) <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_. See :doc:`theory_landscape` for a complete map of all methods organized by data type and output type.
 
 .. toctree::
    :maxdepth: 2
    :hidden:
 
-   theory_landscape
    budget/index
    menu/index
-   production/index
-   intertemporal/index
    algorithms
    performance
+   applications
+   theory_landscape
    api
    references

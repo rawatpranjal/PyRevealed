@@ -28,7 +28,7 @@ better evaluation metric for recommender systems than RMSE or MAE.
 - User segmentation by preference consistency
 - Temporal analysis for churn detection via sliding-window SARP
 
-**Companion script:** ``applications/03_recommendation_clicks.py``
+**Companion script:** ``examples/applications/03_recommendation_clicks.py``
 
 Formal Setup
 ------------

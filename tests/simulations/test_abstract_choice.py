@@ -20,7 +20,7 @@ from pathlib import Path
 # Add parent to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sim.generators import (
+from .generators import (
     generate_rational_menu_choices,
     generate_warp_violation_menus,
     generate_sarp_violation_cycle,

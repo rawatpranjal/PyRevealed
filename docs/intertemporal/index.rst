@@ -1,5 +1,5 @@
-Intertemporal Choice
-====================
+Intertemporal
+=============
 
 Analysis of time preferences — testing whether choices over time-dated
 payoffs are consistent with exponential discounting or exhibit present bias.

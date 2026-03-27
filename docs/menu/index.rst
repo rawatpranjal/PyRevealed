@@ -1,5 +1,5 @@
-Menu Choice
-===========
+Menus
+=====
 
 Menu-based analysis evaluates consistency when choices come from finite
 sets of alternatives without prices. Covers classical WARP/SARP,

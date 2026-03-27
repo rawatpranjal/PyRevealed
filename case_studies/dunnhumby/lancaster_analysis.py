@@ -24,7 +24,7 @@ from typing import Dict
 import numpy as np
 from scipy import stats
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.pyrevealed import (
     BehaviorLog,

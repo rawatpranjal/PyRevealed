@@ -20,7 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sim.generators import (
+from .generators import (
     generate_rational_data,
     generate_irrational_data,
     generate_garp_violation_cycle,

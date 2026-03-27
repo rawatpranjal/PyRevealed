@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Workflow Rules
+
+- **Always commit and push after completing changes.** Do not wait for the user to ask — commit and push to main automatically when work is done.
+
+## Documentation Rules
+
+- **RTD nav tab names must be single words.** Current order: Budgets, Menus, Algorithms, Performance, Applications, Methods, API, References. Methods/API/References are intentionally pushed right so they overflow into "More" on narrow viewports. Applications wraps Production + Intertemporal.
+
 ## Build & Test Commands
 
 ```bash

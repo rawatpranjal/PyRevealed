@@ -66,19 +66,19 @@ Running the Analysis
    cd dunnhumby && ./download_data.sh
 
    # Run the full integration test suite
-   python3 dunnhumby/run_all.py
+   python3 case_studies/dunnhumby/run_all.py
 
    # Run individual analyses
-   python3 dunnhumby/extended_analysis.py       # Income, spending, time trends
-   python3 dunnhumby/comprehensive_analysis.py  # Confusion, separability
-   python3 dunnhumby/advanced_analysis.py       # Complementarity, mental accounting
-   python3 dunnhumby/encoder_analysis.py        # Auto-discovery, outlier fraction
-   python3 dunnhumby/predictive_analysis.py     # Split-sample LightGBM
-   python3 dunnhumby/new_algorithms_analysis.py # Test power, 2024 survey algorithms
-   python3 dunnhumby/lancaster_analysis.py      # Lancaster characteristics model
+   python3 case_studies/dunnhumby/extended_analysis.py       # Income, spending, time trends
+   python3 case_studies/dunnhumby/comprehensive_analysis.py  # Confusion, separability
+   python3 case_studies/dunnhumby/advanced_analysis.py       # Complementarity, mental accounting
+   python3 case_studies/dunnhumby/encoder_analysis.py        # Auto-discovery, outlier fraction
+   python3 case_studies/dunnhumby/predictive_analysis.py     # Split-sample LightGBM
+   python3 case_studies/dunnhumby/new_algorithms_analysis.py # Test power, 2024 survey algorithms
+   python3 case_studies/dunnhumby/lancaster_analysis.py      # Lancaster characteristics model
 
    # Quick test mode (100 households sample)
-   python3 dunnhumby/run_all.py --quick
+   python3 case_studies/dunnhumby/run_all.py --quick
 
 See Also
 --------

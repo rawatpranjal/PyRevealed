@@ -20,7 +20,7 @@ from pathlib import Path
 # Add parent to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sim.generators import generate_rational_data
+from .generators import generate_rational_data
 from src.pyrevealed import BehaviorLog
 from src.pyrevealed.algorithms.welfare import (
     _recover_afriat_utility,
