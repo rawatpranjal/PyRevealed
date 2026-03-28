@@ -1,5 +1,5 @@
-Algorithms
-==========
+Under the Hood
+==============
 
 Complexity
 --------------------
