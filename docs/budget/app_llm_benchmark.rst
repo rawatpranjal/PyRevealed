@@ -5,16 +5,16 @@ Do LLMs have stable action rankings, or does the ranking change when
 different alternatives are shown? We build preference graphs from LLM
 decisions and check for cycles.
 
-**TL;DR.** GPT-4o-mini makes structurally consistent decisions most of the
-time --- 74--92% of vignettes pass SARP at temp=0, and majority-vote
-over 20 stochastic reps barely changes the picture (96--98% agreement).
-But the inconsistency that *does* exist is not random: it clusters on
-adjacent-severity action pairs, follows predictable compromise and
-anchoring patterns borrowed from human behavioral economics (Simonson
-1989), and survives temperature averaging. Job screening is the worst
-offender (74% pass, 15 IIA violations); alert triage is the cleanest
-(92%, 2 violations). No single prompt is universally best ---
-decision-tree hits 100% on procurement but 60% on jobs.
+**TL;DR.** GPT-4o-mini usually keeps a stable ranking of actions.
+Between 74 to 92 percent of vignettes pass SARP at temperature 0, and
+majority vote over 20 stochastic repetitions changes little, with
+agreement around 96 to 98 percent. Where inconsistency appears, it is
+systematic. It concentrates on adjacent severity pairs, shows compromise
+and anchoring patterns, and persists under stochastic aggregation. Job
+screening is the weakest case at 74 percent with many IIA violations.
+Alert triage is the strongest at 92 percent with very few violations.
+There is no single best prompt. Decision tree is perfect on procurement
+but performs poorly on jobs.
 
 .. code-block:: text
 
@@ -27,9 +27,18 @@ decision-tree hits 100% on procurement but 60% on jobs.
 Setup
 -----
 
-5 enterprise scenarios, 5 actions each, 5 system prompts. gpt-4o-mini.
-For each vignette: fix the input, present all C(5,2)=10 pairwise menus
-+ 5 size-3 menus. Deterministic (temp=0) and stochastic (temp=0.7, K=20).
+A **scenario** is a real enterprise decision task (support triage,
+alert routing, etc.). Each scenario has 5 **actions** the LLM can
+choose from. A **vignette** is one concrete input --- a specific support
+ticket, alert payload, or candidate resume --- that the LLM must
+respond to. A **prompt** is the system-prompt persona framing how the
+LLM should approach the decision. A **menu** is a subset of the 5
+actions shown to the LLM for a given vignette; we present all
+C(5,2)=10 pairwise menus + 5 size-3 menus = 15 menus per vignette.
+
+5 scenarios, 10 vignettes each, 5 prompts, 15 menus per vignette.
+Model: gpt-4o-mini. Deterministic (temp=0) and stochastic (temp=0.7,
+K=20 reps per menu).
 
 .. list-table::
    :header-rows: 1
@@ -48,7 +57,47 @@ For each vignette: fix the input, present all C(5,2)=10 pairwise menus
    * - Procurement
      - auto-approve, tag, request quotes, escalate, deny
 
-Prompts: *minimal, decision-tree, conservative, aggressive, chain-of-thought.*
+.. list-table::
+   :header-rows: 1
+   :widths: 18 82
+
+   * - Prompt
+     - Framing
+   * - minimal
+     - One-line instruction with no guidance ("Route support tickets.")
+   * - decision-tree
+     - Explicit if/then rules mapping input features to actions
+   * - conservative
+     - Risk-averse persona that prefers escalation over automation
+   * - aggressive
+     - Efficiency-first persona that prefers automation over escalation
+   * - chain-of-thought
+     - Numbered reasoning steps (identify intent, assess urgency, etc.)
+
+How to read the results
+-----------------------
+
+- SARP is a deterministic consistency check. We build a preference graph
+  by adding an edge from the chosen item to every unchosen item in the
+  same menu. SARP passes when the transitive closure of this graph has
+  no cycles, which is equivalent to having a strict ranking that explains
+  all choices.
+- IIA violations are detected by comparing pairwise menus with the
+  corresponding triples. If A beats B in the pair {A, B}, but adding C
+  shifts the choice to B in {A, B, C}, then the result depends on the
+  menu and independence is violated.
+- Stochastic results use K=20 samples at temperature 0.7 per menu and
+  report the majority choice. Agreement measures the percent of menus
+  where this majority matches the deterministic pick. Percent mixed is
+  the share of menus where the K responses do not all agree.
+
+Why this design
+---------------
+
+Holding the vignette constant and only changing the menu isolates menu
+effects. Earlier designs that varied both content and menus at the same
+time made it hard to tell whether a flip was caused by a different story
+or a different set of options. This setup pins flips on the menu.
 
 Deterministic Results (temp=0)
 ------------------------------
@@ -355,56 +404,55 @@ consistent depending on the decision domain.
      - conservative
      - 2
 
-**Compromise effect (job screening).** Across 11 of 14 job-screen
-IIA violations, the mechanism is the same: adding an extreme option
-pushes the choice toward the middle. In vignette v04 under
-chain-of-thought, the model prefers *phone_screen* over
-*hold_for_review* pairwise. But present {auto_reject, hold,
-phone_screen} and *hold* wins --- adding the worst option makes hold
-look like the safe middle ground. The reverse also occurs: adding
-*fast_track* pushes the choice from *auto_reject* to
-*technical_interview*. This is the classic compromise effect from
-behavioral economics (Simonson 1989), now confirmed in LLM outputs.
+**Compromise effect (job screening).** In most job screening IIA cases
+the mechanism is the same. Adding an extreme option shifts the choice
+toward the middle option. For example, the model prefers
+*phone_screen* over *hold_for_review* in a pair. When shown the triple
+{auto_reject, hold, phone_screen}, the choice moves to *hold*. The
+reverse also appears. Adding *fast_track* can move a choice from
+*auto_reject* to *technical_interview*. This is the familiar
+compromise pattern.
 
-**Severity anchor (content moderation).** In vignette v01 under
-decision-tree, the model prefers *remove_and_strike* over
-*suspend_and_legal* pairwise. But present {approve, remove, suspend}
-and *suspend* wins --- adding "approve" (the lenient end) anchors
-judgment toward severity. The reverse also holds: adding "suspend"
-(extreme) makes "remove" look moderate and preferable to "approve."
-The LLM anchors to the extremes of whatever menu is shown.
+**Severity anchor (content moderation).** Adding a lenient option pushes
+the choice toward a stricter action, and adding an extreme option pushes
+the choice toward a moderate action. For example, the model prefers
+*remove_and_strike* over *suspend_and_legal* in a pair. When shown the
+triple {approve, remove, suspend}, *suspend* wins. In the opposite
+direction, adding *suspend* can make *remove* preferable to *approve*.
+The model anchors to the extremes of the menu.
 
-**Parse failures as a policy floor.** In content-review v01, 5 of 15
-menus return PARSE_FAIL --- all menus containing *only* mild options
-(approve, content_warning, hide_from_feed). The model refuses to pick
-any mild action for graphic content, outputting an off-menu severe
-action instead. This is not noise: it reveals a hard policy constraint
-the LLM will not violate even when no on-menu action satisfies it.
-SARP counts this as a violation; it is better understood as a revealed
-constraint.
+**Parse failures as a policy floor.** In severe content cases, all-mild
+menus sometimes return PARSE_FAIL. The model refuses to pick a mild
+action and outputs a severe action instead, even though it is not in the
+menu. This is not random error. It reveals a safety floor that the model
+will not cross. SARP counts this as a violation, but it is better read
+as a constraint revealed by the model.
 
 Findings
 --------
 
-- **Job screening is the least consistent scenario.** 74% deterministic
-  SARP pass, 78% stochastic. 15 deterministic + 14 stochastic IIA violations.
-  Adding a third candidate changes which of two is preferred.
-- **Content moderation "clear" vignettes pass only 47% stochastically.**
-  Even unambiguous posts produce menu-dependent severity judgments.
-  12 stochastic IIA violations — majority-voting doesn't eliminate
-  context effects.
-- **Decision-tree is the only prompt to hit 100% on any scenario**
-  (procurement stochastic). But it scores 60% on jobs. Conservative
-  scores 90% on support, 60% on content. No universal best prompt.
-- **Alert triage is the most consistent** (90% stochastic SARP). Actions
-  have a clear ordinal severity structure that resists menu effects.
-- **Procurement conservative prompt has 24% mixed menus** — the highest
-  of any scenario-prompt combination. Spending authority decisions are
-  genuinely sensitive to sampling temperature when the prompt emphasizes
-  caution.
-- **Stochastic sampling barely changes rankings.** 96-98% of menus agree
-  between temp=0 and temp=0.7 majority vote. Only 8-12% of menus produce
-  mixed responses across 20 reps. Inconsistency is structural, not noise.
+- **Job screening is the least consistent scenario.** 74 percent
+  deterministic SARP pass and 78 percent stochastic. There are 15
+  deterministic and 14 stochastic IIA violations. Adding a third
+  candidate changes which of two is preferred.
+- **Content moderation "clear" vignettes pass only 47 percent
+  stochastically.** Even unambiguous posts produce menu dependent
+  severity judgments. There are 12 stochastic IIA violations. Majority
+  voting does not eliminate these context effects.
+- **Decision tree is the only prompt to hit 100 percent on any
+  scenario** (procurement stochastic). It scores 60 percent on jobs.
+  Conservative scores 90 percent on support and 60 percent on content.
+  There is no universal best prompt.
+- **Alert triage is the most consistent** (90 percent stochastic SARP).
+  Actions have a clear ordinal severity structure that resists menu
+  effects.
+- **Procurement conservative prompt has 24 percent mixed menus,** the
+  highest of any scenario and prompt. Spending authority decisions are
+  sensitive to sampling temperature when the prompt emphasizes caution.
+- **Stochastic sampling barely changes rankings.** 96 to 98 percent of
+  menus agree between temperature 0 and temperature 0.7 majority vote.
+  Only 8 to 12 percent of menus produce mixed responses across 20
+  repetitions. Inconsistency is structural, not noise.
 
 Reproduce
 ---------
