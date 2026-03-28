@@ -396,10 +396,16 @@ class BehavioralSummary(ResultDisplayMixin):
         if include_sarp:
             sarp_result = validate_sarp(log)
 
-        # Houtman-Maks if there are violations
-        houtman_maks_result = None
-        if not garp_result.is_consistent:
-            houtman_maks_result = compute_houtman_maks_index(log)
+        # Houtman-Maks: always compute, even for consistent data.
+        # Heufer & Hjertstrand (2015), Section 2 (references/papers/md/
+        # HeuferHjertstrand2015_ConsistentSubsets.md):
+        #   "The HM-index is the maximal fraction of non-zero elements
+        #    in the binary vector v such that GARP(v) holds."
+        # For consistent data, compute_houtman_maks_index fast-exits with
+        # fraction=0.0, removed=[] — trivially correct. Never leave as None
+        # because callers (summary display, user code) expect this field
+        # to always be populated.
+        houtman_maks_result = compute_houtman_maks_index(log)
 
         # Power analysis (optional, computationally expensive)
         optimal_efficiency_result = None

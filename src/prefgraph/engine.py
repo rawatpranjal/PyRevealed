@@ -16,7 +16,7 @@ Usage:
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, replace
 from typing import Any, Optional
 
 import numpy as np
@@ -444,7 +444,7 @@ class Engine:
         # Rust backend always returns all keys (with False/0 defaults) even
         # when a metric wasn't requested. Use flags to emit None for unrequested
         # optional metrics, so DataFrames show NaN instead of misleading False/0.
-        return [
+        engine_results = [
             EngineResult(
                 is_garp=r["is_garp"],
                 n_violations=r["n_violations"],
@@ -478,6 +478,25 @@ class Engine:
             )
             for r in raw_results
         ]
+        # Post-process VEI: if vei was requested but Rust returned the 1.0 default
+        # on GARP-violating data, compute in Python using compute_vei().
+        # The Rust backend may not implement VEI or may silently return 1.0
+        # (the EngineResult default) when it can't compute.
+        if flags.get("vei"):
+            from prefgraph.core.session import BehaviorLog as _BL
+            from prefgraph.algorithms.vei import compute_vei as _compute_vei
+            fixed = []
+            for er, (prices, quantities) in zip(engine_results, chunk):
+                if not er.is_garp and er.vei_mean == 1.0:
+                    try:
+                        log = _BL(cost_vectors=prices, action_vectors=quantities)
+                        vr = _compute_vei(log)
+                        er = replace(er, vei_mean=vr.mean_efficiency, vei_min=vr.min_efficiency)
+                    except Exception:
+                        pass
+                fixed.append(er)
+            engine_results = fixed
+        return engine_results
 
     def _analyze_chunk_python(
         self,
@@ -555,6 +574,31 @@ class Engine:
                 except Exception:
                     utility_success = False
 
+            # VEI: per-observation efficiency — Varian (1990) "Goodness-of-fit
+            # in optimizing models", J. Econometrics 46(1-2), 125-140.
+            # papers/EcheniqueLeeShum2011_MoneyPump.pdf p.7 footnote 3:
+            #   "Varian modifies AEI by allowing e to vary across the different
+            #    price vectors, looking at a vector (e_k). Varian's measure is
+            #    the closest distance to the unit vector (e_k = 1) of a (e_k)
+            #    with no violations of GARP."
+            # Smeulders et al. (2014), Section 2.2:
+            #   "VI equals the vector e that is closest to one, for some given
+            #    norm, such that the data satisfies the revealed-preference
+            #    axiom under study."
+            # Mononen (2023), Section 2.2:
+            #   "Varian's index is the least average of adjustments required
+            #    to rationalize the data."
+            vei_mean_val = 1.0
+            vei_min_val = 1.0
+            if flags.get("vei") and not garp.is_consistent:
+                try:
+                    from prefgraph.algorithms.vei import compute_vei
+                    vei_result = compute_vei(log)
+                    vei_mean_val = vei_result.mean_efficiency
+                    vei_min_val = vei_result.min_efficiency
+                except Exception:
+                    pass  # keep defaults on solver failure
+
             results.append(EngineResult(
                 is_garp=garp.is_consistent,
                 n_violations=len(garp.violations),
@@ -564,6 +608,8 @@ class Engine:
                 hm_total=hm_total,
                 is_harp=is_harp,
                 utility_success=utility_success,
+                vei_mean=vei_mean_val,
+                vei_min=vei_min_val,
             ))
         return results
 

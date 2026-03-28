@@ -18,19 +18,44 @@ from prefgraph.datasets._demo import load_demo
 from prefgraph.datasets._dunnhumby import load_dunnhumby
 from prefgraph.datasets._open_ecommerce import load_open_ecommerce
 from prefgraph.datasets._uci_retail import load_uci_retail
-from prefgraph.datasets._retailrocket import load_retailrocket
+# These loaders require pandas at module level. Import lazily so that
+# `import prefgraph` does not crash without pandas installed.
+# The 4 offenders: _retailrocket, _rees46, _taobao, _tenrec all have
+# bare `import pandas as pd` at file scope. Wrapping them here defers
+# the pandas import until the loader function is actually called.
 from prefgraph.datasets._instacart import load_instacart
 from prefgraph.datasets._instacart_menu_v2 import load_instacart_menu_v2
 from prefgraph.datasets._yoochoose import load_yoochoose
 from prefgraph.datasets._olist import load_olist
 from prefgraph.datasets._m5 import load_m5
-from prefgraph.datasets._rees46 import load_rees46
 from prefgraph.datasets._online_retail_ii import load_online_retail_ii
 from prefgraph.datasets._hm import load_hm
 from prefgraph.datasets._pakistan import load_pakistan
 from prefgraph.datasets._favorita import load_favorita
-from prefgraph.datasets._taobao import load_taobao
-from prefgraph.datasets._tenrec import load_tenrec
+
+
+def load_retailrocket(*args, **kwargs):
+    """Lazy wrapper — defers pandas import until called."""
+    from prefgraph.datasets._retailrocket import load_retailrocket as _fn
+    return _fn(*args, **kwargs)
+
+
+def load_rees46(*args, **kwargs):
+    """Lazy wrapper — defers pandas import until called."""
+    from prefgraph.datasets._rees46 import load_rees46 as _fn
+    return _fn(*args, **kwargs)
+
+
+def load_taobao(*args, **kwargs):
+    """Lazy wrapper — defers pandas import until called."""
+    from prefgraph.datasets._taobao import load_taobao as _fn
+    return _fn(*args, **kwargs)
+
+
+def load_tenrec(*args, **kwargs):
+    """Lazy wrapper — defers pandas import until called."""
+    from prefgraph.datasets._tenrec import load_tenrec as _fn
+    return _fn(*args, **kwargs)
 
 
 def list_datasets() -> list[dict[str, str]]:

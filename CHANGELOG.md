@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.9] - 2026-03-28
+
+### Fixed
+- **Base install safety** — `import prefgraph` no longer crashes without `pandas`. Four dataset loaders (_retailrocket, _rees46, _taobao, _tenrec) had bare `import pandas as pd` at module level; now lazily imported via wrapper functions in `datasets/__init__.py`.
+- **compute_mpi() function API** — was silently returning 0.0 on GARP-violating data. Root cause: Rust call had wrong argument count (missing `network=False`), causing TypeError caught by bare `except`, falling to Python fallback which had a separate `is_garp` gate bug. Fixed arg count per engine.py call signature. Ref: Echenique, Lee & Shum (2011) JPE 119(6), Eq. (2).
+- **Engine VEI** — `Engine(metrics=['vei'])` returned `vei_mean=1.0` on inconsistent data. Neither the Rust backend nor the Python fallback called `compute_vei()`. Added Python VEI computation to both paths. Ref: Varian (1990) J. Econometrics; Mononen (2023) "Computing Measures of Rationality".
+- **BehavioralAuditor HM** — `summary().houtman_maks_result` was `None` on consistent logs. Now always computed (fast-exits trivially with fraction=0.0). Ref: Heufer & Hjertstrand (2015) "Consistent Subsets".
+
 ## [0.5.8] - 2026-03-28
 
 ### Fixed

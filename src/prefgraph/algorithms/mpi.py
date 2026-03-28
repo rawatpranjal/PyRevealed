@@ -60,27 +60,48 @@ def compute_mpi(
     """
     start_time = time.perf_counter()
 
-    # Try Rust backend for MPI (Karp's algorithm in Rust)
+    # --------------------------------------------------------------------------
+    # MPI via Rust backend — Karp's max-mean-weight cycle algorithm.
+    #
+    # Echenique, Lee & Shum (2011) "The Money Pump as a Measure of Revealed
+    # Preference Violations", JPE 119(6), 1201-1223.
+    # papers/EcheniqueLeeShum2011_MoneyPump.pdf
+    #
+    # Section 3.1, p.6: "The revealed preference relation on X is the binary
+    # relation R defined as x^k R x^l if p^k · x^k >= p^k · x^l. The strict
+    # revealed preference relation is the binary relation P defined as
+    # x^k P x^l if p^k · x^k > p^k · x^l."
+    #
+    # Eq. (2), p.7: "the money pump index MPI equals the money pump cost as
+    # a proportion of total expenditure":
+    #   MPI = sum_{l=1}^{n} p^{k_l} · (x^{k_l} - x^{k_{l+1}})
+    #         / sum_{l=1}^{n} p^{k_l} · x^{k_l}
+    #
+    # Smeulders et al. (2014), p.359, confirm Karp's (1978) O(nm) algorithm
+    # is the standard for finding the minimum cycle mean (MCM) in digraphs,
+    # which gives the max-mean-weight money-pump cycle.
+    # --------------------------------------------------------------------------
     from prefgraph._rust_backend import HAS_RUST, _rust_analyze_batch
     if HAS_RUST:
         try:
             p = np.ascontiguousarray(session.prices, dtype=np.float64)
             q = np.ascontiguousarray(session.quantities, dtype=np.float64)
-            results = _rust_analyze_batch([p], [q], False, True, False, False, False, False, False, tolerance)
+            # Args must match engine.py _analyze_chunk_rust call signature:
+            # (prices, quantities, ccei, mpi, harp, hm, utility, vei, vei_exact, network, tolerance)
+            # Previously missing network=False, so tolerance landed in position 10
+            # (the bool network slot), causing TypeError in Rust PyO3 binding and
+            # silently falling through to the Python fallback.
+            results = _rust_analyze_batch([p], [q], False, True, False, False, False, False, False, False, tolerance)
             mpi_val = results[0]["mpi"]
-            is_consistent = results[0]["is_garp"]
 
+            # Trust mpi_val directly from Rust. Do NOT gate on results["is_garp"]:
+            # the Rust GARP check may use different tolerance or handle zero-quantity
+            # edge cases differently than Python's check_garp, causing a mismatch
+            # where Rust says is_garp=True on data that Python finds inconsistent.
+            # This produced a false early-exit returning mpi=0.0 on real violations.
             total_expenditure = float(session.own_expenditures.sum())
 
-            if is_consistent:
-                computation_time = (time.perf_counter() - start_time) * 1000
-                return MPIResult(
-                    mpi_value=0.0, worst_cycle=None, cycle_costs=[],
-                    total_expenditure=total_expenditure,
-                    computation_time_ms=computation_time,
-                )
-
-            # Get violation cycles from Python (cheap since GARP uses Rust graph)
+            # Get violation cycles from Python for the cycle_costs breakdown.
             from prefgraph.algorithms.garp import check_garp
             garp_result = check_garp(session, tolerance)
             E = session.expenditure_matrix
