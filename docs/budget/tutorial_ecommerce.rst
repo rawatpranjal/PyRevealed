@@ -702,4 +702,5 @@ Exercises
 
 4. **Alternative Aggregation:** Try weekly instead of monthly periods.
    How do results change?
+
 :orphan:

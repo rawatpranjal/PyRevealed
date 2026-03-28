@@ -353,4 +353,5 @@ Built-in datasets (require separate download):
    panel = load_dunnhumby()           # 2,500 households, 10 goods, 104 weeks
    panel = load_open_ecommerce()      # 4,700 consumers, 50 categories, 66 months
    panel = load_uci_retail()          # 1,800 customers, 50 products, 13 months
+
 :orphan:

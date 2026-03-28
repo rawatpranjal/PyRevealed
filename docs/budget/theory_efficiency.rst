@@ -1,5 +1,5 @@
 Efficiency and Power Indices
-===========================
+============================
 
 In empirical settings where axiomatic consistency (e.g., GARP) is violated, efficiency indices provide a continuous measure to quantify the severity of departures from rationality and the statistical power of the associated tests.
 

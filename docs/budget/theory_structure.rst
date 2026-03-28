@@ -1,5 +1,5 @@
 Structural Preference Analysis and Utility Recovery
-==================================================
+===================================================
 
 This section delineates axiomatic tests for specific preference structures, including homotheticity, quasilinearity, and separability, as well as the formal methodology for utility recovery.
 

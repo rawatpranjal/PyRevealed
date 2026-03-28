@@ -1,5 +1,5 @@
 Abstract Choice Theory and Menu-Based Analysis
-============================================
+===============================================
 
 Abstract choice theory evaluates preference consistency from discrete choice observations in the absence of price vectors. In this framework, the analyst observes a sequence of menu-choice pairs, where each menu :math:`B_t` is a finite set of alternatives and the selection :math:`c(B_t)` is a single element from that menu.
 

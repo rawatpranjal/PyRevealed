@@ -808,4 +808,5 @@ See Also
 - :doc:`tutorial_demand_analysis` - Slutsky decomposition and integrability
 - :doc:`/api` - Full API documentation
 - :doc:`/budget/theory_advanced` - Mathematical foundations (Chapter 7)
+
 :orphan:
