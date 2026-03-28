@@ -10,6 +10,19 @@ organized by topic.
    Chapter numbers throughout the documentation refer to this textbook.
 
 
+Selected Reading
+----------------
+
+Recent applied work using revealed preference methods on real-world data:
+
+- **Choi et al. (2014)** — Lab CCEI benchmarks (≈0.88). *American Economic Review* (experiment).
+- "Revealed preference theory: An algorithmic outlook" (2019). *European Journal of Operational Research*.
+- **Deb, Kitamura, Quah & Stoye (2023)** — Revealed price preference: Theory and empirical analysis. *Review of Economic Studies*, 90(2), 707–743.
+- "The Moral Mind(s) of Large Language Models" (arXiv, 2024/2025).
+- **Devine et al. (2025)** — Context effects in economic choice: A meta-analysis. *Working paper*.
+- **GARP‑EFM (2026)** — "GARP‑EFM: Improving Foundation Models with Revealed Preference Structure." *arXiv* (March 2026).
+
+
 Foundational Works
 ------------------
 

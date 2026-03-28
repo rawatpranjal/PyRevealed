@@ -34,14 +34,16 @@ Why Preference Graphs?
 -----------------------
 
 Most approaches assume a model of preferences first, then fit parameters.
-Preference graphs work backwards: take raw choices, build the revealed
+Preference graphs work backwards from raw choices, build the revealed
 preference graph, and ask "is it acyclic?" No assumptions about what
-people want — just a consistency check on what they did.
+people want, just a consistency check on what they did.
 
 A cycle in the preference graph (A > B > C > A) means no ranking
 explains the choices. Detecting and measuring these cycles is what
-PrefGraph does — using Floyd-Warshall, Tarjan SCC, and Karp's algorithm
+PrefGraph does, using Floyd-Warshall, Tarjan SCC, and Karp's algorithm
 on the preference graph.
+
+Inconsistency is not always bad. It can reflect changing preferences, exploration, or noise. However, sometimes we prefer consistency.
 
 .. raw:: html
 
@@ -208,25 +210,10 @@ Benchmarked on synthetic data, T=15 observations, 10 goods, M1 Mac:
      - ~19,000 agents/sec
      - 50 μs
      - O(N³)
-
-Empirical benchmarks: CCEI ≈ 0.88 in lab experiments (Choi et al., 2014); HM ≈ 0.70–0.85 in recommendation click data.
-
+ 
  
 
-Selected Reading
---------------------
-
-Recent applied work using revealed preference methods on real-world data:
-
-- **GARP‑EFM (2026)** — "GARP‑EFM: Improving Foundation Models with Revealed Preference Structure." *arXiv* (March 2026).
-- "The Moral Mind(s) of Large Language Models" (arXiv, 2024/2025).
-- "Revealed preference theory: An algorithmic outlook" (2019). *European Journal of Operational Research*.
-
-See :doc:`references` for the full bibliography.
-
-----
-
-Implements the framework of Chambers & Echenique (2016) `Revealed Preference Theory <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_ (Cambridge University Press, Econometric Society Monographs). See :doc:`theory_landscape` for the full method map.
+Implements the framework of Chambers & Echenique (2016) `Revealed Preference Theory <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_ . See :doc:`theory_landscape` for the full method map.
 
 .. toctree::
    :maxdepth: 2
