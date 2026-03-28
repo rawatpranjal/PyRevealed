@@ -133,11 +133,11 @@ Full results: :doc:`benchmarks_ecommerce`.
      - High Spender
      - 0.763
      - 0.762
-   * - Instacart
+   * - Instacart V2
      - 50,000
-     - High Value
-     - 0.966
-     - 0.966
+     - High Novelty
+     - 0.765
+     - 0.767
    * - REES46
      - 8,832
      - High Engagement

@@ -1,10 +1,10 @@
 E-commerce Benchmarks
 =====================
 
-*Last updated: 2026-03-28. H&M results refreshed with per-customer realized
-prices (v0.5.8).*
+*Last updated: 2026-03-28. Instacart V2 (aisle-level menu) replaces old
+budget construction. H&M results with per-customer realized prices (v0.5.8).*
 
-Seven public datasets, 167K users, 42 RP features. CatBoost (H&M) or LightGBM
+Eight public datasets, 217K users, 42 RP features. CatBoost (H&M) or LightGBM
 (others) with 80/20 user holdout + bootstrap CI. Results split by data type:
 
 - **Menu datasets**: RP features are **competitive with baselines**. Taobao
@@ -13,6 +13,9 @@ Seven public datasets, 167K users, 42 RP features. CatBoost (H&M) or LightGBM
   real signal that engagement stats miss.
 - **Budget datasets**: RP adds ~0% marginal lift over strong RFM baselines.
   Spending features already capture the signal; CCEI/MPI are correlated.
+- **Instacart V2**: Aisle-level menu construction with trailing-3 menus.
+  RP features show real structure (83.8% SARP violations) but add near-zero
+  lift over baseline — consistent with habit-heavy grocery reordering.
 
 All targets use top-tercile thresholds for consistency.
 
@@ -79,20 +82,20 @@ Results
      - 0.295
      - +0.005
      - —
-   * - Instacart
+   * - Instacart V2
      - 50,000
-     - Spend Drop
-     - 0.666
-     - 0.665
-     - -0.0%
-     - 0.197
-   * - Instacart
-     - 50,000
-     - High Value
-     - 0.966
-     - 0.966
+     - Low Loyalty
+     - 0.968
+     - 0.969
      - +0.0%
-     - 0.941
+     - —
+   * - Instacart V2
+     - 50,000
+     - High Novelty
+     - 0.765
+     - 0.767
+     - +0.3%
+     - —
    * - REES46
      - 8,832
      - High Engagement
@@ -143,6 +146,10 @@ independent signal:
      - High Engagement
      - 0.990
      - 0.996
+   * - Instacart V2
+     - High Novelty
+     - 0.762
+     - 0.765
    * - H&M
      - High Spender
      - 0.720
@@ -181,10 +188,10 @@ Total wall time: **29 min** on M1 Mac (data on external USB drive via symlink).
      - 46,757
      - 1857s
      - 141s
-   * - Instacart
+   * - Instacart V2
      - 50,000
-     - 92s
-     - 27s
+     - 120s
+     - 30s
    * - REES46
      - 8,832
      - 709s
@@ -232,7 +239,7 @@ CSV load + in-memory analysis:
      - 151.2
      - 3.1
      - **49x**
-   * - Instacart
+   * - Instacart (budget)
      - 50,000
      - 90.1
      - 1.6
@@ -275,10 +282,10 @@ Price Assumptions
      - Per-customer realized prices
      - Budget
      - Customer avg paid price if purchased; period-group median imputation otherwise
-   * - Instacart
-     - Uniform ($1/unit)
-     - Budget
-     - **Quantity-only consistency** — no price-quantity tradeoffs
+   * - Instacart V2
+     - N/A
+     - Menu
+     - Aisle-level single-reorder + trailing-3 familiar menus
    * - REES46
      - N/A
      - Menu
@@ -439,9 +446,11 @@ Here is what each loader does and what it cannot do.
   Within-category substitution is invisible (e.g., "Dairy" includes milk,
   yogurt, and cheese at different prices). RP violations may reflect
   within-category product switching, not true preference inconsistency.
-- **Instacart heuristic prices**: No prices in raw data. We assign per-aisle
-  prices ($1.50--$14.00) via keyword matching on 134 aisle names. Yields
-  $32/order average (real Instacart ~$35--50). Defensible but approximate.
+- **Instacart V2 menu construction**: No prices — treated as menu-choice, not
+  budget. Observation = user × order × aisle with exactly one reordered SKU.
+  Menu = trailing-3 order products in same aisle. Filters: menu size ≥ 2,
+  (user, aisle) pairs with ≥ 3 valid events. 4.5M events, 120K users, 715K
+  pairs. Habit-heavy: 83.8% of users have SARP violations.
 - **H&M per-customer prices**: Each customer's own average paid price
   per product group per month. Unpurchased groups imputed via
   period-group median → group median → global median. Prices are
@@ -450,8 +459,14 @@ Here is what each loader does and what it cannot do.
   of a ~$100--150 weekly grocery budget. The RP analysis is valid within
   these categories but doesn't cover the full basket.
 
-**Menu datasets** (REES46, Taobao, Tenrec):
+**Menu datasets** (Instacart V2, REES46, Taobao, Tenrec):
 
+- **Instacart V2 menus**: Constructed from trailing-3 order history per aisle,
+  not from the platform's recommendation set. Menu = products the user
+  previously bought in that aisle (familiarity set). Choice = sole reordered
+  SKU. This is habit-heavy data: 58.6% of repeated user-aisle pairs never
+  switch products. RP features show real graph structure but no predictive
+  lift, consistent with reorder-dominated behavior.
 - **Impression bias**: Menus contain only items the user viewed/clicked.
   Items shown but not clicked are invisible. The RP analysis is conditional
   on the user having engaged with these items, not the full catalog.

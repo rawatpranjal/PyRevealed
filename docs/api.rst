@@ -362,6 +362,8 @@ Dataset Loaders
 
 .. autofunction:: prefgraph.datasets.load_instacart
 
+.. autofunction:: prefgraph.datasets.load_instacart_menu_v2
+
 .. autofunction:: prefgraph.datasets.load_yoochoose
 
 .. autofunction:: prefgraph.datasets.load_olist
