@@ -1,17 +1,7 @@
 E-commerce Benchmarks
 =====================
 
-Do revealed-preference (RP) features add independent predictive signal beyond
-strong engagement/spend baselines on real e‑commerce data?
-
-**TL;DR.** On menu datasets, RP captures structure that engagement stats miss
-(Taobao RP‑only 0.925 > baseline 0.913). On budget datasets, RP adds ~0% over
-RFM — spending history already carries the signal. Instacart shows heavy habit
-structure (83.8% SARP violations) but near‑zero lift, consistent with
-reordering.
-
-Six public datasets, 117K users, 42 RP features. CatBoost with default
-hyperparameters. 80/20 user holdout with bootstrap CIs.
+**TL;DR.** RP features deliver a modest 0–1% gain on predictive tasks; strong engagement/spend baselines already capture most of the signal.
 
 .. _eco-setup:
 
@@ -153,9 +143,9 @@ Results
      - —
 
 *Baseline = CatBoost on 13 RFM features. +RP = same model with 42 RP features
-added. RP-only = RP features without baseline. On Taobao, RP-only (0.925)
-outperforms the engagement baseline (0.913) — graph transitivity and choice
-entropy capture patterns that session counts miss.*
+added. RP-only = RP features without baseline. On Taobao (buy‑anchored, 6h),
+RP features contribute modest lift on structural targets; engagement/volume
+targets remain baseline‑dominated.*
 
 Taobao (Buy‑Anchored, 6h) — Full‑Run Results (AP/AUC)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -388,7 +378,9 @@ allocation, not structural preference parameters.
 
 **Open E-Commerce.** 4,694 users, category-level quantities. Budget-based RP.
 Median price per category per month, forward-filled for missing periods. Shared
-oracle across users. Within-category product switching is invisible.
+oracle across users. Within-category product switching is invisible. This dataset
+is retained as a sensitivity analysis only; in our runs, RP adds ~0% over strong
+RFM baselines, so it is not part of the main benchmark conclusions.
 
 Polars fast-path (this repo):
 - Users analyzed: 4,744 (goods=50, median T=34 months)
@@ -441,6 +433,8 @@ Assumptions: views approximate the considered set (impression bias: unseen
 alternatives are unobserved); 6‑hour window is a pragmatic simultaneity proxy
 (shorter/longer windows yield similar patterns); post‑purchase views are excluded;
 exposure is observational (not randomized).
+
+**Taobao (Session‑based).** 4,239 users, ~100M raw events. Menu‑based RP with sessions defined by 30‑minute inactivity gaps (84% of inter‑event gaps < 30 minutes). For each session, build a menu from the items the user viewed or purchased within that session; median menu size ≈ 4 items. No prices — choices reveal within‑session preference orderings only.
 
 Appendix: Pipeline
 ------------------
