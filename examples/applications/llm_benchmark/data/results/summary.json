@@ -19,7 +19,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -29,9 +29,9 @@
         "ci_lower": 0.934,
         "ci_upper": 0.9543,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9453,
-        "std_hm": 0.0065
+        "std_hm": 0.0064
       }
     },
     "aggressive__o4-mini": {
@@ -53,7 +53,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -63,9 +63,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9473,
-        "std_hm": 0.0064
+        "n_bootstrap": 500,
+        "mean_hm": 0.9468,
+        "std_hm": 0.0066
       }
     },
     "chain_of_thought__gpt-4o-mini": {
@@ -87,19 +87,19 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
         "bh_significant": false
       },
       "bootstrap_hm_ci": {
-        "ci_lower": 0.935,
+        "ci_lower": 0.93,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9464,
-        "std_hm": 0.0064
+        "n_bootstrap": 500,
+        "mean_hm": 0.9461,
+        "std_hm": 0.0067
       }
     },
     "chain_of_thought__o4-mini": {
@@ -121,7 +121,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -131,9 +131,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.947,
-        "std_hm": 0.0063
+        "n_bootstrap": 500,
+        "mean_hm": 0.9467,
+        "std_hm": 0.0067
       }
     },
     "conservative__gpt-4o-mini": {
@@ -155,7 +155,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -165,9 +165,9 @@
         "ci_lower": 0.9482,
         "ci_upper": 0.9689,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9578,
-        "std_hm": 0.006
+        "n_bootstrap": 500,
+        "mean_hm": 0.9579,
+        "std_hm": 0.0061
       }
     },
     "conservative__o4-mini": {
@@ -189,7 +189,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -199,9 +199,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9469,
-        "std_hm": 0.0066
+        "n_bootstrap": 500,
+        "mean_hm": 0.9466,
+        "std_hm": 0.0067
       }
     },
     "decision_tree__gpt-4o-mini": {
@@ -223,7 +223,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -233,9 +233,9 @@
         "ci_lower": 0.934,
         "ci_upper": 0.9594,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9456,
-        "std_hm": 0.0065
+        "n_bootstrap": 500,
+        "mean_hm": 0.9457,
+        "std_hm": 0.0064
       }
     },
     "decision_tree__o4-mini": {
@@ -257,7 +257,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -267,9 +267,9 @@
         "ci_lower": 0.9337,
         "ci_upper": 0.9592,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9463,
-        "std_hm": 0.0065
+        "n_bootstrap": 500,
+        "mean_hm": 0.9459,
+        "std_hm": 0.0064
       }
     },
     "minimal__gpt-4o-mini": {
@@ -291,7 +291,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -301,9 +301,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9468,
-        "std_hm": 0.0064
+        "n_bootstrap": 500,
+        "mean_hm": 0.9465,
+        "std_hm": 0.0066
       }
     },
     "minimal__o4-mini": {
@@ -325,7 +325,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -335,9 +335,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9473,
-        "std_hm": 0.0062
+        "n_bootstrap": 500,
+        "mean_hm": 0.947,
+        "std_hm": 0.0066
       }
     }
   },
@@ -361,7 +361,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -371,9 +371,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9473,
-        "std_hm": 0.0064
+        "n_bootstrap": 500,
+        "mean_hm": 0.9474,
+        "std_hm": 0.0065
       }
     },
     "aggressive__o4-mini": {
@@ -395,7 +395,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -403,11 +403,11 @@
       },
       "bootstrap_hm_ci": {
         "ci_lower": 0.93,
-        "ci_upper": 0.96,
+        "ci_upper": 0.965,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9459,
-        "std_hm": 0.0075
+        "n_bootstrap": 500,
+        "mean_hm": 0.9458,
+        "std_hm": 0.0076
       }
     },
     "chain_of_thought__gpt-4o-mini": {
@@ -429,7 +429,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -439,8 +439,8 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9473,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9474,
         "std_hm": 0.0063
       }
     },
@@ -463,7 +463,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -473,8 +473,8 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9465,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9466,
         "std_hm": 0.0063
       }
     },
@@ -497,7 +497,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -507,9 +507,9 @@
         "ci_lower": 0.95,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9616,
-        "std_hm": 0.0053
+        "std_hm": 0.0051
       }
     },
     "conservative__o4-mini": {
@@ -531,7 +531,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -541,9 +541,9 @@
         "ci_lower": 0.95,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9617,
-        "std_hm": 0.0053
+        "std_hm": 0.0052
       }
     },
     "decision_tree__gpt-4o-mini": {
@@ -565,7 +565,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -575,8 +575,8 @@
         "ci_lower": 0.9347,
         "ci_upper": 0.9598,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9484,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9485,
         "std_hm": 0.0069
       }
     },
@@ -599,7 +599,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -609,9 +609,9 @@
         "ci_lower": 0.9347,
         "ci_upper": 0.9598,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9476,
-        "std_hm": 0.0067
+        "n_bootstrap": 500,
+        "mean_hm": 0.948,
+        "std_hm": 0.0068
       }
     },
     "minimal__gpt-4o-mini": {
@@ -633,7 +633,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -643,8 +643,8 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.948,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9479,
         "std_hm": 0.006
       }
     },
@@ -667,7 +667,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -677,8 +677,8 @@
         "ci_lower": 0.935,
         "ci_upper": 0.955,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9462,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9463,
         "std_hm": 0.0063
       }
     }
@@ -702,7 +702,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 6,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -712,7 +712,7 @@
         "ci_lower": 0.965,
         "ci_upper": 0.99,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9743,
         "std_hm": 0.0065
       }
@@ -736,19 +736,19 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
         "bh_significant": false
       },
       "bootstrap_hm_ci": {
-        "ci_lower": 0.95,
+        "ci_lower": 0.9474,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.959,
-        "std_hm": 0.0057
+        "std_hm": 0.0059
       }
     },
     "chain_of_thought__gpt-4o-mini": {
@@ -770,7 +770,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -780,8 +780,8 @@
         "ci_lower": 0.945,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9583,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9584,
         "std_hm": 0.0058
       }
     },
@@ -804,19 +804,19 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
         "bh_significant": false
       },
       "bootstrap_hm_ci": {
-        "ci_lower": 0.945,
+        "ci_lower": 0.95,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9587,
-        "std_hm": 0.0058
+        "std_hm": 0.0057
       }
     },
     "conservative__gpt-4o-mini": {
@@ -838,7 +838,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -848,9 +848,9 @@
         "ci_lower": 0.945,
         "ci_upper": 0.965,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9563,
-        "std_hm": 0.0054
+        "n_bootstrap": 500,
+        "mean_hm": 0.9564,
+        "std_hm": 0.0055
       }
     },
     "conservative__o4-mini": {
@@ -872,7 +872,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -882,9 +882,9 @@
         "ci_lower": 0.945,
         "ci_upper": 0.965,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9571,
-        "std_hm": 0.0053
+        "std_hm": 0.0054
       }
     },
     "decision_tree__gpt-4o-mini": {
@@ -906,7 +906,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -916,8 +916,8 @@
         "ci_lower": 0.95,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9601,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9602,
         "std_hm": 0.0058
       }
     },
@@ -940,7 +940,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -950,9 +950,9 @@
         "ci_lower": 0.9444,
         "ci_upper": 0.9697,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9575,
-        "std_hm": 0.0058
+        "n_bootstrap": 500,
+        "mean_hm": 0.9574,
+        "std_hm": 0.0059
       }
     },
     "minimal__gpt-4o-mini": {
@@ -974,19 +974,19 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
         "bh_significant": false
       },
       "bootstrap_hm_ci": {
-        "ci_lower": 0.945,
-        "ci_upper": 0.97,
+        "ci_lower": 0.95,
+        "ci_upper": 0.965,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9576,
-        "std_hm": 0.0055
+        "n_bootstrap": 500,
+        "mean_hm": 0.9578,
+        "std_hm": 0.0054
       }
     },
     "minimal__o4-mini": {
@@ -1008,7 +1008,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1018,8 +1018,8 @@
         "ci_lower": 0.945,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9578,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9577,
         "std_hm": 0.0057
       }
     }
@@ -1044,19 +1044,19 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
         "bh_significant": false
       },
       "bootstrap_hm_ci": {
-        "ci_lower": 0.935,
+        "ci_lower": 0.9324,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.952,
-        "std_hm": 0.0109
+        "n_bootstrap": 500,
+        "mean_hm": 0.9521,
+        "std_hm": 0.0108
       }
     },
     "aggressive__o4-mini": {
@@ -1078,7 +1078,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1086,11 +1086,11 @@
       },
       "bootstrap_hm_ci": {
         "ci_lower": 0.935,
-        "ci_upper": 0.96,
+        "ci_upper": 0.955,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9464,
-        "std_hm": 0.0064
+        "std_hm": 0.0063
       }
     },
     "chain_of_thought__gpt-4o-mini": {
@@ -1112,7 +1112,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1122,9 +1122,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9474,
-        "std_hm": 0.0061
+        "n_bootstrap": 500,
+        "mean_hm": 0.9473,
+        "std_hm": 0.006
       }
     },
     "chain_of_thought__o4-mini": {
@@ -1146,7 +1146,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1156,9 +1156,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9468,
-        "std_hm": 0.0062
+        "n_bootstrap": 500,
+        "mean_hm": 0.9467,
+        "std_hm": 0.0061
       }
     },
     "conservative__gpt-4o-mini": {
@@ -1180,7 +1180,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1190,9 +1190,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.965,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9487,
-        "std_hm": 0.0084
+        "n_bootstrap": 500,
+        "mean_hm": 0.9484,
+        "std_hm": 0.0083
       }
     },
     "conservative__o4-mini": {
@@ -1214,7 +1214,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1224,9 +1224,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.965,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9494,
-        "std_hm": 0.0073
+        "n_bootstrap": 500,
+        "mean_hm": 0.9495,
+        "std_hm": 0.0072
       }
     },
     "decision_tree__gpt-4o-mini": {
@@ -1248,7 +1248,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1258,7 +1258,7 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9475,
         "std_hm": 0.0063
       }
@@ -1282,7 +1282,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1292,9 +1292,9 @@
         "ci_lower": 0.9347,
         "ci_upper": 0.9598,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9478,
-        "std_hm": 0.0067
+        "n_bootstrap": 500,
+        "mean_hm": 0.9476,
+        "std_hm": 0.007
       }
     },
     "minimal__gpt-4o-mini": {
@@ -1316,7 +1316,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1326,8 +1326,8 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9465,
+        "n_bootstrap": 500,
+        "mean_hm": 0.9464,
         "std_hm": 0.0063
       }
     },
@@ -1350,7 +1350,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1360,7 +1360,7 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9471,
         "std_hm": 0.0063
       }
@@ -1386,7 +1386,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1396,9 +1396,9 @@
         "ci_lower": 0.93,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.945,
-        "std_hm": 0.0067
+        "std_hm": 0.0069
       }
     },
     "aggressive__o4-mini": {
@@ -1420,7 +1420,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1430,9 +1430,9 @@
         "ci_lower": 0.9347,
         "ci_upper": 0.9698,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9521,
-        "std_hm": 0.0088
+        "n_bootstrap": 500,
+        "mean_hm": 0.9529,
+        "std_hm": 0.0087
       }
     },
     "chain_of_thought__gpt-4o-mini": {
@@ -1454,19 +1454,19 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
         "bh_significant": false
       },
       "bootstrap_hm_ci": {
-        "ci_lower": 0.95,
+        "ci_lower": 0.9524,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9621,
-        "std_hm": 0.005
+        "n_bootstrap": 500,
+        "mean_hm": 0.9618,
+        "std_hm": 0.0049
       }
     },
     "chain_of_thought__o4-mini": {
@@ -1488,7 +1488,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1498,9 +1498,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9473,
-        "std_hm": 0.0067
+        "n_bootstrap": 500,
+        "mean_hm": 0.9471,
+        "std_hm": 0.0068
       }
     },
     "conservative__gpt-4o-mini": {
@@ -1522,7 +1522,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1532,7 +1532,7 @@
         "ci_lower": 0.935,
         "ci_upper": 0.965,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
+        "n_bootstrap": 500,
         "mean_hm": 0.9481,
         "std_hm": 0.0077
       }
@@ -1556,7 +1556,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1566,9 +1566,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.96,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9489,
-        "std_hm": 0.0067
+        "n_bootstrap": 500,
+        "mean_hm": 0.9487,
+        "std_hm": 0.0066
       }
     },
     "decision_tree__gpt-4o-mini": {
@@ -1590,19 +1590,19 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
         "bh_significant": false
       },
       "bootstrap_hm_ci": {
-        "ci_lower": 0.9318,
+        "ci_lower": 0.9292,
         "ci_upper": 0.9581,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9433,
-        "std_hm": 0.0071
+        "n_bootstrap": 500,
+        "mean_hm": 0.9434,
+        "std_hm": 0.0074
       }
     },
     "decision_tree__o4-mini": {
@@ -1624,7 +1624,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1634,9 +1634,9 @@
         "ci_lower": 0.9347,
         "ci_upper": 0.9598,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9485,
-        "std_hm": 0.0071
+        "n_bootstrap": 500,
+        "mean_hm": 0.9483,
+        "std_hm": 0.007
       }
     },
     "minimal__gpt-4o-mini": {
@@ -1658,7 +1658,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1668,9 +1668,9 @@
         "ci_lower": 0.95,
         "ci_upper": 0.97,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9614,
-        "std_hm": 0.0051
+        "n_bootstrap": 500,
+        "mean_hm": 0.9612,
+        "std_hm": 0.005
       }
     },
     "minimal__o4-mini": {
@@ -1692,7 +1692,7 @@
       },
       "permutation_test": {
         "p_value": 1.0,
-        "n_permutations": 1000,
+        "n_permutations": 500,
         "observed_violations": 10,
         "mean_random_violations": null,
         "p_adjusted": 1.0,
@@ -1702,9 +1702,9 @@
         "ci_lower": 0.935,
         "ci_upper": 0.965,
         "ci_level": 0.95,
-        "n_bootstrap": 1000,
-        "mean_hm": 0.9486,
-        "std_hm": 0.008
+        "n_bootstrap": 500,
+        "mean_hm": 0.9489,
+        "std_hm": 0.0081
       }
     }
   }
