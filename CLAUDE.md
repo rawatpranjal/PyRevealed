@@ -29,7 +29,7 @@ from these local files rather than paraphrasing from memory. Key papers per modu
 
 ## Documentation Rules
 
-- **RTD nav tab names must be single words.** Current order: Quickstart, Budgets, Menus, Benchmarks, Algorithms, Performance, API, References. API/References are intentionally pushed right so they overflow into "More" on narrow viewports. Benchmarks wraps E-commerce + LLMs.
+- **RTD nav tab names must be single words.** Current order: Quickstart, Budgets, Menus, Benchmarks, Algorithms, API, References. API/References are intentionally pushed right so they overflow into "More" on narrow viewports. Benchmarks wraps E-commerce + LLMs + Performance.
 - **RTD sidebars:** Left sidebar (`sidebar-nav-bs` + `page-toc`) on ALL pages including front page - set via `html_sidebars = {"**": ["sidebar-nav-bs", "page-toc"]}`. No right sidebar anywhere - `secondary_sidebar_items: []`. **NEVER add `:html_theme.sidebar_primary.remove:` or `:html_theme.sidebar_secondary.remove:` to any RST file** - these page-level directives override conf.py globally and break sidebar consistency. The "On this page" label is hidden via CSS selector `.tocsection.onthispage { display: none !important; }` in `custom.css`.
 - **References only in the References tab.** Never add a `References` section or `.. seealso::` directive to any page - citations belong only in `docs/references.rst`.
 - **README is user-forward.** Paste-and-run example first (using `load_demo`), then Scores, "Which API?", Choice Categories, Performance. Architecture details live in RTD only.
