@@ -4,6 +4,11 @@ LLM Prompt Consistency
 A controlled experiment testing whether different system prompts cause
 LLMs to make inconsistent choices when selecting from package menus.
 
+.. image:: ../images/app_llm_panel.png
+   :width: 95%
+   :align: center
+   :alt: LLM prompt consistency - HM efficiency, choice heatmap, preference graph, temperature comparison
+
 
 
 Introduction
@@ -202,18 +207,7 @@ Results (GPT-4o-mini, 60 trials per prompt, March 2026):
    innovative      temp=0:  0 viol  temp=0.7:  0 viol  → CLEAN
    minimal         temp=0:  0 viol  temp=0.7:  1 viol  → NOISE
 
-.. raw:: html
 
-   <div style="margin: 1.5em 0;"></div>
-
-.. image:: ../images/app_llm_panel.png
-   :width: 100%
-   :align: center
-   :alt: LLM prompt consistency - HM efficiency, choice heatmap, preference graph, temperature comparison
-
-.. raw:: html
-
-   <div style="margin: 1.5em 0;"></div>
 
 Interpretation
 --------------
