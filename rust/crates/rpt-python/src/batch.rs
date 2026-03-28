@@ -258,6 +258,9 @@ fn process_users_parallel(
                     0.0
                 };
 
+                // HARP: binary test for homothetic preferences.
+                // Varian (1983), C&E (2016) Thm 4.2: pass/fail only.
+                // harp_severity is always 1.0 — no severity metric in the literature.
                 let (is_harp, harp_severity) = if flags.harp {
                     let harp = harp_check(graph, tolerance);
                     (harp.is_consistent, harp.max_cycle_product)

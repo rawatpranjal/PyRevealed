@@ -468,7 +468,19 @@ class Engine:
         chunk: list[tuple[np.ndarray, np.ndarray]],
         flags: dict[str, bool],
     ) -> list[EngineResult]:
-        """Fallback: analyze using Python backend when Rust is unavailable."""
+        """Python fallback when Rust backend is unavailable (HAS_RUST=False).
+
+        Supports: GARP, CCEI, MPI, HM, HARP, utility.
+        Does NOT support: VEI (requires Rust LP solver).
+
+        Each metric matches the Rust Engine output. Algorithm references:
+        - GARP: Varian (1982), SCC + Floyd-Warshall
+        - CCEI: Afriat (1967), binary search
+        - MPI: Echenique, Lee & Shum (2011), Karp's max-mean cycle
+        - HM: Houtman & Maks (1985), exact ILP for T<=100, greedy FVS otherwise
+        - HARP: Varian (1983), FW on log-ratios (binary test only, no severity)
+        - Utility: Afriat (1967), LP via scipy/HiGHS
+        """
         from prefgraph import BehaviorLog, check_garp, compute_aei, compute_mpi
         from prefgraph.algorithms.mpi import compute_houtman_maks_index
         from prefgraph.algorithms.harp import check_harp
@@ -478,6 +490,8 @@ class Engine:
         for prices, quantities in chunk:
             log = BehaviorLog(cost_vectors=prices, action_vectors=quantities)
 
+            # GARP: always computed — it's the foundation for all other metrics.
+            # Varian (1982): SCC decomposition + Floyd-Warshall transitive closure.
             garp = check_garp(log, self.tolerance)
             ccei_val = 1.0
             mpi_val = 0.0
@@ -486,23 +500,37 @@ class Engine:
             is_harp = False
             utility_success = False
 
+            # CCEI (Afriat Efficiency Index): only computed when GARP fails.
+            # Consistent data has CCEI=1.0 by definition — no search needed.
+            # Afriat (1967): binary search over e ∈ (0,1] for max e where e-GARP holds.
             if flags.get("ccei") and not garp.is_consistent:
                 aei = compute_aei(log, method="discrete")
                 ccei_val = aei.efficiency_index
 
+            # MPI (Money Pump Index): only computed when GARP fails.
+            # Consistent data has MPI=0.0 — unexploitable.
+            # Echenique, Lee & Shum (2011): Karp's O(T^3) max-mean-weight cycle.
             if flags.get("mpi") and not garp.is_consistent:
                 mpi_result = compute_mpi(log)
                 mpi_val = mpi_result.mpi_value
 
+            # HM (Houtman-Maks): minimum observations to remove for GARP consistency.
+            # Houtman & Maks (1985). NP-hard (Smeulders et al. 2014).
+            # Uses exact ILP (Demuynck & Rehbeck 2023) for T<=100, greedy FVS above.
             if flags.get("hm"):
                 hm_total = prices.shape[0]
                 hm_result = compute_houtman_maks_index(log, self.tolerance)
                 hm_consistent = hm_total - len(hm_result.removed_observations)
 
+            # HARP: binary test for homothetic preferences.
+            # Varian (1983), C&E (2016) Theorem 4.2: (>=^H, >^H) is acyclic.
+            # No severity metric exists in the literature — only pass/fail.
             if flags.get("harp"):
                 harp_result = check_harp(log, self.tolerance)
                 is_harp = harp_result.is_consistent
 
+            # Utility recovery: Afriat LP — find U_t, lambda_t satisfying
+            # Afriat's inequalities. Success = data is rationalizable.
             if flags.get("utility"):
                 try:
                     util_result = recover_utility(log)

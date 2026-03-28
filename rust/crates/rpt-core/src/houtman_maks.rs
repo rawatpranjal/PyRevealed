@@ -141,17 +141,20 @@ fn houtman_maks_greedy(graph: &PreferenceGraph) -> (usize, usize) {
     (t - removed_count, t)
 }
 
-/// Exact Houtman-Maks via ILP (Big-M Afriat formulation).
+/// Exact Houtman-Maks via ILP.
 ///
 /// Finds the true maximum consistent subset using integer linear programming.
-/// Slower than greedy FVS but exact — guaranteed optimal solution.
+/// Uses the Demuynck & Rehbeck (2023) Corollary 2 formulation with fixed
+/// parameters α, δ, ε — no Big-M sensitivity issues.
 ///
-/// For T ≤ 200, typically solves in under 3 seconds (Demuynck & Rehbeck, 2023).
-/// Falls back to greedy if ILP fails.
+/// For T ≤ 200, typically solves in under 3 seconds (D&R benchmarked T=22–79).
+/// Falls back to greedy FVS if the ILP solver fails.
+///
+/// Called by batch.rs for T ≤ 200; houtman_maks() (greedy) used for T > 200.
 ///
 /// References:
 ///   Demuynck & Rehbeck (2023), "Computing RP Goodness-of-Fit with IP", Econ Theory.
-///   Mononen (2023), "Computing and Comparing Measures of Rationality", UZH WP 437.
+///   Smeulders et al. (2014), "Computational aspects of RP analysis", ACM TEAC.
 pub fn houtman_maks_exact(graph: &mut PreferenceGraph) -> (usize, usize) {
     use crate::garp::garp_check;
 
