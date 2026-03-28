@@ -5,9 +5,11 @@ customers purchasing clothing articles over 2 years (2018-09 to 2020-09),
 returning a BehaviorPanel.
 
 Articles are aggregated into product groups (first 2 digits of article_id).
-Transactions are aggregated to monthly periods: for each customer-month,
-quantity per product group. A price oracle provides median price per product
-group per month.
+Transactions are aggregated to configurable time periods (week/month/quarter).
+
+Price construction uses per-customer realized prices:
+  - Purchased groups: customer's average paid price in that period-group
+  - Unpurchased groups: period-group median -> group median -> global median
 
 Data must be downloaded separately from Kaggle.
 """
@@ -26,9 +28,11 @@ from prefgraph.core.session import BehaviorLog
 
 MAX_PRODUCT_GROUPS = 20
 DEFAULT_MAX_USERS = 50_000
-DEFAULT_MIN_MONTHS = 6
+DEFAULT_MIN_PERIODS = 6
 CHUNKSIZE = 500_000
 CUTOFF_DATE = "2020-06-01"
+
+VALID_PERIODS = {"week": "W", "month": "M", "quarter": "Q"}
 
 
 def _find_data_dir(data_dir: str | Path | None) -> Path:
@@ -63,35 +67,37 @@ def _find_data_dir(data_dir: str | Path | None) -> Path:
 def load_hm(
     data_dir: str | Path | None = None,
     max_users: int = DEFAULT_MAX_USERS,
-    min_months: int = DEFAULT_MIN_MONTHS,
+    min_periods: int = DEFAULT_MIN_PERIODS,
     top_k_groups: int = MAX_PRODUCT_GROUPS,
     cutoff_date: str = CUTOFF_DATE,
+    time_period: str = "month",
 ) -> BehaviorPanel:
     """Load H&M Fashion dataset as a BehaviorPanel.
 
     Reads transactions_train.csv in chunks for memory efficiency.
     Maps article_id to product groups (first 2 digits), aggregates
-    to monthly price-quantity panels per customer.
+    to per-customer price-quantity panels.
+
+    Price construction: for purchased groups, the customer's own average
+    realized price is used. For unpurchased groups, prices are imputed
+    via period-group median -> group median -> global median fallback.
 
     Args:
         data_dir: Path to directory containing transactions_train.csv.
-            If None, searches standard locations.
-        max_users: Maximum number of customers to include. Selects the
-            most active users by total transaction count (default 50000).
-        min_months: Minimum active months per customer (default 6).
-        top_k_groups: Number of top product groups by frequency to keep
-            (default 20).
-        cutoff_date: ISO date string for train/test split boundary.
-            Stored in metadata for out-of-time evaluation (default
-            '2020-06-01').
+        max_users: Maximum number of customers (most active, default 50000).
+        min_periods: Minimum active periods per customer (default 6).
+        top_k_groups: Number of top product groups to keep (default 20).
+        cutoff_date: ISO date for metadata (default '2020-06-01').
+        time_period: Aggregation period — "week", "month" (default),
+            or "quarter".
 
     Returns:
-        BehaviorPanel with one BehaviorLog per customer (rows = months,
-        cols = product groups).
+        BehaviorPanel with one BehaviorLog per customer.
 
     Raises:
         FileNotFoundError: If data files cannot be found.
         ImportError: If pandas is not installed.
+        ValueError: If time_period is invalid.
     """
     try:
         import pandas as pd
@@ -100,6 +106,12 @@ def load_hm(
             "pandas is required for dataset loaders. "
             "Install with: pip install 'prefgraph[datasets]'"
         ) from None
+
+    if time_period not in VALID_PERIODS:
+        raise ValueError(
+            f"time_period must be one of {list(VALID_PERIODS)}, got {time_period!r}"
+        )
+    pd_freq = VALID_PERIODS[time_period]
 
     data_path = _find_data_dir(data_dir)
     csv_path = data_path / "transactions_train.csv"
@@ -114,7 +126,6 @@ def load_hm(
         dtype={"customer_id": str, "article_id": str},
         chunksize=CHUNKSIZE,
     ):
-        # Product group = first 2 digits of zero-padded article_id
         chunk["product_group"] = chunk["article_id"].str[:2]
 
         for grp, cnt in chunk["product_group"].value_counts().items():
@@ -123,11 +134,9 @@ def load_hm(
         for uid, cnt in chunk["customer_id"].value_counts().items():
             user_counts[uid] = user_counts.get(uid, 0) + cnt
 
-    # Select top product groups by total frequency
     sorted_groups = sorted(group_counts, key=group_counts.get, reverse=True)
     top_groups = sorted_groups[:top_k_groups]
 
-    # Select most active users
     sorted_users = sorted(user_counts, key=user_counts.get, reverse=True)
     target_users = set(sorted_users[:max_users])
 
@@ -152,56 +161,69 @@ def load_hm(
 
     df = pd.concat(frames, ignore_index=True)
 
-    # --- Month period key (YYYY-MM) ---
-    df["month"] = df["t_dat"].dt.to_period("M")
-    months_sorted = sorted(df["month"].unique())
-    month_to_idx = {m: i for i, m in enumerate(months_sorted)}
-    month_labels = [str(m) for m in months_sorted]
+    # --- Period key ---
+    df["period"] = df["t_dat"].dt.to_period(pd_freq)
+    periods_sorted = sorted(df["period"].unique())
+    period_to_idx = {p: i for i, p in enumerate(periods_sorted)}
+    period_labels = [str(p) for p in periods_sorted]
 
-    # --- Price oracle: median price per product group per month ---
-    price_oracle = df.pivot_table(
-        values="price",
-        index="month",
-        columns="product_group",
-        aggfunc="median",
-    ).reindex(index=months_sorted, columns=top_groups)
-    price_oracle = price_oracle.ffill().bfill()
+    # --- Three-tier imputation oracle ---
+    # Most specific: period x group median across all customers
+    period_group_median = df.groupby(["period", "product_group"])["price"].median()
+    # Mid: group median across all periods
+    group_median = df.groupby("product_group")["price"].median()
+    # Broadest: global median
+    global_median = float(df["price"].median())
 
-    # Fill any remaining NaN with global median per group
-    for col in price_oracle.columns:
-        if price_oracle[col].isna().any():
-            price_oracle[col].fillna(price_oracle[col].median(), inplace=True)
-    # Last resort: fill with 0.01 if an entire column is NaN
-    price_oracle = price_oracle.fillna(0.01)
-    price_grid = price_oracle.values.astype(np.float64)  # (n_months, n_groups)
+    impute_grid = np.full((len(periods_sorted), len(top_groups)), global_median)
+    for gi, grp in enumerate(top_groups):
+        if grp in group_median.index:
+            impute_grid[:, gi] = group_median[grp]
+        for pi, per in enumerate(periods_sorted):
+            if (per, grp) in period_group_median.index:
+                impute_grid[pi, gi] = period_group_median[(per, grp)]
+
+    # --- Aggregate: quantity (count) + realized mean price per customer-period-group ---
+    agg = df.groupby(["customer_id", "period", "product_group"]).agg(
+        quantity=("price", "size"),
+        mean_price=("price", "mean"),
+    ).reset_index()
 
     # --- Build per-customer BehaviorLogs ---
-    # Aggregate quantity: count of transactions per customer-month-group
-    agg = df.groupby(["customer_id", "month", "product_group"]).size()
-    agg = agg.reset_index(name="quantity")
-
     logs: dict[str, BehaviorLog] = {}
 
     for cid, cust_data in agg.groupby("customer_id"):
-        # Pivot: rows = months, cols = product groups
+        # Pivot quantity
         qty_pivot = cust_data.pivot_table(
             values="quantity",
-            index="month",
+            index="period",
             columns="product_group",
             aggfunc="sum",
-        ).reindex(index=months_sorted, columns=top_groups).fillna(0)
+        ).reindex(index=periods_sorted, columns=top_groups).fillna(0)
 
-        # Active months: at least one purchase in any group
+        # Pivot realized prices (NaN where customer didn't purchase)
+        price_pivot = cust_data.pivot_table(
+            values="mean_price",
+            index="period",
+            columns="product_group",
+            aggfunc="mean",
+        ).reindex(index=periods_sorted, columns=top_groups)
+
+        # Active periods: at least one purchase in any group
         active_mask = qty_pivot.sum(axis=1) > 0
-        active_months = qty_pivot.index[active_mask].tolist()
+        active_periods = qty_pivot.index[active_mask].tolist()
 
-        if len(active_months) < min_months:
+        if len(active_periods) < min_periods:
             continue
 
-        active_indices = [month_to_idx[m] for m in active_months]
+        active_indices = [period_to_idx[p] for p in active_periods]
 
-        qty_matrix = qty_pivot.loc[active_months].values.astype(np.float64)
-        price_matrix = price_grid[active_indices]
+        qty_matrix = qty_pivot.loc[active_periods].values.astype(np.float64)
+
+        # Per-customer prices: realized where purchased, imputed where not
+        price_raw = price_pivot.loc[active_periods].values.astype(np.float64)
+        impute_slice = impute_grid[active_indices]
+        price_matrix = np.where(np.isnan(price_raw), impute_slice, price_raw)
 
         uid = f"customer_{cid[:12]}"
         logs[uid] = BehaviorLog(
@@ -216,11 +238,12 @@ def load_hm(
             "dataset": "hm",
             "goods": top_groups,
             "goods_labels": [f"group_{g}" for g in top_groups],
-            "months": month_labels,
-            "min_months": min_months,
+            "periods": period_labels,
+            "time_period": time_period,
+            "min_periods": min_periods,
             "max_users": max_users,
             "top_k_groups": top_k_groups,
             "cutoff_date": cutoff_date,
-            "num_months_available": len(months_sorted),
+            "num_periods_available": len(periods_sorted),
         },
     )

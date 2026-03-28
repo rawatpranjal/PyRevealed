@@ -22,9 +22,17 @@ from prefgraph.engine import Engine, results_to_dataframe
 # Budget baseline features (from raw prices/quantities)
 # ---------------------------------------------------------------------------
 
+CORE_10_FEATURES = [
+    "n_obs", "total_spend", "mean_spend", "std_spend",
+    "mean_basket_size", "n_active_categories", "herfindahl",
+    "top_category_share", "spend_slope", "spend_cv",
+]
+
+
 def extract_budget_baseline(
     users: list[tuple[np.ndarray, np.ndarray]],
     user_ids: list[str],
+    feature_set: str = "full",
 ) -> pd.DataFrame:
     """Extract standard RFM + spending features from budget data."""
     records = []
@@ -113,7 +121,10 @@ def extract_budget_baseline(
             "std_inter_purchase_gap": std_gap,
         })
 
-    return pd.DataFrame(records).set_index("user_id")
+    df = pd.DataFrame(records).set_index("user_id")
+    if feature_set == "core":
+        df = df[CORE_10_FEATURES]
+    return df
 
 
 # ---------------------------------------------------------------------------
@@ -151,7 +162,7 @@ def extract_budget_rp(
 
     for col in ["is_garp", "is_harp", "utility_success"]:
         if col in df.columns:
-            df[col] = df[col].astype(int)
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
 
     if extended:
         print(f"    Extracting extended RP features ({len(users)} users)...")

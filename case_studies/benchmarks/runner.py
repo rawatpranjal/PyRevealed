@@ -33,6 +33,7 @@ AVAILABLE_DATASETS = {
     "instacart": "case_studies.benchmarks.datasets.instacart_bench",
     # Menu-based
     "instacart_menu": "case_studies.benchmarks.datasets.instacart_menu_bench",
+    "instacart_v2_menu": "case_studies.benchmarks.datasets.instacart_v2_menu_bench",
     "rees46": "case_studies.benchmarks.datasets.rees46_bench",
     "taobao": "case_studies.benchmarks.datasets.taobao_bench",
     "tenrec": "case_studies.benchmarks.datasets.tenrec_bench",
@@ -53,7 +54,7 @@ def run_dataset(name: str, max_users: int | None = None) -> list[BenchmarkResult
     elif name == "open_ecommerce":
         if max_users:
             kwargs["n_users"] = max_users
-    elif name in ("instacart", "instacart_menu", "rees46", "hm", "taobao", "tenrec"):
+    elif name in ("instacart", "instacart_menu", "instacart_v2_menu", "rees46", "hm", "taobao", "tenrec"):
         kwargs["max_users"] = max_users or 50000
 
     try:

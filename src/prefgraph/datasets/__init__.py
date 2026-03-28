@@ -20,6 +20,7 @@ from prefgraph.datasets._open_ecommerce import load_open_ecommerce
 from prefgraph.datasets._uci_retail import load_uci_retail
 from prefgraph.datasets._retailrocket import load_retailrocket
 from prefgraph.datasets._instacart import load_instacart
+from prefgraph.datasets._instacart_menu_v2 import load_instacart_menu_v2
 from prefgraph.datasets._yoochoose import load_yoochoose
 from prefgraph.datasets._olist import load_olist
 from prefgraph.datasets._m5 import load_m5
@@ -161,6 +162,7 @@ __all__ = [
     "load_uci_retail",
     "load_retailrocket",
     "load_instacart",
+    "load_instacart_menu_v2",
     "load_yoochoose",
     "load_olist",
     "load_m5",
