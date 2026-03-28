@@ -6,7 +6,7 @@ Empirical evaluation of PrefGraph on real data.
 .. raw:: html
 
    <div style="display:flex; gap:16px; align-items:center;">
-     <img src="_static/app_llm_hero.jpg" alt="LLM prompt consistency — stock illustration" style="width:180px; border-radius:6px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);" />
+     <img src="_static/app_llm_stock.svg" alt="LLM Consistency Benchmarks — stock illustration" style="width:180px; border-radius:6px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);" />
      <div style="margin-top:6px;">
        <h2 style="margin:0 0 6px 0; font-size:1.6rem;">
         <a href="budget/app_llm_benchmark.html" style="text-decoration:none;">LLM Consistency Benchmarks</a>

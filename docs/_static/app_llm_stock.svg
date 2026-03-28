@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-labelledby="title desc">
+  <title id="title">LLM Illustration</title>
+  <desc id="desc">Abstract illustration of a large language model with nodes and connections.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#1f2937"/>
+    </linearGradient>
+    <radialGradient id="pulse" cx="50%" cy="50%" r="0.9">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="url(#g)"/>
+
+  <!-- network grid -->
+  <g opacity="0.25" stroke="#93c5fd" stroke-width="1">
+    <path d="M40 80 H600 M40 140 H600 M40 200 H600 M40 260 H600"/>
+    <path d="M120 40 V320 M220 40 V320 M320 40 V320 M420 40 V320 M520 40 V320"/>
+  </g>
+
+  <!-- nodes -->
+  <g fill="#93c5fd" filter="url(#glow)">
+    <circle cx="120" cy="100" r="6"/>
+    <circle cx="220" cy="160" r="6"/>
+    <circle cx="320" cy="120" r="6"/>
+    <circle cx="420" cy="200" r="6"/>
+    <circle cx="520" cy="140" r="6"/>
+    <circle cx="180" cy="240" r="6"/>
+    <circle cx="280" cy="260" r="6"/>
+    <circle cx="380" cy="100" r="6"/>
+    <circle cx="480" cy="240" r="6"/>
+  </g>
+
+  <!-- connections -->
+  <g stroke="#3b82f6" stroke-width="2" opacity="0.7">
+    <path d="M120 100 C170 130, 270 130, 320 120" fill="none"/>
+    <path d="M220 160 C270 150, 370 170, 420 200" fill="none"/>
+    <path d="M320 120 C370 150, 470 150, 520 140" fill="none"/>
+    <path d="M180 240 C230 250, 330 270, 380 100" fill="none"/>
+    <path d="M280 260 C330 230, 430 220, 480 240" fill="none"/>
+  </g>
+
+  <!-- center pulse -->
+  <circle cx="320" cy="180" r="90" fill="url(#pulse)" opacity="0.25"/>
+
+  <!-- LLM label -->
+  <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial" font-weight="700" text-anchor="middle">
+    <text x="320" y="195" font-size="88" fill="#e5e7eb" letter-spacing="4">LLM</text>
+    <text x="320" y="232" font-size="18" fill="#93c5fd" opacity="0.9" letter-spacing="1">Consistency</text>
+  </g>
+</svg>
+

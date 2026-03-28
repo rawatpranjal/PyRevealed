@@ -5,7 +5,7 @@ Do LLMs have stable action rankings, or does the ranking change when
 different alternatives are shown? We build preference graphs from LLM
 decisions and check for cycles.
 
-.. image:: ../_static/app_llm_hero.jpg
+.. image:: ../_static/app_llm_stock.svg
    :alt: LLM Consistency Benchmarks
    :align: center
 
