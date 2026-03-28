@@ -409,13 +409,7 @@
                   
   <section id="preference-graphs">
 <h1>Preference Graphs<a class="headerlink" href="#preference-graphs" title="Link to this heading">#</a></h1>
-<p>Turn raw choices into a preference graph. Detect cycles and quantify
-how rational the behavior is — at scale. PrefGraph powers analysis for
-shopper baskets, recommender logs, and LLM decisions.</p>
-<p>Every choice reveals a preference edge: “A was chosen over B.” These
-edges form a <strong>preference graph</strong>. If the graph is acyclic, a coherent
-ranking exists. If it has cycles, the choices are inconsistent — and
-PrefGraph scores <em>how much</em> (0 = incoherent, 1 = perfectly rational).</p>
+<p><strong>PrefGraph</strong> translates raw user choices into directed preference networks to detect inconsistencies and measure behavioral coherence at scale. Without assuming prior models or making parametric guesses, it tests whether choices follow a stable ranking—making it possible to score the rationality of millions of users or evaluate LLM decision-making instantly.</p>
 <div class="feature-grid">
   <div class="feature-card">
     <h3>Build &amp; Test</h3>
@@ -624,22 +618,6 @@ Full results: <a class="reference internal" href="benchmarks_ecommerce.html"><sp
 <td><p>+0.005</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>Instacart</p></td>
-<td><p>50,000</p></td>
-<td><p>Low Loyalty</p></td>
-<td><p>0.968</p></td>
-<td><p>0.969</p></td>
-<td><p>+0.0%</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>Instacart</p></td>
-<td><p>50,000</p></td>
-<td><p>High Novelty</p></td>
-<td><p>0.765</p></td>
-<td><p>0.767</p></td>
-<td><p>+0.3%</p></td>
-<td><p>0.762</p></td>
-</tr>
 <tr class="row-even"><td><p>REES46</p></td>
 <td><p>8,832</p></td>
 <td><p>High Engagement</p></td>
@@ -666,38 +644,32 @@ Full results: <a class="reference internal" href="benchmarks_ecommerce.html"><sp
 <p>Benchmarked on synthetic data, T=15 observations, 10 goods, M1 Mac:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <colgroup>
+<col style="width: 40.0%" />
 <col style="width: 30.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 20.0%" />
+<col style="width: 30.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Configuration</p></th>
 <th class="head"><p>Throughput</p></th>
 <th class="head"><p>Latency (per agent)</p></th>
-<th class="head"><p>Complexity</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><strong>GARP only</strong></p></td>
 <td><p>~49,000 agents/sec</p></td>
 <td><p>20 μs</p></td>
-<td><p>O(T²)</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>GARP + CCEI</strong></p></td>
 <td><p>~2,400 agents/sec</p></td>
 <td><p>420 μs</p></td>
-<td><p>O(T² log T)</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Full suite</strong> (GARP, CCEI, MPI, HARP)</p></td>
 <td><p>~2,000 agents/sec</p></td>
 <td><p>500 μs</p></td>
-<td><p>O(T³)</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Menu</strong> (SARP + WARP + HM)</p></td>
 <td><p>~19,000 agents/sec</p></td>
 <td><p>50 μs</p></td>
-<td><p>O(N³)</p></td>
 </tr>
 </tbody>
 </table>

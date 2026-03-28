@@ -372,6 +372,20 @@ Polars fast-path (this repo):
 - CCEI percentiles: p25≈0.300, p50≈0.424, p75≈0.567, p95≈0.855
 - Tooling: ``tools/open_ecommerce_polars_variation.py``
 
+Latest ML benchmark (Open E‑Commerce, ~5k users)
+- Users: 4,668 (after train/test split constraints)
+- Targets and results
+  - High Spender (classification)
+    - AUC: RP=0.932, Base=0.940, Combined=0.942, Lift=+0.002
+  - Spend Drop (classification)
+    - AUC: RP=0.684, Base=0.784, Combined=0.798, Lift=+0.014
+  - Spend Change (regression)
+    - R2: RP=-0.032, Base=0.144, Combined=0.091
+  - Future LTV (regression)
+    - R2: RP=0.387, Base=0.633, Combined=0.622
+- Read: Combined modestly improves “Spend Drop”; baseline dominates for LTV and
+  Spend Change; RP alone underperforms baseline on those.
+
 **H&M.** 46,757 customers, 31.8M transactions (2018‑09 to 2020‑09). Budget‑based
 RP. Each customer’s purchases in a month define one choice occasion. Articles map
 to 20 coarse product groups (first two digits of article_id). Quantity per group

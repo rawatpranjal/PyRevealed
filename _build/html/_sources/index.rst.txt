@@ -1,14 +1,7 @@
 Preference Graphs
 ==================
 
-Turn raw choices into a preference graph. Detect cycles and quantify
-how rational the behavior is — at scale. PrefGraph powers analysis for
-shopper baskets, recommender logs, and LLM decisions.
-
-Every choice reveals a preference edge: "A was chosen over B." These
-edges form a **preference graph**. If the graph is acyclic, a coherent
-ranking exists. If it has cycles, the choices are inconsistent — and
-PrefGraph scores *how much* (0 = incoherent, 1 = perfectly rational).
+**PrefGraph** translates raw user choices into directed preference networks to detect inconsistencies and measure behavioral coherence at scale. Without assuming prior models or making parametric guesses, it tests whether choices follow a stable ranking—making it possible to score the rationality of millions of users or evaluate LLM decision-making instantly.
 
 .. raw:: html
 
@@ -206,20 +199,6 @@ Full results: :doc:`benchmarks_ecommerce`.
      - 0.295
      - +0.005
      - —
-   * - Instacart
-     - 50,000
-     - Low Loyalty
-     - 0.968
-     - 0.969
-     - +0.0%
-     - —
-   * - Instacart
-     - 50,000
-     - High Novelty
-     - 0.765
-     - 0.767
-     - +0.3%
-     - 0.762
    * - REES46
      - 8,832
      - High Engagement
@@ -244,28 +223,23 @@ Benchmarked on synthetic data, T=15 observations, 10 goods, M1 Mac:
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 25 25 20
+   :widths: 40 30 30
 
    * - Configuration
      - Throughput
      - Latency (per agent)
-     - Complexity
    * - **GARP only**
      - ~49,000 agents/sec
      - 20 μs
-     - O(T²)
    * - **GARP + CCEI**
      - ~2,400 agents/sec
      - 420 μs
-     - O(T² log T)
    * - **Full suite** (GARP, CCEI, MPI, HARP)
      - ~2,000 agents/sec
      - 500 μs
-     - O(T³)
    * - **Menu** (SARP + WARP + HM)
      - ~19,000 agents/sec
      - 50 μs
-     - O(N³)
  
 ..
    Archived: homepage book blurb moved to docs/archive/homepage_extras.rst

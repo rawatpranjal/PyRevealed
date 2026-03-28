@@ -271,5 +271,5 @@ Example output:
 See Also
 --------
 
-- :doc:`scaling` - Full performance benchmarks
-- :doc:`theory` - Mathematical foundations
+- :doc:`benchmarks` - Full performance benchmarks and datasets
+- :doc:`theory_landscape` - Mathematical foundations

@@ -102,14 +102,7 @@ preferences from :math:`i` to :math:`j`). A GARP violation occurs if :math:`i R^
 and :math:`p_j x_j > p_j x_i`. This is exactly what the SCC check detects: a cycle
 containing at least one "strictly more expensive" edge.
 
-**Example**:
-Suppose at :math:`t=1`, you buy :math:`x_1` at prices :math:`p_1`. You could have
-bought :math:`x_2` (:math:`p_1 x_1 \geq p_1 x_2`).
-At :math:`t=2`, you buy :math:`x_2` at prices :math:`p_2`. You could have bought
-:math:`x_1` and it was **strictly cheaper** (:math:`p_2 x_2 > p_2 x_1`).
-This forms a 2-cycle :math:`1 \xrightarrow{R_0} 2 \xrightarrow{P_0} 1`. Both
-observations are in the same SCC, and there is a strict preference arc :math:`P_0`
-between them. **GARP fails.**
+**Example**: Suppose at :math:`t=1`, you buy :math:`x_1` at prices :math:`p_1` and could have bought :math:`x_2` (:math:`p_1 x_1 \geq p_1 x_2`). At :math:`t=2`, you buy :math:`x_2` at prices :math:`p_2` and could have bought :math:`x_1` while it was **strictly cheaper** (:math:`p_2 x_2 > p_2 x_1`). This forms a 2‑cycle :math:`1 \xrightarrow{R_0} 2 \xrightarrow{P_0} 1`. Both observations are in the same SCC, and there is a strict preference arc :math:`P_0` between them. **GARP fails.**
 
 **Algorithm**:
 
@@ -193,16 +186,11 @@ original goods plus your fees. The MPI quantifies how much "money" can be
 pumped out of you this way.
 
 **Example (Money Pump Cycle)**:
-1. At :math:`t=1`, you buy :math:`x_1` for $10. You could have bought :math:`x_2`
-   for $8. (Savings = 20%)
-2. At :math:`t=2`, you buy :math:`x_2` for $10. You could have bought :math:`x_1`
-   for $8. (Savings = 20%)
-By trading back and forth, 20% of the budget is "wasted" in each round of the cycle.
-The MPI for this cycle is 0.20.
+1. At :math:`t=1`, you buy :math:`x_1` for $10; you could have bought :math:`x_2` for $8 (savings = 20%).
+2. At :math:`t=2`, you buy :math:`x_2` for $10; you could have bought :math:`x_1` for $8 (savings = 20%).
+By trading back and forth, 20% of the budget is "wasted" in each round of the cycle. The MPI for this cycle is 0.20.
 
-**Algorithm**:
-We model this as finding the **Maximum Mean-Weight Cycle** in a directed graph
-where edge weights are relative savings :math:`w_{ij} = (E_{ii} - E_{ij})/E_{ii}`.
+**Algorithm**: We model this as finding the **Maximum Mean-Weight Cycle** in a directed graph where edge weights are relative savings :math:`w_{ij} = (E_{ii} - E_{ij})/E_{ii}`.
 
 PrefGraph uses **Karp's Algorithm**, which uses dynamic programming to find the
 optimal cycle in :math:`O(VE)` time, which is :math:`O(T^3)` here.
@@ -260,14 +248,8 @@ Weight Independent Set** on a conflict graph, or more directly, the **Minimum
 Directed Feedback Vertex Set (DFVS)** on the preference graph.
 
 **Algorithm**:
-1. **Greedy (Default)**: We use an SCC-aware greedy heuristic. Following
-   Heufer & Hjertstrand (2015), the SCC decomposition reduces the problem to
-   independent subproblems per strongly connected component. In each SCC, we
-   repeatedly remove the node with the highest degree (participation in violations).
-   This is extremely fast and usually within 1-2% of the optimal.
-2. **Exact (ILP)**: We solve the problem using Integer Linear Programming (ILP).
-   Binary variables :math:`z_t \in \{0,1\}` indicate whether observation :math:`t`
-   is kept. The objective is to maximize :math:`\sum z_t` subject to GARP.
+1. **Greedy (Default)**: SCC‑aware heuristic per Heufer & Hjertstrand (2015). Decompose by SCC, then iteratively remove the node with highest violation participation; extremely fast and usually within 1–2% of optimal.
+2. **Exact (ILP)**: Integer program with binary :math:`z_t \in \{0,1\}` indicating whether observation :math:`t` is kept; maximize :math:`\sum z_t` subject to GARP constraints.
 
 **Total**: NP-hard, but practical for :math:`T \leq 500` using SCC decomposition.
 
@@ -372,11 +354,8 @@ the consumer has a utility :math:`U_i = V_i + \epsilon_i` where :math:`\epsilon_
 a random error term.
 
 **Key Axioms**:
-- **Regularity**: :math:`P(x|A) \geq P(x|B)` whenever :math:`A \subseteq B`. Removing
-  options from a menu should not decrease the probability of choosing an existing item.
-- **IIA (Independence of Irrelevant Alternatives)**: The ratio of probabilities
-  between two items :math:`P(x|A)/P(y|A)` should be constant across all menus
-  containing both :math:`x` and :math:`y`.
+- **Regularity**: :math:`P(x|A) \geq P(x|B)` whenever :math:`A \subseteq B`; removing options should not decrease the probability of choosing an existing item.
+- **IIA (Independence of Irrelevant Alternatives)**: The ratio :math:`P(x|A)/P(y|A)` is constant across menus that contain both :math:`x` and :math:`y`.
 
 **Algorithms**:
 PrefGraph implements maximum likelihood estimation for:

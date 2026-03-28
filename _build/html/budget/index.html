@@ -404,12 +404,6 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use">When To Use</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-shape-and-types">Data Shape and Types</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outputs-you-get">Outputs You Get</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-guide">Interpretation Guide</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-mode-many-users">Batch Mode (Many Users)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls">Common Pitfalls</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theory">Theory</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 </ul>
@@ -489,64 +483,6 @@ The classical setting of Samuelson (1938), Afriat (1967), and Varian (1982).</p>
 <span class="n">ccei</span> <span class="o">=</span> <span class="n">compute_integrity_score</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>       <span class="c1"># Score: 0→1</span>
 </pre></div>
 </div>
-<section id="when-to-use">
-<h2>When To Use<a class="headerlink" href="#when-to-use" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Use budgets when you have prices and purchased quantities per observation (e.g., weekly baskets by category).</p></li>
-<li><p>If you only know which item was chosen from a set (no prices), use <a class="reference internal" href="../menu/index.html"><span class="doc">Menus</span></a> instead.</p></li>
-</ul>
-</section>
-<section id="data-shape-and-types">
-<h2>Data Shape and Types<a class="headerlink" href="#data-shape-and-types" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">BehaviorLog(cost_vectors,</span> <span class="pre">action_vectors)</span></code> expects two 2D arrays of shape <code class="docutils literal notranslate"><span class="pre">(T,</span> <span class="pre">N)</span></code>
-- <code class="docutils literal notranslate"><span class="pre">T</span></code> = number of observations (trips, weeks, orders)
-- <code class="docutils literal notranslate"><span class="pre">N</span></code> = number of goods/features (categories, aisles)</p></li>
-<li><p>All values must be finite. Costs must be strictly positive; quantities non‑negative.</p></li>
-<li><p>If you have a pandas DataFrame, see <code class="docutils literal notranslate"><span class="pre">BehaviorPanel.from_dataframe</span></code> to build many logs at once.</p></li>
-</ul>
-</section>
-<section id="outputs-you-get">
-<h2>Outputs You Get<a class="headerlink" href="#outputs-you-get" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">validate_consistency</span></code> → pass/fail (GARP, with violation details in the result object)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">compute_integrity_score</span></code> (Afriat/CCEI) → number in [0, 1]; higher = more consistent</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">compute_confusion_metric</span></code> (MPI) → exploitability in [0, 1]; higher = more inconsistent</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">recover_utility</span></code> → Afriat utility values if data is GARP‑consistent</p></li>
-</ul>
-</section>
-<section id="interpretation-guide">
-<h2>Interpretation Guide<a class="headerlink" href="#interpretation-guide" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>CCEI (0→1):
-- ~0.95–1.00: near‑perfect; small local contradictions only
-- ~0.80–0.95: moderate inconsistencies; investigate specific observations
-- &lt;0.80: substantial waste/violations; expect low predictive stability</p></li>
-<li><p>MPI (0→1):
-- 0.00: no money‑pump cycles (ideal)
-- 0.05–0.20: mild to moderate arbitrage potential
-- &gt;0.20: large cycles; consider segmentation or filtering</p></li>
-</ul>
-</section>
-<section id="batch-mode-many-users">
-<h2>Batch Mode (Many Users)<a class="headerlink" href="#batch-mode-many-users" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
-<span class="c1"># users = list of (prices, quantities) tuples, each shaped (T, N)</span>
-<span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;garp&quot;</span><span class="p">,</span> <span class="s2">&quot;ccei&quot;</span><span class="p">,</span> <span class="s2">&quot;mpi&quot;</span><span class="p">,</span> <span class="s2">&quot;harp&quot;</span><span class="p">])</span>  <span class="c1"># Rust backend if available</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">analyze_arrays</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
-<span class="c1"># results[i]: EngineResult with is_garp, ccei, mpi, is_harp, hm_consistent/total, etc.</span>
-</pre></div>
-</div>
-</section>
-<section id="common-pitfalls">
-<h2>Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Zero or negative prices: filter or impute; required to be strictly &gt; 0.</p></li>
-<li><p>Mismatched shapes: <code class="docutils literal notranslate"><span class="pre">cost_vectors</span></code> and <code class="docutils literal notranslate"><span class="pre">action_vectors</span></code> must both be <code class="docutils literal notranslate"><span class="pre">(T,</span> <span class="pre">N)</span></code>.</p></li>
-<li><p>Aggregation drift: keep the same set of goods across observations; reindex missing goods to 0 quantity.</p></li>
-<li><p>Sparse/short histories (very small <code class="docutils literal notranslate"><span class="pre">T</span></code>): expect low test power; see <code class="docutils literal notranslate"><span class="pre">compute_test_power</span></code>.</p></li>
-</ul>
-</section>
 <section id="theory">
 <h2>Theory<a class="headerlink" href="#theory" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">

@@ -104,6 +104,7 @@ case_studies/datasets/cache/
 
 # Benchmark outputs
 benchmarks/output/
+case_studies/benchmarks/output/
 
 # Generated outputs
 *.png
@@ -111,6 +112,7 @@ benchmarks/output/
 
 # Sphinx documentation
 docs/_build/
+_build/
 
 # Rust build artifacts
 **/target/

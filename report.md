@@ -477,14 +477,12 @@ The Tenrec dataset fails the fundamental requirement of a menu-choice problem on
 | **H&M** | Budget | MODERATE | Normalized prices; coarse product groups; shared oracle |
 | **Instacart Menu** | Menu | WEAK | Bulk reorder; "first in cart" is noise, not preference |
 | **Open E-Commerce** | Budget | WEAK | Shared price oracle indefensible for Amazon |
-| **Tenrec** | Menu | DEAD | Sequential feed, not simultaneous menu; degenerate windows |
-| **Instacart Budget** | Budget | DEAD | Constant prices; zero variance in all RP features |
+| **Tenrec** | Menu | Appendix Only | Sequential feed (algorithmic exposure) — not a simultaneous menu; moved to appendix, not part of main benchmark |
 
 ### What Should Change
 
 **Drop immediately (no salvage path):**
-- Instacart Budget: No prices in the raw data. Any constant imputation makes GARP trivially satisfied.
-- Tenrec: The data structure (sequential recommendation feed) is fundamentally incompatible with menu-choice theory. No change to the loader can fix this because the problem is in the data, not the code.
+- Tenrec (Appendix): The data structure (sequential feed) is fundamentally incompatible with simultaneous menu choice. Kept only as an appendix case study with explicit caveats; excluded from main benchmark.
 
 **Drop or reframe with strong caveats:**
 - Open E-Commerce: Amazon's personalized pricing makes the shared price oracle assumption indefensible. If retained, it must be explicitly framed as a sensitivity analysis testing what happens when the price oracle is known to be wrong, not as evidence that RP features work or fail.

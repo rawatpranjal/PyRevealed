@@ -1,17 +1,7 @@
 E-commerce Benchmarks
 =====================
 
-Do revealed-preference (RP) features add independent predictive signal beyond
-strong engagement/spend baselines on real e‑commerce data?
-
-**TL;DR.** On menu datasets, RP captures structure that engagement stats miss
-(Taobao RP‑only 0.925 > baseline 0.913). On budget datasets, RP adds ~0% over
-RFM — spending history already carries the signal. Instacart shows heavy habit
-structure (83.8% SARP violations) but near‑zero lift, consistent with
-reordering.
-
-Six public datasets, 117K users, 42 RP features. CatBoost with default
-hyperparameters. 80/20 user holdout with bootstrap CIs.
+**TL;DR.** RP features deliver a modest 0–1% gain on predictive tasks; strong engagement/spend baselines already capture most of the signal.
 
 .. _eco-setup:
 
@@ -123,20 +113,6 @@ Results
      - 0.295
      - +0.005
      - —
-   * - Instacart
-     - 50,000
-     - Low Loyalty
-     - 0.968
-     - 0.969
-     - +0.0%
-     - —
-   * - Instacart
-     - 50,000
-     - High Novelty
-     - 0.765
-     - 0.767
-     - +0.3%
-     - 0.762
    * - REES46
      - 8,832
      - High Engagement
@@ -153,9 +129,9 @@ Results
      - —
 
 *Baseline = CatBoost on 13 RFM features. +RP = same model with 42 RP features
-added. RP-only = RP features without baseline. On Taobao, RP-only (0.925)
-outperforms the engagement baseline (0.913) — graph transitivity and choice
-entropy capture patterns that session counts miss.*
+added. RP-only = RP features without baseline. On Taobao (buy‑anchored, 6h),
+RP features contribute modest lift on structural targets; engagement/volume
+targets remain baseline‑dominated.*
 
 Taobao (Buy‑Anchored, 6h) — Full‑Run Results (AP/AUC)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -251,10 +227,7 @@ baselines. Measures such as CCEI and MPI correlate with spending history,
 so they contribute little independent predictive power when the baseline
 already encodes that history.
 
-Instacart illustrates the difference between structure and prediction.
-We detect heavy habit structure via high SARP violations, yet adding RP
-to the baseline yields near zero lift because the task within aisles is
-dominated by reorder behavior.
+
 
 Looking at feature importance, baseline spend features dominate in most
 global models. RP features rise near the top on menu tasks. The menu
@@ -388,7 +361,16 @@ allocation, not structural preference parameters.
 
 **Open E-Commerce.** 4,694 users, category-level quantities. Budget-based RP.
 Median price per category per month, forward-filled for missing periods. Shared
-oracle across users. Within-category product switching is invisible.
+oracle across users. Within-category product switching is invisible. This dataset
+is retained as a sensitivity analysis only; in our runs, RP adds ~0% over strong
+RFM baselines, so it is not part of the main benchmark conclusions.
+
+Polars fast-path (this repo):
+- Users analyzed: 4,744 (goods=50, median T=34 months)
+- Price variation: users with ≥3 distinct price vectors: ~100%
+- GARP pass rate: ~2.9% (strong power)
+- CCEI percentiles: p25≈0.300, p50≈0.424, p75≈0.567, p95≈0.855
+- Tooling: ``tools/open_ecommerce_polars_variation.py``
 
 **H&M.** 46,757 customers, 31.8M transactions (2018‑09 to 2020‑09). Budget‑based
 RP. Each customer’s purchases in a month define one choice occasion. Articles map
@@ -402,21 +384,6 @@ unlike the shared oracle used for Dunnhumby and Open E‑Commerce. Prices are
 normalized 0–1 (Kaggle): relative variation is real, absolute dollar levels are
 not. Filters: ≥ 6 active months, ≥ 10 total observations. Sales channel ignored.
 
-**Instacart.** 206,209 users, 32.4M order-product rows across 3.4M prior orders
-(Kaggle Market Basket Analysis). Menu‑based RP — the raw data contains no prices,
-so budget‑based analysis is not possible. Each user's orders are broken into
-user × order × aisle triples. Within each triple, a valid choice occasion requires
-exactly one reordered SKU in that aisle; events with zero or multiple reorders are
-dropped. The menu for each event is the set of distinct products the user bought in
-that same aisle across their previous three orders, plus the current choice to
-guarantee membership. This trailing‑3 window avoids inflating menus with stale
-items from distant history. Events with menu size < 2 are dropped (trivial menus).
-To ensure enough repeated structure for RP analysis, only user‑aisle pairs with at
-least 3 valid events are retained. Each user's surviving events across all their
-qualifying aisles are concatenated in order‑number sequence into a single
-``MenuChoiceLog``, with product IDs remapped to a compact 0..N−1 space per user.
-Filters: ≥ 5 total observations per user. Final dataset: 4.5M events, 120K users,
-715K user‑aisle pairs.
 
 **REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP.
 Server-defined session IDs (gold standard). Menus contain only items the user
@@ -434,6 +401,8 @@ Assumptions: views approximate the considered set (impression bias: unseen
 alternatives are unobserved); 6‑hour window is a pragmatic simultaneity proxy
 (shorter/longer windows yield similar patterns); post‑purchase views are excluded;
 exposure is observational (not randomized).
+
+**Taobao (Session‑based).** 4,239 users, ~100M raw events. Menu‑based RP with sessions defined by 30‑minute inactivity gaps (84% of inter‑event gaps < 30 minutes). For each session, build a menu from the items the user viewed or purchased within that session; median menu size ≈ 4 items. No prices — choices reveal within‑session preference orderings only.
 
 Appendix: Pipeline
 ------------------

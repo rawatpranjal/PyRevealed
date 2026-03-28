@@ -401,12 +401,6 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use">When To Use</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-shape-and-types">Data Shape and Types</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outputs-you-get">Outputs You Get</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-guide">Interpretation Guide</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-mode-many-users">Batch Mode (Many Users)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls">Common Pitfalls</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theory">Theory</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 </ul>
@@ -515,63 +509,6 @@ limited attention, random utility, and risk preferences.</p>
 <span class="n">hm</span>   <span class="o">=</span> <span class="n">compute_menu_efficiency</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>       <span class="c1"># Score: 0→1</span>
 </pre></div>
 </div>
-<section id="when-to-use">
-<h2>When To Use<a class="headerlink" href="#when-to-use" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Use menus when each observation is a set of available items (a menu) and a single chosen item.</p></li>
-<li><p>If you observe prices and purchased quantities instead, use <a class="reference internal" href="../budget/index.html"><span class="doc">Budgets</span></a>.</p></li>
-</ul>
-</section>
-<section id="data-shape-and-types">
-<h2>Data Shape and Types<a class="headerlink" href="#data-shape-and-types" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Deterministic: <code class="docutils literal notranslate"><span class="pre">MenuChoiceLog(menus,</span> <span class="pre">choices)</span></code>
-- <code class="docutils literal notranslate"><span class="pre">menus</span></code>: iterable of sets/frozensets of item indices (e.g., <code class="docutils literal notranslate"><span class="pre">{0,</span> <span class="pre">3,</span> <span class="pre">7}</span></code>)
-- <code class="docutils literal notranslate"><span class="pre">choices</span></code>: iterable of integers, each contained in the corresponding menu</p></li>
-<li><p>Stochastic: <code class="docutils literal notranslate"><span class="pre">StochasticChoiceLog(menus,</span> <span class="pre">frequencies)</span></code>
-- <code class="docutils literal notranslate"><span class="pre">frequencies</span></code>: per‑menu frequency vectors that sum to 1</p></li>
-<li><p>Risk: <code class="docutils literal notranslate"><span class="pre">RiskChoiceLog(lotteries,</span> <span class="pre">choices)</span></code> where items are lotteries</p></li>
-<li><p>Items must be indexed by integers [0..K‑1]. For string IDs, map to ints per user.</p></li>
-</ul>
-</section>
-<section id="outputs-you-get">
-<h2>Outputs You Get<a class="headerlink" href="#outputs-you-get" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">validate_menu_warp</span></code>/<code class="docutils literal notranslate"><span class="pre">validate_menu_sarp</span></code> → pass/fail with violation details</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">compute_menu_efficiency</span></code> (HM) → fraction of observations to remove (higher = better)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">fit_menu_preferences</span></code> → ordinal utility/ranking if consistent</p></li>
-</ul>
-</section>
-<section id="interpretation-guide">
-<h2>Interpretation Guide<a class="headerlink" href="#interpretation-guide" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>SARP pass: there exists a strict ranking that explains all choices across menus.</p></li>
-<li><p>HM efficiency (0→1): fraction of observations kept after removing minimal contradictions.
-- 1.00: perfectly consistent
-- 0.85–0.99: minor flips; often due to near‑ties or exposure noise
-- &lt;0.85: systematic context effects or instability</p></li>
-<li><p>IIA/Regularity: compare pair results with triples; violations indicate menu dependence.</p></li>
-</ul>
-</section>
-<section id="batch-mode-many-users">
-<h2>Batch Mode (Many Users)<a class="headerlink" href="#batch-mode-many-users" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Engine</span>
-<span class="c1"># users = list of (menus, choices) tuples per user</span>
-<span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sarp&quot;</span><span class="p">,</span> <span class="s2">&quot;warp&quot;</span><span class="p">,</span> <span class="s2">&quot;hm&quot;</span><span class="p">])</span>  <span class="c1"># menu metrics are auto‑computed</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">analyze_menus</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>  <span class="c1"># returns list[MenuResult]</span>
-<span class="c1"># results[i]: MenuResult with is_sarp, is_warp, hm_consistent/total, etc.</span>
-</pre></div>
-</div>
-</section>
-<section id="common-pitfalls">
-<h2>Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Menus containing items not seen before or inconsistent indexing across observations.</p></li>
-<li><p>Choices not contained in the menu for that observation.</p></li>
-<li><p>Over‑aggregated sessions: if a session contains multiple purchases, split into multiple menus.</p></li>
-<li><p>Very small menus (always size 1): no information about preferences; filter these out.</p></li>
-</ul>
-</section>
 <section id="theory">
 <h2>Theory<a class="headerlink" href="#theory" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
