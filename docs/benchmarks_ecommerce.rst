@@ -20,13 +20,30 @@ and ordinal utility. Models use CatBoost with default hyperparameters. The split
 
 .. admonition:: Null rates in RP features
 
-   Not all 42 RP features are populated for every user. Measured on Dunnhumby (n=442): **9 of 59 total features** carry substantial nulls; the remaining 50 are fully populated.
+   Not all RP features are populated for every user. Measured on n=500 samples per dataset:
 
-   **Budget datasets (Dunnhumby, H&M):** The 14 Engine features are always non-null — booleans are coerced to 0/1 and numeric metrics have defined defaults. Of the 28 Extended features, the 8 utility-recovery features (``util_mean``, ``util_std``, ``util_range``, ``util_cv``, ``util_gini``, ``lambda_mean``, ``lambda_std``, ``lambda_cv``) are **89% NaN on Dunnhumby**: Afriat's LP requires GARP to hold, and even then numerical near-degeneracy causes frequent solver failures on shared category-price data. The feature ``violation_mean_position`` is **100% NaN on Dunnhumby** — Dunnhumby's shared category prices leave no room for GARP cycles, so every user is consistent and there are no violation positions to average.
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 12 12 56
 
-   **Menu datasets (REES46, Taobao):** The Engine features are always non-null. Ordinal utility features (``menu_util_range``, ``menu_util_std``) and congruence features (``is_congruent``, ``n_maximality_violations``) are NaN when the underlying LP or algorithm call fails; rates vary by dataset.
+      * - Dataset
+        - Features
+        - Null features
+        - Which features, and why
+      * - Dunnhumby
+        - 59
+        - 9 (15%)
+        - ``violation_mean_position`` 100% NaN (shared category prices → zero GARP cycles for every user); 8 utility-recovery features (``util_mean/std/range/cv/gini``, ``lambda_mean/std/cv``) 89% NaN (Afriat LP near-degenerate on shared prices)
+      * - REES46
+        - 27
+        - 2 (7%)
+        - ``menu_util_range``, ``menu_util_std`` 26% NaN (ordinal utility LP fails when preference graph has insufficient constraints)
+      * - Taobao
+        - 27
+        - 2 (7%)
+        - Same two features, 82% NaN (buy-window sessions are sparse — few choices per user make the ordinal utility LP under-constrained)
 
-   All NaN values are imputed with the per-feature train-set median before model training, so models always see complete feature matrices. Features with high null rates are effectively constant after imputation and carry little predictive signal.
+   The 14 Engine features are always non-null across all datasets. All NaN values are imputed with the per-feature train-set median before model training. Features with high null rates are effectively constant after imputation and carry little predictive signal.
 
 The hardest part is reconstructing the choice set and the observed choices.
 For budgets, prices and quantities must reflect what the customer could have
