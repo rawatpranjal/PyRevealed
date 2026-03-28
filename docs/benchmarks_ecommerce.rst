@@ -13,7 +13,7 @@ reordering.
 *Last updated: 2026-03-28. Instacart now uses aisle-level menus. H&M uses
 per-customer realized prices (v0.5.8).* 
 
-Eight public datasets, 217K users, 42 RP features. CatBoost (H&M) or LightGBM
+Seven public datasets, 167K users, 42 RP features. CatBoost (H&M) or LightGBM
 (others). 80/20 user holdout with bootstrap CIs.
 
 Roadmap
@@ -97,10 +97,7 @@ defined by 30-minute inactivity gaps (84% of inter-event gaps < 30 min). Median
 menu size 4 items. Menus contain only items the user viewed or purchased within
 a session. No prices.
 
-**Tenrec.** 50,000 users, NeurIPS 2022 QQ Browser dataset. Menu-based RP.
-Click-to-like windows with positional feedback tracking; median ~5 clicks
-between likes. Menus reflect algorithmic recommendations, not organic browsing.
-Items shown but not clicked are invisible. No prices.
+
 
 .. _eco-how-to-read:
 
@@ -210,13 +207,6 @@ Results
      - **0.915**
      - **0.925**
      - **+0.2%**
-   * - Tenrec
-     - 50,000
-     - High Engagement
-     - 0.993
-     - 0.993
-     - **0.993**
-     - +0.0%
 
 *Baseline = LightGBM on 13 RFM features. +RP = same model with 42 RP features
 added. RP-only = RP features without baseline. On Taobao, RP-only (0.925)
@@ -243,10 +233,6 @@ independent signal.
      - High Engagement
      - 0.925
      - 0.913
-   * - Tenrec
-     - High Engagement
-     - 0.993
-     - 0.993
    * - REES46
      - High Engagement
      - 0.990
@@ -339,7 +325,7 @@ Across all classification tasks (LightGBM feature importance, combined model):
      - **RP**
      - Normalized Shannon entropy of choice distribution
 
-Menu-dataset top features (Taobao + Tenrec):
+Menu-dataset top features (Taobao + REES46):
 
 .. list-table::
    :header-rows: 1

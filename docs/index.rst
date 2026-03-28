@@ -148,11 +148,6 @@ Full results: :doc:`benchmarks_ecommerce`.
      - High Engagement
      - 0.913
      - **0.915**
-   * - Tenrec
-     - 50,000
-     - High Engagement
-     - 0.993
-     - 0.993
 
 Budget datasets: RP adds ~0% over strong RFM baselines. Menu datasets: RP features competitive — Taobao RP-only (0.925) beats baseline (0.913).
 
