@@ -114,17 +114,6 @@ def print_summary(results: list[BenchmarkResult]) -> None:
             )
         print("  " + "-" * 100)
 
-        print("\n  Classification Tasks — In-Sample AUC-ROC (overfitting check)")
-        print("  " + "-" * 80)
-        print(f"  {'Dataset':<18} {'Target':<18}  {'RP only':>10}  {'Baseline':>10}  {'Combined':>10}")
-        print("  " + "-" * 80)
-        for r in cls_results:
-            print(
-                f"  {r.dataset:<18} {r.target:<18}  "
-                f"{r.auc_rp_train:>10.3f}  {r.auc_base_train:>10.3f}  {r.auc_combined_train:>10.3f}"
-            )
-        print("  " + "-" * 80)
-
     # Regression results
     reg_results = [r for r in results if r.task_type == "regression"]
     if reg_results:
@@ -136,17 +125,6 @@ def print_summary(results: list[BenchmarkResult]) -> None:
             print(
                 f"  {r.dataset:<18} {r.target:<22} {r.n_users:>6}  "
                 f"{r.r2_rp:>8.3f}  {r.r2_base:>8.3f}  {r.r2_combined:>8.3f}"
-            )
-        print("  " + "-" * 86)
-
-        print("\n  Regression Tasks — In-Sample R² (overfitting check)")
-        print("  " + "-" * 86)
-        print(f"  {'Dataset':<18} {'Target':<22}  {'RP only':>8}  {'Baseline':>8}  {'Combined':>8}")
-        print("  " + "-" * 86)
-        for r in reg_results:
-            print(
-                f"  {r.dataset:<18} {r.target:<22}  "
-                f"{r.r2_rp_train:>8.3f}  {r.r2_base_train:>8.3f}  {r.r2_combined_train:>8.3f}"
             )
         print("  " + "-" * 86)
 

@@ -10,41 +10,29 @@ MIN_TEST_BUDGET = 3  # Minimum test observations for budget datasets
 MIN_TRAIN_MENU = 3  # Minimum training observations for menu datasets
 MIN_TEST_MENU = 2  # Minimum test observations for menu datasets
 
-# LightGBM hyperparameters (shared across all benchmarks)
-LGBM_CLASSIFIER_PARAMS = {
-    "objective": "binary",
-    "metric": "auc",
-    "boosting_type": "gbdt",
-    "num_leaves": 15,
+# CatBoost hyperparameters (shared across all benchmarks)
+CATBOOST_CLASSIFIER_PARAMS = {
+    "depth": 5,
     "learning_rate": 0.03,
-    "feature_fraction": 0.6,
-    "bagging_fraction": 0.7,
-    "bagging_freq": 5,
-    "min_child_samples": 30,
-    "reg_alpha": 1.0,
-    "reg_lambda": 5.0,
-    "max_depth": 5,
-    "verbose": -1,
-    "n_estimators": 200,
-    "random_state": SEED,
+    "iterations": 200,
+    "l2_leaf_reg": 5.0,
+    "rsm": 0.6,
+    "subsample": 0.7,
+    "random_seed": SEED,
+    "verbose": 0,
+    "eval_metric": "AUC",
 }
 
-LGBM_REGRESSOR_PARAMS = {
-    "objective": "regression",
-    "metric": "rmse",
-    "boosting_type": "gbdt",
-    "num_leaves": 15,
+CATBOOST_REGRESSOR_PARAMS = {
+    "depth": 5,
     "learning_rate": 0.03,
-    "feature_fraction": 0.6,
-    "bagging_fraction": 0.7,
-    "bagging_freq": 5,
-    "min_child_samples": 30,
-    "reg_alpha": 1.0,
-    "reg_lambda": 5.0,
-    "max_depth": 5,
-    "verbose": -1,
-    "n_estimators": 200,
-    "random_state": SEED,
+    "iterations": 200,
+    "l2_leaf_reg": 5.0,
+    "rsm": 0.6,
+    "subsample": 0.7,
+    "random_seed": SEED,
+    "verbose": 0,
+    "eval_metric": "RMSE",
 }
 
 # Engine metrics to compute
