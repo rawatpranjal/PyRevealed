@@ -17,7 +17,7 @@ def print_summary(results: list[BenchmarkResult]) -> None:
 
     print("\n" + "=" * 110)
     print(" ML BENCHMARK: Do RP Graph Features Add Predictive Power?")
-    print(" Protocol: Global time cutoff | 80/20 user holdout | LightGBM defaults | Bootstrap CI")
+    print(" Protocol: Per-user temporal split | 80/20 user holdout | CatBoost defaults | Bootstrap CI")
     print("=" * 110)
 
     if cls:

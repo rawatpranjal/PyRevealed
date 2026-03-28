@@ -1,9 +1,9 @@
-"""ML Benchmark: Global time cutoff + user holdout + bootstrap CI + grouped importance.
+"""ML Benchmark: Per-user temporal split + user holdout + bootstrap CI + grouped importance.
 
 Protocol:
-  1. Global time cutoff (70th pctl per dataset) → features before, targets after
-  2. 80/20 random user holdout
-  3. LightGBM defaults + colsample_bytree=0.8, min_child_samples=50
+  1. Per-user event-time split (first 70% → features, last 30% → targets)
+  2. 80/20 random user holdout (stratified for classification)
+  3. CatBoost defaults (random_seed=42, verbose=0)
   4. Bootstrap CI on test lift (1000 iterations)
   5. Grouped permutation importance (RP block vs baseline block)
 """
