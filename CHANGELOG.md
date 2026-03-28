@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Changed
+- CI: restore docs build workflow with strict Sphinx (-W --keep-going) and upload HTML artifact on every push/PR. Cleaned Sphinx warnings (added orphans, fixed tables/underlines, removed stray directives) so CI stays green. RTD continues to publish via `.readthedocs.yaml`.
 - Docs: fleshed out REES46 dataset entry in `docs/benchmarks_ecommerce.rst` with full sentences and explicit raw-data → choice-set conversion steps (views-only menus ∪ purchased item, single-purchase sessions, 2–50 menu-size filter, ≥5 sessions/user, per-user item remapping, impression-bias note).
 - CI: add GitHub Actions workflow `.github/workflows/docs.yml` to always build Sphinx HTML on every push and PR; uploads HTML as an artifact. Keeps RTD as the publisher while catching build issues early.
 - Front page LLM summary table: clarified column names (no abbreviations), split deterministic vs stochastic SARP into separate columns, expanded IIA into separate deterministic/stochastic columns, and added RUM pass rate (%). Also clarified footnote definitions for all metrics. Source numbers pulled from docs page `docs/budget/app_llm_benchmark.rst` to ensure consistency.
