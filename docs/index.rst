@@ -199,7 +199,7 @@ Preference graphs reveal what accuracy benchmarks miss: decoy effects
 (decision-tree 60% on jobs vs 100% on alert), and menu-dependent
 severity judgments even on "clear" content moderation inputs (60% pass).
 
-Reading List (2020+)
+Reading List
 --------------------
 
 Recent applied work using revealed preference methods on real-world data:
