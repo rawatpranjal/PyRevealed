@@ -3,7 +3,7 @@ Benchmarks
 
 Empirical evaluation of PrefGraph on real data.
 
-`LLM Consistency Benchmarks <budget/app_llm_benchmark.html>`_
+`Consistency Benchmarks (LLMs) <budget/app_llm_benchmark.html>`_
    Do LLMs keep a stable action ranking across menus? We construct preference graphs from model choices and test for cycles (SARP, IIA), then quantify minimal edits (HM) to restore consistency.
 
 `Predictive Benchmarks (E-commerce) <benchmarks_ecommerce.html>`_
