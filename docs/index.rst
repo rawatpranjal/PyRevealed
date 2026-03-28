@@ -61,7 +61,7 @@ PrefGraph is designed to handle two fundamentally different types of choice envi
    3. How much? → compute_integrity_score()  3. How much? → compute_menu_efficiency()
    4. Segment users by score                 4. Segment users by score
 
-LLM Consistency Benchmark
+LLM Consistency Benchmarks
 --------------------------
 
 Do LLMs have stable action rankings? We build preference graphs from

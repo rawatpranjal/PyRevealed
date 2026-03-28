@@ -1,12 +1,12 @@
-LLM Consistency Benchmark
-=========================
+LLM Consistency Benchmarks
+==========================
 
 Do LLMs have stable action rankings, or does the ranking change when
 different alternatives are shown? We build preference graphs from LLM
 decisions and check for cycles.
 
 .. image:: ../_static/app_llm_hero.jpg
-   :alt: LLM Consistency Benchmark
+   :alt: LLM Consistency Benchmarks
    :align: center
 
 **TL;DR.** GPT-4o-mini usually keeps a stable ranking of actions.
