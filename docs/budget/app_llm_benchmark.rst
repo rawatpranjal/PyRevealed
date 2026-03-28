@@ -138,54 +138,118 @@ are shown.
      - 80
      - 84
 
-.. list-table:: IIA violations + stochastic variation (% menus with mixed responses at temp=0.7)
+.. list-table:: IIA violations and deterministic/stochastic agreement
    :header-rows: 1
-   :widths: 18 12 12 12 12 12 12
+   :widths: 20 15 15 20
 
    * -
-     - IIA count
-     - Min
-     - DecTree
-     - Conserv
-     - Aggress
-     - CoT
+     - Det. IIA
+     - Stoch. IIA
+     - Det/Stoch agree
    * - Support
      - 3
-     - 8%
-     - 20%
-     - 0%
-     - 11%
-     - 11%
+     - 3
+     - 98.2%
    * - Alert
      - 2
-     - 7%
-     - 12%
-     - 8%
-     - 9%
-     - 7%
+     - 3
+     - 98.3%
    * - Content
      - 9
-     - 19%
-     - 17%
-     - 23%
-     - 5%
-     - 27%
+     - 8
+     - 97.4%
    * - Jobs
      - 15
-     - --
-     - --
-     - --
      - --
      - --
    * - Procurement
      - 8
      - --
      - --
+
+*Det. IIA = cycles from temp=0 choices. Stoch. IIA = cycles from majority-vote
+of K=20 reps at temp=0.7. Agreement = % of menus where both conditions pick
+the same action. -- = in progress.*
+
+.. list-table:: Stochastic SARP pass rate (majority-vote from K=20, temp=0.7)
+   :header-rows: 1
+   :widths: 18 13 13 13 13 13 13
+
+   * -
+     - Min
+     - DecTree
+     - Conserv
+     - Aggress
+     - CoT
+     - Mean
+   * - Support
+     - 80
+     - 80
+     - 100
+     - 100
+     - 100
+     - 92
+   * - Alert
+     - 80
+     - 100
+     - 90
+     - 100
+     - 90
+     - 92
+   * - Content
+     - 88
+     - 80
+     - 62
+     - 86
+     - 75
+     - 78
+   * - Jobs
+     - --
+     - --
+     - --
+     - --
+     - --
+     - --
+   * - Procurement
+     - --
+     - --
+     - --
      - --
      - --
      - --
 
-*-- = stochastic data collection in progress.*
+.. list-table:: % of menus with mixed responses (temp=0.7, K=20)
+   :header-rows: 1
+   :widths: 18 13 13 13 13 13 13
+
+   * -
+     - Min
+     - DecTree
+     - Conserv
+     - Aggress
+     - CoT
+     - All
+   * - Support
+     - 8
+     - 20
+     - 4
+     - 11
+     - 11
+     - 11
+   * - Alert
+     - 7
+     - 12
+     - 8
+     - 9
+     - 7
+     - 8
+   * - Content
+     - 12
+     - 8
+     - 17
+     - 3
+     - 18
+     - 12
 
 Do Item Graphs Add Value?
 --------------------------
@@ -205,10 +269,11 @@ Yes. Three findings that accuracy benchmarks do not capture:
    (60%). Conservative is most consistent on support (100%) but least on content
    review (70%). Only per-vignette SARP testing reveals this.
 
-The stochastic experiment further shows that at temp=0.7, **88-92% of menus
-produce identical choices across 20 repetitions.** gpt-4o-mini is overwhelmingly
-deterministic. The 8-18% that vary concentrate on the same action pairs
-that produce item graph cycles in the deterministic condition.
+**Stochastic confirms deterministic.** At temp=0.7 with K=20 reps,
+97-98% of menus produce the same majority-vote choice as temp=0.
+Stochastic SARP pass rates are similar to deterministic (support 92%
+vs 88%, content 78% vs 82%). The preference graph structure is robust
+to sampling noise — cycles are structural, not stochastic artifacts.
 
 V1 Experiment (10,000 decisions)
 ---------------------------------
