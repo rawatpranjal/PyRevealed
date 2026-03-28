@@ -31,8 +31,11 @@ from prefgraph._rust_backend import (
 class EngineResult:
     """Result for one user from the Engine (budget data).
 
-    Contains all metrics requested via ``Engine(metrics=[...])``. Fields
-    for unrequested metrics retain their defaults (e.g. ``ccei=1.0``).
+    Contains all metrics requested via ``Engine(metrics=[...])``.
+    Unrequested numeric metrics retain mathematically correct defaults
+    (``ccei=1.0``, ``mpi=0.0``). Unrequested boolean/count metrics
+    default to ``None`` (not ``False``/``0``) so they render as NaN
+    in DataFrames — unambiguously "not computed" rather than "failed".
 
     Attributes:
         is_garp: True if choices satisfy GARP (no revealed-preference cycles).
@@ -54,14 +57,24 @@ class EngineResult:
         compute_time_us: Wall-clock computation time in microseconds.
     """
 
+    # is_garp is always computed — it gates every other metric.
     is_garp: bool
     n_violations: int = 0
+    # ccei=1.0 and mpi=0.0 are mathematically correct defaults:
+    # GARP-consistent data has CCEI=1.0 (Afriat 1967) and MPI=0.0
+    # (Echenique, Lee & Shum 2011). These are only overwritten when
+    # GARP fails AND the metric was requested.
     ccei: float = 1.0
     mpi: float = 0.0
-    is_harp: bool = False
-    hm_consistent: int = 0
-    hm_total: int = 0
-    utility_success: bool = False
+    # Optional metrics default to None (= "not computed"), not False/0.
+    # False would be indistinguishable from "computed and failed" in output
+    # DataFrames, causing users to misinterpret uncomputed HARP as
+    # "not homothetic" or uncomputed utility as "LP failed".
+    # None serializes to NaN in pandas, which is unambiguously "missing".
+    is_harp: Optional[bool] = None
+    hm_consistent: Optional[int] = None
+    hm_total: Optional[int] = None
+    utility_success: Optional[bool] = None
     vei_mean: float = 1.0
     vei_min: float = 1.0
     vei_exact_mean: float = 1.0
@@ -96,16 +109,16 @@ class EngineResult:
         lines.append(f"  CCEI:  {self.ccei:.4f}")
         if self.mpi > 0.0:
             lines.append(f"  MPI:   {self.mpi:.4f}")
-        if self.is_harp:
+        if self.is_harp is True:
             lines.append("  HARP:  yes (homothetic)")
-        if self.hm_total > 0:
+        if self.hm_total is not None and self.hm_total > 0:
             frac = self.hm_consistent / self.hm_total
             lines.append(f"  HM:    {self.hm_consistent}/{self.hm_total} ({frac:.0%} consistent)")
-        if self.utility_success:
+        if self.utility_success is True:
             lines.append("  Utility: recovered")
         if self.vei_mean < 1.0:
             lines.append(f"  VEI:   mean={self.vei_mean:.4f}  min={self.vei_min:.4f}  std={self.vei_std:.4f}  IQR=[{self.vei_q25:.4f}, {self.vei_q75:.4f}]")
-        if not self.is_harp and self.harp_severity > 1.0:
+        if self.is_harp is False and self.harp_severity > 1.0:
             lines.append(f"  HARP:  violated (severity={self.harp_severity:.4f})")
         if self.max_scc > 1:
             lines.append(f"  SCC:   {self.n_scc} components, max={self.max_scc}, mean={self.scc_mean_size:.1f}")
@@ -124,7 +137,7 @@ class EngineResult:
         parts.append(f"ccei={self.ccei:.4f}")
         if self.mpi > 0.0:
             parts.append(f"mpi={self.mpi:.4f}")
-        if self.hm_total > 0:
+        if self.hm_total is not None and self.hm_total > 0:
             parts.append(f"hm={self.hm_consistent}/{self.hm_total}")
         parts.append(f"({self.compute_time_us}us)")
         return "  ".join(parts)
@@ -428,16 +441,19 @@ class Engine:
             self.tolerance,
         )
 
+        # Rust backend always returns all keys (with False/0 defaults) even
+        # when a metric wasn't requested. Use flags to emit None for unrequested
+        # optional metrics, so DataFrames show NaN instead of misleading False/0.
         return [
             EngineResult(
                 is_garp=r["is_garp"],
                 n_violations=r["n_violations"],
                 ccei=r["ccei"],
                 mpi=r.get("mpi", 0.0),
-                is_harp=r.get("is_harp", False),
-                hm_consistent=r.get("hm_consistent", 0),
-                hm_total=r.get("hm_total", 0),
-                utility_success=r.get("utility_success", False),
+                is_harp=r["is_harp"] if flags.get("harp") else None,
+                hm_consistent=r["hm_consistent"] if flags.get("hm") else None,
+                hm_total=r["hm_total"] if flags.get("hm") else None,
+                utility_success=r["utility_success"] if flags.get("utility") else None,
                 vei_mean=r.get("vei_mean", 1.0),
                 vei_min=r.get("vei_min", 1.0),
                 vei_exact_mean=r.get("vei_exact_mean", 1.0),
@@ -495,10 +511,11 @@ class Engine:
             garp = check_garp(log, self.tolerance)
             ccei_val = 1.0
             mpi_val = 0.0
-            hm_consistent = 0
-            hm_total = 0
-            is_harp = False
-            utility_success = False
+            # None = "not computed" (distinct from 0 = "computed, zero removals").
+            hm_consistent = None
+            hm_total = None
+            is_harp = None
+            utility_success = None
 
             # CCEI (Afriat Efficiency Index): only computed when GARP fails.
             # Consistent data has CCEI=1.0 by definition — no search needed.
@@ -761,10 +778,10 @@ class Engine:
                 n_violations=r["n_violations"],
                 ccei=r["ccei"],
                 mpi=r.get("mpi", 0.0),
-                is_harp=r.get("is_harp", False),
-                hm_consistent=r.get("hm_consistent", 0),
-                hm_total=r.get("hm_total", 0),
-                utility_success=r.get("utility_success", False),
+                is_harp=r["is_harp"] if "harp" in self.metrics else None,
+                hm_consistent=r["hm_consistent"] if "hm" in self.metrics else None,
+                hm_total=r["hm_total"] if "hm" in self.metrics else None,
+                utility_success=r["utility_success"] if "utility" in self.metrics else None,
                 vei_mean=r.get("vei_mean", 1.0),
                 vei_min=r.get("vei_min", 1.0),
                 vei_exact_mean=r.get("vei_exact_mean", 1.0),

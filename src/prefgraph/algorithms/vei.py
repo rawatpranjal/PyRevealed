@@ -64,7 +64,8 @@ def compute_vei(
     E = session.expenditure_matrix  # T x T
     own_exp = session.own_expenditures  # T
 
-    # First check if data is already consistent
+    # GARP check gates computation: consistent data has e_i = 1.0 for all i
+    # by definition — no LP needed. Varian (1982), Econometrica 50(4), 945-972.
     garp_result = check_garp(session)
 
     if garp_result.is_consistent:
@@ -81,17 +82,50 @@ def compute_vei(
             computation_time_ms=computation_time,
         )
 
-    # Get transitive closure to know which constraints must hold
-    R_star = garp_result.transitive_closure
+    # --------------------------------------------------------------------------
+    # VEI LP formulation — Varian (1990) "Goodness-of-fit in optimizing models",
+    # J. Econometrics 46(1-2), 125-140.
+    #
+    # Smeulders, Cherchye, De Rock & Spieksma (2014) "Goodness-of-Fit Measures
+    # for Revealed Preference Tests", ACM Trans. Econ. Comp. 2(1), Art. 3,
+    # define VEI (Section 2.2):
+    #
+    #   "The Varian index (VI) differs from AI by allowing for observation-
+    #    specific perturbations. VI equals the vector e that is closest to one,
+    #    for some given norm, such that the data satisfies the revealed-
+    #    preference axiom under study."
+    #
+    # The relaxed revealed-preference relation R^0(e) is (Section 2.2):
+    #   q_i R^0(e) q_j  iff  e_i * p_i · q_i >= p_i · q_j
+    #
+    # For each (i,j) where i directly revealed-prefers j (R[i,j] = True),
+    # the efficiency-adjusted budget must still cover j's bundle:
+    #   e_i >= (p_i · q_j) / (p_i · q_i) = E[i,j] / own_exp[i]
+    #
+    # We use direct R (not the transitive closure R*) because:
+    #   - For direct pairs, E[i,j]/own_exp[i] <= 1 by definition (LP always feasible).
+    #   - Transitivity is implicit: if each direct link is maintained under e,
+    #     the transitive closure R*(e) follows.
+    #   - Using R* would include transitive pairs where E[i,j] > own_exp[i],
+    #     making the LP infeasible.
+    #
+    # The LP minimizes sum(e_i), finding the tightest per-observation efficiency
+    # that maintains all direct revealed-preference links. Lower e_i means
+    # observation i's budget is more "wasted" — the observation is less efficient.
+    #
+    # NP-hardness: Smeulders et al. (2014) Theorem 4.2 shows VI-GARP_d is
+    # NP-complete via reduction from independent set. This LP is an approximation
+    # using direct-R constraints only.
+    # --------------------------------------------------------------------------
 
-    # Build LP: minimize sum(-e_i) (equivalently, maximize sum(e_i))
-    # Variables: e_1, ..., e_T
-    # Constraints: For each i, j where R_star[i, j] = True and i != j:
-    #   e_i * own_exp[i] >= E[i, j]
-    #   Rearranged: -e_i <= -E[i, j] / own_exp[i]
-    #   Or: e_i >= E[i, j] / own_exp[i]
+    # Build direct revealed-preference relation R (not transitive closure).
+    # R[i,j] = True iff own_exp[i] >= E[i,j], i.e. i could afford j's bundle.
+    R_direct = own_exp[:, np.newaxis] >= E - tolerance
+    np.fill_diagonal(R_direct, False)
 
-    # Collect constraints
+    # Collect per-observation lower-bound constraints from direct R pairs.
+    # Each constraint says: e_i >= E[i,j] / own_exp[i]  (the efficiency ratio).
+    # Rearranged for linprog: -e_i <= -E[i,j] / own_exp[i].
     A_ub_list = []
     b_ub_list = []
 
@@ -99,9 +133,7 @@ def compute_vei(
         for j in range(T):
             if i == j:
                 continue
-            if R_star[i, j]:
-                # Constraint: e_i >= E[i,j] / own_exp[i]
-                # As inequality: -e_i <= -E[i,j] / own_exp[i]
+            if R_direct[i, j]:
                 row = np.zeros(T)
                 row[i] = -1.0
                 A_ub_list.append(row)
@@ -114,8 +146,12 @@ def compute_vei(
         A_ub = np.zeros((0, T))
         b_ub = np.zeros(0)
 
-    # Objective: minimize -sum(e_i) (equivalent to maximizing sum)
-    c = -np.ones(T)
+    # Objective: minimize sum(e_i).
+    # Each e_i is pushed down to its tightest lower bound from the constraints.
+    # Observations involved in GARP violations will have e_i < 1.0.
+    # The old code used c = -np.ones(T) (maximize), which trivially returned
+    # e_i = 1.0 for all observations because all lower bounds are <= 1.
+    c = np.ones(T)
 
     # Bounds: 0 <= e_i <= 1
     bounds = [(0.0, 1.0) for _ in range(T)]

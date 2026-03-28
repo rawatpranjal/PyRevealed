@@ -1,7 +1,26 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-Pelase write clearly, what did you run what did yo find. no shorthand. 
+Pelase write clearly, what did you run what did yo find. no shorthand.
+please write heavy code comments in the code as you refine your context and imporve your understanding with sources (form papers in the repo) 
+
+## Paper References
+
+Academic papers cited in code comments live in two places:
+- `papers/` — original PDFs (e.g. `Afriat1967_UtilityConstruction.pdf`, `DemuynckRehbeck2023_MILP.pdf`)
+- `references/papers/md/` — markdown conversions of key papers for searchable text
+
+When adding algorithm comments, cite the specific paper, theorem/definition number, and quote
+from these local files rather than paraphrasing from memory. Key papers per module:
+
+| Module | Primary Papers |
+|--------|---------------|
+| `vei.py` | Varian (1990) J. Econometrics; Smeulders et al. (2014) ACM Trans. Econ. Comp. |
+| `mpi.py` (HM) | Houtman & Maks (1985); Heufer & Hjertstrand (2015); Smeulders et al. (2014) |
+| `garp.py` | Varian (1982) Econometrica; Afriat (1967) IER |
+| `production.py` | Varian (1984) Econometrica; Chambers & Echenique (2016) Ch 15 |
+| `houtman_maks.rs` | Demuynck & Rehbeck (2023); Smeulders et al. (2014) |
+| `lp.rs` | Demuynck & Rehbeck (2023) Corollary 2 |
 
 ## Workflow Rules
 

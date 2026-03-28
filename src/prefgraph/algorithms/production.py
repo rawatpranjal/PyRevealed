@@ -68,42 +68,69 @@ def test_profit_maximization(
 
     T = log.num_observations
 
-    # Construct revealed profitability relation
-    # R[i,j] = True if choosing (x_j, y_j) at prices (w_i, p_i) would give
-    # at least as much profit as (x_i, y_i), AND i's actual profit >= j's counterfactual
-    R = np.zeros((T, T), dtype=np.bool_)
+    # --------------------------------------------------------------------------
+    # Production GARP — Varian (1984) "The Nonparametric Approach to Production
+    # Analysis", Econometrica 52(3), 579-597.
+    # Chambers & Echenique (2016) "Revealed Preference Theory", Chapter 15.
+    #
+    # For a profit-maximizing firm observed at T periods with input prices w_t,
+    # output prices p_t, input quantities x_t, and output quantities y_t:
+    #
+    # Actual profit at t:        pi_t = p_t · y_t - w_t · x_t
+    # Counterfactual profit:     cf_t(s) = p_t · y_s - w_t · x_s
+    #   (profit firm t would earn using firm s's input-output bundle at t's prices)
+    #
+    # Revealed profitability relations:
+    #   R[t,s]:  pi_t >= cf_t(s)  (weak: t's bundle at least as profitable as s's)
+    #   P[t,s]:  pi_t >  cf_t(s)  (strict: t's bundle strictly more profitable)
+    #
+    # Production GARP violation (Def 2.1 in Smeulders et al. 2014, applied to
+    # production data per Varian 1984):
+    #   R_star[i,j] AND P[j,i]
+    # i.e., i transitively reveals j's bundle to be at most as profitable,
+    # yet at j's prices, j's own bundle is strictly more profitable than i's.
+    #
+    # The old code checked R_star[i,j] AND R_star[j,i] (cycle check only).
+    # That misses violations where i R* j and j P i without a reverse R* arc.
+    # The Rust implementation (rpt-core/src/garp.rs) uses the correct condition.
+    # --------------------------------------------------------------------------
 
-    # Vectorized computation of actual profits
+    # Vectorized computation of actual profits: pi_t = p_t · y_t - w_t · x_t
     actual_profits = log.total_revenue - log.total_cost  # Shape: (T,)
 
-    # Vectorized computation of counterfactual profits
-    # counterfactual_revenue[i,j] = output_prices[i] @ output_quantities[j]
-    # counterfactual_cost[i,j] = input_prices[i] @ input_quantities[j]
-    counterfactual_revenue = log.output_prices @ log.output_quantities.T  # Shape: (T, T)
-    counterfactual_cost = log.input_prices @ log.input_quantities.T  # Shape: (T, T)
+    # Counterfactual profit matrix: cf[i,j] = p_i · y_j - w_i · x_j
+    counterfactual_revenue = log.output_prices @ log.output_quantities.T  # (T, T)
+    counterfactual_cost = log.input_prices @ log.input_quantities.T  # (T, T)
     counterfactual_profit = counterfactual_revenue - counterfactual_cost
 
-    # R[i,j] = True if actual_profit[i] >= counterfactual_profit[i,j]
-    # Using broadcasting: actual_profits[:, np.newaxis] has shape (T, 1)
+    # Weak revealed profitability: R[i,j] = True iff pi_i >= cf[i,j]
+    # "At i's prices, i's bundle is at least as profitable as j's bundle."
     R = actual_profits[:, np.newaxis] >= counterfactual_profit - tolerance
-
-    # Exclude self-comparisons
     np.fill_diagonal(R, False)
 
-    # Compute transitive closure
+    # Strict revealed profitability: P[i,j] = True iff pi_i > cf[i,j]
+    # "At i's prices, i's bundle is strictly more profitable than j's."
+    P = actual_profits[:, np.newaxis] > counterfactual_profit + tolerance
+    np.fill_diagonal(P, False)
+
+    # Transitive closure via Floyd-Warshall: R_star[i,j] = True iff there
+    # exists a chain i R i_1 R i_2 R ... R j.
     R_star = floyd_warshall_transitive_closure(R)
 
-    # Find violations: cycles in R_star
+    # Production GARP violation: R_star[i,j] AND P[j,i].
+    # "i transitively reveals j to be at most as profitable, yet j strictly
+    #  prefers its own bundle over i's at j's prices."
+    # This matches the Rust implementation (rpt-core/src/garp.rs lines 58-77).
     violations: list[Cycle] = []
-    visited_pairs: set[frozenset[int]] = set()
+    seen: set[tuple[int, int]] = set()
 
     for i in range(T):
-        for j in range(i + 1, T):
-            if R_star[i, j] and R_star[j, i]:
-                pair = frozenset({i, j})
-                if pair not in visited_pairs:
-                    visited_pairs.add(pair)
-                    violations.append((i, j))
+        for j in range(T):
+            if i != j and R_star[i, j] and P[j, i]:
+                pair = (i, j)
+                if pair not in seen:
+                    seen.add(pair)
+                    violations.append(pair)
 
     is_profit_maximizing = len(violations) == 0
 

@@ -455,7 +455,36 @@ def _houtman_maks_greedy(
     session: ConsumerSession,
     tolerance: float,
 ) -> list[int]:
-    """Greedy FVS-based Houtman-Maks (fast approximation)."""
+    """Greedy FVS-based Houtman-Maks (fast approximation).
+
+    Houtman & Maks (1985) "Determining All Maximal Data Subsets Consistent
+    with Revealed Preference", Kwantitatieve Methoden 19, 89-104.
+
+    The HM index finds the largest subset of observations consistent with
+    GARP. Equivalently, it finds the minimum set of observations to remove
+    so that the remaining data satisfies GARP.
+
+    Heufer & Hjertstrand (2015) "Consistent Subsets", Section 2, define:
+      "The HM-index is the maximal fraction of non-zero elements in the
+       binary vector v such that GARP(v) holds."
+
+    GARP violation (Varian 1982, Def 2.1 in Smeulders et al. 2014):
+      "if q_i R q_j, then it is not the case that q_j P^0 q_i"
+    where R is the TRANSITIVE closure of R^0. Violations live in R_star,
+    not in the direct relation R.
+
+    Smeulders et al. (2014) Theorem 5.1 proves HI-GARP is NP-hard.
+    This greedy uses SCC decomposition + feedback vertex set (FVS) as
+    an approximation.
+
+    Key fix (2026-03-28): SCC decomposition must use R_star (transitive
+    closure), not R (direct relation). Purely transitive GARP violations
+    — where the violation path i ->* j goes through intermediates with no
+    direct back-edge — produce all-singleton SCCs in R. The greedy loop
+    then skips all components, returning removed=[] even when violations
+    exist. Using R_star ensures all observations participating in any
+    cycle (direct or transitive) are grouped into the same SCC.
+    """
     from prefgraph.graph.scc import find_sccs, greedy_feedback_vertex_set
     from prefgraph.graph.transitive_closure import floyd_warshall_transitive_closure
 
@@ -463,17 +492,28 @@ def _houtman_maks_greedy(
     E = session.expenditure_matrix
     own_exp = session.own_expenditures
 
+    # Direct revealed-preference relations (Varian 1982):
+    # R[i,j] = True iff p_i · x_i >= p_i · x_j  (i could afford j's bundle)
+    # P[i,j] = True iff p_i · x_i >  p_i · x_j  (strictly)
     R = own_exp[:, np.newaxis] >= E - tolerance
     P = own_exp[:, np.newaxis] > E + tolerance
     np.fill_diagonal(P, False)
 
+    # R_star = transitive closure of R via Floyd-Warshall.
+    # GARP violation: R_star[i,j] AND P[j,i] — i.e., i transitively
+    # revealed-prefers j, yet j strictly prefers its own bundle over i's.
     R_star = floyd_warshall_transitive_closure(R)
     violation_matrix = R_star & P.T
 
     if not np.any(violation_matrix):
         return []
 
-    n_comp, labels = find_sccs(R)
+    # SCC decomposition on R_star (transitive closure), NOT R (direct).
+    # In R_star, i and j are in the same SCC iff R_star[i,j] AND R_star[j,i],
+    # meaning they are mutually reachable through chains of revealed preference.
+    # This guarantees all observations involved in ANY violation cycle — even
+    # purely transitive ones — are grouped together for FVS removal.
+    n_comp, labels = find_sccs(R_star)
     scc_sizes = np.bincount(labels, minlength=n_comp)
 
     removed: list[int] = []
@@ -487,7 +527,10 @@ def _houtman_maks_greedy(
         if not np.any(sub_violation):
             continue
 
-        sub_R = R[np.ix_(scc_nodes, scc_nodes)].copy()
+        # Greedy FVS on R_star within this SCC. Using R_star (not R) ensures
+        # the FVS algorithm sees all transitive edges as direct arcs, so it
+        # can identify which nodes to remove to break transitive cycles.
+        sub_R = R_star[np.ix_(scc_nodes, scc_nodes)].copy()
         fvs_local = greedy_feedback_vertex_set(sub_R)
 
         for local_idx in fvs_local:

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.8] - 2026-03-28
+
+### Fixed
+- **VEI objective sign** — `compute_vei()` LP was maximizing sum(e_i) instead of minimizing, trivially returning e_i=1.0 for all observations regardless of GARP violations. Now uses direct R constraints and minimize direction, producing meaningful per-observation efficiency scores. Ref: Varian (1990) J. Econometrics; Smeulders et al. (2014) ACM Trans. Econ. Comp.
+- **HM greedy SCC** — `_houtman_maks_greedy()` used `find_sccs(R)` (direct relation) instead of `find_sccs(R_star)` (transitive closure). Purely transitive GARP violations produced all-singleton SCCs, causing the greedy FVS to return 0 removals even when violations existed. Ref: Houtman & Maks (1985); Smeulders et al. (2014) Theorem 5.1.
+- **Production GARP** — Python `test_profit_maximization()` checked `R_star[i,j] AND R_star[j,i]` (cycle only) instead of `R_star[i,j] AND P[j,i]` (proper GARP condition). Now matches the Rust implementation. Ref: Varian (1984) Econometrica; Chambers & Echenique (2016) Ch 15.
+- **EngineResult defaults** — `is_harp`, `utility_success`, `hm_consistent`, `hm_total` now default to `None` (not `False`/`0`) when not computed. DataFrames show NaN instead of misleading failure values.
+
 ## [0.5.7] - 2026-03-28
 
 ### Fixed

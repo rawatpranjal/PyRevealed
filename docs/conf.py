@@ -18,7 +18,7 @@ autodoc_mock_imports = ["prefgraph._rust_core", "numba"]
 project = "PrefGraph"
 copyright = "2024, PrefGraph Contributors"
 author = "PrefGraph Contributors"
-release = "0.5.7"
+release = "0.5.8"
 
 # -- General configuration ---------------------------------------------------
 
