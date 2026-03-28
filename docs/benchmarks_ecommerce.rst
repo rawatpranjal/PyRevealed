@@ -134,35 +134,35 @@ Results
      - 0.996
      - +0.0%
      - 0.990
-   * - Taobao Buy Window
+   * - Taobao
      - 29,519
      - Pref Drift (AP)
      - 0.940
      - 0.938
      - -0.2%
      - -
-   * - Taobao Buy Window
+   * - Taobao
      - 29,519
      - High Entropy (AP)
      - 0.789
      - **0.790**
      - **+0.1%**
      - -
-   * - Taobao Buy Window
+   * - Taobao
      - 29,519
      - High Active Time (AUC)
      - 0.777
      - 0.778
      - +0.1%
      - -
-   * - Taobao Buy Window
+   * - Taobao
      - 29,519
      - High Click Volume (AUC)
      - 0.818
      - 0.818
      - +0.0%
      - -
-   * - Taobao Buy Window
+   * - Taobao
      - 29,519
      - Fast Conversion (AUC)
      - 0.561
@@ -189,7 +189,7 @@ Appendix: Datasets & Assumptions
 
 **Instacart.** Treated as menu-choice, not budget (no prices in raw data). Observation = user × order × aisle with exactly one reordered SKU. Menu = trailing-3 order products in the same aisle (familiarity set). Filters: menu size ≥ 2, (user, aisle) pairs with ≥ 3 valid events. This yields 4.5M events from 120K users across 715K user-aisle pairs. The data is habit-heavy: 58.6% of repeated user-aisle pairs never switch products, and 83.8% of users have SARP violations. RP features show real graph structure but near-zero predictive lift, consistent with reorder-dominated behavior.
 
-**REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP. Server-defined session IDs (gold standard). Menus include only items the user clicked; unviewed items are invisible. Median menu size ≈ 5 items. No prices - choices reveal preference orderings only.
+**REES46.** 8,832 users with server-defined shopping sessions (gold standard boundaries). Menu-based RP with one observation per session: the menu is the set of products the user viewed in that session, and the choice is the single purchased product in that session. Raw logs include `event_time`, `event_type` (view/cart/purchase), `product_id`, and `user_session`; the loader keeps only view and purchase events, groups by `user_session`, and retains sessions with exactly one purchase and at least one view. For each kept session it forms the menu as the union of viewed items and the purchased item (to guarantee the chosen item is in the menu even if the platform did not log an explicit pre-buy view), then filters to menu sizes 2–50 to exclude non-choices and degenerate sessions. Users must have ≥ 5 valid sessions; item IDs are remapped to 0..N−1 per user for compact graphs. This construction reflects “what the user actually saw” (impression bias: unseen catalog items are not in the menu). Median menu size is about five items. There are no prices, so results describe within-menu preference orderings only (WARP/SARP/Congruence et al.), not willingness-to-pay.
 
 **Taobao (Buy Window).** ~29.5k users built from UserBehavior.csv (user_id, item_id, category_id, behavior_type, timestamp). Keep only view and buy events. For each buy at time t, define a trailing 6-hour window [t−6h, t); the menu is the set of unique items viewed in that window (pre-buy only), and the choice is the bought item. Require that the bought item was viewed; keep menus of size 2–50. Aggregate each user's buy-anchored observations into a single MenuChoiceLog with per-user item remapping; require ≥5 valid observations. Assumptions: views approximate the considered set (impression bias: unseen alternatives are unobserved); 6-hour window is a pragmatic simultaneity proxy (shorter/longer windows yield similar patterns); post-purchase views are excluded; exposure is observational (not randomized). Train/test uses a per-user temporal split (70/30) with separate remappings to avoid leakage.
 
@@ -222,94 +222,16 @@ informative signals.
 Top Features
 ------------
 
-Across all classification tasks (CatBoost feature importance, combined model):
+Across all classification tasks, baseline spending features generally dominate in the global models. Features like `total_spend` (total expenditure in the training period), `spend_slope` (spending trend), and `n_obs` (number of observations) consistently account for the majority of predictive power. Core RP scores (`ccei`, `mpi`, `hm_ratio`) unfortunately correlate strongly with these spending baselines, adding no marginal value to a strong RFM baseline. 
 
-.. list-table::
-   :header-rows: 1
-   :widths: 5 30 10 55
+What works for budget tracking is somewhat counterintuitive. While static-price GARP produces zero violations acting as completely degenerate markers, other RP structures like the `util_gini` (Gini inequality of recovered Afriat utility values) can add nuanced signals.
 
-   * - #
-     - Feature
-     - Type
-     - Interpretation
-   * - 1
-     - total_spend
-     - Baseline
-     - Total expenditure in training period
-   * - 2
-     - spend_slope
-     - Baseline
-     - Spending trend (increasing/decreasing)
-   * - 3
-     - n_sessions
-     - Baseline
-     - Number of menu presentations (menu datasets)
-   * - 4
-     - n_obs
-     - Baseline
-     - Number of observations (frequency)
-   * - 5
-     - mean_basket_size
-     - Baseline
-     - Average items per observation
-   * - 6
-     - max_choice_freq
-     - Baseline
-     - Most-chosen item frequency
-   * - 7
-     - util_gini
-     - **RP**
-     - Gini inequality of recovered Afriat utility values
-   * - 8
-     - spend_cv
-     - Baseline
-     - Spending variability (coefficient of variation)
-   * - 9
-     - items_per_session
-     - Baseline
-     - Item diversity per session
-   * - 10
-     - choice_entropy_norm
-     - **RP**
-     - Normalized Shannon entropy of choice distribution
+However, the true value of Revealed Preference features is in **menu datasets** (like Taobao), where RP features are highly competitive with baselines. Across these domains, four of the top eight most important features are RP-derived. When modeling menu-choice settings:
+- **`menu_transitivity`** (Preference graph transitivity ratio) and **`pref_graph_density`** (Edge density of revealed preference graph) consistently rank in the top 5–10 features. They capture preference graph properties and patterns that simple engagement counts miss completely. 
+- **`choice_entropy_norm`** (Normalized Shannon entropy of choice distribution) and **`menu_util_range`** (Ordinal utility spread) carry useful signal highlighting structured choice behavior that standalone engagement counts miss.
+- **`n_scc`** (Number of strongly connected components) offers graph fragmentation signals that augment baseline statistics like standard sizes and diversity.
 
-Menu-dataset top features (Taobao + REES46):
-
-.. list-table::
-   :header-rows: 1
-   :widths: 5 30 10 55
-
-   * - #
-     - Feature
-     - Type
-     - Interpretation
-   * - 1
-     - std_menu_size
-     - Baseline
-     - Variability of menu sizes
-   * - 2
-     - menu_transitivity
-     - **RP**
-     - Item graph transitivity ratio
-   * - 3
-     - n_sessions
-     - Baseline
-     - Number of sessions
-   * - 4
-     - menu_pref_density
-     - **RP**
-     - Item graph edge density
-   * - 5
-     - choice_entropy_norm
-     - **RP**
-     - Normalized choice entropy
-   * - 8
-     - menu_util_range
-     - **RP**
-     - Ordinal utility spread (max - min recovered rank)
-
-Four of the top 8 menu features are RP-derived. Item graph structure and choice
-entropy carry signal that engagement statistics do not capture.
+Overall, RP graph structure features add novel information that tree models actively depend upon, but the marginal predictive lift over well-engineered baseline metrics is relatively small and rarely significant for basic classification targets. 
 
 .. _eco-reproduce:
 
