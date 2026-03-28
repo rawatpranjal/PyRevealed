@@ -120,92 +120,92 @@ Results
 
 .. list-table::
    :header-rows: 1
-   :widths: 18 8 15 10 10 10 8
+   :widths: 18 8 15 10 10 8 10
 
    * - Dataset
      - N
      - Target
      - Baseline
      - +RP
-     - RP-only
      - Lift%
+     - RP-only
    * - Dunnhumby
      - 2,222
      - High Spender
      - 0.960
      - 0.960
-     - —
      - -0.0%
+     - —
    * - Dunnhumby
      - 2,222
      - Churn
      - 0.752
      - 0.740
-     - —
      - -1.5%
+     - —
    * - Open E-Commerce
      - 4,694
      - High Spender
      - 0.950
      - 0.951
-     - —
      - +0.0%
+     - —
    * - Open E-Commerce
      - 4,694
      - Churn
      - 0.846
      - 0.846
-     - 0.769
      - -0.0%
+     - 0.769
    * - H&M
      - 46,757
      - High Spender
      - 0.784
      - 0.783
-     - 0.720
      - -0.1%
+     - 0.720
    * - H&M
      - 46,757
      - Future Spend (R²)
      - 0.337
      - 0.340
-     - —
      - +0.003
+     - —
    * - H&M
      - 46,757
      - Spend Change (R²)
      - 0.290
      - 0.295
-     - —
      - +0.005
+     - —
    * - Instacart
      - 50,000
      - Low Loyalty
      - 0.968
      - 0.969
-     - —
      - +0.0%
+     - —
    * - Instacart
      - 50,000
      - High Novelty
      - 0.765
      - 0.767
-     - 0.762
      - +0.3%
+     - 0.762
    * - REES46
      - 8,832
      - High Engagement
      - 0.996
      - 0.996
-     - 0.990
      - +0.0%
+     - 0.990
    * - Taobao
      - 4,239
      - High Engagement
      - 0.913
      - **0.915**
-     - **0.925**
      - **+0.2%**
+     - **0.925**
 
 *Baseline = LightGBM on 13 RFM features. +RP = same model with 42 RP features
 added. RP-only = RP features without baseline. On Taobao, RP-only (0.925)
