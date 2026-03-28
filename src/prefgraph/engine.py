@@ -43,7 +43,7 @@ class EngineResult:
             exploitability per dollar. 0.0 = unexploitable. Range: [0, 1).
         is_harp: True if choices satisfy HARP (homothetic preferences).
         hm_consistent: Houtman-Maks: size of largest GARP-consistent subset.
-        hm_total: Total observations. ``hm_consistent / hm_total`` = noise fraction.
+        hm_total: Total observations. ``hm_consistent / hm_total`` = rationalizable fraction.
         utility_success: True if Afriat's LP recovered a rationalizing utility.
         vei_mean: Mean Varian Efficiency Index across observations. Range: [0, 1].
         vei_min: Worst-observation VEI. Range: [0, 1].
