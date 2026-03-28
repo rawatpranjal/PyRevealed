@@ -117,3 +117,4 @@ _build/
 # Rust build artifacts
 **/target/
 *.dylib
+_build/
