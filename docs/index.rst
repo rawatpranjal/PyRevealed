@@ -1,9 +1,9 @@
 Preference Graphs
 ==================
 
-Build a preference graph from observed choices. Test it for cycles.
-Score how rational it is. PrefGraph does this at scale — for shoppers,
-recommender clicks, or LLM decisions.
+Turn raw choices into a preference graph. Detect cycles and quantify
+how rational the behavior is — at scale. PrefGraph powers analysis for
+shopper baskets, recommender logs, and LLM decisions.
 
 Every choice reveals a preference edge: "A was chosen over B." These
 edges form a **preference graph**. If the graph is acyclic, a coherent
@@ -82,7 +82,8 @@ for cycles. Full results: :doc:`budget/app_llm_benchmark`.
 Key takeaways
 ~~~~~~~~~~~~~
 
-LLMs maintain stable action rankings: 74–92% SARP pass deterministically, and majority vote at temp=0.7 changes little (96–98% agreement). Only 8–12% of menus are mixed across 20 reps, pointing to structure rather than noise. When inconsistency appears, it clusters in compromise effects for jobs and severity anchoring for content, and these patterns persist under stochastic aggregation. Prompt choice is domain‑specific: decision‑tree is perfect on procurement but weak on jobs, while conservative/CoT stabilize support/alert — there is no single best prompt.
+- LLMs are mostly consistent: they usually pick the same thing even if you change the options; only a small share of menus make them switch.
+- When they do switch, it’s predictable—extreme options nudge them to the middle (jobs) and lenient options make them stricter (content)—and the best instructions depend on the task (no one-size-fits-all).
 
 Summary metrics
 ~~~~~~~~~~~~~~~
