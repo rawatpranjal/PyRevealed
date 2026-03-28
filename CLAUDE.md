@@ -408,24 +408,28 @@ grep -n "github" pyproject.toml docs/conf.py
 
 ### Quick Deploy Commands
 
-When the user says **"release"**, **"deploy"**, or **"push to all surfaces"**, run these commands:
+When the user says **"release"**, **"deploy"**, or **"push to PyPI"**, do a full release:
 
 ```bash
-# 1. Stage and commit all changes
+# 1. Bump version in all 3 files
+# 2. Update CHANGELOG.md
+# 3. Commit, tag, push:
 git add -A
-git commit -m "Description of changes
-
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
-
-# 2. Push to GitHub (triggers RTD rebuild automatically)
-git push
-
-# 3. Verify surfaces after 1-2 minutes:
-#    - ReadTheDocs: https://prefgraph.readthedocs.io
-#    - GitHub: https://github.com/rawatpranjal/PrefGraph
+git commit -m "release: vX.Y.Z — description"
+git tag vX.Y.Z
+git push && git push --tags
 ```
 
-**Note**: This does NOT push to PyPI. For a full PyPI release, follow the Release Checklist above (requires version bump).
+The `v*` tag triggers `.github/workflows/release.yml` which:
+- Builds manylinux2_28 x86_64 wheels (Python 3.10–3.13)
+- Builds macOS x86_64 + aarch64 wheels (Python 3.10–3.13)
+- Builds Windows x64 wheels (Python 3.10–3.13)
+- Publishes all 16 wheels + sdist to PyPI via `PYPI_API_TOKEN` secret
+
+**Never use `python3 -m build` + `twine upload` for releases.** That only builds
+a single local wheel. The CI builds all 16 platform/version combinations.
+
+Monitor: `gh run list --workflow=release.yml --limit 1`
 
 ## Theory Reference
 
