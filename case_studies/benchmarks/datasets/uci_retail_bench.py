@@ -86,7 +86,7 @@ def load_and_prepare(data_dir=None, n_customers=None):
 
     targets_dict = {
         "LTV Tier": (ltv_tier, "classification"),
-        "Churn": (churn, "classification"),
+        "Spend Drop": (churn, "classification"),
         "Order Frequency": (order_freq, "regression"),
     }
 

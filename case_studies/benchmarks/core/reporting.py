@@ -46,13 +46,13 @@ def print_summary(results: list[BenchmarkResult]) -> None:
 
     if reg:
         print(f"\n  {'Dataset':<16} {'Target':<18} {'N':>5} "
-              f"{'Base R²':>8} {'+RP R²':>8} {'Lift':>8} {'95% CI':>16} {'p-val':>6}")
-        print("  " + "-" * 85)
+              f"{'Base R²':>8} {'+RP R²':>8} {'ΔR²':>7}")
+        print("  " + "-" * 60)
         for r in reg:
-            ci_str = f"({r.lift_ci_lower:+.1f}, {r.lift_ci_upper:+.1f})"
+            delta = r.r2_combined - r.r2_base
             print(f"  {r.dataset:<16} {r.target:<18} {r.n_test:>5} "
-                  f"{r.r2_base:>8.3f} {r.r2_combined:>8.3f} {r.lift_pct:>+7.1f}% {ci_str:>16} {r.lift_p_value:>5.3f}")
-        print("  " + "-" * 85)
+                  f"{r.r2_base:>8.3f} {r.r2_combined:>8.3f} {delta:>+7.3f}")
+        print("  " + "-" * 60)
 
     total_time = sum(r.wall_time_s for r in results)
     print(f"\n  Wall time: {total_time:.0f}s")

@@ -89,11 +89,13 @@ def load_and_prepare(data_dir=None, n_households=None):
     # Spend change: difference in mean spend (regression)
     spend_change = test_mean_spends - train_mean_spends
 
+    # targets_dict: name -> (y, task_type, y_continuous, threshold_pctl)
+    # y_continuous + threshold_pctl = let evaluation.py binarize on train only (zero leakage)
     targets_dict = {
-        "Churn": (churn, "classification"),
-        "High Spender": (high_spender, "classification"),
-        "Spend Change": (spend_change, "regression"),
-        "Future LTV": (test_mean_spends, "regression"),
+        "Spend Drop": (churn, "classification", None, None),
+        "High Spender": (high_spender, "classification", test_total_spends, 66.67),
+        "Spend Change": (spend_change, "regression", None, None),
+        "Future LTV": (test_mean_spends, "regression", None, None),
     }
 
     return X_rp, X_base, targets_dict, user_ids
@@ -104,7 +106,7 @@ def run_benchmark(data_dir=None, n_households=None) -> list[BenchmarkResult]:
     X_rp, X_base, targets_dict, user_ids = load_and_prepare(data_dir, n_households)
 
     results = []
-    for target_name, (y, task_type) in targets_dict.items():
+    for target_name, (y, task_type, y_cont, pctl) in targets_dict.items():
         print(f"  [{DATASET_NAME}] Target: {target_name} ({task_type})")
         if task_type == "classification":
             pos_rate = np.mean(y)
@@ -112,7 +114,8 @@ def run_benchmark(data_dir=None, n_households=None) -> list[BenchmarkResult]:
                 print(f"    Skipping — too imbalanced (pos_rate={pos_rate:.3f})")
                 continue
 
-        result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type)
+        result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type,
+                               y_continuous=y_cont, threshold_pctl=pctl)
         results.append(result)
 
         if task_type == "classification":

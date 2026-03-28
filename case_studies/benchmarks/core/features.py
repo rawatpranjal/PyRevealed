@@ -73,6 +73,25 @@ def extract_budget_baseline(
         else:
             mean_abs_change = 0.0
 
+        # Recency and frequency (proxy — observation index as time)
+        active_periods = spend_per_obs > 0
+        n_active = int(np.sum(active_periods))
+        purchase_rate = n_active / T  # true frequency rate
+        if n_active > 0:
+            last_active_idx = int(np.max(np.where(active_periods)[0]))
+            recency = (T - 1 - last_active_idx) / max(T - 1, 1)  # 0=just bought, 1=bought only at start
+        else:
+            recency = 1.0
+        # Inter-purchase gaps
+        if n_active >= 2:
+            active_indices = np.where(active_periods)[0]
+            gaps = np.diff(active_indices)
+            mean_gap = float(np.mean(gaps))
+            std_gap = float(np.std(gaps))
+        else:
+            mean_gap = float(T)
+            std_gap = 0.0
+
         records.append({
             "user_id": uid,
             "n_obs": n_obs,
@@ -88,6 +107,10 @@ def extract_budget_baseline(
             "spend_slope": spend_slope,
             "spend_cv": cv,
             "mean_abs_spend_change": mean_abs_change,
+            "recency": recency,
+            "purchase_rate": purchase_rate,
+            "mean_inter_purchase_gap": mean_gap,
+            "std_inter_purchase_gap": std_gap,
         })
 
     return pd.DataFrame(records).set_index("user_id")

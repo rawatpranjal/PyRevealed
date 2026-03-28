@@ -1,272 +1,114 @@
 [
   {
-    "dataset": "Instacart",
-    "target": "Spend Drop",
+    "dataset": "H&M",
+    "target": "High Spender",
     "task_type": "classification",
-    "n_users": 50000,
-    "n_rp_features": 59,
-    "n_base_features": 13,
-    "positive_rate": 0.1107,
-    "oos_auc_rp": 0.6078775964490406,
-    "oos_auc_base": 0.6503038076596891,
-    "oos_auc_combined": 0.6499406118166283,
-    "oos_ap_rp": 0.15275595636873562,
-    "oos_ap_base": 0.1778819642836718,
-    "oos_ap_combined": 0.17167985130109992,
-    "oos_r2_rp": 0.0,
-    "oos_r2_base": 0.0,
-    "oos_r2_combined": 0.0,
-    "oot_auc_rp": 0.7631760757803987,
-    "oot_auc_base": 0.8077083454593308,
-    "oot_auc_combined": 0.8161758723175897,
-    "oot_ap_rp": 0.3284140949758957,
-    "oot_ap_base": 0.4197097983890627,
-    "oot_ap_combined": 0.43030947683523746,
-    "oot_r2_rp": 0.0,
-    "oot_r2_base": 0.0,
-    "oot_r2_combined": 0.0,
-    "top_features": [
-      [
-        "spend_slope",
-        276
-      ],
-      [
-        "mean_abs_spend_change",
-        195
-      ],
-      [
-        "herfindahl",
-        192
-      ],
-      [
-        "spend_cv",
-        190
-      ],
-      [
-        "top_category_share",
-        185
-      ],
-      [
-        "n_active_categories",
-        168
-      ],
-      [
-        "util_gini",
-        158
-      ],
-      [
-        "total_spend",
-        157
-      ],
-      [
-        "mean_basket_size",
-        153
-      ],
-      [
-        "util_cv",
-        148
-      ],
-      [
-        "util_mean",
-        140
-      ],
-      [
-        "max_spend",
-        119
-      ],
-      [
-        "min_spend",
-        119
-      ],
-      [
-        "util_range",
-        117
-      ],
-      [
-        "std_spend",
-        116
-      ]
-    ],
-    "wall_time_s": 4.619013071060181
+    "n_users": 46757,
+    "n_train": 37405,
+    "n_test": 9352,
+    "positive_rate": 0.33329768804670956,
+    "auc_rp": 0.7120072839556675,
+    "auc_base": 0.7545008501635879,
+    "auc_combined": 0.7538096050347591,
+    "ap_rp": 0.5983112718479063,
+    "ap_base": 0.6545352559726323,
+    "ap_combined": 0.6556061452017534,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "lift_pct": -0.08608142857064678,
+    "lift_ci_lower": -0.5443183884371714,
+    "lift_ci_upper": 0.3407020697102005,
+    "lift_p_value": 0.643,
+    "group_importance": {
+      "RP_features": 0.009221880990475984,
+      "Baseline_features": 0.23828921718830368
+    },
+    "top_features": null,
+    "wall_time_s": 34.72662091255188
   },
   {
-    "dataset": "Instacart",
-    "target": "High Value",
+    "dataset": "H&M",
+    "target": "Churn",
     "task_type": "classification",
-    "n_users": 50000,
-    "n_rp_features": 59,
-    "n_base_features": 13,
-    "positive_rate": 0.33076,
-    "oos_auc_rp": 0.9401071123202207,
-    "oos_auc_base": 0.96483031951378,
-    "oos_auc_combined": 0.9650662353070425,
-    "oos_ap_rp": 0.9019932498351362,
-    "oos_ap_base": 0.9384037270309724,
-    "oos_ap_combined": 0.9380794799254486,
-    "oos_r2_rp": 0.0,
-    "oos_r2_base": 0.0,
-    "oos_r2_combined": 0.0,
-    "oot_auc_rp": 0.9531484232743337,
-    "oot_auc_base": 0.976738221653196,
-    "oot_auc_combined": 0.9773709167099216,
-    "oot_ap_rp": 0.9210886241522243,
-    "oot_ap_base": 0.9575049975502343,
-    "oot_ap_combined": 0.958856922410637,
-    "oot_r2_rp": 0.0,
-    "oot_r2_base": 0.0,
-    "oot_r2_combined": 0.0,
-    "top_features": [
-      [
-        "total_spend",
-        365
-      ],
-      [
-        "mean_basket_size",
-        336
-      ],
-      [
-        "spend_slope",
-        298
-      ],
-      [
-        "mean_spend",
-        185
-      ],
-      [
-        "spend_cv",
-        184
-      ],
-      [
-        "mean_abs_spend_change",
-        180
-      ],
-      [
-        "herfindahl",
-        161
-      ],
-      [
-        "top_category_share",
-        149
-      ],
-      [
-        "pref_graph_density",
-        114
-      ],
-      [
-        "n_active_categories",
-        110
-      ],
-      [
-        "util_gini",
-        107
-      ],
-      [
-        "min_spend",
-        100
-      ],
-      [
-        "std_spend",
-        98
-      ],
-      [
-        "util_range",
-        89
-      ],
-      [
-        "util_mean",
-        87
-      ]
-    ],
-    "wall_time_s": 4.39637303352356
+    "n_users": 46757,
+    "n_train": 37405,
+    "n_test": 9352,
+    "positive_rate": 0.11523408259725816,
+    "auc_rp": 0.720296787711063,
+    "auc_base": 0.7626735380024512,
+    "auc_combined": 0.7628553893704623,
+    "ap_rp": 0.24487071857872195,
+    "ap_base": 0.260116788644208,
+    "ap_combined": 0.26686594906131783,
+    "r2_rp": 0.0,
+    "r2_base": 0.0,
+    "r2_combined": 0.0,
+    "lift_pct": 2.579177387910365,
+    "lift_ci_lower": -1.6046066982545673,
+    "lift_ci_upper": 7.075928422630501,
+    "lift_p_value": 0.12,
+    "group_importance": {
+      "RP_features": 0.010737437568474385,
+      "Baseline_features": 0.25174687186496975
+    },
+    "top_features": null,
+    "wall_time_s": 31.688395977020264
   },
   {
-    "dataset": "Instacart",
-    "target": "Basket Size",
+    "dataset": "H&M",
+    "target": "Spend Change",
     "task_type": "regression",
-    "n_users": 50000,
-    "n_rp_features": 59,
-    "n_base_features": 13,
+    "n_users": 46757,
+    "n_train": 37405,
+    "n_test": 9352,
     "positive_rate": 0.0,
-    "oos_auc_rp": 0.0,
-    "oos_auc_base": 0.0,
-    "oos_auc_combined": 0.0,
-    "oos_ap_rp": 0.0,
-    "oos_ap_base": 0.0,
-    "oos_ap_combined": 0.0,
-    "oos_r2_rp": 0.4972579576883349,
-    "oos_r2_base": 0.7055037640595271,
-    "oos_r2_combined": 0.7067335894568819,
-    "oot_auc_rp": 0.0,
-    "oot_auc_base": 0.0,
-    "oot_auc_combined": 0.0,
-    "oot_ap_rp": 0.0,
-    "oot_ap_base": 0.0,
-    "oot_ap_combined": 0.0,
-    "oot_r2_rp": 0.5336783457672989,
-    "oot_r2_base": 0.7416633092155127,
-    "oot_r2_combined": 0.7447650259310599,
-    "top_features": [
-      [
-        "spend_slope",
-        381
-      ],
-      [
-        "mean_basket_size",
-        345
-      ],
-      [
-        "mean_abs_spend_change",
-        195
-      ],
-      [
-        "spend_cv",
-        180
-      ],
-      [
-        "util_range",
-        159
-      ],
-      [
-        "top_category_share",
-        157
-      ],
-      [
-        "herfindahl",
-        156
-      ],
-      [
-        "min_spend",
-        153
-      ],
-      [
-        "total_spend",
-        150
-      ],
-      [
-        "max_spend",
-        146
-      ],
-      [
-        "std_spend",
-        139
-      ],
-      [
-        "n_active_categories",
-        137
-      ],
-      [
-        "util_gini",
-        127
-      ],
-      [
-        "util_mean",
-        124
-      ],
-      [
-        "util_cv",
-        103
-      ]
-    ],
-    "wall_time_s": 4.368414878845215
+    "auc_rp": 0.0,
+    "auc_base": 0.0,
+    "auc_combined": 0.0,
+    "ap_rp": 0.0,
+    "ap_base": 0.0,
+    "ap_combined": 0.0,
+    "r2_rp": 0.19144476792605203,
+    "r2_base": 0.3204045424124149,
+    "r2_combined": 0.3169035804868542,
+    "lift_pct": -1.040817327672838,
+    "lift_ci_lower": -3.7180856623297043,
+    "lift_ci_upper": 1.5155453341831624,
+    "lift_p_value": 0.781,
+    "group_importance": {
+      "RP_features": 0.0384402352066338,
+      "Baseline_features": 0.5646784555853848
+    },
+    "top_features": null,
+    "wall_time_s": 16.953691959381104
+  },
+  {
+    "dataset": "H&M",
+    "target": "Future LTV",
+    "task_type": "regression",
+    "n_users": 46757,
+    "n_train": 37405,
+    "n_test": 9352,
+    "positive_rate": 0.0,
+    "auc_rp": 0.0,
+    "auc_base": 0.0,
+    "auc_combined": 0.0,
+    "ap_rp": 0.0,
+    "ap_base": 0.0,
+    "ap_combined": 0.0,
+    "r2_rp": 0.19405593612358785,
+    "r2_base": 0.30365297440700556,
+    "r2_combined": 0.302702784258569,
+    "lift_pct": -0.24068694795955942,
+    "lift_ci_lower": -2.748559634788989,
+    "lift_ci_upper": 2.3477366329178753,
+    "lift_p_value": 0.592,
+    "group_importance": {
+      "RP_features": 0.052314310708136455,
+      "Baseline_features": 0.6550767984418755
+    },
+    "top_features": null,
+    "wall_time_s": 15.922991752624512
   }
 ]

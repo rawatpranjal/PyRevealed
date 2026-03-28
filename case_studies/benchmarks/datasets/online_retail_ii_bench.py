@@ -83,7 +83,7 @@ def load_and_prepare(data_dir=None, n_customers=None):
 
     targets_dict = {
         "High Spender": (high_spender, "classification"),
-        "Churn": (churn, "classification"),
+        "Spend Drop": (churn, "classification"),
         "Spend Change": (spend_change, "regression"),
     }
 

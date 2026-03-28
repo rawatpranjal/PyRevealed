@@ -128,8 +128,15 @@ def run_three_way(
     dataset: str,
     target: str,
     task_type: Literal["classification", "regression"] = "classification",
+    y_continuous: np.ndarray | None = None,
+    threshold_pctl: float | None = None,
 ) -> BenchmarkResult:
-    """Run the full protocol: train, evaluate, bootstrap CI, grouped importance."""
+    """Run the full protocol: train, evaluate, bootstrap CI, grouped importance.
+
+    For classification with threshold_pctl: pass raw continuous values in
+    y_continuous and the percentile (e.g. 66.67). The threshold is computed
+    on TRAIN users only, then applied to TEST users. Zero leakage.
+    """
     import time as _time
     _t0 = _time.time()
 
@@ -162,6 +169,13 @@ def run_three_way(
     stratify = y if task_type == "classification" else None
     idx = np.arange(n_users)
     tr, te = train_test_split(idx, test_size=0.2, random_state=SEED, stratify=stratify)
+
+    # Fix threshold leakage: re-binarize using TRAIN-only threshold
+    if y_continuous is not None and threshold_pctl is not None:
+        train_threshold = np.percentile(y_continuous[tr], threshold_pctl)
+        y = (y_continuous > train_threshold).astype(int)
+        pos_rate = float(np.mean(y))
+
     y_train, y_test = y[tr], y[te]
 
     # Train 3 models, collect test predictions
