@@ -5,7 +5,17 @@ Do LLMs have stable action rankings, or does the ranking change when
 different alternatives are shown? We build preference graphs from LLM
 decisions and check for cycles.
 
+**TL;DR.** GPT-4o-mini operates with stable logical rankings for most tasks but struggles with context-dependent framing. Between 74% to 92% of scenarios pass the Strong Axiom of Revealed Preference (SARP) at temperature 0.
+
+**Insights from the data:**
+
+* **Alert Triage (92% pass rate):** Decisions are highly stable. If the model routes an alert to "Escalate", showing or hiding intermediate routing options rarely causes it to contradict its core logic.
+* **Job Screening (74% pass rate):** The weakest category. We observe frequent violations of the Independence of Irrelevant Alternatives (IIA). For example, the LLM might prefer "Interview" over "Reject" for a candidate natively, but introducing "Waitlist" as a third option inexplicably flips its choice to "Reject".
+
+We test logical consistency natively—we don't take mathematically flawed "majority votes" on stochastic outputs. Probabilistic choice (temperature > 0) is instead evaluated strictly through Random Utility Models (RUM) further down.
+
 .. _llm-setup:
+
 
 Setup
 -----
@@ -226,166 +236,9 @@ contradicting it.
 
 .. _llm-stoch-results:
 
-Results 2: Stochastic (majority vote, temp=0.7)
------------------------------------------------
-
-We repeat each menu K times at temperature 0.7 and take the majority
-choice per menu. These tables show how often acyclicity survives
-sampling, and how often menus produce mixed responses across K reps.
-
-.. list-table:: SARP pass rate (majority-vote)
-   :header-rows: 1
-   :widths: 18 13 13 13 13 13 13
-
-   * -
-     - Min
-     - DecTree
-     - Conserv
-     - Aggress
-     - CoT
-     - Mean
-   * - Support
-     - 90
-     - 80
-     - 90
-     - 90
-     - 100
-     - 90
-   * - Alert
-     - 80
-     - 90
-     - 90
-     - 100
-     - 90
-     - 90
-   * - Content
-     - 90
-     - 80
-     - 60
-     - 80
-     - 70
-     - 76
-   * - Jobs
-     - 80
-     - 60
-     - 80
-     - 80
-     - 90
-     - 78
-   * - Procurement
-     - 78
-     - 100
-     - 75
-     - 88
-     - 75
-     - 83
-
-These rates come from majority vote at temperature 0.7. They measure how
-often sampling preserves an acyclic preference order for a vignette and
-prompt. Compare to deterministic rates to see which prompts are robust.
-
-.. list-table:: % of menus with mixed responses
-   :header-rows: 1
-   :widths: 18 13 13 13 13 13 13
-
-   * -
-     - Min
-     - DecTree
-     - Conserv
-     - Aggress
-     - CoT
-     - All
-   * - Support
-     - 8
-     - 20
-     - 5
-     - 11
-     - 11
-     - 11
-   * - Alert
-     - 8
-     - 11
-     - 7
-     - 9
-     - 7
-     - 8
-   * - Content
-     - 14
-     - 7
-     - 16
-     - 5
-     - 17
-     - 12
-   * - Jobs
-     - 9
-     - 10
-     - 9
-     - 5
-     - 9
-     - 8
-   * - Procurement
-     - 5
-     - 8
-     - 24
-     - 16
-     - 5
-     - 12
-
-Percent mixed captures instability within the K repetitions for the same
-menu. High values point to prompts and scenarios where the model splits
-between two nearby options rather than committing to one.
-
-.. list-table:: SARP pass rate by tier (majority-vote)
-   :header-rows: 1
-   :widths: 18 16 16 16 16 16
-
-   * -
-     - Clear
-     - Binary
-     - Ambig.
-     - Advers.
-     - Mean
-   * - Support
-     - 93
-     - 100
-     - 80
-     - 80
-     - 90
-   * - Alert
-     - 87
-     - 100
-     - 90
-     - 80
-     - 90
-   * - Content
-     - 47
-     - 87
-     - 80
-     - 100
-     - 76
-   * - Jobs
-     - 87
-     - 73
-     - 80
-     - 70
-     - 78
-   * - Procurement
-     - 87
-     - 67
-     - 100
-     - 100\*
-     - 83
-
-*\*Procurement adversarial based on 1 observed vignette.*
-
-This tier view under stochastic sampling shows how clarity interacts with
-menu effects. The contrast for content is informative. Clear cases pass
-less often than ambiguous or adversarial ones because severity anchors
-become more influential in clear settings.
-
 .. _llm-rum:
 
-Results 3: Stochastic Choice (RUM)
+Results 2: Stochastic Choice (RUM)
 ----------------------------------
 
 We aggregate the K responses into choice frequencies and test random

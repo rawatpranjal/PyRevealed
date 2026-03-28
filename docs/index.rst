@@ -62,7 +62,7 @@ PrefGraph is designed to handle two fundamentally different types of choice envi
    4. Segment users by score                 4. Segment users by score
 
 Consistency Benchmarks (LLMs)
---------------------------
+-----------------------------
 
 Do LLMs have stable action rankings? We build preference graphs from
 gpt-4o-mini decisions across 5 enterprise scenarios (support triage,
@@ -102,7 +102,7 @@ inputs.
 *How we measure this: We test absolute logical consistency at Temperature 0 using a strict SARP check (did the model ever contradict its own unprompted ranking?). Then, we raise the temperature to 0.7, run 20 repeated trials, and use Random Utility Models (RUM) to mathematically verify if the model's probabilistic hallucinations still follow a coherent underlying distribution of choices. This isolates true preference reversals from standard token sampling noise.*
 
 Predictive Benchmarks (E-commerce)
------------------------------------
+--------------------------------------
 
 Do RP features improve predictive models?
 We benchmark GARP, CCEI, MPI, HM, and VEI features against spend/engagement baselines on churn, high-spender, novelty, and LTV tasks.
