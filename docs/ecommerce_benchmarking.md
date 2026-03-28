@@ -452,3 +452,143 @@ Columns:
 - **RP Group**: Drop in test AUC when all RP features shuffled simultaneously
 - **Base Group**: Drop in test AUC when all baseline features shuffled simultaneously
 - Significance: *** p<0.01, ** p<0.05, * p<0.10
+
+---
+
+## 9. Data Creation Audit: What We Tried, What Broke, What We Learned
+
+This section documents the iterative process of constructing defensible RP benchmark data. Every dead end is recorded.
+
+### 9.1 Budget Datasets: The Price Problem
+
+**Issue: Instacart has no prices.**
+Instacart's raw data contains products, aisles, departments, and order sequences — but zero price information. Without prices, budget-based RP (GARP) requires a price assumption.
+
+**Attempt 1: Uniform $1 prices (21 departments).**
+Assigned $1/unit to all departments. Result: GARP reduces to quantity-dominance checks. Every user is perfectly consistent (CCEI=1.0, MPI=0.0, zero violations). RP features have zero variance. Dead on arrival.
+
+**Attempt 2: Heuristic per-aisle prices (134 aisles, $1.50–$14.00).**
+Keyword-matched 134 aisle names to price tiers (fresh produce $2.00, meat $5.00, alcohol $12.00, etc.). Prices are constant across time. EDA showed plausible order totals ($32/order vs real $35–50). But: static prices mean budget lines never intersect. GARP violations are mathematically impossible with parallel budget constraints. Verified: 200 users, every one perfectly GARP-consistent. All efficiency features (CCEI, MPI, VEI) have zero variance. **Conclusion: static heuristic prices make GARP degenerate regardless of granularity.**
+
+**Attempt 3: Reframe Instacart as menu-choice (current).**
+Instead of forcing prices, construct product-level menu-choice data within departments. Menu = user's known products in their most active department. Choice = first product added to cart. This produces real SARP violations (mean 68 per user, HM ratio 81%). See Section 9.3.
+
+**Lesson learned:** RP budget analysis requires genuine temporal price variation. Without it, all users appear perfectly rational. Heuristic prices at any granularity cannot substitute for real market price dynamics.
+
+**Other budget datasets — price oracle concerns:**
+- **Dunnhumby & Open E-Commerce**: Global median price oracle shared across all users. Individual price exposure (coupons, store location) not captured. Forward-fill/backward-fill for missing periods creates artificial price continuity. Accepted limitation — follows Dean & Martin (2016) precedent.
+- **H&M**: Real transaction prices (normalized 0–1). 4-level fallback chain (ffill → bfill → group median → 0.01) for missing prices. Some prices are heavily imputed. Accepted — the alternative is dropping observations.
+
+### 9.2 Menu Datasets: The Session Boundary Problem
+
+**Issue: What defines a "session" (menu presentation)?**
+
+**REES46**: Server-defined `user_session` column — gold standard. No heuristic needed.
+
+**Taobao — Attempt 1: Calendar day.**
+Original construction: menu = items viewed that day, choice = item purchased. Problem: a user browsing electronics at 8am and buying groceries at 11pm both appear in one "menu." Cross-midnight sessions (view 23:50, buy 00:10) split incorrectly. Inflated menu sizes with irrelevant items.
+
+**Taobao — Attempt 2: 30-minute gap sessions (current).**
+EDA showed 84% of inter-event gaps < 30 min with a sharp break at p90 (3.3 hours). Using 1800s gap threshold produces natural sessions with median 4 items/menu. Valid sessions increased from 855K to 919K. **Accepted.**
+
+**Tenrec — Original: Set-based feedback tracking (buggy).**
+Stored liked items in a Python set. `if item_id in fb_set` closed the window at the first click of ANY item the user ever liked — even if the like happened later. Menus closed prematurely.
+
+**Tenrec — Fix: Positional feedback tracking (current).**
+Track `(item_id, had_feedback_at_this_position)` per click. Window closes only when THIS specific click had feedback=1. Correct temporal ordering preserved.
+
+**Tenrec — Structural concern: Algorithmic menus.**
+Menus are determined by Tencent's recommendation algorithm, not organic user browsing. SARP violations may reflect algorithm-user interaction patterns rather than pure user preferences. Documented as limitation — we measure "user-algorithm interaction consistency."
+
+### 9.3 Instacart Menu-Choice: The Product-Level Construction
+
+**Goal:** Rescue Instacart from dead budget-RP by constructing menu-choice data at the product level.
+
+**Construction:**
+- For each user, identify their most active department (most reorder events)
+- Walk orders chronologically within that department
+- Menu = products the user has bought before from this department (growing "known set")
+- Choice = first product added to cart from that department this order
+- Only count observations where choice is in the known set (genuine reorder = choosing from known options)
+- Filter: menu size 3–30, min 5 valid observations per user
+
+**EDA results (500 users):**
+- Mean 22 sessions/user, median 13
+- Menu size: mean 21, median 22 (growing known set → menus grow over time)
+- SARP violations: mean 68 per user, HM ratio ~81%
+- Real preference cycles detected (user prefers yogurt over milk, then switches)
+
+**Issue: High Engagement target is trivially predictable.**
+Baseline AUC = 1.000. `n_sessions` perfectly predicts future session count because both scale with user activity level. The menu construction is correct but the target is wrong — need behavioral-change targets (preference drift, loyalty, exploration rate).
+
+**Open question:** What targets would RP features uniquely predict on this data? Candidates:
+- Preference drift: did user's top-choice product change?
+- Loyalty: fraction of test choices that repeat train choices
+- Exploration rate: fraction of test choices on never-before-seen products
+
+### 9.4 The Temporal Split Problem
+
+**Per-user event-time split (current design):**
+Each user's observations split 70/30 individually. Features from first 70%, targets from last 30%. 80/20 random user holdout for OOS evaluation.
+
+**Attempt: Global calendar cutoff.**
+Tried using 70th percentile of absolute observation index as a global cutoff for all users. On Dunnhumby: cutoff at observation 56 → 67% of users "churned" (had no data beyond that point). But this wasn't real churn — many users simply had shorter data collection periods. Baseline AUC shot to 0.975 (trivial to predict "churn" = short data collection). **Reverted.**
+
+**Attempt: Global calendar cutoff using raw DAY column.**
+Read Dunnhumby's actual `DAY` column (1–711). Cutoff at DAY 497 (70th percentile of unique days). Only 30 users truly churned (1.7%). More realistic but small sample. Churn AUC-PR: baseline 0.144, combined 0.189 (+35% lift, p=0.081). Promising but fragile with N=30.
+
+**Lesson learned:** Global calendar cutoff is the gold standard for production deployment simulation, but fails on heterogeneous panel datasets where data collection windows vary by user cohort. Per-user event-time split is the accepted compromise — explicitly conditions on "established users with sufficient history."
+
+### 9.5 The Evaluation Design Evolution
+
+**V1: 5-fold stratified CV + LightGBM tuned.**
+Original design. Reviewers would flag: temporal leakage in random folds, hyperparameter sensitivity.
+
+**V2: Single 80/20 split + LightGBM defaults + regularization.**
+Added `colsample_bytree=0.8`, `min_child_samples=50`. Better but still accused of favoring specific regularization.
+
+**V3: CatBoost pure defaults.**
+Ordered boosting handles noisy features better. Won all 3 Dunnhumby targets vs LightGBM (+0.002 to +0.022). But CatBoost is slower.
+
+**V4 (current): CatBoost defaults + bootstrap CI + grouped permutation importance.**
+Single split, no CV, no tuning. Bootstrap proves lift significance. Grouped permutation proves RP features did the work (not just noise). Most defensible design.
+
+**Key reviewer concerns addressed:**
+1. "Churn" renamed to "Spend Drop" (survival bias: users have 3+ test observations)
+2. High Spender threshold computed on train users only (zero leakage)
+3. R² reported as absolute ΔR², not percentage lift (avoids math breakdown on near-zero R²)
+4. Recency + frequency rate added to baseline (was missing R and F from "RFM")
+5. Instacart RP dead with static prices → reframed as menu-choice
+
+### 9.6 Feature Engineering Lessons
+
+**What works (orthogonal to baselines):**
+- `strict_pref_density`: Preference graph structure. Correlation < 0.44 with all baselines. Ranked #3–#6 across datasets.
+- `util_gini`: Inequality of recovered Afriat utility values. Correlation < 0.17. Ranked #7 overall.
+- `choice_entropy_norm`: Normalized Shannon entropy of choice distribution. Menu-dataset specific.
+- `menu_transitivity`: Preference graph transitivity ratio. #2 on menu datasets.
+- `pref_graph_density`: Edge density of revealed preference graph. Consistently top 5–10.
+- `n_scc`: Number of strongly connected components. Graph fragmentation signal.
+
+**What doesn't work (correlated with baselines):**
+- `ccei`, `mpi`, `hm_ratio`: Core RP scores are highly correlated with spending features. Adding them to a strong RFM baseline adds noise, not signal.
+- `vei_mean`: Mean per-observation efficiency. Correlated with `n_obs` and `total_spend`.
+- VEI distributional features (std, q25, q75): Many users have identical VEI vectors (all 1.0 if consistent), causing zero variance.
+
+**What's broken (high NaN rates):**
+- Utility recovery features (`util_mean`, `util_gini`, `lambda_cv`): Require GARP consistency for LP feasibility. ~40% of users fail, producing NaN. Imputed with median, diluting signal.
+- Cycle features (`n_cycles`, `violation_mean_position`): Require violations to exist. Consistent users produce NaN. Same imputation problem.
+
+### 9.7 Summary: Current State of Evidence
+
+| Category | Finding | Confidence |
+|----------|---------|------------|
+| **Budget RP → classification** | ~0% marginal lift over RFM | High (7 datasets, bootstrap CI) |
+| **Budget RP → regression (LTV)** | +1.3% R² lift on Dunnhumby (p=0.037) | Moderate (1 dataset, single split) |
+| **Menu RP → classification** | RP-only competitive with baselines (Taobao RP-only 0.925 > baseline 0.913) | Moderate |
+| **Graph features (pref_density, n_scc)** | Consistently rank in top 10 feature importance | High |
+| **Core RP scores (CCEI, MPI)** | Correlated with RFM, no marginal value | High |
+| **Static-price GARP** | Completely degenerate (zero violations) | Definitive |
+| **Product-level menu choice** | Rich SARP signal (68 violations/user) but needs better targets | Preliminary |
+
+The honest conclusion: **RP graph structure features add novel information that tree models use, but the marginal predictive lift over well-engineered RFM baselines is small and rarely statistically significant for classification. The strongest evidence for RP's value is in continuous regression targets (LTV) and in menu-choice settings where preference graph properties (transitivity, density) capture patterns that simple engagement counts miss.**
