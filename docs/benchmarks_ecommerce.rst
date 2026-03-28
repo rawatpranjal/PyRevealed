@@ -22,181 +22,149 @@ All targets use top-tercile thresholds for consistency.
 Assumptions
 -----------
 
-**Budget datasets** require prices. Dunnhumby and Open E-Commerce use global
-median prices per category per period, shared across all households — individual
-price exposure (coupons, regional variation) is not captured (Dean & Martin 2016).
-H&M uses each customer's own average paid price per product group per month;
-unpurchased groups are imputed via period-group median, then group median, then
-global median. Each row in the raw H&M CSV is one purchased article unit (confirmed
-by duplicate (date, customer, article) rows), so quantities are article counts per
-product group per month. Product groups are the first 2 digits of article_id (top
-20 by frequency). A customer-month is one budget observation; customers need ≥ 6
-active months to enter the panel. Prices are normalized 0--1 (Kaggle competition);
-relative price variation is real but absolute dollar interpretation is lost. Sales
-channel is ignored. All budget datasets aggregate to 10--134 categories, so
-within-category substitution is invisible. Dunnhumby's 10 commodity groups
-capture ~$19/week of a ~$100--150 weekly grocery budget.
+**Dunnhumby.** 2,222 households, 104 weeks, 10 commodity groups (~$19/week of
+a ~$100--150 weekly grocery basket). Budget-based RP. Global median price oracle
+per commodity per week, shared across all households (Dean & Martin 2016).
+Individual price exposure (coupons, regional variation) is not captured.
+Within-commodity substitution is invisible.
 
-**Menu datasets** have no prices. REES46 uses server-defined session IDs
-(gold standard), median menu size ~5 items. Taobao uses 30-minute inactivity
-gaps to define session boundaries (84% of inter-event gaps < 30 min), median
-menu size 4 items. Tenrec uses click-to-like windows with positional feedback
-tracking, median ~5 clicks between likes; menus reflect algorithmic
-recommendations, not organic browsing. For all three, menus contain only items
-the user viewed or clicked — items shown but not engaged with are invisible.
+**Open E-Commerce.** 4,694 users, category-level quantities. Budget-based RP.
+Median price per category per month, forward-filled for missing periods. Shared
+oracle across users. Within-category product switching is invisible.
 
-**Instacart** is treated as menu-choice, not budget (no prices in raw data).
+**H&M.** 46,757 customers, 20 product groups (first 2 digits of article_id).
+Budget-based RP. Each customer's own average paid price per product group per
+month; unpurchased groups imputed via period-group median, then group median,
+then global median. Each raw CSV row is one purchased article unit, so quantities
+are article counts per group per month. Customers need ≥ 6 active months. Prices
+normalized 0--1 (Kaggle); relative variation is real, absolute dollar
+interpretation is lost. Sales channel ignored.
+
+**Instacart.** 50,000 users, 134 aisles. Menu-based RP (no prices in raw data).
 Observation = user × order × aisle with exactly one reordered SKU. Menu =
 trailing-3 order products in the same aisle (familiarity set). Filters: menu
-size ≥ 2, (user, aisle) pairs with ≥ 3 valid events. This yields 4.5M events
-from 120K users across 715K user-aisle pairs. The data is habit-heavy: 58.6%
-of repeated user-aisle pairs never switch products, and 83.8% of users have
-SARP violations. RP features show real graph structure but near-zero predictive
-lift, consistent with reorder-dominated behavior.
+size ≥ 2, (user, aisle) pairs with ≥ 3 valid events. Yields 4.5M events from
+120K users across 715K user-aisle pairs. Habit-heavy: 58.6% of repeated
+user-aisle pairs never switch; 83.8% of users have SARP violations.
+
+**REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP.
+Server-defined session IDs (gold standard). Menus contain only items the user
+clicked; unviewed items are invisible. Median menu size ~5 items. No prices —
+choices reveal preference orderings only.
+
+**Taobao.** 4,239 users, 100M raw events. Menu-based RP. Session boundaries
+defined by 30-minute inactivity gaps (84% of inter-event gaps < 30 min). Median
+menu size 4 items. Menus contain only items the user viewed or purchased within
+a session. No prices.
+
+**Tenrec.** 50,000 users, NeurIPS 2022 QQ Browser dataset. Menu-based RP.
+Click-to-like windows with positional feedback tracking; median ~5 clicks
+between likes. Menus reflect algorithmic recommendations, not organic browsing.
+Items shown but not clicked are invisible. No prices.
 
 Results
 -------
 
 .. list-table::
    :header-rows: 1
-   :widths: 18 8 15 10 10 8 8
+   :widths: 18 8 15 10 10 10 8
 
    * - Dataset
      - N
      - Target
      - Baseline
      - +RP
+     - RP-only
      - Lift%
-     - AUC-PR
    * - Dunnhumby
      - 2,222
      - High Spender
      - 0.960
      - 0.960
+     - —
      - -0.0%
-     - 0.931
    * - Dunnhumby
      - 2,222
      - Churn
      - 0.752
      - 0.740
+     - —
      - -1.5%
-     - 0.160
    * - Open E-Commerce
      - 4,694
      - High Spender
      - 0.950
      - 0.951
+     - —
      - +0.0%
-     - 0.914
    * - Open E-Commerce
      - 4,694
      - Churn
      - 0.846
      - 0.846
+     - 0.769
      - -0.0%
-     - 0.297
    * - H&M
      - 46,757
      - High Spender
      - 0.784
      - 0.783
+     - 0.720
      - -0.1%
-     - —
    * - H&M
      - 46,757
      - Future Spend (R²)
      - 0.337
      - 0.340
-     - +0.003
      - —
+     - +0.003
    * - H&M
      - 46,757
      - Spend Change (R²)
      - 0.290
      - 0.295
-     - +0.005
      - —
+     - +0.005
    * - Instacart
      - 50,000
      - Low Loyalty
      - 0.968
      - 0.969
-     - +0.0%
      - —
+     - +0.0%
    * - Instacart
      - 50,000
      - High Novelty
      - 0.765
      - 0.767
+     - 0.762
      - +0.3%
-     - —
    * - REES46
      - 8,832
      - High Engagement
      - 0.996
      - 0.996
+     - 0.990
      - +0.0%
-     - 0.966
    * - Taobao
      - 4,239
      - High Engagement
      - 0.913
      - **0.915**
+     - **0.925**
      - **+0.2%**
-     - 0.136
    * - Tenrec
      - 50,000
      - High Engagement
      - 0.993
      - 0.993
-     - +0.0%
-     - 0.983
-
-*Baseline = LightGBM on 13 RFM features. +RP = same model with 42 RP features added (Engine scores + graph structure + utility recovery + choice entropy). Lift = (Combined - Baseline) / Baseline x 100.*
-
-RP-Only Performance
-~~~~~~~~~~~~~~~~~~~
-
-RP features alone (no baseline) show where preference structure carries
-independent signal:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 18 15 12 12
-
-   * - Dataset
-     - Target
-     - RP-only
-     - Baseline
-   * - Taobao
-     - High Engagement
-     - **0.925**
-     - 0.913
-   * - Tenrec
-     - High Engagement
      - **0.993**
-     - 0.993
-   * - REES46
-     - High Engagement
-     - 0.990
-     - 0.996
-   * - Instacart
-     - High Novelty
-     - 0.762
-     - 0.765
-   * - H&M
-     - High Spender
-     - 0.720
-     - 0.784
-   * - Open E-Commerce
-     - Churn
-     - 0.769
-     - 0.846
+     - +0.0%
 
-On Taobao, RP-only **outperforms** the engagement baseline. Preference
-graph transitivity and choice entropy capture patterns that session
-counts and menu sizes miss.
+*Baseline = LightGBM on 13 RFM features. +RP = same model with 42 RP features
+added. RP-only = RP features without baseline. On Taobao, RP-only (0.925)
+outperforms the engagement baseline (0.913) — graph transitivity and choice
+entropy capture patterns that session counts miss.*
 
 Top Features
 ------------
