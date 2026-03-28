@@ -174,12 +174,12 @@ Full results: :doc:`benchmarks_ecommerce`.
      - 0.996
      - 0.996
    * - Taobao (Buy Window)
-     - 5,955
-     - Pref Drift (AP)
-     - 0.964
-     - **0.973**
+     - 29,519
+     - High Entropy (AP)
+     - 0.789
+     - **0.790**
 
-Budget datasets: RP adds ~0% over strong RFM baselines. On Taobao (buy‑anchored, 6h), RP adds signal on structural targets (e.g., Pref Drift AP 0.964 → 0.973); see full results.
+Budget datasets: RP adds ~0% over strong RFM baselines. On Taobao (buy‑anchored, 6h), we report multiple targets; structural outcomes (dispersion, drift) show the clearest RP gains. See full results for AP/AUC by target.
 
 Performance
 -----------
@@ -224,6 +224,5 @@ Benchmarked on synthetic data, T=15 observations, 10 goods, M1 Mac:
    benchmarks
    algorithms
    performance
-   theory_landscape
    api
    references
