@@ -1,8 +1,11 @@
 E-commerce Benchmarks
 =====================
 
-Seven public datasets, 167K users, 42 RP features, LightGBM with 5-fold
-stratified CV. Results split by data type:
+*Last updated: 2026-03-28. H&M results refreshed with per-customer realized
+prices (v0.5.8).*
+
+Seven public datasets, 167K users, 42 RP features. CatBoost (H&M) or LightGBM
+(others) with 80/20 user holdout + bootstrap CI. Results split by data type:
 
 - **Menu datasets**: RP features are **competitive with baselines**. Taobao
   RP-only AUC (0.925) beats the engagement baseline (0.913). Graph features
@@ -58,17 +61,24 @@ Results
    * - H&M
      - 46,757
      - High Spender
-     - 0.763
-     - 0.762
+     - 0.784
+     - 0.783
      - -0.1%
-     - 0.667
+     - —
    * - H&M
      - 46,757
-     - Churn
-     - 0.778
-     - 0.778
-     - -0.1%
-     - 0.293
+     - Future Spend (R²)
+     - 0.337
+     - 0.340
+     - +0.003
+     - —
+   * - H&M
+     - 46,757
+     - Spend Change (R²)
+     - 0.290
+     - 0.295
+     - +0.005
+     - —
    * - Instacart
      - 50,000
      - Spend Drop
@@ -135,8 +145,8 @@ independent signal:
      - 0.996
    * - H&M
      - High Spender
-     - 0.715
-     - 0.763
+     - 0.720
+     - 0.784
    * - Open E-Commerce
      - Churn
      - 0.769
@@ -169,8 +179,8 @@ Total wall time: **29 min** on M1 Mac (data on external USB drive via symlink).
      - 12s
    * - H&M
      - 46,757
-     - 169s
-     - 21s
+     - 1857s
+     - 141s
    * - Instacart
      - 50,000
      - 92s
@@ -262,9 +272,9 @@ Price Assumptions
      - Budget
      - Forward-filled for missing periods
    * - H&M
-     - Actual transaction prices
+     - Per-customer realized prices
      - Budget
-     - Normalized prices from Kaggle competition
+     - Customer avg paid price if purchased; period-group median imputation otherwise
    * - Instacart
      - Uniform ($1/unit)
      - Budget
@@ -407,7 +417,7 @@ Appendix: Pipeline
 
 **Three models per target**: (a) Baseline only, (b) RP only, (c) Baseline + RP.
 
-**Targets**: High Spender (top tercile spend), Churn (>50% spend drop),
+**Targets**: High Spender (top tercile spend), Future Spend (regression),
 Spend Change (regression), High Engagement (top tercile sessions).
 
 **Output**: ``case_studies/benchmarks/output/results.json`` (full metrics),
@@ -432,9 +442,10 @@ Here is what each loader does and what it cannot do.
 - **Instacart heuristic prices**: No prices in raw data. We assign per-aisle
   prices ($1.50--$14.00) via keyword matching on 134 aisle names. Yields
   $32/order average (real Instacart ~$35--50). Defensible but approximate.
-- **H&M normalized prices**: Prices are from Kaggle competition data,
-  normalized to 0--1 range. Relative price variation is real; absolute
-  values are not dollar amounts.
+- **H&M per-customer prices**: Each customer's own average paid price
+  per product group per month. Unpurchased groups imputed via
+  period-group median → group median → global median. Prices are
+  normalized 0--1 (Kaggle); relative variation is real.
 - **Dunnhumby coarse categories**: 10 commodity groups capture ~$19/week
   of a ~$100--150 weekly grocery budget. The RP analysis is valid within
   these categories but doesn't cover the full basket.
