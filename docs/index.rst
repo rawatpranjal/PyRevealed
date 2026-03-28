@@ -41,7 +41,7 @@ people want — just a consistency check on what they did.
 A cycle in the preference graph (A > B > C > A) means no ranking
 explains the choices. Detecting and measuring these cycles is what
 PrefGraph does — using Floyd-Warshall, Tarjan SCC, and Karp's algorithm
-on the preference graph. Afriat (1967), Varian (1982).
+on the preference graph.
 
 .. raw:: html
 
@@ -52,7 +52,7 @@ on the preference graph. Afriat (1967), Varian (1982).
    <div style="display: flex; gap: 20px; justify-content: space-between; flex-wrap: wrap;">
      <div style="width: 48%;">
        <img src="_static/budget_hero.gif" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Budget Choices">
-       <p class="gif-caption"><strong>Budget choices.</strong> A shopper buys goods at given prices. Budget lines show what was affordable. When chosen bundles sit inside each other's budget lines, that's a contradiction — CCEI measures how much you'd need to shrink budgets to fix it. Afriat (1967).</p>
+       <p class="gif-caption"><strong>Budget choices.</strong> A shopper buys goods at given prices. Budget lines show what was affordable. When chosen bundles sit inside each other's budget lines, that's a contradiction — CCEI measures how much you'd need to shrink budgets to fix it.</p>
      </div>
      <div style="width: 48%;">
        <img src="_static/menu_hero.gif" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Menu Choices">
