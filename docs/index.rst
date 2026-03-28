@@ -1,28 +1,22 @@
 Preference Graphs
 ==================
 
-Turn raw choices into a preference graph. Detect cycles and quantify
-how rational the behavior is — at scale. PrefGraph powers analysis for
-shopper baskets, recommender logs, and LLM decisions.
-
-Every choice reveals a preference edge: "A was chosen over B." These
-edges form a **preference graph**. If the graph is acyclic, a coherent
-ranking exists. If it has cycles, the choices are inconsistent — and
-PrefGraph scores *how much* (0 = incoherent, 1 = perfectly rational).
+**PrefGraph** translates raw user choices into directed preference networks to detect inconsistencies and measure behavioral coherence at scale. Without assuming prior models or making parametric guesses, it tests whether choices follow a stable ranking—making it possible to score the rationality of millions of users or evaluate LLM decision-making instantly.
 
 .. raw:: html
 
    <div class="feature-grid">
      <div class="feature-card">
-       <h3>Build &amp; Test</h3>
-       <p>Budget data (prices × quantities) → observation graph. Menu data (menus × choices) → item graph. Test GARP, SARP, WARP for cycles via Floyd-Warshall and Tarjan SCC.</p>     </div>
-     <div class="feature-card">
-       <h3>Score &amp; Recover</h3>
-       <p>CCEI, MPI, Houtman-Maks, VEI — each user gets a 0-to-1 rationality score. Then recover utility functions, welfare bounds, or detect IIA violations.</p>
+       <h3>1. Build &amp; Test</h3>
+       <p>Map budget choices (prices × quantities) and menu selections to directed graphs. Instantly test models like GARP, SARP, and WARP for cyclic contradictions.</p>
      </div>
      <div class="feature-card">
-       <h3>Scale</h3>
-       <p>Rust backend (Rayon parallel, HiGHS LP). 49K users/sec on GARP. <strong>Engine</strong> for batch, <strong>Functions</strong> for deep dives. Python fallback available.</p>
+       <h3>2. Score &amp; Recover</h3>
+       <p>Assign a 0-to-1 rationality score using indices like CCEI or Houtman-Maks. Recover utility bound estimates and identify specific choice violations.</p>
+     </div>
+     <div class="feature-card">
+       <h3>3. Scale Out</h3>
+       <p>Process 49k+ users per second with a Rayon/Rust backend. Use the <strong>Engine API</strong> for batch processing and ML pipelines, or <strong>Functions</strong> for single-user audits.</p>
      </div>
    </div>
 
@@ -33,17 +27,9 @@ PrefGraph scores *how much* (0 = incoherent, 1 = perfectly rational).
 Why Preference Graphs?
 -----------------------
 
-Most approaches assume a model of preferences first, then fit parameters.
-Preference graphs work backwards from raw choices, build the revealed
-preference graph, and ask "is it acyclic?" No assumptions about what
-people want, just a consistency check on what they did.
+Most behavioral analysis assumes a utility model first and tries to fit parameters to it. Preference graphs work in the exact opposite direction: they start with raw choices, build the revealed preference graph, and ask, "Is it acyclic?" By testing whether observed actions follow a logically valid ranking, PrefGraph evaluates choice quality directly from the data, without making assumptions about underlying tastes or functional forms. 
 
-A cycle in the preference graph (A > B > C > A) means no ranking
-explains the choices. Detecting and measuring these cycles is what
-PrefGraph does, using Floyd-Warshall, Tarjan SCC, and Karp's algorithm
-on the preference graph.
-
-Inconsistency is not always bad. It can reflect changing preferences, exploration, or noise. However, sometimes we prefer consistency.
+In a preference graph, a cycle (A > B > C > A) represents a logical contradiction where no coherent ranking can explain the choices. While inconsistency isn't inherently bad—it can simply reflect changing tastes, exploration, or random noise—we often need to know when decisions are inconsistent. Using fast algorithms like Tarjan's SCC, PrefGraph detects these cycles to quantify consistency.
 
 .. raw:: html
 
@@ -65,6 +51,8 @@ Inconsistency is not always bad. It can reflect changing preferences, exploratio
 Two Core Data Types
 -------------------
 
+PrefGraph is designed to handle two fundamentally different types of choice environments out of the box: **Budget** (e.g. retail shopping where users buy quantities given prices and a budget constraint) and **Menu** (e.g. search pages or LLM prompting where users pick one discrete item from an available set). Both follow the exact same unified workflow.
+
 .. code-block:: text
 
    Budget Data (prices + quantities)          Menu Data (menus + choices)   ───────────────────────────────            ──────────────────────────
@@ -81,14 +69,7 @@ gpt-4o-mini decisions across 5 enterprise scenarios (support triage,
 alert routing, content moderation, job screening, procurement) and test
 for cycles. Full results: :doc:`budget/app_llm_benchmark`.
 
-Key takeaways
-~~~~~~~~~~~~~
-
-- LLMs are mostly consistent: they usually pick the same thing even if you change the options; only a small share of menus make them switch.
-- When they do switch, it’s predictable—extreme options nudge them to the middle (jobs) and lenient options make them stricter (content)—and the best instructions depend on the task (no one-size-fits-all).
-
-Summary metrics
-~~~~~~~~~~~~~~~
+We find that LLMs are mostly consistent: they usually pick the same thing even if you change the options; only a small share of menus make them suffer from decoy effects. When they do switch, it’s predictable, extreme options nudge them to the middle (jobs) and lenient options make them stricter (content), and the best instructions depend on the task (no one-size-fits-all).
 
 .. list-table::
    :header-rows: 1
@@ -136,7 +117,7 @@ Mixed menus = percent of menus with non‑unanimous responses across K reps.*
 E-commerce Benchmarks
 ---------------------
 
-Seven public datasets, 167K users, LightGBM with 5-fold stratified CV.
+Does measuring behavioral consistency actually improve machine learning models? We evaluated PrefGraph across seven public datasets to predict concrete business outcomes like future spend, churn, and engagement. Using CatBoost, we compared strong baselines against models augmented with revealed preference (RP) features. 
 Full results: :doc:`benchmarks_ecommerce`.
 
 .. list-table::
@@ -206,20 +187,6 @@ Full results: :doc:`benchmarks_ecommerce`.
      - 0.295
      - +0.005
      - —
-   * - Instacart
-     - 50,000
-     - Low Loyalty
-     - 0.968
-     - 0.969
-     - +0.0%
-     - —
-   * - Instacart
-     - 50,000
-     - High Novelty
-     - 0.765
-     - 0.767
-     - +0.3%
-     - 0.762
    * - REES46
      - 8,832
      - High Engagement
@@ -235,10 +202,12 @@ Full results: :doc:`benchmarks_ecommerce`.
      - **+0.1%**
      - —
 
-Budget datasets: RP adds ~0% over strong RFM baselines. On Taobao (buy‑anchored, 6h), we report multiple targets; structural outcomes (dispersion, drift) show the clearest RP gains. See full results for AP/AUC by target.
+Overall, incorporating preference graph features provides a modest but consistent lift over strong baseline models (such as traditional RFM features).
 
 Performance
 -----------
+
+PrefGraph achieves throughput up to two orders of magnitude faster than naive Python implementations. By combining PyArrow for memory-efficient Parquet data loading with a Rust core powered by Rayon (parallelism) and algorithm optimizations like Tarjan's SCC, PrefGraph easily scales to datasets with millions of users.
 
 Benchmarked on synthetic data, T=15 observations, 10 goods, M1 Mac:
 

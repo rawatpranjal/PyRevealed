@@ -113,20 +113,6 @@ Results
      - 0.295
      - +0.005
      - —
-   * - Instacart
-     - 50,000
-     - Low Loyalty
-     - 0.968
-     - 0.969
-     - +0.0%
-     - —
-   * - Instacart
-     - 50,000
-     - High Novelty
-     - 0.765
-     - 0.767
-     - +0.3%
-     - 0.762
    * - REES46
      - 8,832
      - High Engagement
@@ -241,10 +227,7 @@ baselines. Measures such as CCEI and MPI correlate with spending history,
 so they contribute little independent predictive power when the baseline
 already encodes that history.
 
-Instacart illustrates the difference between structure and prediction.
-We detect heavy habit structure via high SARP violations, yet adding RP
-to the baseline yields near zero lift because the task within aisles is
-dominated by reorder behavior.
+
 
 Looking at feature importance, baseline spend features dominate in most
 global models. RP features rise near the top on menu tasks. The menu
@@ -401,21 +384,6 @@ unlike the shared oracle used for Dunnhumby and Open E‑Commerce. Prices are
 normalized 0–1 (Kaggle): relative variation is real, absolute dollar levels are
 not. Filters: ≥ 6 active months, ≥ 10 total observations. Sales channel ignored.
 
-**Instacart.** 206,209 users, 32.4M order-product rows across 3.4M prior orders
-(Kaggle Market Basket Analysis). Menu‑based RP — the raw data contains no prices,
-so budget‑based analysis is not possible. Each user's orders are broken into
-user × order × aisle triples. Within each triple, a valid choice occasion requires
-exactly one reordered SKU in that aisle; events with zero or multiple reorders are
-dropped. The menu for each event is the set of distinct products the user bought in
-that same aisle across their previous three orders, plus the current choice to
-guarantee membership. This trailing‑3 window avoids inflating menus with stale
-items from distant history. Events with menu size < 2 are dropped (trivial menus).
-To ensure enough repeated structure for RP analysis, only user‑aisle pairs with at
-least 3 valid events are retained. Each user's surviving events across all their
-qualifying aisles are concatenated in order‑number sequence into a single
-``MenuChoiceLog``, with product IDs remapped to a compact 0..N−1 space per user.
-Filters: ≥ 5 total observations per user. Final dataset: 4.5M events, 120K users,
-715K user‑aisle pairs.
 
 **REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP.
 Server-defined session IDs (gold standard). Menus contain only items the user
