@@ -470,6 +470,7 @@ class Engine:
     ) -> list[EngineResult]:
         """Fallback: analyze using Python backend."""
         from prefgraph import BehaviorLog, check_garp, compute_aei, compute_mpi
+        from prefgraph.algorithms.mpi import compute_houtman_maks_index
 
         results = []
         for prices, quantities in chunk:
@@ -478,6 +479,8 @@ class Engine:
             garp = check_garp(log, self.tolerance)
             ccei_val = 1.0
             mpi_val = 0.0
+            hm_consistent = 0
+            hm_total = 0
 
             if flags.get("ccei") and not garp.is_consistent:
                 aei = compute_aei(log, method="discrete")
@@ -487,11 +490,18 @@ class Engine:
                 mpi_result = compute_mpi(log)
                 mpi_val = mpi_result.mpi_value
 
+            if flags.get("hm"):
+                hm_total = prices.shape[0]
+                hm_result = compute_houtman_maks_index(log, self.tolerance)
+                hm_consistent = hm_total - len(hm_result.removed_observations)
+
             results.append(EngineResult(
                 is_garp=garp.is_consistent,
                 n_violations=len(garp.violations),
                 ccei=ccei_val,
                 mpi=mpi_val,
+                hm_consistent=hm_consistent,
+                hm_total=hm_total,
             ))
         return results
 

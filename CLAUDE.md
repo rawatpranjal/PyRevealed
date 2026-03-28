@@ -131,8 +131,8 @@ Engine results
 
 ### Backend Parity
 
-Python fallback (`Engine._analyze_chunk_python`) supports GARP + CCEI + MPI only.
-HARP, HM, utility, and VEI require the Rust backend.
+Python fallback (`Engine._analyze_chunk_python`) supports GARP + CCEI + MPI + HM.
+HARP, utility, and VEI require the Rust backend.
 
 Known algorithm differences:
 - **MPI**: Python uses GARP-cycle enumeration; Rust uses Karp's max-mean-weight cycle. Tolerance: 0.05

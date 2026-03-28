@@ -6,7 +6,7 @@ Install
 
 .. code-block:: bash
 
-   pip install prefgraph
+   pip install "prefgraph[datasets]"
 
 Score 100 Users in 5 Lines
 --------------------------
@@ -110,6 +110,11 @@ Your Own Data
                         menu_col="shown_items", choice_col="clicked")
 
    print(results[["is_garp", "ccei", "mpi"]].describe())
+
+.. note::
+
+   Results include ``user_id`` as the DataFrame index, not as a column.
+   Use ``results.reset_index()`` to move it to a column for joins.
 
 Format is auto-detected from which parameters you provide. Default metrics: ``garp``, ``ccei``, ``mpi``.
 Customize with ``metrics=["garp", "ccei", "mpi", "hm", "harp"]``.

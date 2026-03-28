@@ -793,14 +793,14 @@ of Revealed Preference). Consistent behavior indicates:
 - Not confused by the UI
 
 Returns a ConsistencyResult with:
-- is_valid: True if behavior is consistent
-- inconsistencies: List of detected inconsistencies
+- is_consistent: True if behavior is consistent
+- violations: List of detected violation cycles
 
 Example:
     >>> from prefgraph import BehaviorLog, validate_consistency
     >>> result = validate_consistency(user_log)
-    >>> if not result.is_valid:
-    ...     print(f"Found {result.num_violations} inconsistencies")
+    >>> if not result.is_consistent:
+    ...     print(f"Found {result.num_violations} violations")
 """
 
 # validate_consistency_weak: Tech-friendly name for check_warp

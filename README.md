@@ -7,7 +7,7 @@ Rationality scores for every user, at scale. Rust engine, Python interface.
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ```bash
-pip install prefgraph
+pip install "prefgraph[datasets]"
 ```
 
 ## Quick Example
