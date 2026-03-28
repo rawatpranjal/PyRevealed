@@ -143,19 +143,19 @@ Each cell = % of 10 vignettes where the preference graph is acyclic.
    * - Support
      - 3
      - 3
-     - 98.2%
+     - 95.8%
    * - Alert
      - 2
      - 3
-     - 98.3%
+     - 96.6%
    * - Content
      - 9
-     - 8
-     - 97.4%
+     - 12
+     - 95.5%
    * - Jobs
      - 15
-     - --
-     - --
+     - 14
+     - 97.6%
    * - Procurement
      - 8
      - --
@@ -163,7 +163,7 @@ Each cell = % of 10 vignettes where the preference graph is acyclic.
 
 *IIA violation = adding a third option flips the pairwise preference.
 Stochastic = majority-vote from K=20 reps. Agreement = % of menus
-where temp=0 and temp=0.7 majority match. -- = in progress.*
+where temp=0 and temp=0.7 majority match. -- = procurement in progress.*
 
 Stochastic Results (temp=0.7, K=20)
 ------------------------------------
@@ -180,25 +180,32 @@ Stochastic Results (temp=0.7, K=20)
      - CoT
      - Mean
    * - Support
+     - 90
      - 80
-     - 80
+     - 90
+     - 90
      - 100
-     - 100
-     - 100
-     - 92
+     - 90
    * - Alert
      - 80
-     - 100
+     - 90
      - 90
      - 100
      - 90
-     - 92
+     - 90
    * - Content
-     - 88
+     - 90
      - 80
-     - 62
-     - 86
-     - 75
+     - 60
+     - 80
+     - 70
+     - 76
+   * - Jobs
+     - 80
+     - 60
+     - 80
+     - 80
+     - 90
      - 78
 
 .. list-table:: % of menus with mixed responses
@@ -215,38 +222,50 @@ Stochastic Results (temp=0.7, K=20)
    * - Support
      - 8
      - 20
-     - 4
+     - 5
      - 11
      - 11
      - 11
    * - Alert
-     - 7
-     - 12
      - 8
+     - 11
+     - 7
      - 9
      - 7
      - 8
    * - Content
-     - 12
-     - 8
+     - 14
+     - 7
+     - 16
+     - 5
      - 17
-     - 3
-     - 18
      - 12
+   * - Jobs
+     - 9
+     - 10
+     - 9
+     - 5
+     - 9
+     - 8
 
 Findings
 --------
 
-- Job screening has the most preference graph cycles (74% pass, 15 IIA
-  violations). Adding a third candidate changes which of two is preferred.
-- Content moderation "clear" vignettes pass only 60%. Even unambiguous
-  posts produce menu-dependent severity judgments.
-- Decision-tree prompts score 60% on jobs, 100% on alert. Conservative
-  scores 100% on support, 70% on content. No universal best prompt.
-- Alert triage is the most consistent scenario (92%). Actions have a
-  clear ordinal structure.
-- At temp=0.7, 88-92% of menus produce identical choices across 20 reps.
-  Deterministic and stochastic results agree 97-98%.
+- **Job screening is the least consistent scenario.** 74% deterministic
+  SARP pass, 78% stochastic. 15 deterministic + 14 stochastic IIA violations.
+  Adding a third candidate changes which of two is preferred.
+- **Content moderation "clear" vignettes pass only 47% stochastically.**
+  Even unambiguous posts produce menu-dependent severity judgments.
+  Stochastic IIA violations jump from 8 (old) to 12 — majority-voting
+  doesn't eliminate context effects.
+- **Decision-tree prompts score 60% on jobs but 90% on alert.** Conservative
+  scores 90% on support, 60% on content. Chain-of-thought is the only
+  prompt that hits 100% on any scenario (support). No universal best prompt.
+- **Alert triage is the most consistent** (90% stochastic SARP). Actions
+  have a clear ordinal severity structure that resists menu effects.
+- **Stochastic sampling barely changes rankings.** 92-98% of menus agree
+  between temp=0 and temp=0.7 majority vote. Only 8-12% of menus produce
+  mixed responses across 20 reps. Inconsistency is structural, not noise.
 
 Reproduce
 ---------
@@ -264,6 +283,7 @@ Reproduce
 
    # Stochastic (75,000 calls)
    python -m applications.llm_benchmark.v2.run_benchmark --all --stage 2 --k 20
+   python -m applications.llm_benchmark.v2.analyze --all --stage 2
 
 Appendix
 --------
@@ -327,4 +347,4 @@ Limitations
 ~~~~~~~~~~~
 
 No ground truth (consistency ≠ accuracy). Synthetic vignettes. Single
-model family. Stochastic data collecting for 2 scenarios.
+model family. Procurement stochastic data still collecting.
