@@ -296,9 +296,7 @@ Aggressive pacing.
      - 100
      - 100
 
-Stochastic consistency testing reinforces the deterministic findings. Jobs and 
-Procurement paradoxically perform better under Adversarial and Ambiguous constraints,
-while seemingly clear-cut Content moderation fractures into inconsistent distributions. 
+Stochastic consistency testing reinforces the deterministic findings. Procurement paradoxically performs perfectly under Ambiguous and Adversarial constraints, while seemingly clear-cut Content moderation fractures into inconsistent distributions. Jobs, conversely, correctly performs best on Clear cases but degrades under complex scenarios. 
 (*Results with asterisks are based on partial procurement stage2 coverage.*)
 
 .. _llm-patterns:
