@@ -71,12 +71,21 @@ unlike the shared oracle used for Dunnhumby and Open E‑Commerce. Prices are
 normalized 0–1 (Kaggle): relative variation is real, absolute dollar levels are
 not. Filters: ≥ 6 active months, ≥ 10 total observations. Sales channel ignored.
 
-**Instacart.** 50,000 users, 134 aisles. Menu-based RP (no prices in raw data).
-Observation = user × order × aisle with exactly one reordered SKU. Menu =
-trailing‑3 order products in the same aisle (familiarity set). Filters: menu
-size ≥ 2, (user, aisle) pairs with ≥ 3 valid events. Yields 4.5M events from
-120K users across 715K user‑aisle pairs. Habit‑heavy: 58.6% of repeated
-user‑aisle pairs never switch; 83.8% of users have SARP violations.
+**Instacart.** 206,209 users, 32.4M order-product rows across 3.4M prior orders
+(Kaggle Market Basket Analysis). Menu‑based RP — the raw data contains no prices,
+so budget‑based analysis is not possible. Each user's orders are broken into
+user × order × aisle triples. Within each triple, a valid choice occasion requires
+exactly one reordered SKU in that aisle; events with zero or multiple reorders are
+dropped. The menu for each event is the set of distinct products the user bought in
+that same aisle across their previous three orders, plus the current choice to
+guarantee membership. This trailing‑3 window avoids inflating menus with stale
+items from distant history. Events with menu size < 2 are dropped (trivial menus).
+To ensure enough repeated structure for RP analysis, only user‑aisle pairs with at
+least 3 valid events are retained. Each user's surviving events across all their
+qualifying aisles are concatenated in order‑number sequence into a single
+``MenuChoiceLog``, with product IDs remapped to a compact 0..N−1 space per user.
+Filters: ≥ 5 total observations per user. Final dataset: 4.5M events, 120K users,
+715K user‑aisle pairs.
 
 **REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP.
 Server-defined session IDs (gold standard). Menus contain only items the user
