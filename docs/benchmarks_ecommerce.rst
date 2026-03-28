@@ -229,10 +229,10 @@ However, the true value of Revealed Preference features is in **menu datasets** 
 
 Overall, RP graph structure features add novel information that tree models actively depend upon, but the marginal predictive lift over well-engineered baseline metrics is relatively small and rarely significant for basic classification targets. 
 
-.. _eco-reproduce:
+.. _eco-replication:
 
-Reproduce
----------
+Replication
+-----------
 
 .. code-block:: bash
 
