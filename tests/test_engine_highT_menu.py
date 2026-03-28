@@ -59,19 +59,30 @@ def test_highT_menu_with_isolated_warp_reversal():
     - WARP and SARP violations
     - HM consistent = T-1 (remove either of the two reversal observations)
     """
-    T, n_items = 2000, 40
-    menus, choices = _consistent_menu_user(T - 2, n_items, seed=777)
+    T, n_items = 5000, 200
+    # Build consistent menus that avoid items {0,1} entirely
+    rng = np.random.RandomState(777)
+    menus = []
+    choices = []
+    u = rng.rand(n_items).astype(np.float64)
+    for _ in range(T - 2):
+        # Draw from items 2..n_items-1 only
+        pool = list(range(2, n_items))
+        msize = int(rng.randint(2, min(10, n_items - 2) + 1))
+        menu = rng.choice(pool, size=msize, replace=False).tolist()
+        best = max(menu, key=lambda i: u[i])
+        menus.append(menu)
+        choices.append(best)
 
-    # Inject direct reversal on pair (0,1)
-    menus_inj = [[0, 1], [1, 0]]
-    choices_inj = [0, 1]
-
-    menus = menus_inj + menus
-    choices = choices_inj + choices
+    # Inject isolated direct reversal on items {0,1} (not used elsewhere)
+    menus = [[0, 1], [1, 0]] + menus
+    choices = [0, 1] + choices
 
     e = Engine()
     [r] = e.analyze_menus([(menus, choices, n_items)])
 
     assert r.is_warp is False
     assert r.is_sarp is False
-    assert r.hm_total == n_items and r.hm_consistent < n_items
+    # Because items {0,1} are isolated from the rest, removing exactly
+    # one of them suffices; HM should be n_items-1 exactly under item-count HM.
+    assert r.hm_total == n_items and r.hm_consistent == n_items - 1

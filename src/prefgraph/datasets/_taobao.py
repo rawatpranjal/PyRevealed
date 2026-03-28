@@ -64,20 +64,39 @@ def load_taobao(
     min_sessions: int = 5,
     max_users: int | None = 50000,
     remap_items: bool = True,
+    *,
+    mode: str = "session",
+    session_gap: int = SESSION_GAP,
+    window_seconds: int | None = None,
+    min_menu_size: int = MIN_MENU_SIZE,
+    max_menu_size: int = MAX_MENU_SIZE,
+    max_rows: int | None = None,
 ) -> dict[str, MenuChoiceLog]:
     """Load Taobao user behavior as menu-choice observations.
 
-    Gap-based sessions: a new session starts when the gap between
-    consecutive events of the same user exceeds 30 minutes (1800s).
-    Items viewed (pv) within a session form the menu; the purchased
-    item (buy) is the choice.  Only sessions with exactly 1 purchased
-    item and menu size in [2, 50] are kept.
+    Two constructions are supported via ``mode``:
+
+    - ``mode='session'`` (default): gap-based sessions (inactivity threshold
+      ``session_gap`` seconds). Menu = views strictly before the first buy in the
+      session; require exactly one purchased item; keep menus with size in
+      [min_menu_size, max_menu_size].
+
+    - ``mode='buy_window'``: buy-anchored windows. For every buy event, take the
+      set of items viewed in the trailing ``window_seconds`` before the buy.
+      Require menu size within [min_menu_size, max_menu_size] and that the bought
+      item was viewed within the window. Each qualifying buy yields one
+      observation.
 
     Args:
         data_dir: Path to directory containing UserBehavior.csv.
-        min_sessions: Minimum valid sessions per user.
+        min_sessions: Minimum valid observations per user to retain.
         max_users: Cap on number of users returned.
         remap_items: Remap item IDs to 0..N-1 per user.
+        mode: 'session' or 'buy_window'.
+        session_gap: Inactivity threshold in seconds for sessionization (session mode).
+        window_seconds: Trailing window size in seconds (buy_window mode).
+        min_menu_size: Minimum menu size to keep.
+        max_menu_size: Maximum menu size to keep.
 
     Returns:
         Dict mapping user_id (str) -> MenuChoiceLog.
@@ -90,6 +109,7 @@ def load_taobao(
     # Read in chunks, keep only pv + buy events
     chunks = []
 
+    rows_read = 0
     for chunk in pd.read_csv(
         csv_file,
         header=None,
@@ -99,7 +119,11 @@ def load_taobao(
         chunksize=CHUNK_SIZE,
     ):
         mask = chunk["behavior_type"].isin(["pv", "buy"])
-        chunks.append(chunk.loc[mask, ["user_id", "item_id", "behavior_type", "timestamp"]])
+        part = chunk.loc[mask, ["user_id", "item_id", "behavior_type", "timestamp"]]
+        chunks.append(part)
+        rows_read += len(part)
+        if max_rows is not None and rows_read >= max_rows:
+            break
 
     df = pd.concat(chunks, ignore_index=True)
     del chunks
@@ -119,63 +143,102 @@ def load_taobao(
 
     df["session_id"] = np.cumsum(session_break)
 
-    print(f"  Sessions (raw): {df['session_id'].nunique():,}")
+    if mode == "session":
+        print(f"  Sessions (raw): {df['session_id'].nunique():,}")
 
-    # Split views and buys
-    is_buy = df["behavior_type"] == "buy"
-    buys_df = df.loc[is_buy, ["user_id", "session_id", "item_id"]]
-    views_df = df.loc[~is_buy, ["user_id", "session_id", "item_id"]]
-    del df
+        # Split views and buys
+        is_buy = df["behavior_type"] == "buy"
+        buys_df = df.loc[is_buy, ["user_id", "session_id", "item_id"]]
+        views_df = df.loc[~is_buy, ["user_id", "session_id", "item_id"]]
+        del df
 
-    # Keep sessions with exactly 1 unique purchased item
-    buy_counts = buys_df.groupby("session_id")["item_id"].nunique()
-    valid_sessions = set(buy_counts[buy_counts == 1].index)
+        # Keep sessions with exactly 1 unique purchased item
+        buy_counts = buys_df.groupby("session_id")["item_id"].nunique()
+        valid_sessions = set(buy_counts[buy_counts == 1].index)
 
-    # Get purchased item per valid session
-    valid_buys = buys_df[buys_df["session_id"].isin(valid_sessions)]
-    session_purchases = (
-        valid_buys.groupby("session_id")
-        .agg(user_id=("user_id", "first"), item_id=("item_id", "first"))
-    )
+        # Get purchased item per valid session
+        valid_buys = buys_df[buys_df["session_id"].isin(valid_sessions)]
+        session_purchases = (
+            valid_buys.groupby("session_id")
+            .agg(user_id=("user_id", "first"), item_id=("item_id", "first"))
+        )
 
-    # Build menus from views in valid sessions
-    valid_views = views_df[views_df["session_id"].isin(valid_sessions)]
-    session_menus = valid_views.groupby("session_id")["item_id"].apply(set)
+        # Build menus from views in valid sessions (pre-buy not enforced here)
+        valid_views = views_df[views_df["session_id"].isin(valid_sessions)]
+        session_menus = valid_views.groupby("session_id")["item_id"].apply(set)
 
-    del buys_df, views_df, valid_buys, valid_views
+        del buys_df, views_df, valid_buys, valid_views
 
-    # Build (menu, choice) records — ensure purchased item is in menu
-    records = []
-    for sid, menu in session_menus.items():
-        row = session_purchases.loc[sid]
-        choice = row["item_id"]
-        menu = menu | {choice}
-        if len(menu) < MIN_MENU_SIZE or len(menu) > MAX_MENU_SIZE:
-            continue
-        records.append({
-            "user_id": row["user_id"],
-            "menu": frozenset(menu),
-            "choice": choice,
-        })
+        # Build (menu, choice) records — ensure purchased item is in menu
+        records = []
+        for sid, menu in session_menus.items():
+            row = session_purchases.loc[sid]
+            choice = row["item_id"]
+            menu = menu | {choice}
+            if len(menu) < min_menu_size or len(menu) > max_menu_size:
+                continue
+            records.append({
+                "user_id": row["user_id"],
+                "menu": frozenset(menu),
+                "choice": choice,
+            })
 
-    print(f"  Valid sessions: {len(records):,}")
+    elif mode == "buy_window":
+        if not window_seconds:
+            raise ValueError("buy_window mode requires window_seconds")
+        # Build per-user sequences
+        df_user = df[["user_id", "item_id", "behavior_type", "timestamp"]]
+        del df
+        df_user.sort_values(["user_id", "timestamp"], inplace=True)
 
-    # Group by user
+        records = []
+        # Process per user for efficiency
+        for uid, grp in df_user.groupby("user_id", sort=False):
+            arr_t = grp["timestamp"].to_numpy()
+            arr_item = grp["item_id"].to_numpy()
+            arr_type = grp["behavior_type"].to_numpy()
+
+            i0 = 0
+            for j in range(len(arr_t)):
+                if arr_type[j] != "buy":
+                    continue
+                t_buy = arr_t[j]
+                # advance i0 to first event within window [t_buy - window_seconds, t_buy)
+                while i0 < j and arr_t[i0] < t_buy - window_seconds:
+                    i0 += 1
+                pre_items = set()
+                for k in range(i0, j):
+                    if arr_type[k] == "pv":
+                        pre_items.add(int(arr_item[k]))
+                # require buy viewed
+                choice = int(arr_item[j])
+                if choice not in pre_items:
+                    continue
+                if not (min_menu_size <= len(pre_items) <= max_menu_size):
+                    continue
+                records.append({
+                    "user_id": int(uid),
+                    "menu": frozenset(pre_items),
+                    "choice": choice,
+                })
+        print(f"  Buy-anchored windows built: {len(records):,}")
+
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
+
+    # Group by user and filter by min_sessions
     from collections import defaultdict
     user_sessions = defaultdict(list)
     for r in records:
         user_sessions[r["user_id"]].append(r)
 
-    # Filter by min_sessions and cap at max_users
-    qualifying = {uid: sessions for uid, sessions in user_sessions.items()
-                  if len(sessions) >= min_sessions}
-    # Sort by session count descending (most active users first)
+    qualifying = {uid: sess for uid, sess in user_sessions.items() if len(sess) >= min_sessions}
+    # Sort by count desc for deterministic top-k
     qualifying = dict(sorted(qualifying.items(), key=lambda x: len(x[1]), reverse=True))
-
     if max_users is not None:
         qualifying = dict(list(qualifying.items())[:max_users])
 
-    print(f"  Users with >= {min_sessions} sessions: {len(qualifying):,}")
+    print(f"  Users with >= {min_sessions} observations: {len(qualifying):,}")
 
     # Build MenuChoiceLog per user
     user_logs: dict[str, MenuChoiceLog] = {}

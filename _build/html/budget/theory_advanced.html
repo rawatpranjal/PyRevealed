@@ -1,0 +1,674 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Advanced Topics &#8212; PrefGraph 0.5.9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f62897f1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=93eceeb8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'budget/theory_advanced';</script>
+    <link rel="icon" href="../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="General Metric Preferences" href="theory_spatial.html" />
+    <link rel="prev" title="Structural Preference Analysis and Utility Recovery" href="theory_structure.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="PrefGraph 0.5.9 documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="PrefGraph 0.5.9 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="theory_foundations.html">Theoretical Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory_consistency.html">Axiomatic Consistency Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory_efficiency.html">Efficiency and Power Indices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory_structure.html">Structural Preference Analysis and Utility Recovery</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory_spatial.html">General Metric Preferences</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+</div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrability-conditions">Integrability Conditions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#slutsky-matrix">Slutsky Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integrability-test">Integrability Test</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#welfare-analysis">Welfare Analysis</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compensating-variation">Compensating Variation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalent-variation">Equivalent Variation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additive-separability">Additive Separability</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additive-utility">Additive Utility</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testable-restriction">Testable Restriction</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compensated-demand">Compensated Demand</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#slutsky-decomposition">Slutsky Decomposition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hicksian-demand">Hicksian Demand</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Budgets</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Advanced Topics</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="advanced-topics">
+<h1>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Link to this heading">#</a></h1>
+<p>This section covers integrability conditions, welfare analysis, additive separability,
+and compensated demand.</p>
+<section id="integrability-conditions">
+<h2>Integrability Conditions<a class="headerlink" href="#integrability-conditions" title="Link to this heading">#</a></h2>
+<p>The integrability problem asks whether observed demand can be derived from utility maximization.
+Based on Chambers &amp; Echenique (2016) Chapter 6.4-6.5.</p>
+<section id="slutsky-matrix">
+<h3>Slutsky Matrix<a class="headerlink" href="#slutsky-matrix" title="Link to this heading">#</a></h3>
+<p><strong>Function:</strong> <code class="docutils literal notranslate"><span class="pre">compute_slutsky_matrix(log)</span></code></p>
+<p>The Slutsky matrix captures compensated demand responses:</p>
+<div class="math notranslate nohighlight">
+\[S_{ij} = \frac{\partial h_i}{\partial p_j}\]</div>
+<p>where <span class="math notranslate nohighlight">\(h_i(p, u)\)</span> is the Hicksian (compensated) demand for good <span class="math notranslate nohighlight">\(i\)</span>.</p>
+<p><strong>Slutsky Equation:</strong></p>
+<div class="math notranslate nohighlight">
+\[S_{ij} = \frac{\partial x_i}{\partial p_j} + x_j \frac{\partial x_i}{\partial m}\]</div>
+<p>where the first term is the substitution effect and the second is the income effect.</p>
+</section>
+<section id="integrability-test">
+<h3>Integrability Test<a class="headerlink" href="#integrability-test" title="Link to this heading">#</a></h3>
+<p><strong>Function:</strong> <code class="docutils literal notranslate"><span class="pre">test_integrability(log)</span></code></p>
+<p>For demand to be integrable (derivable from utility maximization), the Slutsky matrix must satisfy:</p>
+<ol class="arabic simple">
+<li><p><strong>Symmetry:</strong> <span class="math notranslate nohighlight">\(S_{ij} = S_{ji}\)</span> for all <span class="math notranslate nohighlight">\(i, j\)</span></p></li>
+<li><p><strong>Negative Semi-Definiteness:</strong> <span class="math notranslate nohighlight">\(v^\top S v \leq 0\)</span> for all vectors <span class="math notranslate nohighlight">\(v\)</span></p></li>
+<li><p><strong>Homogeneity of degree zero:</strong> <span class="math notranslate nohighlight">\(\sum_j S_{ij} p_j = 0\)</span></p></li>
+</ol>
+<div class="important admonition">
+<p class="admonition-title">Hurwicz-Uzawa Theorem</p>
+<p>A differentiable demand function satisfying Walras’ Law is integrable if and only if
+the Slutsky matrix is symmetric and negative semi-definite.</p>
+</div>
+<p><strong>Reference:</strong> Hurwicz &amp; Uzawa (1971), Chambers &amp; Echenique (2016) Ch. 6</p>
+</section>
+</section>
+<section id="welfare-analysis">
+<h2>Welfare Analysis<a class="headerlink" href="#welfare-analysis" title="Link to this heading">#</a></h2>
+<p>Measure welfare changes from price variations. Based on Chambers &amp; Echenique (2016) Chapter 7.3-7.4.</p>
+<section id="compensating-variation">
+<h3>Compensating Variation<a class="headerlink" href="#compensating-variation" title="Link to this heading">#</a></h3>
+<p><strong>Function:</strong> <code class="docutils literal notranslate"><span class="pre">compute_compensating_variation(log)</span></code></p>
+<p>The <strong>compensating variation</strong> is the income change that keeps utility constant at the <em>old</em> level
+after prices change:</p>
+<div class="math notranslate nohighlight">
+\[CV = e(p^1, u^0) - e(p^0, u^0)\]</div>
+<p>where <span class="math notranslate nohighlight">\(e(p, u)\)</span> is the expenditure function (minimum cost to achieve utility <span class="math notranslate nohighlight">\(u\)</span> at prices <span class="math notranslate nohighlight">\(p\)</span>).</p>
+<p><strong>Interpretation:</strong> How much would we need to compensate the consumer to maintain their old welfare?</p>
+</section>
+<section id="equivalent-variation">
+<h3>Equivalent Variation<a class="headerlink" href="#equivalent-variation" title="Link to this heading">#</a></h3>
+<p><strong>Function:</strong> <code class="docutils literal notranslate"><span class="pre">compute_equivalent_variation(log)</span></code></p>
+<p>The <strong>equivalent variation</strong> is the income change that would produce the same utility change at the <em>old</em> prices:</p>
+<div class="math notranslate nohighlight">
+\[EV = e(p^1, u^1) - e(p^0, u^1)\]</div>
+<p><strong>Interpretation:</strong> What income change at old prices would be equivalent to the price change?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For infinitesimal price changes, <span class="math notranslate nohighlight">\(CV \approx EV \approx\)</span> consumer surplus change.
+For discrete changes, they generally differ unless preferences are quasilinear.</p>
+</div>
+<p><strong>Reference:</strong> Hicks (1939), Chambers &amp; Echenique (2016) Ch. 7</p>
+</section>
+</section>
+<section id="additive-separability">
+<h2>Additive Separability<a class="headerlink" href="#additive-separability" title="Link to this heading">#</a></h2>
+<p>Test whether utility has the additively separable form.
+Based on Chambers &amp; Echenique (2016) Chapter 9.3.</p>
+<section id="additive-utility">
+<h3>Additive Utility<a class="headerlink" href="#additive-utility" title="Link to this heading">#</a></h3>
+<p><strong>Function:</strong> <code class="docutils literal notranslate"><span class="pre">test_additive_separability(log)</span></code></p>
+<p>Preferences are <strong>additively separable</strong> if utility can be written as:</p>
+<div class="math notranslate nohighlight">
+\[U(x_1, \ldots, x_n) = \sum_{i=1}^{n} u_i(x_i)\]</div>
+<p><strong>Implications:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>No cross-price effects:</strong> <span class="math notranslate nohighlight">\(\frac{\partial^2 U}{\partial x_i \partial x_j} = 0\)</span> for <span class="math notranslate nohighlight">\(i \neq j\)</span></p></li>
+<li><p><strong>Independent valuations:</strong> Marginal utility of good <span class="math notranslate nohighlight">\(i\)</span> depends only on <span class="math notranslate nohighlight">\(x_i\)</span></p></li>
+<li><p><strong>Constant marginal rate of substitution:</strong> MRS between two goods depends only on their quantities</p></li>
+</ol>
+</section>
+<section id="testable-restriction">
+<h3>Testable Restriction<a class="headerlink" href="#testable-restriction" title="Link to this heading">#</a></h3>
+<p><strong>Function:</strong> <code class="docutils literal notranslate"><span class="pre">check_no_cross_effects(log)</span></code></p>
+<p>For additively separable preferences, the cross-price effect should be entirely due to income effects:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial x_i}{\partial p_j} = -x_j \frac{\partial x_i}{\partial m} \quad \text{for } i \neq j\]</div>
+<p><strong>Reference:</strong> Chambers &amp; Echenique (2016) Ch. 9</p>
+</section>
+</section>
+<section id="compensated-demand">
+<h2>Compensated Demand<a class="headerlink" href="#compensated-demand" title="Link to this heading">#</a></h2>
+<p>Decompose price effects into substitution and income components.
+Based on Chambers &amp; Echenique (2016) Chapter 10.3.</p>
+<section id="slutsky-decomposition">
+<h3>Slutsky Decomposition<a class="headerlink" href="#slutsky-decomposition" title="Link to this heading">#</a></h3>
+<p><strong>Function:</strong> <code class="docutils literal notranslate"><span class="pre">decompose_price_effects(log)</span></code></p>
+<p>The total effect of a price change decomposes into substitution and income effects:</p>
+<div class="math notranslate nohighlight">
+\[\underbrace{\frac{\partial x_i}{\partial p_j}}_{\text{total effect}} =
+\underbrace{\frac{\partial h_i}{\partial p_j}}_{\text{substitution effect}} -
+\underbrace{x_j \frac{\partial x_i}{\partial m}}_{\text{income effect}}\]</div>
+</section>
+<section id="hicksian-demand">
+<h3>Hicksian Demand<a class="headerlink" href="#hicksian-demand" title="Link to this heading">#</a></h3>
+<p><strong>Function:</strong> <code class="docutils literal notranslate"><span class="pre">compute_hicksian_demand(log)</span></code></p>
+<p>The <strong>Hicksian demand</strong> function <span class="math notranslate nohighlight">\(h(p, u)\)</span> gives the cheapest bundle achieving utility <span class="math notranslate nohighlight">\(u\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[h(p, u) = \arg\min_x \{ p \cdot x : U(x) \geq u \}\]</div>
+<p><strong>Properties:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Homogeneous of degree zero</strong> in prices</p></li>
+<li><p><strong>Shephard’s Lemma:</strong> <span class="math notranslate nohighlight">\(h_i(p, u) = \frac{\partial e(p, u)}{\partial p_i}\)</span></p></li>
+<li><p><strong>Compensated Law of Demand:</strong> <span class="math notranslate nohighlight">\((p' - p) \cdot (h(p', u) - h(p, u)) \leq 0\)</span></p></li>
+</ol>
+<p><strong>Reference:</strong> Hicks (1939), Chambers &amp; Echenique (2016) Ch. 10</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, PrefGraph Contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

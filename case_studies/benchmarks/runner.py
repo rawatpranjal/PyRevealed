@@ -29,18 +29,21 @@ AVAILABLE_DATASETS = {
     "dunnhumby": "case_studies.benchmarks.datasets.dunnhumby_bench",
     "open_ecommerce": "case_studies.benchmarks.datasets.open_ecommerce_bench",
     "hm": "case_studies.benchmarks.datasets.hm_bench",
-    # Budget-based (uniform prices)
-    "instacart": "case_studies.benchmarks.datasets.instacart_bench",
     # Menu-based
-    "instacart_menu": "case_studies.benchmarks.datasets.instacart_menu_bench",
     "instacart_v2_menu": "case_studies.benchmarks.datasets.instacart_v2_menu_bench",
     "rees46": "case_studies.benchmarks.datasets.rees46_bench",
     "taobao": "case_studies.benchmarks.datasets.taobao_bench",
-    "tenrec": "case_studies.benchmarks.datasets.tenrec_bench",
+    "taobao_buy_window": "case_studies.benchmarks.datasets.taobao_buy_window_bench",
 }
 
 
-def run_dataset(name: str, max_users: int | None = None) -> list[BenchmarkResult]:
+def run_dataset(
+    name: str,
+    max_users: int | None = None,
+    *,
+    taobao_window_seconds: int | None = None,
+    n_rows: int | None = None,
+) -> list[BenchmarkResult]:
     """Run benchmark for a single dataset."""
     import importlib
 
@@ -54,8 +57,14 @@ def run_dataset(name: str, max_users: int | None = None) -> list[BenchmarkResult
     elif name == "open_ecommerce":
         if max_users:
             kwargs["n_users"] = max_users
-    elif name in ("instacart", "instacart_menu", "instacart_v2_menu", "rees46", "hm", "taobao", "tenrec"):
+    elif name in ("instacart_v2_menu", "rees46", "hm", "taobao"):
         kwargs["max_users"] = max_users or 50000
+    elif name == "taobao_buy_window":
+        kwargs["max_users"] = max_users or 50000
+        if taobao_window_seconds is not None:
+            kwargs["window_seconds"] = taobao_window_seconds
+        if n_rows is not None:
+            kwargs["n_rows"] = n_rows
 
     try:
         return mod.run_benchmark(**kwargs)
@@ -82,6 +91,18 @@ def main():
         type=int,
         default=None,
         help="Cap number of users per dataset (for quick testing).",
+    )
+    parser.add_argument(
+        "--taobao-window",
+        type=int,
+        default=None,
+        help="Buy-anchored window size in seconds (only for taobao_buy_window)",
+    )
+    parser.add_argument(
+        "--n-rows",
+        type=int,
+        default=None,
+        help="Rows to read from CSV for datasets that support partial loads (e.g., taobao_buy_window)",
     )
     parser.add_argument(
         "--output-dir",
@@ -114,7 +135,12 @@ def main():
 
     for name in dataset_names:
         t0 = time.time()
-        results = run_dataset(name, args.max_users)
+        results = run_dataset(
+            name,
+            args.max_users,
+            taobao_window_seconds=args.taobao_window,
+            n_rows=args.n_rows,
+        )
         elapsed = time.time() - t0
         print(f"  [{name}] Completed in {elapsed:.1f}s ({len(results)} targets)")
         all_results.extend(results)

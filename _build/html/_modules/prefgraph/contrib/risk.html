@@ -1,0 +1,1536 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>prefgraph.contrib.risk &#8212; PrefGraph 0.5.9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f62897f1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=93eceeb8"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/prefgraph/contrib/risk';</script>
+    <link rel="icon" href="../../../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="PrefGraph 0.5.9 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="PrefGraph 0.5.9 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">prefgraph.contrib.risk</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for prefgraph.contrib.risk</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Risk profile analysis via revealed preferences under uncertainty.</span>
+
+<span class="sd">Implements classification of risk attitudes (risk-seeking, risk-neutral, risk-averse)</span>
+<span class="sd">based on choices between safe and risky options using CRRA utility estimation.</span>
+
+<span class="sd">Also implements the GRID (Generalized Restriction of Infinite Domains) method</span>
+<span class="sd">for testing Expected Utility and Rank-Dependent Utility axioms from</span>
+<span class="sd">Polisson, Quah &amp; Renou (2020).</span>
+
+<span class="sd">Tech-Friendly Names (Primary):</span>
+<span class="sd">    - compute_risk_profile(): Estimate risk profile from choices</span>
+<span class="sd">    - test_expected_utility(): GRID test for EU consistency</span>
+<span class="sd">    - test_rank_dependent_utility(): Test RDU consistency</span>
+<span class="sd">    - check_expected_utility_axioms(): Check basic EU axioms</span>
+
+<span class="sd">Economics Names (Legacy Aliases):</span>
+<span class="sd">    - classify_risk_type() -&gt; quick classification</span>
+
+<span class="sd">References:</span>
+<span class="sd">    Chambers, C. P., Echenique, F., &amp; Saito, K. (2015). Testing Theories of</span>
+<span class="sd">    Financial Decision Making. Econometrica.</span>
+
+<span class="sd">    Polisson, M., Quah, J. K. H., &amp; Renou, L. (2020). Revealed Preferences</span>
+<span class="sd">    over Risk and Uncertainty. American Economic Review.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize_scalar</span><span class="p">,</span> <span class="n">linprog</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">RiskSession</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.result</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">RiskProfileResult</span><span class="p">,</span>
+    <span class="n">ExpectedUtilityResult</span><span class="p">,</span>
+    <span class="n">RankDependentUtilityResult</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">SolverError</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># LOTTERY CHOICE DATA STRUCTURE</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LotteryChoice</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A single lottery choice observation.</span>
+
+<span class="sd">    Represents a choice between lotteries where the decision maker</span>
+<span class="sd">    allocates their budget across different states of the world.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        outcomes: Array of possible outcomes (states) for each lottery</span>
+<span class="sd">        probabilities: Probability distribution over states</span>
+<span class="sd">        chosen: Index of the chosen lottery (or allocation vector)</span>
+<span class="sd">        budget: Total budget constraint (if applicable)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">outcomes</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span>  <span class="c1"># Shape: (n_lotteries, n_states)</span>
+    <span class="n">probabilities</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span>  <span class="c1"># Shape: (n_states,)</span>
+    <span class="n">chosen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span>  <span class="c1"># Index or allocation vector</span>
+    <span class="n">budget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="compute_risk_profile">
+<a class="viewcode-back" href="../../../api.html#prefgraph.compute_risk_profile">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_risk_profile</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">RiskSession</span><span class="p">,</span>
+    <span class="n">rho_bounds</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RiskProfileResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimate risk profile from choices under uncertainty.</span>
+
+<span class="sd">    Uses Constant Relative Risk Aversion (CRRA) utility model:</span>
+<span class="sd">        u(x) = x^(1-ρ) / (1-ρ)  for ρ ≠ 1</span>
+<span class="sd">        u(x) = ln(x)            for ρ = 1</span>
+
+<span class="sd">    where ρ is the Arrow-Pratt coefficient of relative risk aversion.</span>
+
+<span class="sd">    This function estimates ρ using Maximum Likelihood Estimation (MLE) with</span>
+<span class="sd">    a logistic choice model. This is an econometric approach; for the revealed</span>
+<span class="sd">    preference axiom approach, see Chambers, Echenique, and Saito (2015).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: RiskSession with safe values, risky lotteries, and choices</span>
+<span class="sd">        rho_bounds: Search bounds for risk aversion coefficient (min, max)</span>
+<span class="sd">        tolerance: Convergence tolerance for optimization</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        RiskProfileResult with estimated risk profile</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from prefgraph import RiskSession, compute_risk_profile</span>
+<span class="sd">        &gt;&gt;&gt; # Risk-averse person: prefers $50 certain over 50/50 chance of $100/$0</span>
+<span class="sd">        &gt;&gt;&gt; safe = np.array([50.0, 40.0, 30.0])</span>
+<span class="sd">        &gt;&gt;&gt; outcomes = np.array([[100.0, 0.0], [100.0, 0.0], [100.0, 0.0]])</span>
+<span class="sd">        &gt;&gt;&gt; probs = np.array([[0.5, 0.5], [0.5, 0.5], [0.5, 0.5]])</span>
+<span class="sd">        &gt;&gt;&gt; choices = np.array([False, False, True])  # Only takes gamble at $30</span>
+<span class="sd">        &gt;&gt;&gt; session = RiskSession(safe, outcomes, probs, choices)</span>
+<span class="sd">        &gt;&gt;&gt; result = compute_risk_profile(session)</span>
+<span class="sd">        &gt;&gt;&gt; result.risk_category</span>
+<span class="sd">        &#39;risk_averse&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_observations</span>
+
+    <span class="c1"># Find optimal rho by maximizing choice likelihood</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">neg_log_likelihood</span><span class="p">(</span><span class="n">rho</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Negative log-likelihood of choices given rho.&quot;&quot;&quot;</span>
+        <span class="c1"># Compute utility of safe option</span>
+        <span class="n">u_safe</span> <span class="o">=</span> <span class="n">_crra_utility</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">safe_values</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+
+        <span class="c1"># Compute expected utility of risky option</span>
+        <span class="n">u_risky_outcomes</span> <span class="o">=</span> <span class="n">_crra_utility</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">risky_outcomes</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+        <span class="n">eu_risky</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u_risky_outcomes</span> <span class="o">*</span> <span class="n">session</span><span class="o">.</span><span class="n">risky_probabilities</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Compute probability of choosing risky (logistic model)</span>
+        <span class="c1"># P(risky) = 1 / (1 + exp(-(EU_risky - U_safe)))</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">eu_risky</span> <span class="o">-</span> <span class="n">u_safe</span>
+
+        <span class="c1"># Clip to avoid overflow</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="o">-</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+        <span class="c1"># Log-likelihood: sum of log P(observed choice)</span>
+        <span class="n">log_p_risky</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">diff</span><span class="p">))</span>
+        <span class="n">log_p_safe</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">diff</span><span class="p">))</span>
+
+        <span class="n">ll</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">choices</span><span class="p">,</span> <span class="n">log_p_risky</span><span class="p">,</span> <span class="n">log_p_safe</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="o">-</span><span class="n">ll</span>  <span class="c1"># Negative for minimization</span>
+
+    <span class="c1"># Optimize rho</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">minimize_scalar</span><span class="p">(</span>
+        <span class="n">neg_log_likelihood</span><span class="p">,</span>
+        <span class="n">bounds</span><span class="o">=</span><span class="n">rho_bounds</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bounded&quot;</span><span class="p">,</span>
+        <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;xatol&quot;</span><span class="p">:</span> <span class="n">tolerance</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span>
+
+    <span class="c1"># Compute certainty equivalents for each lottery</span>
+    <span class="n">certainty_equivalents</span> <span class="o">=</span> <span class="n">_compute_certainty_equivalents</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+
+    <span class="c1"># Classify risk category</span>
+    <span class="k">if</span> <span class="n">rho</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+        <span class="n">risk_category</span> <span class="o">=</span> <span class="s2">&quot;risk_averse&quot;</span>
+    <span class="k">elif</span> <span class="n">rho</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">:</span>
+        <span class="n">risk_category</span> <span class="o">=</span> <span class="s2">&quot;risk_seeking&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">risk_category</span> <span class="o">=</span> <span class="s2">&quot;risk_neutral&quot;</span>
+
+    <span class="c1"># Compute consistency: how many choices match the model prediction</span>
+    <span class="n">u_safe</span> <span class="o">=</span> <span class="n">_crra_utility</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">safe_values</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+    <span class="n">u_risky_outcomes</span> <span class="o">=</span> <span class="n">_crra_utility</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">risky_outcomes</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+    <span class="n">eu_risky</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u_risky_outcomes</span> <span class="o">*</span> <span class="n">session</span><span class="o">.</span><span class="n">risky_probabilities</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">predicted_risky</span> <span class="o">=</span> <span class="n">eu_risky</span> <span class="o">&gt;</span> <span class="n">u_safe</span>
+    <span class="n">num_consistent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">predicted_risky</span> <span class="o">==</span> <span class="n">session</span><span class="o">.</span><span class="n">choices</span><span class="p">))</span>
+    <span class="n">consistency_score</span> <span class="o">=</span> <span class="n">num_consistent</span> <span class="o">/</span> <span class="n">T</span>
+
+    <span class="c1"># Utility curvature (second derivative at mean wealth)</span>
+    <span class="n">mean_outcome</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">risky_outcomes</span><span class="p">)</span>
+    <span class="n">utility_curvature</span> <span class="o">=</span> <span class="n">_crra_curvature</span><span class="p">(</span><span class="n">mean_outcome</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+
+    <span class="n">elapsed_ms</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+
+    <span class="k">return</span> <span class="n">RiskProfileResult</span><span class="p">(</span>
+        <span class="n">risk_aversion_coefficient</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span>
+        <span class="n">risk_category</span><span class="o">=</span><span class="n">risk_category</span><span class="p">,</span>
+        <span class="n">certainty_equivalents</span><span class="o">=</span><span class="n">certainty_equivalents</span><span class="p">,</span>
+        <span class="n">utility_curvature</span><span class="o">=</span><span class="n">utility_curvature</span><span class="p">,</span>
+        <span class="n">consistency_score</span><span class="o">=</span><span class="n">consistency_score</span><span class="p">,</span>
+        <span class="n">num_consistent_choices</span><span class="o">=</span><span class="n">num_consistent</span><span class="p">,</span>
+        <span class="n">num_total_choices</span><span class="o">=</span><span class="n">T</span><span class="p">,</span>
+        <span class="n">computation_time_ms</span><span class="o">=</span><span class="n">elapsed_ms</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_crra_utility</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span> <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute CRRA utility.</span>
+
+<span class="sd">    u(x) = x^(1-ρ) / (1-ρ)  for ρ ≠ 1</span>
+<span class="sd">    u(x) = ln(x)            for ρ = 1</span>
+
+<span class="sd">    Handles edge cases for negative outcomes and zero.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># Handle zeros and negatives (add small epsilon)</span>
+    <span class="n">x_safe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rho</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x_safe</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x_safe</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_crra_curvature</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute second derivative of CRRA utility at x.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">rho</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="n">rho</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_certainty_equivalents</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">RiskSession</span><span class="p">,</span> <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute certainty equivalent for each risky lottery.</span>
+
+<span class="sd">    The certainty equivalent CE is the certain amount such that</span>
+<span class="sd">    u(CE) = E[u(X)] where X is the lottery.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Compute expected utility of each lottery</span>
+    <span class="n">u_outcomes</span> <span class="o">=</span> <span class="n">_crra_utility</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">risky_outcomes</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+    <span class="n">eu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u_outcomes</span> <span class="o">*</span> <span class="n">session</span><span class="o">.</span><span class="n">risky_probabilities</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Invert CRRA to get CE</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rho</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+        <span class="c1"># u(x) = ln(x) =&gt; x = exp(u)</span>
+        <span class="n">ce</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">eu</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># u(x) = x^(1-ρ)/(1-ρ) =&gt; x = ((1-ρ)*u)^(1/(1-ρ))</span>
+        <span class="n">ce</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">)</span> <span class="o">*</span> <span class="n">eu</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">),</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">ce</span>
+
+
+<div class="viewcode-block" id="check_expected_utility_axioms">
+<a class="viewcode-back" href="../../../api.html#prefgraph.check_expected_utility_axioms">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_expected_utility_axioms</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">RiskSession</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if choices are consistent with Expected Utility axioms.</span>
+
+<span class="sd">    Tests for violations of:</span>
+<span class="sd">    1. Monotonicity: preferring more to less</span>
+<span class="sd">    2. Independence: compound lottery invariance</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: RiskSession with choice data</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple of (is_consistent, list of violation descriptions)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">violations</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check monotonicity: if safe &gt; max(risky), should choose safe</span>
+    <span class="n">max_risky</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">risky_outcomes</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">chose_risky_when_dominated</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">choices</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">safe_values</span> <span class="o">&gt;</span> <span class="n">max_risky</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">chose_risky_when_dominated</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">chose_risky_when_dominated</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+            <span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Obs </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: Chose risky </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">risky_outcomes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> over &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;dominating safe </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">safe_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Check if safe &lt; min(risky), should choose risky</span>
+    <span class="n">min_risky</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">risky_outcomes</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">chose_safe_when_dominated</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">session</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">safe_values</span> <span class="o">&lt;</span> <span class="n">min_risky</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">chose_safe_when_dominated</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">chose_safe_when_dominated</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+            <span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Obs </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: Chose safe </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">safe_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> over &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;dominating risky </span><span class="si">{</span><span class="n">session</span><span class="o">.</span><span class="n">risky_outcomes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="n">is_consistent</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">violations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">is_consistent</span><span class="p">,</span> <span class="n">violations</span></div>
+
+
+
+<div class="viewcode-block" id="classify_risk_type">
+<a class="viewcode-back" href="../../../api.html#prefgraph.classify_risk_type">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">classify_risk_type</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">RiskSession</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;gambler&quot;</span><span class="p">,</span> <span class="s2">&quot;investor&quot;</span><span class="p">,</span> <span class="s2">&quot;neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;inconsistent&quot;</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Quick classification of decision-maker type.</span>
+
+<span class="sd">    - &quot;gambler&quot;: Risk-seeking, prefers uncertainty</span>
+<span class="sd">    - &quot;investor&quot;: Risk-averse, prefers certainty</span>
+<span class="sd">    - &quot;neutral&quot;: Maximizes expected value</span>
+<span class="sd">    - &quot;inconsistent&quot;: Choices don&#39;t fit any clear pattern</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: RiskSession with choice data</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Classification string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">compute_risk_profile</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">consistency_score</span> <span class="o">&lt;</span> <span class="mf">0.6</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;inconsistent&quot;</span>
+
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">risk_category</span> <span class="o">==</span> <span class="s2">&quot;risk_seeking&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;gambler&quot;</span>
+    <span class="k">elif</span> <span class="n">result</span><span class="o">.</span><span class="n">risk_category</span> <span class="o">==</span> <span class="s2">&quot;risk_averse&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;investor&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;neutral&quot;</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># GRID METHOD (Polisson, Quah &amp; Renou 2020)</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_expected_utility</span><span class="p">(</span>
+    <span class="n">lottery_choices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LotteryChoice</span><span class="p">],</span>
+    <span class="n">risk_attitude</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;any&quot;</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExpectedUtilityResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test if lottery choices are consistent with Expected Utility.</span>
+
+<span class="sd">    Implements the GRID (Generalized Restriction of Infinite Domains) method</span>
+<span class="sd">    from Polisson, Quah &amp; Renou (2020) to test EU rationalizability.</span>
+
+<span class="sd">    A decision maker satisfies Expected Utility if there exists a</span>
+<span class="sd">    strictly increasing, continuous utility function u such that</span>
+<span class="sd">    lottery L1 is chosen over L2 iff E[u(L1)] &gt;= E[u(L2)].</span>
+
+<span class="sd">    The test checks:</span>
+<span class="sd">    1. First-order stochastic dominance consistency</span>
+<span class="sd">    2. Independence axiom (compound lottery invariance)</span>
+<span class="sd">    3. Completeness of revealed preferences</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lottery_choices: List of LotteryChoice observations</span>
+<span class="sd">        risk_attitude: Restriction on risk attitude:</span>
+<span class="sd">            - &quot;any&quot;: Allow any concave/convex utility</span>
+<span class="sd">            - &quot;averse&quot;: Require concave utility (risk aversion)</span>
+<span class="sd">            - &quot;seeking&quot;: Require convex utility (risk seeking)</span>
+<span class="sd">            - &quot;neutral&quot;: Require linear utility</span>
+<span class="sd">        tolerance: Numerical tolerance for comparisons</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ExpectedUtilityResult with consistency status and violations</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from prefgraph.algorithms.risk import LotteryChoice, test_expected_utility</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; # Choice 1: Choose lottery A over B</span>
+<span class="sd">        &gt;&gt;&gt; choice1 = LotteryChoice(</span>
+<span class="sd">        ...     outcomes=np.array([[100, 0], [50, 50]]),  # A vs B</span>
+<span class="sd">        ...     probabilities=np.array([0.5, 0.5]),</span>
+<span class="sd">        ...     chosen=0  # Chose lottery A</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; result = test_expected_utility([choice1])</span>
+<span class="sd">        &gt;&gt;&gt; print(result.is_consistent)</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Polisson, M., Quah, J. K. H., &amp; Renou, L. (2020). Revealed Preferences</span>
+<span class="sd">        over Risk and Uncertainty. American Economic Review, 110(6), 1782-1820.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="n">n_choices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lottery_choices</span><span class="p">)</span>
+    <span class="n">violations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">total_severity</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">if</span> <span class="n">n_choices</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">computation_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="k">return</span> <span class="n">ExpectedUtilityResult</span><span class="p">(</span>
+            <span class="n">is_consistent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">risk_attitude</span><span class="o">=</span><span class="n">risk_attitude</span><span class="p">,</span>
+            <span class="n">violations</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">violation_severity</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">num_choices</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">num_violations</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">computation_time_ms</span><span class="o">=</span><span class="n">computation_time</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Check FOSD violations: chosen should not be dominated</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">choice</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lottery_choices</span><span class="p">):</span>
+        <span class="n">outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">chosen</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">chosen_idx</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">chosen</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If allocation vector, find the dominant lottery</span>
+            <span class="n">chosen_idx</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">chosen_outcomes</span> <span class="o">=</span> <span class="n">outcomes</span><span class="p">[</span><span class="n">chosen_idx</span><span class="p">]</span>
+
+        <span class="c1"># Check if any other lottery FOSD dominates the chosen one</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">other_outcomes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outcomes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">chosen_idx</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Check first-order stochastic dominance</span>
+            <span class="k">if</span> <span class="n">_fosd_dominates</span><span class="p">(</span><span class="n">other_outcomes</span><span class="p">,</span> <span class="n">chosen_outcomes</span><span class="p">,</span> <span class="n">probs</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
+                <span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+                <span class="c1"># Severity: expected value difference</span>
+                <span class="n">ev_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probs</span> <span class="o">*</span> <span class="p">(</span><span class="n">other_outcomes</span> <span class="o">-</span> <span class="n">chosen_outcomes</span><span class="p">))</span>
+                <span class="n">total_severity</span> <span class="o">+=</span> <span class="n">ev_diff</span>
+
+    <span class="c1"># Check independence axiom violations (pairwise comparisons)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_choices</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_choices</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">_violates_independence</span><span class="p">(</span>
+                <span class="n">lottery_choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">lottery_choices</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">tolerance</span>
+            <span class="p">):</span>
+                <span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+                <span class="n">total_severity</span> <span class="o">+=</span> <span class="mf">0.1</span>  <span class="c1"># Add constant severity for independence violations</span>
+
+    <span class="c1"># Apply risk attitude constraint via linear programming</span>
+    <span class="k">if</span> <span class="n">risk_attitude</span> <span class="o">!=</span> <span class="s2">&quot;any&quot;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">violations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">is_consistent_with_attitude</span> <span class="o">=</span> <span class="n">_check_risk_attitude_consistency</span><span class="p">(</span>
+            <span class="n">lottery_choices</span><span class="p">,</span> <span class="n">risk_attitude</span><span class="p">,</span> <span class="n">tolerance</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_consistent_with_attitude</span><span class="p">:</span>
+            <span class="c1"># Mark as violation but no specific pair</span>
+            <span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># Sentinel for attitude violation</span>
+
+    <span class="n">num_violations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">violations</span><span class="p">)</span>
+    <span class="n">is_consistent</span> <span class="o">=</span> <span class="n">num_violations</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">violation_severity</span> <span class="o">=</span> <span class="n">total_severity</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_violations</span><span class="p">)</span> <span class="k">if</span> <span class="n">num_violations</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="n">computation_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+
+    <span class="k">return</span> <span class="n">ExpectedUtilityResult</span><span class="p">(</span>
+        <span class="n">is_consistent</span><span class="o">=</span><span class="n">is_consistent</span><span class="p">,</span>
+        <span class="n">risk_attitude</span><span class="o">=</span><span class="n">risk_attitude</span><span class="p">,</span>
+        <span class="n">violations</span><span class="o">=</span><span class="n">violations</span><span class="p">,</span>
+        <span class="n">violation_severity</span><span class="o">=</span><span class="n">violation_severity</span><span class="p">,</span>
+        <span class="n">num_choices</span><span class="o">=</span><span class="n">n_choices</span><span class="p">,</span>
+        <span class="n">num_violations</span><span class="o">=</span><span class="n">num_violations</span><span class="p">,</span>
+        <span class="n">computation_time_ms</span><span class="o">=</span><span class="n">computation_time</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_rank_dependent_utility</span><span class="p">(</span>
+    <span class="n">lottery_choices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LotteryChoice</span><span class="p">],</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RankDependentUtilityResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test if lottery choices are consistent with Rank-Dependent Utility.</span>
+
+<span class="sd">    Rank-Dependent Utility (RDU) generalizes Expected Utility by allowing</span>
+<span class="sd">    probability weighting. Probabilities are transformed by a weighting</span>
+<span class="sd">    function w(p) before computing expected utility.</span>
+
+<span class="sd">    RDU: V(L) = sum_k w(p_k) * u(x_k)</span>
+
+<span class="sd">    where outcomes are ranked and probabilities are weighted according</span>
+<span class="sd">    to the cumulative distribution.</span>
+
+<span class="sd">    This is a more permissive test than EU, as it allows for behavioral</span>
+<span class="sd">    patterns like the certainty effect (overweighting certain outcomes).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lottery_choices: List of LotteryChoice observations</span>
+<span class="sd">        tolerance: Numerical tolerance for comparisons</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        RankDependentUtilityResult with consistency status and violations</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from prefgraph.algorithms.risk import LotteryChoice, test_rank_dependent_utility</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; choice = LotteryChoice(</span>
+<span class="sd">        ...     outcomes=np.array([[100, 0], [50, 50]]),</span>
+<span class="sd">        ...     probabilities=np.array([0.5, 0.5]),</span>
+<span class="sd">        ...     chosen=0</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; result = test_rank_dependent_utility([choice])</span>
+<span class="sd">        &gt;&gt;&gt; print(result.is_consistent)</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Quiggin, J. (1982). A theory of anticipated utility.</span>
+<span class="sd">        Journal of Economic Behavior &amp; Organization.</span>
+
+<span class="sd">        Polisson, M., Quah, J. K. H., &amp; Renou, L. (2020). Revealed Preferences</span>
+<span class="sd">        over Risk and Uncertainty. American Economic Review.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="n">n_choices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lottery_choices</span><span class="p">)</span>
+    <span class="n">violations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">total_severity</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">if</span> <span class="n">n_choices</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">computation_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="k">return</span> <span class="n">RankDependentUtilityResult</span><span class="p">(</span>
+            <span class="n">is_consistent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">probability_weighting</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+            <span class="n">violations</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">violation_severity</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">num_choices</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">num_violations</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">computation_time_ms</span><span class="o">=</span><span class="n">computation_time</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># RDU allows more flexibility than EU, so we only check</span>
+    <span class="c1"># for direct dominance violations and transitivity</span>
+
+    <span class="c1"># Check for strict dominance violations</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">choice</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lottery_choices</span><span class="p">):</span>
+        <span class="n">outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">chosen</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">chosen_idx</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">chosen</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">chosen_idx</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">chosen_outcomes</span> <span class="o">=</span> <span class="n">outcomes</span><span class="p">[</span><span class="n">chosen_idx</span><span class="p">]</span>
+
+        <span class="c1"># Check if any other lottery strictly dominates</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">other_outcomes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outcomes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">chosen_idx</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Strict dominance: other &gt;= chosen everywhere, &gt; somewhere</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">other_outcomes</span> <span class="o">&gt;=</span> <span class="n">chosen_outcomes</span> <span class="o">-</span> <span class="n">tolerance</span><span class="p">)</span> <span class="ow">and</span> \
+               <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">other_outcomes</span> <span class="o">&gt;</span> <span class="n">chosen_outcomes</span> <span class="o">+</span> <span class="n">tolerance</span><span class="p">):</span>
+                <span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+                <span class="n">total_severity</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">other_outcomes</span> <span class="o">-</span> <span class="n">chosen_outcomes</span><span class="p">)</span>
+
+    <span class="c1"># Detect probability weighting pattern</span>
+    <span class="n">probability_weighting</span> <span class="o">=</span> <span class="n">_detect_probability_weighting</span><span class="p">(</span><span class="n">lottery_choices</span><span class="p">)</span>
+
+    <span class="n">num_violations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">violations</span><span class="p">)</span>
+    <span class="n">is_consistent</span> <span class="o">=</span> <span class="n">num_violations</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">violation_severity</span> <span class="o">=</span> <span class="n">total_severity</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_violations</span><span class="p">)</span> <span class="k">if</span> <span class="n">num_violations</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="n">computation_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+
+    <span class="k">return</span> <span class="n">RankDependentUtilityResult</span><span class="p">(</span>
+        <span class="n">is_consistent</span><span class="o">=</span><span class="n">is_consistent</span><span class="p">,</span>
+        <span class="n">probability_weighting</span><span class="o">=</span><span class="n">probability_weighting</span><span class="p">,</span>
+        <span class="n">violations</span><span class="o">=</span><span class="n">violations</span><span class="p">,</span>
+        <span class="n">violation_severity</span><span class="o">=</span><span class="n">violation_severity</span><span class="p">,</span>
+        <span class="n">num_choices</span><span class="o">=</span><span class="n">n_choices</span><span class="p">,</span>
+        <span class="n">num_violations</span><span class="o">=</span><span class="n">num_violations</span><span class="p">,</span>
+        <span class="n">computation_time_ms</span><span class="o">=</span><span class="n">computation_time</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># HELPER FUNCTIONS FOR GRID METHOD</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fosd_dominates</span><span class="p">(</span>
+    <span class="n">outcomes_a</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">outcomes_b</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">probabilities</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if lottery A first-order stochastically dominates lottery B.</span>
+
+<span class="sd">    FOSD: F_A(x) &lt;= F_B(x) for all x, with strict inequality somewhere.</span>
+<span class="sd">    This means A is unambiguously better for any risk attitude.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sort outcomes to compute CDFs</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outcomes_a</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outcomes_b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Create combined outcome list with CDF values</span>
+    <span class="n">sorted_a_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">outcomes_a</span><span class="p">)</span>
+    <span class="n">sorted_b_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">outcomes_b</span><span class="p">)</span>
+
+    <span class="n">cdf_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">probabilities</span><span class="p">[</span><span class="n">sorted_a_idx</span><span class="p">])</span>
+    <span class="n">cdf_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">probabilities</span><span class="p">[</span><span class="n">sorted_b_idx</span><span class="p">])</span>
+
+    <span class="c1"># For each outcome level, check CDF inequality</span>
+    <span class="c1"># A dominates B if CDF_A(x) &lt;= CDF_B(x) everywhere</span>
+    <span class="c1"># We check at the sorted outcome points</span>
+
+    <span class="c1"># Simple check: A dominates B if outcomes are pointwise &gt;= with probability-weighted average</span>
+    <span class="n">ev_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probabilities</span> <span class="o">*</span> <span class="n">outcomes_a</span><span class="p">)</span>
+    <span class="n">ev_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probabilities</span> <span class="o">*</span> <span class="n">outcomes_b</span><span class="p">)</span>
+
+    <span class="c1"># More lenient check for FOSD</span>
+    <span class="n">all_outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">outcomes_a</span><span class="p">,</span> <span class="n">outcomes_b</span><span class="p">])))</span>
+
+    <span class="n">cdf_a_at_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_outcomes</span><span class="p">))</span>
+    <span class="n">cdf_b_at_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_outcomes</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_outcomes</span><span class="p">):</span>
+        <span class="n">cdf_a_at_points</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probabilities</span><span class="p">[</span><span class="n">outcomes_a</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tolerance</span><span class="p">])</span>
+        <span class="n">cdf_b_at_points</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probabilities</span><span class="p">[</span><span class="n">outcomes_b</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tolerance</span><span class="p">])</span>
+
+    <span class="c1"># A dominates B if CDF_A &lt;= CDF_B everywhere (A has less probability of low outcomes)</span>
+    <span class="n">dominates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">cdf_a_at_points</span> <span class="o">&lt;=</span> <span class="n">cdf_b_at_points</span> <span class="o">+</span> <span class="n">tolerance</span><span class="p">)</span>
+    <span class="n">strict</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">cdf_a_at_points</span> <span class="o">&lt;</span> <span class="n">cdf_b_at_points</span> <span class="o">-</span> <span class="n">tolerance</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dominates</span> <span class="ow">and</span> <span class="n">strict</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_violates_independence</span><span class="p">(</span>
+    <span class="n">choice1</span><span class="p">:</span> <span class="n">LotteryChoice</span><span class="p">,</span>
+    <span class="n">choice2</span><span class="p">:</span> <span class="n">LotteryChoice</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if two lottery choices violate the independence axiom.</span>
+
+<span class="sd">    Independence Axiom: If L1 ≻ L2, then αL1 + (1-α)L3 ≻ αL2 + (1-α)L3</span>
+<span class="sd">    for any lottery L3 and any α ∈ (0,1).</span>
+
+<span class="sd">    This function checks for several types of independence violations:</span>
+
+<span class="sd">    1. Direct reversal: Same lottery pair, different preferences across choices</span>
+<span class="sd">    2. Compound lottery violation: If choice1 reveals L1 ≻ L2, and choice2 involves</span>
+<span class="sd">       compound lotteries mixing L1/L2 with some L3, check consistency</span>
+<span class="sd">    3. Betweenness violation: If L1 ≻ L2 and M = αL1 + (1-α)L2 is a mixture,</span>
+<span class="sd">       then we should have L1 ≻ M ≻ L2 (not M ≻ L1 or L2 ≻ M)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        choice1: First lottery choice</span>
+<span class="sd">        choice2: Second lottery choice</span>
+<span class="sd">        tolerance: Numerical tolerance for comparisons</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if the two choices together violate Independence</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">outcomes1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice1</span><span class="o">.</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">outcomes2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice2</span><span class="o">.</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">probs1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice1</span><span class="o">.</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">probs2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice2</span><span class="o">.</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="n">chosen1</span> <span class="o">=</span> <span class="n">choice1</span><span class="o">.</span><span class="n">chosen</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choice1</span><span class="o">.</span><span class="n">chosen</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">chosen2</span> <span class="o">=</span> <span class="n">choice2</span><span class="o">.</span><span class="n">chosen</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choice2</span><span class="o">.</span><span class="n">chosen</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="c1"># Check 1: Direct preference reversal on identical lotteries</span>
+    <span class="k">if</span> <span class="n">outcomes1</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">outcomes2</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">outcomes1</span><span class="p">,</span> <span class="n">outcomes2</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">probs1</span><span class="p">,</span> <span class="n">probs2</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">):</span>
+                <span class="c1"># Same lotteries with same probabilities but different choices</span>
+                <span class="k">if</span> <span class="n">chosen1</span> <span class="o">!=</span> <span class="n">chosen2</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Check 2: Compound lottery / mixture consistency</span>
+    <span class="c1"># If choice1 has lotteries A and B with A chosen,</span>
+    <span class="c1"># and choice2 has lotteries that are mixtures αA+(1-α)C and αB+(1-α)C,</span>
+    <span class="c1"># then αA+(1-α)C should be chosen over αB+(1-α)C</span>
+    <span class="k">if</span> <span class="n">outcomes1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">outcomes2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">L1_chosen</span> <span class="o">=</span> <span class="n">outcomes1</span><span class="p">[</span><span class="n">chosen1</span><span class="p">]</span>  <span class="c1"># Chosen lottery in choice 1</span>
+        <span class="n">L1_rejected</span> <span class="o">=</span> <span class="n">outcomes1</span><span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="n">chosen1</span><span class="p">]</span> <span class="k">if</span> <span class="n">outcomes1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">L1_rejected</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Check if any lottery in choice2 is a mixture involving L1_chosen/L1_rejected</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">L2_lottery</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outcomes2</span><span class="p">):</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="n">_is_mixture_of</span><span class="p">(</span><span class="n">L2_lottery</span><span class="p">,</span> <span class="n">L1_chosen</span><span class="p">,</span> <span class="n">L1_rejected</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># L2_lottery = α * L1_chosen + (1-α) * L1_rejected</span>
+                    <span class="c1"># By Independence, this should be preferred over pure L1_rejected</span>
+                    <span class="c1"># and less preferred than pure L1_chosen</span>
+
+                    <span class="c1"># Check if we can find the corresponding &quot;other&quot; mixture</span>
+                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">L2_other</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outcomes2</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                            <span class="k">continue</span>
+                        <span class="n">alpha2</span> <span class="o">=</span> <span class="n">_is_mixture_of</span><span class="p">(</span><span class="n">L2_other</span><span class="p">,</span> <span class="n">L1_chosen</span><span class="p">,</span> <span class="n">L1_rejected</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">alpha2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="c1"># Both are mixtures - higher α should be preferred</span>
+                            <span class="k">if</span> <span class="n">alpha</span> <span class="o">&gt;</span> <span class="n">alpha2</span> <span class="o">+</span> <span class="n">tolerance</span> <span class="ow">and</span> <span class="n">chosen2</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+                                <span class="c1"># Chose lower-α mixture when higher-α was available</span>
+                                <span class="k">return</span> <span class="kc">True</span>
+                            <span class="k">if</span> <span class="n">alpha2</span> <span class="o">&gt;</span> <span class="n">alpha</span> <span class="o">+</span> <span class="n">tolerance</span> <span class="ow">and</span> <span class="n">chosen2</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                                <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Check 3: Betweenness violation (special case of Independence)</span>
+    <span class="c1"># If in choice1, L_A ≻ L_B, and in choice2 we have L_M = αL_A + (1-α)L_B</span>
+    <span class="c1"># competing against L_A or L_B, check ordering</span>
+    <span class="k">if</span> <span class="n">outcomes1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">outcomes2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">L_A</span> <span class="o">=</span> <span class="n">outcomes1</span><span class="p">[</span><span class="n">chosen1</span><span class="p">]</span>  <span class="c1"># Preferred lottery</span>
+        <span class="n">L_B</span> <span class="o">=</span> <span class="n">outcomes1</span><span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="n">chosen1</span><span class="p">]</span>  <span class="c1"># Less preferred</span>
+
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">L2_lottery</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outcomes2</span><span class="p">):</span>
+            <span class="c1"># Check if L2_lottery is a mixture of L_A and L_B</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">_is_mixture_of</span><span class="p">(</span><span class="n">L2_lottery</span><span class="p">,</span> <span class="n">L_A</span><span class="p">,</span> <span class="n">L_B</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># L2_lottery = M = α*L_A + (1-α)*L_B</span>
+                <span class="c1"># By betweenness: L_A ≻ M ≻ L_B</span>
+
+                <span class="c1"># Check if L_A is in choice2</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">other</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outcomes2</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">L_A</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">):</span>
+                        <span class="c1"># M vs L_A: L_A should be preferred</span>
+                        <span class="k">if</span> <span class="n">chosen2</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>  <span class="c1"># M was chosen over L_A</span>
+                            <span class="k">return</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">L_B</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">):</span>
+                        <span class="c1"># M vs L_B: M should be preferred</span>
+                        <span class="k">if</span> <span class="n">chosen2</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>  <span class="c1"># L_B was chosen over M</span>
+                            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_mixture_of</span><span class="p">(</span>
+    <span class="n">lottery</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">L_A</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">L_B</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if lottery is a convex combination αL_A + (1-α)L_B.</span>
+
+<span class="sd">    Returns α if lottery ≈ αL_A + (1-α)L_B for some α ∈ [0,1], else None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">lottery</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">L_A</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">lottery</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">L_B</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># lottery = α*L_A + (1-α)*L_B</span>
+    <span class="c1"># lottery - L_B = α*(L_A - L_B)</span>
+    <span class="n">diff_AB</span> <span class="o">=</span> <span class="n">L_A</span> <span class="o">-</span> <span class="n">L_B</span>
+    <span class="n">diff_lottery</span> <span class="o">=</span> <span class="n">lottery</span> <span class="o">-</span> <span class="n">L_B</span>
+
+    <span class="c1"># Find α by least squares if L_A ≠ L_B</span>
+    <span class="n">norm_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff_AB</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">norm_diff</span> <span class="o">&lt;</span> <span class="n">tolerance</span><span class="p">:</span>
+        <span class="c1"># L_A ≈ L_B</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">lottery</span><span class="p">,</span> <span class="n">L_A</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mf">0.5</span>  <span class="c1"># Any α works</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># α = (lottery - L_B) · (L_A - L_B) / ||L_A - L_B||²</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">diff_lottery</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">diff_AB</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">norm_diff</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Verify the reconstruction</span>
+    <span class="n">reconstructed</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">L_A</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">L_B</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">lottery</span><span class="p">,</span> <span class="n">reconstructed</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">):</span>
+        <span class="k">if</span> <span class="o">-</span><span class="n">tolerance</span> <span class="o">&lt;=</span> <span class="n">alpha</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">tolerance</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_risk_attitude_consistency</span><span class="p">(</span>
+    <span class="n">lottery_choices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LotteryChoice</span><span class="p">],</span>
+    <span class="n">risk_attitude</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+    <span class="n">grid_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if choices are consistent with a specific risk attitude using LP.</span>
+
+<span class="sd">    Uses linear programming to check if there exists a utility function</span>
+<span class="sd">    of the specified type (concave, convex, or linear) that rationalizes</span>
+<span class="sd">    all observed choices.</span>
+
+<span class="sd">    The approach:</span>
+<span class="sd">    1. Discretize outcome space into grid points x_1 &lt; x_2 &lt; ... &lt; x_n</span>
+<span class="sd">    2. Define utility variables u_1, u_2, ..., u_n</span>
+<span class="sd">    3. Add choice constraints: E[u(chosen)] &gt;= E[u(rejected)] for each choice</span>
+<span class="sd">    4. Add curvature constraints based on risk attitude:</span>
+<span class="sd">       - Concave (averse): u_{i+1} - u_i &lt;= u_i - u_{i-1}</span>
+<span class="sd">       - Convex (seeking): u_{i+1} - u_i &gt;= u_i - u_{i-1}</span>
+<span class="sd">       - Linear (neutral): u_{i+1} - u_i = u_i - u_{i-1}</span>
+<span class="sd">    5. Monotonicity: u_i &lt; u_{i+1} (strictly increasing)</span>
+<span class="sd">    6. Check if the LP is feasible</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lottery_choices: List of lottery choices</span>
+<span class="sd">        risk_attitude: &quot;averse&quot;, &quot;seeking&quot;, or &quot;neutral&quot;</span>
+<span class="sd">        tolerance: Numerical tolerance</span>
+<span class="sd">        grid_size: Number of grid points for utility discretization</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if choices are consistent with the specified risk attitude</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lottery_choices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># For risk_neutral, use exact expected value check (simpler and more efficient)</span>
+    <span class="k">if</span> <span class="n">risk_attitude</span> <span class="o">==</span> <span class="s2">&quot;neutral&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">lottery_choices</span><span class="p">:</span>
+            <span class="n">outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">chosen_idx</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">chosen</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">chosen</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+
+            <span class="c1"># Compute expected values</span>
+            <span class="n">evs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">outcomes</span> <span class="o">*</span> <span class="n">probs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">max_ev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">evs</span><span class="p">)</span>
+            <span class="n">chosen_ev</span> <span class="o">=</span> <span class="n">evs</span><span class="p">[</span><span class="n">chosen_idx</span><span class="p">]</span>
+
+            <span class="c1"># Chosen should have max EV (approximately)</span>
+            <span class="k">if</span> <span class="n">chosen_ev</span> <span class="o">&lt;</span> <span class="n">max_ev</span> <span class="o">-</span> <span class="n">tolerance</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># For risk_averse or risk_seeking, use LP-based concavity/convexity test</span>
+
+    <span class="c1"># Collect all unique outcome values and create grid</span>
+    <span class="n">all_outcomes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">lottery_choices</span><span class="p">:</span>
+        <span class="n">outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">all_outcomes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">outcomes</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="n">all_outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_outcomes</span><span class="p">)</span>
+    <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">all_outcomes</span><span class="p">)</span>
+    <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_outcomes</span><span class="p">)</span>
+
+    <span class="c1"># Add margin to avoid boundary issues</span>
+    <span class="n">margin</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.05</span> <span class="o">+</span> <span class="mf">0.01</span>
+    <span class="n">x_min</span> <span class="o">-=</span> <span class="n">margin</span>
+    <span class="n">x_max</span> <span class="o">+=</span> <span class="n">margin</span>
+
+    <span class="c1"># Create grid points</span>
+    <span class="n">grid_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">)</span>
+
+    <span class="c1"># Build LP:</span>
+    <span class="c1"># Variables: u_1, u_2, ..., u_n (utility at each grid point)</span>
+    <span class="c1"># Objective: minimize 0 (feasibility check)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">grid_size</span>
+
+    <span class="c1"># Collect constraints</span>
+    <span class="n">A_ub</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Inequality constraints: A_ub @ x &lt;= b_ub</span>
+    <span class="n">b_ub</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">A_eq</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Equality constraints (for linear utility if needed)</span>
+    <span class="n">b_eq</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># 1. Choice constraints: E[u(chosen)] &gt;= E[u(rejected)]</span>
+    <span class="c1"># Rewritten as: E[u(rejected)] - E[u(chosen)] &lt;= 0</span>
+    <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">lottery_choices</span><span class="p">:</span>
+        <span class="n">outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">chosen_idx</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">chosen</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">chosen</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="n">chosen_outcomes</span> <span class="o">=</span> <span class="n">outcomes</span><span class="p">[</span><span class="n">chosen_idx</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">outcomes</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">chosen_idx</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">other_outcomes</span> <span class="o">=</span> <span class="n">outcomes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># E[u(other)] - E[u(chosen)] &lt;= -tolerance</span>
+            <span class="c1"># Using linear interpolation on grid:</span>
+            <span class="c1"># E[u(L)] = sum_k p_k * u(x_k) ≈ sum_k p_k * interpolate(u, x_k)</span>
+
+            <span class="n">constraint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+            <span class="c1"># Add contribution from rejected lottery</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">other_outcomes</span><span class="p">,</span> <span class="n">probs</span><span class="p">)):</span>
+                <span class="n">weights</span> <span class="o">=</span> <span class="n">_interpolation_weights</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grid_points</span><span class="p">)</span>
+                <span class="n">constraint</span> <span class="o">+=</span> <span class="n">p</span> <span class="o">*</span> <span class="n">weights</span>
+
+            <span class="c1"># Subtract contribution from chosen lottery</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">chosen_outcomes</span><span class="p">,</span> <span class="n">probs</span><span class="p">)):</span>
+                <span class="n">weights</span> <span class="o">=</span> <span class="n">_interpolation_weights</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grid_points</span><span class="p">)</span>
+                <span class="n">constraint</span> <span class="o">-=</span> <span class="n">p</span> <span class="o">*</span> <span class="n">weights</span>
+
+            <span class="n">A_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
+            <span class="n">b_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">tolerance</span><span class="p">)</span>  <span class="c1"># Strict inequality margin</span>
+
+    <span class="c1"># 2. Monotonicity constraints: u_{i+1} - u_i &gt;= epsilon</span>
+    <span class="c1"># Rewritten as: u_i - u_{i+1} &lt;= -epsilon</span>
+    <span class="n">epsilon_mono</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">constraint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">constraint</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">constraint</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">A_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
+        <span class="n">b_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">epsilon_mono</span><span class="p">)</span>
+
+    <span class="c1"># 3. Curvature constraints based on risk attitude</span>
+    <span class="k">if</span> <span class="n">risk_attitude</span> <span class="o">==</span> <span class="s2">&quot;averse&quot;</span><span class="p">:</span>
+        <span class="c1"># Concave: u_{i+1} - u_i &lt;= u_i - u_{i-1}</span>
+        <span class="c1"># Rewritten: u_{i+1} - 2*u_i + u_{i-1} &lt;= 0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">constraint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">constraint</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">constraint</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+            <span class="n">constraint</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">A_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
+            <span class="n">b_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">risk_attitude</span> <span class="o">==</span> <span class="s2">&quot;seeking&quot;</span><span class="p">:</span>
+        <span class="c1"># Convex: u_{i+1} - u_i &gt;= u_i - u_{i-1}</span>
+        <span class="c1"># Rewritten: -u_{i+1} + 2*u_i - u_{i-1} &lt;= 0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">constraint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">constraint</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">constraint</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">constraint</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">A_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
+            <span class="n">b_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Convert to arrays</span>
+    <span class="n">A_ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">A_ub</span><span class="p">)</span> <span class="k">if</span> <span class="n">A_ub</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">b_ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b_ub</span><span class="p">)</span> <span class="k">if</span> <span class="n">b_ub</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># Objective: feasibility (minimize 0)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="c1"># Bounds: utility can be any real number</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+
+    <span class="c1"># Solve LP</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">linprog</span><span class="p">(</span>
+            <span class="n">c</span><span class="p">,</span>
+            <span class="n">A_ub</span><span class="o">=</span><span class="n">A_ub</span><span class="p">,</span>
+            <span class="n">b_ub</span><span class="o">=</span><span class="n">b_ub</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;highs&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SolverError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;LP solver failed when checking </span><span class="si">{</span><span class="n">risk_attitude</span><span class="si">}</span><span class="s2"> risk attitude consistency. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Original error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolation_weights</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">grid_points</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute linear interpolation weights for value x on grid.</span>
+
+<span class="sd">    Returns weight vector w such that u(x) ≈ sum_i w_i * u_i</span>
+<span class="sd">    where u_i are utility values at grid points.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_points</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="c1"># Find bracket</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">grid_points</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">grid_points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">weights</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Find i such that grid_points[i] &lt;= x &lt; grid_points[i+1]</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">grid_points</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">x_lo</span> <span class="o">=</span> <span class="n">grid_points</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">x_hi</span> <span class="o">=</span> <span class="n">grid_points</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x_hi</span> <span class="o">-</span> <span class="n">x_lo</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-12</span><span class="p">:</span>
+            <span class="n">weights</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Linear interpolation: u(x) = (1-t)*u_lo + t*u_hi</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x_lo</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_hi</span> <span class="o">-</span> <span class="n">x_lo</span><span class="p">)</span>
+            <span class="n">weights</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">t</span>
+            <span class="n">weights</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+
+    <span class="k">return</span> <span class="n">weights</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_detect_probability_weighting</span><span class="p">(</span><span class="n">lottery_choices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LotteryChoice</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Detect the type of probability weighting from lottery choices.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - &quot;none&quot;: No apparent probability weighting (EU-like)</span>
+<span class="sd">        - &quot;certainty_effect&quot;: Overweighting of certain outcomes</span>
+<span class="sd">        - &quot;possibility_effect&quot;: Overweighting of rare positive outcomes</span>
+<span class="sd">        - &quot;optimistic&quot;: General overweighting of good outcomes</span>
+<span class="sd">        - &quot;pessimistic&quot;: General overweighting of bad outcomes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lottery_choices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;none&quot;</span>
+
+    <span class="c1"># Count patterns</span>
+    <span class="n">certain_preferred</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">risky_preferred</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ev_maximizing</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">lottery_choices</span><span class="p">:</span>
+        <span class="n">outcomes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">chosen_idx</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">chosen</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">chosen</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="n">chosen_outcomes</span> <span class="o">=</span> <span class="n">outcomes</span><span class="p">[</span><span class="n">chosen_idx</span><span class="p">]</span>
+
+        <span class="c1"># Check if chosen option is &quot;certain&quot; (low variance)</span>
+        <span class="n">chosen_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">chosen_outcomes</span><span class="p">)</span>
+
+        <span class="c1"># Compare to other options</span>
+        <span class="n">other_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">outcomes</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">outcomes</span><span class="p">))</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">chosen_idx</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_vars</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">chosen_var</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">other_vars</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="n">certain_preferred</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">chosen_var</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">other_vars</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">:</span>
+                <span class="n">risky_preferred</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ev_maximizing</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">total</span> <span class="o">=</span> <span class="n">certain_preferred</span> <span class="o">+</span> <span class="n">risky_preferred</span> <span class="o">+</span> <span class="n">ev_maximizing</span>
+    <span class="k">if</span> <span class="n">total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;none&quot;</span>
+
+    <span class="k">if</span> <span class="n">certain_preferred</span> <span class="o">/</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mf">0.6</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;certainty_effect&quot;</span>
+    <span class="k">elif</span> <span class="n">risky_preferred</span> <span class="o">/</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mf">0.6</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;possibility_effect&quot;</span>
+    <span class="k">elif</span> <span class="n">certain_preferred</span> <span class="o">&gt;</span> <span class="n">risky_preferred</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;pessimistic&quot;</span>
+    <span class="k">elif</span> <span class="n">risky_preferred</span> <span class="o">&gt;</span> <span class="n">certain_preferred</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;optimistic&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;none&quot;</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># LEGACY ALIASES</span>
+<span class="c1"># =============================================================================</span>
+
+<span class="n">check_eu_consistency</span> <span class="o">=</span> <span class="n">test_expected_utility</span>
+<span class="sd">&quot;&quot;&quot;Legacy alias: use test_expected_utility instead.&quot;&quot;&quot;</span>
+
+<span class="n">check_rdu_consistency</span> <span class="o">=</span> <span class="n">test_rank_dependent_utility</span>
+<span class="sd">&quot;&quot;&quot;Legacy alias: use test_rank_dependent_utility instead.&quot;&quot;&quot;</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, PrefGraph Contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

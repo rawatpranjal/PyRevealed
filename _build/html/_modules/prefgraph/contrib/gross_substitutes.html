@@ -1,0 +1,1467 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>prefgraph.contrib.gross_substitutes &#8212; PrefGraph 0.5.9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f62897f1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=93eceeb8"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/prefgraph/contrib/gross_substitutes';</script>
+    <link rel="icon" href="../../../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="PrefGraph 0.5.9 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="PrefGraph 0.5.9 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">prefgraph.contrib.gross_substitutes</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for prefgraph.contrib.gross_substitutes</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Gross substitutes test and compensated demand analysis.</span>
+
+<span class="sd">Tests for gross substitutes/complements relationships and implements</span>
+<span class="sd">Slutsky decomposition of price effects. Based on Chapter 10.3 of</span>
+<span class="sd">Chambers &amp; Echenique (2016) &quot;Revealed Preference Theory&quot;.</span>
+
+<span class="sd">Tech-Friendly Names (Primary):</span>
+<span class="sd">    - test_cross_price_effect(): Test substitute/complement relationship</span>
+<span class="sd">    - decompose_price_effects(): Slutsky decomposition</span>
+<span class="sd">    - compute_hicksian_demand(): Compensated demand estimation</span>
+
+<span class="sd">Economics Names (Legacy Aliases):</span>
+<span class="sd">    - check_gross_substitutes() -&gt; test_cross_price_effect()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDArray</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConsumerSession</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.result</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GrossSubstitutesResult</span><span class="p">,</span>
+    <span class="n">SubstitutionMatrixResult</span><span class="p">,</span>
+    <span class="n">CompensatedDemandResult</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValueRangeError</span><span class="p">,</span> <span class="n">DataValidationError</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_gross_substitutes</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ConsumerSession</span><span class="p">,</span>
+    <span class="n">good_g</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">good_h</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">price_change_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GrossSubstitutesResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test if two goods are gross substitutes based on revealed preference data.</span>
+
+<span class="sd">    Gross substitutes: when the price of good g increases (other prices constant)</span>
+<span class="sd">    and quantity of g decreases, we should see quantity of h increase.</span>
+
+<span class="sd">    Gross complements: when p_g increases and x_g decreases, x_h also decreases.</span>
+
+<span class="sd">    The algorithm:</span>
+<span class="sd">    1. Finds observation pairs where price of g changed significantly</span>
+<span class="sd">    2. Checks if other prices stayed relatively constant</span>
+<span class="sd">    3. Analyzes the direction of quantity changes</span>
+<span class="sd">    4. Classifies the relationship based on majority of informative pairs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: ConsumerSession with prices and quantities</span>
+<span class="sd">        good_g: Index of first good</span>
+<span class="sd">        good_h: Index of second good (potential substitute)</span>
+<span class="sd">        price_change_threshold: Minimum relative price change to consider (default 5%)</span>
+<span class="sd">        tolerance: Numerical tolerance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GrossSubstitutesResult with relationship classification and confidence</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from prefgraph import ConsumerSession, check_gross_substitutes</span>
+<span class="sd">        &gt;&gt;&gt; # Prices for goods 0 and 1 over 3 observations</span>
+<span class="sd">        &gt;&gt;&gt; prices = np.array([[1.0, 2.0], [2.0, 2.0], [1.0, 1.0]])</span>
+<span class="sd">        &gt;&gt;&gt; quantities = np.array([[4.0, 1.0], [1.0, 3.0], [2.0, 2.0]])</span>
+<span class="sd">        &gt;&gt;&gt; session = ConsumerSession(prices=prices, quantities=quantities)</span>
+<span class="sd">        &gt;&gt;&gt; result = check_gross_substitutes(session, good_g=0, good_h=1)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Relationship: {result.relationship}&quot;)</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Hicks, J. R. (1939). Value and Capital. Oxford University Press.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_observations</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_goods</span>
+
+    <span class="k">if</span> <span class="n">good_g</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">good_g</span> <span class="o">&gt;=</span> <span class="n">N</span> <span class="ow">or</span> <span class="n">good_h</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">good_h</span> <span class="o">&gt;=</span> <span class="n">N</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ValueRangeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Good indices must be in [0, </span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">). &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Got good_g=</span><span class="si">{</span><span class="n">good_g</span><span class="si">}</span><span class="s2">, good_h=</span><span class="si">{</span><span class="n">good_h</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Hint: Use valid indices from 0 to </span><span class="si">{</span><span class="n">N</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">good_g</span> <span class="o">==</span> <span class="n">good_h</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DataValidationError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;good_g and good_h must be different. Got </span><span class="si">{</span><span class="n">good_g</span><span class="si">}</span><span class="s2"> for both. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Hint: Gross substitutes analysis requires two distinct goods.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">P</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">prices</span>  <span class="c1"># T x N</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">quantities</span>  <span class="c1"># T x N</span>
+
+    <span class="n">substitutes_pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">complements_pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Compare all pairs of observations</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+            <span class="c1"># Check if price of g changed significantly while others ~constant</span>
+            <span class="n">pg_i</span><span class="p">,</span> <span class="n">pg_j</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">good_g</span><span class="p">],</span> <span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">good_g</span><span class="p">]</span>
+            <span class="n">ph_i</span><span class="p">,</span> <span class="n">ph_j</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">good_h</span><span class="p">],</span> <span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">good_h</span><span class="p">]</span>
+
+            <span class="c1"># Skip if prices are near zero</span>
+            <span class="k">if</span> <span class="n">pg_i</span> <span class="o">&lt;</span> <span class="n">tolerance</span> <span class="ow">or</span> <span class="n">pg_j</span> <span class="o">&lt;</span> <span class="n">tolerance</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Relative price change for good g</span>
+            <span class="n">rel_change_g</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pg_j</span> <span class="o">-</span> <span class="n">pg_i</span><span class="p">)</span> <span class="o">/</span> <span class="n">pg_i</span>
+
+            <span class="c1"># Check if price of h stayed relatively constant</span>
+            <span class="n">rel_change_h</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ph_j</span> <span class="o">-</span> <span class="n">ph_i</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">ph_i</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+
+            <span class="c1"># We want: significant change in p_g, small change in p_h</span>
+            <span class="k">if</span> <span class="n">rel_change_g</span> <span class="o">&lt;</span> <span class="n">price_change_threshold</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># Not enough price movement in g</span>
+            <span class="k">if</span> <span class="n">rel_change_h</span> <span class="o">&gt;</span> <span class="n">rel_change_g</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># Too much change in h relative to g</span>
+
+            <span class="c1"># Check other prices didn&#39;t change too much</span>
+            <span class="n">other_goods</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">good_g</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">good_h</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">other_goods</span><span class="p">:</span>
+                <span class="n">other_changes</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="nb">abs</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">tolerance</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">other_goods</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">other_changes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">rel_change_g</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">:</span>
+                    <span class="k">continue</span>  <span class="c1"># Other prices changed too much</span>
+
+            <span class="c1"># Get quantity changes</span>
+            <span class="n">xg_i</span><span class="p">,</span> <span class="n">xg_j</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">good_g</span><span class="p">],</span> <span class="n">Q</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">good_g</span><span class="p">]</span>
+            <span class="n">xh_i</span><span class="p">,</span> <span class="n">xh_j</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">good_h</span><span class="p">],</span> <span class="n">Q</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">good_h</span><span class="p">]</span>
+
+            <span class="c1"># Direction of price change for g</span>
+            <span class="n">pg_increased</span> <span class="o">=</span> <span class="n">pg_j</span> <span class="o">&gt;</span> <span class="n">pg_i</span> <span class="o">+</span> <span class="n">tolerance</span>
+            <span class="n">pg_decreased</span> <span class="o">=</span> <span class="n">pg_j</span> <span class="o">&lt;</span> <span class="n">pg_i</span> <span class="o">-</span> <span class="n">tolerance</span>
+
+            <span class="c1"># Direction of quantity changes</span>
+            <span class="n">xg_increased</span> <span class="o">=</span> <span class="n">xg_j</span> <span class="o">&gt;</span> <span class="n">xg_i</span> <span class="o">+</span> <span class="n">tolerance</span>
+            <span class="n">xg_decreased</span> <span class="o">=</span> <span class="n">xg_j</span> <span class="o">&lt;</span> <span class="n">xg_i</span> <span class="o">-</span> <span class="n">tolerance</span>
+            <span class="n">xh_increased</span> <span class="o">=</span> <span class="n">xh_j</span> <span class="o">&gt;</span> <span class="n">xh_i</span> <span class="o">+</span> <span class="n">tolerance</span>
+            <span class="n">xh_decreased</span> <span class="o">=</span> <span class="n">xh_j</span> <span class="o">&lt;</span> <span class="n">xh_i</span> <span class="o">-</span> <span class="n">tolerance</span>
+
+            <span class="c1"># Gross substitutes pattern:</span>
+            <span class="c1"># p_g up, x_g down =&gt; x_h up (or p_g down, x_g up =&gt; x_h down)</span>
+            <span class="k">if</span> <span class="n">pg_increased</span> <span class="ow">and</span> <span class="n">xg_decreased</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">xh_increased</span><span class="p">:</span>
+                    <span class="n">substitutes_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">xh_decreased</span><span class="p">:</span>
+                    <span class="n">complements_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">pg_decreased</span> <span class="ow">and</span> <span class="n">xg_increased</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">xh_decreased</span><span class="p">:</span>
+                    <span class="n">substitutes_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">xh_increased</span><span class="p">:</span>
+                    <span class="n">complements_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+
+    <span class="c1"># Determine relationship</span>
+    <span class="n">n_subs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">substitutes_pairs</span><span class="p">)</span>
+    <span class="n">n_comp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">complements_pairs</span><span class="p">)</span>
+    <span class="n">informative_pairs</span> <span class="o">=</span> <span class="n">n_subs</span> <span class="o">+</span> <span class="n">n_comp</span>
+
+    <span class="k">if</span> <span class="n">informative_pairs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">relationship</span> <span class="o">=</span> <span class="s2">&quot;inconclusive&quot;</span>
+        <span class="n">are_substitutes</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">are_complements</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">confidence</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">supporting</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">violating</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">elif</span> <span class="n">n_subs</span> <span class="o">&gt;</span> <span class="n">n_comp</span><span class="p">:</span>
+        <span class="n">relationship</span> <span class="o">=</span> <span class="s2">&quot;substitutes&quot;</span>
+        <span class="n">are_substitutes</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">are_complements</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">confidence</span> <span class="o">=</span> <span class="n">n_subs</span> <span class="o">/</span> <span class="n">informative_pairs</span>
+        <span class="n">supporting</span> <span class="o">=</span> <span class="n">substitutes_pairs</span>
+        <span class="n">violating</span> <span class="o">=</span> <span class="n">complements_pairs</span>
+    <span class="k">elif</span> <span class="n">n_comp</span> <span class="o">&gt;</span> <span class="n">n_subs</span><span class="p">:</span>
+        <span class="n">relationship</span> <span class="o">=</span> <span class="s2">&quot;complements&quot;</span>
+        <span class="n">are_substitutes</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">are_complements</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">confidence</span> <span class="o">=</span> <span class="n">n_comp</span> <span class="o">/</span> <span class="n">informative_pairs</span>
+        <span class="n">supporting</span> <span class="o">=</span> <span class="n">complements_pairs</span>
+        <span class="n">violating</span> <span class="o">=</span> <span class="n">substitutes_pairs</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">relationship</span> <span class="o">=</span> <span class="s2">&quot;independent&quot;</span>
+        <span class="n">are_substitutes</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">are_complements</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">confidence</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="n">supporting</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">violating</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">computation_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+
+    <span class="k">return</span> <span class="n">GrossSubstitutesResult</span><span class="p">(</span>
+        <span class="n">are_substitutes</span><span class="o">=</span><span class="n">are_substitutes</span><span class="p">,</span>
+        <span class="n">are_complements</span><span class="o">=</span><span class="n">are_complements</span><span class="p">,</span>
+        <span class="n">relationship</span><span class="o">=</span><span class="n">relationship</span><span class="p">,</span>
+        <span class="n">supporting_pairs</span><span class="o">=</span><span class="n">supporting</span><span class="p">,</span>
+        <span class="n">violating_pairs</span><span class="o">=</span><span class="n">violating</span><span class="p">,</span>
+        <span class="n">confidence_score</span><span class="o">=</span><span class="n">confidence</span><span class="p">,</span>
+        <span class="n">good_g_index</span><span class="o">=</span><span class="n">good_g</span><span class="p">,</span>
+        <span class="n">good_h_index</span><span class="o">=</span><span class="n">good_h</span><span class="p">,</span>
+        <span class="n">computation_time_ms</span><span class="o">=</span><span class="n">computation_time</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># Relationship codes for efficient storage</span>
+<span class="n">_RELATIONSHIP_CODES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;self&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;substitutes&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;complements&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;independent&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;inconclusive&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">_CODE_TO_RELATIONSHIP</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_RELATIONSHIP_CODES</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_substitution_matrix</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ConsumerSession</span><span class="p">,</span>
+    <span class="n">price_change_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubstitutionMatrixResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute pairwise substitution relationships for all goods.</span>
+
+<span class="sd">    Returns an N x N matrix where entry [g, h] indicates the relationship</span>
+<span class="sd">    between goods g and h.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: ConsumerSession</span>
+<span class="sd">        price_change_threshold: Minimum price change to consider</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        SubstitutionMatrixResult with relationship matrix</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from prefgraph import ConsumerSession, compute_substitution_matrix</span>
+<span class="sd">        &gt;&gt;&gt; result = compute_substitution_matrix(session)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Substitute pairs: {result.substitute_pairs}&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Complement pairs: {result.complement_pairs}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_goods</span>
+    <span class="c1"># Use int8 codes for memory efficiency instead of object dtype strings</span>
+    <span class="n">relationship_codes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+    <span class="n">confidence_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">g</span> <span class="o">==</span> <span class="n">h</span><span class="p">:</span>
+                <span class="n">relationship_codes</span><span class="p">[</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="n">_RELATIONSHIP_CODES</span><span class="p">[</span><span class="s2">&quot;self&quot;</span><span class="p">]</span>
+                <span class="n">confidence_matrix</span><span class="p">[</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">elif</span> <span class="n">g</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">check_gross_substitutes</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">price_change_threshold</span><span class="p">)</span>
+                <span class="n">code</span> <span class="o">=</span> <span class="n">_RELATIONSHIP_CODES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">relationship</span><span class="p">,</span> <span class="n">_RELATIONSHIP_CODES</span><span class="p">[</span><span class="s2">&quot;inconclusive&quot;</span><span class="p">])</span>
+                <span class="n">relationship_codes</span><span class="p">[</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="n">code</span>
+                <span class="n">relationship_codes</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="n">code</span>
+                <span class="n">confidence_matrix</span><span class="p">[</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">confidence_score</span>
+                <span class="n">confidence_matrix</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">confidence_score</span>
+
+    <span class="c1"># Convert codes back to strings for the result object (for API compatibility)</span>
+    <span class="n">relationship_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">relationship_matrix</span><span class="p">[</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="n">_CODE_TO_RELATIONSHIP</span><span class="p">[</span><span class="n">relationship_codes</span><span class="p">[</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">]]</span>
+
+    <span class="n">computation_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+
+    <span class="k">return</span> <span class="n">SubstitutionMatrixResult</span><span class="p">(</span>
+        <span class="n">relationship_matrix</span><span class="o">=</span><span class="n">relationship_matrix</span><span class="p">,</span>
+        <span class="n">confidence_matrix</span><span class="o">=</span><span class="n">confidence_matrix</span><span class="p">,</span>
+        <span class="n">num_goods</span><span class="o">=</span><span class="n">N</span><span class="p">,</span>
+        <span class="n">computation_time_ms</span><span class="o">=</span><span class="n">computation_time</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_law_of_demand</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ConsumerSession</span><span class="p">,</span>
+    <span class="n">good</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">price_change_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a good satisfies the law of demand (own-price effect is negative).</span>
+
+<span class="sd">    The law of demand states that when price increases, quantity demanded</span>
+<span class="sd">    decreases (holding other factors constant).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: ConsumerSession</span>
+<span class="sd">        good: Index of the good to test</span>
+<span class="sd">        price_change_threshold: Minimum price change to consider</span>
+<span class="sd">        tolerance: Numerical tolerance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dictionary with:</span>
+<span class="sd">        - satisfies_law: True if law of demand holds</span>
+<span class="sd">        - supporting_pairs: Pairs where law holds</span>
+<span class="sd">        - violating_pairs: Pairs where law is violated (Giffen good behavior)</span>
+<span class="sd">        - confidence: Fraction of pairs supporting the law</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_observations</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_goods</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">prices</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">quantities</span>
+
+    <span class="n">supporting_pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">violating_pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+            <span class="n">pg_i</span><span class="p">,</span> <span class="n">pg_j</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">good</span><span class="p">],</span> <span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">good</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">pg_i</span> <span class="o">&lt;</span> <span class="n">tolerance</span> <span class="ow">or</span> <span class="n">pg_j</span> <span class="o">&lt;</span> <span class="n">tolerance</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">rel_change</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pg_j</span> <span class="o">-</span> <span class="n">pg_i</span><span class="p">)</span> <span class="o">/</span> <span class="n">pg_i</span>
+            <span class="k">if</span> <span class="n">rel_change</span> <span class="o">&lt;</span> <span class="n">price_change_threshold</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Check other prices (vectorized)</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">good</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+                <span class="n">other_changes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">mask</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">mask</span><span class="p">],</span> <span class="n">tolerance</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">other_changes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">rel_change</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+            <span class="n">xg_i</span><span class="p">,</span> <span class="n">xg_j</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">good</span><span class="p">],</span> <span class="n">Q</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">good</span><span class="p">]</span>
+
+            <span class="c1"># Law of demand: price up =&gt; quantity down</span>
+            <span class="n">price_up</span> <span class="o">=</span> <span class="n">pg_j</span> <span class="o">&gt;</span> <span class="n">pg_i</span> <span class="o">+</span> <span class="n">tolerance</span>
+            <span class="n">price_down</span> <span class="o">=</span> <span class="n">pg_j</span> <span class="o">&lt;</span> <span class="n">pg_i</span> <span class="o">-</span> <span class="n">tolerance</span>
+            <span class="n">qty_up</span> <span class="o">=</span> <span class="n">xg_j</span> <span class="o">&gt;</span> <span class="n">xg_i</span> <span class="o">+</span> <span class="n">tolerance</span>
+            <span class="n">qty_down</span> <span class="o">=</span> <span class="n">xg_j</span> <span class="o">&lt;</span> <span class="n">xg_i</span> <span class="o">-</span> <span class="n">tolerance</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">price_up</span> <span class="ow">and</span> <span class="n">qty_down</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">price_down</span> <span class="ow">and</span> <span class="n">qty_up</span><span class="p">):</span>
+                <span class="n">supporting_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">price_up</span> <span class="ow">and</span> <span class="n">qty_up</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">price_down</span> <span class="ow">and</span> <span class="n">qty_down</span><span class="p">):</span>
+                <span class="n">violating_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">supporting_pairs</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">violating_pairs</span><span class="p">)</span>
+    <span class="n">confidence</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">supporting_pairs</span><span class="p">)</span> <span class="o">/</span> <span class="n">total</span> <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.5</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;satisfies_law&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">violating_pairs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">supporting_pairs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;supporting_pairs&quot;</span><span class="p">:</span> <span class="n">supporting_pairs</span><span class="p">,</span>
+        <span class="s2">&quot;violating_pairs&quot;</span><span class="p">:</span> <span class="n">violating_pairs</span><span class="p">,</span>
+        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">confidence</span><span class="p">,</span>
+        <span class="s2">&quot;num_informative_pairs&quot;</span><span class="p">:</span> <span class="n">total</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># TECH-FRIENDLY ALIASES</span>
+<span class="c1"># =============================================================================</span>
+
+<span class="c1"># test_cross_price_effect: Tech-friendly name for check_gross_substitutes</span>
+<span class="n">test_cross_price_effect</span> <span class="o">=</span> <span class="n">check_gross_substitutes</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Test how changes in one item&#39;s price affect demand for another item.</span>
+
+<span class="sd">This is the tech-friendly alias for check_gross_substitutes.</span>
+
+<span class="sd">Use this to understand cross-price relationships between products:</span>
+<span class="sd">- Substitutes: Price of A up → Demand for B up (users switch)</span>
+<span class="sd">- Complements: Price of A up → Demand for B down (bought together)</span>
+<span class="sd">- Independent: No clear relationship</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; from prefgraph import BehaviorLog, test_cross_price_effect</span>
+<span class="sd">    &gt;&gt;&gt; result = test_cross_price_effect(user_log, good_g=0, good_h=1)</span>
+<span class="sd">    &gt;&gt;&gt; if result.are_substitutes:</span>
+<span class="sd">    ...     print(&quot;Users treat these as substitutes&quot;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">compute_cross_price_matrix</span> <span class="o">=</span> <span class="n">compute_substitution_matrix</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Compute all pairwise cross-price relationships.</span>
+
+<span class="sd">Returns an N x N matrix of relationships between all goods.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># COMPENSATED DEMAND (Chapter 10.3)</span>
+<span class="c1"># =============================================================================</span>
+
+
+<div class="viewcode-block" id="decompose_price_effects">
+<a class="viewcode-back" href="../../../api.html#prefgraph.decompose_price_effects">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">decompose_price_effects</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ConsumerSession</span><span class="p">,</span>
+    <span class="n">price_change_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CompensatedDemandResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decompose price effects into substitution and income effects.</span>
+
+<span class="sd">    The Slutsky equation states:</span>
+<span class="sd">    Total effect = Substitution effect + Income effect</span>
+<span class="sd">    dx_i/dp_j = (∂x_i/∂p_j)|_u + x_j * (∂x_i/∂m)</span>
+
+<span class="sd">    The substitution effect measures how demand changes when price changes</span>
+<span class="sd">    but utility is held constant (compensated demand).</span>
+
+<span class="sd">    The income effect measures how the change in purchasing power</span>
+<span class="sd">    affects demand.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: ConsumerSession with prices and quantities</span>
+<span class="sd">        price_change_threshold: Minimum price change to consider</span>
+<span class="sd">        tolerance: Numerical tolerance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        CompensatedDemandResult with Slutsky decomposition</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from prefgraph import ConsumerSession, decompose_price_effects</span>
+<span class="sd">        &gt;&gt;&gt; result = decompose_price_effects(user_session)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Substitution effect for good 0 from price 1: {result.substitution_effects[0,1]:.3f}&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Income effect: {result.income_effects[0,1]:.3f}&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Satisfies compensated law: {result.satisfies_compensated_law}&quot;)</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Chambers &amp; Echenique (2016), Chapter 10.3</span>
+<span class="sd">        Slutsky, E. (1915). &quot;On the Theory of the Budget of the Consumer&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_observations</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_goods</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">prices</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">quantities</span>
+
+    <span class="c1"># Compute substitution and income effects matrices</span>
+    <span class="n">substitution_effects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">income_effects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">total_effects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">s_ij</span><span class="p">,</span> <span class="n">ie_ij</span><span class="p">,</span> <span class="n">te_ij</span> <span class="o">=</span> <span class="n">_estimate_slutsky_components</span><span class="p">(</span>
+                <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">price_change_threshold</span><span class="p">,</span> <span class="n">tolerance</span>
+            <span class="p">)</span>
+            <span class="n">substitution_effects</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">s_ij</span>
+            <span class="n">income_effects</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ie_ij</span>
+            <span class="n">total_effects</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">te_ij</span>
+
+    <span class="c1"># Compute own-price elasticities</span>
+    <span class="n">own_price_elasticities</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">avg_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">P</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+        <span class="n">avg_qty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Q</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">avg_qty</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">:</span>
+            <span class="n">own_price_elasticities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_effects</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">avg_price</span> <span class="o">/</span> <span class="n">avg_qty</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">own_price_elasticities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Compute cross-price elasticities</span>
+    <span class="n">cross_price_elasticities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">avg_price_j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">P</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+            <span class="n">avg_qty_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Q</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">avg_qty_i</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">:</span>
+                <span class="n">cross_price_elasticities</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_effects</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">avg_price_j</span> <span class="o">/</span> <span class="n">avg_qty_i</span>
+
+    <span class="c1"># Check compensated law of demand</span>
+    <span class="c1"># Substitution effects should be negative semi-definite</span>
+    <span class="c1"># Own-price substitution effects should be negative (or zero)</span>
+    <span class="n">violations</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">substitution_effects</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">:</span>
+            <span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+
+    <span class="n">satisfies_compensated_law</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">violations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="n">computation_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+
+    <span class="k">return</span> <span class="n">CompensatedDemandResult</span><span class="p">(</span>
+        <span class="n">substitution_effects</span><span class="o">=</span><span class="n">substitution_effects</span><span class="p">,</span>
+        <span class="n">income_effects</span><span class="o">=</span><span class="n">income_effects</span><span class="p">,</span>
+        <span class="n">satisfies_compensated_law</span><span class="o">=</span><span class="n">satisfies_compensated_law</span><span class="p">,</span>
+        <span class="n">own_price_elasticities</span><span class="o">=</span><span class="n">own_price_elasticities</span><span class="p">,</span>
+        <span class="n">cross_price_elasticities</span><span class="o">=</span><span class="n">cross_price_elasticities</span><span class="p">,</span>
+        <span class="n">violations</span><span class="o">=</span><span class="n">violations</span><span class="p">,</span>
+        <span class="n">computation_time_ms</span><span class="o">=</span><span class="n">computation_time</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compute_hicksian_demand">
+<a class="viewcode-back" href="../../../api.html#prefgraph.compute_hicksian_demand">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_hicksian_demand</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ConsumerSession</span><span class="p">,</span>
+    <span class="n">target_utility</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;exact&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute Hicksian (compensated) demand via expenditure minimization.</span>
+
+<span class="sd">    Hicksian demand h(p, u) solves:</span>
+<span class="sd">        min_x  p @ x</span>
+<span class="sd">        s.t.   U(x) &gt;= u</span>
+<span class="sd">               x &gt;= 0</span>
+
+<span class="sd">    This implementation recovers the Afriat utility function U(x) from the data</span>
+<span class="sd">    and uses constrained optimization to solve for Hicksian demand at any</span>
+<span class="sd">    price vector and utility level.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: ConsumerSession with prices and quantities</span>
+<span class="sd">        target_utility: Utility level for computing derivatives (default: median)</span>
+<span class="sd">        method: Computation method:</span>
+<span class="sd">            - &quot;exact&quot;: Full Afriat recovery + constrained optimization</span>
+<span class="sd">            - &quot;approximation&quot;: Legacy finite differences (faster but approximate)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dictionary containing:</span>
+<span class="sd">        - &#39;success&#39;: Whether Afriat utility recovery succeeded</span>
+<span class="sd">        - &#39;hicksian_demand_fn&#39;: Callable (prices, utility) -&gt; quantities</span>
+<span class="sd">        - &#39;hicksian_derivatives&#39;: N x N matrix of ∂h_i/∂p_j at target utility</span>
+<span class="sd">        - &#39;target_utility&#39;: Utility level used for derivatives</span>
+<span class="sd">        - &#39;utility_function&#39;: Callable to evaluate utility at any bundle</span>
+<span class="sd">        - &#39;observation_utilities&#39;: Utility at each observed bundle</span>
+<span class="sd">        - &#39;observations_used&#39;: Number of observations (for backward compatibility)</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from prefgraph import ConsumerSession, compute_hicksian_demand</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; P = np.array([[1.0, 2.0], [1.5, 1.5], [2.0, 1.0]])</span>
+<span class="sd">        &gt;&gt;&gt; Q = np.array([[2.0, 1.0], [1.5, 1.5], [1.0, 2.0]])</span>
+<span class="sd">        &gt;&gt;&gt; session = ConsumerSession(prices=P, quantities=Q)</span>
+<span class="sd">        &gt;&gt;&gt; result = compute_hicksian_demand(session, method=&#39;exact&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; if result[&#39;success&#39;]:</span>
+<span class="sd">        ...     h = result[&#39;hicksian_demand_fn&#39;]</span>
+<span class="sd">        ...     print(f&quot;h([1,1], 0.5) = {h([1, 1], 0.5)}&quot;)</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Chambers &amp; Echenique (2016), Chapter 10.3</span>
+<span class="sd">        Afriat (1967), &quot;The Construction of Utility Functions&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;approximation&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_compute_hicksian_demand_approximation</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">target_utility</span><span class="p">)</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_observations</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_goods</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">prices</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">quantities</span>
+
+    <span class="c1"># Recover Afriat utility function</span>
+    <span class="n">utility_fn</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">lambdas</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">_recover_afriat_utility_for_hicksian</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span> <span class="ow">or</span> <span class="n">utility_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Fall back to approximation method</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">_compute_hicksian_demand_approximation</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">target_utility</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;utility_function&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;hicksian_demand_fn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="c1"># Compute utility at each observation</span>
+    <span class="n">observation_utilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">utility_fn</span><span class="p">(</span><span class="n">Q</span><span class="p">[</span><span class="n">t</span><span class="p">])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">)])</span>
+
+    <span class="k">if</span> <span class="n">target_utility</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_utility</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">observation_utilities</span><span class="p">)</span>
+
+    <span class="c1"># Create Hicksian demand function</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hicksian_demand_fn</span><span class="p">(</span>
+        <span class="n">prices</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+        <span class="n">utility_level</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute Hicksian demand h(p, u).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            prices: N-dimensional price vector</span>
+<span class="sd">            utility_level: Target utility level</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            N-dimensional quantity vector or None if optimization fails</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_solve_hicksian_at_point</span><span class="p">(</span>
+            <span class="n">utility_fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">prices</span><span class="p">),</span> <span class="n">utility_level</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-8</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Compute Hicksian derivatives at target utility level</span>
+    <span class="c1"># ∂h_i/∂p_j ≈ [h_i(p + ε*e_j, u) - h_i(p - ε*e_j, u)] / (2ε)</span>
+    <span class="n">hicksian_derivatives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># Use mean prices as evaluation point</span>
+    <span class="n">p_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">p_mean</span><span class="p">)</span>  <span class="c1"># 1% perturbation</span>
+
+    <span class="c1"># Compute baseline Hicksian demand</span>
+    <span class="n">h_base</span> <span class="o">=</span> <span class="n">hicksian_demand_fn</span><span class="p">(</span><span class="n">p_mean</span><span class="p">,</span> <span class="n">target_utility</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">h_base</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">p_plus</span> <span class="o">=</span> <span class="n">p_mean</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">p_plus</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">epsilon</span>
+            <span class="n">p_minus</span> <span class="o">=</span> <span class="n">p_mean</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">p_minus</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-=</span> <span class="n">epsilon</span>
+
+            <span class="n">h_plus</span> <span class="o">=</span> <span class="n">hicksian_demand_fn</span><span class="p">(</span><span class="n">p_plus</span><span class="p">,</span> <span class="n">target_utility</span><span class="p">)</span>
+            <span class="n">h_minus</span> <span class="o">=</span> <span class="n">hicksian_demand_fn</span><span class="p">(</span><span class="n">p_minus</span><span class="p">,</span> <span class="n">target_utility</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">h_plus</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">h_minus</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                    <span class="n">hicksian_derivatives</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h_plus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">h_minus</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;hicksian_demand_fn&quot;</span><span class="p">:</span> <span class="n">hicksian_demand_fn</span><span class="p">,</span>
+        <span class="s2">&quot;hicksian_derivatives&quot;</span><span class="p">:</span> <span class="n">hicksian_derivatives</span><span class="p">,</span>
+        <span class="s2">&quot;target_utility&quot;</span><span class="p">:</span> <span class="n">target_utility</span><span class="p">,</span>
+        <span class="s2">&quot;utility_function&quot;</span><span class="p">:</span> <span class="n">utility_fn</span><span class="p">,</span>
+        <span class="s2">&quot;observation_utilities&quot;</span><span class="p">:</span> <span class="n">observation_utilities</span><span class="p">,</span>
+        <span class="s2">&quot;observations_used&quot;</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_recover_afriat_utility_for_hicksian</span><span class="p">(</span>
+    <span class="n">P</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">Q</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">callable</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">NDArray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">NDArray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recover Afriat utility function from price-quantity data.</span>
+
+<span class="sd">    Solves the LP:</span>
+<span class="sd">        min Σ λ_k</span>
+<span class="sd">        s.t. U_k &lt;= U_l + λ_l * p_l @ (x_k - x_l)  for all k, l</span>
+<span class="sd">             U_k &gt;= 0, λ_k &gt; ε</span>
+
+<span class="sd">    Then constructs:</span>
+<span class="sd">        u(x) = min_k { U_k + λ_k * p_k @ (x - x_k) }</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple of (utility_function, U_values, lambda_values, success)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">linprog</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_vars</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">T</span>
+
+    <span class="n">constraints_A</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">constraints_b</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">obs_l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">obs_l</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_vars</span><span class="p">)</span>
+            <span class="n">row</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">row</span><span class="p">[</span><span class="n">obs_l</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">obs_l</span><span class="p">]</span> <span class="o">-</span> <span class="n">Q</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">lambda_coef</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">obs_l</span><span class="p">]</span> <span class="o">@</span> <span class="n">diff</span>
+            <span class="n">row</span><span class="p">[</span><span class="n">T</span> <span class="o">+</span> <span class="n">obs_l</span><span class="p">]</span> <span class="o">=</span> <span class="n">lambda_coef</span>
+
+            <span class="n">constraints_A</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="n">constraints_b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="n">A_ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">constraints_A</span><span class="p">)</span> <span class="k">if</span> <span class="n">constraints_A</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">))</span>
+    <span class="n">b_ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">constraints_b</span><span class="p">)</span> <span class="k">if</span> <span class="n">constraints_b</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-6</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)]</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="p">[(</span><span class="n">epsilon</span><span class="p">,</span> <span class="kc">None</span><span class="p">)]</span> <span class="o">*</span> <span class="n">T</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_vars</span><span class="p">)</span>
+    <span class="n">c</span><span class="p">[</span><span class="n">T</span><span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">linprog</span><span class="p">(</span>
+            <span class="n">c</span><span class="p">,</span>
+            <span class="n">A_ub</span><span class="o">=</span><span class="n">A_ub</span><span class="p">,</span>
+            <span class="n">b_ub</span><span class="o">=</span><span class="n">b_ub</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;highs&quot;</span><span class="p">,</span>
+            <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;presolve&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[:</span><span class="n">T</span><span class="p">]</span>
+            <span class="n">lambdas</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">T</span><span class="p">:]</span>
+
+            <span class="c1"># Construct the Afriat utility function</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">utility_fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+                    <span class="n">values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">lambdas</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">@</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">Q</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">utility_fn</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">lambdas</span><span class="p">,</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizationError</span>
+
+        <span class="k">raise</span> <span class="n">OptimizationError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Afriat utility recovery failed for Hicksian demand. Original error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_solve_hicksian_at_point</span><span class="p">(</span>
+    <span class="n">utility_fn</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+    <span class="n">prices</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">target_utility</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">observed_Q</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve the Hicksian demand problem at a specific price-utility point.</span>
+
+<span class="sd">    min_x  p @ x</span>
+<span class="sd">    s.t.   U(x) &gt;= u</span>
+<span class="sd">           x &gt;= 0</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        utility_fn: Afriat utility function</span>
+<span class="sd">        prices: N-dimensional price vector</span>
+<span class="sd">        target_utility: Target utility level u</span>
+<span class="sd">        observed_Q: Observed quantity matrix (for initial guess)</span>
+<span class="sd">        tolerance: Numerical tolerance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Optimal quantity vector or None if optimization fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">objective</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">prices</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">utility_constraint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">utility_fn</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">target_utility</span>
+
+    <span class="c1"># Find initial guess: observed bundle closest to target utility</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">observed_Q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">obs_utilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">utility_fn</span><span class="p">(</span><span class="n">observed_Q</span><span class="p">[</span><span class="n">t</span><span class="p">])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">)])</span>
+    <span class="n">closest_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">obs_utilities</span> <span class="o">-</span> <span class="n">target_utility</span><span class="p">))</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">observed_Q</span><span class="p">[</span><span class="n">closest_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Ensure x0 is positive</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">)</span>
+
+    <span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">1e-10</span><span class="p">,</span> <span class="kc">None</span><span class="p">)]</span> <span class="o">*</span> <span class="n">N</span>
+    <span class="n">constraints</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ineq&quot;</span><span class="p">,</span> <span class="s2">&quot;fun&quot;</span><span class="p">:</span> <span class="n">utility_constraint</span><span class="p">}]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+            <span class="n">objective</span><span class="p">,</span>
+            <span class="n">x0</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;SLSQP&quot;</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+            <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">,</span>
+            <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;maxiter&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;ftol&quot;</span><span class="p">:</span> <span class="n">tolerance</span><span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizationError</span>
+
+        <span class="k">raise</span> <span class="n">OptimizationError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Hicksian demand optimization failed. Original error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_hicksian_demand_approximation</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ConsumerSession</span><span class="p">,</span>
+    <span class="n">target_utility</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Legacy approximation of Hicksian demand using finite differences.</span>
+
+<span class="sd">    This is the original implementation kept for backward compatibility</span>
+<span class="sd">    and as a fallback when Afriat recovery fails.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_observations</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_goods</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">prices</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">quantities</span>
+
+    <span class="c1"># Estimate utility for each observation</span>
+    <span class="n">utilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+        <span class="n">utilities</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Q</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1e-10</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">target_utility</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_utility</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">utilities</span><span class="p">)</span>
+
+    <span class="c1"># Find observations near target utility</span>
+    <span class="n">utility_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">utilities</span> <span class="o">-</span> <span class="n">target_utility</span><span class="p">)</span>
+    <span class="n">near_target</span> <span class="o">=</span> <span class="n">utility_diffs</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">utilities</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">near_target</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">near_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="c1"># Estimate Hicksian demand derivatives</span>
+    <span class="n">hicksian_derivatives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">effects</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">t1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">near_target</span><span class="p">[</span><span class="n">t1</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">for</span> <span class="n">t2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">near_target</span><span class="p">[</span><span class="n">t2</span><span class="p">]:</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">dp_j</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">t2</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dp_j</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">dq_i</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">t2</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">Q</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+                    <span class="n">effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dq_i</span> <span class="o">/</span> <span class="n">dp_j</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">effects</span><span class="p">:</span>
+                <span class="n">hicksian_derivatives</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;hicksian_demand_fn&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;hicksian_derivatives&quot;</span><span class="p">:</span> <span class="n">hicksian_derivatives</span><span class="p">,</span>
+        <span class="s2">&quot;target_utility&quot;</span><span class="p">:</span> <span class="n">target_utility</span><span class="p">,</span>
+        <span class="s2">&quot;utility_function&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;observation_utilities&quot;</span><span class="p">:</span> <span class="n">utilities</span><span class="p">,</span>
+        <span class="s2">&quot;observations_used&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">near_target</span><span class="p">)),</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="check_compensated_law_of_demand">
+<a class="viewcode-back" href="../../../api.html#prefgraph.check_compensated_law_of_demand">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_compensated_law_of_demand</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ConsumerSession</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if data satisfies the compensated law of demand.</span>
+
+<span class="sd">    The compensated law states that substitution effects are negative</span>
+<span class="sd">    for own-price changes: when price increases (holding utility constant),</span>
+<span class="sd">    quantity demanded decreases.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session: ConsumerSession with prices and quantities</span>
+<span class="sd">        tolerance: Numerical tolerance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dictionary with test results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">decompose_price_effects</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+
+    <span class="c1"># Check own-price substitution effects</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">num_goods</span>
+    <span class="n">violations</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">substitution_effects</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">:</span>
+            <span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;satisfies_law&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">violations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;violations&quot;</span><span class="p">:</span> <span class="n">violations</span><span class="p">,</span>
+        <span class="s2">&quot;substitution_effects_diagonal&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">substitution_effects</span><span class="p">),</span>
+    <span class="p">}</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_estimate_slutsky_components</span><span class="p">(</span>
+    <span class="n">P</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">Q</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">good_i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">good_j</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">price_threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimate Slutsky decomposition components for a pair of goods.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple of (substitution_effect, income_effect, total_effect)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Precompute expenditures (vectorized)</span>
+    <span class="n">expenditures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span> <span class="o">*</span> <span class="n">Q</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">total_effects</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">income_effects_raw</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">t1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">t2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+            <span class="c1"># Price change in good j</span>
+            <span class="n">dp_j</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">t2</span><span class="p">,</span> <span class="n">good_j</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">good_j</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dp_j</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">good_j</span><span class="p">],</span> <span class="n">tolerance</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">price_threshold</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Check other prices are relatively stable (vectorized)</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">good_j</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">other_change</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">t2</span><span class="p">,</span> <span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">mask</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">mask</span><span class="p">],</span> <span class="n">tolerance</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">other_change</span> <span class="o">&gt;</span> <span class="n">price_threshold</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Quantity change in good i</span>
+            <span class="n">dq_i</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">t2</span><span class="p">,</span> <span class="n">good_i</span><span class="p">]</span> <span class="o">-</span> <span class="n">Q</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">good_i</span><span class="p">]</span>
+
+            <span class="c1"># Total effect (Marshallian)</span>
+            <span class="n">total_effect</span> <span class="o">=</span> <span class="n">dq_i</span> <span class="o">/</span> <span class="n">dp_j</span>
+            <span class="n">total_effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">total_effect</span><span class="p">)</span>
+
+            <span class="c1"># Estimate income effect</span>
+            <span class="c1"># Income effect = x_j * (dq_i/dm)</span>
+            <span class="n">dm</span> <span class="o">=</span> <span class="n">expenditures</span><span class="p">[</span><span class="n">t2</span><span class="p">]</span> <span class="o">-</span> <span class="n">expenditures</span><span class="p">[</span><span class="n">t1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">:</span>
+                <span class="n">dq_dm</span> <span class="o">=</span> <span class="n">dq_i</span> <span class="o">/</span> <span class="n">dm</span>
+                <span class="n">x_j_avg</span> <span class="o">=</span> <span class="p">(</span><span class="n">Q</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">good_j</span><span class="p">]</span> <span class="o">+</span> <span class="n">Q</span><span class="p">[</span><span class="n">t2</span><span class="p">,</span> <span class="n">good_j</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="n">income_effect</span> <span class="o">=</span> <span class="n">x_j_avg</span> <span class="o">*</span> <span class="n">dq_dm</span>
+                <span class="n">income_effects_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">income_effect</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">total_effects</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+
+    <span class="n">total_effect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">total_effects</span><span class="p">)</span>
+    <span class="n">income_effect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">income_effects_raw</span><span class="p">)</span> <span class="k">if</span> <span class="n">income_effects_raw</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">substitution_effect</span> <span class="o">=</span> <span class="n">total_effect</span> <span class="o">-</span> <span class="n">income_effect</span>
+
+    <span class="k">return</span> <span class="n">substitution_effect</span><span class="p">,</span> <span class="n">income_effect</span><span class="p">,</span> <span class="n">total_effect</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># ADDITIONAL TECH-FRIENDLY ALIASES</span>
+<span class="c1"># =============================================================================</span>
+
+<span class="n">compute_slutsky_decomposition</span> <span class="o">=</span> <span class="n">decompose_price_effects</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Compute Slutsky decomposition of price effects.</span>
+
+<span class="sd">Alias for decompose_price_effects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">estimate_compensated_demand</span> <span class="o">=</span> <span class="n">compute_hicksian_demand</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Estimate compensated (Hicksian) demand.</span>
+
+<span class="sd">Alias for compute_hicksian_demand.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, PrefGraph Contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

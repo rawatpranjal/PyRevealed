@@ -2,6 +2,9 @@
 
 ## [0.5.9] - 2026-03-28
 
+### Changed
+- Performance page rewritten into concise paragraphs; consolidated RTD plot generation under `docs/perf/` with a CLI (`python -m docs.perf.cli`) and migrated legacy script to delegate. Figures write to `docs/_static/perf_*.png`.
+
 ### Fixed
 - **Base install safety** — `import prefgraph` no longer crashes without `pandas`. Four dataset loaders (_retailrocket, _rees46, _taobao, _tenrec) had bare `import pandas as pd` at module level; now lazily imported via wrapper functions in `datasets/__init__.py`.
 - **compute_mpi() function API** — was silently returning 0.0 on GARP-violating data. Root cause: Rust call had wrong argument count (missing `network=False`), causing TypeError caught by bare `except`, falling to Python fallback which had a separate `is_garp` gate bug. Fixed arg count per engine.py call signature. Ref: Echenique, Lee & Shum (2011) JPE 119(6), Eq. (2).

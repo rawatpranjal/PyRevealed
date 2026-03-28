@@ -1,7 +1,6 @@
-"""Instacart menu-choice benchmark: product-level within departments.
+"""Taobao buy-anchored benchmark (1 day window).
 
-Uses department-scoped product choices (known set → first pick).
-Tests whether RP preference graph features predict future engagement.
+Menu = views in last 24 hours before each buy (require buy-viewed).
 """
 
 from __future__ import annotations
@@ -13,7 +12,7 @@ from case_studies.benchmarks.config import TRAIN_FRACTION, MIN_OBS_MENU, MIN_TRA
 from case_studies.benchmarks.core.features import extract_menu_baseline, extract_menu_rp
 from case_studies.benchmarks.core.evaluation import run_three_way, BenchmarkResult
 
-DATASET_NAME = "Instacart (Menu)"
+DATASET_NAME = "Taobao (Buy-Window 1d)"
 
 
 def _split_menu_log(log: MenuChoiceLog, fraction: float):
@@ -34,10 +33,19 @@ def _split_menu_log(log: MenuChoiceLog, fraction: float):
 
 
 def load_and_prepare(data_dir=None, max_users=50000):
-    from prefgraph.datasets._instacart_menu import load_instacart_menu
+    from prefgraph.datasets._taobao import load_taobao
 
     print(f"\n[{DATASET_NAME}] Loading dataset...")
-    user_logs = load_instacart_menu(data_dir=data_dir, min_sessions=MIN_OBS_MENU, max_users=max_users)
+    user_logs = load_taobao(
+        data_dir=data_dir,
+        min_sessions=MIN_OBS_MENU,
+        max_users=max_users,
+        mode="buy_window",
+        window_seconds=24 * 3600,
+        min_menu_size=2,
+        max_menu_size=50,
+        max_rows=10_000_000,
+    )
 
     train_logs, user_ids = {}, []
     targets = {"high_engagement": []}
@@ -68,9 +76,7 @@ def load_and_prepare(data_dir=None, max_users=50000):
     print(f"  Extracting RP features via Engine...")
     X_rp = extract_menu_rp(train_logs)
 
-    targets_dict = {
-        "High Engagement": (high_eng, "classification", engagement, 66.67),
-    }
+    targets_dict = {"High Engagement": (high_eng, "classification")}
     return X_rp, X_base, targets_dict, user_ids
 
 
@@ -79,14 +85,13 @@ def run_benchmark(data_dir=None, max_users=50000) -> list[BenchmarkResult]:
     if X_rp is None:
         return []
     results = []
-    for target_name, (y, task_type, y_cont, pctl) in targets_dict.items():
+    for target_name, (y, task_type) in targets_dict.items():
         print(f"  [{DATASET_NAME}] Target: {target_name} ({task_type})")
         pos_rate = np.mean(y)
         if pos_rate < 0.02 or pos_rate > 0.98:
             print(f"    Skipping — too imbalanced (pos_rate={pos_rate:.3f})")
             continue
-        result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type,
-                               y_continuous=y_cont, threshold_pctl=pctl)
+        result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type)
         results.append(result)
         print(f"    AUC: RP={result.auc_rp:.3f}  Base={result.auc_base:.3f}  "
               f"Combined={result.auc_combined:.3f}  Lift={result.auc_combined - result.auc_base:+.3f}")

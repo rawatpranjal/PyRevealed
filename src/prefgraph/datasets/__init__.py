@@ -101,13 +101,6 @@ def list_datasets() -> list[dict[str, str]]:
             "observations": "~8 months per customer",
         },
         {
-            "name": "instacart",
-            "description": "Grocery orders from 200K+ users across 134 aisles",
-            "source": "Kaggle (instacart/market-basket-analysis)",
-            "goods": "134 aisles (heuristic per-aisle prices)",
-            "observations": "~15-100 orders per user",
-        },
-        {
             "name": "yoochoose",
             "description": "E-commerce click sessions from RecSys 2015 challenge",
             "source": "RecSys 2015 Challenge",
@@ -170,13 +163,7 @@ def list_datasets() -> list[dict[str, str]]:
             "goods": "Menu-based (daily viewed → purchased items)",
             "observations": "~5-50 purchase-days per user",
         },
-        {
-            "name": "tenrec",
-            "description": "Tencent QQ Browser: 5M users, 140M interactions (click/like/share/follow)",
-            "source": "NeurIPS 2022 (Tenrec)",
-            "goods": "Menu-based (clicked items → liked item)",
-            "observations": "~5-50 sessions per user",
-        },
+
     ]
 
 

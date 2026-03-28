@@ -16,8 +16,9 @@ OUTPUT_DIR = Path(__file__).parent / "_static"
 DPI = 100
 
 # Durations for variable-speed algorithm GIFs
-SLOW_MS = 3000   # text-change frames (phase transitions, new explanations)
-FAST_MS = 600    # visual-only frames (edges appearing, nodes moving)
+# Slow text-heavy frames a lot; ease visual transitions slightly
+SLOW_MS = 6500   # text-change frames (phase transitions, new explanations)
+FAST_MS = 900    # visual-only frames (edges appearing, nodes moving)
 
 
 def _save_gif_variable_speed(fig, update_fn, total_frames, text_frames,
@@ -194,7 +195,8 @@ def generate_budget_hero():
                               edgecolor=PALETTE["accent"], alpha=0.95))
 
     print("  Generating budget_hero.gif...")
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=900)
+    # Slightly slower transitions for readability
+    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=1100)
     anim.save(OUTPUT_DIR / "budget_hero.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
 
@@ -363,7 +365,8 @@ def generate_menu_hero():
                               edgecolor=PALETTE["accent"], alpha=0.95))
 
     print("  Generating menu_hero.gif...")
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=900)
+    # Slightly slower transitions for readability
+    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=1100)
     anim.save(OUTPUT_DIR / "menu_hero.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
 
@@ -818,7 +821,8 @@ def generate_power_analysis():
         ax.set_title("Power Analysis: Observed vs Random", fontsize=12, fontweight="bold")
         fig.tight_layout()
 
-    anim = FuncAnimation(fig, update, frames=total, interval=350)
+    # Ease the transition pacing a bit
+    anim = FuncAnimation(fig, update, frames=total, interval=450)
     anim.save(OUTPUT_DIR / "power_analysis.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
     print("  power_analysis.gif")
@@ -882,7 +886,8 @@ def generate_engine_throughput():
 
         fig.tight_layout()
 
-    anim = FuncAnimation(fig, update, frames=n_frames + hold_frames, interval=150)
+    # Ease the transition pacing a bit
+    anim = FuncAnimation(fig, update, frames=n_frames + hold_frames, interval=200)
     anim.save(OUTPUT_DIR / "engine_throughput.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
     print("  engine_throughput.gif")
@@ -955,7 +960,8 @@ def generate_attention_decay():
         ax.set_title("Position-Based Attention Decay", fontsize=12, fontweight="bold")
         fig.tight_layout()
 
-    anim = FuncAnimation(fig, update, frames=total, interval=350)
+    # Ease the transition pacing a bit
+    anim = FuncAnimation(fig, update, frames=total, interval=450)
     anim.save(OUTPUT_DIR / "attention_decay.gif", writer="pillow", dpi=DPI)
     plt.close(fig)
     print("  attention_decay.gif")
@@ -1671,6 +1677,18 @@ def main():
     for f in sorted(OUTPUT_DIR.glob("*.gif")):
         size_kb = f.stat().st_size / 1024
         print(f"  {f.name} ({size_kb:.0f} KB)")
+
+    # Also copy generated GIFs into docs/_static so RTD pages pick them up
+    try:
+        import shutil
+        docs_static = Path(__file__).resolve().parents[2] / "_static"
+        docs_static.mkdir(parents=True, exist_ok=True)
+        for f in OUTPUT_DIR.glob("*.gif"):
+            target = docs_static / f.name
+            shutil.copy2(f, target)
+        print(f"\nCopied GIFs to {docs_static}/ for site consumption.")
+    except Exception as e:
+        print(f"\nWarning: could not copy GIFs to docs/_static: {e}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,1462 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>prefgraph.engine &#8212; PrefGraph 0.5.9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f62897f1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=93eceeb8"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/prefgraph/engine';</script>
+    <link rel="icon" href="../../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="PrefGraph 0.5.9 documentation - Home"/>
+    <img src="../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="PrefGraph 0.5.9 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">prefgraph.engine</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for prefgraph.engine</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Engine: batch revealed preference analysis for millions of users.</span>
+
+<span class="sd">Automatically uses the Rust backend (Rayon parallel, thread-local scratchpads)</span>
+<span class="sd">if installed, otherwise falls back to Python with ProcessPoolExecutor.</span>
+
+<span class="sd">Usage:</span>
+<span class="sd">    from prefgraph.engine import Engine</span>
+
+<span class="sd">    engine = Engine(metrics=[&quot;garp&quot;, &quot;ccei&quot;, &quot;mpi&quot;, &quot;harp&quot;, &quot;hm&quot;, &quot;utility&quot;, &quot;vei&quot;])</span>
+<span class="sd">    results = engine.analyze_arrays(user_data)</span>
+
+<span class="sd">    # Get the full observation graph (for Tier 2 deep dives)</span>
+<span class="sd">    graph = engine.build_graph(prices, quantities)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph._rust_backend</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HAS_RUST</span><span class="p">,</span> <span class="n">_rust_analyze_batch</span><span class="p">,</span> <span class="n">_rust_analyze_menu_batch</span><span class="p">,</span> <span class="n">_rust_build_preference_graph</span><span class="p">,</span>
+    <span class="n">HAS_PARQUET_RUST</span><span class="p">,</span> <span class="n">_rust_analyze_parquet_file</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="EngineResult">
+<a class="viewcode-back" href="../../api.html#prefgraph.EngineResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EngineResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result for one user from the Engine (budget data).</span>
+
+<span class="sd">    Contains all metrics requested via ``Engine(metrics=[...])``.</span>
+<span class="sd">    Unrequested numeric metrics retain mathematically correct defaults</span>
+<span class="sd">    (``ccei=1.0``, ``mpi=0.0``). Unrequested boolean/count metrics</span>
+<span class="sd">    default to ``None`` (not ``False``/``0``) so they render as NaN</span>
+<span class="sd">    in DataFrames — unambiguously &quot;not computed&quot; rather than &quot;failed&quot;.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        is_garp: True if choices satisfy GARP (no revealed-preference cycles).</span>
+<span class="sd">        n_violations: Number of GARP violation pairs. 0 when consistent.</span>
+<span class="sd">        ccei: Critical Cost Efficiency Index (Afriat 1967). 1.0 = perfectly</span>
+<span class="sd">            rational; lower values indicate wasted budget. Range: (0, 1].</span>
+<span class="sd">        mpi: Money Pump Index (Echenique, Lee &amp; Shum 2011). Average</span>
+<span class="sd">            exploitability per dollar. 0.0 = unexploitable. Range: [0, 1).</span>
+<span class="sd">        is_harp: True if choices satisfy HARP (homothetic preferences).</span>
+<span class="sd">        hm_consistent: Houtman-Maks: number of consistent observations (budget) or items (menu).</span>
+<span class="sd">        hm_total: Total observations (budget) or items (menu).</span>
+<span class="sd">        utility_success: True if Afriat&#39;s LP recovered a rationalizing utility.</span>
+<span class="sd">        vei_mean: Mean Varian Efficiency Index across observations. Range: [0, 1].</span>
+<span class="sd">        vei_min: Worst-observation VEI. Range: [0, 1].</span>
+<span class="sd">        vei_exact_mean: VEI via exact LP (vs binary-search approximation).</span>
+<span class="sd">        vei_exact_min: Exact VEI, worst observation.</span>
+<span class="sd">        max_scc: Largest strongly connected component in observation graph.</span>
+<span class="sd">            1 = acyclic (no entangled violations).</span>
+<span class="sd">        compute_time_us: Wall-clock computation time in microseconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># is_garp is always computed — it gates every other metric.</span>
+    <span class="n">is_garp</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">n_violations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># ccei=1.0 and mpi=0.0 are mathematically correct defaults:</span>
+    <span class="c1"># GARP-consistent data has CCEI=1.0 (Afriat 1967) and MPI=0.0</span>
+    <span class="c1"># (Echenique, Lee &amp; Shum 2011). These are only overwritten when</span>
+    <span class="c1"># GARP fails AND the metric was requested.</span>
+    <span class="n">ccei</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">mpi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="c1"># Optional metrics default to None (= &quot;not computed&quot;), not False/0.</span>
+    <span class="c1"># False would be indistinguishable from &quot;computed and failed&quot; in output</span>
+    <span class="c1"># DataFrames, causing users to misinterpret uncomputed HARP as</span>
+    <span class="c1"># &quot;not homothetic&quot; or uncomputed utility as &quot;LP failed&quot;.</span>
+    <span class="c1"># None serializes to NaN in pandas, which is unambiguously &quot;missing&quot;.</span>
+    <span class="n">is_harp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">hm_consistent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">hm_total</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">utility_success</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">vei_mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">vei_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">vei_exact_mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">vei_exact_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">max_scc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">compute_time_us</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">vei_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">vei_q25</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">vei_q75</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">vei_exact_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">vei_exact_q25</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">vei_exact_q75</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">n_scc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">harp_severity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">scc_mean_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">r_density</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">r_out_degree_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">degree_gini</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ew_mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ew_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ew_skew</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+<div class="viewcode-block" id="EngineResult.to_dict">
+<a class="viewcode-back" href="../../api.html#prefgraph.EngineResult.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return dictionary representation for serialization.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)}</span></div>
+
+
+<div class="viewcode-block" id="EngineResult.summary">
+<a class="viewcode-back" href="../../api.html#prefgraph.EngineResult.summary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return human-readable summary report.&quot;&quot;&quot;</span>
+        <span class="n">indicator</span> <span class="o">=</span> <span class="s2">&quot;[+]&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_garp</span> <span class="k">else</span> <span class="s2">&quot;[-]&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;GARP-consistent&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_garp</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_violations</span><span class="si">}</span><span class="s2"> GARP violations&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Engine Budget Report: </span><span class="si">{</span><span class="n">indicator</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  CCEI:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ccei</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpi</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  MPI:   </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mpi</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_harp</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;  HARP:  yes (homothetic)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">frac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_consistent</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  HM:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hm_consistent</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">frac</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> consistent)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_success</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;  Utility: recovered&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vei_mean</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  VEI:   mean=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">vei_mean</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">  min=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">vei_min</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">  std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">vei_std</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">  IQR=[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">vei_q25</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">vei_q75</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_harp</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">harp_severity</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  HARP:  violated (severity=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">harp_severity</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_scc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  SCC:   </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_scc</span><span class="si">}</span><span class="s2"> components, max=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_scc</span><span class="si">}</span><span class="s2">, mean=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">scc_mean_size</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_density</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;density=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">r_density</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;deg_std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">r_out_degree_std</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;gini=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">degree_gini</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ew_std</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ew_std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ew_std</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Graph: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Time:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_time_us</span><span class="si">}</span><span class="s2">us&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">indicator</span> <span class="o">=</span> <span class="s2">&quot;[+]&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_garp</span> <span class="k">else</span> <span class="s2">&quot;[-]&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;GARP-consistent&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_garp</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_violations</span><span class="si">}</span><span class="s2"> violations&quot;</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;EngineResult: </span><span class="si">{</span><span class="n">indicator</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ccei=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ccei</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpi</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mpi=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mpi</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;hm=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hm_consistent</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_time_us</span><span class="si">}</span><span class="s2">us)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MenuResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result for one user from menu/discrete choice analysis.</span>
+
+<span class="sd">    Contains SARP, WARP, and optionally WARP-LA consistency tests plus</span>
+<span class="sd">    Houtman-Maks noise fraction for discrete (menu-based) choice data.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        is_sarp: True if choices satisfy SARP (no preference cycles of any length).</span>
+<span class="sd">        is_warp: True if choices satisfy WARP (no direct preference reversals).</span>
+<span class="sd">        is_warp_la: True if choices satisfy WARP under limited attention</span>
+<span class="sd">            (Masatlioglu, Nakajima &amp; Ozbay 2012). Only computed when</span>
+<span class="sd">            ``compute_warp_la=True``.</span>
+<span class="sd">        n_sarp_violations: Number of SARP violation cycles found.</span>
+<span class="sd">        n_warp_violations: Number of WARP violation pairs found.</span>
+<span class="sd">        hm_consistent: Houtman-Maks: number of consistent observations (budget) or items (menu).</span>
+<span class="sd">        hm_total: Total observations (budget) or items (menu).</span>
+<span class="sd">        max_scc: Largest SCC in the item graph. 1 = acyclic.</span>
+<span class="sd">        compute_time_us: Wall-clock computation time in microseconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">is_sarp</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">is_warp</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">is_warp_la</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">n_sarp_violations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_warp_violations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">hm_consistent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">hm_total</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_scc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_scc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">r_density</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">pref_entropy</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">choice_diversity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">compute_time_us</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return dictionary representation for serialization.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return human-readable summary report.&quot;&quot;&quot;</span>
+        <span class="n">indicator</span> <span class="o">=</span> <span class="s2">&quot;[+]&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_sarp</span> <span class="k">else</span> <span class="s2">&quot;[-]&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;SARP-consistent&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_sarp</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_sarp_violations</span><span class="si">}</span><span class="s2"> SARP violations&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Engine Menu Report: </span><span class="si">{</span><span class="n">indicator</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_warp</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  WARP:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_warp_violations</span><span class="si">}</span><span class="s2"> violations&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;  WARP:  consistent&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_warp_la</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;  WARP-LA: consistent (limited attention)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">frac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_consistent</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  HM:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hm_consistent</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">frac</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> consistent)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_scc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  SCC:   </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_scc</span><span class="si">}</span><span class="s2"> components, max=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_scc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Time:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_time_us</span><span class="si">}</span><span class="s2">us&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">indicator</span> <span class="o">=</span> <span class="s2">&quot;[+]&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_sarp</span> <span class="k">else</span> <span class="s2">&quot;[-]&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;SARP-consistent&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_sarp</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_sarp_violations</span><span class="si">}</span><span class="s2"> SARP violations&quot;</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;MenuResult: </span><span class="si">{</span><span class="n">indicator</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;hm=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hm_consistent</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hm_total</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_time_us</span><span class="si">}</span><span class="s2">us)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Engine">
+<a class="viewcode-back" href="../../api.html#prefgraph.Engine">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Engine</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyzes revealed preference for millions of users.</span>
+
+<span class="sd">    Automatically routes to Rust (if available) or Python backend.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        metrics: Which metrics to compute. &quot;garp&quot; is always included.</span>
+<span class="sd">            Supported: &quot;garp&quot;, &quot;ccei&quot;, &quot;mpi&quot;, &quot;harp&quot;, &quot;hm&quot;, &quot;utility&quot;, &quot;vei&quot;.</span>
+<span class="sd">        chunk_size: Number of users per batch (for streaming / memory bounding).</span>
+<span class="sd">        tolerance: Numerical tolerance for GARP comparisons.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUPPORTED_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;garp&quot;</span><span class="p">,</span> <span class="s2">&quot;ccei&quot;</span><span class="p">,</span> <span class="s2">&quot;mpi&quot;</span><span class="p">,</span> <span class="s2">&quot;harp&quot;</span><span class="p">,</span> <span class="s2">&quot;hm&quot;</span><span class="p">,</span> <span class="s2">&quot;utility&quot;</span><span class="p">,</span> <span class="s2">&quot;vei&quot;</span><span class="p">,</span> <span class="s2">&quot;vei_exact&quot;</span><span class="p">,</span> <span class="s2">&quot;network&quot;</span><span class="p">}</span>
+
+<div class="viewcode-block" id="Engine.__init__">
+<a class="viewcode-back" href="../../api.html#prefgraph.Engine.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;garp&quot;</span><span class="p">,</span> <span class="s2">&quot;ccei&quot;</span><span class="p">),</span>
+        <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50_000</span><span class="p">,</span>
+        <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">unknown</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORTED_METRICS</span>
+        <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unknown metrics: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">unknown</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Supported: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SUPPORTED_METRICS</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s2">&quot;rust&quot;</span> <span class="k">if</span> <span class="n">HAS_RUST</span> <span class="k">else</span> <span class="s2">&quot;python&quot;</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Input validation</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_budget_input</span><span class="p">(</span><span class="n">users</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate input for analyze_arrays().&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataValidationError</span><span class="p">,</span> <span class="n">DimensionError</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">users</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;users must be a list of (prices, quantities) tuples, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">users</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Hint: Wrap a single user as [(prices, quantities)]. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;If you have a pandas DataFrame, use prefgraph.analyze(df, ...) instead.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DataValidationError</span><span class="p">(</span><span class="s2">&quot;users list is empty. Provide at least one (prices, quantities) tuple.&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">users</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">length_hint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; of length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;__len__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">raise</span> <span class="n">DataValidationError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] must be a (prices, quantities) tuple of length 2, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}{</span><span class="n">length_hint</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Hint: Each element is (np.ndarray T*K, np.ndarray T*K).&quot;</span>
+                <span class="p">)</span>
+            <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]: prices and quantities must be numpy arrays, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">). &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Hint: Convert with np.asarray(data).&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DimensionError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]: prices must be 2D (T x K), got </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D with shape </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Hint: Use prices.reshape(-1, K) for 1D arrays, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;or prefgraph.analyze(df, ...) for DataFrames.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DimensionError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]: quantities must be 2D (T x K), got </span><span class="si">{</span><span class="n">q</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D with shape </span><span class="si">{</span><span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Hint: Use quantities.reshape(-1, K) for 1D arrays, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;or prefgraph.analyze(df, ...) for DataFrames.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DimensionError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]: prices shape </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> != quantities shape </span><span class="si">{</span><span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Both must be (T, K) with matching dimensions.&quot;</span>
+                <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_menu_input</span><span class="p">(</span><span class="n">users</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate input for analyze_menus().&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataValidationError</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">users</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;users must be a list of (menus, choices, n_items) tuples, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">users</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DataValidationError</span><span class="p">(</span><span class="s2">&quot;users list is empty. Provide at least one (menus, choices, n_items) tuple.&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">users</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">length_hint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; of length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;__len__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">raise</span> <span class="n">DataValidationError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] must be a (menus, choices, n_items) tuple of length 3, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}{</span><span class="n">length_hint</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Hint: Each element is (list[list[int]], list[int], int).&quot;</span>
+                <span class="p">)</span>
+            <span class="n">menus</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">n_items</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">menus</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]: menus must be a list of lists, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">menus</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">choices</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]: choices must be a list, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_items</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_items</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DataValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]: n_items must be a positive integer, got </span><span class="si">{</span><span class="n">n_items</span><span class="si">!r}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">menus</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">DataValidationError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]: len(menus)=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">menus</span><span class="p">)</span><span class="si">}</span><span class="s2"> != len(choices)=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Each menu observation must have exactly one choice.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">menu</span><span class="p">,</span> <span class="n">choice</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">menus</span><span class="p">,</span> <span class="n">choices</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">choice</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">menu</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">DataValidationError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;users[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">], observation </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">: choice </span><span class="si">{</span><span class="n">choice</span><span class="si">}</span><span class="s2"> not in menu </span><span class="si">{</span><span class="n">menu</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Budget analysis</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Engine.analyze_arrays">
+<a class="viewcode-back" href="../../api.html#prefgraph.Engine.analyze_arrays">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_arrays</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">users</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+        <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;budget&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">EngineResult</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze users from a list of array pairs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            users: For budget data: list of (prices T*K, quantities T*K).</span>
+<span class="sd">            data_type: &quot;budget&quot; (default). &quot;menu&quot; and &quot;production&quot; not yet implemented.</span>
+
+<span class="sd">        Returns list of EngineResult, one per user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="o">!=</span> <span class="s2">&quot;budget&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;data_type=&#39;</span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s2">&#39; not yet implemented. &quot;</span>
+                <span class="s2">&quot;Only &#39;budget&#39; is currently supported.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_budget_input</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+        <span class="n">all_results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EngineResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ccei&quot;</span><span class="p">:</span> <span class="s2">&quot;ccei&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;mpi&quot;</span><span class="p">:</span> <span class="s2">&quot;mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;harp&quot;</span><span class="p">:</span> <span class="s2">&quot;harp&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;hm&quot;</span><span class="p">:</span> <span class="s2">&quot;hm&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;utility&quot;</span><span class="p">:</span> <span class="s2">&quot;utility&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;vei&quot;</span><span class="p">:</span> <span class="s2">&quot;vei&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;vei_exact&quot;</span><span class="p">:</span> <span class="s2">&quot;vei_exact&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;network&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">):</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">users</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;rust&quot;</span><span class="p">:</span>
+                <span class="n">chunk_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_chunk_rust</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chunk_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_chunk_python</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+
+            <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chunk_results</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_results</span></div>
+
+
+<div class="viewcode-block" id="Engine.build_graph">
+<a class="viewcode-back" href="../../api.html#prefgraph.Engine.build_graph">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_graph</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">prices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">quantities</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build an observation graph and return it as numpy arrays.</span>
+
+<span class="sd">        Tier 2 entry point for deep per-user analysis. Python modules</span>
+<span class="sd">        (utility.py, welfare.py, etc.) can consume the Rust-computed graph.</span>
+
+<span class="sd">        Returns dict with keys:</span>
+<span class="sd">            r, p, r_star: T*T uint8 arrays (boolean preference matrices)</span>
+<span class="sd">            expenditure: T*T float64 (expenditure matrix E)</span>
+<span class="sd">            edge_weights: T*T float64 (log-ratios for HARP)</span>
+<span class="sd">            own_expenditure: T float64 (diagonal of E)</span>
+<span class="sd">            scc_labels: T uint32 (SCC component IDs)</span>
+<span class="sd">            is_garp, n_violations, max_scc, n_components, t: scalars</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">HAS_RUST</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;build_graph requires the Rust backend. &quot;</span>
+                <span class="s2">&quot;Install with: pip install rpt-python&quot;</span>
+            <span class="p">)</span>
+        <span class="n">tol</span> <span class="o">=</span> <span class="n">tolerance</span> <span class="k">if</span> <span class="n">tolerance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span>
+        <span class="k">return</span> <span class="n">_rust_build_preference_graph</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">quantities</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+            <span class="n">tol</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_chunk_rust</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">chunk</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+        <span class="n">flags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">EngineResult</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze a chunk using Rust Rayon backend.&quot;&quot;&quot;</span>
+        <span class="n">prices_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">chunk</span>
+        <span class="p">]</span>
+        <span class="n">quantities_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">chunk</span>
+        <span class="p">]</span>
+
+        <span class="n">raw_results</span> <span class="o">=</span> <span class="n">_rust_analyze_batch</span><span class="p">(</span>
+            <span class="n">prices_list</span><span class="p">,</span> <span class="n">quantities_list</span><span class="p">,</span>
+            <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ccei&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;harp&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hm&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;utility&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;network&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Rust backend always returns all keys (with False/0 defaults) even</span>
+        <span class="c1"># when a metric wasn&#39;t requested. Use flags to emit None for unrequested</span>
+        <span class="c1"># optional metrics, so DataFrames show NaN instead of misleading False/0.</span>
+        <span class="n">engine_results</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">EngineResult</span><span class="p">(</span>
+                <span class="n">is_garp</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;is_garp&quot;</span><span class="p">],</span>
+                <span class="n">n_violations</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;n_violations&quot;</span><span class="p">],</span>
+                <span class="n">ccei</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;ccei&quot;</span><span class="p">],</span>
+                <span class="n">mpi</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">is_harp</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;is_harp&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;harp&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">hm_consistent</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;hm_consistent&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hm&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">hm_total</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;hm_total&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hm&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">utility_success</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;utility_success&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;utility&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">vei_mean</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_mean&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_min</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_min&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_exact_mean</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_mean&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_exact_min</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_min&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">max_scc</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;max_scc&quot;</span><span class="p">],</span>
+                <span class="n">compute_time_us</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;compute_time_us&quot;</span><span class="p">],</span>
+                <span class="n">vei_std</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_std&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">vei_q25</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_q25&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_q75</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_q75&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_exact_std</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_std&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">vei_exact_q25</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_q25&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_exact_q75</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_q75&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">n_scc</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_scc&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="n">harp_severity</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;harp_severity&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">scc_mean_size</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scc_mean_size&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">r_density</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;r_density&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">r_out_degree_std</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;r_out_degree_std&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">degree_gini</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;degree_gini&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">ew_mean</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ew_mean&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">ew_std</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ew_std&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">ew_skew</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ew_skew&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">raw_results</span>
+        <span class="p">]</span>
+        <span class="c1"># Post-process VEI: if vei was requested but Rust returned the 1.0 default</span>
+        <span class="c1"># on GARP-violating data, compute in Python using compute_vei().</span>
+        <span class="c1"># The Rust backend may not implement VEI or may silently return 1.0</span>
+        <span class="c1"># (the EngineResult default) when it can&#39;t compute.</span>
+        <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei&quot;</span><span class="p">):</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.core.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">BehaviorLog</span> <span class="k">as</span> <span class="n">_BL</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.vei</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_vei</span> <span class="k">as</span> <span class="n">_compute_vei</span>
+            <span class="n">fixed</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">er</span><span class="p">,</span> <span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">quantities</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">engine_results</span><span class="p">,</span> <span class="n">chunk</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">er</span><span class="o">.</span><span class="n">is_garp</span> <span class="ow">and</span> <span class="n">er</span><span class="o">.</span><span class="n">vei_mean</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">log</span> <span class="o">=</span> <span class="n">_BL</span><span class="p">(</span><span class="n">cost_vectors</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">action_vectors</span><span class="o">=</span><span class="n">quantities</span><span class="p">)</span>
+                        <span class="n">vr</span> <span class="o">=</span> <span class="n">_compute_vei</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+                        <span class="n">er</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">er</span><span class="p">,</span> <span class="n">vei_mean</span><span class="o">=</span><span class="n">vr</span><span class="o">.</span><span class="n">mean_efficiency</span><span class="p">,</span> <span class="n">vei_min</span><span class="o">=</span><span class="n">vr</span><span class="o">.</span><span class="n">min_efficiency</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                <span class="n">fixed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">er</span><span class="p">)</span>
+            <span class="n">engine_results</span> <span class="o">=</span> <span class="n">fixed</span>
+        <span class="k">return</span> <span class="n">engine_results</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_chunk_python</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">chunk</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+        <span class="n">flags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">EngineResult</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Python fallback when Rust backend is unavailable (HAS_RUST=False).</span>
+
+<span class="sd">        Supports: GARP, CCEI, MPI, HM, HARP, utility.</span>
+<span class="sd">        Does NOT support: VEI (requires Rust LP solver).</span>
+
+<span class="sd">        Each metric matches the Rust Engine output. Algorithm references:</span>
+<span class="sd">        - GARP: Varian (1982), SCC + Floyd-Warshall</span>
+<span class="sd">        - CCEI: Afriat (1967), binary search</span>
+<span class="sd">        - MPI: Echenique, Lee &amp; Shum (2011), Karp&#39;s max-mean cycle</span>
+<span class="sd">        - HM: Houtman &amp; Maks (1985), exact ILP for T&lt;=100, greedy FVS otherwise</span>
+<span class="sd">        - HARP: Varian (1983), FW on log-ratios (binary test only, no severity)</span>
+<span class="sd">        - Utility: Afriat (1967), LP via scipy/HiGHS</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph</span><span class="w"> </span><span class="kn">import</span> <span class="n">BehaviorLog</span><span class="p">,</span> <span class="n">check_garp</span><span class="p">,</span> <span class="n">compute_aei</span><span class="p">,</span> <span class="n">compute_mpi</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.mpi</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_houtman_maks_index</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.harp</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_harp</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.utility</span><span class="w"> </span><span class="kn">import</span> <span class="n">recover_utility</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">prices</span><span class="p">,</span> <span class="n">quantities</span> <span class="ow">in</span> <span class="n">chunk</span><span class="p">:</span>
+            <span class="n">log</span> <span class="o">=</span> <span class="n">BehaviorLog</span><span class="p">(</span><span class="n">cost_vectors</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">action_vectors</span><span class="o">=</span><span class="n">quantities</span><span class="p">)</span>
+
+            <span class="c1"># GARP: always computed — it&#39;s the foundation for all other metrics.</span>
+            <span class="c1"># Varian (1982): SCC decomposition + Floyd-Warshall transitive closure.</span>
+            <span class="n">garp</span> <span class="o">=</span> <span class="n">check_garp</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">)</span>
+            <span class="n">ccei_val</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">mpi_val</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="c1"># None = &quot;not computed&quot; (distinct from 0 = &quot;computed, zero removals&quot;).</span>
+            <span class="n">hm_consistent</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">hm_total</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">is_harp</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">utility_success</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># CCEI (Afriat Efficiency Index): only computed when GARP fails.</span>
+            <span class="c1"># Consistent data has CCEI=1.0 by definition — no search needed.</span>
+            <span class="c1"># Afriat (1967): binary search over e ∈ (0,1] for max e where e-GARP holds.</span>
+            <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ccei&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">garp</span><span class="o">.</span><span class="n">is_consistent</span><span class="p">:</span>
+                <span class="n">aei</span> <span class="o">=</span> <span class="n">compute_aei</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;discrete&quot;</span><span class="p">)</span>
+                <span class="n">ccei_val</span> <span class="o">=</span> <span class="n">aei</span><span class="o">.</span><span class="n">efficiency_index</span>
+
+            <span class="c1"># MPI (Money Pump Index): only computed when GARP fails.</span>
+            <span class="c1"># Consistent data has MPI=0.0 — unexploitable.</span>
+            <span class="c1"># Echenique, Lee &amp; Shum (2011): Karp&#39;s O(T^3) max-mean-weight cycle.</span>
+            <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">garp</span><span class="o">.</span><span class="n">is_consistent</span><span class="p">:</span>
+                <span class="n">mpi_result</span> <span class="o">=</span> <span class="n">compute_mpi</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+                <span class="n">mpi_val</span> <span class="o">=</span> <span class="n">mpi_result</span><span class="o">.</span><span class="n">mpi_value</span>
+
+            <span class="c1"># HM (Houtman-Maks): minimum observations to remove for GARP consistency.</span>
+            <span class="c1"># Houtman &amp; Maks (1985). NP-hard (Smeulders et al. 2014).</span>
+            <span class="c1"># Uses exact ILP (Demuynck &amp; Rehbeck 2023) for T&lt;=100, greedy FVS above.</span>
+            <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hm&quot;</span><span class="p">):</span>
+                <span class="n">hm_total</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">hm_result</span> <span class="o">=</span> <span class="n">compute_houtman_maks_index</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">)</span>
+                <span class="n">hm_consistent</span> <span class="o">=</span> <span class="n">hm_total</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">hm_result</span><span class="o">.</span><span class="n">removed_observations</span><span class="p">)</span>
+
+            <span class="c1"># HARP: binary test for homothetic preferences.</span>
+            <span class="c1"># Varian (1983), C&amp;E (2016) Theorem 4.2: (&gt;=^H, &gt;^H) is acyclic.</span>
+            <span class="c1"># No severity metric exists in the literature — only pass/fail.</span>
+            <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;harp&quot;</span><span class="p">):</span>
+                <span class="n">harp_result</span> <span class="o">=</span> <span class="n">check_harp</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">)</span>
+                <span class="n">is_harp</span> <span class="o">=</span> <span class="n">harp_result</span><span class="o">.</span><span class="n">is_consistent</span>
+
+            <span class="c1"># Utility recovery: Afriat LP — find U_t, lambda_t satisfying</span>
+            <span class="c1"># Afriat&#39;s inequalities. Success = data is rationalizable.</span>
+            <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;utility&quot;</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">util_result</span> <span class="o">=</span> <span class="n">recover_utility</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+                    <span class="n">utility_success</span> <span class="o">=</span> <span class="n">util_result</span><span class="o">.</span><span class="n">success</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">utility_success</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="c1"># VEI: per-observation efficiency — Varian (1990) &quot;Goodness-of-fit</span>
+            <span class="c1"># in optimizing models&quot;, J. Econometrics 46(1-2), 125-140.</span>
+            <span class="c1"># papers/EcheniqueLeeShum2011_MoneyPump.pdf p.7 footnote 3:</span>
+            <span class="c1">#   &quot;Varian modifies AEI by allowing e to vary across the different</span>
+            <span class="c1">#    price vectors, looking at a vector (e_k). Varian&#39;s measure is</span>
+            <span class="c1">#    the closest distance to the unit vector (e_k = 1) of a (e_k)</span>
+            <span class="c1">#    with no violations of GARP.&quot;</span>
+            <span class="c1"># Smeulders et al. (2014), Section 2.2:</span>
+            <span class="c1">#   &quot;VI equals the vector e that is closest to one, for some given</span>
+            <span class="c1">#    norm, such that the data satisfies the revealed-preference</span>
+            <span class="c1">#    axiom under study.&quot;</span>
+            <span class="c1"># Mononen (2023), Section 2.2:</span>
+            <span class="c1">#   &quot;Varian&#39;s index is the least average of adjustments required</span>
+            <span class="c1">#    to rationalize the data.&quot;</span>
+            <span class="n">vei_mean_val</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">vei_min_val</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">if</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">garp</span><span class="o">.</span><span class="n">is_consistent</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.vei</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_vei</span>
+                    <span class="n">vei_result</span> <span class="o">=</span> <span class="n">compute_vei</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+                    <span class="n">vei_mean_val</span> <span class="o">=</span> <span class="n">vei_result</span><span class="o">.</span><span class="n">mean_efficiency</span>
+                    <span class="n">vei_min_val</span> <span class="o">=</span> <span class="n">vei_result</span><span class="o">.</span><span class="n">min_efficiency</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>  <span class="c1"># keep defaults on solver failure</span>
+
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EngineResult</span><span class="p">(</span>
+                <span class="n">is_garp</span><span class="o">=</span><span class="n">garp</span><span class="o">.</span><span class="n">is_consistent</span><span class="p">,</span>
+                <span class="n">n_violations</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">garp</span><span class="o">.</span><span class="n">violations</span><span class="p">),</span>
+                <span class="n">ccei</span><span class="o">=</span><span class="n">ccei_val</span><span class="p">,</span>
+                <span class="n">mpi</span><span class="o">=</span><span class="n">mpi_val</span><span class="p">,</span>
+                <span class="n">hm_consistent</span><span class="o">=</span><span class="n">hm_consistent</span><span class="p">,</span>
+                <span class="n">hm_total</span><span class="o">=</span><span class="n">hm_total</span><span class="p">,</span>
+                <span class="n">is_harp</span><span class="o">=</span><span class="n">is_harp</span><span class="p">,</span>
+                <span class="n">utility_success</span><span class="o">=</span><span class="n">utility_success</span><span class="p">,</span>
+                <span class="n">vei_mean</span><span class="o">=</span><span class="n">vei_mean_val</span><span class="p">,</span>
+                <span class="n">vei_min</span><span class="o">=</span><span class="n">vei_min_val</span><span class="p">,</span>
+            <span class="p">))</span>
+        <span class="k">return</span> <span class="n">results</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Menu analysis</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Engine.analyze_menus">
+<a class="viewcode-back" href="../../api.html#prefgraph.Engine.analyze_menus">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_menus</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">users</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]],</span>
+        <span class="n">compute_warp_la</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MenuResult</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze discrete/menu choice data for multiple users.</span>
+
+<span class="sd">        Each user tuple: (menus, choices, n_items) where:</span>
+<span class="sd">        - menus: list of menus, each a list of item indices shown</span>
+<span class="sd">        - choices: list of chosen item index per menu</span>
+<span class="sd">        - n_items: total number of distinct items for this user</span>
+
+<span class="sd">        Returns list of MenuResult with SARP, WARP, HM scores.</span>
+
+<span class="sd">        Example (rec/search click data):</span>
+<span class="sd">            users = [</span>
+<span class="sd">                ([[0,1,2,3], [1,2,4], [0,3,4]], [2, 1, 0], 5),  # user 0</span>
+<span class="sd">                ([[0,1], [1,2], [0,2]], [0, 1, 2], 3),            # user 1</span>
+<span class="sd">            ]</span>
+<span class="sd">            results = engine.analyze_menus(users)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_menu_input</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+        <span class="n">all_results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">MenuResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">):</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">users</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;rust&quot;</span> <span class="ow">and</span> <span class="n">_rust_analyze_menu_batch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">menus_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">chunk</span><span class="p">]</span>
+                <span class="n">choices_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">chunk</span><span class="p">]</span>
+                <span class="n">n_items_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">chunk</span><span class="p">]</span>
+
+                <span class="n">raw</span> <span class="o">=</span> <span class="n">_rust_analyze_menu_batch</span><span class="p">(</span>
+                    <span class="n">menus_list</span><span class="p">,</span> <span class="n">choices_list</span><span class="p">,</span> <span class="n">n_items_list</span><span class="p">,</span> <span class="n">compute_warp_la</span><span class="p">,</span>
+                    <span class="s2">&quot;network&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                    <span class="n">MenuResult</span><span class="p">(</span>
+                        <span class="n">is_sarp</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;is_sarp&quot;</span><span class="p">],</span>
+                        <span class="n">is_warp</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;is_warp&quot;</span><span class="p">],</span>
+                        <span class="n">is_warp_la</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_warp_la&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                        <span class="n">n_sarp_violations</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;n_sarp_violations&quot;</span><span class="p">],</span>
+                        <span class="n">n_warp_violations</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;n_warp_violations&quot;</span><span class="p">],</span>
+                        <span class="n">hm_consistent</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;hm_consistent&quot;</span><span class="p">],</span>
+                        <span class="n">hm_total</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;hm_total&quot;</span><span class="p">],</span>
+                        <span class="n">max_scc</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;max_scc&quot;</span><span class="p">],</span>
+                        <span class="n">n_scc</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_scc&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="n">r_density</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;r_density&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                        <span class="n">pref_entropy</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pref_entropy&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                        <span class="n">choice_diversity</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;choice_diversity&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                        <span class="n">compute_time_us</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;compute_time_us&quot;</span><span class="p">],</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">raw</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Python fallback</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph</span><span class="w"> </span><span class="kn">import</span> <span class="n">MenuChoiceLog</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.abstract_choice</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+                    <span class="n">validate_menu_sarp</span><span class="p">,</span> <span class="n">validate_menu_warp</span><span class="p">,</span> <span class="n">compute_menu_efficiency</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">menus</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">n_items</span> <span class="ow">in</span> <span class="n">chunk</span><span class="p">:</span>
+                    <span class="n">log</span> <span class="o">=</span> <span class="n">MenuChoiceLog</span><span class="p">(</span>
+                        <span class="n">menus</span><span class="o">=</span><span class="p">[</span><span class="nb">frozenset</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">menus</span><span class="p">],</span>
+                        <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">sarp</span> <span class="o">=</span> <span class="n">validate_menu_sarp</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+                    <span class="n">warp</span> <span class="o">=</span> <span class="n">validate_menu_warp</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+                    <span class="n">hm</span> <span class="o">=</span> <span class="n">compute_menu_efficiency</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+                    <span class="n">all_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MenuResult</span><span class="p">(</span>
+                        <span class="n">is_sarp</span><span class="o">=</span><span class="n">sarp</span><span class="o">.</span><span class="n">is_consistent</span><span class="p">,</span>
+                        <span class="n">is_warp</span><span class="o">=</span><span class="n">warp</span><span class="o">.</span><span class="n">is_consistent</span><span class="p">,</span>
+                        <span class="n">n_sarp_violations</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sarp</span><span class="o">.</span><span class="n">violations</span><span class="p">),</span>
+                        <span class="n">n_warp_violations</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">warp</span><span class="o">.</span><span class="n">violations</span><span class="p">),</span>
+                        <span class="n">hm_consistent</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">hm</span><span class="o">.</span><span class="n">remaining_observations</span><span class="p">),</span>
+                        <span class="n">hm_total</span><span class="o">=</span><span class="n">hm</span><span class="o">.</span><span class="n">num_total</span><span class="p">,</span>
+                    <span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">all_results</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Parquet streaming</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Engine.analyze_parquet">
+<a class="viewcode-back" href="../../api.html#prefgraph.Engine.analyze_parquet">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_parquet</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">user_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;user_id&quot;</span><span class="p">,</span>
+        <span class="n">cost_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">action_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">item_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">cost_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">action_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">time_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stream-analyze a Parquet file without loading it all into memory.</span>
+
+<span class="sd">        Reads row groups incrementally, groups by user, and feeds chunks</span>
+<span class="sd">        to the Rust engine. Memory stays bounded at O(chunk_size) regardless</span>
+<span class="sd">        of total dataset size.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path: Path to Parquet file.</span>
+<span class="sd">            user_col: Column for user identifiers.</span>
+<span class="sd">            cost_cols: (Wide format) Price column names.</span>
+<span class="sd">            action_cols: (Wide format) Quantity column names.</span>
+<span class="sd">            item_col: (Long format) Item identifier column.</span>
+<span class="sd">            cost_col: (Long format) Price column.</span>
+<span class="sd">            action_col: (Long format) Quantity column.</span>
+<span class="sd">            time_col: (Long format) Time/period column.</span>
+<span class="sd">            output_path: If set, write results incrementally to this Parquet</span>
+<span class="sd">                file instead of accumulating in memory.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas DataFrame with one row per user (or path to output Parquet</span>
+<span class="sd">            if ``output_path`` is set).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Fast path: wide-format + Rust parquet feature compiled</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">HAS_PARQUET_RUST</span>
+            <span class="ow">and</span> <span class="n">cost_cols</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">action_cols</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">item_col</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_parquet_rust</span><span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">user_col</span><span class="p">,</span> <span class="n">cost_cols</span><span class="p">,</span> <span class="n">action_cols</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Standard path: PyArrow streaming</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.io.parquet</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParquetUserIterator</span>
+
+        <span class="n">iterator</span> <span class="o">=</span> <span class="n">ParquetUserIterator</span><span class="p">(</span>
+            <span class="n">path</span><span class="p">,</span>
+            <span class="n">user_col</span><span class="o">=</span><span class="n">user_col</span><span class="p">,</span>
+            <span class="n">cost_cols</span><span class="o">=</span><span class="n">cost_cols</span><span class="p">,</span>
+            <span class="n">action_cols</span><span class="o">=</span><span class="n">action_cols</span><span class="p">,</span>
+            <span class="n">item_col</span><span class="o">=</span><span class="n">item_col</span><span class="p">,</span>
+            <span class="n">cost_col</span><span class="o">=</span><span class="n">cost_col</span><span class="p">,</span>
+            <span class="n">action_col</span><span class="o">=</span><span class="n">action_col</span><span class="p">,</span>
+            <span class="n">time_col</span><span class="o">=</span><span class="n">time_col</span><span class="p">,</span>
+            <span class="n">chunk_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">flags</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ccei&quot;</span><span class="p">:</span> <span class="s2">&quot;ccei&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;mpi&quot;</span><span class="p">:</span> <span class="s2">&quot;mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;harp&quot;</span><span class="p">:</span> <span class="s2">&quot;harp&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;hm&quot;</span><span class="p">:</span> <span class="s2">&quot;hm&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;utility&quot;</span><span class="p">:</span> <span class="s2">&quot;utility&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;vei&quot;</span><span class="p">:</span> <span class="s2">&quot;vei&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;vei_exact&quot;</span><span class="p">:</span> <span class="s2">&quot;vei_exact&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;network&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_parquet_to_file</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+
+        <span class="n">all_user_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EngineResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">user_ids</span><span class="p">,</span> <span class="n">user_tuples</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;rust&quot;</span><span class="p">:</span>
+                <span class="n">chunk_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_chunk_rust</span><span class="p">(</span><span class="n">user_tuples</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chunk_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_chunk_python</span><span class="p">(</span><span class="n">user_tuples</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+            <span class="n">all_user_ids</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+            <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chunk_results</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">results_to_dataframe</span><span class="p">(</span><span class="n">all_results</span><span class="p">,</span> <span class="n">user_ids</span><span class="o">=</span><span class="n">all_user_ids</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_parquet_rust</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">user_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">cost_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">action_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Full Rust pipeline: Parquet I/O + Rayon analysis, no Python overhead.&quot;&quot;&quot;</span>
+        <span class="n">raw_results</span> <span class="o">=</span> <span class="n">_rust_analyze_parquet_file</span><span class="p">(</span>
+            <span class="n">path</span><span class="p">,</span>
+            <span class="n">user_col</span><span class="p">,</span>
+            <span class="n">cost_cols</span><span class="p">,</span>
+            <span class="n">action_cols</span><span class="p">,</span>
+            <span class="s2">&quot;ccei&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;mpi&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;harp&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;hm&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;utility&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;vei&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;vei_exact&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="s2">&quot;network&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">user_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">uid</span> <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">raw_results</span><span class="p">]</span>
+        <span class="n">engine_results</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">EngineResult</span><span class="p">(</span>
+                <span class="n">is_garp</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;is_garp&quot;</span><span class="p">],</span>
+                <span class="n">n_violations</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;n_violations&quot;</span><span class="p">],</span>
+                <span class="n">ccei</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;ccei&quot;</span><span class="p">],</span>
+                <span class="n">mpi</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mpi&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">is_harp</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;is_harp&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;harp&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">hm_consistent</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;hm_consistent&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;hm&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">hm_total</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;hm_total&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;hm&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">utility_success</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;utility_success&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;utility&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">vei_mean</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_mean&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_min</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_min&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_exact_mean</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_mean&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_exact_min</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_min&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">max_scc</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;max_scc&quot;</span><span class="p">],</span>
+                <span class="n">compute_time_us</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;compute_time_us&quot;</span><span class="p">],</span>
+                <span class="n">vei_std</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_std&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">vei_q25</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_q25&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_q75</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_q75&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_exact_std</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_std&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">vei_exact_q25</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_q25&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">vei_exact_q75</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vei_exact_q75&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">n_scc</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_scc&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="n">harp_severity</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;harp_severity&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">scc_mean_size</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scc_mean_size&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">r_density</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;r_density&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">r_out_degree_std</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;r_out_degree_std&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">degree_gini</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;degree_gini&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">ew_mean</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ew_mean&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">ew_std</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ew_std&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">ew_skew</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ew_skew&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">raw_results</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">results_to_dataframe</span><span class="p">(</span><span class="n">engine_results</span><span class="p">,</span> <span class="n">user_ids</span><span class="o">=</span><span class="n">user_ids</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_parquet_to_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">iterator</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">flags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span>
+        <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze streaming and write results to Parquet incrementally.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">pyarrow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pa</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">pyarrow.parquet</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pq</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;pyarrow is required for Parquet output. &quot;</span>
+                <span class="s2">&quot;Install with: pip install prefgraph[parquet]&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+
+        <span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">total_users</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">user_ids</span><span class="p">,</span> <span class="n">user_tuples</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;rust&quot;</span><span class="p">:</span>
+                <span class="n">chunk_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_chunk_rust</span><span class="p">(</span><span class="n">user_tuples</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chunk_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_chunk_python</span><span class="p">(</span><span class="n">user_tuples</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+
+            <span class="n">result_df</span> <span class="o">=</span> <span class="n">results_to_dataframe</span><span class="p">(</span><span class="n">chunk_results</span><span class="p">,</span> <span class="n">user_ids</span><span class="o">=</span><span class="n">user_ids</span><span class="p">)</span>
+            <span class="n">result_table</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">Table</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">writer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">ParquetWriter</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">result_table</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span>
+                                          <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;zstd&quot;</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">write_table</span><span class="p">(</span><span class="n">result_table</span><span class="p">)</span>
+            <span class="n">total_users</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">output_path</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engine(backend=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="si">!r}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;metrics=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="si">}</span><span class="s2">, chunk_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ------------------------------------------------------------------</span>
+<span class="c1"># DataFrame conversion</span>
+<span class="c1"># ------------------------------------------------------------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">results_to_dataframe</span><span class="p">(</span>
+    <span class="n">results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EngineResult</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">MenuResult</span><span class="p">],</span>
+    <span class="n">user_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert Engine results to a pandas DataFrame.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        results: List of EngineResult or MenuResult from Engine.</span>
+<span class="sd">        user_ids: Optional user ID labels for the index.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas.DataFrame with one row per user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;pandas is required for results_to_dataframe(). &quot;</span>
+            <span class="s2">&quot;Install with: pip install pandas&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">user_ids</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;user_id&quot;</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, PrefGraph Contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

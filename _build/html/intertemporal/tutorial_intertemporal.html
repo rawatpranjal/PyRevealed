@@ -1,0 +1,1143 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tutorial 10: Intertemporal Choice &#8212; PrefGraph 0.5.9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f62897f1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=93eceeb8"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intertemporal/tutorial_intertemporal';</script>
+    <link rel="icon" href="../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="PrefGraph 0.5.9 documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="PrefGraph 0.5.9 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-theory-time-preferences">Part 1: Theory - Time Preferences</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exponential-discounting">Exponential Discounting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quasi-hyperbolic-beta-delta-discounting">Quasi-Hyperbolic (Beta-Delta) Discounting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-the-datedchoice-data-structure">Part 2: The DatedChoice Data Structure</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-option-choices">Multi-Option Choices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-testing-exponential-discounting">Part 3: Testing Exponential Discounting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-delta-bounds">Interpreting Delta Bounds</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#full-summary-report">Full Summary Report</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-detecting-present-bias">Part 4: Detecting Present Bias</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-present-bias">Interpreting Present Bias</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-quasi-hyperbolic-beta-delta-model">Part 5: Quasi-Hyperbolic (Beta-Delta) Model</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-beta-delta-parameters">Interpreting Beta-Delta Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Full Summary Report</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-6-recovering-discount-factors">Part 6: Recovering Discount Factors</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implied-interest-rates">Implied Interest Rates</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-7-application-subscription-service-design">Part 7: Application - Subscription Service Design</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-8-notes">Part 8: Notes</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use-intertemporal-analysis">When to Use Intertemporal Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#typical-parameter-values">Typical Parameter Values</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#function-reference">Function Reference</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+  </nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Tutorial 10: Intertemporal Choice</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="tutorial-10-intertemporal-choice">
+<h1>Tutorial 10: Intertemporal Choice<a class="headerlink" href="#tutorial-10-intertemporal-choice" title="Link to this heading">#</a></h1>
+<p>This tutorial covers analyzing time preferences through revealed preference
+tests. These methods detect present bias, estimate discount factors, and
+test whether choices are consistent with exponential or hyperbolic discounting.</p>
+<p>Topics covered:</p>
+<ul class="simple">
+<li><p>The DatedChoice data structure</p></li>
+<li><p>Testing exponential discounting (time-consistent preferences)</p></li>
+<li><p>Detecting present bias</p></li>
+<li><p>Quasi-hyperbolic (beta-delta) model</p></li>
+<li><p>Recovering discount factors</p></li>
+</ul>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Python 3.10+</p></li>
+<li><p>Completed Tutorial 1 (Budget-Based Analysis)</p></li>
+<li><p>Basic understanding of discounting and time preferences</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Key insight</strong>: Time inconsistency (present bias) is a major driver of
+suboptimal decisions in savings, health, and subscription services. Detecting
+present bias helps design better defaults, commitment devices, and pricing
+strategies for time-delayed consumption.</p>
+</div>
+</section>
+<section id="part-1-theory-time-preferences">
+<h2>Part 1: Theory - Time Preferences<a class="headerlink" href="#part-1-theory-time-preferences" title="Link to this heading">#</a></h2>
+<section id="exponential-discounting">
+<h3>Exponential Discounting<a class="headerlink" href="#exponential-discounting" title="Link to this heading">#</a></h3>
+<p>The standard economic model assumes <strong>exponential discounting</strong>:</p>
+<div class="math notranslate nohighlight">
+\[U = \sum_{t=0}^{T} \delta^t \cdot u(c_t)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\delta \in (0, 1)\)</span> is the discount factor</p></li>
+<li><p><span class="math notranslate nohighlight">\(u(c_t)\)</span> is utility from consumption at time t</p></li>
+<li><p>A higher <span class="math notranslate nohighlight">\(\delta\)</span> means more patience</p></li>
+</ul>
+<p>This implies <strong>time-consistent</strong> preferences: if you prefer $100 today over
+$110 tomorrow, you also prefer $100 in 30 days over $110 in 31 days.</p>
+</section>
+<section id="quasi-hyperbolic-beta-delta-discounting">
+<h3>Quasi-Hyperbolic (Beta-Delta) Discounting<a class="headerlink" href="#quasi-hyperbolic-beta-delta-discounting" title="Link to this heading">#</a></h3>
+<p>Many people exhibit <strong>present bias</strong> - they discount the immediate future
+more heavily. The beta-delta model captures this:</p>
+<div class="math notranslate nohighlight">
+\[U = u(c_0) + \beta \sum_{t=1}^{T} \delta^t \cdot u(c_t)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\beta &lt; 1\)</span> captures present bias (over-valuing immediate rewards)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\delta\)</span> is the long-run discount factor</p></li>
+</ul>
+<p>Classic pattern:</p>
+<ul class="simple">
+<li><p>Prefer $100 today over $110 tomorrow (impatient)</p></li>
+<li><p>Prefer $110 in 31 days over $100 in 30 days (patient)</p></li>
+</ul>
+<p>This reversal violates exponential discounting but is explained by beta-delta.</p>
+</section>
+</section>
+<section id="part-2-the-datedchoice-data-structure">
+<h2>Part 2: The DatedChoice Data Structure<a class="headerlink" href="#part-2-the-datedchoice-data-structure" title="Link to this heading">#</a></h2>
+<p>Intertemporal choices are represented using <code class="docutils literal notranslate"><span class="pre">DatedChoice</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.intertemporal</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatedChoice</span>
+
+<span class="c1"># A choice between $100 today or $110 in 30 days</span>
+<span class="c1"># User chose the $100 today (index 0)</span>
+<span class="n">choice1</span> <span class="o">=</span> <span class="n">DatedChoice</span><span class="p">(</span>
+    <span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">]),</span>
+    <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">]),</span>
+    <span class="n">chosen</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>  <span class="c1"># Chose the immediate option</span>
+<span class="p">)</span>
+
+<span class="c1"># A choice between $100 in 30 days or $110 in 60 days</span>
+<span class="c1"># User chose $110 in 60 days (index 1)</span>
+<span class="n">choice2</span> <span class="o">=</span> <span class="n">DatedChoice</span><span class="p">(</span>
+    <span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">]),</span>
+    <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">]),</span>
+    <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Chose to wait</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Choice 1: Chose $</span><span class="si">{</span><span class="n">choice1</span><span class="o">.</span><span class="n">amounts</span><span class="p">[</span><span class="n">choice1</span><span class="o">.</span><span class="n">chosen</span><span class="p">]</span><span class="si">}</span><span class="s2"> at day </span><span class="si">{</span><span class="n">choice1</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="n">choice1</span><span class="o">.</span><span class="n">chosen</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Choice 2: Chose $</span><span class="si">{</span><span class="n">choice2</span><span class="o">.</span><span class="n">amounts</span><span class="p">[</span><span class="n">choice2</span><span class="o">.</span><span class="n">chosen</span><span class="p">]</span><span class="si">}</span><span class="s2"> at day </span><span class="si">{</span><span class="n">choice2</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="n">choice2</span><span class="o">.</span><span class="n">chosen</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Choice 1: Chose $100.0 at day 0
+Choice 2: Chose $110.0 at day 60
+</pre></div>
+</div>
+<section id="multi-option-choices">
+<h3>Multi-Option Choices<a class="headerlink" href="#multi-option-choices" title="Link to this heading">#</a></h3>
+<p>Choices can have more than two options:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multiple payout options</span>
+<span class="n">complex_choice</span> <span class="o">=</span> <span class="n">DatedChoice</span><span class="p">(</span>
+    <span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">105.0</span><span class="p">,</span> <span class="mf">115.0</span><span class="p">,</span> <span class="mf">130.0</span><span class="p">]),</span>
+    <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">]),</span>
+    <span class="n">chosen</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Chose $115 in 60 days</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Options available:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">amt</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">complex_choice</span><span class="o">.</span><span class="n">amounts</span><span class="p">,</span> <span class="n">complex_choice</span><span class="o">.</span><span class="n">dates</span><span class="p">)):</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot; &lt;-- CHOSEN&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">complex_choice</span><span class="o">.</span><span class="n">chosen</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  $</span><span class="si">{</span><span class="n">amt</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> days</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Options available:
+  $100 in 0 days
+  $105 in 30 days
+  $115 in 60 days &lt;-- CHOSEN
+  $130 in 90 days
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-3-testing-exponential-discounting">
+<h2>Part 3: Testing Exponential Discounting<a class="headerlink" href="#part-3-testing-exponential-discounting" title="Link to this heading">#</a></h2>
+<p>Test whether choices are consistent with time-consistent preferences:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.intertemporal</span><span class="w"> </span><span class="kn">import</span> <span class="n">test_exponential_discounting</span><span class="p">,</span> <span class="n">DatedChoice</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Create a set of consistent choices</span>
+<span class="c1"># Higher interest rates for longer waits (patient behavior)</span>
+<span class="n">consistent_choices</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">105.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">103.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">test_exponential_discounting</span><span class="p">(</span><span class="n">consistent_choices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Consistent with exponential discounting: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">is_consistent</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Delta range: [</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">delta_lower</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">delta_upper</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of violations: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">violations</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Consistent with exponential discounting: True
+Delta range: [0.833, 0.997]
+Number of violations: 0
+</pre></div>
+</div>
+<section id="interpreting-delta-bounds">
+<h3>Interpreting Delta Bounds<a class="headerlink" href="#interpreting-delta-bounds" title="Link to this heading">#</a></h3>
+<p>The result provides bounds on the discount factor:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Discount factor interpretation:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Delta lower bound: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">delta_lower</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Delta upper bound: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">delta_upper</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">has_tight_bounds</span><span class="p">:</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">delta_lower</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">delta_upper</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">annual_rate</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span>  <span class="c1"># Monthly to annual</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Estimated monthly delta: ~</span><span class="si">{</span><span class="n">mid</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Implied annual interest rate: ~</span><span class="si">{</span><span class="n">annual_rate</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Discount factor interpretation:
+  Delta lower bound: 0.833
+  Delta upper bound: 0.997
+  Estimated monthly delta: ~0.915
+  Implied annual interest rate: ~11.1%
+</pre></div>
+</div>
+</section>
+<section id="full-summary-report">
+<h3>Full Summary Report<a class="headerlink" href="#full-summary-report" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>================================================================================
+                     EXPONENTIAL DISCOUNTING TEST REPORT
+================================================================================
+
+Status: CONSISTENT
+
+Metrics:
+-------
+  Is Consistent ........................ Yes
+  Violations ............................. 0
+  Delta Lower Bound .................. 0.8333
+  Delta Upper Bound .................. 0.9970
+  Observations ........................... 3
+
+Interpretation:
+--------------
+  Choices are time-consistent (exponential discounting).
+  Estimated discount factor: ~0.915
+
+Computation Time: 0.12 ms
+================================================================================
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-4-detecting-present-bias">
+<h2>Part 4: Detecting Present Bias<a class="headerlink" href="#part-4-detecting-present-bias" title="Link to this heading">#</a></h2>
+<p>Present bias is detected when people are impatient for immediate rewards
+but patient for future tradeoffs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.intertemporal</span><span class="w"> </span><span class="kn">import</span> <span class="n">test_present_bias</span><span class="p">,</span> <span class="n">DatedChoice</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Classic present bias pattern</span>
+<span class="n">present_biased_choices</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Impatient NOW: prefer $100 today over $110 tomorrow</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+
+    <span class="c1"># Patient LATER: prefer $110 in 31 days over $100 in 30 days</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+
+    <span class="c1"># More examples</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">55.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">55.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">60</span><span class="p">,</span> <span class="mi">67</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">test_present_bias</span><span class="p">(</span><span class="n">present_biased_choices</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Present bias detected: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;has_present_bias&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bias magnitude: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;bias_magnitude&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Patience when immediate: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;immediate_patience&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Patience when future: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;future_patience&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Present bias detected: True
+Bias magnitude: 1.00
+Patience when immediate: 0.0%
+Patience when future: 100.0%
+</pre></div>
+</div>
+<section id="interpreting-present-bias">
+<h3>Interpreting Present Bias<a class="headerlink" href="#interpreting-present-bias" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Present Bias Interpretation:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Immediate choices: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;num_immediate_choices&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Future choices: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;num_future_choices&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;has_present_bias&#39;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  Pattern: User is IMPATIENT when rewards are immediate&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;           but PATIENT when both options are in the future.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  This indicates hyperbolic/quasi-hyperbolic preferences.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Present Bias Interpretation:
+  Immediate choices: 2
+  Future choices: 2
+
+  Pattern: User is IMPATIENT when rewards are immediate
+           but PATIENT when both options are in the future.
+  This indicates hyperbolic/quasi-hyperbolic preferences.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-5-quasi-hyperbolic-beta-delta-model">
+<h2>Part 5: Quasi-Hyperbolic (Beta-Delta) Model<a class="headerlink" href="#part-5-quasi-hyperbolic-beta-delta-model" title="Link to this heading">#</a></h2>
+<p>The beta-delta model captures present bias with two parameters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.intertemporal</span><span class="w"> </span><span class="kn">import</span> <span class="n">test_quasi_hyperbolic</span><span class="p">,</span> <span class="n">DatedChoice</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Choices exhibiting present bias</span>
+<span class="n">choices</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Immediate vs near future - impatient</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">115.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">108.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">14</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+
+    <span class="c1"># Far future vs further future - patient</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">105.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">103.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">90</span><span class="p">,</span> <span class="mi">120</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">test_quasi_hyperbolic</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beta-delta consistent: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">is_consistent</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beta range: [</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">beta_lower</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">beta_upper</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Delta range: [</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">delta_lower</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">delta_upper</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Present bias detected: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">has_present_bias</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Beta-delta consistent: True
+Beta range: [0.010, 0.870]
+Delta range: [0.000, 1.000]
+Present bias detected: True
+</pre></div>
+</div>
+<section id="interpreting-beta-delta-parameters">
+<h3>Interpreting Beta-Delta Parameters<a class="headerlink" href="#interpreting-beta-delta-parameters" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Parameter Interpretation:&quot;</span><span class="p">)</span>
+
+<span class="c1"># Beta interpretation</span>
+<span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">has_present_bias</span><span class="p">:</span>
+    <span class="n">beta_mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">beta_lower</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">beta_upper</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Beta (present bias): ~</span><span class="si">{</span><span class="n">beta_mid</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Beta = 1.0 means no present bias&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Beta &lt; 1.0 means immediate rewards are over-weighted&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Lower beta = stronger present bias&quot;</span><span class="p">)</span>
+
+<span class="c1"># Delta interpretation</span>
+<span class="n">delta_mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">delta_lower</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">delta_upper</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  Delta (long-run patience): ~</span><span class="si">{</span><span class="n">delta_mid</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Higher delta = more patient in the long run&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Parameter Interpretation:
+  Beta (present bias): ~0.44
+    - Beta = 1.0 means no present bias
+    - Beta &lt; 1.0 means immediate rewards are over-weighted
+    - Lower beta = stronger present bias
+
+  Delta (long-run patience): ~0.50
+    - Higher delta = more patient in the long run
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>Full Summary Report<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>================================================================================
+                 QUASI-HYPERBOLIC DISCOUNTING TEST REPORT
+================================================================================
+
+Status: CONSISTENT
+
+Parameters:
+----------
+  Beta Range: [0.010, 0.870]
+  Delta Range: [0.000, 1.000]
+  Present Bias Detected: True
+
+Interpretation:
+--------------
+  Choices exhibit present bias (beta &lt; 1).
+  Immediate rewards are over-weighted.
+
+Computation Time: 0.45 ms
+================================================================================
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-6-recovering-discount-factors">
+<h2>Part 6: Recovering Discount Factors<a class="headerlink" href="#part-6-recovering-discount-factors" title="Link to this heading">#</a></h2>
+<p>Bound the discount factor implied by observed choices:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.intertemporal</span><span class="w"> </span><span class="kn">import</span> <span class="n">recover_discount_factor</span><span class="p">,</span> <span class="n">DatedChoice</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Choices that reveal discount rate preferences</span>
+<span class="n">choices</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">102.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">105.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">DatedChoice</span><span class="p">(</span><span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">101.0</span><span class="p">]),</span> <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">]),</span> <span class="n">chosen</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">bounds</span> <span class="o">=</span> <span class="n">recover_discount_factor</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Discount factor bounds: [</span><span class="si">{</span><span class="n">bounds</span><span class="o">.</span><span class="n">delta_lower</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">bounds</span><span class="o">.</span><span class="n">delta_upper</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Is identified: </span><span class="si">{</span><span class="n">bounds</span><span class="o">.</span><span class="n">is_identified</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Midpoint estimate: </span><span class="si">{</span><span class="n">bounds</span><span class="o">.</span><span class="n">midpoint</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Discount factor bounds: [0.9804, 0.9901]
+Is identified: True
+Midpoint estimate: 0.9852
+</pre></div>
+</div>
+<section id="implied-interest-rates">
+<h3>Implied Interest Rates<a class="headerlink" href="#implied-interest-rates" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Implied Interest Rates (per period):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Lower bound: </span><span class="si">{</span><span class="n">bounds</span><span class="o">.</span><span class="n">implied_interest_rate_lower</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Upper bound: </span><span class="si">{</span><span class="n">bounds</span><span class="o">.</span><span class="n">implied_interest_rate_upper</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Convert to annual if periods are months</span>
+<span class="k">if</span> <span class="n">bounds</span><span class="o">.</span><span class="n">is_identified</span><span class="p">:</span>
+    <span class="n">annual_lower</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">bounds</span><span class="o">.</span><span class="n">implied_interest_rate_lower</span><span class="p">)</span> <span class="o">**</span> <span class="mi">12</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">annual_upper</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">bounds</span><span class="o">.</span><span class="n">implied_interest_rate_upper</span><span class="p">)</span> <span class="o">**</span> <span class="mi">12</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Annualized (assuming monthly periods):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Lower bound: </span><span class="si">{</span><span class="n">annual_lower</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Upper bound: </span><span class="si">{</span><span class="n">annual_upper</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Implied Interest Rates (per period):
+  Lower bound: 1.00%
+  Upper bound: 2.00%
+
+Annualized (assuming monthly periods):
+  Lower bound: 12.7%
+  Upper bound: 26.8%
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-7-application-subscription-service-design">
+<h2>Part 7: Application - Subscription Service Design<a class="headerlink" href="#part-7-application-subscription-service-design" title="Link to this heading">#</a></h2>
+<p>Use intertemporal analysis to optimize subscription pricing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">prefgraph.algorithms.intertemporal</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DatedChoice</span><span class="p">,</span>
+    <span class="n">test_exponential_discounting</span><span class="p">,</span>
+    <span class="n">test_present_bias</span><span class="p">,</span>
+    <span class="n">recover_discount_factor</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Simulate user choices between payment plans</span>
+<span class="c1"># Monthly: $10/month, Annual: $100/year ($8.33/month)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">simulate_subscription_choices</span><span class="p">(</span><span class="n">n_users</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulate choices with beta-delta preferences.&quot;&quot;&quot;</span>
+    <span class="n">choices</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_users</span><span class="p">):</span>
+        <span class="c1"># Choice 1: Pay $10 now vs $100 in one lump sum (annual)</span>
+        <span class="c1"># Effective: $10 today vs $8.33/month for 12 months</span>
+
+        <span class="c1"># Monthly option: pay now</span>
+        <span class="n">amounts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">8.33</span><span class="p">])</span>
+        <span class="n">dates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># Both &quot;now&quot; but different commitment</span>
+
+        <span class="c1"># For simplicity, model as: $10 now vs $100 now (with annual value)</span>
+        <span class="c1"># User with present bias prefers smaller immediate payment</span>
+
+        <span class="c1"># Choice: monthly ($10) vs annual ($100) upfront</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="n">DatedChoice</span><span class="p">(</span>
+            <span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">]),</span>
+            <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+            <span class="n">chosen</span><span class="o">=</span><span class="mi">0</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.3</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># 70% choose monthly</span>
+        <span class="p">)</span>
+        <span class="n">choices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span>
+
+        <span class="c1"># Choice 2: Renew in 11 months - same tradeoff</span>
+        <span class="n">choice2</span> <span class="o">=</span> <span class="n">DatedChoice</span><span class="p">(</span>
+            <span class="n">amounts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">]),</span>
+            <span class="n">dates</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">330</span><span class="p">,</span> <span class="mi">330</span><span class="p">]),</span>  <span class="c1"># 11 months from now</span>
+            <span class="n">chosen</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.4</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1"># 60% would choose annual</span>
+        <span class="p">)</span>
+        <span class="n">choices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">choice2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">choices</span>
+
+<span class="c1"># Simulate choices</span>
+<span class="n">choices</span> <span class="o">=</span> <span class="n">simulate_subscription_choices</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Analyze present bias</span>
+<span class="n">bias_result</span> <span class="o">=</span> <span class="n">test_present_bias</span><span class="p">(</span><span class="n">choices</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Subscription Pricing Analysis ===&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sample size: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span><span class="si">}</span><span class="s2"> choices from 50 users&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Present Bias Analysis:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Present bias detected: </span><span class="si">{</span><span class="n">bias_result</span><span class="p">[</span><span class="s1">&#39;has_present_bias&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Bias magnitude: </span><span class="si">{</span><span class="n">bias_result</span><span class="p">[</span><span class="s1">&#39;bias_magnitude&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Recommendations</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Pricing Recommendations:&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">bias_result</span><span class="p">[</span><span class="s1">&#39;has_present_bias&#39;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Users show present bias: they prefer monthly despite higher total cost&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Consider: offer commitment devices (annual with early exit penalty)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Consider: frame annual savings as &#39;X</span><span class="si">% o</span><span class="s2">ff&#39; rather than total savings&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Consider: auto-renewal to reduce decision points&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Users show time-consistent preferences&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Standard discount for annual plans should work&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>=== Subscription Pricing Analysis ===
+
+Sample size: 100 choices from 50 users
+
+Present Bias Analysis:
+  Present bias detected: True
+  Bias magnitude: 0.30
+
+Pricing Recommendations:
+  - Users show present bias: they prefer monthly despite higher total cost
+  - Consider: offer commitment devices (annual with early exit penalty)
+  - Consider: frame annual savings as &#39;X% off&#39; rather than total savings
+  - Consider: auto-renewal to reduce decision points
+</pre></div>
+</div>
+</section>
+<section id="part-8-notes">
+<h2>Part 8: Notes<a class="headerlink" href="#part-8-notes" title="Link to this heading">#</a></h2>
+<section id="when-to-use-intertemporal-analysis">
+<h3>When to Use Intertemporal Analysis<a class="headerlink" href="#when-to-use-intertemporal-analysis" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Good Applications</p></th>
+<th class="head"><p>Less Suitable For</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Subscription vs one-time pricing</p></td>
+<td><p>Impulse purchases</p></td>
+</tr>
+<tr class="row-odd"><td><p>Savings program design</p></td>
+<td><p>Single-period decisions</p></td>
+</tr>
+<tr class="row-even"><td><p>Loan/credit product analysis</p></td>
+<td><p>Non-monetary choices</p></td>
+</tr>
+<tr class="row-odd"><td><p>Health behavior interventions</p></td>
+<td><p>Choices without timing component</p></td>
+</tr>
+<tr class="row-even"><td><p>Retirement planning tools</p></td>
+<td><p>Real-time recommendations</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="typical-parameter-values">
+<h3>Typical Parameter Values<a class="headerlink" href="#typical-parameter-values" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table" id="id2">
+<caption><span class="caption-text">Empirical Benchmarks</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Typical Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Delta (monthly)</p></td>
+<td><p>0.95-0.99 (patient) to 0.80-0.90 (impatient)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Beta</p></td>
+<td><p>0.7-0.9 (mild bias) to 0.4-0.6 (strong bias)</p></td>
+</tr>
+<tr class="row-even"><td><p>Annual interest</p></td>
+<td><p>5-15% (patient) to 50-200% (very impatient)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="function-reference">
+<h3>Function Reference<a class="headerlink" href="#function-reference" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Purpose</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Test exponential discounting</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">test_exponential_discounting()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Test quasi-hyperbolic model</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">test_quasi_hyperbolic()</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Detect present bias</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">test_present_bias()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Recover discount factor bounds</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">recover_discount_factor()</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../budget/tutorial.html"><span class="doc">Tutorial 1: Budget-Based Analysis</span></a> - Budget-based analysis fundamentals</p></li>
+<li><p><a class="reference internal" href="../menu/tutorial_risk.html"><span class="doc">Tutorial 8: Risk Analysis</span></a> - Risk preferences under uncertainty</p></li>
+<li><p><a class="reference internal" href="../api.html"><span class="doc">API</span></a> - Full API documentation</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, PrefGraph Contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

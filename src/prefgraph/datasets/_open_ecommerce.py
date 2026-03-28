@@ -159,7 +159,25 @@ def load_open_ecommerce(
         price_indices = [period_to_idx[p] for p in active_periods if p in period_to_idx]
         if len(price_indices) != len(active_periods):
             continue
-        price_matrix = price_grid[price_indices]
+        # User-specific realized prices where available; market median otherwise
+        user_price_pivot = (
+            user_data.pivot_table(
+                values="Purchase Price Per Unit",
+                index="period",
+                columns="category",
+                aggfunc="median",
+            )
+            .reindex(columns=categories)
+        )
+        user_price_matrix = (
+            user_price_pivot.loc[active_periods].values.astype(np.float64)
+            if set(active_periods).issubset(set(user_price_pivot.index))
+            else np.full((len(active_periods), len(categories)), np.nan, dtype=np.float64)
+        )
+
+        market_slice = price_grid[price_indices].astype(np.float64)
+        # Fill NaNs (unbought categories) with market medians
+        price_matrix = np.where(np.isnan(user_price_matrix), market_slice, user_price_matrix)
 
         uid = f"user_{uid_raw}"
         logs[uid] = BehaviorLog(

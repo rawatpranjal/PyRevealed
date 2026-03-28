@@ -1,0 +1,1039 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>E-commerce Benchmarks &#8212; PrefGraph 0.5.9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f62897f1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=93eceeb8"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'benchmarks_ecommerce';</script>
+    <link rel="icon" href="_static/logo.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Algorithms" href="algorithms.html" />
+    <link rel="prev" title="LLM Consistency Benchmark" href="budget/app_llm_benchmark.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.svg" class="logo__image only-light" alt="PrefGraph 0.5.9 documentation - Home"/>
+    <img src="_static/logo.svg" class="logo__image only-dark pst-js-only" alt="PrefGraph 0.5.9 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="budget/index.html">
+    Budgets
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="menu/index.html">
+    Menus
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="benchmarks.html">
+    Benchmarks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="algorithms.html">
+    Algorithms
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="performance.html">
+    Performance
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rawatpranjal/PrefGraph" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="budget/app_llm_benchmark.html">LLM Consistency Benchmark</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">E-commerce Benchmarks</a></li>
+</ul>
+</div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-read-the-results">How to read the results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#taobao-buyanchored-6h-fullrun-results-ap-auc">Taobao (Buy‑Anchored, 6h) — Full‑Run Results (AP/AUC)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-the-taobao-choice-data-is-built-buyanchored">How The Taobao Choice Data Is Built (Buy‑Anchored)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#findings">Findings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#top-features">Top Features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce">Reproduce</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-datasets-assumptions">Appendix: Datasets &amp; Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-pipeline">Appendix: Pipeline</a></li>
+</ul>
+  </nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="benchmarks.html" class="nav-link">Benchmarks</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">E-commerce Benchmarks</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="e-commerce-benchmarks">
+<h1>E-commerce Benchmarks<a class="headerlink" href="#e-commerce-benchmarks" title="Link to this heading">#</a></h1>
+<p>Do revealed-preference (RP) features add independent predictive signal beyond
+strong engagement/spend baselines on real e‑commerce data?</p>
+<p><strong>TL;DR.</strong> On menu datasets, RP captures structure that engagement stats miss
+(Taobao RP‑only 0.925 &gt; baseline 0.913). On budget datasets, RP adds ~0% over
+RFM — spending history already carries the signal. Instacart shows heavy habit
+structure (83.8% SARP violations) but near‑zero lift, consistent with
+reordering.</p>
+<p>Six public datasets, 117K users, 42 RP features. CatBoost with default
+hyperparameters. 80/20 user holdout with bootstrap CIs.</p>
+<section id="setup">
+<span id="eco-setup"></span><h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<p>We evaluate two data types: budgets with prices and menus without prices. The
+targets include classification tasks such as High Spender, High Engagement, Low
+Loyalty, and High Novelty, as well as regression tasks for Future Spend and
+Spend Change. Targets use top tercile thresholds for consistency. Features
+combine a 13 feature baseline that covers RFM, concentration, and trends with
+42 revealed preference features, split into 14 RP Engine features and 28 RP
+Extended features. These include GARP, CCEI, MPI, HARP, HM, VEI, graph density
+and transitivity, utility recovery metrics such as Gini and CV, choice entropy,
+and ordinal utility. Models use CatBoost with default hyperparameters. The split uses an 80 to 20
+user holdout, five fold stratified cross validation, and bootstrap confidence
+intervals on lift.</p>
+<p>The hardest part is reconstructing the choice set and the observed choices.
+For budgets, prices and quantities must reflect what the customer could have
+afforded at each observation. For menus, the available alternatives must be
+recovered from logs. This requires explicit assumptions about availability,
+timing, and aggregation. We document those assumptions in the Appendix and,
+honestly, we have to make good assumptions and hope they are right.</p>
+</section>
+<section id="how-to-read-the-results">
+<span id="eco-how-to-read"></span><h2>How to read the results<a class="headerlink" href="#how-to-read-the-results" title="Link to this heading">#</a></h2>
+<p>Baseline uses CatBoost on 13 RFM features. +RP adds 42 revealed
+preference features to that baseline, while RP only removes the baseline and
+uses only the RP features. Lift percent is defined as (Combined minus Baseline)
+divided by Baseline times 100. Classification tasks report AUC ROC, and some
+menu tasks also show AUC PR. Regression tasks report R squared. As a rule of
+thumb, RP adds signal when +RP is greater than Baseline and RP only is close to
+Baseline. When RP only is smaller than Baseline and +RP is about the same as
+Baseline, the baseline already captures the structure.</p>
+</section>
+<section id="results">
+<span id="eco-results"></span><h2>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.8%" />
+<col style="width: 10.1%" />
+<col style="width: 19.0%" />
+<col style="width: 12.7%" />
+<col style="width: 12.7%" />
+<col style="width: 10.1%" />
+<col style="width: 12.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>N</p></th>
+<th class="head"><p>Target</p></th>
+<th class="head"><p>Baseline</p></th>
+<th class="head"><p>+RP</p></th>
+<th class="head"><p>Lift%</p></th>
+<th class="head"><p>RP-only</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Dunnhumby</p></td>
+<td><p>2,222</p></td>
+<td><p>High Spender</p></td>
+<td><p>0.962</p></td>
+<td><p>0.965</p></td>
+<td><p>+0.3%</p></td>
+<td><p>0.937</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dunnhumby</p></td>
+<td><p>2,222</p></td>
+<td><p>Churn</p></td>
+<td><p>0.711</p></td>
+<td><p>0.724</p></td>
+<td><p>+1.8%</p></td>
+<td><p>0.622</p></td>
+</tr>
+<tr class="row-even"><td><p>Dunnhumby</p></td>
+<td><p>2,222</p></td>
+<td><p>Future LTV (R²)</p></td>
+<td><p>0.577</p></td>
+<td><p>0.589</p></td>
+<td><p>+0.012</p></td>
+<td><p>0.246</p></td>
+</tr>
+<tr class="row-odd"><td><p>Open E-Commerce</p></td>
+<td><p>4,694</p></td>
+<td><p>High Spender</p></td>
+<td><p>0.950</p></td>
+<td><p>0.951</p></td>
+<td><p>+0.0%</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>Open E-Commerce</p></td>
+<td><p>4,694</p></td>
+<td><p>Churn</p></td>
+<td><p>0.846</p></td>
+<td><p>0.846</p></td>
+<td><p>-0.0%</p></td>
+<td><p>0.769</p></td>
+</tr>
+<tr class="row-odd"><td><p>H&amp;M</p></td>
+<td><p>46,757</p></td>
+<td><p>High Spender</p></td>
+<td><p>0.784</p></td>
+<td><p>0.783</p></td>
+<td><p>-0.1%</p></td>
+<td><p>0.720</p></td>
+</tr>
+<tr class="row-even"><td><p>H&amp;M</p></td>
+<td><p>46,757</p></td>
+<td><p>Future Spend (R²)</p></td>
+<td><p>0.337</p></td>
+<td><p>0.340</p></td>
+<td><p>+0.003</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>H&amp;M</p></td>
+<td><p>46,757</p></td>
+<td><p>Spend Change (R²)</p></td>
+<td><p>0.290</p></td>
+<td><p>0.295</p></td>
+<td><p>+0.005</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>Instacart</p></td>
+<td><p>50,000</p></td>
+<td><p>Low Loyalty</p></td>
+<td><p>0.968</p></td>
+<td><p>0.969</p></td>
+<td><p>+0.0%</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>Instacart</p></td>
+<td><p>50,000</p></td>
+<td><p>High Novelty</p></td>
+<td><p>0.765</p></td>
+<td><p>0.767</p></td>
+<td><p>+0.3%</p></td>
+<td><p>0.762</p></td>
+</tr>
+<tr class="row-even"><td><p>REES46</p></td>
+<td><p>8,832</p></td>
+<td><p>High Engagement</p></td>
+<td><p>0.996</p></td>
+<td><p>0.996</p></td>
+<td><p>+0.0%</p></td>
+<td><p>0.990</p></td>
+</tr>
+<tr class="row-odd"><td><p>Taobao (Buy Window)</p></td>
+<td><p>29,519</p></td>
+<td><p>High Entropy (AP)</p></td>
+<td><p>0.789</p></td>
+<td><p><strong>0.790</strong></p></td>
+<td><p><strong>+0.1%</strong></p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>Baseline = CatBoost on 13 RFM features. +RP = same model with 42 RP features
+added. RP-only = RP features without baseline. On Taobao, RP-only (0.925)
+outperforms the engagement baseline (0.913) — graph transitivity and choice
+entropy capture patterns that session counts miss.</em></p>
+<section id="taobao-buyanchored-6h-fullrun-results-ap-auc">
+<h3>Taobao (Buy‑Anchored, 6h) — Full‑Run Results (AP/AUC)<a class="headerlink" href="#taobao-buyanchored-6h-fullrun-results-ap-auc" title="Link to this heading">#</a></h3>
+<p>We reconstruct menus as the items viewed in the last 6 hours before each buy
+and require that the purchased item was viewed. This yields tens of thousands of
+users with ≥5 observations and clean menus. On the full file (≈100M rows; 29,519 users; 5,904 test users):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 39.3%" />
+<col style="width: 21.4%" />
+<col style="width: 21.4%" />
+<col style="width: 17.9%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Target (classification)</p></th>
+<th class="head"><p>Base</p></th>
+<th class="head"><p>+RP</p></th>
+<th class="head"><p>Δ (metric)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pref Drift (AP)</p></td>
+<td><p>0.940</p></td>
+<td><p>0.938</p></td>
+<td><p>−0.002</p></td>
+</tr>
+<tr class="row-odd"><td><p>High Entropy (AP)</p></td>
+<td><p>0.789</p></td>
+<td><p>0.790</p></td>
+<td><p>+0.001</p></td>
+</tr>
+<tr class="row-even"><td><p>High Active Time (AUC)</p></td>
+<td><p>0.777</p></td>
+<td><p>0.778</p></td>
+<td><p>+0.001</p></td>
+</tr>
+<tr class="row-odd"><td><p>High Click Volume (AUC)</p></td>
+<td><p>0.818</p></td>
+<td><p>0.818</p></td>
+<td><p>+0.000</p></td>
+</tr>
+<tr class="row-even"><td><p>Fast Conversion (AUC)</p></td>
+<td><p>0.561</p></td>
+<td><p>0.561</p></td>
+<td><p>+0.000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Engagement volume/time targets remain baseline‑dominated; structural outcomes
+(drift, entropy) show the clearest RP gains. See case_studies/benchmarks for protocol details.</p>
+</section>
+<section id="how-the-taobao-choice-data-is-built-buyanchored">
+<h3>How The Taobao Choice Data Is Built (Buy‑Anchored)<a class="headerlink" href="#how-the-taobao-choice-data-is-built-buyanchored" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>Raw events</dt><dd><ul class="simple">
+<li><p>File: <code class="docutils literal notranslate"><span class="pre">UserBehavior.csv</span></code> with rows <code class="docutils literal notranslate"><span class="pre">(user_id,</span> <span class="pre">item_id,</span> <span class="pre">category_id,</span> <span class="pre">behavior_type,</span> <span class="pre">timestamp)</span></code>.</p></li>
+<li><p>We keep only <code class="docutils literal notranslate"><span class="pre">pv</span></code> (view) and <code class="docutils literal notranslate"><span class="pre">buy</span></code> events and sort by <code class="docutils literal notranslate"><span class="pre">(user_id,</span> <span class="pre">timestamp)</span></code>.</p></li>
+</ul>
+</dd>
+<dt>Observation construction (6‑hour window)</dt><dd><ul class="simple">
+<li><p>For each buy at time <code class="docutils literal notranslate"><span class="pre">t_buy</span></code>, define a trailing window <code class="docutils literal notranslate"><span class="pre">[t_buy</span> <span class="pre">−</span> <span class="pre">6h,</span> <span class="pre">t_buy)</span></code>.</p></li>
+<li><p>Menu = unique items viewed in this window (pre‑buy only). Choice = the bought item.</p></li>
+<li><p>Require the bought item was viewed in the window; drop otherwise.</p></li>
+<li><p>Keep observations with menu size in <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">50]</span></code>.</p></li>
+</ul>
+</dd>
+<dt>Per‑user logs and qualification</dt><dd><ul class="simple">
+<li><p>Collect all buy‑anchored observations for a user as one MenuChoiceLog.</p></li>
+<li><p>Users must have at least 5 valid observations (<code class="docutils literal notranslate"><span class="pre">min_sessions=5</span></code>).</p></li>
+<li><p>Item IDs are remapped to a compact per‑user space (0..N‑1) to ensure stable graph ops.</p></li>
+</ul>
+</dd>
+<dt>Why buy‑anchored windows (vs. whole sessions)</dt><dd><ul class="simple">
+<li><p>Whole‑session, pre‑buy menus (with a 30‑minute inactivity session boundary) are very clean but too sparse per user.</p></li>
+<li><p>Extending the session gap to 60–180 minutes does not materially increase clean, pre‑buy observations.</p></li>
+<li><p>Buy‑anchored windows preserve the economic idea (simultaneous availability right before purchase) and produce thousands of qualifying users while enforcing “buy was viewed”.</p></li>
+</ul>
+</dd>
+<dt>Train/test protocol (leakage‑safe)</dt><dd><ul class="simple">
+<li><p>Per‑user temporal split: first 70% of observations → features, last 30% → targets. Each half gets its own item remapping.</p></li>
+<li><p>User holdout: 80/20 split across users (stratified for classification).</p></li>
+<li><p>Thresholds (e.g., top/bottom tercile) are computed on TRAIN users only, then applied to TEST; labels are re‑binarized with the train‑only threshold in the evaluation routine.</p></li>
+<li><p>Features: Baseline engagement stats + RP features from <code class="docutils literal notranslate"><span class="pre">Engine.analyze_menus</span></code> (SARP/WARP/HM, graph structure). Extended menu RP features are computed per user.</p></li>
+</ul>
+</dd>
+<dt>Target definitions (examples)</dt><dd><ul class="simple">
+<li><p>Pref Drift: 1 if the fraction of unique choices increases in the test window vs. train.</p></li>
+<li><p>Choice Entropy: normalized entropy of test‑window choice distribution (top tercile = High Entropy).</p></li>
+<li><p>Active Time: capped sum of inter‑event gaps within each buy window, summed over test windows (top tercile = High Active Time). Gaps are capped (e.g., 5 minutes) to avoid idle inflation.</p></li>
+<li><p>Fast Conversion: bottom tercile of median latency from last pre‑buy view to the buy.</p></li>
+</ul>
+</dd>
+<dt>Notes and caveats</dt><dd><ul class="simple">
+<li><p>No dwell times are logged; “active seconds” uses capped inter‑event deltas as a practical proxy.</p></li>
+<li><p>Novelty targets (e.g., any novel choice) can become degenerate on some splits; we report only targets with both classes present.</p></li>
+<li><p>Results are reported as AUC‑PR (AP) when class imbalance is high and AUC otherwise; the bootstrap CI on lift is computed on the chosen metric.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+<section id="findings">
+<span id="eco-findings"></span><h2>Findings<a class="headerlink" href="#findings" title="Link to this heading">#</a></h2>
+<p>On menu datasets, RP features are competitive with, and sometimes exceed,
+engagement baselines. The Taobao results show that item graph structure
+such as transitivity and density, along with choice entropy, carry signal
+that session counts and menu sizes do not capture.</p>
+<p>On budget datasets, RP adds roughly zero marginal lift over strong RFM
+baselines. Measures such as CCEI and MPI correlate with spending history,
+so they contribute little independent predictive power when the baseline
+already encodes that history.</p>
+<p>Instacart illustrates the difference between structure and prediction.
+We detect heavy habit structure via high SARP violations, yet adding RP
+to the baseline yields near zero lift because the task within aisles is
+dominated by reorder behavior.</p>
+<p>Looking at feature importance, baseline spend features dominate in most
+global models. RP features rise near the top on menu tasks. The menu
+tables below show item graph structure and choice entropy among the most
+informative signals.</p>
+</section>
+<section id="top-features">
+<span id="eco-top-features"></span><h2>Top Features<a class="headerlink" href="#top-features" title="Link to this heading">#</a></h2>
+<p>Across all classification tasks (CatBoost feature importance, combined model):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.0%" />
+<col style="width: 30.0%" />
+<col style="width: 10.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>#</p></th>
+<th class="head"><p>Feature</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>total_spend</p></td>
+<td><p>Baseline</p></td>
+<td><p>Total expenditure in training period</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>spend_slope</p></td>
+<td><p>Baseline</p></td>
+<td><p>Spending trend (increasing/decreasing)</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>n_sessions</p></td>
+<td><p>Baseline</p></td>
+<td><p>Number of menu presentations (menu datasets)</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>n_obs</p></td>
+<td><p>Baseline</p></td>
+<td><p>Number of observations (frequency)</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>mean_basket_size</p></td>
+<td><p>Baseline</p></td>
+<td><p>Average items per observation</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>max_choice_freq</p></td>
+<td><p>Baseline</p></td>
+<td><p>Most-chosen item frequency</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>util_gini</p></td>
+<td><p><strong>RP</strong></p></td>
+<td><p>Gini inequality of recovered Afriat utility values</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>spend_cv</p></td>
+<td><p>Baseline</p></td>
+<td><p>Spending variability (coefficient of variation)</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>items_per_session</p></td>
+<td><p>Baseline</p></td>
+<td><p>Item diversity per session</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>choice_entropy_norm</p></td>
+<td><p><strong>RP</strong></p></td>
+<td><p>Normalized Shannon entropy of choice distribution</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Menu-dataset top features (Taobao + REES46):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 5.0%" />
+<col style="width: 30.0%" />
+<col style="width: 10.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>#</p></th>
+<th class="head"><p>Feature</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>std_menu_size</p></td>
+<td><p>Baseline</p></td>
+<td><p>Variability of menu sizes</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>menu_transitivity</p></td>
+<td><p><strong>RP</strong></p></td>
+<td><p>Item graph transitivity ratio</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>n_sessions</p></td>
+<td><p>Baseline</p></td>
+<td><p>Number of sessions</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>menu_pref_density</p></td>
+<td><p><strong>RP</strong></p></td>
+<td><p>Item graph edge density</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>choice_entropy_norm</p></td>
+<td><p><strong>RP</strong></p></td>
+<td><p>Normalized choice entropy</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>menu_util_range</p></td>
+<td><p><strong>RP</strong></p></td>
+<td><p>Ordinal utility spread (max - min recovered rank)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Four of the top 8 menu features are RP-derived. Item graph structure and choice
+entropy carry signal that engagement statistics do not capture.</p>
+</section>
+<section id="reproduce">
+<span id="eco-reproduce"></span><h2>Reproduce<a class="headerlink" href="#reproduce" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>prefgraph<span class="w"> </span>lightgbm<span class="w"> </span>scikit-learn
+python<span class="w"> </span>case_studies/benchmarks/runner.py<span class="w"> </span>--datasets<span class="w"> </span>all
+</pre></div>
+</div>
+<p>Datasets require <code class="docutils literal notranslate"><span class="pre">kaggle</span></code> CLI. See <code class="docutils literal notranslate"><span class="pre">case_studies/benchmarks/</span></code> for details.</p>
+<hr class="docutils" />
+</section>
+<section id="appendix-datasets-assumptions">
+<span id="eco-appendix"></span><h2>Appendix: Datasets &amp; Assumptions<a class="headerlink" href="#appendix-datasets-assumptions" title="Link to this heading">#</a></h2>
+<p id="eco-assumptions"><strong>Dunnhumby.</strong> 2,222 households, 104 weeks, 10 staple commodity groups.
+Budget-based RP. Each observation is one active household-week — weeks with
+zero purchases in tracked categories are excluded, since they represent
+spending outside the sub-basket, not zero demand. Quantities are total units
+per commodity per week. Prices are a global median oracle per commodity per
+week (Dean &amp; Martin 2016), shared across all households — individual price
+exposure (coupons, store variation) is not captured. RP outputs should be
+interpreted as reduced-form consistency descriptors of conditional sub-basket
+allocation, not structural preference parameters.</p>
+<p><strong>Open E-Commerce.</strong> 4,694 users, category-level quantities. Budget-based RP.
+Median price per category per month, forward-filled for missing periods. Shared
+oracle across users. Within-category product switching is invisible.</p>
+<p><strong>H&amp;M.</strong> 46,757 customers, 31.8M transactions (2018‑09 to 2020‑09). Budget‑based
+RP. Each customer’s purchases in a month define one choice occasion. Articles map
+to 20 coarse product groups (first two digits of article_id). Quantity per group
+is the article‑row count — each CSV row is one purchased unit. Price per group is
+the customer’s own average paid price that month. Unpurchased groups are imputed
+via period‑group median → group median → global median, because RP tests require
+a full price vector to compare what a customer could have afforded across
+observations. This per‑customer price construction preserves individual variation,
+unlike the shared oracle used for Dunnhumby and Open E‑Commerce. Prices are
+normalized 0–1 (Kaggle): relative variation is real, absolute dollar levels are
+not. Filters: ≥ 6 active months, ≥ 10 total observations. Sales channel ignored.</p>
+<p><strong>Instacart.</strong> 206,209 users, 32.4M order-product rows across 3.4M prior orders
+(Kaggle Market Basket Analysis). Menu‑based RP — the raw data contains no prices,
+so budget‑based analysis is not possible. Each user’s orders are broken into
+user × order × aisle triples. Within each triple, a valid choice occasion requires
+exactly one reordered SKU in that aisle; events with zero or multiple reorders are
+dropped. The menu for each event is the set of distinct products the user bought in
+that same aisle across their previous three orders, plus the current choice to
+guarantee membership. This trailing‑3 window avoids inflating menus with stale
+items from distant history. Events with menu size &lt; 2 are dropped (trivial menus).
+To ensure enough repeated structure for RP analysis, only user‑aisle pairs with at
+least 3 valid events are retained. Each user’s surviving events across all their
+qualifying aisles are concatenated in order‑number sequence into a single
+<code class="docutils literal notranslate"><span class="pre">MenuChoiceLog</span></code>, with product IDs remapped to a compact 0..N−1 space per user.
+Filters: ≥ 5 total observations per user. Final dataset: 4.5M events, 120K users,
+715K user‑aisle pairs.</p>
+<p><strong>REES46.</strong> 8,832 users, click-to-purchase sessions. Menu-based RP.
+Server-defined session IDs (gold standard). Menus contain only items the user
+clicked; unviewed items are invisible. Median menu size ~5 items. No prices —
+choices reveal preference orderings only.</p>
+<p><strong>Taobao.</strong> 100M raw events (pv, buy). Buy‑anchored menu reconstruction:
+for each buy at time <code class="docutils literal notranslate"><span class="pre">t</span></code>, define a trailing window <code class="docutils literal notranslate"><span class="pre">[t−6h,</span> <span class="pre">t)</span></code>;
+menu = unique items viewed (pv) in that window; choice = the bought item.
+Require the bought item was viewed; keep menus of size 2–50 only. Build per‑user
+logs from all such observations; retain users with ≥5 observations. Item IDs are
+remapped to a compact per‑user space. No prices — analysis is ordinal.</p>
+<p>Assumptions: views approximate the considered set (impression bias: unseen
+alternatives are unobserved); 6‑hour window is a pragmatic simultaneity proxy
+(shorter/longer windows yield similar patterns); post‑purchase views are excluded;
+exposure is observational (not randomized).</p>
+</section>
+<section id="appendix-pipeline">
+<h2>Appendix: Pipeline<a class="headerlink" href="#appendix-pipeline" title="Link to this heading">#</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Raw CSV
+  -&gt; Loader (prefgraph.datasets)
+  -&gt; BehaviorPanel / MenuChoiceLog per user
+  -&gt; Temporal split: first 70% -&gt; features, last 30% -&gt; targets
+  -&gt; Feature extraction:
+       Baseline (13): RFM, category concentration, temporal trends
+       RP Engine (14): CCEI, MPI, HM, VEI, GARP, HARP, SCC, n_scc, harp_severity
+       RP Extended (28): VEI distribution, utility recovery (Gini, CV),
+           graph network (density, transitivity, cycles), MPI cycle costs,
+           choice reversals, choice entropy, congruence, ordinal utility
+  -&gt; CatBoost (random_seed=42, default hyperparameters)
+  -&gt; 5-fold stratified CV
+  -&gt; Metrics: AUC-ROC, AUC-PR, Log Loss, F1
+</pre></div>
+</div>
+<p><strong>Three models per target</strong>: (a) Baseline only, (b) RP only, (c) Baseline + RP.</p>
+<p><strong>Targets</strong>: High Spender (top tercile spend), Future Spend (regression),
+Spend Change (regression), High Engagement (top tercile sessions).</p>
+<p><strong>Output</strong>: <code class="docutils literal notranslate"><span class="pre">case_studies/benchmarks/output/results.json</span></code> (full metrics),
+<code class="docutils literal notranslate"><span class="pre">summary_table.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">figures/</span></code>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, PrefGraph Contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

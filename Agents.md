@@ -1,0 +1,2 @@
+- dont wait to ask: rebuild the page and commit and push. 
+- go ahead and run the analysis. 

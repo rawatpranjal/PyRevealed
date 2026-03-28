@@ -144,18 +144,97 @@ Results
      - 0.996
      - +0.0%
      - 0.990
-   * - Taobao
-     - 4,239
-     - High Engagement
-     - 0.913
-     - **0.915**
-     - **+0.2%**
-     - **0.925**
+   * - Taobao (Buy Window)
+     - 29,519
+     - High Entropy (AP)
+     - 0.789
+     - **0.790**
+     - **+0.1%**
+     - —
 
 *Baseline = CatBoost on 13 RFM features. +RP = same model with 42 RP features
 added. RP-only = RP features without baseline. On Taobao, RP-only (0.925)
 outperforms the engagement baseline (0.913) — graph transitivity and choice
 entropy capture patterns that session counts miss.*
+
+Taobao (Buy‑Anchored, 6h) — Full‑Run Results (AP/AUC)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We reconstruct menus as the items viewed in the last 6 hours before each buy
+and require that the purchased item was viewed. This yields tens of thousands of
+users with ≥5 observations and clean menus. On the full file (≈100M rows; 29,519 users; 5,904 test users):
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 12 12 10
+
+   * - Target (classification)
+     - Base
+     - +RP
+     - Δ (metric)
+   * - Pref Drift (AP)
+     - 0.940
+     - 0.938
+     - −0.002
+   * - High Entropy (AP)
+     - 0.789
+     - 0.790
+     - +0.001
+   * - High Active Time (AUC)
+     - 0.777
+     - 0.778
+     - +0.001
+   * - High Click Volume (AUC)
+     - 0.818
+     - 0.818
+     - +0.000
+   * - Fast Conversion (AUC)
+     - 0.561
+     - 0.561
+     - +0.000
+
+Engagement volume/time targets remain baseline‑dominated; structural outcomes
+(drift, entropy) show the clearest RP gains. See case_studies/benchmarks for protocol details.
+
+How The Taobao Choice Data Is Built (Buy‑Anchored)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Raw events
+  - File: ``UserBehavior.csv`` with rows ``(user_id, item_id, category_id, behavior_type, timestamp)``.
+  - We keep only ``pv`` (view) and ``buy`` events and sort by ``(user_id, timestamp)``.
+
+Observation construction (6‑hour window)
+  - For each buy at time ``t_buy``, define a trailing window ``[t_buy − 6h, t_buy)``.
+  - Menu = unique items viewed in this window (pre‑buy only). Choice = the bought item.
+  - Require the bought item was viewed in the window; drop otherwise.
+  - Keep observations with menu size in ``[2, 50]``.
+
+Per‑user logs and qualification
+  - Collect all buy‑anchored observations for a user as one MenuChoiceLog.
+  - Users must have at least 5 valid observations (``min_sessions=5``).
+  - Item IDs are remapped to a compact per‑user space (0..N‑1) to ensure stable graph ops.
+
+Why buy‑anchored windows (vs. whole sessions)
+  - Whole‑session, pre‑buy menus (with a 30‑minute inactivity session boundary) are very clean but too sparse per user.
+  - Extending the session gap to 60–180 minutes does not materially increase clean, pre‑buy observations.
+  - Buy‑anchored windows preserve the economic idea (simultaneous availability right before purchase) and produce thousands of qualifying users while enforcing “buy was viewed”.
+
+Train/test protocol (leakage‑safe)
+  - Per‑user temporal split: first 70% of observations → features, last 30% → targets. Each half gets its own item remapping.
+  - User holdout: 80/20 split across users (stratified for classification).
+  - Thresholds (e.g., top/bottom tercile) are computed on TRAIN users only, then applied to TEST; labels are re‑binarized with the train‑only threshold in the evaluation routine.
+  - Features: Baseline engagement stats + RP features from ``Engine.analyze_menus`` (SARP/WARP/HM, graph structure). Extended menu RP features are computed per user.
+
+Target definitions (examples)
+  - Pref Drift: 1 if the fraction of unique choices increases in the test window vs. train.
+  - Choice Entropy: normalized entropy of test‑window choice distribution (top tercile = High Entropy).
+  - Active Time: capped sum of inter‑event gaps within each buy window, summed over test windows (top tercile = High Active Time). Gaps are capped (e.g., 5 minutes) to avoid idle inflation.
+  - Fast Conversion: bottom tercile of median latency from last pre‑buy view to the buy.
+
+Notes and caveats
+  - No dwell times are logged; “active seconds” uses capped inter‑event deltas as a practical proxy.
+  - Novelty targets (e.g., any novel choice) can become degenerate on some splits; we report only targets with both classes present.
+  - Results are reported as AUC‑PR (AP) when class imbalance is high and AUC otherwise; the bootstrap CI on lift is computed on the chosen metric.
 
 .. _eco-findings:
 
@@ -311,6 +390,13 @@ allocation, not structural preference parameters.
 Median price per category per month, forward-filled for missing periods. Shared
 oracle across users. Within-category product switching is invisible.
 
+Polars fast-path (this repo):
+- Users analyzed: 4,744 (goods=50, median T=34 months)
+- Price variation: users with ≥3 distinct price vectors: ~100%
+- GARP pass rate: ~2.9% (strong power)
+- CCEI percentiles: p25≈0.300, p50≈0.424, p75≈0.567, p95≈0.855
+- Tooling: ``tools/open_ecommerce_polars_variation.py``
+
 **H&M.** 46,757 customers, 31.8M transactions (2018‑09 to 2020‑09). Budget‑based
 RP. Each customer’s purchases in a month define one choice occasion. Articles map
 to 20 coarse product groups (first two digits of article_id). Quantity per group
@@ -344,10 +430,17 @@ Server-defined session IDs (gold standard). Menus contain only items the user
 clicked; unviewed items are invisible. Median menu size ~5 items. No prices —
 choices reveal preference orderings only.
 
-**Taobao.** 4,239 users, 100M raw events. Menu-based RP. Session boundaries
-defined by 30-minute inactivity gaps (84% of inter-event gaps < 30 min). Median
-menu size 4 items. Menus contain only items the user viewed or purchased within
-a session. No prices.
+**Taobao.** 100M raw events (pv, buy). Buy‑anchored menu reconstruction:
+for each buy at time ``t``, define a trailing window ``[t−6h, t)``;
+menu = unique items viewed (pv) in that window; choice = the bought item.
+Require the bought item was viewed; keep menus of size 2–50 only. Build per‑user
+logs from all such observations; retain users with ≥5 observations. Item IDs are
+remapped to a compact per‑user space. No prices — analysis is ordinal.
+
+Assumptions: views approximate the considered set (impression bias: unseen
+alternatives are unobserved); 6‑hour window is a pragmatic simultaneity proxy
+(shorter/longer windows yield similar patterns); post‑purchase views are excluded;
+exposure is observational (not randomized).
 
 Appendix: Pipeline
 ------------------
