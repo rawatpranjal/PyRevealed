@@ -7,6 +7,7 @@
 - Replaced Benchmarks hub card image with real results thumbnail (`_static/app_llm_benchmark_summary.png`).
  - Menus page GIFs: replaced raw HTML <img> with a robust list-table of images to ensure they render reliably on RTD.
  - Slightly sped up all docs GIF animations (~1.25× faster) to feel snappier. No changes to CSS/JS text transitions; only GIF frame delays were reduced.
+ - Further increased GIF speed for a total ~1.5× faster vs original (applied an additional 1.2× pass to existing GIF timings). Text transitions remain unchanged.
 
 ## [0.5.13] - 2026-03-28
 
