@@ -70,8 +70,6 @@ observations. This per‑customer price construction preserves individual variat
 unlike the shared oracle used for Dunnhumby and Open E‑Commerce. Prices are
 normalized 0–1 (Kaggle): relative variation is real, absolute dollar levels are
 not. Filters: ≥ 6 active months, ≥ 10 total observations. Sales channel ignored.
-Targets: High Spender (classification), Future Spend and Spend Change
-(regression). CatBoost defaults, 80/20 holdout, bootstrap CI.
 
 **Instacart.** 50,000 users, 134 aisles. Menu-based RP (no prices in raw data).
 Observation = user × order × aisle with exactly one reordered SKU. Menu =
