@@ -66,7 +66,7 @@ Returns a pandas DataFrame with one row per user. Customize with `metrics=["garp
 | Efficiency | `ccei` | How close to perfectly rational? (Afriat) | 0-1 |
 | Exploitability | `mpi` | Value left on the table per choice (Karp cycle) | 0-1 |
 | Homotheticity | `is_harp` | Do preferences scale with budget? | bool |
-| Noise fraction | `hm_consistent/hm_total` | Fraction of rationalizable choices (Houtman-Maks) | 0-1 |
+| Rationalizable fraction | `hm_consistent/hm_total` | Fraction of rationalizable choices (Houtman–Maks) | 0-1 |
 | Utility recovery | `utility_success` | Can latent utility be reconstructed? (Afriat LP) | bool |
 | Per-obs efficiency | `vei_mean` | Average efficiency across observations (Varian) | 0-1 |
 
@@ -120,11 +120,12 @@ The Rust engine (`rpt-core`) handles graph algorithms and LP solving via Rayon t
 
 ## Documentation
 
-**[Full docs](https://prefgraph.readthedocs.io/)** — examples, theory, API reference, application case studies.
+**Full docs**: https://prefgraph.readthedocs.io/ — examples, theory, API reference, and applications.
 
-**[E-commerce benchmarks](https://prefgraph.readthedocs.io/en/latest/benchmarks_ecommerce.html)** — 6 datasets, 117K users, 12 targets. RP features add 0–2% lift over RFM baselines; on Taobao, RP-only (0.925) beats the engagement baseline (0.913).
-
-**[15 dataset loaders](https://prefgraph.readthedocs.io/en/latest/api.html#dataset-loaders)** — Dunnhumby, Instacart, H&M, Taobao, and 11 more real-world datasets.
+- Benchmarks overview: https://prefgraph.readthedocs.io/en/latest/benchmarks.html
+- LLM Consistency Benchmarks: https://prefgraph.readthedocs.io/en/latest/budget/app_llm_benchmark.html
+- E‑commerce benchmarks (incl. Amazon): https://prefgraph.readthedocs.io/en/latest/benchmarks_ecommerce.html
+- Dataset loaders (15+): https://prefgraph.readthedocs.io/en/latest/api.html#dataset-loaders
 
 ## License
 
