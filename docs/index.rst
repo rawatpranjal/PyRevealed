@@ -130,13 +130,9 @@ procurement but weak on jobs), and severity anchoring even on “clear” conten
 inputs.
 
 *Definitions: SARP pass (deterministic) = percent of vignette–prompt pairs
-with an acyclic preference graph at temperature 0. SARP pass (stochastic)
-uses majority vote over K=20 samples at temperature 0. IIA violations count
-pairwise preference flips when a third option is added. Menus with mixed
-responses = percent of menus where the K stochastic responses are not all the
-same. Deterministic–stochastic agreement = percent of menus where the
-deterministic choice matches the stochastic majority. RUM pass rate aggregates
-frequencies over K samples and tests Random Utility Model consistency.*
+with an acyclic preference graph at temperature 0 using MenuChoiceLog. IIA counts
+deterministic preference flips when a third option is added. RUM pass rate aggregates
+frequencies over K samples at temp 0.7 using StochasticChoiceLog and tests Random Utility Model consistency.*
 
 Predictive Benchmarks (E-commerce)
 -----------------------------------
