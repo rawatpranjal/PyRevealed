@@ -1,16 +1,6 @@
 Algorithms
 ==========
 
-.. admonition:: Design Philosophy
-
-   Algorithms are chosen to be provably
-   optimal or best-in-class. The Rust engine (``rpt-core``) handles all graph and LP
-   computation; Python is I/O only. Rayon thread-pool parallelism gives linear
-   scaling across cores.
-
-This page documents the algorithmic choices, complexity analysis, and the reasoning
-behind each implementation decision.
-
 Complexity
 --------------------
 

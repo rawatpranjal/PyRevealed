@@ -25,7 +25,7 @@ Install
 Load your own data
 ------------------
 
-This section shows common, copy‑paste starters for real data. Use Polars for I/O and transformation, then hand off NumPy arrays or menu lists to the Engine.
+Use Polars for I/O and transformation, then hand off NumPy arrays or menu lists to the Engine.
 
 Budget data from Parquet (wide format)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

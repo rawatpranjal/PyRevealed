@@ -59,7 +59,7 @@ Latency follows suit: GARP-only averages around ~20 microseconds per agent, the 
 Computational Complexity by Metric
 ----------------------------------
 
-Costs differ by metric. Graph-based axioms (GARP) and indices like MPI are efficient because they rely on graph traversals and cycle checks; CCEI adds an outer binary search, effectively running GARP multiple times. This is reflected in the per-user timing curves below.
+Metrics vary in throughput corresponding to their graph complexity. (See :doc:`Algorithms <algorithms>` for derivations.)
 
 .. raw:: html
 
@@ -68,12 +68,6 @@ Costs differ by metric. Graph-based axioms (GARP) and indices like MPI are effic
 .. image:: _static/perf_per_user.png
    :width: 100%
    :alt: Per-agent computational cost by metric and observation count (T)
-
-.. raw:: html
-
-   <div style="margin: 1.5em 0;"></div>
-
-PrefGraph implements an O(T²) SCC-based approach for GARP, avoiding O(T³) all-pairs closures. CCEI therefore runs in roughly O(T² log T). Metrics such as MPI and HARP require O(T³) closures, while utility recovery and VEI rely on LP routines that behave close to O(T²) in practice. See :doc:`algorithms` for details.
 
 .. raw:: html
 
