@@ -196,10 +196,38 @@ Full results: :doc:`benchmarks_ecommerce`.
      - 0.990
    * - Taobao (Buy Window)
      - 29,519
+     - Pref Drift (AP)
+     - 0.940
+     - 0.938
+     - -0.2%
+     - —
+   * - Taobao (Buy Window)
+     - 29,519
      - High Entropy (AP)
      - 0.789
      - **0.790**
      - **+0.1%**
+     - —
+   * - Taobao (Buy Window)
+     - 29,519
+     - High Active Time (AUC)
+     - 0.777
+     - 0.778
+     - +0.1%
+     - —
+   * - Taobao (Buy Window)
+     - 29,519
+     - High Click Volume (AUC)
+     - 0.818
+     - 0.818
+     - +0.0%
+     - —
+   * - Taobao (Buy Window)
+     - 29,519
+     - Fast Conversion (AUC)
+     - 0.561
+     - 0.561
+     - +0.0%
      - —
 
 Overall, incorporating preference graph features provides a modest but consistent lift over strong baseline models (such as traditional RFM features).

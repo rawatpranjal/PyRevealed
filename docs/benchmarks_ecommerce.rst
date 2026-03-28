@@ -136,10 +136,38 @@ Results
      - 0.990
    * - Taobao (Buy Window)
      - 29,519
+     - Pref Drift (AP)
+     - 0.940
+     - 0.938
+     - -0.2%
+     - —
+   * - Taobao (Buy Window)
+     - 29,519
      - High Entropy (AP)
      - 0.789
      - **0.790**
      - **+0.1%**
+     - —
+   * - Taobao (Buy Window)
+     - 29,519
+     - High Active Time (AUC)
+     - 0.777
+     - 0.778
+     - +0.1%
+     - —
+   * - Taobao (Buy Window)
+     - 29,519
+     - High Click Volume (AUC)
+     - 0.818
+     - 0.818
+     - +0.0%
+     - —
+   * - Taobao (Buy Window)
+     - 29,519
+     - Fast Conversion (AUC)
+     - 0.561
+     - 0.561
+     - +0.0%
      - —
 
 *Baseline = CatBoost on 13 RFM features. +RP = same model with 42 RP features
@@ -147,44 +175,6 @@ added. RP-only = RP features without baseline. On Taobao (buy‑anchored, 6h),
 RP features contribute modest lift on structural targets; engagement/volume
 targets remain baseline‑dominated.*
 
-Taobao (Buy‑Anchored, 6h) — Full‑Run Results (AP/AUC)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We reconstruct menus as the items viewed in the last 6 hours before each buy
-and require that the purchased item was viewed. This yields tens of thousands of
-users with ≥5 observations and clean menus. On the full file (≈100M rows; 29,519 users; 5,904 test users):
-
-.. list-table::
-   :header-rows: 1
-   :widths: 22 12 12 10
-
-   * - Target (classification)
-     - Base
-     - +RP
-     - Δ (metric)
-   * - Pref Drift (AP)
-     - 0.940
-     - 0.938
-     - −0.002
-   * - High Entropy (AP)
-     - 0.789
-     - 0.790
-     - +0.001
-   * - High Active Time (AUC)
-     - 0.777
-     - 0.778
-     - +0.001
-   * - High Click Volume (AUC)
-     - 0.818
-     - 0.818
-     - +0.000
-   * - Fast Conversion (AUC)
-     - 0.561
-     - 0.561
-     - +0.000
-
-Engagement volume/time targets remain baseline‑dominated; structural outcomes
-(drift, entropy) show the clearest RP gains. See case_studies/benchmarks for protocol details.
 
 How The Taobao Choice Data Is Built (Buy‑Anchored)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
