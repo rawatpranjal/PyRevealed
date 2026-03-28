@@ -118,6 +118,24 @@ div.math {
     margin-top: 8px;
 }
 
+/* Menu landing GIF grid - remove table padding/borders so GIFs fill */
+.bd-content table.docutils.gif-grid {
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    margin: 16px 0 24px 0;
+}
+
+.bd-content table.docutils.gif-grid td {
+    padding: 0;
+}
+
+.bd-content table.docutils.gif-grid img {
+    width: 100%;
+    display: block;
+    margin: 0; /* override default img margins */
+}
+
 /* Feature cards with depth */
 .feature-card {
     padding: 28px;

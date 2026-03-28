@@ -10,6 +10,7 @@ limited attention, random utility, and risk preferences.
 .. list-table::
    :widths: 33 34 33
    :align: center
+   :class: gif-grid
 
    * - .. image:: ../_static/deterministic.gif
           :alt: Deterministic logic
