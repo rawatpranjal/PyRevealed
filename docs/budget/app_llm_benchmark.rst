@@ -158,12 +158,13 @@ Each cell = % of 10 vignettes where the preference graph is acyclic.
      - 97.6%
    * - Procurement
      - 8
-     - --
-     - --
+     - 6
+     - 97.7%
 
 *IIA violation = adding a third option flips the pairwise preference.
 Stochastic = majority-vote from K=20 reps. Agreement = % of menus
-where temp=0 and temp=0.7 majority match. -- = procurement in progress.*
+where temp=0 and temp=0.7 majority match. Procurement stochastic
+based on 82% of expected data (41/50 vignette-prompt combos).*
 
 Stochastic Results (temp=0.7, K=20)
 ------------------------------------
@@ -207,6 +208,13 @@ Stochastic Results (temp=0.7, K=20)
      - 80
      - 90
      - 78
+   * - Procurement
+     - 78
+     - 100
+     - 75
+     - 88
+     - 75
+     - 83
 
 .. list-table:: % of menus with mixed responses
    :header-rows: 1
@@ -247,6 +255,13 @@ Stochastic Results (temp=0.7, K=20)
      - 5
      - 9
      - 8
+   * - Procurement
+     - 5
+     - 8
+     - 24
+     - 16
+     - 5
+     - 12
 
 Findings
 --------
@@ -256,14 +271,18 @@ Findings
   Adding a third candidate changes which of two is preferred.
 - **Content moderation "clear" vignettes pass only 47% stochastically.**
   Even unambiguous posts produce menu-dependent severity judgments.
-  Stochastic IIA violations jump from 8 (old) to 12 — majority-voting
-  doesn't eliminate context effects.
-- **Decision-tree prompts score 60% on jobs but 90% on alert.** Conservative
-  scores 90% on support, 60% on content. Chain-of-thought is the only
-  prompt that hits 100% on any scenario (support). No universal best prompt.
+  12 stochastic IIA violations — majority-voting doesn't eliminate
+  context effects.
+- **Decision-tree is the only prompt to hit 100% on any scenario**
+  (procurement stochastic). But it scores 60% on jobs. Conservative
+  scores 90% on support, 60% on content. No universal best prompt.
 - **Alert triage is the most consistent** (90% stochastic SARP). Actions
   have a clear ordinal severity structure that resists menu effects.
-- **Stochastic sampling barely changes rankings.** 92-98% of menus agree
+- **Procurement conservative prompt has 24% mixed menus** — the highest
+  of any scenario-prompt combination. Spending authority decisions are
+  genuinely sensitive to sampling temperature when the prompt emphasizes
+  caution.
+- **Stochastic sampling barely changes rankings.** 96-98% of menus agree
   between temp=0 and temp=0.7 majority vote. Only 8-12% of menus produce
   mixed responses across 20 reps. Inconsistency is structural, not noise.
 
@@ -347,4 +366,4 @@ Limitations
 ~~~~~~~~~~~
 
 No ground truth (consistency ≠ accuracy). Synthetic vignettes. Single
-model family. Procurement stochastic data still collecting.
+model family. Procurement stochastic based on 82% of expected data.
