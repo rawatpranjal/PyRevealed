@@ -43,7 +43,7 @@ and ordinal utility. Models use CatBoost with default hyperparameters. The split
         - 2 (7%)
         - Same two features, 82% NaN (buy-window sessions are sparse — few choices per user make the ordinal utility LP under-constrained)
 
-   The 14 Engine features are always non-null across all datasets. All NaN values are imputed with the per-feature train-set median before model training. Features with high null rates are effectively constant after imputation and carry little predictive signal.
+   The vast majority of RP features are fully populated: 50/59 on Dunnhumby, 25/27 on REES46 and Taobao. The null issue is narrow — it affects only utility-recovery and ordinal-utility features, which require a feasible LP solve. The remaining features (GARP, CCEI, MPI, HM, VEI, graph density, transitivity, entropy, etc.) are always non-null. All NaN values are imputed with the per-feature train-set median before model training; the handful of high-null features carry little signal after imputation.
 
 The hardest part is reconstructing the choice set and the observed choices.
 For budgets, prices and quantities must reflect what the customer could have
