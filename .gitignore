@@ -123,3 +123,6 @@ _build/
 deploy.sh
 deploy2.sh
 
+
+# CatBoost training logs
+catboost_info/
