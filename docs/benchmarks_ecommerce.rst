@@ -384,6 +384,7 @@ Latest ML benchmark (Open E‑Commerce, ~5k users)
     - R2: RP=-0.032, Base=0.144, Combined=0.091
   - Future LTV (regression)
     - R2: RP=0.387, Base=0.633, Combined=0.622
+
 - Read: Combined modestly improves “Spend Drop”; baseline dominates for LTV and
   Spend Change; RP alone underperforms baseline on those.
 

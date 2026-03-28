@@ -9,7 +9,7 @@ build:
       # Install only doc dependencies + the source tree (no Rust compile).
       # conf.py adds ../src to sys.path and mocks _rust_core for autodoc.
       - python -m pip install sphinx>=7.0 pydata-sphinx-theme>=0.14 sphinx-autodoc-typehints>=1.25 sphinx-copybutton>=0.5
-      - python -m pip install numpy scipy networkx
+      - python -m pip install numpy scipy networkx pandas polars
 
 sphinx:
   configuration: docs/conf.py
