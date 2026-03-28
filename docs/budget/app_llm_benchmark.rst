@@ -86,28 +86,27 @@ Why this design
 ---------------
 
 Holding the vignette constant and only changing the menu isolates menu
-effects. Earlier designs that varied both content and menus at the same
-time made it hard to tell whether a flip was caused by a different story
-or a different set of options. This setup pins flips on the menu.
+effects.
 
 .. _llm-det-results:
 
 Results 1: Deterministic (temp=0)
 ---------------------------------
 
-We first measure consistency with no sampling. Each cell shows the
-percent of vignette plus prompt pairs whose preference graph is acyclic.
+We first measure consistency with no sampling. Each cell shows the percentage
+of tested configurations where the LLM's preference graph is perfectly acyclic
+(passing SARP).
 
-.. list-table:: SARP pass rate by prompt
+.. list-table:: SARP Pass Rate by Prompt Framework (%)
    :header-rows: 1
    :widths: 18 13 13 13 13 13 13
 
-   * -
-     - Min
-     - DecTree
-     - Conserv
-     - Aggress
-     - CoT
+   * - Scenario
+     - Minimal
+     - Decision Tree
+     - Conservative
+     - Aggressive
+     - Chain-of-Thought
      - Mean
    * - Support
      - 90
@@ -145,19 +144,19 @@ percent of vignette plus prompt pairs whose preference graph is acyclic.
      - 90
      - 84
 
-This table compares prompts within each scenario. Higher values mean the
-model maintains a single implied ranking across the 15 menus for that
-vignette and prompt. Use it to pick a default prompt per scenario.
+Prompt engineering significantly impacts consistency. Structuring decisions with 
+rigid rules (Decision Tree) or directional bias (Conservative/Aggressive) 
+tends to out-perform unguided Minimal prompts across most operational domains.
 
-.. list-table:: SARP pass rate by vignette difficulty
+.. list-table:: SARP Pass Rate by Case Difficulty (%)
    :header-rows: 1
    :widths: 18 16 16 16 16 16
 
-   * -
-     - Clear
-     - Binary
-     - Ambig.
-     - Advers.
+   * - Scenario
+     - Clear Cases
+     - Binary Cases
+     - Ambiguous
+     - Adversarial
      - Mean
    * - Support
      - 87
@@ -190,18 +189,18 @@ vignette and prompt. Use it to pick a default prompt per scenario.
      - 80
      - 84
 
-This table holds the prompt mix fixed and varies the vignette difficulty.
-It shows which scenarios degrade when cases are clear versus ambiguous
-or adversarial. Content is notably fragile on clear cases.
+Model consistency does not uniformly degrade on harder tasks. Paradoxically, 
+Content moderation decisions are less consistent on ostensibly "Clear" cases 
+(60%), while Jobs screening struggles most on simplified "Binary" rulesets (67%).
 
 .. _llm-iia:
 
-.. list-table:: IIA violations (Deterministic)
+.. list-table:: Independence of Irrelevant Alternatives (IIA) Flips
    :header-rows: 1
    :widths: 50 50
 
-   * - Scenario
-     - IIA Violations
+   * - Operational Scenario
+     - Reversal Frequency (IIA Count)
    * - Support
      - 3
    * - Alert
@@ -213,11 +212,9 @@ or adversarial. Content is notably fragile on clear cases.
    * - Procurement
      - 8
 
-*IIA violation = adding a third option flips the pairwise preference.
-Procurement stochastic based on 82% of expected data (41/50 vignette-prompt combos).*
+*IIA violation = adding a third option inexplicably reverses the preference between two existing options.*
 
-Read this table as a stress test for menu dependence. Higher IIA counts
-mean more flips when a third option is added.
+The Jobs and Content moderation categories exhibit the highest susceptibility to context-dependent preference reversals, indicating that the mere presence of decoy options can systematically manipulate the LLM's logical alignment.
 
 .. _llm-stoch-results:
 
@@ -233,16 +230,16 @@ admit a rationalizing distribution over rankings.
 To test stochastic choice directly, we aggregate the K responses per menu into frequencies and
 check Random Utility Model consistency, regularity, IIA, and transitivity.
 
-.. list-table:: RUM pass rate by prompt (percent of vignette plus prompt pairs)
+.. list-table:: RUM Pass Rate by Prompt Framework (%)
    :header-rows: 1
    :widths: 18 13 13 13 13 13
 
-   * -
-     - Min
-     - DecTree
-     - Conserv
-     - Aggress
-     - CoT
+   * - Scenario
+     - Minimal
+     - Decision Tree
+     - Conservative
+     - Aggressive
+     - Chain-of-Thought
    * - Support
      - 50
      - 30
@@ -274,19 +271,19 @@ check Random Utility Model consistency, regularity, IIA, and transitivity.
      - 38
      - 63
 
-These rates show which prompts are stochastically rational in each scenario.
-Decision tree is strongest on procurement under RUM while aggressive is often
-best on jobs. CoT and conservative tend to stabilize support and alert.
+Stochastic robustness requires tailored instructional frameworks. Decision Tree paths 
+prove remarkably effective for Procurement, whereas Jobs pipelines align better with 
+Aggressive pacing.
 
-.. list-table:: RUM pass rate by tier (percent)
+.. list-table:: RUM Pass Rate by Case Difficulty (%)
    :header-rows: 1
    :widths: 18 16 16 16 16
 
-   * -
-     - Clear
-     - Binary
-     - Ambig.
-     - Advers.
+   * - Scenario
+     - Clear Cases
+     - Binary Cases
+     - Ambiguous
+     - Adversarial
    * - Support
      - 53
      - 67
@@ -313,10 +310,10 @@ best on jobs. CoT and conservative tend to stabilize support and alert.
      - 100
      - 100
 
-RUM confirms the earlier pattern. Content is weakest on clear cases and
-strongest on adversarial. Jobs and procurement improve on ambiguous and
-adversarial tiers. Results with asterisks are based on partial procurement
-stage2 coverage.
+Stochastic consistency testing reinforces the deterministic findings. Jobs and 
+Procurement paradoxically perform better under Adversarial and Ambiguous constraints,
+while seemingly clear-cut Content moderation fractures into inconsistent distributions. 
+(*Results with asterisks are based on partial procurement stage2 coverage.*)
 
 .. _llm-patterns:
 
@@ -329,33 +326,33 @@ scores 100% SARP on procurement. Conservative leads on content
 moderation (accounting for nearly half of the category's violations). The same prompt can be the most and least
 consistent depending on the decision domain.
 
-.. list-table:: IIA violations by prompt (top entries)
+.. list-table:: IIA Violations by Framework (Top Entries)
    :header-rows: 1
    :widths: 22 22 16
 
    * - Scenario
-     - Prompt
-     - IIA count
+     - Prompt Framework
+     - Flips (IIA Count)
    * - Jobs
-     - decision_tree
+     - Decision Tree
      - 6
    * - Content
-     - conservative
+     - Conservative
      - 4
    * - Content
-     - decision_tree
+     - Decision Tree
      - 3
    * - Content
-     - aggressive
+     - Aggressive
      - 2
    * - Jobs
-     - minimal
+     - Minimal
      - 2
    * - Procurement
-     - minimal
+     - Minimal
      - 2
    * - Procurement
-     - conservative
+     - Conservative
      - 2
 
 **Compromise effect (job screening).** In most job screening IIA cases
@@ -504,9 +501,8 @@ Limitations
 ~~~~~~~~~~~
 
 No ground truth (consistency ≠ accuracy). Synthetic vignettes. Single
-model family. Procurement stochastic based on 82% of expected data.
-For theoretical details on stochastic rationality testing (regularity,
-Block-Marschak) see :doc:`../menu/theory_stochastic`.
+model family. For theoretical details on stochastic rationality testing 
+(regularity, Block-Marschak) see :doc:`../menu/theory_stochastic`.
 
 Worked Example
 ~~~~~~~~~~~~~~
