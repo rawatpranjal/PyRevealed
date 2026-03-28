@@ -1,26 +1,53 @@
 E-commerce Benchmarks
 =====================
 
-*Last updated: 2026-03-28. Instacart now uses aisle-level menu construction.
-H&M results with per-customer realized prices (v0.5.8).*
+Do revealed-preference (RP) features add independent predictive signal beyond
+strong engagement/spend baselines on real e‑commerce data?
+
+**TL;DR.** On menu datasets, RP captures structure that engagement stats miss
+(Taobao RP‑only 0.925 > baseline 0.913). On budget datasets, RP adds ~0% over
+RFM — spending history already carries the signal. Instacart shows heavy habit
+structure (83.8% SARP violations) but near‑zero lift, consistent with
+reordering.
+
+*Last updated: 2026-03-28. Instacart now uses aisle-level menus. H&M uses
+per-customer realized prices (v0.5.8).* 
 
 Eight public datasets, 217K users, 42 RP features. CatBoost (H&M) or LightGBM
-(others) with 80/20 user holdout + bootstrap CI. Results split by data type:
+(others). 80/20 user holdout with bootstrap CIs.
 
-- **Menu datasets**: RP features are **competitive with baselines**. Taobao
-  RP-only AUC (0.925) beats the engagement baseline (0.913). Graph features
-  (``menu_transitivity``, ``menu_pref_density``) and choice entropy carry
-  real signal that engagement stats miss.
-- **Budget datasets**: RP adds ~0% marginal lift over strong RFM baselines.
-  Spending features already capture the signal; CCEI/MPI are correlated.
-- **Instacart**: Aisle-level menu construction with trailing-3 menus.
-  RP features show real structure (83.8% SARP violations) but add near-zero
-  lift over baseline — consistent with habit-heavy grocery reordering.
+Roadmap
+-------
 
-All targets use top-tercile thresholds for consistency.
+- :ref:`Setup <eco-setup>`: datasets, targets, models, and splits
+- :ref:`Datasets & assumptions <eco-assumptions>`: what each dataset measures
+- :ref:`How to read <eco-how-to-read>`: Baseline, +RP, RP‑only, Lift
+- :ref:`Results <eco-results>`: full table with RP‑only highlights
+- :ref:`RP‑only performance <eco-rp-only>`: where RP carries independent signal
+- :ref:`Findings <eco-findings>`: practical takeaways
+- :ref:`Top features <eco-top-features>`: what matters across tasks
+- :ref:`Reproduce <eco-reproduce>` and :ref:`Appendix <eco-appendix>`: pipeline and code
 
-Assumptions
------------
+.. _eco-setup:
+
+Setup
+-----
+
+- **Data types**: budgets (with prices) and menus (no prices).
+- **Targets**: classification (High Spender, High Engagement, Low Loyalty, High
+  Novelty) and regression (Future Spend, Spend Change). Targets use top‑tercile
+  thresholds for consistency.
+- **Features**: Baseline (RFM + concentration + trends, 13); RP Engine (14) +
+  RP Extended (28) for 42 total: GARP/CCEI/MPI/HARP/HM/VEI, graph density and
+  transitivity, utility recovery (Gini/CV), choice entropy, ordinal utility.
+- **Models**: LightGBM (menus, budgets except H&M); CatBoost (H&M). Default
+  hyperparameters.
+- **Split**: 80/20 user holdout; 5‑fold stratified CV; bootstrap CIs on lift.
+
+.. _eco-assumptions:
+
+Datasets & Assumptions
+----------------------
 
 **Dunnhumby.** 2,222 households, 104 weeks, 10 commodity groups (~$19/week of
 a ~$100--150 weekly grocery basket). Budget-based RP. Global median price oracle
@@ -32,72 +59,26 @@ Within-commodity substitution is invisible.
 Median price per category per month, forward-filled for missing periods. Shared
 oracle across users. Within-category product switching is invisible.
 
-**H&M.** 46,757 customers, 31.8M transactions (2018-09 to 2020-09). Budget-based
-RP with per-customer realized prices.
-
-*Observation unit.* Customer × month. Each customer-month is one budget
-observation consisting of a price vector and a quantity vector over 20 product
-groups.
-
-*Goods.* Product groups are the first 2 digits of article_id, top 20 by
-transaction frequency. Coarse but necessary — finer grouping destroys repeated
-support across months.
-
-*Quantities.* Article counts per group per month. Each raw CSV row is one
-purchased article unit (confirmed by duplicate (date, customer, article) rows
-representing distinct units). If a customer bought 5 items in group "06" in June,
-quantity = 5.
-
-*Prices.* Per-customer realized prices, not a shared oracle. For groups the
-customer purchased in a given month: their own average paid price across all
-articles in that group-month. For groups they did not purchase: imputed via
-period-group median → group median → global median. This three-tier fallback
-ensures every observation has a full price vector (required for RP tests) while
-preserving individual price variation where it exists. Prices are normalized 0--1
-(Kaggle competition); relative variation is real, absolute dollar values are not.
-
-*Panel eligibility.* ≥ 6 active months, ≥ 10 total observations, ≥ 5 in the
-feature window, ≥ 3 in the target window. 46,757 of ~50,000 most-active
-customers pass these filters.
-
-*Time toggle.* Default is month. Week and quarter are available as robustness
-checks but are not used in the main benchmark (week is too sparse, quarter too
-coarse).
-
-*Ignored.* Sales channel (online vs in-store) is dropped for simplicity. Any
-resulting price heterogeneity is treated as noise.
-
-*Targets.* Three targets from the last 30% of each customer's history: (1) High
-Spender — top tercile of target-window total spend (classification); (2) Future
-Spend — mean spend per period in target window (regression); (3) Spend Change —
-target mean spend minus train mean spend (regression). "Churn" was dropped
-because the design excludes customers with no future window, making it
-spend-decline-among-survivors rather than true disappearance. "LTV" was renamed
-to "Future Spend" for the same reason.
-
-*Features.* Baseline: 10 spending/concentration features (total spend, mean
-spend, std, basket size, Herfindahl, top group share, spend slope, spend CV,
-active groups, observation count). RP: GARP, CCEI, MPI, HARP, Houtman-Maks, VEI
-distributions, utility recovery, graph structure (~42 features via Engine +
-extended per-user algorithms). A dual-baseline comparison (10 core vs 17 full
-features) confirmed the extra 7 baseline features add < 0.002 AUC.
-
-*Model.* CatBoost with default parameters, 80/20 user holdout, bootstrap CI on
-lift (1000 iterations), grouped permutation importance.
-
-*Key finding.* RP features add negligible signal for classification (−0.1% AUC
-lift on High Spender) but show small consistent gains for regression (+0.003 R²
-on Future Spend, +0.005 R² on Spend Change). RP grouped importance (0.005) is
-55× smaller than baseline importance (0.276). Spending history already captures
-the predictive signal; CCEI and MPI are correlated with spending features and
-do not carry independent information for this dataset.
+**H&M.** 46,757 customers, 31.8M transactions (2018‑09 to 2020‑09). Budget‑based
+RP. Each customer’s purchases in a month define one choice occasion. Articles map
+to 20 coarse product groups (first two digits of article_id). Quantity per group
+is the article‑row count — each CSV row is one purchased unit. Price per group is
+the customer’s own average paid price that month. Unpurchased groups are imputed
+via period‑group median → group median → global median, because RP tests require
+a full price vector to compare what a customer could have afforded across
+observations. This per‑customer price construction preserves individual variation,
+unlike the shared oracle used for Dunnhumby and Open E‑Commerce. Prices are
+normalized 0–1 (Kaggle): relative variation is real, absolute dollar levels are
+not. Filters: ≥ 6 active months, ≥ 10 total observations. Sales channel ignored.
+Targets: High Spender (classification), Future Spend and Spend Change
+(regression). CatBoost defaults, 80/20 holdout, bootstrap CI.
 
 **Instacart.** 50,000 users, 134 aisles. Menu-based RP (no prices in raw data).
 Observation = user × order × aisle with exactly one reordered SKU. Menu =
-trailing-3 order products in the same aisle (familiarity set). Filters: menu
+trailing‑3 order products in the same aisle (familiarity set). Filters: menu
 size ≥ 2, (user, aisle) pairs with ≥ 3 valid events. Yields 4.5M events from
-120K users across 715K user-aisle pairs. Habit-heavy: 58.6% of repeated
-user-aisle pairs never switch; 83.8% of users have SARP violations.
+120K users across 715K user‑aisle pairs. Habit‑heavy: 58.6% of repeated
+user‑aisle pairs never switch; 83.8% of users have SARP violations.
 
 **REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP.
 Server-defined session IDs (gold standard). Menus contain only items the user
@@ -113,6 +94,23 @@ a session. No prices.
 Click-to-like windows with positional feedback tracking; median ~5 clicks
 between likes. Menus reflect algorithmic recommendations, not organic browsing.
 Items shown but not clicked are invisible. No prices.
+
+.. _eco-how-to-read:
+
+How to read the results
+-----------------------
+
+- **Baseline** = LightGBM/CatBoost on 13 RFM features.
+- **+RP** = Baseline plus 42 RP features (Engine + Extended).
+- **RP‑only** = RP features without the baseline.
+- **Lift%** = (Combined − Baseline) / Baseline × 100.
+- **AUC vs R²**: classification uses AUC‑ROC (AUC‑PR shown for some menu tasks);
+  regression reports R².
+- **Interpretation**: RP adds signal when +RP > Baseline and RP‑only ≈ Baseline.
+  When RP‑only < Baseline and +RP ≈ Baseline, the baseline already captures the
+  predictive structure.
+
+.. _eco-results:
 
 Results
 -------
@@ -218,6 +216,68 @@ added. RP-only = RP features without baseline. On Taobao, RP-only (0.925)
 outperforms the engagement baseline (0.913) — graph transitivity and choice
 entropy capture patterns that session counts miss.*
 
+.. _eco-rp-only:
+
+RP-only performance
+-------------------
+
+RP features alone (no baseline) show where preference structure carries
+independent signal.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 28 14 14
+
+   * - Dataset
+     - Target
+     - RP-only
+     - Baseline
+   * - Taobao
+     - High Engagement
+     - 0.925
+     - 0.913
+   * - Tenrec
+     - High Engagement
+     - 0.993
+     - 0.993
+   * - REES46
+     - High Engagement
+     - 0.990
+     - 0.996
+   * - Instacart
+     - High Novelty
+     - 0.762
+     - 0.765
+   * - H&M
+     - High Spender
+     - 0.720
+     - 0.784
+   * - Open E-Commerce
+     - Churn
+     - 0.769
+     - 0.846
+
+On Taobao, RP‑only outperforms the engagement baseline. Preference graph
+transitivity and choice entropy capture patterns that session counts and menu
+sizes miss.
+
+.. _eco-findings:
+
+Findings
+--------
+
+- **Menu datasets**: RP is competitive with, and sometimes exceeds, engagement
+  baselines (Taobao). Graph structure (transitivity, density) and choice entropy
+  carry real signal beyond session counts and menu sizes.
+- **Budget datasets**: RP adds ~0% marginal lift over strong RFM baselines.
+  CCEI/MPI correlate with spend history; little independent predictive value.
+- **Instacart**: Strong revealed structure (high SARP violations), yet +RP adds
+  near‑zero lift — behavior is reorder‑dominated within aisles.
+- **Feature importance**: Baseline spend features dominate globally; RP features
+  rise to the top on menu tasks (see below).
+
+.. _eco-top-features:
+
 Top Features
 ------------
 
@@ -307,8 +367,10 @@ Menu-dataset top features (Taobao + Tenrec):
      - **RP**
      - Ordinal utility spread (max - min recovered rank)
 
-Four of the top 8 menu features are RP-derived. Item graph
-structure and choice entropy carry signal that engagement statistics do not capture.
+Four of the top 8 menu features are RP-derived. Item graph structure and choice
+entropy carry signal that engagement statistics do not capture.
+
+.. _eco-reproduce:
 
 Reproduce
 ---------
@@ -321,6 +383,8 @@ Reproduce
 Datasets require ``kaggle`` CLI. See ``case_studies/benchmarks/`` for details.
 
 ----
+
+.. _eco-appendix:
 
 Appendix: Pipeline
 ------------------
@@ -348,4 +412,3 @@ Spend Change (regression), High Engagement (top tercile sessions).
 
 **Output**: ``case_studies/benchmarks/output/results.json`` (full metrics),
 ``summary_table.csv``, ``figures/``.
-
