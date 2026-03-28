@@ -5,38 +5,6 @@ Do LLMs have stable action rankings, or does the ranking change when
 different alternatives are shown? We build preference graphs from LLM
 decisions and check for cycles.
 
-**TL;DR.** GPT-4o-mini usually keeps a stable ranking of actions.
-Between 74 to 92 percent of vignettes pass SARP at temperature 0, and
-majority vote over 20 stochastic repetitions changes little, with
-agreement around 96 to 98 percent. Where inconsistency appears, it is
-systematic. It concentrates on adjacent severity pairs, shows compromise
-and anchoring patterns, and persists under stochastic aggregation. Job
-screening is the weakest case at 74 percent with many IIA violations.
-Alert triage is the strongest at 92 percent with very few violations.
-There is no single best prompt. Decision tree is perfect on procurement
-but performs poorly on jobs.
-
-.. code-block:: text
-
-   ┌────────────┐    ┌────────────┐    ┌────────────┐    ┌────────────┐
-   │ Vignettes  │───▶│ Query LLM  │───▶│ Build pref │───▶│ Test SARP  │
-   │ (10 per    │    │ (15 menus  │    │ graph per  │    │ + IIA per  │
-   │ scenario)  │    │ per vig.)  │    │ vignette   │    │ vignette   │
-   └────────────┘    └────────────┘    └────────────┘    └────────────┘
-
-Roadmap
--------
-
-This page is a guided tour rather than a wall of numbers. We begin with
-the :ref:`llm-setup`, then explain :ref:`llm-how-to-read` the figures and
-tables. The results come in three passes. :ref:`llm-det-results` shows the
-deterministic baseline. :ref:`llm-stoch-results` checks stability when we
-sample. :ref:`llm-rum` tests stochastic rationality directly. We then walk
-through :ref:`llm-patterns` that explain why flips happen, followed by
-actionable :ref:`llm-findings`. The final sections show how to
-:ref:`llm-reproduce` and include an :ref:`llm-appendix` with pipeline,
-metrics, and limitations.
-
 .. _llm-setup:
 
 Setup
@@ -613,10 +581,10 @@ at temperature 0.7. Only 8 to 12 percent of menus produce mixed responses
 across 20 repetitions. The inconsistency we see is structural rather than
 noise.
 
-.. _llm-reproduce:
+.. _llm-replication:
 
-Reproduce
----------
+Replication
+-----------
 
 .. code-block:: bash
 
