@@ -11,6 +11,10 @@
  - Slightly sped up all docs GIF animations (~1.25× faster) to feel snappier. No changes to CSS/JS text transitions; only GIF frame delays were reduced.
  - Further increased GIF speed for a total ~1.5× faster vs original (applied an additional 1.2× pass to existing GIF timings). Text transitions remain unchanged.
 
+### Added
+- Read the Docs config `.readthedocs.yaml` to ensure RTD builds consistently with pinned dependencies and without compiling the Rust extension.
+- GitHub Actions workflow `docs.yml` to build Sphinx docs on every push/PR to `main` (catches doc issues before RTD).
+
 ## [0.5.13] - 2026-03-28
 
 ### Added
