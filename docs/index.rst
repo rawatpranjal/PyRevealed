@@ -82,13 +82,7 @@ for cycles. Full results: :doc:`budget/app_llm_benchmark`.
 Key takeaways
 ~~~~~~~~~~~~~
 
-- Stable rankings: 74–92% SARP pass (deterministic). Majority vote at temp=0.7
-  changes little; 96–98% agreement with deterministic picks.
-- Structure, not noise: only 8–12% of menus are mixed across 20 reps.
-- Where inconsistency shows up: compromise effects in jobs; severity anchoring
-  in content; patterns persist under stochastic aggregation.
-- Prompt matters by domain: decision‑tree is perfect on procurement but weak on
-  jobs; conservative/CoT stabilize support/alert. No single best prompt.
+LLMs maintain stable action rankings: 74–92% SARP pass deterministically, and majority vote at temp=0.7 changes little (96–98% agreement). Only 8–12% of menus are mixed across 20 reps, pointing to structure rather than noise. When inconsistency appears, it clusters in compromise effects for jobs and severity anchoring for content, and these patterns persist under stochastic aggregation. Prompt choice is domain‑specific: decision‑tree is perfect on procurement but weak on jobs, while conservative/CoT stabilize support/alert — there is no single best prompt.
 
 Summary metrics
 ~~~~~~~~~~~~~~~
@@ -223,7 +217,8 @@ Selected Reading
 
 Recent applied work using revealed preference methods on real-world data:
 
-- "Revealed preference theory: An algorithmic outlook" (2019). *European Journal of Operational Research*.
+- **Deb, Kitamura, Quah & Stoye (2023)** — Revealed price preference: Theory and empirical analysis. *Review of Economic Studies*, 90(2), 707–743.
+- **Devine et al. (2025)** — Context effects in economic choice: A meta-analysis. *Working paper*.
 
 See :doc:`references` for the full bibliography.
 
