@@ -624,19 +624,22 @@ class Engine:
     ) -> list[MenuResult]:
         """Analyze discrete/menu choice data for multiple users.
 
-        Each user tuple: (menus, choices, n_items) where:
+        Each user tuple ``(menus, choices, n_items)`` where:
+
         - menus: list of menus, each a list of item indices shown
         - choices: list of chosen item index per menu
         - n_items: total number of distinct items for this user
 
         Returns list of MenuResult with SARP, WARP, HM scores.
 
-        Example (rec/search click data):
+        Example::
+
             users = [
                 ([[0,1,2,3], [1,2,4], [0,3,4]], [2, 1, 0], 5),  # user 0
                 ([[0,1], [1,2], [0,2]], [0, 1, 2], 3),            # user 1
             ]
             results = engine.analyze_menus(users)
+
         """
         self._validate_menu_input(users)
 

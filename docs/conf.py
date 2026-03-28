@@ -46,7 +46,6 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
-    "sphinx_autodoc_typehints",
     "sphinx_copybutton",
 ]
 
@@ -92,6 +91,7 @@ napoleon_google_docstring = True
 napoleon_numpy_docstring = True
 napoleon_include_init_with_doc = True
 napoleon_include_private_with_doc = False
+napoleon_use_ivar = True
 
 # Autodoc settings
 autodoc_default_options = {

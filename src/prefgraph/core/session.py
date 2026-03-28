@@ -247,6 +247,7 @@ class BehaviorLog:
         T x T matrix where S[i,j] = cost to take action j at costs i.
 
         This matrix is fundamental to behavioral consistency analysis:
+
         - If S[i,i] >= S[i,j], then action i is revealed preferred to action j
           at costs i (action j was affordable but not chosen).
         """

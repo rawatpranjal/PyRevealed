@@ -276,13 +276,6 @@ General Metric Preferences
 Analyze preferences with general distance metrics beyond Euclidean.
 Based on Chambers & Echenique (2016) Chapter 11.3-11.4.
 
-EmbeddingChoiceLog
-^^^^^^^^^^^^^^^^^^
-
-.. autoclass:: prefgraph.EmbeddingChoiceLog
-   :members:
-   :undoc-members:
-
 .. autofunction:: prefgraph.find_ideal_point_general
 
 .. autofunction:: prefgraph.determine_best_metric
