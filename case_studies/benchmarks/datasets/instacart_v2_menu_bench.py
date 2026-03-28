@@ -74,7 +74,7 @@ def print_eda(user_logs: dict[str, MenuChoiceLog]) -> None:
             switch_rates.append(switches / (log.num_observations - 1))
 
     print(f"\n  {'=' * 60}")
-    print(f"  {DATASET_NAME} — EDA Summary")
+    print(f"  {DATASET_NAME} - EDA Summary")
     print(f"  {'=' * 60}")
     print(f"  Users:              {n_users:,}")
     print(f"  Total sessions:     {total_sessions:,}")
@@ -172,7 +172,7 @@ def load_and_prepare(data_dir=None, max_users: int = 50_000):
 
     print(f"\n  Users after train/test split: {len(user_ids)}")
     if len(user_ids) < 30:
-        print("  Too few users — skipping")
+        print("  Too few users - skipping")
         return None, None, {}, user_ids
 
     # Feature extraction
@@ -219,7 +219,7 @@ def run_benchmark(data_dir=None, max_users: int = 50_000) -> list[BenchmarkResul
         print(f"\n  [{DATASET_NAME}] Target: {target_name} ({task_type})")
         pos_rate = float(np.mean(y))
         if pos_rate < 0.02 or pos_rate > 0.98:
-            print(f"    Skipping — too imbalanced (pos_rate={pos_rate:.3f})")
+            print(f"    Skipping - too imbalanced (pos_rate={pos_rate:.3f})")
             continue
 
         result = run_three_way(

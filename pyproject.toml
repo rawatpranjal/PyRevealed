@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "prefgraph"
 version = "0.5.13"
-description = "Revealed preference analysis at scale — rationality scores, efficiency indices, and utility recovery. Rust engine, Python interface."
+description = "Revealed preference analysis at scale - rationality scores, efficiency indices, and utility recovery. Rust engine, Python interface."
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"

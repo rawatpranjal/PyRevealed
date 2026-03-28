@@ -1216,7 +1216,7 @@ Economica, 5(17), 61–71.
 15(60), 243–253.
 (1950). “The Problem of Integrability in Utility Theory,” Economica, 17(68),
 355–385.
-(1963). “Problems of Methodology—Discussion,” American Economic
+(1963). “Problems of Methodology-Discussion,” American Economic
 Review, 53, 232–236.
 (1964). “Theory and Realism: A Reply,” American Economic Review, 54,
 736–739.
@@ -1288,7 +1288,7 @@ Stegm¨uller, W., W. Balzer, and W. Spohn (1982). Philosophy of Economics: Proce
 ings, Munich, July 1981. Berlin et al.: Springer-Verlag.
 Stengle, G. (1974). “A Nullstellensatz and a Positivstellensatz in Semialgebraic
 Geometry,” Mathematische Annalen, 207(2), 87–97.
-Stigum, B. P. (1973). “Revealed Preference—A Proof of Houthakker’s Theorem,”
+Stigum, B. P. (1973). “Revealed Preference-A Proof of Houthakker’s Theorem,”
 Econometrica, 41(3), 411–423.
 Stoer, J., and C. Witzgall (1970). Convexity and Optimization in Finite Dimensions.
 Berlin et al.: Springer-Verlag.

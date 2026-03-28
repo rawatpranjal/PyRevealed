@@ -1,4 +1,4 @@
-# Tenrec Decision: Salvage Attempt Failed — Proceed to Path B or Drop
+# Tenrec Decision: Salvage Attempt Failed - Proceed to Path B or Drop
 
 **Status:** Decision point reached. Salvage attempt 3 constructions. All failed acceptance threshold.
 
@@ -121,7 +121,7 @@ Only the K-window constructions produce enough non-degenerate sessions, but they
 
 ## Path Forward: Two Options
 
-### Option A: Move to Appendix (Path B — Exploratory)
+### Option A: Move to Appendix (Path B - Exploratory)
 
 **Claim:** Sequential exposure consistency, not static RP.
 
@@ -140,7 +140,7 @@ Only the K-window constructions produce enough non-degenerate sessions, but they
 
 **Effort:** Low. Reuse existing feature extractors, different target variable.
 
-### Option B: Drop Entirely (Path A — Conservative)
+### Option B: Drop Entirely (Path A - Conservative)
 
 **Rationale:**
 - Tenrec is fundamentally a recommender-system engagement log
@@ -158,7 +158,7 @@ Only the K-window constructions produce enough non-degenerate sessions, but they
 
 **Based on the salvage failure and structural analysis:**
 
-### Primary: **Option B — Drop Tenrec**
+### Primary: **Option B - Drop Tenrec**
 
 **Why:**
 1. All salvage constructions fail acceptance threshold
@@ -167,7 +167,7 @@ Only the K-window constructions produce enough non-degenerate sessions, but they
 4. You have strong benchmarks already (Instacart aisle-level single-reorder, H&M, Dunnhumby, REES46)
 5. Better to have 4 strong benchmarks than 5 mediocre ones
 
-### Secondary: **Option A — If you want a sequential-engagement claim**
+### Secondary: **Option A - If you want a sequential-engagement claim**
 
 Use this only if:
 - You are interested in proving RP features help in sequential contexts
@@ -179,14 +179,14 @@ Use this only if:
 ## Files Produced
 
 **Diagnostic reports:**
-- `tenrec_eda_facts.md` — All 6 diagnostics, raw numbers, code queries
-- `tenrec_eda_summary.md` — Diagnostic interpretation
-- `tenrec_salvage_facts.md` — Salvage experiment queries and numbers
-- `tenrec_salvage_report.md` — Salvage analysis and decision framework
+- `tenrec_eda_facts.md` - All 6 diagnostics, raw numbers, code queries
+- `tenrec_eda_summary.md` - Diagnostic interpretation
+- `tenrec_salvage_facts.md` - Salvage experiment queries and numbers
+- `tenrec_salvage_report.md` - Salvage analysis and decision framework
 
 **Code:**
-- `examples/eda/tenrec_eda.py` — Full 6-diagnostic runner
-- `examples/eda/tenrec_salvage.py` — Salvage experiment runner
+- `examples/eda/tenrec_eda.py` - Full 6-diagnostic runner
+- `examples/eda/tenrec_salvage.py` - Salvage experiment runner
 
 ---
 

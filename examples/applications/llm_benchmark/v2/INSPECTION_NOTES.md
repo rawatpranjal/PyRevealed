@@ -25,7 +25,7 @@ Pattern: in content moderation, adding a lenient option pushes toward strictness
 
 **Job v08 × conservative**: hold > phone_screen in pairwise. But in {auto_reject, hold, phone_screen}, phone_screen wins. Adding auto_reject (lowest) makes phone_screen look reasonable.
 
-Both directions: adding a higher option pushes choice down, adding a lower option pushes choice up. The LLM gravitates toward the "middle" of whatever menu is shown — a compromise effect.
+Both directions: adding a higher option pushes choice down, adding a lower option pushes choice up. The LLM gravitates toward the "middle" of whatever menu is shown - a compromise effect.
 
 ## SARP Pass Cases: What Clean Consistency Looks Like
 
@@ -35,7 +35,7 @@ Both directions: adding a higher option pushes choice down, adding a lower optio
 
 ## Parse Failures: A Signal, Not Noise
 
-**Content v01 × decision_tree**: 5/15 menus return PARSE_FAIL — all menus containing ONLY mild options {approve, content_warning, hide_from_feed}. The LLM refuses to pick any mild action for graphic animal cruelty. It outputs something like "remove_and_strike" even though that's not in the menu. This is a *policy constraint* overriding the menu constraint — the LLM has a floor on severity for extreme content.
+**Content v01 × decision_tree**: 5/15 menus return PARSE_FAIL - all menus containing ONLY mild options {approve, content_warning, hide_from_feed}. The LLM refuses to pick any mild action for graphic animal cruelty. It outputs something like "remove_and_strike" even though that's not in the menu. This is a *policy constraint* overriding the menu constraint - the LLM has a floor on severity for extreme content.
 
 ## Key Observations
 
@@ -43,6 +43,6 @@ Both directions: adding a higher option pushes choice down, adding a lower optio
 
 2. **The compromise effect is the dominant mechanism.** Adding an extreme option to a menu pushes the choice toward the moderate option. This is well-documented in human choice (Simonson 1989) and now confirmed in LLMs.
 
-3. **Parse failures on content review are informative.** The LLM's refusal to pick a mild action for severe content is itself a preference signal — it violates SARP but reveals a hard constraint in the model's policy.
+3. **Parse failures on content review are informative.** The LLM's refusal to pick a mild action for severe content is itself a preference signal - it violates SARP but reveals a hard constraint in the model's policy.
 
 4. **Alert triage SARP passes even on adversarial vignettes** because the severity ordering (auto_resolve < p3_ticket < page_oncall < incident_channel) is deeply embedded. Only execute_runbook creates ambiguity (it's not on the same severity axis).

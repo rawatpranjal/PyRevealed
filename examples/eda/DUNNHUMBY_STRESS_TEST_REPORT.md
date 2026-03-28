@@ -79,7 +79,7 @@ Within-household stability (CV = std/mean):
 
 **Interpretation:**
 - The 10 categories account for only ~19% of total grocery spend on average
-- Tracked share ranges widely (Q25=7%, Q75=32%)—there is no consistent fraction
+- Tracked share ranges widely (Q25=7%, Q75=32%)-there is no consistent fraction
 - Within households, the coefficient of variation is 0.85, meaning households' tracked spend varies by 85% around its mean
 - 18.2% of household-shopping trips have zero tracked spend (shopping in other categories only)
 
@@ -119,8 +119,8 @@ Milk                      $   0.45       22.6%        112
 ```
 
 **Interpretation:**
-- **Yogurt** has the highest relative price variation (IQR is 152% of median price)—stores charge very different prices
-- **Milk** has the lowest (IQR is 23% of median)—relatively uniform pricing across stores
+- **Yogurt** has the highest relative price variation (IQR is 152% of median price)-stores charge very different prices
+- **Milk** has the lowest (IQR is 23% of median)-relatively uniform pricing across stores
 - Soda is expensive but varies widely ($1.97 IQR across 113 stores)
 - **Absolute IQR values** are modest ($0.45–$2.04), but relative to unit prices they're substantial
 
@@ -201,7 +201,7 @@ Households with density > 0.5: 0 / 199 (0.0%)
 
 1. **Edge density is low (~0.017 median).**
    - Only ~1.7% of all household-week pairs have a direct RP edge (x_i is revealed preferred to x_j)
-   - This is expected—most weeks are not directly comparable
+   - This is expected-most weeks are not directly comparable
    - The 10-dimensional quantity space is sparse; budgets rarely permit cross-week comparisons
 
 2. **Budget crossing rate is very low (0.3%).**
@@ -210,10 +210,10 @@ Households with density > 0.5: 0 / 199 (0.0%)
    - Strong identification: weeks have distinct budget levels, not clustered around the same spending
 
 3. **No household has density > 0.5.**
-   - The plan suggested 0.5 as "healthy"—but this expectation was based on theory
+   - The plan suggested 0.5 as "healthy"-but this expectation was based on theory
    - In practice, 0.017–0.034 is actually **healthy for this data**:
      - Prices and quantities interact to create sparse affordability matrices
-     - Low density is NOT a sign of weak RP signal—it's a sign of **budget variety**
+     - Low density is NOT a sign of weak RP signal-it's a sign of **budget variety**
      - If density were 0.5, it would suggest redundant observations (many weeks afford each other)
 
 ### Decision
@@ -230,11 +230,11 @@ The low edge density (0.017) combined with very low budget crossing rate (0.3%) 
 - Likely redundant observations
 - Weak identification for utility recovery
 
-Instead, we observe **sparse but meaningful** RP structure—exactly what's needed for GARP testing.
+Instead, we observe **sparse but meaningful** RP structure-exactly what's needed for GARP testing.
 
 ---
 
-## Block 5: Dynamic Behavior — Stockpiling
+## Block 5: Dynamic Behavior - Stockpiling
 
 **Question:** Do households buy more storable goods during promotions and less after? If so, the IID-across-weeks assumption is violated.
 
@@ -315,9 +315,9 @@ PIZZA (26 promo weeks):
 | Assumption | Finding | Defensible? | Notes |
 |-----------|---------|-------------|-------|
 | **Active-week is the right observational unit** | Median HH active 38% of weeks, 15% have 6mo gaps | ✅ Yes | Zero-filling creates pathological structure. Active-week is correct. |
-| **10-category basket is a meaningful sub-basket** | Median 19% of total spend, CV=0.85 within HH | ⚠️ Conditional | Not a fixed budget envelope—incidental cross-section. Frame as conditional demand. |
+| **10-category basket is a meaningful sub-basket** | Median 19% of total spend, CV=0.85 within HH | ⚠️ Conditional | Not a fixed budget envelope-incidental cross-section. Frame as conditional demand. |
 | **Price oracle is accurate enough** | Median error $0, MAE=$0.98, P90=$2.40 | ✅ Yes | Unbiased at median. Cross-store IQR (23%-152%) is substantial but captured by median. |
-| **RP graph has real support** | Edge density 0.017, crossing rate 0.3% | ✅ Yes | Low density is healthy—indicates budget variety, not weak ID. |
+| **RP graph has real support** | Edge density 0.017, crossing rate 0.3% | ✅ Yes | Low density is healthy-indicates budget variety, not weak ID. |
 | **IID-across-weeks holds** | Stockpiling <2%, no strong post-promo dips | ✅ Yes | Minimal dynamic behavior. Reduced-form demand framing is appropriate. |
 
 ---
@@ -389,10 +389,10 @@ python3 examples/eda/dunnhumby_stress_eda.py
 
 ### Dependencies
 
-- `polars` — lazy data loading and transformation
-- `numpy` — budget matrix computations in Block 4
-- `scipy.stats` — correlation computation (commented-out in current version)
-- `pandas` — read cached filtered data, session matrix construction
+- `polars` - lazy data loading and transformation
+- `numpy` - budget matrix computations in Block 4
+- `scipy.stats` - correlation computation (commented-out in current version)
+- `pandas` - read cached filtered data, session matrix construction
 
 ---
 

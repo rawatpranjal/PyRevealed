@@ -1,7 +1,7 @@
 Preference Graphs
 ==================
 
-**PrefGraph** translates raw user choices into directed preference networks to detect inconsistencies and measure behavioral coherence at scale. Without assuming prior models or making parametric guesses, it tests whether choices follow a stable ranking—making it possible to score the rationality of millions of users or evaluate LLM decision-making instantly.
+**PrefGraph** translates raw user choices into directed preference networks to detect inconsistencies and measure behavioral coherence at scale. Without assuming prior models or making parametric guesses, it tests whether choices follow a stable ranking-making it possible to score the rationality of millions of users or evaluate LLM decision-making instantly.
 
 .. raw:: html
 
@@ -29,7 +29,7 @@ Why Preference Graphs?
 
 Most behavioral analysis assumes a utility model first and tries to fit parameters to it. Preference graphs work in the exact opposite direction: they start with raw choices, build the revealed preference graph, and ask, "Is it acyclic?" By testing whether observed actions follow a logically valid ranking, PrefGraph evaluates choice quality directly from the data, without making assumptions about underlying tastes or functional forms. 
 
-In a preference graph, a cycle (A > B > C > A) represents a logical contradiction where no coherent ranking can explain the choices. While inconsistency isn't inherently bad—it can simply reflect changing tastes, exploration, or random noise—we often need to know when decisions are inconsistent. Using fast algorithms like Tarjan's SCC, PrefGraph detects these cycles to quantify consistency.
+In a preference graph, a cycle (A > B > C > A) represents a logical contradiction where no coherent ranking can explain the choices. While inconsistency isn't inherently bad-it can simply reflect changing tastes, exploration, or random noise-we often need to know when decisions are inconsistent. Using fast algorithms like Tarjan's SCC, PrefGraph detects these cycles to quantify consistency.
 
 .. raw:: html
 
@@ -40,11 +40,11 @@ In a preference graph, a cycle (A > B > C > A) represents a logical contradictio
    <div style="display: flex; gap: 20px; justify-content: space-between; flex-wrap: wrap;">
      <div style="width: 48%;">
        <img src="_static/budget_hero.gif" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Budget Choices">
-       <p class="gif-caption"><strong>Budget choices.</strong> A shopper buys goods at given prices. Budget lines show what was affordable. When chosen bundles sit inside each other's budget lines, that's a contradiction — CCEI measures how much you'd need to shrink budgets to fix it.</p>
+       <p class="gif-caption"><strong>Budget choices.</strong> A shopper buys goods at given prices. Budget lines show what was affordable. When chosen bundles sit inside each other's budget lines, that's a contradiction - CCEI measures how much you'd need to shrink budgets to fix it.</p>
      </div>
      <div style="width: 48%;">
        <img src="_static/menu_hero.gif" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Menu Choices">
-       <p class="gif-caption"><strong>Menu choices.</strong> A user picks one option from a set. Picking Laptop over Tablet in one menu, then Tablet over Laptop in another, is a contradiction — HM counts how many choices to throw out to fix it. Houtman &amp; Maks (1985).</p>
+       <p class="gif-caption"><strong>Menu choices.</strong> A user picks one option from a set. Picking Laptop over Tablet in one menu, then Tablet over Laptop in another, is a contradiction - HM counts how many choices to throw out to fix it. Houtman &amp; Maks (1985).</p>
      </div>
    </div>
 
@@ -158,7 +158,7 @@ Full results: :doc:`benchmarks_ecommerce`.
      - 0.950
      - 0.951
      - +0.0%
-     - —
+     - -
    * - Amazon
      - 4,694
      - Churn
@@ -179,14 +179,14 @@ Full results: :doc:`benchmarks_ecommerce`.
      - 0.337
      - 0.340
      - +0.003
-     - —
+     - -
    * - H&M
      - 46,757
      - Spend Change (R²)
      - 0.290
      - 0.295
      - +0.005
-     - —
+     - -
    * - REES46
      - 8,832
      - High Engagement
@@ -200,35 +200,35 @@ Full results: :doc:`benchmarks_ecommerce`.
      - 0.940
      - 0.938
      - -0.2%
-     - —
+     - -
    * - Taobao Buy Window
      - 29,519
      - High Entropy (AP)
      - 0.789
      - **0.790**
      - **+0.1%**
-     - —
+     - -
    * - Taobao Buy Window
      - 29,519
      - High Active Time (AUC)
      - 0.777
      - 0.778
      - +0.1%
-     - —
+     - -
    * - Taobao Buy Window
      - 29,519
      - High Click Volume (AUC)
      - 0.818
      - 0.818
      - +0.0%
-     - —
+     - -
    * - Taobao Buy Window
      - 29,519
      - Fast Conversion (AUC)
      - 0.561
      - 0.561
      - +0.0%
-     - —
+     - -
 
 Overall, incorporating preference graph features provides a modest but consistent lift over strong baseline models (such as traditional RFM features).
 

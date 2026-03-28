@@ -41,7 +41,7 @@ def compute_mpi(
     Args:
         session: ConsumerSession with prices and quantities
         tolerance: Numerical tolerance for GARP detection
-        method: "cycles" (default, fast — uses GARP violation cycles) or
+        method: "cycles" (default, fast - uses GARP violation cycles) or
                 "karp" (also runs Karp's O(T^3) max-mean-weight-cycle algorithm
                 for a theoretically tighter bound, but 2-5x slower)
 
@@ -61,7 +61,7 @@ def compute_mpi(
     start_time = time.perf_counter()
 
     # --------------------------------------------------------------------------
-    # MPI via Rust backend — Karp's max-mean-weight cycle algorithm.
+    # MPI via Rust backend - Karp's max-mean-weight cycle algorithm.
     #
     # Echenique, Lee & Shum (2011) "The Money Pump as a Measure of Revealed
     # Preference Violations", JPE 119(6), 1201-1223.
@@ -500,8 +500,8 @@ def _houtman_maks_greedy(
 
     Key fix (2026-03-28): SCC decomposition must use R_star (transitive
     closure), not R (direct relation). Purely transitive GARP violations
-    — where the violation path i ->* j goes through intermediates with no
-    direct back-edge — produce all-singleton SCCs in R. The greedy loop
+    - where the violation path i ->* j goes through intermediates with no
+    direct back-edge - produce all-singleton SCCs in R. The greedy loop
     then skips all components, returning removed=[] even when violations
     exist. Using R_star ensures all observations participating in any
     cycle (direct or transitive) are grouped into the same SCC.
@@ -521,7 +521,7 @@ def _houtman_maks_greedy(
     np.fill_diagonal(P, False)
 
     # R_star = transitive closure of R via Floyd-Warshall.
-    # GARP violation: R_star[i,j] AND P[j,i] — i.e., i transitively
+    # GARP violation: R_star[i,j] AND P[j,i] - i.e., i transitively
     # revealed-prefers j, yet j strictly prefers its own bundle over i's.
     R_star = floyd_warshall_transitive_closure(R)
     violation_matrix = R_star & P.T
@@ -532,8 +532,8 @@ def _houtman_maks_greedy(
     # SCC decomposition on R_star (transitive closure), NOT R (direct).
     # In R_star, i and j are in the same SCC iff R_star[i,j] AND R_star[j,i],
     # meaning they are mutually reachable through chains of revealed preference.
-    # This guarantees all observations involved in ANY violation cycle — even
-    # purely transitive ones — are grouped together for FVS removal.
+    # This guarantees all observations involved in ANY violation cycle - even
+    # purely transitive ones - are grouped together for FVS removal.
     n_comp, labels = find_sccs(R_star)
     scc_sizes = np.bincount(labels, minlength=n_comp)
 

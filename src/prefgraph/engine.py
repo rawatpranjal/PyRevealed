@@ -35,7 +35,7 @@ class EngineResult:
     Unrequested numeric metrics retain mathematically correct defaults
     (``ccei=1.0``, ``mpi=0.0``). Unrequested boolean/count metrics
     default to ``None`` (not ``False``/``0``) so they render as NaN
-    in DataFrames — unambiguously "not computed" rather than "failed".
+    in DataFrames - unambiguously "not computed" rather than "failed".
 
     Attributes:
         is_garp: True if choices satisfy GARP (no revealed-preference cycles).
@@ -57,7 +57,7 @@ class EngineResult:
         compute_time_us: Wall-clock computation time in microseconds.
     """
 
-    # is_garp is always computed — it gates every other metric.
+    # is_garp is always computed - it gates every other metric.
     is_garp: bool
     n_violations: int = 0
     # ccei=1.0 and mpi=0.0 are mathematically correct defaults:
@@ -525,7 +525,7 @@ class Engine:
         for prices, quantities in chunk:
             log = BehaviorLog(cost_vectors=prices, action_vectors=quantities)
 
-            # GARP: always computed — it's the foundation for all other metrics.
+            # GARP: always computed - it's the foundation for all other metrics.
             # Varian (1982): SCC decomposition + Floyd-Warshall transitive closure.
             garp = check_garp(log, self.tolerance)
             ccei_val = 1.0
@@ -537,14 +537,14 @@ class Engine:
             utility_success = None
 
             # CCEI (Afriat Efficiency Index): only computed when GARP fails.
-            # Consistent data has CCEI=1.0 by definition — no search needed.
+            # Consistent data has CCEI=1.0 by definition - no search needed.
             # Afriat (1967): binary search over e ∈ (0,1] for max e where e-GARP holds.
             if flags.get("ccei") and not garp.is_consistent:
                 aei = compute_aei(log, method="discrete")
                 ccei_val = aei.efficiency_index
 
             # MPI (Money Pump Index): only computed when GARP fails.
-            # Consistent data has MPI=0.0 — unexploitable.
+            # Consistent data has MPI=0.0 - unexploitable.
             # Echenique, Lee & Shum (2011): Karp's O(T^3) max-mean-weight cycle.
             if flags.get("mpi") and not garp.is_consistent:
                 mpi_result = compute_mpi(log)
@@ -560,12 +560,12 @@ class Engine:
 
             # HARP: binary test for homothetic preferences.
             # Varian (1983), C&E (2016) Theorem 4.2: (>=^H, >^H) is acyclic.
-            # No severity metric exists in the literature — only pass/fail.
+            # No severity metric exists in the literature - only pass/fail.
             if flags.get("harp"):
                 harp_result = check_harp(log, self.tolerance)
                 is_harp = harp_result.is_consistent
 
-            # Utility recovery: Afriat LP — find U_t, lambda_t satisfying
+            # Utility recovery: Afriat LP - find U_t, lambda_t satisfying
             # Afriat's inequalities. Success = data is rationalizable.
             if flags.get("utility"):
                 try:
@@ -574,7 +574,7 @@ class Engine:
                 except Exception:
                     utility_success = False
 
-            # VEI: per-observation efficiency — Varian (1990) "Goodness-of-fit
+            # VEI: per-observation efficiency - Varian (1990) "Goodness-of-fit
             # in optimizing models", J. Econometrics 46(1-2), 125-140.
             # papers/EcheniqueLeeShum2011_MoneyPump.pdf p.7 footnote 3:
             #   "Varian modifies AEI by allowing e to vary across the different

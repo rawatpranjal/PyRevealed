@@ -4,14 +4,14 @@ Covers budget vs menu behavior with exact expected values for:
 - CCEI (Afriat 1967; Varian 1982)
 - MPI (Echenique, Lee & Shum 2011)
 - HM (Houtman & Maks 1985; Smeulders et al. 2014)
-- VEI (Varian 1990) — skipped if SciPy is unavailable
+- VEI (Varian 1990) - skipped if SciPy is unavailable
 
 References (see repo papers/ and references/):
-- Afriat (1967) IER — Utility construction, CCEI foundations
-- Varian (1982) Econometrica — GARP
-- Varian (1990) J. Econometrics — VEI
-- Echenique, Lee & Shum (2011) JPE — Money Pump Index
-- Smeulders et al. (2014) ACM TEC — HM NP-hardness, measures
+- Afriat (1967) IER - Utility construction, CCEI foundations
+- Varian (1982) Econometrica - GARP
+- Varian (1990) J. Econometrics - VEI
+- Echenique, Lee & Shum (2011) JPE - Money Pump Index
+- Smeulders et al. (2014) ACM TEC - HM NP-hardness, measures
 """
 
 from __future__ import annotations
@@ -143,7 +143,7 @@ def test_budget_transitive_violation_vei():
 
 
 # =============================================================================
-# Budget: two disjoint 2-cycles — HM requires two removals; MPI takes max
+# Budget: two disjoint 2-cycles - HM requires two removals; MPI takes max
 # =============================================================================
 
 

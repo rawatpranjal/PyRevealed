@@ -3,7 +3,7 @@
 Cases:
 - T=2000 exactly GARP-consistent via Cobb-Douglas demands (closed-form)
 - T=2000 with an isolated 2-cycle injected (tight CCEI=0.1, MPI~0.9, HM=T-1)
-- T=1000 VEI check (SciPy optional) — mean < 1, min near 0.1
+- T=1000 VEI check (SciPy optional) - mean < 1, min near 0.1
 
 Notes:
 - Marked slow to avoid default runs; aligns with existing benchmarks style.

@@ -118,3 +118,8 @@ _build/
 **/target/
 *.dylib
 _build/
+
+# Secrets/Local deploy scripts
+deploy.sh
+deploy2.sh
+

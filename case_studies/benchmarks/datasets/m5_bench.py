@@ -109,7 +109,7 @@ def run_benchmark(data_dir=None, max_users=None) -> list[BenchmarkResult]:
         if task_type == "classification":
             pos_rate = np.mean(y)
             if pos_rate < 0.02 or pos_rate > 0.98:
-                print(f"    Skipping — too imbalanced (pos_rate={pos_rate:.3f})")
+                print(f"    Skipping - too imbalanced (pos_rate={pos_rate:.3f})")
                 continue
 
         result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type)

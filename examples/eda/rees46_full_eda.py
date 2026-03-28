@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-REES46 Full EDA — Polars-native, full 8,832-user analysis.
+REES46 Full EDA - Polars-native, full 8,832-user analysis.
 
 Raw data: 2019-Oct.csv (5.3 GB) + 2019-Nov.csv (8.4 GB).
 Choice model: server_session → single-purchase sessions only.
@@ -62,7 +62,7 @@ def phase0_raw_stats(csv_files: list[Path]) -> None:
         t0 = time.time()
         print(f"\nFile: {f.name}  ({f.stat().st_size / 1e9:.1f} GB)")
 
-        # Event-type distribution — collect only event_type column
+        # Event-type distribution - collect only event_type column
         event_dist = (
             pl.scan_csv(f, infer_schema_length=10_000)
             .select("event_type")
@@ -79,7 +79,7 @@ def phase0_raw_stats(csv_files: list[Path]) -> None:
             pct = 100 * row["n"] / n_rows
             print(f"    {row['event_type']:<12}  {row['n']:>10,}  ({pct:>5.1f}%)")
 
-        # Unique users and sessions — collect two columns
+        # Unique users and sessions - collect two columns
         t1 = time.time()
         cardinality = (
             pl.scan_csv(f, infer_schema_length=10_000)
@@ -122,7 +122,7 @@ def phase1_build_sessions(csv_files: list[Path]) -> pl.DataFrame:
     t0 = time.time()
     print("\nReading and concatenating both CSV files (lazy)...")
 
-    # Lazy scan — Polars reads all needed columns in one pass
+    # Lazy scan - Polars reads all needed columns in one pass
     frames = [
         pl.scan_csv(
             f,
@@ -137,7 +137,7 @@ def phase1_build_sessions(csv_files: list[Path]) -> pl.DataFrame:
     ]
     events_lazy = pl.concat(frames)
 
-    # Filter to view + purchase before any groupby — cuts data ~50%
+    # Filter to view + purchase before any groupby - cuts data ~50%
     events_lazy = events_lazy.filter(
         pl.col("event_type").cast(pl.Utf8).is_in(["view", "purchase"])
     )
@@ -174,7 +174,7 @@ def phase1_build_sessions(csv_files: list[Path]) -> pl.DataFrame:
     )
     print(f"  Sessions with ≥1 view:             {len(views_per_session):>10,}")
 
-    # Free raw events — no longer needed
+    # Free raw events - no longer needed
     del events, purchases, views
 
     # ── Join sessions + views ─────────────────────────────────────────────────
@@ -204,7 +204,7 @@ def phase1_build_sessions(csv_files: list[Path]) -> pl.DataFrame:
         pl.col("menu").list.len().alias("menu_size")
     )
 
-    # Drop viewed_items and n_purchases — no longer needed
+    # Drop viewed_items and n_purchases - no longer needed
     sessions = sessions.drop(["viewed_items", "n_purchases"])
 
     # ── Menu size filter ───────────────────────────────────────────────────────

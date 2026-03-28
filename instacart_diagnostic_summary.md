@@ -57,7 +57,7 @@ The Instacart dataset, when reconstructed at **aisle granularity with single-reo
 ```
 
 **Interpretation**:
-- **76% of events are NOT meaningful choices** — they either have no menu or only one known alternative
+- **76% of events are NOT meaningful choices** - they either have no menu or only one known alternative
 - These are repeat purchases with empty/trivial menus, not discrete selections
 - The "choice" is binary (buy/don't buy), not among substitutes
 - Menu inflation: formally non-empty but behaviorally trivial
@@ -108,7 +108,7 @@ The Instacart dataset, when reconstructed at **aisle granularity with single-reo
 - Median switching rate: **0%** (many pairs never switch)
 
 **Interpretation**:
-- **58.6% of repeating user-aisles are pure habit** — user buys same SKU every time
+- **58.6% of repeating user-aisles are pure habit** - user buys same SKU every time
 - No preference variation = no choice signal
 - Only 41.4% show *any* substitution behavior
 - Even within switching pairs, changes are infrequent (median 0%)

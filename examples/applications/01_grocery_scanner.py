@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Application: Grocery Scanner Panel Data — Rationality Scoring at Scale.
+"""Application: Grocery Scanner Panel Data - Rationality Scoring at Scale.
 
 Replicates the revealed preference analysis from:
   Dean & Martin (2016) "Measuring Rationality with the Minimum Cost of
@@ -325,7 +325,7 @@ def print_temporal_results(temporal: list[TemporalResult]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Grocery Scanner Panel — Dunnhumby Household Rationality"
+        description="Grocery Scanner Panel - Dunnhumby Household Rationality"
     )
     parser.add_argument("--households", type=int, default=None,
                         help="Max households (default: all ~2,222)")

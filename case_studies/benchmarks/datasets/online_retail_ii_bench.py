@@ -3,7 +3,7 @@
 Extended UCI dataset (2009-2011), ~5,900 customers, real prices.
 Out-of-time cutoff: 2011-06-01 (last 6 months as test period).
 
-NOTE: This dataset has REAL transaction prices — no price assumptions needed.
+NOTE: This dataset has REAL transaction prices - no price assumptions needed.
 """
 
 from __future__ import annotations
@@ -101,7 +101,7 @@ def run_benchmark(data_dir=None, n_customers=None) -> list[BenchmarkResult]:
         if task_type == "classification":
             pos_rate = np.mean(y)
             if pos_rate < 0.02 or pos_rate > 0.98:
-                print(f"    Skipping — too imbalanced (pos_rate={pos_rate:.3f})")
+                print(f"    Skipping - too imbalanced (pos_rate={pos_rate:.3f})")
                 continue
         result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type)
         results.append(result)

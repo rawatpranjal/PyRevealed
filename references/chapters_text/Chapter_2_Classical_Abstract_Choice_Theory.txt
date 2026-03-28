@@ -802,7 +802,7 @@ C(2) ∩C(2,⪰∗)
 
 ∪{x′,y′}.
 So, suppose that b ∈C(1) ∩C(1,⪰∗). By (2.2), we conclude that b =
-y′—otherwise, (2.2) tells us that y′ ≻∗b (recall ⪰∗is a partial order), so that
+y′-otherwise, (2.2) tells us that y′ ≻∗b (recall ⪰∗is a partial order), so that
 b ̸∈C(∗) ∩C(∗,⪰∗). Analogously, by (2.3), if b ∈C(2) ∩C(2,⪰∗), we
 conclude that b = x′.
 This establishes that b ∈{x′,y′}. So, suppose without loss of generality that

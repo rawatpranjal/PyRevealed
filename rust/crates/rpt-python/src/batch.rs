@@ -260,7 +260,7 @@ fn process_users_parallel(
 
                 // HARP: binary test for homothetic preferences.
                 // Varian (1983), C&E (2016) Thm 4.2: pass/fail only.
-                // harp_severity is always 1.0 — no severity metric in the literature.
+                // harp_severity is always 1.0 - no severity metric in the literature.
                 let (is_harp, harp_severity) = if flags.harp {
                     let harp = harp_check(graph, tolerance);
                     (harp.is_consistent, harp.max_cycle_product)
@@ -304,7 +304,7 @@ fn process_users_parallel(
                     (1.0, 1.0, 0.0, 1.0, 1.0)
                 };
 
-                // Graph network features — compute before CCEI which may modify state
+                // Graph network features - compute before CCEI which may modify state
                 let (r_density, r_out_degree_std, degree_gini, ew_mean, ew_std, ew_skew) =
                     if flags.network { compute_graph_stats(graph) } else { (0.0, 0.0, 0.0, 0.0, 0.0, 0.0) };
 
@@ -403,7 +403,7 @@ fn results_to_pydicts<'py>(py: Python<'py>, results: Vec<UserOut>) -> Vec<Bound<
 
 /// Analyze a batch of users in parallel using Rayon.
 ///
-/// Uses PreferenceGraph with lazy computation — expenditure matrix built once,
+/// Uses PreferenceGraph with lazy computation - expenditure matrix built once,
 /// R/P/closure reused across metrics. MPI uses Karp's max-mean-weight cycle
 /// (theory-correct). CCEI runs last since it may modify graph state.
 #[pyfunction]
@@ -448,7 +448,7 @@ pub fn analyze_batch<'py>(
 /// Each user has: menus (list of lists of item indices) + choices (list of chosen item).
 /// Computes SARP, WARP, Houtman-Maks, and optionally WARP-LA per user.
 ///
-/// This is the "rec/search click" path — no prices, just menus and picks.
+/// This is the "rec/search click" path - no prices, just menus and picks.
 #[pyfunction]
 #[pyo3(signature = (menus_list, choices_list, n_items_list, compute_warp_la=false, compute_network=false))]
 pub fn analyze_menu_batch<'py>(
@@ -608,7 +608,7 @@ pub fn build_preference_graph<'py>(
     Ok(dict)
 }
 
-/// Analyze a Parquet file directly in Rust — no Python data prep overhead.
+/// Analyze a Parquet file directly in Rust - no Python data prep overhead.
 ///
 /// Reads Parquet row groups, groups by user_col, extracts cost/action columns,
 /// and feeds users to the Rayon-parallel analysis pipeline. Results returned

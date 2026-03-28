@@ -11,7 +11,7 @@ pub struct SeparabilityResult {
 /// Test weak separability between two groups of goods.
 ///
 /// Group A and Group B are separable if utility can be written as
-/// U(x_A, x_B) = W(V_A(x_A), V_B(x_B)) — i.e., the sub-utility of
+/// U(x_A, x_B) = W(V_A(x_A), V_B(x_B)) - i.e., the sub-utility of
 /// group A doesn't depend on group B's quantities, and vice versa.
 ///
 /// Test: run Afriat LP independently on each group's sub-data.

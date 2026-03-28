@@ -1,7 +1,7 @@
 Examples
 ========
 
-PrefGraph has been validated on real-world data from the **Dunnhumby "The Complete Journey"** dataset—2 years of grocery transactions from 2,222 households.
+PrefGraph has been validated on real-world data from the **Dunnhumby "The Complete Journey"** dataset-2 years of grocery transactions from 2,222 households.
 
 .. note::
 
@@ -83,6 +83,6 @@ Running the Analysis
 See Also
 --------
 
-- :doc:`/budget/tutorial` — Full teaching tutorial with step-by-step code
-- :doc:`/quickstart` — Getting started with your own data
-- :doc:`/api` — Complete API reference
+- :doc:`/budget/tutorial` - Full teaching tutorial with step-by-step code
+- :doc:`/quickstart` - Getting started with your own data
+- :doc:`/api` - Complete API reference

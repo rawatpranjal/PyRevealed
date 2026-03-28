@@ -1,7 +1,7 @@
 Axiomatic Consistency Tests
 ==========================
 
-Every choice adds edges to a directed **observation graph** (nodes = shopping trips, edges = revealed preferences). The axioms below define what "acyclic" means for this graph — GARP (allowing indifference), SARP (strict), and WARP (pairwise only).
+Every choice adds edges to a directed **observation graph** (nodes = shopping trips, edges = revealed preferences). The axioms below define what "acyclic" means for this graph - GARP (allowing indifference), SARP (strict), and WARP (pairwise only).
 
 GARP (Generalized Axiom of Revealed Preference)
 -----------------------------------------------
@@ -9,7 +9,7 @@ GARP (Generalized Axiom of Revealed Preference)
 .. image:: ../_static/garp_violation.gif
    :width: 55%
    :align: center
-   :alt: GARP violation detection — building preference graph then tracing violation cycle
+   :alt: GARP violation detection - building preference graph then tracing violation cycle
 
 **Reference Implementation:** ``validate_consistency(log)``
 

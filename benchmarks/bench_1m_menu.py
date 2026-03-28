@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""1M user Menu Choice benchmark — rec/search click data at scale."""
+"""1M user Menu Choice benchmark - rec/search click data at scale."""
 
 import os
 import sys

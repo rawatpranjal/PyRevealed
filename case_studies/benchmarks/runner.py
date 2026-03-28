@@ -153,7 +153,7 @@ def main():
         save_results(all_results, output_dir)
         generate_plots(all_results, output_dir)
     else:
-        print("\nNo results — check that at least one dataset is available.")
+        print("\nNo results - check that at least one dataset is available.")
 
 
 if __name__ == "__main__":

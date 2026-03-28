@@ -355,7 +355,7 @@ def compute_menu_efficiency(log: MenuChoiceLog) -> HoutmanMaksAbstractResult:
             computation_time_ms=computation_time,
         )
 
-    # Find SCCs of R — cycles only exist within SCCs
+    # Find SCCs of R - cycles only exist within SCCs
     n_comp, labels = find_sccs(R)
     scc_sizes = np.bincount(labels, minlength=n_comp)
 

@@ -30,7 +30,7 @@ Part 1: Homothetic Preferences (HARP)
 
 **HARP (Homothetic Axiom of Revealed Preference)** tests whether demand scales
 proportionally with income. Homothetic preferences mean the consumer buys the
-same *proportions* of goods regardless of budget level—only the scale changes.
+same *proportions* of goods regardless of budget level-only the scale changes.
 
 .. code-block:: python
 
@@ -206,6 +206,6 @@ Where:
 See Also
 --------
 
-- :doc:`tutorial` — Basic budget analysis
-- :doc:`tutorial_demand_analysis` — Slutsky and integrability
-- :doc:`tutorial_welfare` — CV/EV and deadweight loss
+- :doc:`tutorial` - Basic budget analysis
+- :doc:`tutorial_demand_analysis` - Slutsky and integrability
+- :doc:`tutorial_welfare` - CV/EV and deadweight loss

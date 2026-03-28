@@ -477,7 +477,7 @@ The Tenrec dataset fails the fundamental requirement of a menu-choice problem on
 | **H&M** | Budget | MODERATE | Normalized prices; coarse product groups; shared oracle |
 | **Instacart Menu** | Menu | WEAK | Bulk reorder; "first in cart" is noise, not preference |
 | **Open E-Commerce** | Budget | WEAK | Shared price oracle indefensible for Amazon |
-| **Tenrec** | Menu | Appendix Only | Sequential feed (algorithmic exposure) — not a simultaneous menu; moved to appendix, not part of main benchmark |
+| **Tenrec** | Menu | Appendix Only | Sequential feed (algorithmic exposure) - not a simultaneous menu; moved to appendix, not part of main benchmark |
 
 ### What Should Change
 

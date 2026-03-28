@@ -119,14 +119,14 @@ Results
      - 0.337
      - 0.340
      - +0.003
-     - —
+     - -
    * - H&M
      - 46,757
      - Spend Change (R²)
      - 0.290
      - 0.295
      - +0.005
-     - —
+     - -
    * - REES46
      - 8,832
      - High Engagement
@@ -140,35 +140,35 @@ Results
      - 0.940
      - 0.938
      - -0.2%
-     - —
+     - -
    * - Taobao Buy Window
      - 29,519
      - High Entropy (AP)
      - 0.789
      - **0.790**
      - **+0.1%**
-     - —
+     - -
    * - Taobao Buy Window
      - 29,519
      - High Active Time (AUC)
      - 0.777
      - 0.778
      - +0.1%
-     - —
+     - -
    * - Taobao Buy Window
      - 29,519
      - High Click Volume (AUC)
      - 0.818
      - 0.818
      - +0.0%
-     - —
+     - -
    * - Taobao Buy Window
      - 29,519
      - Fast Conversion (AUC)
      - 0.561
      - 0.561
      - +0.0%
-     - —
+     - -
 
 *Baseline = CatBoost on 13 RFM features. +RP = same model with 42 RP features
 added. RP-only = RP features without baseline. On Taobao (buy‑anchored, 6h),
@@ -181,11 +181,11 @@ targets remain baseline‑dominated.*
 Appendix: Datasets & Assumptions
 --------------------------------
 
-**Dunnhumby.** 2,222 households, 104 weeks, 10 staple commodity groups. Budget-based RP. Each observation is one active household-week — weeks with zero purchases in tracked categories are excluded, since they represent spending outside the sub-basket, not zero demand. Quantities are total units per commodity per week. Prices are a global median oracle per commodity per week (Dean & Martin 2016), shared across all households — individual price exposure (coupons, store variation) is not captured. RP outputs should be interpreted as reduced-form consistency descriptors of conditional sub-basket allocation, not structural preference parameters.
+**Dunnhumby.** 2,222 households, 104 weeks, 10 staple commodity groups. Budget-based RP. Each observation is one active household-week - weeks with zero purchases in tracked categories are excluded, since they represent spending outside the sub-basket, not zero demand. Quantities are total units per commodity per week. Prices are a global median oracle per commodity per week (Dean & Martin 2016), shared across all households - individual price exposure (coupons, store variation) is not captured. RP outputs should be interpreted as reduced-form consistency descriptors of conditional sub-basket allocation, not structural preference parameters.
 
 **Amazon (Open E‑Commerce).** 4,668 users, category-level quantities. Budget-based RP. Median price per category per month, forward-filled for missing periods, shared across users. Within-category product switching is invisible. RP features underperform the RFM baseline on regression tasks (LTV, Spend Change) but show lift on Spend Drop, suggesting category allocation shifts can precede volume declines.
 
-**REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP. Server-defined session IDs (gold standard). Menus include only items the user clicked; unviewed items are invisible. Median menu size ≈ 5 items. No prices — choices reveal preference orderings only.
+**REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP. Server-defined session IDs (gold standard). Menus include only items the user clicked; unviewed items are invisible. Median menu size ≈ 5 items. No prices - choices reveal preference orderings only.
 
 **Taobao Buy Window.** ~29.5k users built from UserBehavior.csv (user_id, item_id, category_id, behavior_type, timestamp). Keep only view and buy events. For each buy at time t, define a trailing 6‑hour window [t−6h, t); the menu is the set of unique items viewed in that window (pre‑buy only), and the choice is the bought item. Require that the bought item was viewed; keep menus of size 2–50. Aggregate each user’s buy‑anchored observations into a single MenuChoiceLog with per‑user item remapping; require ≥5 valid observations. This windowed approach preserves availability right before purchase, enforces “buy was viewed,” and yields enough per‑user observations for RP features. Train/test uses a per‑user temporal split (70/30) with separate remappings to avoid leakage; user holdout is 80/20 with thresholds computed on train users only.
 
@@ -340,7 +340,7 @@ Latest ML benchmark (Amazon, ~5k users)
 **H&M.** 46,757 customers, 31.8M transactions (2018‑09 to 2020‑09). Budget‑based
 RP. Each customer’s purchases in a month define one choice occasion. Articles map
 to 20 coarse product groups (first two digits of article_id). Quantity per group
-is the article‑row count — each CSV row is one purchased unit. Price per group is
+is the article‑row count - each CSV row is one purchased unit. Price per group is
 the customer’s own average paid price that month. Unpurchased groups are imputed
 via period‑group median → group median → global median, because RP tests require
 a full price vector to compare what a customer could have afforded across
@@ -352,7 +352,7 @@ not. Filters: ≥ 6 active months, ≥ 10 total observations. Sales channel igno
 
 **REES46.** 8,832 users, click-to-purchase sessions. Menu-based RP.
 Server-defined session IDs (gold standard). Menus contain only items the user
-clicked; unviewed items are invisible. Median menu size ~5 items. No prices —
+clicked; unviewed items are invisible. Median menu size ~5 items. No prices -
 choices reveal preference orderings only.
 
 **Taobao.** 100M raw events (pv, buy). Buy‑anchored menu reconstruction:
@@ -360,14 +360,14 @@ for each buy at time ``t``, define a trailing window ``[t−6h, t)``;
 menu = unique items viewed (pv) in that window; choice = the bought item.
 Require the bought item was viewed; keep menus of size 2–50 only. Build per‑user
 logs from all such observations; retain users with ≥5 observations. Item IDs are
-remapped to a compact per‑user space. No prices — analysis is ordinal.
+remapped to a compact per‑user space. No prices - analysis is ordinal.
 
 Assumptions: views approximate the considered set (impression bias: unseen
 alternatives are unobserved); 6‑hour window is a pragmatic simultaneity proxy
 (shorter/longer windows yield similar patterns); post‑purchase views are excluded;
 exposure is observational (not randomized).
 
-**Taobao (Session‑based).** 4,239 users, ~100M raw events. Menu‑based RP with sessions defined by 30‑minute inactivity gaps (84% of inter‑event gaps < 30 minutes). For each session, build a menu from the items the user viewed or purchased within that session; median menu size ≈ 4 items. No prices — choices reveal within‑session preference orderings only.
+**Taobao (Session‑based).** 4,239 users, ~100M raw events. Menu‑based RP with sessions defined by 30‑minute inactivity gaps (84% of inter‑event gaps < 30 minutes). For each session, build a menu from the items the user viewed or purchased within that session; median menu size ≈ 4 items. No prices - choices reveal within‑session preference orderings only.
 
 Appendix: Pipeline
 ------------------

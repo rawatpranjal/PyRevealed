@@ -1,6 +1,6 @@
 """One-liner DataFrame-to-scores API.
 
-Provides ``analyze()`` — feed a pandas DataFrame, get rationality scores back.
+Provides ``analyze()`` - feed a pandas DataFrame, get rationality scores back.
 
 Example::
 
@@ -91,7 +91,7 @@ def _check_columns(
     def _check(col_name: str | None, param: str, is_default: bool = False) -> None:
         if col_name is not None and col_name not in available:
             default_hint = (
-                f" (defaulting to '{col_name}' — set {param}= explicitly)"
+                f" (defaulting to '{col_name}' - set {param}= explicitly)"
                 if is_default else ""
             )
             # Suggest close matches

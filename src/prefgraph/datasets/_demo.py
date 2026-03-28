@@ -1,7 +1,7 @@
 """Synthetic demo dataset for PrefGraph.
 
 Generates a deterministic dataset of budget-constrained consumers with
-varying rationality levels — no downloads, no setup.
+varying rationality levels - no downloads, no setup.
 
 Usage:
     from prefgraph.datasets import load_demo

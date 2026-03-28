@@ -13,7 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import combinations
 
-# Reuse v1 scenario configs — same items, same prompts
+# Reuse v1 scenario configs - same items, same prompts
 from ..config import (
     ALL_SCENARIOS,
     SUPPORT_TICKET,
@@ -67,12 +67,12 @@ class VignetteSpec:
 VIGNETTE_TIER_PROMPTS = {
     "clear": (
         "Generate a situation where ONE specific action is obviously the correct choice. "
-        "The situation should be unambiguous — any reasonable person would pick the same action. "
+        "The situation should be unambiguous - any reasonable person would pick the same action. "
         "Make it concrete and realistic (2-3 sentences)."
     ),
     "binary": (
         "Generate a situation that is genuinely ambiguous between exactly TWO of the actions. "
-        "The situation should have features that make both actions plausible — reasonable "
+        "The situation should have features that make both actions plausible - reasonable "
         "people could disagree on which is better. Make it concrete (2-3 sentences). "
         "Target the competing pair: {pair_names}."
     ),

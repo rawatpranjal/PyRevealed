@@ -312,7 +312,7 @@ Segmentation by HM efficiency:
 .. image:: ../images/app_recsys_panel.png
    :width: 100%
    :align: center
-   :alt: Recommender analysis — HM distribution, drift detection, sliding-window trajectories, lifecycle classification
+   :alt: Recommender analysis - HM distribution, drift detection, sliding-window trajectories, lifecycle classification
 
 .. raw:: html
 
@@ -386,7 +386,7 @@ batch-score each half via the Engine:
        fh_tuples.append(fh.to_engine_tuple())
        sh_tuples.append(sh.to_engine_tuple())
 
-   # Three batch Engine calls — no per-user Python loops
+   # Three batch Engine calls - no per-user Python loops
    full_results = engine.analyze_menus(full_tuples)
    fh_results = engine.analyze_menus(fh_tuples)
    sh_results = engine.analyze_menus(sh_tuples)

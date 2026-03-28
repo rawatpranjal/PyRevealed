@@ -7,6 +7,14 @@ limited attention, random utility, and risk preferences.
 
 **3 data subtypes:**
 
+.. raw:: html
+
+   <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+       <div style="flex: 1;"><img src="../_static/deterministic.gif" alt="Deterministic logic" style="width: 100%; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" /></div>
+       <div style="flex: 1;"><img src="../_static/stochastic.gif" alt="Stochastic logic" style="width: 100%; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" /></div>
+       <div style="flex: 1;"><img src="../_static/risk.gif" alt="Risk logic" style="width: 100%; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" /></div>
+   </div>
+
 .. list-table::
    :header-rows: 1
    :widths: 22 28 50

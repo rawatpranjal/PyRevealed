@@ -329,7 +329,7 @@ def main():
         print("     These violations are likely oracle artifacts, not real preference inconsistency.")
     else:
         print(f"  ✅ Only {high_error_pct:.0f}% of violations in high-error categories.")
-        print("     Violations appear distributed across quality tiers—suggests real RP signal.")
+        print("     Violations appear distributed across quality tiers-suggests real RP signal.")
     print()
 
     # =========================================================================
@@ -426,7 +426,7 @@ def main():
         print("     RP signal is present but not overwhelming.")
     else:
         print("  ❌ Observed violations ≤ null model.")
-        print("     No genuine RP signal—violations may be noise.")
+        print("     No genuine RP signal-violations may be noise.")
     print()
 
     print("=" * 80)

@@ -178,7 +178,7 @@ You cannot simultaneously achieve:
 
 Category-run gets (2) but not (1) or (3).
 Fixed-K gets (1) but not (2) or (3).
-Nothing gets (3) — chosen-last is always 100%.
+Nothing gets (3) - chosen-last is always 100%.
 
 ---
 

@@ -46,9 +46,9 @@ Background
 
 Revealed preference analysis on grocery data allows researchers to quantify consumer rationality without assuming specific functional forms for utility. For a formal treatment of the underlying axioms and efficiency metrics, see:
 
-- :doc:`theory_consistency` — GARP, WARP, and SARP definitions.
-- :doc:`theory_efficiency` — CCEI, MPI, and Houtman-Maks indices.
-- :doc:`theory_foundations` — Maintained assumptions for RP testing.
+- :doc:`theory_consistency` - GARP, WARP, and SARP definitions.
+- :doc:`theory_efficiency` - CCEI, MPI, and Houtman-Maks indices.
+- :doc:`theory_foundations` - Maintained assumptions for RP testing.
 
 Data
 ----
@@ -258,7 +258,7 @@ Scoring all 2,222 households via the Rust Engine:
 
    engine = Engine(metrics=["garp", "ccei", "mpi", "hm"])
 
-   # Batch: list of (prices T×K, quantities T×K) — one tuple per household
+   # Batch: list of (prices T×K, quantities T×K) - one tuple per household
    users = [hh.behavior_log.to_engine_tuple() for hh in households.values()]
 
    results = engine.analyze_arrays(users)  # Rust/Rayon parallel scoring
@@ -317,7 +317,7 @@ Key statistics:
 .. image:: ../images/app_grocery_panel.png
    :width: 100%
    :align: center
-   :alt: Grocery analysis — CCEI distribution, efficiency vs exploitability, rolling-window trajectories, recovered utility
+   :alt: Grocery analysis - CCEI distribution, efficiency vs exploitability, rolling-window trajectories, recovered utility
 
 .. raw:: html
 

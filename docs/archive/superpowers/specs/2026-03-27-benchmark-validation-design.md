@@ -41,7 +41,7 @@ Computed from raw prices × quantities in the feature window. No RP library need
 | std_spend | std(spend per obs) |
 | max_spend, min_spend | Extrema |
 | mean_basket_size | mean(total quantity per obs) |
-| herfindahl | sum(category_share²) — concentration |
+| herfindahl | sum(category_share²) - concentration |
 | top_category_share | max(category_share) |
 | n_active_categories | count(share > 0) |
 | spend_slope | Linear trend coefficient |
@@ -62,7 +62,7 @@ Computed from raw prices × quantities in the feature window. No RP library need
 
 ### RP Engine features (14 per user, budget)
 
-From `Engine.analyze_arrays()` — batch Rust computation:
+From `Engine.analyze_arrays()` - batch Rust computation:
 
 | Feature | Source | What it captures |
 |---------|--------|-----------------|
@@ -100,19 +100,19 @@ Derived: hm_ratio, sarp/warp_violation_density, scc_ratio
 
 ### RP Extended features (~28 per user, per-user algorithm calls)
 
-**Budget — distributional:**
+**Budget - distributional:**
 - VEI temporal: vei_first_half, vei_second_half, vei_temporal_shift
 - VEI shape: vei_below_90, vei_below_90_frac
 - Utility recovery: util_mean, util_std, util_range, util_cv, util_gini
 - Marginal utility: lambda_mean, lambda_std, lambda_cv
 
-**Budget — graph structural:**
+**Budget - graph structural:**
 - Preference graph: pref_graph_density, strict_pref_density, transitivity_ratio
 - Cycles: n_cycles, mean_cycle_length, max_cycle_length
 - Temporal: violation_obs_frac, violation_mean_position
 - MPI detail: mpi_max_cycle_cost, mpi_mean_cycle_cost, mpi_n_cycles
 
-**Menu — behavioral:**
+**Menu - behavioral:**
 - Reversals: choice_reversal_count, choice_reversal_ratio
 - Entropy: choice_entropy, choice_entropy_norm
 - Graph: menu_pref_density, menu_transitivity, menu_n_cycles, menu_max_cycle_len
@@ -124,12 +124,12 @@ Derived: hm_ratio, sarp/warp_violation_density, scc_ratio
 Computed from the target window (future data) only.
 
 **Budget datasets:**
-- High Spender: test_total_spend > percentile(66.67) — top tercile
-- Churn: test_mean_spend / train_mean_spend < 0.5 — spend dropped >50%
-- Spend Change: test_mean_spend - train_mean_spend — regression
+- High Spender: test_total_spend > percentile(66.67) - top tercile
+- Churn: test_mean_spend / train_mean_spend < 0.5 - spend dropped >50%
+- Spend Change: test_mean_spend - train_mean_spend - regression
 
 **Menu datasets:**
-- High Engagement: test_session_count > percentile(66.67) — top tercile
+- High Engagement: test_session_count > percentile(66.67) - top tercile
 
 ## Evaluation Protocol
 
@@ -178,7 +178,7 @@ Permutation-based LightGBM feature importance on the OOS train split. Reports to
 - H&M prices normalized (0-1), not absolute dollar values
 
 **Menu:**
-- Menus = viewed/clicked items only (impression bias — unclicked items invisible)
+- Menus = viewed/clicked items only (impression bias - unclicked items invisible)
 - REES46: server-defined sessions (gold standard)
 - Taobao: 30-min inactivity gap sessions (EDA-validated)
 - Tenrec: click-to-like positional windows (algorithmic exposure bias)

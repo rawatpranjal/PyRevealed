@@ -76,7 +76,7 @@ High-error categories (MAE > $1.0):
 **Nearly 3 out of 4 violations are in high-error price categories.**
 
 - **Soda dominates at 65%** of all violations, despite being only 1 of 10 categories
-- Soda's oracle error is **$1.44 (71% of median price)**—this is enormous measurement noise
+- Soda's oracle error is **$1.44 (71% of median price)**-this is enormous measurement noise
 - Pizza adds another **7%** of violations with **$1.41 error (58% of median)**
 - Low-error categories (milk, bread, soup) contribute only **11%** of violations combined
 
@@ -237,8 +237,8 @@ The validation checks show that 70%+ of observed violations are oracle artifacts
 
 ## Files
 
-- `dunnhumby_eda_validation_checks.py` — Tier 1 validation code (445 lines)
-- `DUNNHUMBY_VALIDATION_RESULTS.md` — This document
+- `dunnhumby_eda_validation_checks.py` - Tier 1 validation code (445 lines)
+- `DUNNHUMBY_VALIDATION_RESULTS.md` - This document
 
 ---
 

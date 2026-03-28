@@ -60,7 +60,7 @@ These datasets have menus (sets of available items) and choices (the item select
 - **Scale**: 8,832 qualifying users, 5+ sessions each
 - **Observation unit**: Server-defined shopping sessions
 - **Menu construction**: Items viewed in a session form the menu. Choice = item purchased. Only sessions with exactly 1 purchase and 2–50 viewed items are kept.
-- **Session boundary**: Platform-defined `user_session` column (gold standard — not a heuristic)
+- **Session boundary**: Platform-defined `user_session` column (gold standard - not a heuristic)
 - **Item remapping**: Item IDs remapped to 0..N-1 per user for compact representation
 - **Raw data**: 110M events from Oct–Nov 2019
 
@@ -109,7 +109,7 @@ By requiring observations in both windows, we condition on users surviving long 
 
 ### Menu dataset item remapping
 
-After the temporal split, items in each half are remapped to consecutive integers (0..N-1) independently. This ensures the preference graph is computed on compact, contiguous item IDs. An item appearing in both train and test may receive different integer IDs — this is correct because the RP analysis is per-window, not cross-window.
+After the temporal split, items in each half are remapped to consecutive integers (0..N-1) independently. This ensures the preference graph is computed on compact, contiguous item IDs. An item appearing in both train and test may receive different integer IDs - this is correct because the RP analysis is per-window, not cross-window.
 
 ---
 
@@ -356,7 +356,7 @@ CI = [2.5th percentile, 97.5th percentile]
 p-value = fraction of bootstrap lifts ≤ 0
 ```
 
-- Non-parametric — no distributional assumptions
+- Non-parametric - no distributional assumptions
 - Works for AUC-ROC, AUC-PR, and R²
 - Proves whether observed lift is noise or genuine signal
 - Fixed RNG seed (42) for reproducibility
@@ -439,8 +439,8 @@ Dataset          Target            N test  %pos  Baseline  Combined   Lift%     
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Dunnhumby        Churn (AP)           445  6.8%     0.177     0.150  -18.4%  (-43, +18)   0.887    0.0490      0.2096
 Dunnhumby        High Spender (AUC)   445 33.3%     0.962     0.962   -0.0%  (-1, +1)     0.546    0.0103      0.3622
-Dunnhumby        Spend Change (R²)    445    —     -0.030     0.023 +289.0%  (-111,+2536) 0.233
-Dunnhumby        Future LTV (R²)      445    —      0.793     0.803   +1.3%  (-0, +3)     0.037**
+Dunnhumby        Spend Change (R²)    445    -     -0.030     0.023 +289.0%  (-111,+2536) 0.233
+Dunnhumby        Future LTV (R²)      445    -      0.793     0.803   +1.3%  (-0, +3)     0.037**
 ```
 
 Columns:
@@ -462,7 +462,7 @@ This section documents the iterative process of constructing defensible RP bench
 ### 9.1 Budget Datasets: The Price Problem
 
 **Issue: Instacart has no prices.**
-Instacart's raw data contains products, aisles, departments, and order sequences — but zero price information. Without prices, budget-based RP (GARP) requires a price assumption.
+Instacart's raw data contains products, aisles, departments, and order sequences - but zero price information. Without prices, budget-based RP (GARP) requires a price assumption.
 
 **Attempt 1: Uniform $1 prices (21 departments).**
 Assigned $1/unit to all departments. Result: GARP reduces to quantity-dominance checks. Every user is perfectly consistent (CCEI=1.0, MPI=0.0, zero violations). RP features have zero variance. Dead on arrival.
@@ -475,30 +475,30 @@ Instead of forcing prices, construct product-level menu-choice data within depar
 
 **Lesson learned:** RP budget analysis requires genuine temporal price variation. Without it, all users appear perfectly rational. Heuristic prices at any granularity cannot substitute for real market price dynamics.
 
-**Other budget datasets — price oracle concerns:**
-- **Dunnhumby & Open E-Commerce**: Global median price oracle shared across all users. Individual price exposure (coupons, store location) not captured. Forward-fill/backward-fill for missing periods creates artificial price continuity. Accepted limitation — follows Dean & Martin (2016) precedent.
-- **H&M**: Real transaction prices (normalized 0–1). 4-level fallback chain (ffill → bfill → group median → 0.01) for missing prices. Some prices are heavily imputed. Accepted — the alternative is dropping observations.
+**Other budget datasets - price oracle concerns:**
+- **Dunnhumby & Open E-Commerce**: Global median price oracle shared across all users. Individual price exposure (coupons, store location) not captured. Forward-fill/backward-fill for missing periods creates artificial price continuity. Accepted limitation - follows Dean & Martin (2016) precedent.
+- **H&M**: Real transaction prices (normalized 0–1). 4-level fallback chain (ffill → bfill → group median → 0.01) for missing prices. Some prices are heavily imputed. Accepted - the alternative is dropping observations.
 
 ### 9.2 Menu Datasets: The Session Boundary Problem
 
 **Issue: What defines a "session" (menu presentation)?**
 
-**REES46**: Server-defined `user_session` column — gold standard. No heuristic needed.
+**REES46**: Server-defined `user_session` column - gold standard. No heuristic needed.
 
-**Taobao — Attempt 1: Calendar day.**
+**Taobao - Attempt 1: Calendar day.**
 Original construction: menu = items viewed that day, choice = item purchased. Problem: a user browsing electronics at 8am and buying groceries at 11pm both appear in one "menu." Cross-midnight sessions (view 23:50, buy 00:10) split incorrectly. Inflated menu sizes with irrelevant items.
 
-**Taobao — Attempt 2: 30-minute gap sessions (current).**
+**Taobao - Attempt 2: 30-minute gap sessions (current).**
 EDA showed 84% of inter-event gaps < 30 min with a sharp break at p90 (3.3 hours). Using 1800s gap threshold produces natural sessions with median 4 items/menu. Valid sessions increased from 855K to 919K. **Accepted.**
 
-**Tenrec — Original: Set-based feedback tracking (buggy).**
-Stored liked items in a Python set. `if item_id in fb_set` closed the window at the first click of ANY item the user ever liked — even if the like happened later. Menus closed prematurely.
+**Tenrec - Original: Set-based feedback tracking (buggy).**
+Stored liked items in a Python set. `if item_id in fb_set` closed the window at the first click of ANY item the user ever liked - even if the like happened later. Menus closed prematurely.
 
-**Tenrec — Fix: Positional feedback tracking (current).**
+**Tenrec - Fix: Positional feedback tracking (current).**
 Track `(item_id, had_feedback_at_this_position)` per click. Window closes only when THIS specific click had feedback=1. Correct temporal ordering preserved.
 
-**Tenrec — Structural concern: Algorithmic menus.**
-Menus are determined by Tencent's recommendation algorithm, not organic user browsing. SARP violations may reflect algorithm-user interaction patterns rather than pure user preferences. Documented as limitation — we measure "user-algorithm interaction consistency."
+**Tenrec - Structural concern: Algorithmic menus.**
+Menus are determined by Tencent's recommendation algorithm, not organic user browsing. SARP violations may reflect algorithm-user interaction patterns rather than pure user preferences. Documented as limitation - we measure "user-algorithm interaction consistency."
 
 ### 9.3 Instacart Menu-Choice: The Product-Level Construction
 
@@ -519,7 +519,7 @@ Menus are determined by Tencent's recommendation algorithm, not organic user bro
 - Real preference cycles detected (user prefers yogurt over milk, then switches)
 
 **Issue: High Engagement target is trivially predictable.**
-Baseline AUC = 1.000. `n_sessions` perfectly predicts future session count because both scale with user activity level. The menu construction is correct but the target is wrong — need behavioral-change targets (preference drift, loyalty, exploration rate).
+Baseline AUC = 1.000. `n_sessions` perfectly predicts future session count because both scale with user activity level. The menu construction is correct but the target is wrong - need behavioral-change targets (preference drift, loyalty, exploration rate).
 
 **Open question:** What targets would RP features uniquely predict on this data? Candidates:
 - Preference drift: did user's top-choice product change?
@@ -532,12 +532,12 @@ Baseline AUC = 1.000. `n_sessions` perfectly predicts future session count becau
 Each user's observations split 70/30 individually. Features from first 70%, targets from last 30%. 80/20 random user holdout for OOS evaluation.
 
 **Attempt: Global calendar cutoff.**
-Tried using 70th percentile of absolute observation index as a global cutoff for all users. On Dunnhumby: cutoff at observation 56 → 67% of users "churned" (had no data beyond that point). But this wasn't real churn — many users simply had shorter data collection periods. Baseline AUC shot to 0.975 (trivial to predict "churn" = short data collection). **Reverted.**
+Tried using 70th percentile of absolute observation index as a global cutoff for all users. On Dunnhumby: cutoff at observation 56 → 67% of users "churned" (had no data beyond that point). But this wasn't real churn - many users simply had shorter data collection periods. Baseline AUC shot to 0.975 (trivial to predict "churn" = short data collection). **Reverted.**
 
 **Attempt: Global calendar cutoff using raw DAY column.**
 Read Dunnhumby's actual `DAY` column (1–711). Cutoff at DAY 497 (70th percentile of unique days). Only 30 users truly churned (1.7%). More realistic but small sample. Churn AUC-PR: baseline 0.144, combined 0.189 (+35% lift, p=0.081). Promising but fragile with N=30.
 
-**Lesson learned:** Global calendar cutoff is the gold standard for production deployment simulation, but fails on heterogeneous panel datasets where data collection windows vary by user cohort. Per-user event-time split is the accepted compromise — explicitly conditions on "established users with sufficient history."
+**Lesson learned:** Global calendar cutoff is the gold standard for production deployment simulation, but fails on heterogeneous panel datasets where data collection windows vary by user cohort. Per-user event-time split is the accepted compromise - explicitly conditions on "established users with sufficient history."
 
 ### 9.5 The Evaluation Design Evolution
 

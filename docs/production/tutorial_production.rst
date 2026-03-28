@@ -578,7 +578,7 @@ Production Analysis
    - Requires sufficient variation in scale
    - May be industry-specific
 
-3. **Relative vs absolute** — relative efficiency is often more
+3. **Relative vs absolute** - relative efficiency is often more
    informative than absolute
 
 4. **Data quality**:
@@ -610,6 +610,6 @@ Function Reference
 See Also
 --------
 
-- :doc:`/budget/tutorial` — Budget-based revealed preference
-- :doc:`/menu/tutorial_menu_choice` — Menu-based choice
-- :doc:`theory_production` — Mathematical foundations (Chapter 15)
+- :doc:`/budget/tutorial` - Budget-based revealed preference
+- :doc:`/menu/tutorial_menu_choice` - Menu-based choice
+- :doc:`theory_production` - Mathematical foundations (Chapter 15)

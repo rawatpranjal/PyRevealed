@@ -33,7 +33,7 @@ Important Assumptions
 
 Revealed preference tests rely on several core assumptions regarding the stability and rationality of decision-making. For a formal delineation of these assumptions and their implications, see:
 
-- :doc:`theory_foundations` — Formal assumptions (Stability, Utility Maximization, etc.)
+- :doc:`theory_foundations` - Formal assumptions (Stability, Utility Maximization, etc.)
 
 Real data typically violates these to some degree, which affects interpretation:
 
@@ -196,15 +196,15 @@ reveals A ≿ B. GARP checks whether these revealed preferences form a consisten
    result = validate_consistency(log)
 
    if result.is_consistent:
-       print("GARP satisfied — a utility function exists")
+       print("GARP satisfied - a utility function exists")
    else:
-       print(f"GARP violated — {result.num_violations} contradictions found")
+       print(f"GARP violated - {result.num_violations} contradictions found")
 
 Output (typical for one household):
 
 .. code-block:: text
 
-   GARP violated — 18 contradictions found
+   GARP violated - 18 contradictions found
 
 Full Summary Report
 ~~~~~~~~~~~~~~~~~~~
@@ -752,7 +752,7 @@ The result includes the specific observation pairs that cause violations:
        for obs_i, obs_j in result.swap_pairs:
            print(f"  Observation {obs_i} vs {obs_j}")
 
-This is useful for understanding *where* the inconsistencies occur—perhaps
+This is useful for understanding *where* the inconsistencies occur-perhaps
 a few outlier periods drive all the violations.
 
 Full Summary Report
@@ -797,7 +797,7 @@ Part 6c: Observation Contributions
 ----------------------------------
 
 When GARP fails, which observations are responsible? **Observation contributions**
-(Varian 1990) identifies the "troublemakers"—useful for outlier detection and
+(Varian 1990) identifies the "troublemakers"-useful for outlier detection and
 data quality analysis.
 
 .. code-block:: python
@@ -841,7 +841,7 @@ Two methods are available:
      - Small datasets, precise impact measurement
 
 The ``"removal"`` method computes how much AEI improves when each observation
-is removed—this gives a direct measure of each observation's impact:
+is removed-this gives a direct measure of each observation's impact:
 
 .. code-block:: python
 
@@ -912,9 +912,9 @@ Part 7: Advanced Topics
 
 For more complex budget-based analysis, see the following specialized tutorials:
 
-- :doc:`tutorial_budget_advanced` — Homotheticity, Lancaster characteristics model, and utility recovery.
-- :doc:`tutorial_demand_analysis` — Slutsky matrix, integrability, and additive separability.
-- :doc:`tutorial_welfare` — Welfare analysis (CV/EV) and deadweight loss.
+- :doc:`tutorial_budget_advanced` - Homotheticity, Lancaster characteristics model, and utility recovery.
+- :doc:`tutorial_demand_analysis` - Slutsky matrix, integrability, and additive separability.
+- :doc:`tutorial_welfare` - Welfare analysis (CV/EV) and deadweight loss.
 
 Part 8: Unified Summary Display
 -------------------------------
@@ -1031,7 +1031,7 @@ Power Analysis Plot
 .. image:: ../_static/power_analysis.gif
    :width: 70%
    :align: center
-   :alt: Power analysis — random CCEI distribution building up with observed score
+   :alt: Power analysis - random CCEI distribution building up with observed score
 
 The ``plot_power_analysis()`` function compares your data's efficiency to
 simulated random behavior:
@@ -1119,6 +1119,6 @@ Function Reference
 See Also
 --------
 
-- :doc:`tutorial_ecommerce` — E-commerce application
-- :doc:`/api` — API documentation
-- :doc:`/budget/theory_consistency` — Mathematical foundations
+- :doc:`tutorial_ecommerce` - E-commerce application
+- :doc:`/api` - API documentation
+- :doc:`/budget/theory_consistency` - Mathematical foundations

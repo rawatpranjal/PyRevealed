@@ -88,7 +88,7 @@ def load_hm(
         min_periods: Minimum active periods per customer (default 6).
         top_k_groups: Number of top product groups to keep (default 20).
         cutoff_date: ISO date for metadata (default '2020-06-01').
-        time_period: Aggregation period — "week", "month" (default),
+        time_period: Aggregation period - "week", "month" (default),
             or "quarter".
 
     Returns:
@@ -131,7 +131,7 @@ def load_hm(
     ):
         # Product group = first 2 digits of article_id. This is the coarsest
         # grouping available without the articles.csv metadata file. Produces
-        # ~20 groups with repeated support across months — essential for RP.
+        # ~20 groups with repeated support across months - essential for RP.
         chunk["product_group"] = chunk["article_id"].str[:2]
 
         for grp, cnt in chunk["product_group"].value_counts().items():
@@ -177,9 +177,9 @@ def load_hm(
     # RP tests require a FULL price vector every period (purchased + unpurchased
     # groups). For purchased groups we use the customer's own realized price.
     # For unpurchased groups we need an imputation. The fallback chain is:
-    #   1. period-group median (most specific — "what did others pay this month?")
-    #   2. group median (across all periods — "what does this group typically cost?")
-    #   3. global median (last resort — "what does anything cost?")
+    #   1. period-group median (most specific - "what did others pay this month?")
+    #   2. group median (across all periods - "what does this group typically cost?")
+    #   3. global median (last resort - "what does anything cost?")
     # The old loader used a single shared median oracle for ALL customers,
     # which destroyed individual price variation. Per-customer prices let RP
     # detect when a customer paid more/less than the market for a group.

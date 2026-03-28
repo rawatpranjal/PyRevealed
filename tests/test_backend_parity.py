@@ -4,10 +4,10 @@ Tests that _analyze_chunk_python and _analyze_chunk_rust produce equivalent
 results within known tolerance bounds for shared metrics (GARP, CCEI, MPI).
 
 Tolerance rationale:
-- GARP (bool): exact match — same Floyd-Warshall algorithm
-- CCEI (float): within 0.01 — same discrete binary search, minor float rounding
-- MPI (float): within 0.05 — Python uses cycle-enumeration, Rust uses Karp's
-  max-mean-weight cycle — different algorithms, same theoretical target
+- GARP (bool): exact match - same Floyd-Warshall algorithm
+- CCEI (float): within 0.01 - same discrete binary search, minor float rounding
+- MPI (float): within 0.05 - Python uses cycle-enumeration, Rust uses Karp's
+  max-mean-weight cycle - different algorithms, same theoretical target
 """
 
 import pytest
@@ -44,7 +44,7 @@ def violation_data():
     """Random data (seed=123) that produces GARP violations.
 
     Varied prices + random quantities create strict revealed preferences
-    that form cycles — unlike equal-price data where all expenditures match.
+    that form cycles - unlike equal-price data where all expenditures match.
     """
     rng = np.random.RandomState(123)
     p = (rng.rand(20, 3) + 0.1).astype(np.float64)

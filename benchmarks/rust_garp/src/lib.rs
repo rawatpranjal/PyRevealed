@@ -5,7 +5,7 @@ use rayon::prelude::*;
 
 /// Raw Floyd-Warshall GARP check in Rust.
 ///
-/// No SCC decomposition — just the brute-force O(T^3) approach to measure
+/// No SCC decomposition - just the brute-force O(T^3) approach to measure
 /// pure compute speed of Rust vs Python/Numba.
 #[pyfunction]
 fn check_garp_rust<'py>(
@@ -448,7 +448,7 @@ fn check_garp_batch_rust<'py>(
 /// Instead of allocating fresh Vec<bool> per user (10M allocations),
 /// each Rayon thread reuses a single pre-allocated scratchpad.
 /// The closure matrix uses FixedBitSet (1 bit per entry) instead of
-/// Vec<bool> (1 byte per entry) — 8x memory reduction + better cache.
+/// Vec<bool> (1 byte per entry) - 8x memory reduction + better cache.
 #[pyfunction]
 fn check_garp_batch_optimized<'py>(
     _py: Python<'py>,

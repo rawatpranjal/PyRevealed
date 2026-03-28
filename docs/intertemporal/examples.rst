@@ -28,7 +28,7 @@ Test whether time-dated choices are consistent with a fixed discount factor:
 Present Bias Detection
 ----------------------
 
-Impatient now but patient later — the hallmark of present bias:
+Impatient now but patient later - the hallmark of present bias:
 
 .. code-block:: python
 

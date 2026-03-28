@@ -456,7 +456,7 @@ Function Reference
 See Also
 --------
 
-- :doc:`/budget/tutorial` — Budget-based analysis (GARP, CCEI)
-- :doc:`tutorial_menu_choice` — Menu-based choice analysis
-- :doc:`/api` — Full API documentation
-- :doc:`/menu/theory_abstract` — Mathematical foundations (Chapter 8)
+- :doc:`/budget/tutorial` - Budget-based analysis (GARP, CCEI)
+- :doc:`tutorial_menu_choice` - Menu-based choice analysis
+- :doc:`/api` - Full API documentation
+- :doc:`/menu/theory_abstract` - Mathematical foundations (Chapter 8)

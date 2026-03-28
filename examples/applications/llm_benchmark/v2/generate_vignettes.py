@@ -52,7 +52,7 @@ def generate_vignettes_for_scenario(scenario_name: str) -> None:
     competing_pairs = V1_COMPETING_PAIRS.get(scenario_name, [(0, 1), (1, 2), (2, 3)])
 
     items_desc = "\n".join(
-        f"  {idx}: {name} — {scenario.item_descriptions[idx]}"
+        f"  {idx}: {name} - {scenario.item_descriptions[idx]}"
         for idx, name in sorted(scenario.items.items())
     )
 

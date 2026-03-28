@@ -3,8 +3,8 @@
 
 Compares three implementations at various T values:
 1. Python + SCC optimization (current production code)
-2. Rust raw Floyd-Warshall (no SCC — pure compute comparison)
-3. Rust + SCC (Tarjan's in Rust — full algorithmic + compute comparison)
+2. Rust raw Floyd-Warshall (no SCC - pure compute comparison)
+3. Rust + SCC (Tarjan's in Rust - full algorithmic + compute comparison)
 
 Usage:
     # First build the Rust extension:
@@ -41,7 +41,7 @@ def bench_python_scc(prices, quantities, warmup=False):
 
 
 def bench_python_raw_fw(prices, quantities, warmup=False):
-    """Python raw Floyd-Warshall (no SCC — apples-to-apples vs Rust raw FW)."""
+    """Python raw Floyd-Warshall (no SCC - apples-to-apples vs Rust raw FW)."""
     T = prices.shape[0]
     E = prices @ quantities.T
     own_exp = np.diag(E)
@@ -129,7 +129,7 @@ def main():
         # Python + SCC
         t_py_scc, c_py_scc = bench_python_scc(prices, quantities)
 
-        # Python raw FW (skip for T > 1000 — too slow)
+        # Python raw FW (skip for T > 1000 - too slow)
         if T <= 1000:
             t_py_raw, c_py_raw = bench_python_raw_fw(prices, quantities)
         else:

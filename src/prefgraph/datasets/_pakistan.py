@@ -34,7 +34,7 @@ CSV_FILENAME = "Pakistan Largest Ecommerce Dataset.csv"
 
 NUM_CATEGORIES = len(CATEGORIES)
 MIN_UNIT_PRICE = 0.01
-MAX_UNIT_PRICE = 500_000.0  # PKR — electronics can be expensive
+MAX_UNIT_PRICE = 500_000.0  # PKR - electronics can be expensive
 
 
 def _find_data_dir(data_dir: str | Path | None) -> Path:

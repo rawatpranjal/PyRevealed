@@ -53,7 +53,7 @@
 | Varian (1982) - GARP | Econometrica 50(4), 945-973 | 10.2307/1912771 | JSTOR |
 | Varian (1990) - Efficiency vectors | J. Econometrics 46(1-2), 125-140 | 10.1016/0304-4076(90)90051-T | ScienceDirect |
 | Afriat (1973) - CCEI | IER 14(2), 460-472 | 10.2307/2525934 | JSTOR |
-| Chambers & Echenique (2016) | Cambridge UP | — | Purchase/Library |
+| Chambers & Echenique (2016) | Cambridge UP | - | Purchase/Library |
 
 ### Tier 2: Consistency Indices
 
@@ -87,8 +87,8 @@
 | Paper | Journal | Access |
 |-------|---------|--------|
 | Blundell et al. (2015) - Sharp for SARP | AEJ:Micro 7(1) | SSRN: 2136861 |
-| Adams (2015) - Mutual Consistency | — | Search needed |
-| Adams et al. (2018) - Non-Market Goods | — | Search needed |
+| Adams (2015) - Mutual Consistency | - | Search needed |
+| Adams et al. (2018) - Non-Market Goods | - | Search needed |
 | Hausman & Newey (2016) - Average Welfare | Econometrica 84(3) | MIT DSpace |
 
 ### Tier 7: Temporal
@@ -112,7 +112,7 @@
 |-------|---------|--------|
 | Bronars (1987) - Power Tests | Econometrica 55(3), 693-698 | JSTOR |
 | Hjertstrand & Swofford (2014) | Empirical Economics 46(4) | Springer |
-| Dardanoni et al. (2024) | — | Search needed |
+| Dardanoni et al. (2024) | - | Search needed |
 
 ---
 

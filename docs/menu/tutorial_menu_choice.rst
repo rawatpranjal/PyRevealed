@@ -755,7 +755,7 @@ multiple users, position bias, and partial attention effects:
    user_tuples = [log.to_engine_tuple() for log in all_logs]
    batch_results = engine.analyze_menus(user_tuples)  # Rust/Rayon parallel
 
-   # Attention analysis not in Engine — per-user (acceptable for small N)
+   # Attention analysis not in Engine - per-user (acceptable for small N)
    all_results = []
    for i, (log, mr) in enumerate(zip(all_logs, batch_results)):
        attention = test_attention_rationality(log)
@@ -866,18 +866,18 @@ When to Use Menu-Based Analysis
 Analysis Notes
 ~~~~~~~~~~~~~~
 
-1. **WARP is the weakest test** — if WARP fails, SARP will too.
+1. **WARP is the weakest test** - if WARP fails, SARP will too.
 
-2. **Efficiency index** — the efficiency score quantifies how close
+2. **Efficiency index** - the efficiency score quantifies how close
    behavior is to rational (beyond pass/fail).
 
-3. **Attention models** — apparent inconsistency may reflect
+3. **Attention models** - apparent inconsistency may reflect
    limited attention rather than irrational preferences.
 
-4. **Sample size** — more observations provide stronger tests but
+4. **Sample size** - more observations provide stronger tests but
    also more opportunities for violations.
 
-5. **Multiple metrics** — different metrics capture different aspects
+5. **Multiple metrics** - different metrics capture different aspects
    of consistency:
 
    - WARP/SARP: binary consistency
@@ -995,7 +995,7 @@ For quick status checks, use ``short_summary()``:
 See Also
 --------
 
-- :doc:`/budget/tutorial` — Budget-based revealed preference (GARP, CCEI)
-- :doc:`tutorial_stochastic` — Stochastic choice models
-- :doc:`/api` — Full API documentation
-- :doc:`theory_abstract` — Mathematical foundations (Chapters 1-2, 14)
+- :doc:`/budget/tutorial` - Budget-based revealed preference (GARP, CCEI)
+- :doc:`tutorial_stochastic` - Stochastic choice models
+- :doc:`/api` - Full API documentation
+- :doc:`theory_abstract` - Mathematical foundations (Chapters 1-2, 14)

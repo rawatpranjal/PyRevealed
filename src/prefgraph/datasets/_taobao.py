@@ -169,7 +169,7 @@ def load_taobao(
 
         del buys_df, views_df, valid_buys, valid_views
 
-        # Build (menu, choice) records — ensure purchased item is in menu
+        # Build (menu, choice) records - ensure purchased item is in menu
         records = []
         for sid, menu in session_menus.items():
             row = session_purchases.loc[sid]

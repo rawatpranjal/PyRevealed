@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PrefGraph v2 — 1,000,000 User Benchmark.
+"""PrefGraph v2 - 1,000,000 User Benchmark.
 
 Demonstrates the Rust-powered Engine analyzing 1M users with GARP + CCEI
 using streaming chunks and thread-local scratchpads.
@@ -44,7 +44,7 @@ def main():
     CHUNK = 50_000
 
     print("=" * 70)
-    print(f" PrefGraph v2 — {N_USERS:,} User Benchmark")
+    print(f" PrefGraph v2 - {N_USERS:,} User Benchmark")
     print("=" * 70)
 
     engine = Engine(metrics=["garp", "ccei"], chunk_size=CHUNK)

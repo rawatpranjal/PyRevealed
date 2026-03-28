@@ -89,7 +89,7 @@ def check_harp(
     diagonal_products = np.diag(max_log_product)
     is_consistent = not np.any(diagonal_products > tolerance)
 
-    # HARP is a binary test only — Varian (1983) and C&E (2016, Thm 4.2)
+    # HARP is a binary test only - Varian (1983) and C&E (2016, Thm 4.2)
     # define no severity metric. max_cycle_product is always 1.0.
     violations: list[tuple[Cycle, float]] = []
     max_cycle_product = 1.0

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Example: Uber Eats at Scale — Revealed Preference for Food Delivery.
+"""Example: Uber Eats at Scale - Revealed Preference for Food Delivery.
 
 Demonstrates PrefGraph on simulated Uber Eats order data with realistic
 user heterogeneity and multi-core parallel processing.
@@ -97,10 +97,10 @@ def simulate_uber_eats_user(
     # Build a realistic menu with category-structured prices
     menu_prices = _build_menu(N, rng)
 
-    # User's latent preference weights (Dirichlet — some items strongly preferred)
+    # User's latent preference weights (Dirichlet - some items strongly preferred)
     # Sparse preferences: user only really likes ~20% of the menu
     raw_alpha = rng.exponential(0.3, size=N)
-    # Make preferences spiky — a few favorites, many ignored
+    # Make preferences spiky - a few favorites, many ignored
     top_k = max(3, N // 5)
     top_items = rng.choice(N, size=top_k, replace=False)
     raw_alpha[top_items] *= rng.uniform(3.0, 10.0, size=top_k)
@@ -115,7 +115,7 @@ def simulate_uber_eats_user(
 
     for t in range(n_orders):
         # Prices vary per order: promotions, surge pricing, time-of-day
-        # This is critical — identical prices across observations can't
+        # This is critical - identical prices across observations can't
         # create GARP violations. Real food delivery has 10-30% price
         # variation from promos, surge, and dynamic pricing.
         price_shock = rng.lognormal(0.0, 0.15, size=N)  # ~15% variation
@@ -272,7 +272,7 @@ def analyze_user(log: BehaviorLog) -> UserResult:
         garp = check_garp(log)
         garp_ms = (time.perf_counter() - t0) * 1000
 
-        # AEI — skip binary search if already consistent
+        # AEI - skip binary search if already consistent
         t0 = time.perf_counter()
         if garp.is_consistent:
             aei_val = 1.0
@@ -281,7 +281,7 @@ def analyze_user(log: BehaviorLog) -> UserResult:
             aei_val = aei_result.efficiency_index
         aei_ms = (time.perf_counter() - t0) * 1000
 
-        # Houtman-Maks — skip if consistent
+        # Houtman-Maks - skip if consistent
         t0 = time.perf_counter()
         if garp.is_consistent:
             hm_frac = 0.0

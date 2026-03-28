@@ -1,7 +1,7 @@
 Intertemporal
 =============
 
-Analysis of time preferences — testing whether choices over time-dated
+Analysis of time preferences - testing whether choices over time-dated
 payoffs are consistent with exponential discounting or exhibit present bias.
 Based on Echenique, Imai & Saito (2020, *AEJ: Micro*) and Laibson (1997, *QJE*).
 

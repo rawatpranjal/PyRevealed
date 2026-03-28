@@ -4,7 +4,7 @@
 
 ✅ **Three critical issues fixed**
 ⚠️ **Four overclaimed conclusions softened**
-🔴 **Do NOT sign off yet** — requires sensitivity testing before publication
+🔴 **Do NOT sign off yet** - requires sensitivity testing before publication
 
 ---
 
@@ -31,8 +31,8 @@ Edge density: 0.504 (50.4%)
 **Root cause:** Line 470 used `len(hh_data)` (filtered transaction rows) instead of `len(hh_pivot.index)` (household-weeks after weekly pivoting).
 
 **Impact:**
-- Old edge density (1.7%) was meaningless—suggested sparse, weak RP support
-- New edge density (50.4%) is healthy—half of all pairs have direct RP edges
+- Old edge density (1.7%) was meaningless-suggested sparse, weak RP support
+- New edge density (50.4%) is healthy-half of all pairs have direct RP edges
 
 ### 2. Sample Accounting
 
@@ -90,7 +90,7 @@ Edge density: 0.504 (50.4%)
 ### Block 4: RP Identification
 
 **v1:** "Low crossing rate (0.3%) indicates strong identification"
-**v2:** "Low crossing rate is ambiguous—could mean budget variety (good) OR insufficient overlap (bad)"
+**v2:** "Low crossing rate is ambiguous-could mean budget variety (good) OR insufficient overlap (bad)"
 
 **Key point:** 50% edge density is healthy, but we can't conclude strong identification without:
 - Checking violation patterns (are they in high-noise categories?)
@@ -211,5 +211,5 @@ For households with GARP violations:
 
 ## Files
 
-- `dunnhumby_stress_eda_v2_conservative.py` — Fixed script with conservative conclusions (449 lines)
-- `DUNNHUMBY_STRESS_TEST_REPORT.md` — v1 report (archive; do not use for paper)
+- `dunnhumby_stress_eda_v2_conservative.py` - Fixed script with conservative conclusions (449 lines)
+- `DUNNHUMBY_STRESS_TEST_REPORT.md` - v1 report (archive; do not use for paper)

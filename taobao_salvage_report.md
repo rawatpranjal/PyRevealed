@@ -6,7 +6,7 @@
 
 ---
 
-## Q2. Timestamp corruption — manageable
+## Q2. Timestamp corruption - manageable
 
 | Metric | Value |
 |--------|-------|
@@ -16,13 +16,13 @@
 | p100 gap before filtering | 41,042 days |
 | p100 gap after filtering | 29.0 days |
 
-Corruption is concentrated in 435 events across 77 users. Dropping corrupted events (not entire users) removes the problem. After filtering, the worst gap is 29 days — unusual but not structurally broken. Sessionization is sound after this filter.
+Corruption is concentrated in 435 events across 77 users. Dropping corrupted events (not entire users) removes the problem. After filtering, the worst gap is 29 days - unusual but not structurally broken. Sessionization is sound after this filter.
 
 **Decision**: Drop 435 bad events. Continue.
 
 ---
 
-## Q1. Clean pre-buy choice occasions — collapse is severe
+## Q1. Clean pre-buy choice occasions - collapse is severe
 
 ### Session funnel (20M row sample, post timestamp filter)
 
@@ -38,7 +38,7 @@ Corruption is concentrated in 435 events across 77 users. Dropping corrupted eve
 
 | Threshold | Users | % of 198K sample | vs loose loader (7,513) |
 |-----------|-------|-----------------|------------------------|
-| ≥1 clean session | 61,214 | 30.9% | — |
+| ≥1 clean session | 61,214 | 30.9% | - |
 | ≥3 clean sessions | 4,095 | 2.1% | 54.5% |
 | ≥5 clean sessions | **376** | **0.2%** | **5.0%** |
 
@@ -50,11 +50,11 @@ The single most destructive rule is requiring the bought item to have been viewe
 - Eliminates 99,043 sessions (3.1% of total, 52% of sessions with a buy AND pre-buy views)
 - This reflects the reality documented in D5: 39.3% of purchase sessions have phantom buy insertion, and 26.9% have no views at all
 
-The "pre-buy only" rule (cutting post-purchase views) is cheap by comparison — it mainly removes sessions where the menu inflated but the choice itself was observed.
+The "pre-buy only" rule (cutting post-purchase views) is cheap by comparison - it mainly removes sessions where the menu inflated but the choice itself was observed.
 
 ---
 
-## Q3. Viability of strict-clean sample — too thin for RP
+## Q3. Viability of strict-clean sample - too thin for RP
 
 ### Session depth per user
 
@@ -71,7 +71,7 @@ The "pre-buy only" rule (cutting post-purchase views) is cheap by comparison —
 Median sessions per user = 1. This is fatal for preference graph construction.
 
 - A user with 1 session has 0 pairwise comparisons.
-- A user with 5 sessions has C(5,2)=10 pairwise comparisons — the minimum for sparse RP testing.
+- A user with 5 sessions has C(5,2)=10 pairwise comparisons - the minimum for sparse RP testing.
 - Mean pairwise comparisons per user in the clean sample: **0.5** (i.e., most users have 0).
 
 ### Qualification breakdown
@@ -88,7 +88,7 @@ Only 0.6% of users with any clean session reach the 5-session threshold. The cle
 
 ### Menu size (strict)
 
-Median: 5 items. p75: 8 items. Menu size is actually healthy — the filtering has selected sessions with genuine pre-buy consideration. The problem is not menu size, it is session depth.
+Median: 5 items. p75: 8 items. Menu size is actually healthy - the filtering has selected sessions with genuine pre-buy consideration. The problem is not menu size, it is session depth.
 
 ---
 

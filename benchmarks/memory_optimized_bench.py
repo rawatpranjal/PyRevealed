@@ -37,7 +37,7 @@ def bench_batch(func, pl, ql, tolerance=1e-10):
 
 
 def bench_streaming(func, total_users, chunk_size, T_range, N=5, tolerance=1e-10):
-    """Process users in streaming chunks — memory bounded to chunk_size users."""
+    """Process users in streaming chunks - memory bounded to chunk_size users."""
     all_results = []
     t0 = time.perf_counter()
     processed = 0
@@ -48,7 +48,7 @@ def bench_streaming(func, total_users, chunk_size, T_range, N=5, tolerance=1e-10
         results = func(pl, ql, tolerance)
         all_results.extend(results)
         processed += batch
-        # pl, ql are dropped here — memory freed
+        # pl, ql are dropped here - memory freed
 
     elapsed = time.perf_counter() - t0
     return elapsed, all_results
@@ -87,7 +87,7 @@ def main():
     print("  Warmup done.\n")
 
     # --- Part 1: Speed comparison (original vs optimized) ---
-    print("PART 1: SPEED — Original vs Optimized (T=20-100)")
+    print("PART 1: SPEED - Original vs Optimized (T=20-100)")
     print("-" * 85)
     hdr = f"{'Users':>10} | {'Original':>10} | {'Optimized':>10} | {'Speedup':>8} | {'Correct':>8}"
     print(hdr)
@@ -105,18 +105,18 @@ def main():
 
     # --- Part 2: Memory comparison ---
     print()
-    print("PART 2: MEMORY — All-at-once vs Streaming chunks")
+    print("PART 2: MEMORY - All-at-once vs Streaming chunks")
     print("-" * 85)
 
     for n_users, chunk_size in [(10000, 10000), (50000, 10000), (100000, 10000)]:
-        # All at once — measure peak memory
+        # All at once - measure peak memory
         tracemalloc.start()
         pl, ql = generate_chunk(n_users, (20, 100))
         check_garp_batch_optimized(pl, ql, 1e-10)
         _, peak_all = tracemalloc.get_traced_memory()
         tracemalloc.stop()
 
-        # Streaming — measure peak memory
+        # Streaming - measure peak memory
         tracemalloc.start()
         bench_streaming(check_garp_batch_optimized, n_users, chunk_size, (20, 100))
         _, peak_stream = tracemalloc.get_traced_memory()
@@ -127,9 +127,9 @@ def main():
               f"streaming (chunks of {chunk_size:,}) {fmt_mem(peak_stream):>8} | "
               f"{reduction:.1f}x reduction")
 
-    # --- Part 3: Stress test — streaming to extreme scale ---
+    # --- Part 3: Stress test - streaming to extreme scale ---
     print()
-    print("PART 3: EXTREME SCALE — Streaming (chunks of 10K)")
+    print("PART 3: EXTREME SCALE - Streaming (chunks of 10K)")
     print("-" * 85)
     print(f"{'Total Users':>14} | {'Time':>10} | {'Users/sec':>12} | {'Peak Mem':>10}")
     print("-" * 85)

@@ -145,7 +145,7 @@ fn houtman_maks_greedy(graph: &PreferenceGraph) -> (usize, usize) {
 ///
 /// Finds the true maximum consistent subset using integer linear programming.
 /// Uses the Demuynck & Rehbeck (2023) Corollary 2 formulation with fixed
-/// parameters α, δ, ε — no Big-M sensitivity issues.
+/// parameters α, δ, ε - no Big-M sensitivity issues.
 ///
 /// For T ≤ 200, typically solves in under 3 seconds (D&R benchmarked T=22–79).
 /// Falls back to greedy FVS if the ILP solver fails.
@@ -164,7 +164,7 @@ pub fn houtman_maks_exact(graph: &mut PreferenceGraph) -> (usize, usize) {
         return (0, 0);
     }
 
-    // O(T²) GARP check — no closure needed for the violation test
+    // O(T²) GARP check - no closure needed for the violation test
     let garp = garp_check(graph);
     let has_violation = !garp.is_consistent;
 
@@ -175,7 +175,7 @@ pub fn houtman_maks_exact(graph: &mut PreferenceGraph) -> (usize, usize) {
     // Try ILP first, fall back to greedy
     let removed = solve_hm_ilp(&graph.e[..t * t], &graph.own_exp[..t], t, graph.tolerance);
     if removed.is_empty() && has_violation {
-        // ILP failed — fall back to greedy
+        // ILP failed - fall back to greedy
         return houtman_maks_greedy(graph);
     }
 

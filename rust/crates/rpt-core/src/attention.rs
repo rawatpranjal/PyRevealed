@@ -15,7 +15,7 @@ pub struct AttentionResult {
 ///   c(B) = max_{>} Γ(B)  for all menus B
 ///
 /// The test: choices are WARP-LA rationalizable iff there are no "attention
-/// cycles" — cases where x is chosen over y in one menu, y is chosen over z
+/// cycles" - cases where x is chosen over y in one menu, y is chosen over z
 /// in another, but z is chosen over x in a third, AND all three were
 /// demonstrably in each other's consideration sets.
 ///

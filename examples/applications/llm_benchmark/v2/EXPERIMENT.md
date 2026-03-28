@@ -1,4 +1,4 @@
-# LLM Benchmark v2 — Experiment Log
+# LLM Benchmark v2 - Experiment Log
 
 ## Design
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Stage 2: Run the LLM benchmark — query models with vignettes and prompts.
+"""Stage 2: Run the LLM benchmark - query models with vignettes and prompts.
 
 Append-only JSONL: each run adds missing (prompt, trial) pairs. Safe to
 interrupt and resume. Data accumulates across runs.

@@ -69,7 +69,7 @@ def test_profit_maximization(
     T = log.num_observations
 
     # --------------------------------------------------------------------------
-    # Production GARP — Varian (1984) "The Nonparametric Approach to Production
+    # Production GARP - Varian (1984) "The Nonparametric Approach to Production
     # Analysis", Econometrica 52(3), 579-597.
     # Chambers & Echenique (2016) "Revealed Preference Theory", Chapter 15.
     #

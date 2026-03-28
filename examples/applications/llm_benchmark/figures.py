@@ -58,7 +58,7 @@ def generate_panel(summary: dict) -> None:
 
     model_names = [m["name"] for m in MODEL_CONFIGS]
 
-    # (a) HM Efficiency Heatmap — side by side
+    # (a) HM Efficiency Heatmap - side by side
     ax = axes[0, 0]
     n_scenarios = len(SCENARIO_ORDER)
     n_prompts = len(PROMPT_ORDER)

@@ -20,7 +20,7 @@
 | Likes without clicks | 2.4K | 0.5% |
 
 **Interpretation:**
-- **True negatives exist.** Over half the rows are pure exposures with no feedback. This is good — it means the dataset contains what users *didn't* like, not just what they did.
+- **True negatives exist.** Over half the rows are pure exposures with no feedback. This is good - it means the dataset contains what users *didn't* like, not just what they did.
 - **Likes are mostly nested in clicks** (99.5% of likes occur in clicked rows). The 0.5% "like without click" suggests some data anomalies, but the general pattern is consistent with a sequential process: exposure → click → optional like.
 - **Exposure-only prevalence (56%) is strong.** This supports the idea that a menu-choice interpretation is *possible* if we can define the menu credibly.
 
@@ -56,7 +56,7 @@ All three "streaming-based" rules (accumulate until positive feedback) exhibit *
 - **Top-category share lower but still 71–76%.** Windows are category-coherent, which is good, but the windows are *too constrained*.
 
 **Verdict on (2):** ✗✗ **FAIL HARD.**
-- R1, R2, R3: Massive window-size variance, trivial windows (36–46% size-1), and the chosen item is always last (100%) — classic engagement/stopping behavior, not menu choice.
+- R1, R2, R3: Massive window-size variance, trivial windows (36–46% size-1), and the chosen item is always last (100%) - classic engagement/stopping behavior, not menu choice.
 - R4, R5: Better bounded, but the chosen item is mechanically last, making the construction circular (you've defined "choice" to be the stopping point).
 
 ---
@@ -75,7 +75,7 @@ All three "streaming-based" rules (accumulate until positive feedback) exhibit *
 | Median category entropy | ~0.0 |
 
 **Interpretation:**
-- **Almost all windows are single-category.** Median = 1 unique category means the typical click-window is entirely within a single video category. This is **very good** for menu coherence — the user is facing items of the same type.
+- **Almost all windows are single-category.** Median = 1 unique category means the typical click-window is entirely within a single video category. This is **very good** for menu coherence - the user is facing items of the same type.
 - **P99 = 2 categories.** Even the extreme tail has mostly 2 categories. Very tight.
 - **Top-category share = 100%.** Almost all windows are 100% the dominant category. No cross-category clutter.
 
@@ -119,7 +119,7 @@ All three "streaming-based" rules (accumulate until positive feedback) exhibit *
 **Interpretation:**
 - **Liked items have slightly higher watch time** (median 2 vs 1, mean 2.5 vs 0.9 for exposed). This suggests some engagement signal.
 - **But the difference is modest.** Liked vs clicked-not-liked have nearly identical watch times (2.0–2.4 s). If the "like" were a strong engagement signal, we'd expect a larger gap.
-- **Exposed-only items are briefer** (1.0 s median), which makes sense — the user didn't click, so they saw less.
+- **Exposed-only items are briefer** (1.0 s median), which makes sense - the user didn't click, so they saw less.
 
 **Interpretation:** The watch-time data *slightly* supports a preference story (liked items are engaged with a bit longer), but the separation is weak. It's not a killer, but it doesn't strongly validate the menu-choice interpretation either.
 
@@ -136,10 +136,10 @@ All three "streaming-based" rules (accumulate until positive feedback) exhibit *
 | Like rate (likes / rows) | 0.000 | 0.027 | 0.265 |
 | Positive-action rate (any action / rows) | 0.429 | 0.731 | 1.000 |
 | Size-1 window share (% of user's windows with size 1) | 0.000 | 0.000 | 0.667 |
-| Median window size per user | 0.0 | 21.0 | — |
+| Median window size per user | 0.0 | 21.0 | - |
 
 **Interpretation:**
-- **Median like rate = 0.** The typical user in the sample has *zero likes*. Only at p90 (90th percentile) does a user have 2.7% likes. At p99, some users like 26.5% of items. This is **extremely skewed** — the vast majority of users are passive viewers.
+- **Median like rate = 0.** The typical user in the sample has *zero likes*. Only at p90 (90th percentile) does a user have 2.7% likes. At p99, some users like 26.5% of items. This is **extremely skewed** - the vast majority of users are passive viewers.
 - **Median positive-action rate = 42.9%.** Most users click or interact at all, but not always.
 - **Median median-window-size = 0.** The median user has a median window size of 0, meaning most users have no windows at all (no likes = no completed menu events). Only at p90 does the per-user median window jump to 21.0.
 - **Size-1 prevalence:** Most users have no size-1 windows (median 0), but at p99, some users are 67% size-1. Again, extreme heterogeneity.
@@ -167,7 +167,7 @@ All three "streaming-based" rules (accumulate until positive feedback) exhibit *
 
 ---
 
-## Decision: Path B — Exploratory Appendix
+## Decision: Path B - Exploratory Appendix
 
 ### What Tenrec **is:**
 1. A sequential exposure-engagement dataset from a real recommendation system
@@ -212,4 +212,4 @@ Tenrec is **suitable for an exploratory appendix** showing how RP features behav
 
 **EDA result:** **The diagnostics confirm Path B.** Category coherence is strong, but window-size variance, size-1 prevalence (46%), and 100% chosen-last behavior all point to sequential engagement, not menu choice.
 
-**Recommendation:** **Proceed with Path B — reframe as appendix.** Don't drop Tenrec entirely; instead, reuse the high-quality category signal and user behavior stability for a secondary claim: "Revealed preference features predict engagement trajectories in sequential contexts."
+**Recommendation:** **Proceed with Path B - reframe as appendix.** Don't drop Tenrec entirely; instead, reuse the high-quality category signal and user behavior stability for a secondary claim: "Revealed preference features predict engagement trajectories in sequential contexts."

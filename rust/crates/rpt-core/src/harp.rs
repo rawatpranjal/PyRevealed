@@ -7,7 +7,7 @@ use crate::types::HarpResult;
 /// expenditure ratios has product > 1. Uses max-product Floyd-Warshall in
 /// log-space: a positive diagonal entry means a violating cycle exists.
 ///
-/// HARP is a **binary test** — Varian (1983) and Chambers & Echenique (2016,
+/// HARP is a **binary test** - Varian (1983) and Chambers & Echenique (2016,
 /// Theorem 4.2) define only pass/fail, not a severity metric. The
 /// `max_cycle_product` field is always 1.0; the meaningful output is
 /// `is_consistent`.

@@ -154,7 +154,7 @@ def load_yoochoose(
 
     print(f"  Valid sessions: {len(records):,}")
 
-    # Yoochoose sessions are anonymous — group by session_id patterns
+    # Yoochoose sessions are anonymous - group by session_id patterns
     # Each session_id is a unique user visit. To get per-"user" data,
     # we need multiple sessions from the same user. Yoochoose doesn't
     # have persistent user IDs, so we use session_id as user_id directly

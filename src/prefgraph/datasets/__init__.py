@@ -35,25 +35,25 @@ from prefgraph.datasets._favorita import load_favorita
 
 
 def load_retailrocket(*args, **kwargs):
-    """Lazy wrapper — defers pandas import until called."""
+    """Lazy wrapper - defers pandas import until called."""
     from prefgraph.datasets._retailrocket import load_retailrocket as _fn
     return _fn(*args, **kwargs)
 
 
 def load_rees46(*args, **kwargs):
-    """Lazy wrapper — defers pandas import until called."""
+    """Lazy wrapper - defers pandas import until called."""
     from prefgraph.datasets._rees46 import load_rees46 as _fn
     return _fn(*args, **kwargs)
 
 
 def load_taobao(*args, **kwargs):
-    """Lazy wrapper — defers pandas import until called."""
+    """Lazy wrapper - defers pandas import until called."""
     from prefgraph.datasets._taobao import load_taobao as _fn
     return _fn(*args, **kwargs)
 
 
 def load_tenrec(*args, **kwargs):
-    """Lazy wrapper — defers pandas import until called."""
+    """Lazy wrapper - defers pandas import until called."""
     from prefgraph.datasets._tenrec import load_tenrec as _fn
     return _fn(*args, **kwargs)
 

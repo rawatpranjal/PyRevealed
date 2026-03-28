@@ -14,20 +14,20 @@ The loader (_taobao.py) makes these assumptions:
   A3. Choice = the purchased item (buy) in that session.
   A4. Only sessions with exactly 1 unique purchased item are valid.
   A5. If the purchased item was not viewed before buying, it is inserted into the menu.
-  A6. Menu size must be in [2, 50] — singletons dropped, huge menus dropped.
+  A6. Menu size must be in [2, 50] - singletons dropped, huge menus dropped.
   A7. Users with < 5 valid sessions are excluded.
   A8. Top 50K users by session count are taken (sort by activity descending).
 
 Nine diagnostics auditing these in turn:
   D1. Raw data overview (behavior mix, time range, user counts)
-  D2. Inter-event gap distribution — is 30 min the right threshold? (A1)
-  D3. Session structure — sessions per user, events per session (A1, A7, A8)
-  D4. Purchase-per-session distribution — 0/1/2+ buys (A3, A4)
-  D5. Purchase-in-menu rate — how often was the bought item viewed? (A2, A5)
-  D6. Purchase temporal position — is the purchase always the LAST viewed item? (A3)
-  D7. Menu size distribution — before/after filters, filter dropout rates (A6)
-  D8. Category coherence — within-session category consistency (A2 quality)
-  D9. User qualification sensitivity — how much does min_sessions threshold matter? (A7)
+  D2. Inter-event gap distribution - is 30 min the right threshold? (A1)
+  D3. Session structure - sessions per user, events per session (A1, A7, A8)
+  D4. Purchase-per-session distribution - 0/1/2+ buys (A3, A4)
+  D5. Purchase-in-menu rate - how often was the bought item viewed? (A2, A5)
+  D6. Purchase temporal position - is the purchase always the LAST viewed item? (A3)
+  D7. Menu size distribution - before/after filters, filter dropout rates (A6)
+  D8. Category coherence - within-session category consistency (A2 quality)
+  D9. User qualification sensitivity - how much does min_sessions threshold matter? (A7)
 
 Run: python examples/eda/taobao_eda.py
 
@@ -47,7 +47,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 DATA_PATH = Path.home() / ".prefgraph" / "data" / "taobao" / "UserBehavior.csv"
-SESSION_GAP = 1800   # 30 minutes (seconds) — the loader's threshold
+SESSION_GAP = 1800   # 30 minutes (seconds) - the loader's threshold
 SAMPLE_ROWS = 20_000_000  # 20M / 100M = 20% of data
 
 
@@ -374,7 +374,7 @@ def diagnostic_5_purchase_in_menu(
     views: pl.DataFrame,
 ) -> dict:
     """
-    A2/A5: The loader does `menu | {choice}` — inserts the purchased item
+    A2/A5: The loader does `menu | {choice}` - inserts the purchased item
     into the menu even if it was never viewed.
 
     How often does a user buy something they never viewed in the same session?
@@ -390,7 +390,7 @@ def diagnostic_5_purchase_in_menu(
     # Restrict to valid sessions (exactly 1 buy)
     valid_buys = buys.filter(pl.col("session_id").is_in(list(valid_session_ids)))
 
-    # One buy per valid session — pick the purchased item
+    # One buy per valid session - pick the purchased item
     session_buy_item = (
         valid_buys.group_by("session_id")
         .agg(pl.col("item_id").first().alias("bought_item"))
@@ -587,7 +587,7 @@ def diagnostic_7_menu_size(
 
     What is the distribution of menu sizes (pv count per valid session)?
     How much data is dropped by the min=2 and max=50 filters?
-    The 'menu' in the loader is the SET of viewed items — so duplicates
+    The 'menu' in the loader is the SET of viewed items - so duplicates
     (viewing the same item twice) don't expand the menu.
     """
     print("\n" + "="*70)
@@ -685,7 +685,7 @@ def diagnostic_8_category_coherence(
     product category (e.g. all shoes, all laptops).
 
     If a session spans many unrelated categories, the 'menu' is not a
-    coherent choice set — it's a browsing trail through unrelated goods.
+    coherent choice set - it's a browsing trail through unrelated goods.
     A cross-category session can still be valid if it's a bundled purchase
     (choosing between product types), but RP tests implicitly assume
     the budget is spent on homogeneous goods.

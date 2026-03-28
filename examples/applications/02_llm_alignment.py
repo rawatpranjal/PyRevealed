@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Application: LLM Prompt Consistency — Controlled Experiment with GPT.
+"""Application: LLM Prompt Consistency - Controlled Experiment with GPT.
 
 Tests whether different system prompts cause LLMs to make inconsistent
 choices when selecting from menus of Python packages. This is a direct
@@ -13,7 +13,7 @@ Experimental design:
   - Metric: SARP consistency + Houtman-Maks efficiency per prompt
 
 If a prompt causes the LLM to choose package A over B in one context but
-B over A in another, that's a SARP violation — no fixed preference ranking
+B over A in another, that's a SARP violation - no fixed preference ranking
 can explain the choices. This measures prompt-induced decision incoherence.
 
 Requires: pip install openai
@@ -358,7 +358,7 @@ def print_results(results: list[PromptResult]) -> None:
 
   A SARP-consistent agent has a fixed preference ranking over packages that
   doesn't change based on which alternatives are shown. SARP violations mean
-  the agent's choices depend on the menu composition — a form of the
+  the agent's choices depend on the menu composition - a form of the
   "irrelevant alternatives" problem that undermines reliable automation.
 
   Applications:
@@ -374,7 +374,7 @@ def print_results(results: list[PromptResult]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="LLM Prompt Consistency — Controlled SARP Experiment"
+        description="LLM Prompt Consistency - Controlled SARP Experiment"
     )
     parser.add_argument("--trials", type=int, default=100,
                         help="Trials per prompt (default: 100)")
@@ -450,7 +450,7 @@ def main() -> None:
         # Save for caching
         save_responses(all_records)
 
-    # Analyze — group by temperature
+    # Analyze - group by temperature
     temps_in_data = sorted(set(r.get("temperature", args.temperature) for r in all_records))
 
     for temp in temps_in_data:

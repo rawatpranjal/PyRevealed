@@ -65,7 +65,7 @@ pub fn quasilinear_check(graph: &mut PreferenceGraph) -> (bool, f64) {
         }
 
         // Check for negative cycles (in surplus space, this means positive surplus cycle)
-        // Wait — we want to detect POSITIVE surplus cycles. So we negate:
+        // Wait - we want to detect POSITIVE surplus cycles. So we negate:
         // If after T-1 relaxations we can still improve, there's a negative-weight cycle.
         // But our weights are surplus (positive = violation). So we check for the ability
         // to keep decreasing distances, which would mean a negative-surplus cycle (good).
@@ -147,7 +147,7 @@ mod tests {
 
     #[test]
     fn test_violation_quasilinear() {
-        // Data with GARP violation — may also violate quasilinearity
+        // Data with GARP violation - may also violate quasilinearity
         let prices = [2.0, 1.0, 1.0, 2.0];
         let quantities = [3.0, 2.0, 2.0, 3.0];
         let mut graph = PreferenceGraph::new(2);

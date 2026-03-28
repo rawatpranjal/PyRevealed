@@ -16,18 +16,18 @@
 - Performance page rewritten into concise paragraphs; consolidated RTD plot generation under `docs/perf/` with a CLI (`python -m docs.perf.cli`) and migrated legacy script to delegate. Figures write to `docs/_static/perf_*.png`.
 
 ### Fixed
-- **Base install safety** — `import prefgraph` no longer crashes without `pandas`. Four dataset loaders (_retailrocket, _rees46, _taobao, _tenrec) had bare `import pandas as pd` at module level; now lazily imported via wrapper functions in `datasets/__init__.py`.
-- **compute_mpi() function API** — was silently returning 0.0 on GARP-violating data. Root cause: Rust call had wrong argument count (missing `network=False`), causing TypeError caught by bare `except`, falling to Python fallback which had a separate `is_garp` gate bug. Fixed arg count per engine.py call signature. Ref: Echenique, Lee & Shum (2011) JPE 119(6), Eq. (2).
-- **Engine VEI** — `Engine(metrics=['vei'])` returned `vei_mean=1.0` on inconsistent data. Neither the Rust backend nor the Python fallback called `compute_vei()`. Added Python VEI computation to both paths. Ref: Varian (1990) J. Econometrics; Mononen (2023) "Computing Measures of Rationality".
-- **BehavioralAuditor HM** — `summary().houtman_maks_result` was `None` on consistent logs. Now always computed (fast-exits trivially with fraction=0.0). Ref: Heufer & Hjertstrand (2015) "Consistent Subsets".
+- **Base install safety** - `import prefgraph` no longer crashes without `pandas`. Four dataset loaders (_retailrocket, _rees46, _taobao, _tenrec) had bare `import pandas as pd` at module level; now lazily imported via wrapper functions in `datasets/__init__.py`.
+- **compute_mpi() function API** - was silently returning 0.0 on GARP-violating data. Root cause: Rust call had wrong argument count (missing `network=False`), causing TypeError caught by bare `except`, falling to Python fallback which had a separate `is_garp` gate bug. Fixed arg count per engine.py call signature. Ref: Echenique, Lee & Shum (2011) JPE 119(6), Eq. (2).
+- **Engine VEI** - `Engine(metrics=['vei'])` returned `vei_mean=1.0` on inconsistent data. Neither the Rust backend nor the Python fallback called `compute_vei()`. Added Python VEI computation to both paths. Ref: Varian (1990) J. Econometrics; Mononen (2023) "Computing Measures of Rationality".
+- **BehavioralAuditor HM** - `summary().houtman_maks_result` was `None` on consistent logs. Now always computed (fast-exits trivially with fraction=0.0). Ref: Heufer & Hjertstrand (2015) "Consistent Subsets".
 
 ## [0.5.8] - 2026-03-28
 
 ### Fixed
-- **VEI objective sign** — `compute_vei()` LP was maximizing sum(e_i) instead of minimizing, trivially returning e_i=1.0 for all observations regardless of GARP violations. Now uses direct R constraints and minimize direction, producing meaningful per-observation efficiency scores. Ref: Varian (1990) J. Econometrics; Smeulders et al. (2014) ACM Trans. Econ. Comp.
-- **HM greedy SCC** — `_houtman_maks_greedy()` used `find_sccs(R)` (direct relation) instead of `find_sccs(R_star)` (transitive closure). Purely transitive GARP violations produced all-singleton SCCs, causing the greedy FVS to return 0 removals even when violations existed. Ref: Houtman & Maks (1985); Smeulders et al. (2014) Theorem 5.1.
-- **Production GARP** — Python `test_profit_maximization()` checked `R_star[i,j] AND R_star[j,i]` (cycle only) instead of `R_star[i,j] AND P[j,i]` (proper GARP condition). Now matches the Rust implementation. Ref: Varian (1984) Econometrica; Chambers & Echenique (2016) Ch 15.
-- **EngineResult defaults** — `is_harp`, `utility_success`, `hm_consistent`, `hm_total` now default to `None` (not `False`/`0`) when not computed. DataFrames show NaN instead of misleading failure values.
+- **VEI objective sign** - `compute_vei()` LP was maximizing sum(e_i) instead of minimizing, trivially returning e_i=1.0 for all observations regardless of GARP violations. Now uses direct R constraints and minimize direction, producing meaningful per-observation efficiency scores. Ref: Varian (1990) J. Econometrics; Smeulders et al. (2014) ACM Trans. Econ. Comp.
+- **HM greedy SCC** - `_houtman_maks_greedy()` used `find_sccs(R)` (direct relation) instead of `find_sccs(R_star)` (transitive closure). Purely transitive GARP violations produced all-singleton SCCs, causing the greedy FVS to return 0 removals even when violations existed. Ref: Houtman & Maks (1985); Smeulders et al. (2014) Theorem 5.1.
+- **Production GARP** - Python `test_profit_maximization()` checked `R_star[i,j] AND R_star[j,i]` (cycle only) instead of `R_star[i,j] AND P[j,i]` (proper GARP condition). Now matches the Rust implementation. Ref: Varian (1984) Econometrica; Chambers & Echenique (2016) Ch 15.
+- **EngineResult defaults** - `is_harp`, `utility_success`, `hm_consistent`, `hm_total` now default to `None` (not `False`/`0`) when not computed. DataFrames show NaN instead of misleading failure values.
 
 ## [0.5.7] - 2026-03-28
 
@@ -41,41 +41,41 @@ Re-release of 0.5.5 with multi-platform wheels (Linux manylinux2_28, macOS x86+a
 ## [0.5.5] - 2026-03-28
 
 ### Fixed
-- **Houtman-Maks ILP rewritten** — replaced Afriat Big-M formulation (broken: M too small, λ bounds infeasible) with Demuynck & Rehbeck (2023) Corollary 2. Uses fixed parameters α, δ, ε with clean data-derived bounds. Exact on all tested counterexamples.
+- **Houtman-Maks ILP rewritten** - replaced Afriat Big-M formulation (broken: M too small, λ bounds infeasible) with Demuynck & Rehbeck (2023) Corollary 2. Uses fixed parameters α, δ, ε with clean data-derived bounds. Exact on all tested counterexamples.
 - **Engine now uses exact ILP** for T ≤ 200 (`houtman_maks_exact`), greedy FVS for T > 200. Previously always used greedy, which over-removed observations.
-- **HARP severity dropped** — `max_cycle_product` always returns 1.0. HARP is a binary test per Varian (1983) and Chambers & Echenique (2016, Thm 4.2); no severity metric is defined in the literature. Previous implementations (FW diagonal, 2-cycle patch) were approximations of a non-existent quantity.
-- **Python HM ILP** — same Big-M fix as Rust (lambda bounds, M computation)
+- **HARP severity dropped** - `max_cycle_product` always returns 1.0. HARP is a binary test per Varian (1983) and Chambers & Echenique (2016, Thm 4.2); no severity metric is defined in the literature. Previous implementations (FW diagonal, 2-cycle patch) were approximations of a non-existent quantity.
+- **Python HM ILP** - same Big-M fix as Rust (lambda bounds, M computation)
 
 ## [0.5.4] - 2026-03-27
 
 ### Fixed
-- `validate_consistency` docstring referenced non-existent `is_valid` and `inconsistencies` fields — now correctly documents `is_consistent` and `violations`
-- Install command in quickstart and README changed from `pip install prefgraph` to `pip install "prefgraph[datasets]"` — beginners no longer hit missing pandas on first run
-- HM (Houtman-Maks) in Python fallback returned `hm_consistent=0, hm_total=0` — now computes real values
-- `EngineResult` docstring described `hm_consistent / hm_total` as "noise fraction" — corrected to "rationalizable fraction"
+- `validate_consistency` docstring referenced non-existent `is_valid` and `inconsistencies` fields - now correctly documents `is_consistent` and `violations`
+- Install command in quickstart and README changed from `pip install prefgraph` to `pip install "prefgraph[datasets]"` - beginners no longer hit missing pandas on first run
+- HM (Houtman-Maks) in Python fallback returned `hm_consistent=0, hm_total=0` - now computes real values
+- `EngineResult` docstring described `hm_consistent / hm_total` as "noise fraction" - corrected to "rationalizable fraction"
 
 ### Added
-- `HoutmanMaksResult.efficiency` property — returns fraction of rationalizable observations (`1 - fraction`), matching the polarity of `compute_menu_efficiency().efficiency_index`
-- User_id note in quickstart — clarifies that `analyze()` output has `user_id` as DataFrame index
+- `HoutmanMaksResult.efficiency` property - returns fraction of rationalizable observations (`1 - fraction`), matching the polarity of `compute_menu_efficiency().efficiency_index`
+- User_id note in quickstart - clarifies that `analyze()` output has `user_id` as DataFrame index
 
 ## [0.5.3] - 2026-03-27
 
 ### Added
-- `rp.analyze()` one-liner API — auto-detects long, wide, and menu formats from a DataFrame
-- **Parquet streaming**: `rp.analyze("data.parquet", ...)` and `Engine.analyze_parquet()` — stream datasets larger than RAM with bounded O(chunk_size) memory
-- **Rust-native Parquet pipeline**: `analyze_parquet_file()` reads Parquet, groups by user, and feeds directly to Rayon — eliminates Python from the hot path (requires `--features parquet`)
-- `prefgraph.io.ParquetUserIterator` — streaming row-group reader for wide and long formats
-- `prefgraph.io.prepare_parquet()` — sort and rewrite datasets for optimal streaming
+- `rp.analyze()` one-liner API - auto-detects long, wide, and menu formats from a DataFrame
+- **Parquet streaming**: `rp.analyze("data.parquet", ...)` and `Engine.analyze_parquet()` - stream datasets larger than RAM with bounded O(chunk_size) memory
+- **Rust-native Parquet pipeline**: `analyze_parquet_file()` reads Parquet, groups by user, and feeds directly to Rayon - eliminates Python from the hot path (requires `--features parquet`)
+- `prefgraph.io.ParquetUserIterator` - streaming row-group reader for wide and long formats
+- `prefgraph.io.prepare_parquet()` - sort and rewrite datasets for optimal streaming
 - `nan_policy` parameter ("raise"/"warn"/"drop") for `analyze()` and `BehaviorLog`
 - `load_pakistan()`, `load_favorita()`, `load_taobao()` dataset loaders
 - 6-dataset e-commerce benchmark: 162K users, 14 tasks, RP features add 0–0.7% AUC
 - LLM benchmark v2 Stage 1: 3,750 decisions, per-vignette SARP pass rates 60–100%
 - Smart error messages with fuzzy column-name suggestions and type-conversion hints
 - Python 3.13 wheels for all platforms
-- Rust build now optional for source installs — pure-Python fallback via setuptools-rust
+- Rust build now optional for source installs - pure-Python fallback via setuptools-rust
 
 ### Fixed
-- Linux/Windows install broken — v0.5.2 only shipped macOS wheel
+- Linux/Windows install broken - v0.5.2 only shipped macOS wheel
 
 ## [0.5.2] - 2026-03-26
 
@@ -86,7 +86,7 @@ Re-release of 0.5.5 with multi-platform wheels (Linux manylinux2_28, macOS x86+a
 ## [0.5.1] - 2026-03-26
 
 ### Fixed
-- ReadTheDocs builds broken since maturin migration — mock Rust extension in autodoc
+- ReadTheDocs builds broken since maturin migration - mock Rust extension in autodoc
 - PyPI homepage URL now points to ReadTheDocs instead of GitHub
 - Linux CI: pin to Python 3.10-3.12 (PyO3 0.22 max), install libclang for HiGHS bindgen
 - Escaped pipe characters in RST list-tables causing Sphinx build errors
@@ -100,7 +100,7 @@ Re-release of 0.5.5 with multi-platform wheels (Linux manylinux2_28, macOS x86+a
 - Simplified pipeline diagram to plain English with function names
 
 ### Added
-- `load_demo()` synthetic dataset — 100 consumers, zero setup, deterministic
+- `load_demo()` synthetic dataset - 100 consumers, zero setup, deterministic
 - `EngineResult.summary()` and `MenuResult.summary()` methods
 - Field-level documentation for `EngineResult` and `MenuResult` dataclasses
 - Quickstart page in documentation
@@ -119,7 +119,7 @@ Re-release of 0.5.5 with multi-platform wheels (Linux manylinux2_28, macOS x86+a
 ## [0.5.0] - 2026-03-25
 
 ### Added
-- Rust engine (`rpt-core`) with Rayon parallelism — 18-100x faster than Python
+- Rust engine (`rpt-core`) with Rayon parallelism - 18-100x faster than Python
 - `Engine` class for batch analysis of millions of users
 - `Engine.analyze_menus()` for discrete/menu choice data
 - `Engine.build_graph()` for deep per-user preference graph construction

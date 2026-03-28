@@ -402,7 +402,7 @@ class BehavioralSummary(ResultDisplayMixin):
         #   "The HM-index is the maximal fraction of non-zero elements
         #    in the binary vector v such that GARP(v) holds."
         # For consistent data, compute_houtman_maks_index fast-exits with
-        # fraction=0.0, removed=[] — trivially correct. Never leave as None
+        # fraction=0.0, removed=[] - trivially correct. Never leave as None
         # because callers (summary display, user code) expect this field
         # to always be populated.
         houtman_maks_result = compute_houtman_maks_index(log)

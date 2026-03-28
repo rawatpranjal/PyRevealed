@@ -24,7 +24,7 @@ pub fn scc_transitive_closure(
     let n_comp = tarjan_scc(r_mat, t, scc_labels);
 
     if n_comp <= 1 && t > 1 {
-        // Single SCC — run full Floyd-Warshall
+        // Single SCC - run full Floyd-Warshall
         floyd_warshall(closure, t);
         return (1, t);
     }

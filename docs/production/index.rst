@@ -1,7 +1,7 @@
 Production
 ==========
 
-**Input:** ``ProductionLog`` — input prices/quantities × output prices/quantities
+**Input:** ``ProductionLog`` - input prices/quantities × output prices/quantities
 
 Production theory applies revealed preference to firm behavior, testing
 whether input-output observations are consistent with profit maximization

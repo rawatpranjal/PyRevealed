@@ -72,15 +72,15 @@ pub fn solve_afriat_lp(
 ///
 /// # Variables (per D&R notation)
 ///
-/// - `u_t ∈ [0,1]`  — continuous utility numbers (T variables)
-/// - `A_t ∈ {0,1}`  — binary: 1 = keep observation t (T variables)
-/// - `U_{t,v} ∈ {0,1}` — binary: 1 iff u_t ≥ u_v (T² variables, t≠v)
+/// - `u_t ∈ [0,1]`  - continuous utility numbers (T variables)
+/// - `A_t ∈ {0,1}`  - binary: 1 = keep observation t (T variables)
+/// - `U_{t,v} ∈ {0,1}` - binary: 1 iff u_t ≥ u_v (T² variables, t≠v)
 ///
 /// # Parameters
 ///
-/// - `ε ∈ (0, 1/T)` — minimum utility gap to separate distinct values
-/// - `α > max_{t} p^t·q^t` — deactivation constant (just above max expenditure)
-/// - `δ` — strict/weak affordability separator:
+/// - `ε ∈ (0, 1/T)` - minimum utility gap to separate distinct values
+/// - `α > max_{t} p^t·q^t` - deactivation constant (just above max expenditure)
+/// - `δ` - strict/weak affordability separator:
 ///   `0 < δ < min{min_{t,v} p^t·q^v, min_{t,v: p^t·q^v > p^t·q^t} (p^t·q^v - p^t·q^t)}`
 ///
 /// # Constraints (D&R equations IP-1, IP-2, IP-5, IP-6)
@@ -166,7 +166,7 @@ pub fn solve_hm_ilp(
 
     let mut pb = RowProblem::default();
 
-    // A_t: binary keep/remove indicators — added FIRST so they occupy
+    // A_t: binary keep/remove indicators - added FIRST so they occupy
     // column indices 0..T-1 for easy solution extraction.
     // Objective: maximize Σ A_t = minimize Σ (-A_t).
     let mut a_cols = Vec::with_capacity(t);
@@ -252,7 +252,7 @@ pub fn solve_hm_ilp(
             removed
         }
         _ => {
-            // Solver failed — return empty so caller can fall back to greedy
+            // Solver failed - return empty so caller can fall back to greedy
             Vec::new()
         }
     }

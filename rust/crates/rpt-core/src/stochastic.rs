@@ -5,7 +5,7 @@ use highs::{HighsModelStatus, RowProblem, Sense};
 pub struct RumResult {
     pub is_consistent: bool,
     pub n_items: usize,
-    pub n_orderings: usize,  // K! — number of possible orderings
+    pub n_orderings: usize,  // K! - number of possible orderings
 }
 
 /// Result of a regularity test.
@@ -19,7 +19,7 @@ pub struct RegularityResult {
 ///
 /// Given choice frequencies over menus, test whether there exists a
 /// probability distribution over all K! preference orderings that
-/// generates the observed frequencies. This is the nonparametric test —
+/// generates the observed frequencies. This is the nonparametric test -
 /// if it fails, NO discrete choice model (logit, probit, mixed logit)
 /// can rationalize the data.
 ///
@@ -42,7 +42,7 @@ pub fn rum_consistency_check(
 ) -> RumResult {
     if n_items > 6 {
         return RumResult {
-            is_consistent: false, // Can't test — too many orderings
+            is_consistent: false, // Can't test - too many orderings
             n_items,
             n_orderings: 0,
         };
@@ -111,7 +111,7 @@ pub fn rum_consistency_check(
 /// increases the choice probability of an existing item, the data violates
 /// regularity (and therefore cannot be a RUM).
 ///
-/// No LP needed — just pairwise comparison of frequencies across nested menus.
+/// No LP needed - just pairwise comparison of frequencies across nested menus.
 pub fn regularity_check(
     menus: &[Vec<usize>],
     frequencies: &[Vec<(usize, f64)>],
@@ -214,7 +214,7 @@ mod tests {
 
     #[test]
     fn test_regularity_consistent() {
-        // P(0|{0,1}) = 0.6, P(0|{0,1,2}) = 0.5 — regularity holds (0.6 >= 0.5)
+        // P(0|{0,1}) = 0.6, P(0|{0,1,2}) = 0.5 - regularity holds (0.6 >= 0.5)
         let menus = vec![vec![0, 1], vec![0, 1, 2]];
         let freqs = vec![
             vec![(0, 60.0), (1, 40.0)],
@@ -226,7 +226,7 @@ mod tests {
 
     #[test]
     fn test_regularity_violation() {
-        // P(0|{0,1}) = 0.4, P(0|{0,1,2}) = 0.6 — violation! (adding item 2 increased P(0))
+        // P(0|{0,1}) = 0.4, P(0|{0,1,2}) = 0.6 - violation! (adding item 2 increased P(0))
         let menus = vec![vec![0, 1], vec![0, 1, 2]];
         let freqs = vec![
             vec![(0, 40.0), (1, 60.0)],

@@ -113,7 +113,7 @@ def _extract_menu_choices(
     views = events.loc[events["event_type"] == "view"]
     purchases = events.loc[events["event_type"] == "purchase"]
 
-    # Count purchases per session — keep only sessions with exactly 1
+    # Count purchases per session - keep only sessions with exactly 1
     purchase_counts = purchases.groupby("user_session").size()
     single_purchase_sessions = purchase_counts[purchase_counts == 1].index
 
@@ -182,7 +182,7 @@ def load_rees46(
     events = _load_events(data_path)
     print(f"  Raw events: {len(events):,}")
 
-    # Keep only view and purchase events (drop cart — not needed for menus)
+    # Keep only view and purchase events (drop cart - not needed for menus)
     events = events[events["event_type"].isin(["view", "purchase"])]
     print(f"  View + purchase events: {len(events):,}")
 
@@ -194,7 +194,7 @@ def load_rees46(
         f"{len(choices_df):,}"
     )
 
-    # Free memory — events no longer needed
+    # Free memory - events no longer needed
     del events
 
     # Filter users with enough sessions

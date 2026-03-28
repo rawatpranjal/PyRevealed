@@ -10,7 +10,7 @@ Loads dunnhumby household shopping data and reports:
 - Household shopping patterns
 - Budget-choice matrix properties
 
-No interpretation, opinions, or analysis—only facts.
+No interpretation, opinions, or analysis-only facts.
 """
 
 import sys

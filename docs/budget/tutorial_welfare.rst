@@ -754,10 +754,10 @@ Handling GARP Violations
 
 Real-world data often violates GARP. Options:
 
-1. **Use Vartia method** — works without exact utility recovery
-2. **Compute bounds** — provides range even with violations
-3. **Use CCEI-adjusted data** — first adjust budgets to ensure consistency
-4. **Report bounds** — acknowledge uncertainty in welfare estimates
+1. **Use Vartia method** - works without exact utility recovery
+2. **Compute bounds** - provides range even with violations
+3. **Use CCEI-adjusted data** - first adjust budgets to ensure consistency
+4. **Report bounds** - acknowledge uncertainty in welfare estimates
 
 Interpretation Guidelines
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -802,7 +802,7 @@ Function Reference
 See Also
 --------
 
-- :doc:`tutorial` — GARP consistency and utility recovery
-- :doc:`tutorial_demand_analysis` — Slutsky decomposition and integrability
-- :doc:`/api` — Full API documentation
-- :doc:`/budget/theory_advanced` — Mathematical foundations (Chapter 7)
+- :doc:`tutorial` - GARP consistency and utility recovery
+- :doc:`tutorial_demand_analysis` - Slutsky decomposition and integrability
+- :doc:`/api` - Full API documentation
+- :doc:`/budget/theory_advanced` - Mathematical foundations (Chapter 7)

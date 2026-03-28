@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PrefGraph — Large-Scale Parquet Benchmark.
+"""PrefGraph - Large-Scale Parquet Benchmark.
 
 End-to-end: generate a multi-GB Parquet file, stream it through the
 Rust engine via PyArrow, and write scored results back to Parquet.
@@ -142,7 +142,7 @@ def main():
     # ── Header ──────────────────────────────────────────────────────
     print()
     print("=" * 72)
-    print("  PrefGraph  —  Large-Scale Parquet Benchmark")
+    print("  PrefGraph  -  Large-Scale Parquet Benchmark")
     print("  PyArrow  +  Rust  +  Rayon  +  Tarjan's SCC")
     print("=" * 72)
 

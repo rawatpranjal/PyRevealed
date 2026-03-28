@@ -1,7 +1,7 @@
 Applications
 ============
 
-Real-world applications of preference-graph analysis — building directed graphs from observed choices and testing them for consistency.
+Real-world applications of preference-graph analysis - building directed graphs from observed choices and testing them for consistency.
 
 Budgets
 -------

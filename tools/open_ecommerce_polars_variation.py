@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Open E‑Commerce (Amazon) — Polars-based RP variation diagnostics.
+"""Open E‑Commerce (Amazon) - Polars-based RP variation diagnostics.
 
 Loads amazon-purchases.csv with Polars, prepares price/quantity panels
 for ~N users, and runs GARP/CCEI/MPI to assess RP test power.

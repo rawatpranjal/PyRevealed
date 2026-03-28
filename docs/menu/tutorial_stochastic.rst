@@ -356,10 +356,10 @@ When to Use This Test
 
 Use regularity testing when:
 
-1. **Validating RUM assumptions** — Regularity is necessary for random utility
-2. **Detecting context effects** — Decoy effects violate regularity
-3. **A/B testing analysis** — Adding options shouldn't boost existing ones
-4. **Menu design** — Understanding how options affect each other
+1. **Validating RUM assumptions** - Regularity is necessary for random utility
+2. **Detecting context effects** - Decoy effects violate regularity
+3. **A/B testing analysis** - Adding options shouldn't boost existing ones
+4. **Menu design** - Understanding how options affect each other
 
 
 Testing IIA (Independence of Irrelevant Alternatives)
@@ -753,7 +753,7 @@ Notes
 Stochastic Choice
 ~~~~~~~~~~~~~~~~~
 
-1. **IIA test** — if IIA fails, logit may be inappropriate
+1. **IIA test** - if IIA fails, logit may be inappropriate
 
 2. **Model fit statistics**:
 
@@ -767,7 +767,7 @@ Stochastic Choice
    - Mixed logit for heterogeneous preferences
    - Probit for flexible substitution
 
-4. **Sample size** — stochastic tests need sufficient
+4. **Sample size** - stochastic tests need sufficient
    observations per menu
 
 
@@ -795,7 +795,7 @@ Function Reference
 See Also
 --------
 
-- :doc:`tutorial_menu_choice` — Deterministic menu-based choice
-- :doc:`/budget/tutorial` — Budget-based revealed preference
-- :doc:`/references` — Full API documentation
-- :doc:`theory_stochastic` — Mathematical foundations (Chapter 13)
+- :doc:`tutorial_menu_choice` - Deterministic menu-based choice
+- :doc:`/budget/tutorial` - Budget-based revealed preference
+- :doc:`/references` - Full API documentation
+- :doc:`theory_stochastic` - Mathematical foundations (Chapter 13)

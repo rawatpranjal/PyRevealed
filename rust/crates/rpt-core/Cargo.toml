@@ -2,7 +2,7 @@
 name = "rpt-core"
 version = "0.1.0"
 edition = "2021"
-description = "Revealed Preference Theory algorithms — pure Rust, no Python dependency"
+description = "Revealed Preference Theory algorithms - pure Rust, no Python dependency"
 
 [features]
 default = []

@@ -96,7 +96,7 @@ ccei = compute_integrity_score(session)    # AEIResult with binary search detail
 Budget          GARP, WARP      CCEI, MPI, HM   Utility, CV/EV    HARP, Separability
 Discrete        SARP, RUM LP    HM (menu)        Ordinal utility   Congruence
 Production      Prod GARP       Prod CCEI        Tech efficiency   Cost minimization
-Intertemporal   Exp discount    —                Discount delta    Quasi-hyperbolic
+Intertemporal   Exp discount    -                Discount delta    Quasi-hyperbolic
 ```
 
 | Category | Input format | Example domain |
@@ -120,7 +120,7 @@ The Rust engine (`rpt-core`) handles graph algorithms and LP solving via Rayon t
 
 ## Documentation
 
-**Full docs**: https://prefgraph.readthedocs.io/ — examples, theory, API reference, and applications.
+**Full docs**: https://prefgraph.readthedocs.io/ - examples, theory, API reference, and applications.
 
 - Benchmarks overview: https://prefgraph.readthedocs.io/en/latest/benchmarks.html
 - LLM Consistency Benchmarks: https://prefgraph.readthedocs.io/en/latest/budget/app_llm_benchmark.html

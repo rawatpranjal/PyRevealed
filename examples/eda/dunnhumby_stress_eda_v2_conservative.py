@@ -119,7 +119,7 @@ def main():
     print()
     print("  2. Including zero weeks would create false dominance relations:")
     print("     'I spent $X on tracked categories and $Y elsewhere' is not comparable")
-    print("     to 'I spent $0 on tracked categories'—these answer different questions.")
+    print("     to 'I spent $0 on tracked categories'-these answer different questions.")
     print()
     print("  3. The analysis should frame as: 'conditional on tracked activity,")
     print("     do households show consistent choice?' Not: 'full weekly demand.'")
@@ -189,7 +189,7 @@ def main():
 
     print("\nVERDICT (Block 2):")
     print("  ✓ The 10-category basket is incidental (19% of spend) and unstable (CV=0.85).")
-    print("  ✓ This is not a fixed budget envelope—it is conditional demand on tracked items.")
+    print("  ✓ This is not a fixed budget envelope-it is conditional demand on tracked items.")
     print()
 
     # =========================================================================
@@ -321,7 +321,7 @@ def main():
     print("  ⚠️  RP support is SPARSE and requires further checks.")
     print("  • Edge density ~1-3% means most household-weeks are not directly comparable.")
     print("  • This could indicate budget variety (good) OR insufficient overlap (bad).")
-    print("  • Do NOT interpret low density as strong identification—it is ambiguous.")
+    print("  • Do NOT interpret low density as strong identification-it is ambiguous.")
     print("  • Recommend: compute violation counts per household and check for")
     print("    pathological patterns (e.g., violations only in high-noise categories).")
     print()
@@ -330,7 +330,7 @@ def main():
     # BLOCK 5: STOCKPILING (with data provenance note)
     # =========================================================================
     print("=" * 80)
-    print("BLOCK 5: DYNAMIC BEHAVIOR — STOCKPILING EVENT STUDY")
+    print("BLOCK 5: DYNAMIC BEHAVIOR - STOCKPILING EVENT STUDY")
     print("=" * 80)
 
     print("\n⚠️  DATA PROVENANCE NOTE:")

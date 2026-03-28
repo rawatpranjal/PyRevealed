@@ -233,7 +233,7 @@ Part 3a: Quasilinearity (Income Invariance)
 -------------------------------------------
 
 **Quasilinear** preferences have the form ``U(x, m) = v(x) + m`` where ``m`` is
-money and ``v`` is a concave function. This implies **no income effects**—the
+money and ``v`` is a concave function. This implies **no income effects**-the
 marginal utility of money is constant.
 
 .. code-block:: python
@@ -1429,7 +1429,7 @@ Function Reference
 See Also
 --------
 
-- :doc:`tutorial` — GARP consistency and efficiency indices
-- :doc:`tutorial_welfare` — Welfare analysis using demand functions
-- :doc:`/api` — Full API documentation
-- :doc:`/budget/theory_advanced` — Mathematical foundations (Chapters 6, 9)
+- :doc:`tutorial` - GARP consistency and efficiency indices
+- :doc:`tutorial_welfare` - Welfare analysis using demand functions
+- :doc:`/api` - Full API documentation
+- :doc:`/budget/theory_advanced` - Mathematical foundations (Chapters 6, 9)

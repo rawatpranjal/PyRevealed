@@ -34,39 +34,39 @@ Every method in PrefGraph, organized by **input data type** (rows) and
        |
        | :doc:`Theory </budget/theory_consistency>`
        | :doc:`Tutorial </budget/tutorial>`
-     - | GARP — Varian (1982)
-       | WARP — Samuelson (1938)
-       | SARP — Richter (1966)
-       | HARP — Varian (1983)
-       | GAPP — Deb et al. (2023)
-       | Acyclical P — Varian (1982)
-       | Quasilinearity — C&E Ch 9
-       | Integrability — Slutsky
-       | Additive sep. — C&E Ch 9
-       | Gross substitutes — C&E Ch 10
-       | Separability — C&E (2016)
-       | Law of demand — C&E Ch 10
-     - | CCEI/AEI — Afriat (1967)
-       | VEI — Varian (1990)
-       | MPI — Echenique et al. (2011)
-       | Houtman-Maks — H&M (1985)
-       | Swaps — A&B (2015)
-       | Min cost — Dean & Martin (2016)
-       | Bronars power — Bronars (1987)
-     - | Utility — Afriat (1967)
-       | Value function — Afriat (1967)
+     - | GARP - Varian (1982)
+       | WARP - Samuelson (1938)
+       | SARP - Richter (1966)
+       | HARP - Varian (1983)
+       | GAPP - Deb et al. (2023)
+       | Acyclical P - Varian (1982)
+       | Quasilinearity - C&E Ch 9
+       | Integrability - Slutsky
+       | Additive sep. - C&E Ch 9
+       | Gross substitutes - C&E Ch 10
+       | Separability - C&E (2016)
+       | Law of demand - C&E Ch 10
+     - | CCEI/AEI - Afriat (1967)
+       | VEI - Varian (1990)
+       | MPI - Echenique et al. (2011)
+       | Houtman-Maks - H&M (1985)
+       | Swaps - A&B (2015)
+       | Min cost - Dean & Martin (2016)
+       | Bronars power - Bronars (1987)
+     - | Utility - Afriat (1967)
+       | Value function - Afriat (1967)
        | Demand prediction
-       | CV — Vartia (1983)
-       | EV — Vartia (1983)
+       | CV - Vartia (1983)
+       | EV - Vartia (1983)
        | Expenditure function
        | Cost function
-       | Slutsky matrix — C&E Ch 6
-       | Hicksian demand — C&E Ch 10
+       | Slutsky matrix - C&E Ch 6
+       | Hicksian demand - C&E Ch 10
        | Substitution matrix
      - | Separability partitions
        | Quasilinear structure
        | Additive structure
-       | Spatial/ideal point — C&E Ch 11
+       | Spatial/ideal point - C&E Ch 11
 
    * - | **Menu Choice**
        | *(menus × choices)*
@@ -82,39 +82,39 @@ Every method in PrefGraph, organized by **input data type** (rows) and
        | :doc:`Theory </menu/theory_abstract>`
        | :doc:`Tutorial </menu/tutorial_menu_choice>`
      - | *Deterministic*
-       | WARP — Samuelson (1938)
-       | SARP — Richter (1966)
-       | Congruence — Richter (1966)
-       | WARP-LA — MNO (2012)
-       | Attention filter — MNO (2012)
+       | WARP - Samuelson (1938)
+       | SARP - Richter (1966)
+       | Congruence - Richter (1966)
+       | WARP-LA - MNO (2012)
+       | Attention filter - MNO (2012)
        | Attention overload
        | Status quo bias
        |
        | *Stochastic*
-       | RAM — Cattaneo et al. (2020)
-       | RUM — Block & Marschak (1960)
+       | RAM - Cattaneo et al. (2020)
+       | RUM - Block & Marschak (1960)
        | McFadden axioms
-       | IIA — Luce (1959)
-       | Regularity — Debreu (1960)
+       | IIA - Luce (1959)
+       | Regularity - Debreu (1960)
        | Stochastic transitivity
        | Context effects
        |
        | *Risk*
-       | Expected utility — vNM (1944)
+       | Expected utility - vNM (1944)
        | Rank-dependent utility
-     - | Menu HM — H&M (1985)
+     - | Menu HM - H&M (1985)
        | Distance to RUM
        | Predictive success
      - | *Deterministic*
        | Ordinal utility
-       | Consideration sets — MNO (2012)
+       | Consideration sets - MNO (2012)
        | Preference w/ attention
        |
        | *Stochastic*
        | Attention probabilities
        | Salience weights
        | Choice probabilities
-       | Luce model — Luce (1959)
+       | Luce model - Luce (1959)
        | RUM distribution
        | Bradley-Terry
        |
@@ -129,22 +129,22 @@ Every method in PrefGraph, organized by **input data type** (rows) and
        |
        | :doc:`Theory </production/theory_production>`
        | :doc:`Tutorial </production/tutorial_production>`
-     - | Profit maximization — Varian (1984)
+     - | Profit maximization - Varian (1984)
        | Cost minimization
      - | Technical efficiency
      - | Returns to scale
-     - | —
+     - | -
 
    * - | **Intertemporal**
        | *(dated amounts)*
        |
        | :doc:`Tutorial </intertemporal/tutorial_intertemporal>`
-     - | Exponential discounting — EIS (2020)
-       | Quasi-hyperbolic — Laibson (1997)
+     - | Exponential discounting - EIS (2020)
+       | Quasi-hyperbolic - Laibson (1997)
        | Present bias
-     - | —
+     - | -
      - | Discount factor
-     - | —
+     - | -
 
 Abbreviations
 -------------

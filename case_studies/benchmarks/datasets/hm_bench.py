@@ -126,7 +126,7 @@ def load_and_prepare(data_dir=None, max_users=50000):
     # Dual baselines: core10 has the 10 features from the spec (spend stats +
     # category concentration + trend). full17 adds recency, purchase gaps, and
     # inter-purchase variability. Empirical finding (2026-03-28, 46K users):
-    # core10 and full17 produce nearly identical AUC/R2 — the 7 extra features
+    # core10 and full17 produce nearly identical AUC/R2 - the 7 extra features
     # don't carry marginal signal beyond the core 10. Both kept for validation.
     print(f"  Extracting baseline features (core 10)...")
     X_base_10 = extract_budget_baseline(train_tuples, user_ids, feature_set="core")
@@ -144,7 +144,7 @@ def load_and_prepare(data_dir=None, max_users=50000):
     high_spender = (test_total_spends > threshold_all).astype(int)
     spend_change = test_mean_spends - train_mean_spends
 
-    # Do NOT call the regression target "LTV" — users with no future window
+    # Do NOT call the regression target "LTV" - users with no future window
     # are excluded, so this is future-window spend among survivors, not true
     # lifetime value for the full population. "Churn" was also dropped: the
     # design excludes users who disappear, so "churn" is really "large spend
@@ -170,7 +170,7 @@ def run_benchmark(data_dir=None, max_users=50000) -> list[BenchmarkResult]:
         if task_type == "classification" and y is not None:
             pos_rate = np.mean(y)
             if pos_rate < 0.02 or pos_rate > 0.98:
-                print(f"    Skipping — too imbalanced (pos_rate={pos_rate:.3f})")
+                print(f"    Skipping - too imbalanced (pos_rate={pos_rate:.3f})")
                 continue
 
         # --- Core 10 baseline ---

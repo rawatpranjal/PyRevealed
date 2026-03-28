@@ -4,7 +4,7 @@
 All four constructions share:
   - 30-min gap sessions, corrupted timestamps dropped
   - Truncated at first buy (pre-buy events only)
-  - No phantom insertion — bought object must appear in observed pre-buy menu
+  - No phantom insertion - bought object must appear in observed pre-buy menu
   - Menu size [2, 30]
 
 Varied across a 2×2 grid:
@@ -243,7 +243,7 @@ def print_cell(r: dict, total_sessions: int) -> None:
 def print_sessions_per_user_dist(r: dict) -> None:
     label = f"[{r['menu_object'].upper()} | {r['intent'].upper()}]"
     arr = r["sessions_per_user"]
-    print(f"\n  {label} — Sessions per user distribution:")
+    print(f"\n  {label} - Sessions per user distribution:")
     for p in [10, 25, 50, 75, 90, 95, 99]:
         print(f"    p{p:3d}: {np.percentile(arr, p):.0f}")
     for t in [1, 2, 3, 4, 5, 8, 10]:
@@ -255,7 +255,7 @@ def print_sessions_per_user_dist(r: dict) -> None:
 def print_menu_size_dist(r: dict) -> None:
     label = f"[{r['menu_object'].upper()} | {r['intent'].upper()}]"
     arr = r["menu_sizes"]
-    print(f"\n  {label} — Menu size distribution:")
+    print(f"\n  {label} - Menu size distribution:")
     for p in [10, 25, 50, 75, 90, 95]:
         print(f"    p{p:3d}: {np.percentile(arr, p):.0f}")
 
@@ -340,17 +340,17 @@ def main():
         pw = r["mean_pairwise"]
 
         if u5 == 0 and u3 < 100:
-            verdict = "DEAD — no usable benchmark"
+            verdict = "DEAD - no usable benchmark"
         elif u5 < 200 and med <= 1.0:
-            verdict = "DEAD — insufficient session depth"
+            verdict = "DEAD - insufficient session depth"
         elif u5 < 500 and med <= 1.5:
-            verdict = "WEAK — appendix only, with heavy caveats"
+            verdict = "WEAK - appendix only, with heavy caveats"
         elif u5 < 2000 or med < 2.0:
-            verdict = "MARGINAL — keep with explicit caveats"
+            verdict = "MARGINAL - keep with explicit caveats"
         elif u5 >= 2000 and med >= 2.0 and pw >= 2.0:
-            verdict = "VIABLE — suitable for main benchmark"
+            verdict = "VIABLE - suitable for main benchmark"
         else:
-            verdict = "MARGINAL — review manually"
+            verdict = "MARGINAL - review manually"
 
         print(f"\n  {label}")
         print(f"    Users≥5={u5}, median sessions={med:.1f}, mean pairwise={pw:.2f}")

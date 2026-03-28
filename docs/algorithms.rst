@@ -50,7 +50,7 @@ the algorithmic landscape is provided by Smeulders, Crama & Spieksma (2019, *EJO
 Budget-Based Methods
 --------------------
 
-GARP — SCC Algorithm
+GARP - SCC Algorithm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Definition**: A dataset :math:`\{(p_t, x_t)\}_{t=1}^T` satisfies the Generalized
@@ -86,7 +86,7 @@ Components (SCCs)**.
    <div style="margin: 2em 0;">
        <div style="text-align: center;">
            <img src="_static/scc_tarjan.gif" style="width: 100%; max-width: 550px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-           <p style="font-size: 0.9em; color: #666; margin-top: 8px;">Tarjan's SCC detects GARP violations in O(T²) — no closure needed</p>
+           <p style="font-size: 0.9em; color: #666; margin-top: 8px;">Tarjan's SCC detects GARP violations in O(T²) - no closure needed</p>
        </div>
    </div>
 
@@ -106,17 +106,17 @@ containing at least one "strictly more expensive" edge.
 
 **Algorithm**:
 
-1. Build :math:`R_0` and :math:`P_0` from expenditure data — :math:`O(T^2)`
-2. Tarjan's SCC decomposition on :math:`R_0` — :math:`O(T + |A|) \leq O(T^2)`
+1. Build :math:`R_0` and :math:`P_0` from expenditure data - :math:`O(T^2)`
+2. Tarjan's SCC decomposition on :math:`R_0` - :math:`O(T + |A|) \leq O(T^2)`
 3. For each arc :math:`(i,j)` where :math:`\text{scc}[i] = \text{scc}[j]`, check
-   :math:`P_0[i,j]` — :math:`O(T^2)`
+   :math:`P_0[i,j]` - :math:`O(T^2)`
 
-**Total**: :math:`O(T^2)` — provably tight. For :math:`T = 10{,}000`, this is
+**Total**: :math:`O(T^2)` - provably tight. For :math:`T = 10{,}000`, this is
 :math:`1{,}000\times` faster than Floyd-Warshall.
 
 .. rubric:: Implementation
 
-- **Rust**: ``rpt-core/src/garp.rs`` — ``garp_check()`` uses Tarjan's SCC (no closure).
+- **Rust**: ``rpt-core/src/garp.rs`` - ``garp_check()`` uses Tarjan's SCC (no closure).
 - **Batch dispatch**: ``batch.rs`` auto-selects :math:`O(T^2)` when only GARP is
   requested.
 
@@ -160,7 +160,7 @@ efficiency ratios :math:`\{E_{ij} / E_{ii}\}`.
 
 .. rubric:: Implementation
 
-- **Rust**: ``rpt-core/src/ccei.rs`` — ``ccei_search()`` performs the discrete binary
+- **Rust**: ``rpt-core/src/ccei.rs`` - ``ccei_search()`` performs the discrete binary
   search.
 
 .. raw:: html
@@ -173,7 +173,7 @@ efficiency ratios :math:`\{E_{ij} / E_{ii}\}`.
    </div>
 
 
-MPI (Money Pump Index) — Karp's Algorithm
+MPI (Money Pump Index) - Karp's Algorithm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Definition**: The Money Pump Index (MPI) measures the maximum average budget
@@ -201,12 +201,12 @@ optimal cycle in :math:`O(VE)` time, which is :math:`O(T^3)` here.
 
 .. rubric:: Implementation
 
-- **Rust**: ``rpt-core/src/mpi.rs`` — ``mpi_karp()`` implements the exact DP.
+- **Rust**: ``rpt-core/src/mpi.rs`` - ``mpi_karp()`` implements the exact DP.
 
 **References**: Echenique, Lee & Shum (2011); Smeulders et al. (2013).
 
 
-HARP (Homothetic Axiom) — Max-Product Paths
+HARP (Homothetic Axiom) - Max-Product Paths
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Definition**: The Homothetic Axiom of Revealed Preference (HARP) tests if
@@ -229,10 +229,10 @@ requirement.
 
 .. rubric:: Implementation
 
-- **Rust**: ``rpt-core/src/harp.rs`` — ``harp_check()``.
+- **Rust**: ``rpt-core/src/harp.rs`` - ``harp_check()``.
 
 
-Houtman-Maks Index — Greedy + ILP
+Houtman-Maks Index - Greedy + ILP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Definition**: The Houtman-Maks index is the size of the largest subset of
@@ -262,9 +262,9 @@ Directed Feedback Vertex Set (DFVS)** on the preference graph.
 
 .. rubric:: Implementation
 
-- **Rust**: ``rpt-core/src/houtman_maks.rs`` — ``houtman_maks()`` (greedy) and
+- **Rust**: ``rpt-core/src/houtman_maks.rs`` - ``houtman_maks()`` (greedy) and
   ``houtman_maks_exact()`` (ILP via HiGHS).
-- **ILP solver**: ``rpt-core/src/lp.rs`` — ``solve_hm_ilp()``.
+- **ILP solver**: ``rpt-core/src/lp.rs`` - ``solve_hm_ilp()``.
 
 **References**: Houtman & Maks (1985); Heufer & Hjertstrand (2015).
 
@@ -278,7 +278,7 @@ Directed Feedback Vertex Set (DFVS)** on the preference graph.
    </div>
 
 
-VEI (Varian Efficiency Index) — Exact MILP
+VEI (Varian Efficiency Index) - Exact MILP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Definition**: The VEI assigns an individual efficiency level :math:`e_t \in [0,1]`
@@ -292,7 +292,7 @@ perfect (e=1.0)." This provides much higher diagnostic resolution for identifyin
 
 **Algorithm (Mononen, 2023)**:
 PrefGraph implements the state-of-the-art **Row Generation** algorithm.
-1. Formulate the problem as a **Weighted Minimum Feedback Arc Set (WFAS)** — find the minimum-cost set of strict revealed preferences to remove so that no directed cycle remains.
+1. Formulate the problem as a **Weighted Minimum Feedback Arc Set (WFAS)** - find the minimum-cost set of strict revealed preferences to remove so that no directed cycle remains.
 2. Initialize with all 2-cycles (WARP violations).
 3. Solve the MILP with the current constraint set.
 4. Run a separation oracle (DFS) to find any remaining violated cycles in the residual graph.
@@ -310,7 +310,7 @@ as a fast polynomial-time heuristic.
 
 .. rubric:: Implementation
 
-- **Rust**: ``rpt-core/src/vei.rs`` — ``compute_vei()`` (LP relaxation) and
+- **Rust**: ``rpt-core/src/vei.rs`` - ``compute_vei()`` (LP relaxation) and
   ``compute_vei_exact()`` (MILP with row generation).
 
 **References**: Varian (1990, *J Econometrics*); Mononen (2023).
@@ -339,7 +339,7 @@ A violation occurs if : :math:`R_p^*[s,t] \wedge P_p[t,s]`. This is the same str
 
 .. rubric:: Implementation
 
-- **Rust**: ``rpt-core/src/gapp.rs`` — ``gapp_check()`` uses SCC-optimized transitive
+- **Rust**: ``rpt-core/src/gapp.rs`` - ``gapp_check()`` uses SCC-optimized transitive
   closure on the price preference graph.
 
 **Reference**: Deb, Kitamura, Quah & Stoye (2023, *RES*).
@@ -364,7 +364,7 @@ PrefGraph implements maximum likelihood estimation for:
 
 .. rubric:: Implementation
 
-- **Python**: ``src/prefgraph/contrib/stochastic.py`` — ``fit_random_utility_model()``.
+- **Python**: ``src/prefgraph/contrib/stochastic.py`` - ``fit_random_utility_model()``.
 
 **References**: McFadden (1974); Chambers & Echenique (2016), Chapter 13.
 

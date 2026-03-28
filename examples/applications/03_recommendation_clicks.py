@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Application: Recommendation Clicks — SARP from RetailRocket Click-Stream.
+"""Application: Recommendation Clicks - SARP from RetailRocket Click-Stream.
 
 Based on:
   Kallus & Udell (2016) "Revealed Preference at Scale," EC '16.
@@ -114,7 +114,7 @@ def run_engine_batch(
 
 
 # =============================================================================
-# Rolling-Window Lifecycle (per-user window slicing — inherently sequential)
+# Rolling-Window Lifecycle (per-user window slicing - inherently sequential)
 # =============================================================================
 
 @dataclass
@@ -245,7 +245,7 @@ def print_lifecycle_results(lifecycle: list[LifecycleResult]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Recommendation Clicks — RetailRocket SARP Analysis"
+        description="Recommendation Clicks - RetailRocket SARP Analysis"
     )
     parser.add_argument("--max-users", type=int, default=None,
                         help="Max users to analyze (default: all)")

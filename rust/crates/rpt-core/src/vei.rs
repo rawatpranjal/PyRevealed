@@ -245,7 +245,7 @@ pub fn compute_vei_exact(graph: &mut PreferenceGraph) -> VeiResult {
     if cycle_constraints.is_empty() {
         let initial = vei_dfs_find_cycles(&adj, &arc_from, t, &vec![false; n_arcs]);
         if initial.is_empty() {
-            // No cycles in strict graph — consistent
+            // No cycles in strict graph - consistent
             return VeiResult {
                 success: true,
                 efficiency_vector: vec![1.0; t],
@@ -426,7 +426,7 @@ mod tests {
         // For 2-obs WARP violation: E[0,1]/E[0,0] = 7/8 = 0.875, same for E[1,0]/E[1,1].
         // LP relaxation constrains e_i ≥ 0.875 (from R* constraints) and maximizes Σe_i,
         // so both e_i = 1.0 (since 0.875 < 1.0 and we're maximizing).
-        // The LP relaxation does NOT detect cycles — only transitive ratios > 1 would bind.
+        // The LP relaxation does NOT detect cycles - only transitive ratios > 1 would bind.
         // For exact VEI, use compute_vei_exact().
         let prices = [2.0, 1.0, 1.0, 2.0];
         let quantities = [3.0, 2.0, 2.0, 3.0];

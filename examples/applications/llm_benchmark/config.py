@@ -77,7 +77,7 @@ SUPPORT_TICKET = ScenarioConfig(
             "You are a careful support triage system. Your top priority is ensuring no customer "
             "falls through the cracks. When the intent is ambiguous, always prefer routing to a human "
             "(route_account_mgr or escalate_vp) over an automated response (auto_reply_kb). "
-            "Err on the side of over-escalation — a false escalation costs 5 minutes of a human's time, "
+            "Err on the side of over-escalation - a false escalation costs 5 minutes of a human's time, "
             "but a missed urgent issue can cost a customer. "
             "If the customer sounds frustrated or mentions impact on their business, escalate. "
             "Respond with ONLY the action name."
@@ -110,7 +110,7 @@ SUPPORT_TICKET = ScenarioConfig(
         "- Feature requests and onboarding help from enterprise accounts\n"
         "- Urgent production issues (outages, data loss, SLA concerns)\n"
         "- General how-to questions answerable by documentation\n"
-        "Make them realistic and ambiguous — some tickets should be borderline between categories. "
+        "Make them realistic and ambiguous - some tickets should be borderline between categories. "
         "Vary the customer tone from calm to frustrated to panicked."
     ),
 )
@@ -131,7 +131,7 @@ ALERT_TRIAGE = ScenarioConfig(
         4: "execute_runbook",
     },
     item_descriptions={
-        0: "Auto-resolve — known transient issue, no action needed",
+        0: "Auto-resolve - known transient issue, no action needed",
         1: "Create P3 ticket for next sprint backlog",
         2: "Page the on-call engineer immediately",
         3: "Open incident channel and page team lead",
@@ -170,7 +170,7 @@ ALERT_TRIAGE = ScenarioConfig(
             "Respond with ONLY the action name."
         ),
         "aggressive": (
-            "You are a noise-reduction-focused alert triage system. Alert fatigue is the #1 problem — "
+            "You are a noise-reduction-focused alert triage system. Alert fatigue is the #1 problem - "
             "the on-call team gets paged 40 times per week and most are false alarms. "
             "Auto-resolve any alert that has self-recovered within the last 3 occurrences. "
             "Use execute_runbook whenever a documented fix exists, even if you're not 100% sure it applies. "
@@ -217,7 +217,7 @@ CONTENT_REVIEW = ScenarioConfig(
         4: "suspend_and_legal",
     },
     item_descriptions={
-        0: "Approve — false flag, content is fine",
+        0: "Approve - false flag, content is fine",
         1: "Add content warning label (sensitive topic)",
         2: "Hide from recommendations feed (reduce reach)",
         3: "Remove post and issue account strike",
@@ -289,7 +289,7 @@ CONTENT_REVIEW = ScenarioConfig(
         "- News commentary on violent events\n"
         "- Product reviews with extreme language\n"
         "- Potential misinformation with partial truths\n"
-        "Make them borderline and ambiguous — the kind of posts where reasonable people disagree."
+        "Make them borderline and ambiguous - the kind of posts where reasonable people disagree."
     ),
 )
 
@@ -309,7 +309,7 @@ JOB_SCREEN = ScenarioConfig(
         4: "fast_track",
     },
     item_descriptions={
-        0: "Auto-reject — does not meet minimum requirements",
+        0: "Auto-reject - does not meet minimum requirements",
         1: "Hold for recruiter manual review",
         2: "Schedule initial phone screen",
         3: "Advance directly to technical interview",
@@ -353,7 +353,7 @@ JOB_SCREEN = ScenarioConfig(
         "aggressive": (
             "You are a speed-optimized screening system. The talent market is competitive and "
             "top candidates accept offers within 5 days. "
-            "Move promising candidates forward quickly — err on the side of advancing rather than "
+            "Move promising candidates forward quickly - err on the side of advancing rather than "
             "holding. Use phone_screen as the default for anyone who meets basic requirements. "
             "Skip the phone screen (technical_interview) for candidates with clearly strong backgrounds. "
             "Fast-track anyone who would be a clear yes at the technical stage. "
@@ -382,7 +382,7 @@ JOB_SCREEN = ScenarioConfig(
         "- International candidates with experience at local companies\n"
         "- Bootcamp graduates with 2-3 years experience\n"
         "- Senior engineers from adjacent domains (DevOps, ML infra)\n"
-        "Make them realistic — include specific technologies, company types, and years."
+        "Make them realistic - include specific technologies, company types, and years."
     ),
 )
 
@@ -402,7 +402,7 @@ PROCUREMENT = ScenarioConfig(
         4: "deny",
     },
     item_descriptions={
-        0: "Auto-approve — within policy, no review needed",
+        0: "Auto-approve - within policy, no review needed",
         1: "Approve with budget code tagging for tracking",
         2: "Request additional vendor quotes before approval",
         3: "Escalate to department head for review",

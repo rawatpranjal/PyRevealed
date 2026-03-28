@@ -2,7 +2,7 @@
 
 54 stores, 33 product families, ~4 years of daily sales. Budget-based with uniform prices.
 
-ASSUMPTION: No item-level prices available — uses uniform $1/unit (quantity-only consistency).
+ASSUMPTION: No item-level prices available - uses uniform $1/unit (quantity-only consistency).
 """
 
 from __future__ import annotations
@@ -79,7 +79,7 @@ def run_benchmark(data_dir=None, max_users=None) -> list[BenchmarkResult]:
         if task_type == "classification":
             pos_rate = np.mean(y)
             if pos_rate < 0.02 or pos_rate > 0.98:
-                print(f"    Skipping — too imbalanced (pos_rate={pos_rate:.3f})")
+                print(f"    Skipping - too imbalanced (pos_rate={pos_rate:.3f})")
                 continue
         result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type)
         results.append(result)

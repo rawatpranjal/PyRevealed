@@ -85,7 +85,7 @@ def load_instacart_menu_v2(
         .select(["order_id", "user_id", "order_number"])
     )
 
-    # Read product-level order data (not add_to_cart_order — intentionally excluded)
+    # Read product-level order data (not add_to_cart_order - intentionally excluded)
     op = pl.read_csv(
         data_path / "order_products__prior.csv",
         columns=["order_id", "product_id", "reordered"],

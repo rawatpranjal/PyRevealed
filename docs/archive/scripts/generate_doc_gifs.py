@@ -52,7 +52,7 @@ PALETTE = {
 }
 
 # ---------------------------------------------------------------------------
-# GIF 1A: Landing Page — Budget Choice
+# GIF 1A: Landing Page - Budget Choice
 # Single-panel, 14-second story: detect violation → measure with CCEI
 # ---------------------------------------------------------------------------
 def generate_budget_hero():
@@ -101,7 +101,7 @@ def generate_budget_hero():
         ax.tick_params(labelsize=9)
         ax.grid(True, alpha=0.15, color=PALETTE["grid"])
 
-        # Phase logic — gaps between text phases so the viewer can breathe
+        # Phase logic - gaps between text phases so the viewer can breathe
         if frame < 5:
             phase = "show"
         elif frame < 9:
@@ -145,7 +145,7 @@ def generate_budget_hero():
             ax.set_title(f"Shrink budgets until contradiction disappears   e = {e:.2f}",
                          fontsize=13, fontweight="bold", pad=10, color="#e67e22")
         else:
-            ax.set_title(f"CCEI = {CCEI_FINAL:.3f} — Afriat (1967)",
+            ax.set_title(f"CCEI = {CCEI_FINAL:.3f} - Afriat (1967)",
                          fontsize=14, fontweight="bold", pad=10, color=PALETTE["accent"])
 
         # Draw ghost lines if shrinking
@@ -184,7 +184,7 @@ def generate_budget_hero():
                     bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
                               edgecolor=colors[1], alpha=0.9))
         elif phase == "contradiction":
-            ax.text(4.5, 4.8, "Each bundle was affordable when\nthe other was picked — a cycle",
+            ax.text(4.5, 4.8, "Each bundle was affordable when\nthe other was picked - a cycle",
                     fontsize=10, color=PALETTE["highlight"], ha="center",
                     bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
                               edgecolor=PALETTE["highlight"], alpha=0.9))
@@ -201,7 +201,7 @@ def generate_budget_hero():
     plt.close(fig)
 
 # ---------------------------------------------------------------------------
-# GIF 1B: Landing Page — Menu Choice
+# GIF 1B: Landing Page - Menu Choice
 # Single-panel, 14-second story: spot contradiction → count consistent → HM score
 # ---------------------------------------------------------------------------
 def generate_menu_hero():
@@ -244,7 +244,7 @@ def generate_menu_hero():
         ax.set_ylim(-4.2, 1.2)
         ax.axis("off")
 
-        # Phase logic — gaps between text phases for breathing room
+        # Phase logic - gaps between text phases for breathing room
         if frame < 5:
             phase = "row1"
             n_rows = 1
@@ -293,7 +293,7 @@ def generate_menu_hero():
             ax.set_title("3 of 4 choices are consistent", fontsize=14,
                          fontweight="bold", pad=10, color="#e67e22")
         else:
-            ax.set_title("HM = 0.75 — Houtman & Maks (1985)", fontsize=14,
+            ax.set_title("HM = 0.75 - Houtman & Maks (1985)", fontsize=14,
                          fontweight="bold", pad=10, color=PALETTE["accent"])
 
         # Draw menu rows
@@ -371,7 +371,7 @@ def generate_menu_hero():
     plt.close(fig)
 
 def generate_floyd_warshall():
-    """Floyd-Warshall educational GIF — slow, well-spaced, repo terminology."""
+    """Floyd-Warshall educational GIF - slow, well-spaced, repo terminology."""
     fig, ax = plt.subplots(figsize=(8, 9), facecolor=PALETTE["bg"])
     plt.subplots_adjust(top=0.78, bottom=0.14, left=0.08, right=0.95)
 
@@ -568,7 +568,7 @@ def generate_floyd_warshall():
 # GIF 3: Tarjan's SCC (O(T^2))
 # ---------------------------------------------------------------------------
 def generate_scc_tarjan():
-    """SCC-based GARP check — slow, well-spaced, repo terminology."""
+    """SCC-based GARP check - slow, well-spaced, repo terminology."""
     fig, ax = plt.subplots(figsize=(8, 9), facecolor=PALETTE["bg"])
     plt.subplots_adjust(top=0.78, bottom=0.14, left=0.08, right=0.95)
 
@@ -975,12 +975,12 @@ def generate_attention_decay():
 # GIF: CCEI (Afriat Efficiency Index) Pedagogical
 # ---------------------------------------------------------------------------
 def generate_ccei_algorithm():
-    """CCEI educational GIF — slow, well-spaced, no text overlap."""
+    """CCEI educational GIF - slow, well-spaced, no text overlap."""
     fig, ax = plt.subplots(figsize=(8, 9), facecolor=PALETTE["bg"])
     plt.subplots_adjust(top=0.78, bottom=0.16, left=0.10, right=0.95)
 
     TOTAL_FRAMES = 130
-    INTERVAL = 3200  # ms — slow cadence
+    INTERVAL = 3200  # ms - slow cadence
 
     # --- data: 2 goods, 2 observations with a GARP violation ---
     prices = np.array([[1.0, 2.0], [2.0, 1.0]])
@@ -1102,7 +1102,7 @@ def generate_ccei_algorithm():
             spine.set_color(PALETTE["grid"])
 
         # ============================================================
-        # Phase 1: Setup (frames 0-24) — draw budget lines + dots
+        # Phase 1: Setup (frames 0-24) - draw budget lines + dots
         # ============================================================
         if frame <= 24:
             phase_txt.set_text("Step 1:  Two Observations  (T = 2 goods)")
@@ -1344,16 +1344,16 @@ def generate_ccei_algorithm():
 # GIF: HM (Houtman-Maks Index) Pedagogical
 # ---------------------------------------------------------------------------
 def generate_hm_algorithm():
-    """HM educational GIF — slow, well-spaced, no text overlap."""
+    """HM educational GIF - slow, well-spaced, no text overlap."""
     fig, ax = plt.subplots(figsize=(8, 9), facecolor=PALETTE["bg"])
     plt.subplots_adjust(top=0.78, bottom=0.14, left=0.08, right=0.95)
 
     TOTAL_FRAMES = 140
-    INTERVAL = 3200  # ms — slow cadence
+    INTERVAL = 3200  # ms - slow cadence
 
     # --- graph data: 5 nodes, 2 cycles sharing hub node 1 ---
     node_pos = {
-        1: (0.0, 1.8),      # hub — center-ish
+        1: (0.0, 1.8),      # hub - center-ish
         2: (2.8, 3.5),      # top-right
         3: (2.8, 0.1),      # bottom-right
         4: (-2.8, 3.5),     # top-left
@@ -1571,7 +1571,7 @@ def generate_hm_algorithm():
                 _draw_glow(ax, 1, "#e67e22", alpha=0.5)
 
         # ============================================================
-        # Phase 5: Remove the hub — node 1 (frames 100-124)
+        # Phase 5: Remove the hub - node 1 (frames 100-124)
         # ============================================================
         elif frame <= 124:
             if frame <= 107:
@@ -1659,6 +1659,77 @@ def generate_hm_algorithm():
     plt.close(fig)
 
 
+# ---------------------------------------------------------------------------
+# Menu Datatypes (Deterministic, Stochastic, Risk)
+# ---------------------------------------------------------------------------
+def _draw_box(ax, x, y, text, w, h, bg, txt_c, lw=1, ec="#95a5a6"):
+    rect = plt.Rectangle((x-w/2, y-h/2), w, h, facecolor=bg, edgecolor=ec, lw=lw, zorder=5)
+    ax.add_patch(rect)
+    ax.text(x, y, text, ha="center", va="center", color=txt_c, fontweight="bold", zorder=6)
+
+def generate_menu_datatype_deterministic():
+    fig, ax = plt.subplots(figsize=(3, 3), facecolor=PALETTE["bg"])
+    items = ["Laptop", "Tablet", "Phone"]
+    frames = 20
+    def update(f):
+        ax.clear()
+        ax.set_facecolor(PALETTE["bg"])
+        ax.set_xlim(-1.5, 1.5); ax.set_ylim(-1.5, 1.5); ax.axis("off")
+        ax.set_title("Deterministic\nMenuChoiceLog", fontsize=12, fontweight="bold", pad=10, color="#333")
+        for i, item in enumerate(items):
+            y = 0.6 - i*0.6
+            if f > 8 and i == 0:
+                _draw_box(ax, 0, y, item, 2.0, 0.4, PALETTE["node"], "white", lw=2, ec=PALETTE["node"])
+                ax.text(1.2, y, "✓", color=PALETTE["node"], fontsize=16, va="center")
+            else:
+                _draw_box(ax, 0, y, item, 2.0, 0.4, "white", PALETTE["secondary"])
+    anim = FuncAnimation(fig, update, frames=frames, interval=250)
+    anim.save(OUTPUT_DIR / "deterministic.gif", writer="pillow", dpi=DPI)
+    plt.close(fig)
+    print("  deterministic.gif")
+
+def generate_menu_datatype_stochastic():
+    fig, ax = plt.subplots(figsize=(3, 3), facecolor=PALETTE["bg"])
+    items = [("Laptop", 0.6), ("Tablet", 0.3), ("Phone", 0.1)]
+    frames = 20
+    def update(f):
+        ax.clear()
+        ax.set_facecolor(PALETTE["bg"])
+        ax.set_xlim(-1.5, 1.5); ax.set_ylim(-1.5, 1.5); ax.axis("off")
+        ax.set_title("Stochastic\nStochasticChoiceLog", fontsize=12, fontweight="bold", pad=10, color="#333")
+        prog = min(1.0, f / 12.0)
+        for i, (item, prob) in enumerate(items):
+            y = 0.6 - i*0.6
+            w, h = 2.0, 0.4
+            _draw_box(ax, 0, y, f"{item} ({int(prob*100*prog)}%)", w, h, "white", PALETTE["edge"])
+            if prog > 0:
+                fill_w = w * prob * prog
+                fill_x = -w/2 + fill_w/2
+                rect = plt.Rectangle((-w/2, y-h/2), fill_w, h, facecolor=PALETTE["accent"], alpha=0.3, edgecolor="none", zorder=4)
+                ax.add_patch(rect)
+    anim = FuncAnimation(fig, update, frames=frames, interval=250)
+    anim.save(OUTPUT_DIR / "stochastic.gif", writer="pillow", dpi=DPI)
+    plt.close(fig)
+    print("  stochastic.gif")
+
+def generate_menu_datatype_risk():
+    fig, ax = plt.subplots(figsize=(3, 3), facecolor=PALETTE["bg"])
+    frames = 20
+    def update(f):
+        ax.clear()
+        ax.set_facecolor(PALETTE["bg"])
+        ax.set_xlim(-1.5, 1.5); ax.set_ylim(-1.5, 1.5); ax.axis("off")
+        ax.set_title("Risk / Lotteries\nRiskChoiceLog", fontsize=12, fontweight="bold", pad=10, color="#333")
+        _draw_box(ax, 0, 0.4, "Gamble A\n50% $100 | 50% $0", 2.2, 0.6, "white", PALETTE["secondary"])
+        _draw_box(ax, 0, -0.6, "Gamble B\n100% $40", 2.2, 0.6, "white", PALETTE["secondary"])
+        if f > 8:
+            _draw_box(ax, 0, -0.6, "Gamble B\n100% $40", 2.2, 0.6, PALETTE["highlight"], "white", lw=2, ec=PALETTE["highlight"])
+            ax.text(1.3, -0.6, "✓", color=PALETTE["highlight"], fontsize=16, va="center")
+    anim = FuncAnimation(fig, update, frames=frames, interval=250)
+    anim.save(OUTPUT_DIR / "risk.gif", writer="pillow", dpi=DPI)
+    plt.close(fig)
+    print("  risk.gif")
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     print("Generating documentation GIFs...")
@@ -1672,6 +1743,10 @@ def main():
     generate_attention_decay()
     generate_ccei_algorithm()
     generate_hm_algorithm()
+    
+    generate_menu_datatype_deterministic()
+    generate_menu_datatype_stochastic()
+    generate_menu_datatype_risk()
 
     print(f"\nAll GIFs saved to {OUTPUT_DIR}/")
     for f in sorted(OUTPUT_DIR.glob("*.gif")):

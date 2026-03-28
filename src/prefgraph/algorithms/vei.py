@@ -65,7 +65,7 @@ def compute_vei(
     own_exp = session.own_expenditures  # T
 
     # GARP check gates computation: consistent data has e_i = 1.0 for all i
-    # by definition — no LP needed. Varian (1982), Econometrica 50(4), 945-972.
+    # by definition - no LP needed. Varian (1982), Econometrica 50(4), 945-972.
     garp_result = check_garp(session)
 
     if garp_result.is_consistent:
@@ -83,7 +83,7 @@ def compute_vei(
         )
 
     # --------------------------------------------------------------------------
-    # VEI LP formulation — Varian (1990) "Goodness-of-fit in optimizing models",
+    # VEI LP formulation - Varian (1990) "Goodness-of-fit in optimizing models",
     # J. Econometrics 46(1-2), 125-140.
     #
     # Smeulders, Cherchye, De Rock & Spieksma (2014) "Goodness-of-Fit Measures
@@ -111,7 +111,7 @@ def compute_vei(
     #
     # The LP minimizes sum(e_i), finding the tightest per-observation efficiency
     # that maintains all direct revealed-preference links. Lower e_i means
-    # observation i's budget is more "wasted" — the observation is less efficient.
+    # observation i's budget is more "wasted" - the observation is less efficient.
     #
     # NP-hardness: Smeulders et al. (2014) Theorem 4.2 shows VI-GARP_d is
     # NP-complete via reduction from independent set. This LP is an approximation

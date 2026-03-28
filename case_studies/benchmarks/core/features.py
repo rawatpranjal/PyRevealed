@@ -85,7 +85,7 @@ def extract_budget_baseline(
         else:
             mean_abs_change = 0.0
 
-        # Recency and frequency (proxy — observation index as time)
+        # Recency and frequency (proxy - observation index as time)
         active_periods = spend_per_obs > 0
         n_active = int(np.sum(active_periods))
         purchase_rate = n_active / T  # true frequency rate
@@ -132,7 +132,7 @@ def extract_budget_baseline(
 
 
 # ---------------------------------------------------------------------------
-# Budget RP features — Engine batch API
+# Budget RP features - Engine batch API
 # ---------------------------------------------------------------------------
 
 def extract_budget_rp(
@@ -180,7 +180,7 @@ def extract_budget_rp(
 
 
 # ---------------------------------------------------------------------------
-# Budget RP deep features — Auditor + Encoder + Rolling-window
+# Budget RP deep features - Auditor + Encoder + Rolling-window
 # ---------------------------------------------------------------------------
 
 def extract_budget_rp_deep(
@@ -287,7 +287,7 @@ def extract_budget_rp_deep(
 
 
 # ---------------------------------------------------------------------------
-# Budget RP extended features — per-user algorithm calls (~30 new features)
+# Budget RP extended features - per-user algorithm calls (~30 new features)
 # ---------------------------------------------------------------------------
 
 def extract_budget_rp_extended(
@@ -448,7 +448,7 @@ def extract_budget_rp_extended(
 
 
 # ---------------------------------------------------------------------------
-# Menu RP extended features — per-user algorithm calls
+# Menu RP extended features - per-user algorithm calls
 # ---------------------------------------------------------------------------
 
 def extract_menu_rp_extended(
@@ -613,7 +613,7 @@ def extract_menu_baseline(
 
 
 # ---------------------------------------------------------------------------
-# Menu RP features — Engine batch API
+# Menu RP features - Engine batch API
 # ---------------------------------------------------------------------------
 
 def extract_menu_rp(

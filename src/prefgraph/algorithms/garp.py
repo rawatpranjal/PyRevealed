@@ -164,7 +164,7 @@ def _find_violation_cycles(
     if T < 10:
         return _find_violation_cycles_direct(R, P, R_star, violation_matrix)
 
-    # Find SCCs — violations only exist within SCCs
+    # Find SCCs - violations only exist within SCCs
     n_comp, labels = find_sccs(R)
     scc_sizes = np.bincount(labels, minlength=n_comp)
 

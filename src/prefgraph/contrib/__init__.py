@@ -1,4 +1,4 @@
-"""Contributed algorithms — not part of the core graph-based engine.
+"""Contributed algorithms - not part of the core graph-based engine.
 
 These modules implement specialized econometric methods (MLE, regression,
 bootstrap, nonlinear optimization) that don't use the core graph primitives

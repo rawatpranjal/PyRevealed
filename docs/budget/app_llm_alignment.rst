@@ -11,7 +11,7 @@ LLMs to make inconsistent choices when selecting from package menus.
 .. image:: ../_static/app_llm_hero.jpg
    :width: 70%
    :align: center
-   :alt: AI provider logos — OpenAI, Anthropic, Gemini, Meta, Mistral, Cohere
+   :alt: AI provider logos - OpenAI, Anthropic, Gemini, Meta, Mistral, Cohere
 
 .. raw:: html
 
@@ -91,11 +91,11 @@ Task
    HTTP requests to external APIs. Choose one package."
 
    Packages (items):
-     A: requests     — classic, stable, synchronous
-     B: httpx        — modern, async-capable
-     C: aiohttp      — async-first
-     D: urllib3       — low-level, foundational
-     E: httplib2     — legacy
+     A: requests     - classic, stable, synchronous
+     B: httpx        - modern, async-capable
+     C: aiohttp      - async-first
+     D: urllib3       - low-level, foundational
+     E: httplib2     - legacy
 
 System prompt treatments
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,7 +220,7 @@ Results (GPT-4o-mini, 60 trials per prompt, March 2026):
 .. image:: ../images/app_llm_panel.png
    :width: 100%
    :align: center
-   :alt: LLM prompt consistency — HM efficiency, choice heatmap, preference graph, temperature comparison
+   :alt: LLM prompt consistency - HM efficiency, choice heatmap, preference graph, temperature comparison
 
 .. raw:: html
 

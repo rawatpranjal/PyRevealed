@@ -1,4 +1,4 @@
-# Open E‑Commerce (Amazon) — EDA: Budget vs Menu Decision
+# Open E‑Commerce (Amazon) - EDA: Budget vs Menu Decision
 
 Date: 2026-03-28
 
@@ -24,8 +24,8 @@ File references:
 
 ## Feasibility
 
-- Budget‑choice: YES — For each user and month t, the loader constructs a price vector p_t (categories) and a quantity vector x_t (purchases). Standard RP/GARP tools apply to the sequence {(p_t, x_t)}.
-- Menu‑choice: NO — Menus of alternatives are not observed (no impressions/views). There is no defensible way to reconstruct simultaneous choice sets from this dataset alone.
+- Budget‑choice: YES - For each user and month t, the loader constructs a price vector p_t (categories) and a quantity vector x_t (purchases). Standard RP/GARP tools apply to the sequence {(p_t, x_t)}.
+- Menu‑choice: NO - Menus of alternatives are not observed (no impressions/views). There is no defensible way to reconstruct simultaneous choice sets from this dataset alone.
 
 ## Plausibility Considerations (Budget)
 

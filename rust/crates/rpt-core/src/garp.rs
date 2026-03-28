@@ -2,7 +2,7 @@ use crate::graph::PreferenceGraph;
 use crate::scc::tarjan_scc;
 use crate::types::GarpResult;
 
-/// Check GARP consistency in O(T²) — the provably optimal algorithm.
+/// Check GARP consistency in O(T²) - the provably optimal algorithm.
 ///
 /// Talla Nobibon, Smeulders & Spieksma (2015, JOTA 166(3)):
 /// GARP is violated iff any SCC of the weak preference graph R₀ contains

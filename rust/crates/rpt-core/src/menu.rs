@@ -35,7 +35,7 @@ pub fn menu_sarp_check(graph: &mut PreferenceGraph) -> GarpResult {
 ///
 /// Simpler than SARP: only checks for direct reversals.
 /// Violation if R[x,y] AND R[y,x] for any x != y.
-/// No transitive closure needed — O(I²).
+/// No transitive closure needed - O(I²).
 pub fn menu_warp_check(graph: &PreferenceGraph) -> GarpResult {
     let t = graph.t;
     let mut n_violations = 0u32;

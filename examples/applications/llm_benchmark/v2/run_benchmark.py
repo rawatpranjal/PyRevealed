@@ -117,7 +117,7 @@ def run_stage2(scenario_name: str, k: int = STOCHASTIC_K) -> int:
         print(f"    {scenario_name}: no stage1 data, run stage1 first")
         return 0
 
-    # Identify SARP failures per (vignette, prompt) — will be done by analyze
+    # Identify SARP failures per (vignette, prompt) - will be done by analyze
     # For now, run stochastic on ALL vignettes (can filter later)
     out_path = RESPONSE_DIR / f"{scenario_name}__stage2.jsonl"
     done = load_existing(out_path)

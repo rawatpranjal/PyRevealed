@@ -4,7 +4,7 @@
 /// If all bounds are compatible (delta_lower <= delta_upper), the choices
 /// are consistent with exponential discounting.
 ///
-/// No LP needed — just constraint propagation on delta bounds.
+/// No LP needed - just constraint propagation on delta bounds.
 pub struct IntertemporalResult {
     pub is_consistent: bool,
     pub delta_lower: f64,
@@ -33,7 +33,7 @@ pub fn check_exponential_discounting(
 
         let dt = t_chosen - t_rejected;
         if dt.abs() < tolerance {
-            continue; // Same time — no discounting constraint
+            continue; // Same time - no discounting constraint
         }
 
         let ratio = amt_rejected / amt_chosen;

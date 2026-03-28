@@ -6,10 +6,10 @@ use crate::types::CceiResult;
 ///
 /// Uses the O(T²) SCC-based GARP check (Talla Nobibon et al. 2015) inside the
 /// binary search loop, avoiding the O(T³) transitive closure per iteration.
-/// Total complexity: O(T² log T) — provably optimal up to log factors.
+/// Total complexity: O(T² log T) - provably optimal up to log factors.
 ///
 /// Requires: graph has expenditure built (call parse_budget or ensure_expenditure first).
-/// Reuses the expenditure matrix — only rebuilds R/P at each efficiency level.
+/// Reuses the expenditure matrix - only rebuilds R/P at each efficiency level.
 ///
 /// References:
 ///   Afriat (1967), "Construction of Utility Functions from Expenditure Data", IER.
@@ -52,7 +52,7 @@ pub fn ccei_search(graph: &mut PreferenceGraph, tolerance: f64) -> CceiResult {
         };
     }
 
-    // Binary search over candidates — O(log T²) iterations × O(T²) GARP check
+    // Binary search over candidates - O(log T²) iterations × O(T²) GARP check
     let mut lo = 0usize;
     let mut hi = candidates.len() - 1;
     let mut best_e = 0.0f64;
@@ -66,7 +66,7 @@ pub fn ccei_search(graph: &mut PreferenceGraph, tolerance: f64) -> CceiResult {
         // Rebuild R/P at this efficiency level: O(T²)
         graph.build_r_at_efficiency(e, tolerance);
 
-        // O(T²) SCC-based GARP check — no transitive closure needed
+        // O(T²) SCC-based GARP check - no transitive closure needed
         if garp_check(graph).is_consistent {
             best_e = e;
             if mid == 0 {
@@ -124,7 +124,7 @@ mod tests {
         let mut graph = PreferenceGraph::new(2);
         graph.parse_budget(&prices, &quantities, 2, 2, 1e-10);
         let _ = ccei_search(&mut graph, 1e-10);
-        // Closure should be at e=1.0 — GARP violations should exist
+        // Closure should be at e=1.0 - GARP violations should exist
         assert!(graph.has_closure);
         let t = graph.t;
         let mut has_violation = false;

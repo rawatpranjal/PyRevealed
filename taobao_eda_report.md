@@ -26,7 +26,7 @@
 
 ## Assumption Audit Results
 
-### A1 — Session gap = 30 minutes
+### A1 - Session gap = 30 minutes
 
 Gap distribution for within-user consecutive events:
 
@@ -49,7 +49,7 @@ Fraction of gaps below threshold:
 | **30 min** | **84.2%** |
 | 1 hr | 86.2% |
 
-**Gap histogram is unimodal** (heavy mass below 5 min, smooth tail). No bimodal structure straddling 30 min — the threshold is not knife-edge. Changing to 15 min would add +14% more session breaks; changing to 60 min would reduce by 12%.
+**Gap histogram is unimodal** (heavy mass below 5 min, smooth tail). No bimodal structure straddling 30 min - the threshold is not knife-edge. Changing to 15 min would add +14% more session breaks; changing to 60 min would reduce by 12%.
 
 **Issue identified**: p100 gap = 41,042 days = 3.55 billion seconds. The dataset timestamp range is 1905 to 2037 despite being a 2017 dataset. Corrupted timestamps exist. These will create spurious session breaks at the boundary between a normal event and a corrupted-timestamp event. Impact is likely small (extreme outliers in a 100M row dataset) but means session assignment is noisy for affected users.
 
@@ -57,7 +57,7 @@ Fraction of gaps below threshold:
 
 ---
 
-### A2 — Menu = viewed items (pv events)
+### A2 - Menu = viewed items (pv events)
 
 Sessions created by 30-min gap: **3,316,666 total**
 
@@ -69,29 +69,29 @@ Sessions with at least 1 pv event: 3,125,120 (94.2%)
 
 ---
 
-### A3/A4 — Exactly 1 unique purchased item per session
+### A3/A4 - Exactly 1 unique purchased item per session
 
 | Unique buys per session | Count | Fraction |
 |-------------------------|-------|----------|
 | 0 (browsing only) | 3,006,349 | **90.6%** |
-| 1 | 255,104 | **7.7%** — KEPT |
+| 1 | 255,104 | **7.7%** - KEPT |
 | 2 | 38,603 | 1.2% |
 | ≥3 | ~16,000 | 0.5% |
 
-Only 7.7% of sessions contain a purchase. 90.6% are pure browsing and produce no observations. This is a fundamental sparsity of the purchase signal — 12× more browsing sessions than purchase sessions.
+Only 7.7% of sessions contain a purchase. 90.6% are pure browsing and produce no observations. This is a fundamental sparsity of the purchase signal - 12× more browsing sessions than purchase sessions.
 
 **Verdict**: Harsh but clean filter. The 1.7% dropped for multiple purchases is small. ✓
 
 ---
 
-### A5 — Purchased item inserted into menu if not viewed
+### A5 - Purchased item inserted into menu if not viewed
 
 For the 255,104 valid (exactly 1 buy) sessions:
 
 | Status | Count | Fraction |
 |--------|-------|----------|
 | Purchase was viewed (pv) before buying | 86,144 | 33.8% |
-| Purchase NOT viewed — phantom insertion | 100,237 | **39.3%** |
+| Purchase NOT viewed - phantom insertion | 100,237 | **39.3%** |
 | Session had zero pv events | 68,723 | **26.9%** |
 
 **Critical finding**: In 66.2% of valid sessions (39.3% + 26.9%), the purchased item was never observed as a pageview in the same session. The loader inserts it into the menu via `menu | {choice}`.
@@ -105,27 +105,27 @@ This means:
 
 ---
 
-### A6 — Menu size in [2, 50]
+### A6 - Menu size in [2, 50]
 
 Of 255,104 valid sessions:
 
 | Menu size (unique viewed items) | Count | Fraction |
 |---------------------------------|-------|----------|
-| 0 (no pv) | 68,723 | 26.9% — DROPPED |
-| 1 | 27,608 | 10.8% — DROPPED (or bumped to 2 by A5 insert) |
-| 2–50 | 157,691 | **61.8%** — KEPT |
-| >50 | 1,082 | 0.4% — DROPPED |
+| 0 (no pv) | 68,723 | 26.9% - DROPPED |
+| 1 | 27,608 | 10.8% - DROPPED (or bumped to 2 by A5 insert) |
+| 2–50 | 157,691 | **61.8%** - KEPT |
+| >50 | 1,082 | 0.4% - DROPPED |
 
 Menu size percentiles (unique items, for sessions with pv):
 p25 = 2, p50 = 5, p75 = 9, p90 = 17, p99 = 43
 
-41.9% of sessions have repeat views (same item viewed multiple times). Mean 3.5 re-views per such session. The menu is a set so these are deduplicated — raw pv event count is larger than menu size.
+41.9% of sessions have repeat views (same item viewed multiple times). Mean 3.5 re-views per such session. The menu is a set so these are deduplicated - raw pv event count is larger than menu size.
 
 **Verdict**: Filter removes 38.2% of valid sessions. The kept sessions have reasonable menu sizes (median 5). ✓
 
 ---
 
-### D6 — Purchase temporal position (Tenrec test)
+### D6 - Purchase temporal position (Tenrec test)
 
 **This is not a Tenrec-like issue.**
 
@@ -142,7 +142,7 @@ But post-purchase views contaminate the menu. ⚠
 
 ---
 
-### D8 — Category coherence
+### D8 - Category coherence
 
 Of 186,381 sessions with pv data:
 
@@ -159,13 +159,13 @@ Median: 2 categories. p75: 4 categories. p90: 7 categories.
 
 Only 31.4% of sessions are single-category. 68.6% span multiple unrelated product categories (e.g., user browses shoes, then electronics, then clothing, then buys one item from one of those categories).
 
-For discrete-choice RP analysis, cross-category menus are not inherently invalid — the user is choosing among items from their session. But the theoretical cleanness is lower: RP results on a shoe-vs-laptop menu are harder to interpret economically than results on a shoes-only menu.
+For discrete-choice RP analysis, cross-category menus are not inherently invalid - the user is choosing among items from their session. But the theoretical cleanness is lower: RP results on a shoe-vs-laptop menu are harder to interpret economically than results on a shoes-only menu.
 
 **Verdict**: Significant cross-category mixing. Economic interpretation of RP violations is less clean. ⚠
 
 ---
 
-### D9 — User qualification (min_sessions = 5)
+### D9 - User qualification (min_sessions = 5)
 
 Users with ≥1 valid session (in 20M row sample): 124,333
 

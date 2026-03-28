@@ -90,7 +90,7 @@ def scc_transitive_closure(
     T = adjacency.shape[0]
     n_components, labels = find_sccs(adjacency)
 
-    # Single SCC — fall back to full Floyd-Warshall
+    # Single SCC - fall back to full Floyd-Warshall
     if n_components == 1:
         if T < _PARALLEL_THRESHOLD:
             return floyd_warshall_tc_serial(adjacency)

@@ -7,8 +7,8 @@ please write heavy code comments in the code as you refine your context and impo
 ## Paper References
 
 Academic papers cited in code comments live in two places:
-- `papers/` — original PDFs (e.g. `Afriat1967_UtilityConstruction.pdf`, `DemuynckRehbeck2023_MILP.pdf`)
-- `references/papers/md/` — markdown conversions of key papers for searchable text
+- `papers/` - original PDFs (e.g. `Afriat1967_UtilityConstruction.pdf`, `DemuynckRehbeck2023_MILP.pdf`)
+- `references/papers/md/` - markdown conversions of key papers for searchable text
 
 When adding algorithm comments, cite the specific paper, theorem/definition number, and quote
 from these local files rather than paraphrasing from memory. Key papers per module:
@@ -24,14 +24,14 @@ from these local files rather than paraphrasing from memory. Key papers per modu
 
 ## Workflow Rules
 
-- **Always commit and push after completing changes.** Do not wait for the user to ask — commit and push to main automatically when work is done.
+- **Always commit and push after completing changes.** Do not wait for the user to ask - commit and push to main automatically when work is done.
 - **Never add Co-Authored-By or any Claude attribution to commit messages.**
 
 ## Documentation Rules
 
 - **RTD nav tab names must be single words.** Current order: Quickstart, Budgets, Menus, Benchmarks, Algorithms, Performance, Methods, API, References. Methods/API/References are intentionally pushed right so they overflow into "More" on narrow viewports. Benchmarks wraps E-commerce + LLMs.
-- **RTD sidebars:** Left sidebar (`sidebar-nav-bs` + `page-toc`) on ALL pages including front page — set via `html_sidebars = {"**": ["sidebar-nav-bs", "page-toc"]}`. No right sidebar anywhere — `secondary_sidebar_items: []`. **NEVER add `:html_theme.sidebar_primary.remove:` or `:html_theme.sidebar_secondary.remove:` to any RST file** — these page-level directives override conf.py globally and break sidebar consistency. The "On this page" label is hidden via CSS selector `.tocsection.onthispage { display: none !important; }` in `custom.css`.
-- **References only in the References tab.** Never add a `References` section or `.. seealso::` directive to any page — citations belong only in `docs/references.rst`.
+- **RTD sidebars:** Left sidebar (`sidebar-nav-bs` + `page-toc`) on ALL pages including front page - set via `html_sidebars = {"**": ["sidebar-nav-bs", "page-toc"]}`. No right sidebar anywhere - `secondary_sidebar_items: []`. **NEVER add `:html_theme.sidebar_primary.remove:` or `:html_theme.sidebar_secondary.remove:` to any RST file** - these page-level directives override conf.py globally and break sidebar consistency. The "On this page" label is hidden via CSS selector `.tocsection.onthispage { display: none !important; }` in `custom.css`.
+- **References only in the References tab.** Never add a `References` section or `.. seealso::` directive to any page - citations belong only in `docs/references.rst`.
 - **README is user-forward.** Paste-and-run example first (using `load_demo`), then Scores, "Which API?", Choice Categories, Performance. Architecture details live in RTD only.
 - **CHANGELOG.md** lives at repo root. Update it when making user-visible changes.
 - **Never describe the dual naming convention as "tech vs economics".** The two API layers are Engine (batch, Rust) and Functions (per-user deep dives). Legacy aliases exist but are not a selling point.
@@ -94,7 +94,7 @@ Acceptable single-user patterns:
 
 ## Architecture
 
-PrefGraph tests whether observed choices are consistent with rational optimization — without estimating parameters. We test existence ("does a utility function exist?"), not fit models ("which utility function?"). All graph algorithms and LP solving run in Rust via Rayon; Python handles I/O.
+PrefGraph tests whether observed choices are consistent with rational optimization - without estimating parameters. We test existence ("does a utility function exist?"), not fit models ("which utility function?"). All graph algorithms and LP solving run in Rust via Rayon; Python handles I/O.
 
 ### 4 Choice Categories × 4 Method Types
 
@@ -105,39 +105,39 @@ Primary axis: **data type**. Secondary axis: what the method does.
 | **Budget** (prices × quantities) | GARP, WARP, GAPP, Slutsky | CCEI, MPI, HM, VEI, Swaps | Utility, Demand, CV/EV | HARP, Quasilinear, Separability |
 | **Discrete** (menus × choices) | SARP, WARP, WARP-LA, RUM LP, IIA | HM (menu), Regularity | Ordinal utility | Congruence |
 | **Production** (inputs × outputs) | Prod GARP | Prod CCEI | Tech efficiency | Cost min, Returns to scale |
-| **Intertemporal** (dated amounts) | Exp discounting | — | Discount factor δ | Quasi-hyperbolic |
+| **Intertemporal** (dated amounts) | Exp discounting | - | Discount factor δ | Quasi-hyperbolic |
 
-"Discrete" unifies menu choice, stochastic choice, and risk — all "pick from a set" with different item types.
+"Discrete" unifies menu choice, stochastic choice, and risk - all "pick from a set" with different item types.
 
 ### Full Method Reference with Citations
 
 **Budget Choice:**
-- GARP: SCC + Floyd-Warshall — Varian (1982) *Econometrica*
-- CCEI/AEI: Binary search over T² ratios — Afriat (1967) *IER*
-- MPI: Karp's max-mean-weight cycle — Echenique, Lee & Shum (2011) *JPE*
-- Houtman-Maks: Greedy FVS / ILP — Houtman & Maks (1985)
-- VEI: Per-observation LP — Varian (1990) *J Econometrics*
-- HARP: Log-space Floyd-Warshall — Varian (1983) *RES*
-- Quasilinear: Bellman-Ford negative cycles — Chambers & Echenique (2016) Ch 9
-- GAPP: FW on price preferences — Deb, Kitamura, Quah & Stoye (2023) *RES*
-- Utility Recovery: Afriat LP via HiGHS — Afriat (1967)
-- CV/EV Welfare: Afriat LP + expenditure — Vartia (1983) *Econometrica*
-- Swaps Index: Greedy FAS — Apesteguia & Ballester (2015) *JPE*
-- Min Cost Index: Cycle cost — Dean & Martin (2016) *REStat*
+- GARP: SCC + Floyd-Warshall - Varian (1982) *Econometrica*
+- CCEI/AEI: Binary search over T² ratios - Afriat (1967) *IER*
+- MPI: Karp's max-mean-weight cycle - Echenique, Lee & Shum (2011) *JPE*
+- Houtman-Maks: Greedy FVS / ILP - Houtman & Maks (1985)
+- VEI: Per-observation LP - Varian (1990) *J Econometrics*
+- HARP: Log-space Floyd-Warshall - Varian (1983) *RES*
+- Quasilinear: Bellman-Ford negative cycles - Chambers & Echenique (2016) Ch 9
+- GAPP: FW on price preferences - Deb, Kitamura, Quah & Stoye (2023) *RES*
+- Utility Recovery: Afriat LP via HiGHS - Afriat (1967)
+- CV/EV Welfare: Afriat LP + expenditure - Vartia (1983) *Econometrica*
+- Swaps Index: Greedy FAS - Apesteguia & Ballester (2015) *JPE*
+- Min Cost Index: Cycle cost - Dean & Martin (2016) *REStat*
 
 **Discrete Choice:**
-- SARP: FW on item graph — Richter (1966) *Econometrica*
-- WARP-LA: Consideration sets — Masatlioglu, Nakajima & Ozbay (2012) *AER*
-- RUM LP: LP on K! orderings — Block & Marschak (1960); Kitamura & Stoye (2018)
-- Regularity: Subset dominance — Debreu (1960)
-- Congruence: SARP + maximality — Richter (1966)
+- SARP: FW on item graph - Richter (1966) *Econometrica*
+- WARP-LA: Consideration sets - Masatlioglu, Nakajima & Ozbay (2012) *AER*
+- RUM LP: LP on K! orderings - Block & Marschak (1960); Kitamura & Stoye (2018)
+- Regularity: Subset dominance - Debreu (1960)
+- Congruence: SARP + maximality - Richter (1966)
 
 **Production Choice:**
-- Production GARP: FW on profit graph — Varian (1984) *Econometrica*
+- Production GARP: FW on profit graph - Varian (1984) *Econometrica*
 
 **Intertemporal Choice:**
-- Exponential Discounting: Bound propagation — Echenique, Imai & Saito (2020) *AEJ:Micro*
-- Quasi-Hyperbolic: Grid search + LP — Laibson (1997) *QJE*
+- Exponential Discounting: Bound propagation - Echenique, Imai & Saito (2020) *AEJ:Micro*
+- Quasi-Hyperbolic: Grid search + LP - Laibson (1997) *QJE*
 
 ### Rust Engine (rpt-core)
 
@@ -193,18 +193,18 @@ ProductionLog (inputs × outputs)          Intertemporal data (amounts × dates)
 
 | Module | Category | Computation |
 |---|---|---|
-| garp.py | Budget | SCC + Floyd-Warshall — Varian (1982) |
-| aei.py | Budget | Discrete binary search — Afriat (1967) |
-| mpi.py | Budget | Karp's max-mean cycle — Echenique+ (2011) |
-| harp.py | Budget | Log-space FW — Varian (1983) |
-| utility.py | Budget | Afriat LP — Afriat (1967) |
-| vei.py | Budget | Per-obs efficiency LP — Varian (1990) |
-| abstract_choice.py | Discrete | FW on item graph — Richter (1966) |
-| attention.py | Discrete | WARP-LA — Masatlioglu+ (2012) |
-| stochastic.py | Discrete | RUM LP — Kitamura & Stoye (2018) |
-| production.py | Production | Profit graph FW — Varian (1984) |
-| quasilinear.py | Budget | Bellman-Ford — C&E (2016) Ch 9 |
-| intertemporal.py | Intertemporal | Bound propagation — Echenique+ (2020) |
+| garp.py | Budget | SCC + Floyd-Warshall - Varian (1982) |
+| aei.py | Budget | Discrete binary search - Afriat (1967) |
+| mpi.py | Budget | Karp's max-mean cycle - Echenique+ (2011) |
+| harp.py | Budget | Log-space FW - Varian (1983) |
+| utility.py | Budget | Afriat LP - Afriat (1967) |
+| vei.py | Budget | Per-obs efficiency LP - Varian (1990) |
+| abstract_choice.py | Discrete | FW on item graph - Richter (1966) |
+| attention.py | Discrete | WARP-LA - Masatlioglu+ (2012) |
+| stochastic.py | Discrete | RUM LP - Kitamura & Stoye (2018) |
+| production.py | Production | Profit graph FW - Varian (1984) |
+| quasilinear.py | Budget | Bellman-Ford - C&E (2016) Ch 9 |
+| intertemporal.py | Intertemporal | Bound propagation - Echenique+ (2020) |
 
 ### Result Types (`core/results/`)
 
@@ -225,7 +225,7 @@ ProductionLog (inputs × outputs)          Intertemporal data (amounts × dates)
 `from prefgraph.core.result import XxxResult` still works (backward-compat shim).
 31 tech-friendly aliases (e.g. `ConsistencyResult = GARPResult`) live in each submodule.
 
-### Contrib (deprecated — MLE/estimation)
+### Contrib (deprecated - MLE/estimation)
 
 Located in `src/prefgraph/contrib/`. Logit/Luce MLE, CRRA estimation, Bradley-Terry,
 Slutsky regression, Spatial ideal point. Import shims with DeprecationWarning.
@@ -439,7 +439,7 @@ When the user says **"release"**, **"deploy"**, or **"push to PyPI"**, do a full
 # 2. Update CHANGELOG.md
 # 3. Commit, tag, push:
 git add -A
-git commit -m "release: vX.Y.Z — description"
+git commit -m "release: vX.Y.Z - description"
 git tag vX.Y.Z
 git push && git push --tags
 ```

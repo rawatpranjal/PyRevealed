@@ -14,7 +14,7 @@ from prefgraph.engine import Engine, EngineResult
 # ---------------------------------------------------------------------------
 
 def _wide_df():
-    """3 users, 2 goods, 3 observations each — wide format."""
+    """3 users, 2 goods, 3 observations each - wide format."""
     rows = []
     for uid in ["A", "B", "C"]:
         np.random.seed(hash(uid) % 2**31)
@@ -30,7 +30,7 @@ def _wide_df():
 
 
 def _long_df():
-    """2 users, 3 items, 4 time periods — long format (transaction logs)."""
+    """2 users, 3 items, 4 time periods - long format (transaction logs)."""
     rows = []
     for uid in ["U1", "U2"]:
         for t in range(1, 5):
@@ -47,7 +47,7 @@ def _long_df():
 
 
 def _menu_df():
-    """2 users, 5 observations each — menu choice data."""
+    """2 users, 5 observations each - menu choice data."""
     rows = []
     for uid in ["M1", "M2"]:
         for _ in range(5):

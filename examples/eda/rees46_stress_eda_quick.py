@@ -61,7 +61,7 @@ def main():
     print("Decision: Use server's user_session field as ground truth for sessions")
     print("Rationale:")
     print("  • Server-defined sessions are gold standard (no ambiguity)")
-    print("  • Alternative: gap-based (30min inactivity) — would be error-prone")
+    print("  • Alternative: gap-based (30min inactivity) - would be error-prone")
     print("  • user_session is explicitly designed for this purpose")
     print()
 

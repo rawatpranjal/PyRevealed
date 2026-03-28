@@ -8,8 +8,6 @@ Install
 
    pip install "prefgraph[datasets]"
 
-Score 100 Users in 5 Lines
---------------------------
 
 .. code-block:: python
 
@@ -22,5 +20,3 @@ Score 100 Users in 5 Lines
 
    for r in results[:5]:
        print(r)
-
-Next steps → See :doc:`benchmarks` and :doc:`api` for the full tour.

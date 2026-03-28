@@ -409,7 +409,7 @@ def print_verdict(result: dict) -> None:
     print("="*70)
 
     if "user_sessions" not in result:
-        print("\n  VERDICT: DROP — clean sample is empty under strict rules.")
+        print("\n  VERDICT: DROP - clean sample is empty under strict rules.")
         return
 
     n_users_5 = result.get("n_users_5", 0)
@@ -428,16 +428,16 @@ def print_verdict(result: dict) -> None:
     print(f"  Retention rate (strict vs loose): {pct_retained:.1f}%")
 
     if n_users_5 == 0:
-        verdict = "DROP — no users survive strict filtering with ≥5 sessions."
+        verdict = "DROP - no users survive strict filtering with ≥5 sessions."
     elif pct_retained >= 50:
-        verdict = ("KEEP with loader revision — majority of benchmark users survive "
+        verdict = ("KEEP with loader revision - majority of benchmark users survive "
                    "strict cleaning. Revise loader to enforce pre-buy view requirement.")
     elif pct_retained >= 20:
-        verdict = ("KEEP WITH CAVEAT — significant dropout under strict rules. "
+        verdict = ("KEEP WITH CAVEAT - significant dropout under strict rules. "
                    "Benchmark is valid but represents a heavy-buyer subset only. "
                    "Document clearly.")
     else:
-        verdict = ("DROP from main results — too few users survive strict cleaning. "
+        verdict = ("DROP from main results - too few users survive strict cleaning. "
                    "Move to appendix or remove. The loose-loader construction is not "
                    "defensible without phantom insertion.")
 

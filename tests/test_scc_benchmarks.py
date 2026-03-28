@@ -32,12 +32,12 @@ class TestSCCTransitiveClosureCorrectness:
         np.testing.assert_array_equal(tc_scc, tc_fw)
 
     def test_empty_graph(self):
-        """No edges — TC is just the identity."""
+        """No edges - TC is just the identity."""
         adj = np.zeros((5, 5), dtype=np.bool_)
         self._compare_tc(adj)
 
     def test_full_graph(self):
-        """Complete graph — TC is all True."""
+        """Complete graph - TC is all True."""
         adj = np.ones((5, 5), dtype=np.bool_)
         self._compare_tc(adj)
 
@@ -66,7 +66,7 @@ class TestSCCTransitiveClosureCorrectness:
         self._compare_tc(adj)
 
     def test_all_singletons(self):
-        """DAG with no cycles — all SCCs are size 1."""
+        """DAG with no cycles - all SCCs are size 1."""
         adj = np.zeros((5, 5), dtype=np.bool_)
         adj[0, 1] = adj[0, 2] = adj[1, 3] = adj[2, 4] = True
         self._compare_tc(adj)
@@ -88,7 +88,7 @@ class TestSCCTransitiveClosureCorrectness:
         self._compare_tc(adj)
 
     def test_random_t200(self):
-        """Random graph at T=200 — larger scale correctness check."""
+        """Random graph at T=200 - larger scale correctness check."""
         np.random.seed(123)
         T = 200
         adj = np.random.rand(T, T) < 0.1

@@ -587,7 +587,7 @@ Part E: Attention Overload
 
 **Attention overload** (Lleras et al. 2017 "When More is Less") occurs when
 choice quality *degrades* as menu size increases. This is the "paradox of
-choice"—too many options can harm decision quality.
+choice"-too many options can harm decision quality.
 
 E1: Testing for Overload
 ~~~~~~~~~~~~~~~~~~~~~~~~

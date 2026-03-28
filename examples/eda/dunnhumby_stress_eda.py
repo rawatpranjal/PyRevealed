@@ -182,7 +182,7 @@ def block1_observation_construction(df_pl: pl.DataFrame, n_sample: int = 5) -> N
     print(f"  Households with max gap >= 26 weeks: {large_gap_count} ({large_gap_pct:.1f}%)")
 
     # Calendar heatmap for sample households
-    print(f"\nCalendar heatmap (# = active, . = inactive) — {n_sample} sample households:")
+    print(f"\nCalendar heatmap (# = active, . = inactive) - {n_sample} sample households:")
 
     sample_hhs = (
         weekly_counts.sort("active_weeks", descending=True)
@@ -300,7 +300,7 @@ def block2_basket_coverage(raw_txn_lazy: pl.LazyFrame, products_lazy: pl.LazyFra
 
     print("\nVERDICT:")
     print("  Sub-basket share is HIGH-VARIANCE within households (median CV=0.85+).")
-    print("  The 10 categories are NOT a stable sub-budget — they are incidental.")
+    print("  The 10 categories are NOT a stable sub-budget - they are incidental.")
     print("  Active-week construction captures real behavior, not a fixed budget envelope.")
     print()
 
@@ -548,7 +548,7 @@ def block4_rp_identification(
     print(f"\nHouseholds with density > 0.5: {high_density_count} / {len(densities)} ({high_density_pct:.1f}%)")
 
     print("\nVERDICT:")
-    print("  RP density ~0.50 is healthy — half of all pairs have a direct comparison.")
+    print("  RP density ~0.50 is healthy - half of all pairs have a direct comparison.")
     print("  Budget crossings are rare (2-3%), confirming budget variety. The RP graph")
     print("  has real structure, not just noise.")
     print()
@@ -560,13 +560,13 @@ def block5_stockpiling(
     storable: list[str] = STORABLE_COMMODITIES,
 ) -> None:
     """
-    Block 5: Dynamic Behavior — Stockpiling
+    Block 5: Dynamic Behavior - Stockpiling
     ========================================
     Stress-test: Do households stockpile during promos?
     Event study: average normalized quantity at t-2, t-1, t=promo, t+1, t+2.
     """
     print("=" * 70)
-    print("BLOCK 5: DYNAMIC BEHAVIOR — STOCKPILING EVENT STUDY")
+    print("BLOCK 5: DYNAMIC BEHAVIOR - STOCKPILING EVENT STUDY")
     print("=" * 70)
 
     # For each storable commodity, compute event study

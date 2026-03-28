@@ -129,7 +129,7 @@ def generate_vignettes_for_scenario(
 
         time.sleep(0.5)  # rate limit
 
-    print(f"  {scenario.name}: done — {len(existing)}/{n_trials} vignettes")
+    print(f"  {scenario.name}: done - {len(existing)}/{n_trials} vignettes")
 
 
 def main() -> None:

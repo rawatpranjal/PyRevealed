@@ -575,9 +575,9 @@ Output:
 
 **Interpretation:**
 
-- Power > 0.90: Excellent—random behavior almost always fails GARP
-- Power 0.70-0.90: Good—results are meaningful
-- Power < 0.70: Caution—test has low discriminatory power
+- Power > 0.90: Excellent-random behavior almost always fails GARP
+- Power 0.70-0.90: Good-results are meaningful
+- Power < 0.70: Caution-test has low discriminatory power
 
 For the Open E-Commerce dataset, power typically exceeds 0.90.
 
@@ -663,27 +663,27 @@ Use the provided scripts for the complete analysis:
 
 This generates:
 
-- ``output/user_results.csv`` — Full results
-- ``output/aei_distribution.png`` — Histogram
-- ``output/spend_vs_aei.png`` — Scatter plot
+- ``output/user_results.csv`` - Full results
+- ``output/aei_distribution.png`` - Histogram
+- ``output/spend_vs_aei.png`` - Scatter plot
 
 
 Key Takeaways
 -------------
 
-1. **E-commerce data requires assumptions** — category aggregation, temporal
+1. **E-commerce data requires assumptions** - category aggregation, temporal
    aggregation, price imputation all affect results
 
-2. **Behavior is approximately consistent** — mean AEI ~0.85 means 85%
+2. **Behavior is approximately consistent** - mean AEI ~0.85 means 85%
    of behavior can be explained by utility maximization
 
-3. **Lower consistency than lab experiments** — reflects data complexity
+3. **Lower consistency than lab experiments** - reflects data complexity
    and assumption violations
 
-4. **More data = more violations** — consumers with longer histories show
+4. **More data = more violations** - consumers with longer histories show
    lower AEI, suggesting measurement issues
 
-5. **Power analysis matters** — verify your test can distinguish consistent
+5. **Power analysis matters** - verify your test can distinguish consistent
    from random behavior
 
 

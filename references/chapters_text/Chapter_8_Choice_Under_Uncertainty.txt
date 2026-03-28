@@ -10,7 +10,7 @@ expected utility.
 OBJECTIVE PROBABILITY
 There are times when probabilities can be thought to be objective and known,
 or observable. This is the case, for example, when outcomes are randomized
-according to some known physical device—such as a game in a casino, or a
+according to some known physical device-such as a game in a casino, or a
 randomization device used by an experimenter in the laboratory.
 We consider two basic environments. In one the primitive objects of
 choice are lotteries. In the other, the objects of choice are state-contingent
