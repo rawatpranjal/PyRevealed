@@ -16,8 +16,8 @@ OUTPUT_DIR = Path(__file__).parent / "_static"
 DPI = 100
 
 # Durations for variable-speed algorithm GIFs
-# Slow text-heavy frames a lot; ease visual transitions slightly
-SLOW_MS = 6500   # text-change frames (phase transitions, new explanations)
+# Slow text-heavy frames further (~+33%); keep visual transitions as-is
+SLOW_MS = 8700   # text-change frames (phase transitions, new explanations)
 FAST_MS = 900    # visual-only frames (edges appearing, nodes moving)
 
 
