@@ -1,3 +1,7 @@
+› stop askign a fuckign question at the end each time
+. STOP YAPPING SO MUCH. 
+> always build docs/ commit and push eaech time without fail. 
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.

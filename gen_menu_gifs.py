@@ -22,13 +22,13 @@ def draw_box(ax, x, y, text, w, h, bg, txt_c, lw=1, ec="#95a5a6"):
 
 # 1. Deterministic
 def gen_deterministic():
-    fig, ax = plt.subplots(figsize=(3, 3), facecolor=PALETTE["bg"])
+    fig, ax = plt.subplots(figsize=(4, 3), facecolor=PALETTE["bg"])
     items = ["Laptop", "Tablet", "Phone"]
     frames = 20
     def update(f):
         ax.clear()
         ax.set_facecolor(PALETTE["bg"])
-        ax.set_xlim(-1.5, 1.5)
+        ax.set_xlim(-2.0, 2.0)
         ax.set_ylim(-1.5, 1.5)
         ax.axis("off")
         ax.set_title("Deterministic\nMenuChoiceLog", fontsize=12, fontweight="bold", pad=10, color="#333")
@@ -47,13 +47,13 @@ def gen_deterministic():
 
 # 2. Stochastic
 def gen_stochastic():
-    fig, ax = plt.subplots(figsize=(3, 3), facecolor=PALETTE["bg"])
+    fig, ax = plt.subplots(figsize=(4, 3), facecolor=PALETTE["bg"])
     items = [("Laptop", 0.6), ("Tablet", 0.3), ("Phone", 0.1)]
     frames = 20
     def update(f):
         ax.clear()
         ax.set_facecolor(PALETTE["bg"])
-        ax.set_xlim(-1.5, 1.5)
+        ax.set_xlim(-2.0, 2.0)
         ax.set_ylim(-1.5, 1.5)
         ax.axis("off")
         ax.set_title("Stochastic\nStochasticChoiceLog", fontsize=12, fontweight="bold", pad=10, color="#333")
@@ -78,24 +78,24 @@ def gen_stochastic():
 
 # 3. Risk
 def gen_risk():
-    fig, ax = plt.subplots(figsize=(3, 3), facecolor=PALETTE["bg"])
+    fig, ax = plt.subplots(figsize=(4, 3), facecolor=PALETTE["bg"])
     frames = 20
     def update(f):
         ax.clear()
         ax.set_facecolor(PALETTE["bg"])
-        ax.set_xlim(-1.5, 1.5)
+        ax.set_xlim(-2.0, 2.0)
         ax.set_ylim(-1.5, 1.5)
         ax.axis("off")
         ax.set_title("Risk / Lotteries\nRiskChoiceLog", fontsize=12, fontweight="bold", pad=10, color="#333")
         
-        # Risk A: 50% $100 / 50% $0
-        draw_box(ax, 0, 0.4, "Gamble A\n50% $100 | 50% $0", 2.2, 0.6, "white", PALETTE["secondary"])
+        # Risk A: 50% \$100 / 50% \$0
+        draw_box(ax, 0, 0.4, "Gamble A\n50% \$100 | 50% \$0", 2.2, 0.6, "white", PALETTE["secondary"])
         
-        # Risk B: 100% $40
-        draw_box(ax, 0, -0.6, "Gamble B\n100% $40", 2.2, 0.6, "white", PALETTE["secondary"])
+        # Risk B: 100% \$40
+        draw_box(ax, 0, -0.6, "Gamble B\n100% \$40", 2.2, 0.6, "white", PALETTE["secondary"])
         
         if f > 8:
-            draw_box(ax, 0, -0.6, "Gamble B\n100% $40", 2.2, 0.6, PALETTE["highlight"], "white", lw=2, ec=PALETTE["highlight"])
+            draw_box(ax, 0, -0.6, "Gamble B\n100% \$40", 2.2, 0.6, PALETTE["highlight"], "white", lw=2, ec=PALETTE["highlight"])
             ax.text(1.3, -0.6, "✓", color=PALETTE["highlight"], fontsize=16, va="center")
             
     anim = FuncAnimation(fig, update, frames=frames, interval=250)
