@@ -152,13 +152,6 @@ Results
      - 0.295
      - +0.005
      - -
-   * - REES46
-     - 8,832
-     - High Engagement
-     - 0.996
-     - 0.996
-     - +0.0%
-     - 0.990
    * - Taobao
      - 29,519
      - High Entropy (AP)

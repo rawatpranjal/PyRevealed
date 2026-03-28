@@ -141,19 +141,33 @@ Full results: :doc:`benchmarks_ecommerce`.
      - +0.012
      - 0.246
    * - Amazon
-     - 4,694
+     - 4,668
      - High Spender
-     - 0.950
-     - 0.951
-     - +0.0%
-     - -
+     - 0.940
+     - 0.942
+     - +0.2%
+     - 0.932
    * - Amazon
-     - 4,694
-     - Churn
+     - 4,668
+     - Spend Drop
      - 0.784
      - 0.798
-     - -0.0%
-     - 0.769
+     - +1.8%
+     - 0.684
+   * - Amazon
+     - 4,668
+     - Spend Change (R²)
+     - 0.144
+     - 0.091
+     - -0.053
+     - -0.032
+   * - Amazon
+     - 4,668
+     - Future LTV (R²)
+     - 0.633
+     - 0.622
+     - -0.011
+     - 0.387
    * - H&M
      - 46,757
      - High Spender
@@ -175,13 +189,6 @@ Full results: :doc:`benchmarks_ecommerce`.
      - 0.295
      - +0.005
      - -
-   * - REES46
-     - 8,832
-     - High Engagement
-     - 0.996
-     - 0.996
-     - +0.0%
-     - 0.990
    * - Taobao
      - 29,519
      - High Entropy (AP)
