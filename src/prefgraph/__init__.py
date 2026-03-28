@@ -370,6 +370,9 @@ from prefgraph.algorithms.abstract_choice import (
     validate_menu_warp,
     validate_menu_sarp,
     validate_menu_consistency,
+    # Aliases
+    menu_sarp_check,
+    menu_warp_check,
     compute_menu_efficiency,
     fit_menu_preferences,
     # Legacy names (economics terminology)
@@ -565,7 +568,7 @@ from prefgraph.core.result import (
     RankDependentUtilityResult,
 )
 
-__version__ = "0.5.5"
+__version__ = "0.5.6"
 
 __all__ = [
     # ==========================================================================
