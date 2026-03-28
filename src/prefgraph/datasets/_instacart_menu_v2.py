@@ -55,6 +55,7 @@ def load_instacart_menu_v2(
     """Load Instacart as aisle-level menu choices with trailing-3 familiar menus.
 
     Each observation is a (user, order, aisle) triple where:
+
     - The user reordered exactly one SKU in that aisle (choice)
     - The menu is all distinct products the user bought in that aisle
       across their previous 3 orders, plus the current choice

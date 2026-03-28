@@ -81,6 +81,7 @@ def load_m5(
             sell_prices.csv, and calendar.csv. If None, searches standard
             locations.
         aggregation: User granularity level.
+
             - "store": 10 users (one per store), 7 goods (departments).
             - "store_dept": 70 users (one per store-department combination),
               goods are items within that department (aggregated to category).

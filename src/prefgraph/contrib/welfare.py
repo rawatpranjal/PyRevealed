@@ -730,7 +730,8 @@ def analyze_welfare_change(
     to measure the welfare impact of a policy or price change.
 
     CV: Amount of money to give consumer after the change to restore
-        original utility level.
+    original utility level.
+
     EV: Amount of money equivalent to the utility change at original prices.
 
     This function uses theoretically rigorous methods:
@@ -986,7 +987,7 @@ def compute_deadweight_loss(
     For a welfare-improving policy: DWL = CV - EV (EV > CV implies inefficiency)
     For a welfare-worsening policy: DWL = EV - CV (CV > EV implies inefficiency)
 
-    The Harberger approximation uses: DWL ≈ |CV - EV| / 2
+    The Harberger approximation uses: DWL ≈ ``|CV - EV|`` / 2
 
     This function uses theoretically rigorous CV/EV computation methods.
 

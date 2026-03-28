@@ -496,7 +496,8 @@ def compute_hicksian_demand(
     """
     Compute Hicksian (compensated) demand via expenditure minimization.
 
-    Hicksian demand h(p, u) solves:
+    Hicksian demand h(p, u) solves::
+
         min_x  p @ x
         s.t.   U(x) >= u
                x >= 0
