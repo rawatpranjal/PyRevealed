@@ -6,6 +6,7 @@
 - Removed stock illustrations from LLM consistency docs: dropped robot graphic from `budget/app_llm_benchmark` and `benchmarks` cards; removed unused `_static/app_llm_stock.svg`. Also removed decorative hero image from `budget/app_llm_alignment` to keep the page focused on real outputs.
 - Replaced Benchmarks hub card image with real results thumbnail (`_static/app_llm_benchmark_summary.png`).
  - Menus page GIFs: replaced raw HTML <img> with a robust list-table of images to ensure they render reliably on RTD.
+ - Slightly sped up all docs GIF animations (~1.25× faster) to feel snappier. No changes to CSS/JS text transitions; only GIF frame delays were reduced.
 
 ## [0.5.13] - 2026-03-28
 
