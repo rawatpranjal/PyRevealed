@@ -19,6 +19,35 @@ Eight public datasets, 217K users, 42 RP features. CatBoost (H&M) or LightGBM
 
 All targets use top-tercile thresholds for consistency.
 
+Assumptions
+-----------
+
+**Budget datasets** require prices. Dunnhumby and Open E-Commerce use global
+median prices per category per period, shared across all households — individual
+price exposure (coupons, regional variation) is not captured (Dean & Martin 2016).
+H&M uses each customer's own average paid price per product group per month;
+unpurchased groups are imputed via period-group median, then group median, then
+global median. All budget datasets aggregate to 10--134 categories, so
+within-category substitution is invisible. Dunnhumby's 10 commodity groups
+capture ~$19/week of a ~$100--150 weekly grocery budget.
+
+**Menu datasets** have no prices. REES46 uses server-defined session IDs
+(gold standard), median menu size ~5 items. Taobao uses 30-minute inactivity
+gaps to define session boundaries (84% of inter-event gaps < 30 min), median
+menu size 4 items. Tenrec uses click-to-like windows with positional feedback
+tracking, median ~5 clicks between likes; menus reflect algorithmic
+recommendations, not organic browsing. For all three, menus contain only items
+the user viewed or clicked — items shown but not engaged with are invisible.
+
+**Instacart** is treated as menu-choice, not budget (no prices in raw data).
+Observation = user × order × aisle with exactly one reordered SKU. Menu =
+trailing-3 order products in the same aisle (familiarity set). Filters: menu
+size ≥ 2, (user, aisle) pairs with ≥ 3 valid events. This yields 4.5M events
+from 120K users across 715K user-aisle pairs. The data is habit-heavy: 58.6%
+of repeated user-aisle pairs never switch products, and 83.8% of users have
+SARP violations. RP features show real graph structure but near-zero predictive
+lift, consistent with reorder-dominated behavior.
+
 Results
 -------
 
@@ -163,46 +192,6 @@ On Taobao, RP-only **outperforms** the engagement baseline. Preference
 graph transitivity and choice entropy capture patterns that session
 counts and menu sizes miss.
 
-Assumptions
------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 18 20 12 50
-
-   * - Dataset
-     - Input Source
-     - RP Type
-     - Assumption
-   * - Dunnhumby
-     - Median oracle
-     - Budget
-     - Shared prices across households (Dean & Martin 2016)
-   * - Open E-Commerce
-     - Median per category/month
-     - Budget
-     - Forward-filled for missing periods
-   * - H&M
-     - Per-customer realized prices
-     - Budget
-     - Customer avg paid price if purchased; period-group median imputation otherwise
-   * - Instacart
-     - N/A
-     - Menu
-     - Aisle-level single-reorder + trailing-3 familiar menus
-   * - REES46
-     - N/A
-     - Menu
-     - Click -> purchase sessions
-   * - Taobao
-     - N/A
-     - Menu
-     - Daily view -> purchase sessions (100M events)
-   * - Tenrec
-     - N/A
-     - Menu
-     - Click -> like sessions (493M events, NeurIPS 2022)
-
 Top Features
 ------------
 
@@ -334,52 +323,3 @@ Spend Change (regression), High Engagement (top tercile sessions).
 **Output**: ``case_studies/benchmarks/output/results.json`` (full metrics),
 ``summary_table.csv``, ``figures/``.
 
-Data Assumptions
-~~~~~~~~~~~~~~~~
-
-Every dataset involves assumptions when mapping raw logs to RP inputs.
-Here is what each loader does and what it cannot do.
-
-**Budget datasets** (Dunnhumby, Open E-Commerce, H&M, Instacart):
-
-- **Shared price oracle**: Dunnhumby and Open E-Commerce use global median
-  prices per category per period, shared across all users. Individual price
-  exposure (coupons, regional variation) is not captured. This follows
-  Dean & Martin (2016).
-- **Category-level aggregation**: 10--134 categories depending on dataset.
-  Within-category substitution is invisible (e.g., "Dairy" includes milk,
-  yogurt, and cheese at different prices). RP violations may reflect
-  within-category product switching, not true preference inconsistency.
-- **Instacart menu construction**: No prices — treated as menu-choice, not
-  budget. Observation = user × order × aisle with exactly one reordered SKU.
-  Menu = trailing-3 order products in same aisle. Filters: menu size ≥ 2,
-  (user, aisle) pairs with ≥ 3 valid events. 4.5M events, 120K users, 715K
-  pairs. Habit-heavy: 83.8% of users have SARP violations.
-- **H&M per-customer prices**: Each customer's own average paid price
-  per product group per month. Unpurchased groups imputed via
-  period-group median → group median → global median. Prices are
-  normalized 0--1 (Kaggle); relative variation is real.
-- **Dunnhumby coarse categories**: 10 commodity groups capture ~$19/week
-  of a ~$100--150 weekly grocery budget. The RP analysis is valid within
-  these categories but doesn't cover the full basket.
-
-**Menu datasets** (Instacart, REES46, Taobao, Tenrec):
-
-- **Instacart menus**: Constructed from trailing-3 order history per aisle,
-  not from the platform's recommendation set. Menu = products the user
-  previously bought in that aisle (familiarity set). Choice = sole reordered
-  SKU. This is habit-heavy data: 58.6% of repeated user-aisle pairs never
-  switch products. RP features show real graph structure but no predictive
-  lift, consistent with reorder-dominated behavior.
-- **Impression bias**: Menus contain only items the user viewed/clicked.
-  Items shown but not clicked are invisible. The RP analysis is conditional
-  on the user having engaged with these items, not the full catalog.
-- **REES46 sessions**: Server-defined session IDs (gold standard).
-  Median menu size ~5 items.
-- **Taobao sessions**: 30-minute inactivity gap defines session boundaries
-  (84% of inter-event gaps < 30 min). Median menu size 4 items.
-- **Tenrec sessions**: Click-to-like windows with positional feedback
-  tracking. Median ~5 clicks between likes. Menus reflect algorithmic
-  recommendations, not organic browsing.
-- **No budget constraint**: Menu datasets have no prices. Choices reveal
-  preference orderings, not willingness-to-pay.
