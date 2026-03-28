@@ -1,18 +1,17 @@
-"""Three-way model comparison: Global time cutoff + user holdout.
+"""ML Benchmark: Global time cutoff + user holdout + bootstrap CI + grouped importance.
 
-Design:
-  1. Global T_cutoff (70th percentile of all timestamps per dataset)
-  2. Features from events BEFORE T_cutoff
-  3. Targets from events AFTER T_cutoff
-  4. 80/20 random user holdout — train on 80%, evaluate on 20%
-  5. LightGBM defaults + minimal regularization
-  6. Permutation importance on test set
+Protocol:
+  1. Global time cutoff (70th pctl per dataset) → features before, targets after
+  2. 80/20 random user holdout
+  3. LightGBM defaults + colsample_bytree=0.8, min_child_samples=50
+  4. Bootstrap CI on test lift (1000 iterations)
+  5. Grouped permutation importance (RP block vs baseline block)
 """
 
 from __future__ import annotations
 
 import warnings
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from typing import Literal
 
 import numpy as np
@@ -21,7 +20,6 @@ import pandas as pd
 from case_studies.benchmarks.config import SEED
 
 
-# LightGBM defaults + minimal universal regularization
 LGBM_PARAMS = {
     "random_state": SEED,
     "verbose": -1,
@@ -38,11 +36,9 @@ class BenchmarkResult:
     n_users: int
     n_train: int
     n_test: int
-    n_rp_features: int
-    n_base_features: int
     positive_rate: float = 0.0
 
-    # Test set metrics (20% holdout users, future targets)
+    # Test set metrics
     auc_rp: float = 0.0
     auc_base: float = 0.0
     auc_combined: float = 0.0
@@ -53,11 +49,72 @@ class BenchmarkResult:
     r2_base: float = 0.0
     r2_combined: float = 0.0
 
-    top_features: list | None = None  # Permutation importance on test set
+    # Bootstrap CI on lift
+    lift_pct: float = 0.0
+    lift_ci_lower: float = 0.0
+    lift_ci_upper: float = 0.0
+    lift_p_value: float = 1.0
+
+    # Grouped permutation importance
+    group_importance: dict = field(default_factory=dict)
+
+    top_features: list | None = None
     wall_time_s: float = 0.0
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+def _bootstrap_lift(y_test, pred_base, pred_combined, metric_fn, n_boot=1000):
+    """Bootstrap CI on lift percentage."""
+    rng = np.random.default_rng(SEED)
+    lifts = []
+    for _ in range(n_boot):
+        idx = rng.choice(len(y_test), size=len(y_test), replace=True)
+        try:
+            b = metric_fn(y_test[idx], pred_base[idx])
+            c = metric_fn(y_test[idx], pred_combined[idx])
+            if b > 0:
+                lifts.append((c - b) / b * 100)
+        except ValueError:
+            pass
+    if not lifts:
+        return 0.0, 0.0, 0.0, 1.0
+    ci_lower, ci_upper = np.percentile(lifts, [2.5, 97.5])
+    p_value = float(np.mean(np.array(lifts) <= 0))
+    return float(np.mean(lifts)), ci_lower, ci_upper, p_value
+
+
+def _grouped_permutation_importance(model, X_test, y_test, feature_names, rp_cols, base_cols, metric_fn, task_type):
+    """Shuffle RP block and baseline block separately to measure group contribution."""
+    if task_type == "classification":
+        base_score = metric_fn(y_test, model.predict_proba(X_test)[:, 1])
+    else:
+        base_score = metric_fn(y_test, model.predict(X_test))
+
+    results = {}
+    rng = np.random.default_rng(SEED)
+
+    for group_name, cols in [("RP_features", rp_cols), ("Baseline_features", base_cols)]:
+        col_indices = [i for i, name in enumerate(feature_names) if name in cols]
+        if not col_indices:
+            results[group_name] = 0.0
+            continue
+
+        drops = []
+        for _ in range(5):  # 5 repeats
+            X_shuf = X_test.copy()
+            perm = rng.permutation(len(X_test))
+            for ci in col_indices:
+                X_shuf[:, ci] = X_shuf[perm, ci]
+            if task_type == "classification":
+                shuf_score = metric_fn(y_test, model.predict_proba(X_shuf)[:, 1])
+            else:
+                shuf_score = metric_fn(y_test, model.predict(X_shuf))
+            drops.append(base_score - shuf_score)
+        results[group_name] = float(np.mean(drops))
+
+    return results
 
 
 def compute_lift_pct(combined: float, base: float) -> float:
@@ -74,18 +131,15 @@ def run_three_way(
     target: str,
     task_type: Literal["classification", "regression"] = "classification",
 ) -> BenchmarkResult:
-    """Global time cutoff already applied by caller. This does user holdout + eval."""
+    """Run the full protocol: train, evaluate, bootstrap CI, grouped importance."""
     import time as _time
     _t0 = _time.time()
 
     import lightgbm as lgb
     from sklearn.model_selection import train_test_split
-    from sklearn.metrics import (
-        roc_auc_score, average_precision_score, r2_score,
-    )
-    from sklearn.inspection import permutation_importance
+    from sklearn.metrics import roc_auc_score, average_precision_score, r2_score
 
-    # Align indices
+    # Align
     common_idx = X_rp.index.intersection(X_base.index)
     X_rp = X_rp.loc[common_idx]
     X_base = X_base.loc[common_idx]
@@ -93,10 +147,14 @@ def run_three_way(
     X_combined = pd.concat([X_base, X_rp], axis=1)
     X_combined = X_combined.loc[:, ~X_combined.columns.duplicated()]
 
+    rp_cols = set(X_rp.columns)
+    base_cols = set(X_base.columns)
+    combined_names = list(X_combined.columns)
+
     feature_sets = {
-        "rp": X_rp,
-        "base": X_base,
-        "combined": X_combined,
+        "rp": X_rp.values,
+        "base": X_base.values,
+        "combined": X_combined.values,
     }
 
     n_users = len(y)
@@ -105,20 +163,20 @@ def run_three_way(
     # 80/20 user holdout
     stratify = y if task_type == "classification" else None
     idx = np.arange(n_users)
-    tr_idx, te_idx = train_test_split(
-        idx, test_size=0.2, random_state=SEED, stratify=stratify
-    )
-    y_train, y_test = y[tr_idx], y[te_idx]
+    tr, te = train_test_split(idx, test_size=0.2, random_state=SEED, stratify=stratify)
+    y_train, y_test = y[tr], y[te]
 
+    # Train 3 models, collect test predictions
     metrics = {}
-    models = {}
-    for name, X_df in feature_sets.items():
-        X_arr = X_df.values
-        # Impute NaN/inf using TRAIN medians only
-        train_df = pd.DataFrame(X_arr[tr_idx])
-        medians = train_df.median()
-        X_tr = train_df.fillna(medians).replace([np.inf, -np.inf], 0).values
-        X_te = pd.DataFrame(X_arr[te_idx]).fillna(medians).replace([np.inf, -np.inf], 0).values
+    test_preds = {}
+    combined_model = None
+
+    for name, X_arr in feature_sets.items():
+        # Impute with train medians only
+        train_df = pd.DataFrame(X_arr[tr])
+        med = train_df.median()
+        X_tr = train_df.fillna(med).replace([np.inf, -np.inf], 0).values
+        X_te = pd.DataFrame(X_arr[te]).fillna(med).replace([np.inf, -np.inf], 0).values
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -135,35 +193,46 @@ def run_three_way(
                 except ValueError:
                     ap = 0.0
                 metrics[name] = {"auc": auc, "ap": ap}
+                test_preds[name] = y_prob
             else:
                 model = lgb.LGBMRegressor(**LGBM_PARAMS)
                 model.fit(X_tr, y_train)
                 y_pred = model.predict(X_te)
                 metrics[name] = {"r2": float(r2_score(y_test, y_pred))}
-            models[name] = (model, X_te, y_test)
+                test_preds[name] = y_pred
 
-    # Permutation importance on TEST set (combined model)
-    top_features = None
-    model_c, X_te_c, y_te_c = models["combined"]
-    scoring = "roc_auc" if task_type == "classification" else "r2"
+            if name == "combined":
+                combined_model = model
+                X_te_combined = X_te
+
+    # Bootstrap CI on lift
+    if task_type == "classification":
+        # Use AUC-PR for imbalanced, AUC-ROC for balanced
+        metric_fn = average_precision_score if pos_rate < 0.15 else roc_auc_score
+        lift_mean, ci_lo, ci_hi, p_val = _bootstrap_lift(
+            y_test, test_preds["base"], test_preds["combined"], metric_fn
+        )
+    else:
+        lift_mean, ci_lo, ci_hi, p_val = _bootstrap_lift(
+            y_test, test_preds["base"], test_preds["combined"], r2_score
+        )
+
+    # Grouped permutation importance on test set
+    metric_fn_perm = roc_auc_score if task_type == "classification" else r2_score
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        perm = permutation_importance(
-            model_c, X_te_c, y_te_c,
-            scoring=scoring, n_repeats=5, random_state=SEED,
+        group_imp = _grouped_permutation_importance(
+            combined_model, X_te_combined, y_test,
+            combined_names, rp_cols, base_cols, metric_fn_perm, task_type
         )
-    feat_names = list(X_combined.columns)
-    imp_mean = perm.importances_mean
-    top_features = sorted(
-        zip(feat_names, imp_mean.tolist()),
-        key=lambda x: x[1], reverse=True,
-    )[:15]
 
     result = BenchmarkResult(
         dataset=dataset, target=target, task_type=task_type,
-        n_users=n_users, n_train=len(tr_idx), n_test=len(te_idx),
-        n_rp_features=X_rp.shape[1], n_base_features=X_base.shape[1],
-        positive_rate=pos_rate, top_features=top_features,
+        n_users=n_users, n_train=len(tr), n_test=len(te),
+        positive_rate=pos_rate,
+        lift_pct=lift_mean, lift_ci_lower=ci_lo, lift_ci_upper=ci_hi,
+        lift_p_value=p_val,
+        group_importance=group_imp,
     )
 
     if task_type == "classification":
