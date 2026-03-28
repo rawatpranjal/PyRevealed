@@ -173,13 +173,13 @@ Full results: :doc:`benchmarks_ecommerce`.
      - High Engagement
      - 0.996
      - 0.996
-   * - Taobao
-     - 4,239
-     - High Engagement
-     - 0.913
-     - **0.915**
+   * - Taobao (Buy Window)
+     - 5,955
+     - Pref Drift (AP)
+     - 0.964
+     - **0.973**
 
-Budget datasets: RP adds ~0% over strong RFM baselines. Menu datasets: RP features competitive — Taobao RP-only (0.925) beats baseline (0.913).
+Budget datasets: RP adds ~0% over strong RFM baselines. On Taobao (buy‑anchored, 6h), RP adds signal on structural targets (e.g., Pref Drift AP 0.964 → 0.973); see full results.
 
 Performance
 -----------
@@ -211,9 +211,8 @@ Benchmarked on synthetic data, T=15 observations, 10 goods, M1 Mac:
      - 50 μs
      - O(N³)
  
- 
-
-Implements the framework of Chambers & Echenique (2016) `Revealed Preference Theory <https://www.amazon.com/Revealed-Preference-Econometric-Society-Monographs/dp/1107087805>`_ . See :doc:`theory_landscape` for the full method map.
+..
+   Archived: homepage book blurb moved to docs/archive/homepage_extras.rst
 
 .. toctree::
    :maxdepth: 2

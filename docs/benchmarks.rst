@@ -1,16 +1,7 @@
 Benchmarks
 ==========
 
-Empirical evaluation of preference-graph features (cycle counts, acyclicity scores) on real-world
-prediction tasks across e-commerce and LLM domains.
-
-E-commerce
-----------
-
-.. toctree::
-   :maxdepth: 1
-
-   benchmarks_ecommerce
+Empirical evaluation of preference-graph on real-world prediction and evaluation tasks.
 
 LLMs
 ----
@@ -19,3 +10,11 @@ LLMs
    :maxdepth: 1
 
    budget/app_llm_benchmark
+
+E-commerce
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   benchmarks_ecommerce

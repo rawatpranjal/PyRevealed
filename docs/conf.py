@@ -33,7 +33,12 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "archive/**",
+]
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -53,6 +58,8 @@ html_theme_options = {
 
 # All pages get left sidebar with nav tree + in-page section TOC
 html_sidebars = {
+    "index": ["sidebar-nav-bs"],
+    "api": ["sidebar-nav-bs"],
     "**": ["sidebar-nav-bs", "page-toc"],
 }
 
@@ -80,4 +87,3 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }
-
