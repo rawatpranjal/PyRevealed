@@ -51,9 +51,11 @@ def load_and_prepare(data_dir=None, max_users=50000):
 
     print(f"\n[{DATASET_NAME}] Loading dataset...")
     _t_load = _time.perf_counter()
+    # RetailRocket has few repeat purchasers; lower min_sessions to 3
+    # to retain enough users for a meaningful benchmark.
     user_logs = load_retailrocket(
         data_dir=data_dir,
-        min_sessions=MIN_OBS_MENU,
+        min_sessions=3,
         max_users=max_users,
     )
     load_and_prepare.load_time_s = _time.perf_counter() - _t_load
