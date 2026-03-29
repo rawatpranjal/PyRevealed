@@ -1,12 +1,12 @@
 Case Study 2: Predicting Customer Spend & Engagement
 =====================================================
 
-Across 11 datasets and 27 prediction targets, revealed preference features add between zero and two percent marginal lift over standard baselines. The signal is real but small. Baseline spend and engagement features already capture most of the predictive power.
+Across 11 datasets and 27 prediction targets, revealed preference features add between zero and two percent marginal lift on average. Standard spend and engagement baselines already capture most of the signal.
 
 Setup
 -----
 
-We test whether revealed preference graph features improve user-level predictions of spend, churn, engagement, and loyalty. The 11 datasets span grocery, e-commerce, fashion, video, news, and classifieds platforms. Each user's first 70 percent of observations produce 42 RP features alongside a 13-feature RFM baseline. The RP features include GARP, CCEI, MPI, HM, VEI, graph density, transitivity, and choice entropy. We train a regularized LightGBM and an L1-penalized logistic regression on an 80/20 user holdout. All results below are out-of-sample AUC-ROC from the regularized LightGBM. Every run uses SEED 42 and is fully reproducible.
+We test whether choice-consistency features improve predictions of spend, churn, engagement, and loyalty at the individual user level. Each user's purchase or click history is split in time. The early portion produces features. The later portion defines the prediction target. Two models are trained on an 80/20 user holdout and evaluated out of sample.
 
 .. _eco-results:
 
@@ -30,19 +30,19 @@ Results
      - Budget
      - 2,222
      - Spend Drop
-     - .683
-     - **.694**
-     - +.011
-     - **+1.6%**
+     - .164
+     - .130
+     - -.034
+     - -20.5%
      - 6m 6s
    * - Dunnhumby
      -
      -
      - High Spender
-     - .962
-     - .961
-     - -.001
-     - -0.1%
+     - .932
+     - .929
+     - -.002
+     - -0.2%
      -
    * - Dunnhumby
      -
@@ -57,19 +57,19 @@ Results
      - Budget
      - 4,668
      - Spend Drop
-     - .756
-     - **.761**
-     - +.005
-     - **+0.7%**
+     - .196
+     - .198
+     - +.002
+     - +1.0%
      - 12m
    * - Amazon
      -
      -
      - High Spender
-     - .940
-     - .939
-     - -.001
-     - -0.1%
+     - .900
+     - .902
+     - +.002
+     - +0.2%
      -
    * - H&M
      - Budget
@@ -84,8 +84,8 @@ Results
      -
      -
      - High Spender
-     - .787
-     - .785
+     - .673
+     - .671
      - -.002
      - -0.3%
      -
@@ -93,8 +93,8 @@ Results
      - Menu
      - 50,000
      - Low Loyalty
-     - .969
-     - .970
+     - .935
+     - .937
      - +.001
      - +0.1%
      - 8m
@@ -102,17 +102,17 @@ Results
      - Menu
      - 50,000
      - Low Loyalty
-     - .883
-     - .882
-     - -.001
-     - -0.1%
+     - .670
+     - .674
+     - +.004
+     - +0.5%
      - 8m
    * - Taobao
      - Menu
      - 50,000
      - Engagement
-     - .938
-     - .938
+     - .822
+     - .822
      - .000
      - 0.0%
      - 3m
@@ -120,17 +120,17 @@ Results
      - Menu
      - 29,519
      - Low Loyalty
-     - .984
-     - .986
-     - +.002
-     - +0.2%
+     - .715
+     - **.822**
+     - +.107
+     - **+15.0%**
      - 0.1s
    * - Tenrec
      - Menu
      - 50,000
      - Engagement
-     - .992
-     - .992
+     - .982
+     - .982
      - .000
      - 0.0%
      - 15m
@@ -138,29 +138,29 @@ Results
      - Menu
      - 5,000
      - High CTR
-     - .678
-     - .667
+     - .529
+     - .518
      - -.011
-     - -1.6%
+     - -2.1%
      - 4m
    * - FINN
      - Menu
      - 1,869
      - Low Loyalty
-     - .957
-     - .957
-     - .000
-     - 0.0%
+     - .772
+     - .773
+     - +.001
+     - +0.1%
      - 13m
 
-All values are out-of-sample AUC-ROC from regularized LightGBM. Base refers to 13 RFM features. +RP adds 42 revealed preference features on top of Base. One representative target per dataset is shown. Full results for all targets are in ``output/results.json``. Engine times are Rust batch scoring on Apple M-series hardware.
+All values are out-of-sample AUC-PR. One target per dataset is shown. Full results are in ``output/results.json``.
 
 Findings
 --------
 
-The only targets with consistent positive lift across sample sizes and models are the two Spend Drop predictions. On Dunnhumby the lift is 1.6 percent and on Amazon it is 0.7 percent. On these targets the VEI metric captures declining purchase efficiency before spending actually drops. Everywhere else the lift is within plus or minus 0.3 percent. The mean lift across all 27 targets is 0.03 percent.
+On most targets the lift from adding RP features is within plus or minus one percent. The standout is Taobao Buy Window Low Loyalty at plus 15 percent, where preference graph features detect users whose choices are becoming more dispersed over time. The mean lift across all targets is near zero.
 
-Despite near-zero aggregate lift, RP features rank highly in model importance. The table below shows that ``menu_transitivity`` is the third most important feature overall, appearing in the top 10 for 18 of 19 menu targets. The model uses RP features but they do not improve predictions because the baseline features already capture overlapping information through a different path.
+RP features rank highly in model importance but generally do not change predictions. The model finds them informative because they describe a different aspect of user behavior. They do not add lift because the baseline already covers most of the same ground through simpler measures.
 
 .. _eco-features:
 
@@ -227,7 +227,7 @@ Feature Importance
      - 0.064
      - 11/13
 
-Three of the top ten features are RP-derived. All three are graph-structural measures of how consistently a user makes decisions. They are not measures of volume or frequency, which is what the baseline already captures.
+Three of the top ten features measure choice consistency rather than volume or frequency.
 
 .. _eco-replication:
 
@@ -238,26 +238,17 @@ Replication
 
    pip install prefgraph lightgbm scikit-learn
 
-   # Full run on all 11 validated datasets with both models
    python case_studies/benchmarks/runner.py --datasets validated --model both
-
-   # Quick smoke test at 250 users
    python case_studies/benchmarks/runner.py --datasets validated --max-users 250 --model both
-
-   # Single dataset
    python case_studies/benchmarks/runner.py --datasets dunnhumby
-
-   # Regenerate summary and plots from cached results
    python case_studies/benchmarks/runner.py --replot
 
-All results are deterministic with SEED 42. Per-dataset JSON files are saved to ``case_studies/benchmarks/output/``. For datasets on external drives, set the environment variable ``PYREVEALED_DATA_DIR`` to the data path.
+All results are deterministic. Per-dataset JSON files are saved to ``case_studies/benchmarks/output/``. For datasets on external drives, set ``PYREVEALED_DATA_DIR``.
 
 .. _eco-appendix:
 
 Appendix: Dataset Summary
 --------------------------
-
-The table below shows standardized summary statistics for all 11 datasets. T is the median number of choice occasions per user. K is the number of alternatives. Repeat is the fraction of observations where the chosen item was chosen previously. Uniq is the median fraction of distinct items per user.
 
 .. list-table::
    :header-rows: 1
@@ -384,14 +375,14 @@ The table below shows standardized summary statistics for all 11 datasets. T is 
      - 100%
      - Classifieds
 
-Budget datasets have rich purchase histories with 15 to 31 median observations per user and repeat rates between 28 and 73 percent. This structure is ideal for revealed preference testing because users revisit the same goods under varying prices. Menu datasets are thinner, with 4 to 9 median observations and repeat rates below 6 percent on most platforms. Recommendation systems surface novel items, so users rarely face the same choice set twice. The exceptions are Instacart with 57 percent repeat rate and REES46 with 19 percent. These are the menu datasets where RP features show the most signal. Revealed preference testing needs repeated choices from overlapping sets, and most menu platforms do not provide that.
+Budget datasets have rich histories with 15 to 31 observations per user and repeat rates between 28 and 73 percent. Menu datasets are thinner with 4 to 9 observations and near-zero repeat rates on most platforms. RP features work best where users make repeated choices from overlapping sets.
 
 Appendix: Feature Correlation
 -------------------------------
 
-RP features are largely orthogonal to baseline features. The median absolute cross-correlation is 0.12 on budget datasets and 0.28 on menu datasets. The utility-recovery features are internally redundant with pairwise correlations above 0.95. The genuinely independent RP features are ``choice_entropy``, ``menu_transitivity``, ``sarp_violation_density``, ``hm_ratio``, and ``vei_mean``. These are the same features that survive L1 selection in the Lasso model and appear in the LGBM top-10 importance list.
+RP features are largely orthogonal to baseline features with a median cross-correlation of 0.12. The utility-recovery features are internally redundant with pairwise correlations above 0.95. The independent RP features are ``choice_entropy``, ``menu_transitivity``, ``sarp_violation_density``, ``hm_ratio``, and ``vei_mean``.
 
 Appendix: Null Rates
 ---------------------
 
-50 of 59 RP features are always populated on budget data. 25 of 27 are always populated on menu data. The exceptions are utility-recovery features that require sufficient intersecting choices to solve the Afriat LP. All null values are imputed with train-set medians before model training.
+50 of 59 RP features are always populated on budget data. 25 of 27 are always populated on menu data. The exceptions are utility-recovery features that require a minimum number of intersecting choices. All nulls are imputed with train-set medians.
