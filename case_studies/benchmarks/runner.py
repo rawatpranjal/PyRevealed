@@ -186,12 +186,6 @@ def main():
         choices=["lgbm", "lasso", "both"],
         help="Model to run: lgbm (default), lasso, or both.",
     )
-    parser.add_argument(
-        "--n-bootstrap",
-        type=int,
-        default=100,
-        help="Bootstrap resamples for Lasso SE (default: 100, 0=skip).",
-    )
     args = parser.parse_args()
 
     if args.datasets == "all":
@@ -339,7 +333,6 @@ def main():
                     result = run_lasso_three_way(
                         X_rp, X_base, y, name, target_name, task_type,
                         y_continuous=y_cont, threshold_pctl=pctl,
-                        n_bootstrap=args.n_bootstrap,
                     )
                 except Exception as e:
                     print(f"SKIP ({e})")

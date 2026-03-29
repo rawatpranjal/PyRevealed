@@ -33,7 +33,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LassoCV, LogisticRegressionCV
+from sklearn.linear_model import Lasso, LogisticRegression
 from sklearn.metrics import average_precision_score, r2_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -142,18 +142,22 @@ class LassoResult:
 # ---------------------------------------------------------------------------
 
 def _fit_lasso(task_type: str, X_tr: np.ndarray, y_tr: np.ndarray):
-    """Return a fitted Pipeline(StandardScaler + LassoCV/LogisticRegressionCV)."""
+    """Return a fitted Pipeline(StandardScaler + Lasso/LogisticRegression).
+
+    Uses a fixed conservative regularization (no CV) for speed.
+    Features are standardized so coefficients are directly comparable.
+    Classification: C=0.1 (strong L1). Regression: alpha=1.0 (strong L1).
+    """
     if task_type == "classification":
-        estimator = LogisticRegressionCV(
+        estimator = LogisticRegression(
             penalty="l1",
             solver="saga",
-            cv=5,
+            C=0.1,  # conservative (= alpha=10 in Lasso terms)
             random_state=SEED,
             max_iter=10000,
-            Cs=20,
         )
     else:
-        estimator = LassoCV(cv=5, random_state=SEED, max_iter=10000)
+        estimator = Lasso(alpha=1.0, random_state=SEED, max_iter=10000)
 
     pipe = Pipeline([("scaler", StandardScaler()), ("model", estimator)])
     with warnings.catch_warnings():
@@ -170,11 +174,11 @@ def _predict(pipe, X, task_type: str):
 
 
 def _get_alpha(pipe, task_type: str) -> float:
-    """Extract selected regularization strength."""
+    """Extract regularization strength."""
     inner = pipe.named_steps["model"]
     if task_type == "classification":
-        return float(1.0 / inner.C_[0])
-    return float(inner.alpha_)
+        return float(1.0 / inner.C)
+    return float(inner.alpha)
 
 
 def _get_coefs(pipe) -> np.ndarray:
@@ -208,7 +212,6 @@ def run_lasso_three_way(
     task_type: str = "classification",
     y_continuous: np.ndarray | None = None,
     threshold_pctl: float | None = None,
-    n_bootstrap: int = 100,
 ) -> LassoResult:
     """Fit Lasso on RP-only, Baseline-only, Combined. Capture all metrics."""
     t0 = time.time()
@@ -295,23 +298,6 @@ def run_lasso_three_way(
         else:
             group_dict[fname] = "Base"
 
-    # --- Bootstrap standard errors ---
-    coef_stderr = {}
-    if n_bootstrap > 0 and X_tr_combined is not None:
-        rng = np.random.default_rng(SEED)
-        boot_coefs = []
-        for _ in range(n_bootstrap):
-            bidx = rng.choice(len(X_tr_combined), size=len(X_tr_combined), replace=True)
-            try:
-                boot_pipe = _fit_lasso(task_type, X_tr_combined[bidx], y_train[bidx])
-                boot_coefs.append(_get_coefs(boot_pipe))
-            except Exception:
-                pass
-        if boot_coefs:
-            boot_arr = np.array(boot_coefs)
-            for i, fname in enumerate(combined_names):
-                coef_stderr[fname] = float(boot_arr[:, i].std())
-
     # --- Count features ---
     n_rp_nz = sum(1 for f in coef_dict if group_dict.get(f) == "RP")
     n_base_nz = sum(1 for f in coef_dict if group_dict.get(f) == "Base")
@@ -329,7 +315,6 @@ def run_lasso_three_way(
         alpha_base=alphas["base"],
         alpha_combined=alphas["combined"],
         coefficients=coef_dict,
-        coef_stderr=coef_stderr,
         feature_groups=group_dict,
         n_features_total=len(combined_names),
         n_features_nonzero=len(coef_dict),
@@ -472,16 +457,13 @@ def print_coefficient_table(results: list[LassoResult], top_n: int = 15) -> None
         print(f"\n  {r.dataset} / {r.target} ({r.task_type})")
         print(f"  α={r.alpha_combined:.4g}  |  {r.n_features_nonzero}/{r.n_features_total} selected "
               f"({r.n_features_rp_nonzero} RP, {r.n_features_base_nonzero} Base)")
-        print(f"  {'Rank':>4}  {'Coef':>9}  {'SE':>8}  {'|t|':>6}  {'Feature':<35} {'Group':>5}")
-        print("  " + "-" * 75)
+        print(f"  {'Rank':>4}  {'Coef':>9}  {'Feature':<40} {'Group':>5}")
+        print("  " + "-" * 65)
 
         sorted_coefs = sorted(r.coefficients.items(), key=lambda x: abs(x[1]), reverse=True)
         for rank, (fname, coef) in enumerate(sorted_coefs[:top_n], 1):
             group = r.feature_groups.get(fname, "?")
-            se = r.coef_stderr.get(fname, 0.0)
-            t_stat = abs(coef / se) if se > 1e-8 else float("inf")
-            sig = "***" if t_stat > 2.58 else "**" if t_stat > 1.96 else "*" if t_stat > 1.64 else ""
-            print(f"  {rank:>4}  {coef:>+9.4f}  {se:>8.4f}  {t_stat:>5.1f}{sig}  {fname:<35} {group:>5}")
+            print(f"  {rank:>4}  {coef:>+9.4f}  {fname:<40} {group:>5}")
 
         if len(sorted_coefs) > top_n:
             print(f"  ... and {len(sorted_coefs) - top_n} more non-zero features")
@@ -550,7 +532,7 @@ def main():
     )
     parser.add_argument("--max-users", type=int, default=None)
     parser.add_argument("--top-n", type=int, default=15, help="Top coefficients to show per target")
-    parser.add_argument("--n-bootstrap", type=int, default=100, help="Bootstrap resamples for SE (0=skip)")
+    # Bootstrap removed — using fixed conservative regularization instead
     parser.add_argument(
         "--output-dir", type=str, default=None,
         help="Output directory (default: case_studies/benchmarks/output/)",
@@ -575,7 +557,7 @@ def main():
     print("=" * 70)
     print(f"\n  Datasets: {', '.join(dataset_names)}")
     print(f"  Max users: {args.max_users or 'unlimited'}")
-    print(f"  Bootstrap SE: {args.n_bootstrap} resamples")
+    print(f"  Regularization: C=0.1 (logit), alpha=1.0 (lasso) — fixed, no CV")
 
     all_results: list[LassoResult] = []
 
@@ -620,7 +602,6 @@ def main():
                 result = run_lasso_three_way(
                     X_rp, X_base, y, name, target_name, task_type,
                     y_continuous=y_cont, threshold_pctl=pctl,
-                    n_bootstrap=args.n_bootstrap,
                 )
             except Exception as e:
                 print(f"SKIP ({e})")
