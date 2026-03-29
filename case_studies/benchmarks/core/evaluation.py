@@ -223,12 +223,10 @@ def run_three_way(
                 combined_model = model
                 X_te_combined = X_te
 
-    # Bootstrap CI on lift
+    # Bootstrap CI on lift (always on AUC-PR as primary metric)
     if task_type == "classification":
-        # Use AUC-PR for imbalanced, AUC-ROC for balanced
-        metric_fn = average_precision_score if pos_rate < 0.15 else roc_auc_score
         lift_mean, ci_lo, ci_hi, p_val = _bootstrap_lift(
-            y_test, test_preds["base"], test_preds["combined"], metric_fn
+            y_test, test_preds["base"], test_preds["combined"], average_precision_score
         )
     else:
         lift_mean, ci_lo, ci_hi, p_val = _bootstrap_lift(

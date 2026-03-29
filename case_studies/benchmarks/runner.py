@@ -8,6 +8,8 @@ Usage:
     python case_studies/benchmarks/runner.py                     # All available datasets
     python case_studies/benchmarks/runner.py --datasets dunnhumby,uci_retail
     python case_studies/benchmarks/runner.py --datasets dunnhumby --max-users 500
+    python case_studies/benchmarks/runner.py --skip-existing      # Skip datasets with cached results
+    python case_studies/benchmarks/runner.py --replot             # Regenerate summary + plots from cache
 """
 
 from __future__ import annotations
@@ -21,9 +23,19 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from case_studies.benchmarks.core.evaluation import BenchmarkResult
-from case_studies.benchmarks.core.reporting import print_summary, save_results, generate_plots
+from case_studies.benchmarks.core.reporting import (
+    print_summary,
+    save_results,
+    save_dataset_results,
+    load_dataset_results,
+    aggregate_all_results,
+    generate_plots,
+)
 
 
+# Registry: name -> module path
+# To add a new dataset: create datasets/<name>_bench.py with run_benchmark() -> list[BenchmarkResult],
+# then add an entry here.
 AVAILABLE_DATASETS = {
     # Budget-based (real prices)
     "dunnhumby": "case_studies.benchmarks.datasets.dunnhumby_bench",
@@ -34,6 +46,24 @@ AVAILABLE_DATASETS = {
     "rees46": "case_studies.benchmarks.datasets.rees46_bench",
     "taobao": "case_studies.benchmarks.datasets.taobao_bench",
     "taobao_buy_window": "case_studies.benchmarks.datasets.taobao_buy_window_bench",
+    "retailrocket": "case_studies.benchmarks.datasets.retailrocket_bench",
+    "tenrec": "case_studies.benchmarks.datasets.tenrec_bench",
+    "yoochoose": "case_studies.benchmarks.datasets.yoochoose_bench",
+}
+
+# Map runner name -> display name used in BenchmarkResult.dataset field.
+# Used by --skip-existing to find cached results.
+DATASET_DISPLAY_NAMES = {
+    "dunnhumby": "Dunnhumby",
+    "open_ecommerce": "Open E-Commerce",
+    "hm": "H&M",
+    "instacart_v2_menu": "Instacart V2 (Menu)",
+    "rees46": "REES46",
+    "taobao": "Taobao",
+    "taobao_buy_window": "Taobao (Buy Window)",
+    "retailrocket": "RetailRocket",
+    "tenrec": "Tenrec",
+    "yoochoose": "Yoochoose",
 }
 
 
@@ -57,7 +87,7 @@ def run_dataset(
     elif name == "open_ecommerce":
         if max_users:
             kwargs["n_users"] = max_users
-    elif name in ("instacart_v2_menu", "rees46", "hm", "taobao"):
+    elif name in ("instacart_v2_menu", "rees46", "hm", "taobao", "retailrocket", "tenrec", "yoochoose"):
         kwargs["max_users"] = max_users or 50000
     elif name == "taobao_buy_window":
         kwargs["max_users"] = max_users or 50000
@@ -110,6 +140,16 @@ def main():
         default=None,
         help="Output directory for results (default: case_studies/benchmarks/output/)",
     )
+    parser.add_argument(
+        "--skip-existing",
+        action="store_true",
+        help="Skip datasets that already have cached results in the output directory.",
+    )
+    parser.add_argument(
+        "--replot",
+        action="store_true",
+        help="Load all cached results and regenerate summary + plots without running benchmarks.",
+    )
     args = parser.parse_args()
 
     if args.datasets == "all":
@@ -123,17 +163,44 @@ def main():
 
     output_dir = Path(args.output_dir) if args.output_dir else Path(__file__).parent / "output"
 
+    # --replot: just load cached results and regenerate outputs
+    if args.replot:
+        print("=" * 70)
+        print(" REPLOT: Loading cached results and regenerating outputs")
+        print("=" * 70)
+        all_results = aggregate_all_results(output_dir)
+        if all_results:
+            print(f"\n  Loaded {len(all_results)} cached results from {output_dir}")
+            print_summary(all_results)
+            save_results(all_results, output_dir)
+            generate_plots(all_results, output_dir)
+        else:
+            print(f"\n  No cached results found in {output_dir}")
+        return
+
     print("=" * 70)
     print(" ML BENCHMARK: Revealed Preference Features as Predictive Signals")
     print("=" * 70)
     print(f"\n  Datasets: {', '.join(dataset_names)}")
     print(f"  Max users: {args.max_users or 'unlimited'}")
     print(f"  Output: {output_dir}")
+    if args.skip_existing:
+        print(f"  Mode: skip-existing (use cached results where available)")
 
     all_results: list[BenchmarkResult] = []
     start = time.time()
 
     for name in dataset_names:
+        display_name = DATASET_DISPLAY_NAMES.get(name, name)
+
+        # Check cache if --skip-existing
+        if args.skip_existing:
+            cached = load_dataset_results(display_name, output_dir)
+            if cached:
+                print(f"\n  [{name}] Using cached results ({len(cached)} targets)")
+                all_results.extend(cached)
+                continue
+
         t0 = time.time()
         results = run_dataset(
             name,
@@ -143,6 +210,11 @@ def main():
         )
         elapsed = time.time() - t0
         print(f"  [{name}] Completed in {elapsed:.1f}s ({len(results)} targets)")
+
+        # Persist per-dataset results immediately
+        if results:
+            save_dataset_results(results, results[0].dataset, output_dir)
+
         all_results.extend(results)
 
     total_time = time.time() - start

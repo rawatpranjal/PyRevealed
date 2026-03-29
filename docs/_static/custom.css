@@ -28,10 +28,18 @@ div.math {
     padding: 8px 0;
 }
 
-/* Tables - minimal */
+/* Tables - minimal, centered on page with left-aligned text */
 .bd-content table.docutils {
     border-collapse: collapse;
-    width: 100%;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Centered tables (from :align: center) keep left-aligned header text */
+.bd-content .pst-scrollable-table-container {
+    display: flex;
+    justify-content: center;
 }
 
 .bd-content table.docutils th,

@@ -41,7 +41,7 @@ Results
 
 .. list-table::
    :header-rows: 1
-   :widths: 18 8 15 10 10 8 10
+   :widths: 14 6 14 8 8 6 8 8 8 8 6
 
    * - Dataset
      - N
@@ -50,6 +50,10 @@ Results
      - +RP
      - Lift %
      - RP-only
+     - AUC-PR (Base)
+     - AUC-PR (+RP)
+     - Engine
+     - Mem
    * - Dunnhumby
      - 2,222
      - High Spender
@@ -57,6 +61,10 @@ Results
      - 0.965
      - +0.3%
      - 0.937
+     - 0.946
+     - 0.951
+     - 8m45s
+     - 41 MB
    * - Dunnhumby
      - 2,222
      - Churn
@@ -64,6 +72,10 @@ Results
      - 0.724
      - +1.8%
      - 0.622
+     - \-
+     - \-
+     -
+     -
    * - Dunnhumby
      - 2,222
      - Future LTV (R²)
@@ -71,6 +83,10 @@ Results
      - 0.589
      - +0.012
      - 0.246
+     - \-
+     - \-
+     -
+     -
    * - Amazon
      - 4,668
      - High Spender
@@ -78,6 +94,10 @@ Results
      - 0.942
      - +0.2%
      - 0.932
+     - \-
+     - \-
+     - *tbd*
+     - *tbd*
    * - Amazon
      - 4,668
      - Spend Drop
@@ -85,6 +105,10 @@ Results
      - 0.798
      - +1.8%
      - 0.684
+     - \-
+     - \-
+     -
+     -
    * - Amazon
      - 4,668
      - Spend Change (R²)
@@ -92,6 +116,10 @@ Results
      - 0.091
      - -0.053
      - -0.032
+     - \-
+     - \-
+     -
+     -
    * - Amazon
      - 4,668
      - Future LTV (R²)
@@ -99,6 +127,10 @@ Results
      - 0.622
      - -0.011
      - 0.387
+     - \-
+     - \-
+     -
+     -
    * - H&M
      - 46,757
      - High Spender
@@ -106,53 +138,83 @@ Results
      - 0.783
      - -0.1%
      - 0.720
+     - \-
+     - \-
+     - *tbd*
+     - *tbd*
    * - H&M
      - 46,757
      - Future Spend (R²)
      - 0.337
      - 0.340
      - +0.003
-     - -
+     - \-
+     - \-
+     - \-
+     -
+     -
    * - H&M
      - 46,757
      - Spend Change (R²)
      - 0.290
      - 0.295
      - +0.005
-     - -
+     - \-
+     - \-
+     - \-
+     -
+     -
    * - Taobao
      - 29,519
      - High Entropy (AP)
      - 0.789
      - **0.790**
      - **+0.1%**
-     - -
+     - \-
+     - \-
+     - \-
+     - *tbd*
+     - *tbd*
    * - Taobao
      - 29,519
-     - High Active Time (AUC)
+     - High Active Time
      - 0.777
      - 0.778
      - +0.1%
-     - -
+     - \-
+     - \-
+     - \-
+     -
+     -
    * - Taobao
      - 29,519
-     - High Click Volume (AUC)
+     - High Click Volume
      - 0.818
      - 0.818
      - +0.0%
-     - -
+     - \-
+     - \-
+     - \-
+     -
+     -
    * - Taobao
      - 29,519
-     - Fast Conversion (AUC)
+     - Fast Conversion
      - 0.561
      - 0.561
      - +0.0%
-     - -
+     - \-
+     - \-
+     - \-
+     -
+     -
 
 *Baseline = CatBoost on 13 RFM features. +RP = same model with 42 RP features
-added. RP-only = RP features without baseline. On Taobao (buy‑anchored, 6h),
-RP features contribute modest lift on structural targets; engagement/volume
-targets remain baseline‑dominated.*
+added. RP-only = RP features without baseline. AUC-PR shown when AUC-ROC >= 0.95
+(identifies precision issues on imbalanced classes). Engine = Rust batch scoring
+time; Mem = peak memory. Timing shown on first row per dataset. On Taobao
+(buy-anchored, 6h), RP features contribute modest lift on structural targets;
+engagement/volume targets remain baseline-dominated.*
 
 
 .. _eco-appendix:
@@ -211,26 +273,7 @@ Overall, RP graph structure features add novel information that tree models acti
 Computational Cost
 ------------------
 
-Measured end-to-end on Apple M-series (11 cores). Load = CSV read + panel construction; Engine = Rust batch scoring (6 metrics: GARP, CCEI, MPI, HARP, HM, VEI); Features = Engine + extended per-user features (VEI distribution, utility recovery, graph structure). All times are wall-clock.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 18 8 12 14 14 10
-
-   * - Dataset
-     - N
-     - Load
-     - Engine (Rust)
-     - Features
-     - Peak Mem
-   * - Dunnhumby
-     - 2,222
-     - 4.2 s
-     - 8 m 45 s
-     - 10 m 38 s
-     - 41 MB
-
-Engine time is dominated by O(T³) metrics (MPI, HARP) on long histories (T ≈ 50–73 after 70 % train split, K = 10 goods). Extended features add ~2 minutes of per-user Python calls (VEI distribution, utility recovery, graph structure) on top of the Rust batch. Memory stays flat at 41 MB regardless of user count, thanks to chunked streaming. See :doc:`performance` for scaling characteristics.
+Engine and memory figures are integrated into the results table above (shown on the first row of each dataset group). Measured end-to-end on Apple M-series (11 cores). Engine = Rust batch scoring (6 metrics: GARP, CCEI, MPI, HARP, HM, VEI). Engine time is dominated by O(T³) metrics (MPI, HARP) on long histories (T ≈ 50–73 after 70 % train split, K = 10 goods). Memory stays flat regardless of user count, thanks to chunked streaming. See :doc:`performance` for scaling characteristics.
 
 .. _eco-replication:
 

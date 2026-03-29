@@ -42,6 +42,7 @@ Latency follows suit: GARP-only averages around ~20 microseconds per agent, the 
 .. list-table:: Throughput by Metric Configuration (T=20-100, K=5)
    :header-rows: 1
    :widths: 40 20 20
+   :align: center
 
    * - Metrics
      - Throughput (Agents/sec)
@@ -107,9 +108,10 @@ On discrete menus (50 items, 20–100 sessions), the SARP+WARP+HM bundle complet
 
    <div style="margin: 1.5em 0;"></div>
 
-.. list-table::
+.. list-table:: Budget — Large-Scale
    :header-rows: 1
    :widths: 25 15 15 15
+   :align: center
 
    * - Configuration
      - 10,000 Agents
@@ -132,9 +134,10 @@ On discrete menus (50 items, 20–100 sessions), the SARP+WARP+HM bundle complet
 
    <div style="margin: 1.5em 0;"></div>
 
-.. list-table::
+.. list-table:: Menu — Large-Scale
    :header-rows: 1
    :widths: 25 15 15 15
+   :align: center
 
    * - Metric Configuration
      - 10,000 Agents
@@ -157,6 +160,7 @@ The preceding benchmarks measure scoring throughput on in-memory arrays. Below w
 .. list-table:: Budget: 100K Users, 5 Metrics (GARP, CCEI, MPI, HARP, HM)
    :header-rows: 1
    :widths: 30 12 12 12 12 12
+   :align: center
 
    * - Pipeline
      - Read
@@ -190,6 +194,7 @@ The preceding benchmarks measure scoring throughput on in-memory arrays. Below w
 .. list-table:: Menu: 1,000 Users (SARP + WARP + HM, 50 items)
    :header-rows: 1
    :widths: 40 20
+   :align: center
 
    * - Pipeline
      - Total
@@ -213,9 +218,10 @@ In practice, GARP runs in O(T²), CCEI in O(T² log T), and MPI and HARP in O(T�
 
    <div style="margin: 1.5em 0;"></div>
 
-.. list-table::
+.. list-table:: Complexity Summary
    :header-rows: 1
    :widths: 25 20 55
+   :align: center
 
    * - Algorithm
      - Complexity

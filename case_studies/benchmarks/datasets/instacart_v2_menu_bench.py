@@ -119,14 +119,19 @@ def print_sample_observations(user_logs: dict[str, MenuChoiceLog], n_users: int 
 
 def load_and_prepare(data_dir=None, max_users: int = 50_000):
     """Load Instacart V2 data, split train/test, and extract features."""
+    import time as _time
+    import tracemalloc
+
     from prefgraph.datasets._instacart_menu_v2 import load_instacart_menu_v2
 
     print(f"\n[{DATASET_NAME}] Loading dataset...")
+    _t_load = _time.perf_counter()
     user_logs = load_instacart_menu_v2(
         data_dir=data_dir,
         min_sessions=MIN_OBS_MENU,
         max_users=max_users,
     )
+    load_and_prepare.load_time_s = _time.perf_counter() - _t_load
 
     # EDA and sample observations before splitting
     print_eda(user_logs)
@@ -178,8 +183,20 @@ def load_and_prepare(data_dir=None, max_users: int = 50_000):
     # Feature extraction
     print(f"  Extracting baseline features...")
     X_base = extract_menu_baseline(train_logs)
+
     print(f"  Extracting RP features via Engine...")
+    tracemalloc.start()
+    _t_feat = _time.perf_counter()
     X_rp = extract_menu_rp(train_logs)
+    load_and_prepare.feature_time_s = _time.perf_counter() - _t_feat
+    _, peak_mem = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    load_and_prepare.peak_memory_mb = peak_mem / (1024 * 1024)
+    load_and_prepare.engine_time_s = getattr(extract_menu_rp, "engine_time_s", 0.0)
+
+    print(f"  Engine scoring: {load_and_prepare.engine_time_s:.1f}s  "
+          f"Feature extraction: {load_and_prepare.feature_time_s:.1f}s  "
+          f"Peak memory: {load_and_prepare.peak_memory_mb:.0f} MB")
 
     # --- Targets ---
     # 1. High Engagement: top tercile of test-window session count (standard cross-dataset target)
@@ -214,6 +231,11 @@ def run_benchmark(data_dir=None, max_users: int = 50_000) -> list[BenchmarkResul
     if X_rp is None:
         return []
 
+    _load_t = getattr(load_and_prepare, "load_time_s", 0.0)
+    _engine_t = getattr(load_and_prepare, "engine_time_s", 0.0)
+    _feat_t = getattr(load_and_prepare, "feature_time_s", 0.0)
+    _mem = getattr(load_and_prepare, "peak_memory_mb", 0.0)
+
     results: list[BenchmarkResult] = []
     for target_name, (y, task_type, y_cont, pctl) in targets_dict.items():
         print(f"\n  [{DATASET_NAME}] Target: {target_name} ({task_type})")
@@ -227,6 +249,10 @@ def run_benchmark(data_dir=None, max_users: int = 50_000) -> list[BenchmarkResul
             DATASET_NAME, target_name, task_type,
             y_continuous=y_cont, threshold_pctl=pctl,
         )
+        result.load_time_s = _load_t
+        result.engine_time_s = _engine_t
+        result.feature_time_s = _feat_t
+        result.peak_memory_mb = _mem
         results.append(result)
         lift = result.auc_combined - result.auc_base
         print(f"    AUC: RP={result.auc_rp:.3f}  Base={result.auc_base:.3f}  "

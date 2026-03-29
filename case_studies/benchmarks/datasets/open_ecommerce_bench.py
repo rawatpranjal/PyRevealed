@@ -94,10 +94,10 @@ def load_and_prepare(data_dir=None, n_users=None):
     spend_change = test_mean_spends - train_mean_spends
 
     targets_dict = {
-        "High Spender": (high_spender, "classification"),
-        "Spend Drop": (churn, "classification"),
-        "Spend Change": (spend_change, "regression"),
-        "Future LTV": (test_mean_spends, "regression"),
+        "High Spender": (high_spender, "classification", test_total_spends, 66.67),
+        "Spend Drop": (churn, "classification", None, None),
+        "Spend Change": (spend_change, "regression", None, None),
+        "Future LTV": (test_mean_spends, "regression", None, None),
     }
 
     return X_rp, X_base, targets_dict, user_ids
@@ -113,7 +113,7 @@ def run_benchmark(data_dir=None, n_users=None) -> list[BenchmarkResult]:
     _mem = getattr(load_and_prepare, "peak_memory_mb", 0.0)
 
     results = []
-    for target_name, (y, task_type) in targets_dict.items():
+    for target_name, (y, task_type, y_cont, pctl) in targets_dict.items():
         print(f"  [{DATASET_NAME}] Target: {target_name} ({task_type})")
         if task_type == "classification":
             pos_rate = np.mean(y)
@@ -121,7 +121,8 @@ def run_benchmark(data_dir=None, n_users=None) -> list[BenchmarkResult]:
                 print(f"    Skipping - too imbalanced (pos_rate={pos_rate:.3f})")
                 continue
 
-        result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type)
+        result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type,
+                               y_continuous=y_cont, threshold_pctl=pctl)
         result.load_time_s = _load_t
         result.engine_time_s = _engine_t
         result.feature_time_s = _feat_t
