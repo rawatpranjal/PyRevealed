@@ -58,6 +58,18 @@ def load_tenrec(*args, **kwargs):
     return _fn(*args, **kwargs)
 
 
+def load_kuairec(*args, **kwargs):
+    """Lazy wrapper - defers polars import until called."""
+    from prefgraph.datasets._kuairec import load_kuairec as _fn
+    return _fn(*args, **kwargs)
+
+
+def load_mind(*args, **kwargs):
+    """Lazy wrapper - defers polars import until called."""
+    from prefgraph.datasets._mind import load_mind as _fn
+    return _fn(*args, **kwargs)
+
+
 def list_datasets() -> list[dict[str, str]]:
     """List available datasets with descriptions.
 
@@ -163,7 +175,20 @@ def list_datasets() -> list[dict[str, str]]:
             "goods": "Menu-based (daily viewed → purchased items)",
             "observations": "~5-50 purchase-days per user",
         },
-
+        {
+            "name": "kuairec",
+            "description": "KuaiRec near-dense video interaction matrix: 1,411 users × 3,327 videos",
+            "source": "GitHub (chongminggao/KuaiRec), CIKM 2022",
+            "goods": "Menu-based (daily watched videos → argmax watch_ratio choice)",
+            "observations": "~5-30 qualifying days per user",
+        },
+        {
+            "name": "mind",
+            "description": "MIND news impression logs from Microsoft News: ~50K users, 230K+ impressions",
+            "source": "msnews.github.io (Microsoft Research License), ACL 2020",
+            "goods": "Menu-based (impression list → clicked article)",
+            "observations": "~5-50 1-click impressions per user",
+        },
     ]
 
 
@@ -185,5 +210,7 @@ __all__ = [
     "load_favorita",
     "load_taobao",
     "load_tenrec",
+    "load_kuairec",
+    "load_mind",
     "list_datasets",
 ]
