@@ -8,11 +8,11 @@ plt.switch_backend("Agg")
 
 out_dir = Path("docs/_static")
 out_dir.mkdir(parents=True, exist_ok=True)
-DPI = 100
+DPI = 150
 
 PALETTE = {
-    "bg": "#fafafa", "edge": "#4a4a4a", "node": "#5b8def",
-    "highlight": "#e74c3c", "secondary": "#95a5a6", "accent": "#27ae60"
+    "bg": "#fafafa", "edge": "#333333", "node": "#2563eb",
+    "highlight": "#e74c3c", "secondary": "#666666", "accent": "#27ae60"
 }
 
 def draw_box(ax, x, y, text, w, h, bg, txt_c, lw=1, ec="#95a5a6"):
