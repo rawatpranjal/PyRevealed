@@ -79,8 +79,9 @@ html_theme_options = {
 }
 
 # All pages get left sidebar with nav tree + in-page section TOC
-# Enforce left sidebar (nav tree + in-page TOC) on ALL pages, including index
+# Homepage gets no sidebar for maximum content width
 html_sidebars = {
+    "index": [],
     "**": ["sidebar-nav-bs", "page-toc"],
 }
 

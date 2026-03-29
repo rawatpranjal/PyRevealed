@@ -22,68 +22,78 @@ Preference Graphs
      </div>
    </div>
 
-In a preference graph, a cycle (A > B > C > A) represents a logical contradiction. Using fast algorithms like Tarjan's SCC (see :doc:`algorithms`), PrefGraph detects these cycles to quantify consistency and evaluate choice quality directly from the data.
+When users make choices, we can represent their decisions as a preference graph. If someone chooses A over B, B over C, and then C over A, they have formed a logic cycle. These cycles represent a logical contradiction in their decision making. PrefGraph runs high-speed graph algorithms (like Tarjan's SCC) to instantly detect these cycles. By identifying and counting these contradictions, we can strictly score a user's consistency and evaluate the factual quality of their behavior.
 
 .. raw:: html
 
    <div style="margin: 2em 0; text-align: center;">
-     <img src="_static/intro_graphs.png" style="width: 100%; max-width: 900px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Preference Graphs Overview">
-     <p class="gif-caption" style="margin-top: 10px; font-size: 0.9em; color: #555;"><strong>High-level explanation:</strong> User A demonstrates rational behavior, while User B exhibits a cyclic contradiction, resulting in varying consistency scores.</p>
+     <img src="_static/intro_graphs.png" style="width: 100%; max-width: 900px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Example of Preference Graphs">
+     <p class="gif-caption" style="margin-top: 10px; font-size: 0.9em; color: #555;"><strong>Consistency in action:</strong> User A makes straightforward, logical choices without any contradictions. Conversely, User B creates a logical cycle by choosing Item C over Item A. PrefGraph catches this graph reversal and immediately penalizes User B's score.</p>
    </div>
 
 Analyse Budgets & Menus
 ------------------------
 
-PrefGraph handles two types of choice data: :doc:`Budgets <budget/index>` (prices x quantities, e.g. retail shopping) and :doc:`Menus <menu/index>` (discrete selections, e.g. search clicks or LLM prompting). Menus support three data subtypes: deterministic (``MenuChoiceLog``), stochastic (``StochasticChoiceLog``), and risk/lotteries (``RiskChoiceLog``).
+PrefGraph supports two separate domains of choice data. You can evaluate **Budgets** (purchased quantities constrained by given prices, like retail shopping behavior) and **Menus** (discrete selections chosen from a set of available items, like search engine clicks or AI agent prompting). Furthermore, you can map out three specific behavioral patterns inside menus: strict deterministic limits (``MenuChoiceLog``), probabilistic stochastic distributions (``StochasticChoiceLog``), and risk-based lotteries (``RiskChoiceLog``).
 
-Load data from Polars, Pandas, Parquet, or raw NumPy arrays. See :doc:`quickstart` for all ingestion methods.
+You can easily feed your data into PrefGraph using Polars DataFrames, Pandas, Parquet files, or raw NumPy arrays. See the :doc:`Loading Data <quickstart>` guide for straightforward code examples spanning each loading technique.
 
-**Budget example** --- score 5,000 synthetic consumers in under 5 seconds:
+**Budget example** --- score 100,000 synthetic consumers:
 
 .. code-block:: python
 
    from prefgraph.datasets import load_demo
    from prefgraph.engine import Engine, results_to_dataframe
 
-   users = load_demo(n_users=5000)
-   engine = Engine(metrics=["garp", "ccei", "mpi", "hm"])
+   users = load_demo(n_users=100_000)
+   engine = Engine(metrics=["garp", "ccei"])
    results = engine.analyze_arrays(users)
    df = results_to_dataframe(results)
-   print(df[["is_garp", "n_violations", "ccei", "mpi", "hm_consistent", "hm_total"]].head())
+   print(df[["is_garp", "n_violations", "ccei"]].head())
 
 .. code-block:: text
 
-   Scored 5,000 users in 4.7s
+   Scored 100,000 users in 3.8s (26,165 users/sec)
 
-      is_garp  n_violations   ccei    mpi  hm_consistent  hm_total
-   0     True             0  1.000  0.000             15        15
-   1     True             0  1.000  0.000             15        15
-   2    False             2  0.969  0.134             14        15
-   3    False             2  0.931  0.067             14        15
-   4    False             2  0.998  0.022             14        15
+      is_garp  n_violations      ccei
+   0     True             0  1.000000
+   1     True             0  1.000000
+   2     True             0  1.000000
+   3    False             4  0.972536
+   4    False             2  0.978055
 
-**Menu example** --- check consistency of 3 users picking from small menus:
+**Menu example** --- score 100,000 random menu users:
 
 .. code-block:: python
 
+   import numpy as np
    from prefgraph.engine import Engine, results_to_dataframe
 
-   menus_data = [
-       ([[0,1], [1,2], [0,2], [0,1,2]], [0, 1, 0, 0], 3),  # consistent
-       ([[0,1], [1,2], [0,2], [0,1,2]], [0, 1, 2, 1], 3),  # has violations
-       ([[0,1,2], [1,2,3], [0,2,3], [0,1,3], [0,1,2,3]], [0, 1, 2, 3, 0], 4),
-   ]
+   np.random.seed(42)
+   menus_data = []
+   for _ in range(100_000):
+       menus, choices = [], []
+       for __ in range(10):
+           menu = sorted(np.random.choice(5, np.random.randint(2, 6), replace=False).tolist())
+           menus.append(menu)
+           choices.append(menu[np.random.randint(len(menu))])
+       menus_data.append((menus, choices, 5))
+
    engine = Engine(metrics=["hm"])
    results = engine.analyze_menus(menus_data)
    df = results_to_dataframe(results)
-   print(df[["is_sarp", "n_sarp_violations", "hm_consistent", "hm_total"]])
+   print(df[["is_sarp", "n_sarp_violations", "hm_consistent", "hm_total"]].head())
 
 .. code-block:: text
 
+   Scored 100,000 users in 1.6s (61,093 users/sec)
+
       is_sarp  n_sarp_violations  hm_consistent  hm_total
-   0     True                  0              3         3
-   1    False                  3              2         3
-   2    False                  6              2         4
+   0    False                 10              3         5
+   1    False                  6              3         5
+   2    False                 10              3         5
+   3    False                 10              3         5
+   4    False                 10              3         5
 
 Case Study 1: Detecting Inconsistency in AI Agents
 --------------------------------------------------
@@ -161,7 +171,7 @@ Do RP features improve predictive models? We benchmark GARP, CCEI, MPI, HM, and 
 Blazingly Fast
 --------------
 
-Parallel Rust/Rayon backend with streaming for flat memory. Menus and budgets both scale linearly. Full benchmarks: :doc:`performance`.
+PrefGraph processes choices using a parallel Rust and Rayon backend paired with smart memory streaming. Because it streams the data sequentially, the memory footprint remains entirely flat. Both menus and budgets scale linearly on standard hardware. In practice, you can load and score 100,000 users end-to-end across five different metrics from a 110 MB Parquet file in under two minutes natively. File I/O adds less than 70 milliseconds of total overhead. You can view our extensive format and size comparisons on the :doc:`Performance Benchmarks <performance>` page.
 
 .. list-table:: Throughput by Metric Configuration (T=20-100, K=5)
    :header-rows: 1
@@ -213,8 +223,6 @@ Parallel Rust/Rayon backend with streaming for flat memory. Menus and budgets bo
      - 0.3s
      - 5.2s
      - **85.6s**
-
-End-to-end from a 280 MB CSV or 110 MB Parquet file, 100K users score in under 2 minutes with the full 5-metric suite. File I/O adds under 70 ms. See :doc:`performance` for format comparisons.
 
 Explore the :doc:`API Reference <api>` and :doc:`References <papers>` for more.
 
