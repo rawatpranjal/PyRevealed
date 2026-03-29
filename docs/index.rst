@@ -38,7 +38,7 @@ PrefGraph supports two separate domains of choice data. You can evaluate **Budge
 
 You can easily feed your data into PrefGraph using Polars DataFrames, Pandas, Parquet files, or raw NumPy arrays. See the :doc:`Loading Data <quickstart>` guide for straightforward code examples spanning each loading technique.
 
-**Budget example** --- score 100,000 synthetic consumers:
+**Budget-choice example**
 
 .. code-block:: python
 
@@ -62,7 +62,7 @@ You can easily feed your data into PrefGraph using Polars DataFrames, Pandas, Pa
    3    False             4  0.972536
    4    False             2  0.978055
 
-**Menu example** --- score 100,000 random menu users:
+**Menu-choice example** --- score 100,000 random menu users:
 
 .. code-block:: python
 
@@ -95,7 +95,7 @@ You can easily feed your data into PrefGraph using Polars DataFrames, Pandas, Pa
    3    False                 10              3         5
    4    False                 10              3         5
 
-Case Study 1: Detecting Inconsistency in AI Agents
+Case Study 1: Inconsistency in AI Agents
 --------------------------------------------------
 
 Do LLMs have stable action rankings? We build preference graphs from gpt-4o-mini decisions across 5 enterprise scenarios and test for cycles. Full results: :doc:`budget/app_llm_benchmark`.
@@ -123,7 +123,7 @@ Do LLMs have stable action rankings? We build preference graphs from gpt-4o-mini
      - 84
      - 61
 
-Case Study 2: Predicting Customer Lifetime Values
+Case Study 2: Predicting Customer LTV
 -------------------------------------------------
 
 Do RP features improve predictive models? We benchmark GARP, CCEI, MPI, HM, and VEI features against spend/engagement baselines. Full results: :doc:`benchmarks_ecommerce`.
@@ -139,13 +139,20 @@ Do RP features improve predictive models? We benchmark GARP, CCEI, MPI, HM, and 
      - +RP
      - Lift%
      - RP-only
-   * - Dunnhumby
-     - 2,222
-     - Churn
-     - 0.711
-     - 0.724
-     - +1.8%
-     - 0.622
+   * - H&M
+     - 46,757
+     - Spend Change (R²)
+     - 0.290
+     - 0.295
+     - +0.005
+     - \-
+   * - Taobao
+     - 29,519
+     - High Entropy (AP)
+     - 0.789
+     - 0.790
+     - +0.1%
+     - \-
    * - Amazon
      - 4,668
      - Spend Drop
@@ -155,18 +162,11 @@ Do RP features improve predictive models? We benchmark GARP, CCEI, MPI, HM, and 
      - 0.684
    * - Dunnhumby
      - 2,222
-     - Future LTV (R²)
-     - 0.577
-     - 0.589
-     - +0.012
-     - 0.246
-   * - Dunnhumby
-     - 2,222
-     - High Spender
-     - 0.962
-     - 0.965
-     - +0.3%
-     - 0.937
+     - Churn
+     - 0.711
+     - 0.724
+     - +1.8%
+     - 0.622
 
 Blazingly Fast
 --------------
