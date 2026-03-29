@@ -251,13 +251,13 @@ Measured end-to-end on Apple M-series (11 cores). Load = CSV read + panel constr
      - Features
      - Peak Mem
    * - Dunnhumby
-     - 442
-     - 3.4 s
-     - 156 s
-     - 172 s
-     - 38 MB
+     - 2,222
+     - 4.2 s
+     - 8 m 45 s
+     - 10 m 38 s
+     - 41 MB
 
-Engine time is dominated by O(T³) metrics (MPI, HARP) on long histories (T ≈ 50–73 after 70 % train split, K = 10 goods). On the same hardware, synthetic data with shorter histories (T = 15, K = 5) scores at ~950 users/sec end-to-end. See :doc:`performance` for scaling characteristics.
+Engine time is dominated by O(T³) metrics (MPI, HARP) on long histories (T ≈ 50–73 after 70 % train split, K = 10 goods). Extended features add ~2 minutes of per-user Python calls (VEI distribution, utility recovery, graph structure) on top of the Rust batch. Memory stays flat at 41 MB regardless of user count, thanks to chunked streaming. See :doc:`performance` for scaling characteristics.
 
 .. _eco-replication:
 
