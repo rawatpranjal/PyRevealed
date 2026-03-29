@@ -44,8 +44,6 @@ Theory
    theory_consistency
    theory_efficiency
    theory_structure
-   theory_advanced
-   theory_spatial
 
 Tutorials
 ---------
@@ -55,10 +53,7 @@ Tutorials
 
    tutorial
    tutorial_budget_advanced
-   tutorial_demand_analysis
-   tutorial_welfare
    tutorial_ecommerce
-   tutorial_uber_eats
 
 Applications
 ------------

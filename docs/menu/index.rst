@@ -89,9 +89,6 @@ Tutorials
    tutorial_menu_choice
    tutorial_stochastic
    tutorial_attention
-   tutorial_risk
-   tutorial_ranking
-   tutorial_context_effects
 
 Applications
 ------------

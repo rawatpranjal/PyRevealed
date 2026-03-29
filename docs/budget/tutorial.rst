@@ -913,8 +913,6 @@ Part 7: Advanced Topics
 For more complex budget-based analysis, see the following specialized tutorials:
 
 - :doc:`tutorial_budget_advanced` - Homotheticity, Lancaster characteristics model, and utility recovery.
-- :doc:`tutorial_demand_analysis` - Slutsky matrix, integrability, and additive separability.
-- :doc:`tutorial_welfare` - Welfare analysis (CV/EV) and deadweight loss.
 
 Part 8: Unified Summary Display
 -------------------------------
