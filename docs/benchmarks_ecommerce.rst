@@ -140,11 +140,11 @@ All values are percentage lift from adding RP features to the baseline. Bold mar
 Findings
 --------
 
-Amazon Spend Drop is the one target where both models and both metrics agree that revealed preference features help. The lift ranges from 0.6 to 2.5 percent depending on the model and metric. On this target, per-observation budget efficiency captures declining rationality before spending actually drops.
+Across all 118 lift values in the table, 26 percent are positive, 26 percent are negative, and 47 percent are effectively zero. The median lift above standard RFM features is near zero.
 
-REES46 Low Loyalty shows a smaller but consistent positive signal across three of four columns. On this target, choice entropy and preference graph structure detect users whose purchasing is becoming more dispersed.
+However, revealed preference features consistently rank among the most important features in the model. Menu transitivity appears in the top ten for 18 of 19 menu targets. Choice entropy appears in 17 of 19. These features describe how consistently a user makes decisions, which is fundamentally different from what volume and frequency baselines measure.
 
-Everywhere else the lift is within one percent in either direction. The mean lift across all 32 targets is near zero. Revealed preference features are informative to the model but do not improve predictions when strong baselines are present.
+The conclusion is that while revealed preference features may not improve prediction accuracy over well-constructed baselines, they do contain valuable signal about decision-making behavior that is worth investigating. The directional patterns from the Lasso model below suggest interpretable relationships between choice consistency and future outcomes that standard features do not capture.
 
 Suggestive Directions
 ---------------------
