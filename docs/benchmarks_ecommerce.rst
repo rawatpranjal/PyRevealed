@@ -158,9 +158,9 @@ All values are out-of-sample AUC-PR. One target per dataset is shown. Full resul
 Findings
 --------
 
-On most targets the lift from adding RP features is within plus or minus one percent. The standout is Taobao Buy Window Low Loyalty at plus 15 percent, where preference graph features detect users whose choices are becoming more dispersed over time. The mean lift across all targets is near zero.
+On most targets the lift from adding RP features is within plus or minus one percent. The mean lift across all 27 targets is near zero. One outlier is Taobao Buy Window Low Loyalty at plus 15 percent, though this result comes from a small test set of 118 users with only 7 percent positive rate and should be interpreted with caution.
 
-RP features rank highly in model importance but generally do not change predictions. The model finds them informative because they describe a different aspect of user behavior. They do not add lift because the baseline already covers most of the same ground through simpler measures.
+The model finds RP features informative. Three of the top ten features by importance measure choice consistency rather than volume or frequency. But this importance does not translate into better predictions because the baseline already covers most of the same ground through simpler measures.
 
 .. _eco-features:
 
