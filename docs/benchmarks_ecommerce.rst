@@ -1,38 +1,12 @@
 Case Study 2: Predicting Customer Spend & Engagement
 =====================================================
 
-**TL;DR.** RP features deliver a modest 0–1% gain on predictive tasks; strong engagement/spend baselines already capture most of the signal.
-
-.. _eco-setup:
+**TL;DR.** Across 11 datasets and 27 prediction targets, RP features add 0–2% marginal lift. The signal is real but small — baseline spend and engagement features already capture most of the predictive power.
 
 Setup
 -----
 
-We evaluate two data types: budgets with prices and menus without prices. The
-targets include classification tasks such as High Spender, High Engagement, Low
-Loyalty, and High Novelty, as well as regression tasks for Future Spend and
-Spend Change. Targets use top tercile thresholds for consistency. Features combine a 13-feature baseline (covering recency, frequency, monetary value, concentration, and trends) with 42 Revealed Preference (RP) features. These include GARP, CCEI, MPI, HARP, HM, VEI, graph density
-and transitivity, utility recovery metrics such as Gini and CV, choice entropy,
-and ordinal utility. Models use CatBoost with default hyperparameters. The split uses a per-user temporal divide (first 70% features, last 30% targets) followed by an 80/20 user holdout and bootstrap confidence intervals on lift.
-
-The hardest part is reconstructing the choice set and the observed choices.
-For budgets, prices and quantities must reflect what the customer could have
-afforded at each observation. For menus, the available alternatives must be
-recovered from logs. This requires explicit assumptions about availability,
-timing, and aggregation. We document those assumptions in the Appendix and,
-honestly, we have to make good assumptions and hope they are right.
-
-.. _eco-how-to-read:
-
-How to read the results
------------------------
-
-- **Baseline**: A standard model built purely on basic spending history (recency, frequency, monetary value).
-- **+RP**: The baseline model supplemented with our 42 Revealed Preference features.
-- **Lift %**: The percentage improvement gained by adding Revealed Preference features.
-- **RP-only**: A model running strictly on Revealed Preference features, with all baseline history removed.
-
-As a rule of thumb, Revealed Preference provides genuine new signal if **+RP** noticeably outperforms the **Baseline**, and if **RP-only** remains competitive. If the **Baseline** and **+RP** scores are nearly identical, it means traditional spending history already effectively captured the necessary patterns.
+We test whether revealed preference (RP) graph features improve user-level predictions of spend, churn, engagement, and loyalty. 11 datasets span grocery (Dunnhumby), e-commerce (Amazon, H&M, REES46, Taobao, RetailRocket), grocery menus (Instacart), video (Tenrec), news (MIND), and classifieds (FINN). Each user's first 70% of observations produce 42 RP features (GARP, CCEI, MPI, HM, VEI, graph density, transitivity, entropy) alongside a 13-feature RFM baseline. A regularized LightGBM (``max_depth=3``, ``num_leaves=8``) and L1-penalized logistic regression are trained on an 80/20 user holdout. All results are out-of-sample AUC-ROC; ``SEED=42`` throughout.
 
 .. _eco-results:
 
@@ -41,217 +15,219 @@ Results
 
 .. list-table::
    :header-rows: 1
-   :widths: 14 6 14 8 8 6 8 8 8 8 6
+   :widths: 14 7 7 16 8 8 7 7 7
 
    * - Dataset
+     - Type
      - N
      - Target
-     - Baseline
+     - Base
      - +RP
+     - Δ
      - Lift %
-     - RP-only
-     - AUC-PR (Base)
-     - AUC-PR (+RP)
      - Engine
-     - Mem
    * - Dunnhumby
+     - Budget
      - 2,222
+     - Spend Drop
+     - .683
+     - **.694**
+     - +.011
+     - **+1.6%**
+     - 6m 6s
+   * - Dunnhumby
+     -
+     -
      - High Spender
-     - 0.962
-     - 0.965
-     - +0.3%
-     - 0.937
-     - 0.946
-     - 0.951
-     - 8m45s
-     - 41 MB
-   * - Dunnhumby
-     - 2,222
-     - Churn
-     - 0.711
-     - 0.724
-     - +1.8%
-     - 0.622
-     - \-
-     - \-
-     -
+     - .962
+     - .961
+     - -.001
+     - -0.1%
      -
    * - Dunnhumby
-     - 2,222
+     -
+     -
      - Future LTV (R²)
-     - 0.577
-     - 0.589
-     - +0.012
-     - 0.246
-     - \-
-     - \-
-     -
+     - .582
+     - .587
+     - +.005
+     - +0.9%
      -
    * - Amazon
-     - 4,668
-     - High Spender
-     - 0.940
-     - 0.942
-     - +0.2%
-     - 0.932
-     - \-
-     - \-
-     - *tbd*
-     - *tbd*
-   * - Amazon
+     - Budget
      - 4,668
      - Spend Drop
-     - 0.784
-     - 0.798
-     - +1.8%
-     - 0.684
-     - \-
-     - \-
-     -
-     -
+     - .756
+     - **.761**
+     - +.005
+     - **+0.7%**
+     - 12m
    * - Amazon
-     - 4,668
-     - Spend Change (R²)
-     - 0.144
-     - 0.091
-     - -0.053
-     - -0.032
-     - \-
-     - \-
      -
      -
-   * - Amazon
-     - 4,668
-     - Future LTV (R²)
-     - 0.633
-     - 0.622
-     - -0.011
-     - 0.387
-     - \-
-     - \-
-     -
-     -
-   * - H&M
-     - 46,757
      - High Spender
-     - 0.784
-     - 0.783
+     - .940
+     - .939
+     - -.001
      - -0.1%
-     - 0.720
-     - \-
-     - \-
-     - *tbd*
-     - *tbd*
-   * - H&M
-     - 46,757
-     - Future Spend (R²)
-     - 0.337
-     - 0.340
-     - +0.003
-     - \-
-     - \-
-     - \-
-     -
      -
    * - H&M
+     - Budget
      - 46,757
      - Spend Change (R²)
-     - 0.290
-     - 0.295
-     - +0.005
-     - \-
-     - \-
-     - \-
+     - .299
+     - .302
+     - +.003
+     - +1.0%
+     - 16m
+   * - H&M
      -
      -
-   * - Taobao
-     - 29,519
-     - High Entropy (AP)
-     - 0.789
-     - **0.790**
-     - **+0.1%**
-     - \-
-     - \-
-     - \-
-     - *tbd*
-     - *tbd*
-   * - Taobao
-     - 29,519
-     - High Active Time
-     - 0.777
-     - 0.778
+     - High Spender
+     - .787
+     - .785
+     - -.002
+     - -0.3%
+     -
+   * - Instacart
+     - Menu
+     - 50,000
+     - Low Loyalty
+     - .969
+     - .970
+     - +.001
      - +0.1%
-     - \-
-     - \-
-     - \-
-     -
-     -
+     - 8m
+   * - REES46
+     - Menu
+     - 50,000
+     - Low Loyalty
+     - .883
+     - .882
+     - -.001
+     - -0.1%
+     - 8m
    * - Taobao
+     - Menu
+     - 50,000
+     - Engagement
+     - .938
+     - .938
+     - .000
+     - 0.0%
+     - 3m
+   * - Taobao BW
+     - Menu
      - 29,519
-     - High Click Volume
-     - 0.818
-     - 0.818
-     - +0.0%
-     - \-
-     - \-
-     - \-
-     -
-     -
-   * - Taobao
-     - 29,519
-     - Fast Conversion
-     - 0.561
-     - 0.561
-     - +0.0%
-     - \-
-     - \-
-     - \-
-     -
-     -
+     - Low Loyalty
+     - .984
+     - .986
+     - +.002
+     - +0.2%
+     - 0.1s
+   * - Tenrec
+     - Menu
+     - 50,000
+     - Engagement
+     - .992
+     - .992
+     - .000
+     - 0.0%
+     - 15m
+   * - MIND
+     - Menu
+     - 5,000
+     - High CTR
+     - .678
+     - .667
+     - -.011
+     - -1.6%
+     - 4m
+   * - FINN
+     - Menu
+     - 1,869
+     - Low Loyalty
+     - .957
+     - .957
+     - .000
+     - 0.0%
+     - 13m
 
-*Baseline = CatBoost on 13 RFM features. +RP = same model with 42 RP features
-added. RP-only = RP features without baseline. AUC-PR shown when AUC-ROC >= 0.95
-(identifies precision issues on imbalanced classes). Engine = Rust batch scoring
-time; Mem = peak memory. Timing shown on first row per dataset. On Taobao
-(buy-anchored, 6h), RP features contribute modest lift on structural targets;
-engagement/volume targets remain baseline-dominated.*
-
-
-.. _eco-appendix:
-
-Appendix: Datasets & Assumptions
---------------------------------
-
-To run revealed preference tests on real-world transaction logs, we have to bridge the gap between abstract theory and messy data. The hardest part is reconstructing what the shopper was choosing *from*.
-
-For budget data (Dunnhumby, Amazon, H&M), we construct prices and quantities over time. In **Dunnhumby**, an observation is an active household-week across 10 staple commodity groups (excluding inactive weeks since they represent spending outside the tracked sub-basket, not zero demand). We measure total units purchased, but lacking individual receipt data, we assign the global median price for each commodity that week. **Amazon** groups purchases by month at the category level; we apply median monthly prices across all users, carrying them forward when a category has no sales. **H&M** requires a slightly different temporal approach. We group each customer's rows into monthly choice occasions mapped to 20 coarse product groups. Since a customer only sees their own checkout cart, we use their own average paid price that month, smoothing over missing categories by falling back to period-group medians. These budget datasets force us to use synthesized price vectors over aggregated time windows. As a result, the scores we compute are reduced-form consistency descriptors of sub-basket allocation, not structural proofs of underlying utility.
-
-For menu data (REES46, Taobao), we discard prices entirely and extract preference orderings by looking at what users clicked before they bought. In **REES46**, the database provides native shopping session boundaries for a "gold standard" setup. We build the menu out of all the items a user viewed in a single session, with the final purchase acting as their choice. Since a user can only choose from what they actually saw (impression bias), this gives us tight menus, typically around five items. 
-
-**Taobao** presents a harder problem because it lacks clear session boundaries. Instead of relying on arbitrary inactivity cutoffs, we use a *buy-anchored* approach. Whenever a user buys an item at time *t*, we look back at a trailing 6-hour window. The options they viewed in that window form the menu, with the bought item as the choice. (We exclude post-purchase views, and only keep menus sized between 2 and 50). This makes the 6-hour lookback a pragmatic proxy for simultaneity.
-
-Both menu datasets yielded an interesting discovery: menu-based aggregation almost entirely rules out stochastic processing. We attempted to model users with the probabilistic ``StochasticChoiceLog`` frame, but across both REES46 and Taobao, exact menu repeat rates were functionally 0.00. Because view-streams rarely repeat the identical combination of items, standard probability aggregation yields no additional signal over treating the observations as deterministic sequences.
-
-.. _eco-findings:
+*All values are out-of-sample AUC-ROC (regularized LightGBM). Base = 13 RFM features. +RP = Base + 42 RP features. One representative target per dataset shown; full results in* ``output/results.json``. *Engine = Rust batch scoring time on Apple M-series.*
 
 Findings
 --------
 
-On menu datasets, RP features are competitive with, and sometimes exceed, engagement baselines. The Taobao results show that item graph structure such as transitivity and density, along with choice entropy, carry signal that session counts and menu sizes do not capture. On budget datasets, RP adds roughly zero marginal lift over strong RFM baselines. Measures such as CCEI and MPI correlate with spending history, so they contribute little independent predictive power when the baseline already encodes that history. Looking at feature importance, baseline spend features dominate in most global models. RP features rise near the top on menu tasks. The menu tables below show item graph structure and choice entropy among the most informative signals.
+The two Spend Drop targets are the only ones with consistent positive lift across sample sizes and models — Dunnhumby +1.6%, Amazon +0.7%. On these targets, VEI (per-observation budget efficiency) captures declining rationality before spending actually drops. Everywhere else, RP features are net-neutral: the mean lift across all 27 targets is +0.03%.
 
-.. _eco-top-features:
+Despite near-zero lift, RP features rank highly in LGBM importance. ``menu_transitivity`` is the 3rd most important feature overall (top-10 in 18/19 menu targets), and ``choice_entropy_norm`` is 7th. The model *uses* RP features but they don't improve predictions because the baseline features already capture overlapping information through a different path.
 
-Top Features
-------------
+.. _eco-features:
 
-Across all classification tasks, baseline spending features generally dominate in the global models. Features like ``total_spend`` (total expenditure in the training period), ``spend_slope`` (spending trend), and ``n_obs`` (number of observations) consistently account for the majority of predictive power. Core RP scores (``ccei``, ``mpi``, ``hm_ratio``) unfortunately correlate strongly with these spending baselines, adding no marginal value to a strong RFM baseline. What works for budget tracking is somewhat counterintuitive. While static-price GARP produces zero violations acting as completely degenerate markers, other RP structures like the ``util_gini`` (Gini inequality of recovered Afriat utility values) can add nuanced signals. However, the true value of Revealed Preference features is in **menu datasets** (like Taobao), where RP features are highly competitive with baselines. Across these domains, four of the top eight most important features are RP-derived. When modeling menu-choice settings: ``menu_transitivity`` (Preference graph transitivity ratio) and ``pref_graph_density`` (Edge density of revealed preference graph) consistently rank in the top 5–10 features. They capture preference graph properties and patterns that simple engagement counts miss completely. ``choice_entropy_norm`` (Normalized Shannon entropy of choice distribution) and ``menu_util_range`` (Ordinal utility spread) carry useful signal highlighting structured choice behavior that standalone engagement counts miss. ``n_scc`` (Number of strongly connected components) offers graph fragmentation signals that augment baseline statistics like standard sizes and diversity. Overall, RP graph structure features add novel information that tree models actively depend upon, but the marginal predictive lift over well-engineered baseline metrics is relatively small and rarely significant for basic classification targets. 
-
-.. _eco-cost:
-
-Computational Cost
+Feature Importance
 ------------------
 
-Engine and memory figures are integrated into the results table above (shown on the first row of each dataset group). Measured end-to-end on Apple M-series (11 cores). Engine = Rust batch scoring (6 metrics: GARP, CCEI, MPI, HARP, HM, VEI). Engine time is dominated by O(T³) metrics (MPI, HARP) on long histories (T ≈ 50–73 after 70 % train split, K = 10 goods). Memory stays flat regardless of user count, thanks to chunked streaming. See :doc:`performance` for scaling characteristics.
+.. list-table::
+   :header-rows: 1
+   :widths: 5 30 8 15 15
+
+   * - Rank
+     - Feature
+     - Group
+     - Mean importance
+     - Top-10 in
+   * - 1
+     - ``n_sessions``
+     - Base
+     - 0.144
+     - 15/19 targets
+   * - 2
+     - ``std_menu_size``
+     - Base
+     - 0.112
+     - 15/18
+   * - 3
+     - ``menu_transitivity``
+     - **RP**
+     - 0.101
+     - 18/19
+   * - 4
+     - ``mean_basket_size``
+     - Base
+     - 0.092
+     - 12/13
+   * - 5
+     - ``spend_slope``
+     - Base
+     - 0.080
+     - 13/13
+   * - 6
+     - ``mean_menu_size``
+     - Base
+     - 0.072
+     - 16/18
+   * - 7
+     - ``choice_entropy_norm``
+     - **RP**
+     - 0.072
+     - 17/19
+   * - 8
+     - ``menu_pref_density``
+     - **RP**
+     - 0.072
+     - 15/18
+   * - 9
+     - ``total_spend``
+     - Base
+     - 0.070
+     - 11/13
+   * - 10
+     - ``mean_spend``
+     - Base
+     - 0.064
+     - 11/13
+
+*LGBM gain-based importance, normalized, averaged across all classification targets. 3 of the top 10 features are RP-derived — all graph-structural (transitivity, entropy, preference density).*
 
 .. _eco-replication:
 
@@ -262,94 +238,24 @@ Replication
 
    pip install prefgraph lightgbm scikit-learn
 
-   # Full run: LightGBM on all 11 validated datasets
-   python case_studies/benchmarks/runner.py --datasets validated
-
-   # Both models (LightGBM + Logit-Lasso) with bootstrap SE
+   # Full run (all 11 validated datasets, both models)
    python case_studies/benchmarks/runner.py --datasets validated --model both
 
-   # Quick smoke test (250 users, 20 bootstrap resamples)
-   python case_studies/benchmarks/runner.py --datasets validated --max-users 250 --model both --n-bootstrap 20
+   # Quick smoke test (250 users)
+   python case_studies/benchmarks/runner.py --datasets validated --max-users 250 --model both
 
    # Single dataset
    python case_studies/benchmarks/runner.py --datasets dunnhumby
 
-   # Regenerate summary + plots from cached per-dataset JSON files
+   # Regenerate from cached results
    python case_studies/benchmarks/runner.py --replot
 
-   # Skip datasets that already have cached results
-   python case_studies/benchmarks/runner.py --datasets validated --skip-existing
+All results deterministic (``SEED=42``). Per-dataset JSON saved to ``case_studies/benchmarks/output/``. External datasets: set ``PYREVEALED_DATA_DIR=/path/to/datasets``.
 
-   # Standalone Lasso benchmark with coefficient tables
-   python case_studies/benchmarks/lasso_benchmark.py --datasets validated --max-users 250
-
-Datasets on external drives: set ``PYREVEALED_DATA_DIR=/path/to/datasets`` for MIND, FINN, KuaiRec. Budget datasets (Dunnhumby, Amazon, H&M) require ``kaggle`` CLI. All results are deterministic (``SEED=42``). Per-dataset JSON files are saved to ``case_studies/benchmarks/output/``.
-
-Appendix: Pipeline
-------------------
-
-.. code-block:: text
-
-   Raw CSV / Parquet / NPZ
-     -> Loader (prefgraph.datasets)
-     -> BehaviorPanel / MenuChoiceLog per user
-     -> Temporal split: first 70% -> features, last 30% -> targets
-     -> Feature extraction:
-          Baseline (13): RFM, category concentration, temporal trends
-          RP Engine (14): CCEI, MPI, HM, VEI, GARP, HARP, SCC, n_scc, harp_severity
-          RP Extended (28): VEI distribution, utility recovery (Gini, CV),
-              graph network (density, transitivity, cycles), MPI cycle costs,
-              choice reversals, choice entropy, congruence, ordinal utility
-     -> LightGBM (random_state=42, default hyperparameters)
-     -> Logit-Lasso / LassoCV (StandardScaler + L1 CV, 5-fold)
-     -> 80/20 User Holdout (stratified for classification) with Bootstrap CI
-     -> Metrics: AUC-PR (primary), AUC-ROC, R², Lift %, in-sample gap
-
-**Three models per dataset/target pair**: (a) Baseline only, (b) RP only, (c) Baseline + RP.
-
-**Predicted Targets**:
-  - **High Spender (Classification)**: User ranks in the top tercile of total expenditure during the 30% target period.
-  - **Future Spend / LTV (Regression)**: Continuous prediction of exact dollars or units spent by the user in the target period.
-  - **Spend Change (Regression)**: Predicting the ratio or absolute difference in the user's spending from the feature period to the target period.
-  - **Spend Drop / Churn (Classification)**: The user drops their spending or engagement volume aggressively below a defined safety threshold.
-  - **High Engagement (Classification)**: User ranks in the top tercile of total user sessions or views during the target period. 
-  - **High Entropy / Pref Drift (Classification)**: The user's target-period choices show high diversity across products or significantly shift from their historical baseline.
-
-**Output**: ``case_studies/benchmarks/output/results.json`` (full metrics),
-``summary_table.csv``, ``figures/``.
-
-Appendix: Null Rates in RP Features
--------------------------------------
-
-Not all RP features are populated for every user. Measured on n=500 samples per dataset:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 12 12 56
-
-   * - Dataset
-     - Features
-     - Null features
-     - Which features, and why
-   * - Dunnhumby
-     - 59
-     - 9 (15%)
-     - ``violation_mean_position`` 100% NaN (shared category prices → zero GARP cycles for every user); 8 utility-recovery features (``util_mean/std/range/cv/gini``, ``lambda_mean/std/cv``) 89% NaN (Afriat LP near-degenerate on shared prices)
-   * - REES46
-     - 27
-     - 2 (7%)
-     - ``menu_util_range``, ``menu_util_std`` 26% NaN (ordinal utility LP fails when preference graph has insufficient constraints)
-   * - Taobao
-     - 27
-     - 2 (7%)
-     - Same two features, 82% NaN (buy-window sessions are sparse — few choices per user make the ordinal utility LP under-constrained)
-
-The vast majority of RP features are fully populated: 50/59 on Dunnhumby, 25/27 on REES46 and Taobao. This issue is quite isolated; it primarily affects utility-recovery and ordinal features which mathematically require a minimum number of intersecting choices to solve smoothly. The remaining features (GARP, CCEI, MPI, HM, VEI, graph density, transitivity, entropy, etc.) are always non-null. All NaN values are imputed with the per-feature train-set median before model training; the handful of high-null features carry little signal after imputation.
+.. _eco-appendix:
 
 Appendix: Dataset Summary
 --------------------------
-
-Standardized EDA across all 11 validated datasets (measured at N=2,000 users per dataset where available). T = choice occasions per user, K = number of alternatives (goods for budget, median unique items for menu), Repeat = fraction of observations where the chosen item was chosen before, Uniq% = median fraction of distinct items chosen per user.
 
 .. list-table::
    :header-rows: 1
@@ -367,7 +273,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - Domain
    * - Dunnhumby
      - Budget
-     - 1,779
+     - 2,222
      - 55,388
      - 30
      - 10
@@ -377,7 +283,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - Grocery
    * - Amazon
      - Budget
-     - 1,870
+     - 4,668
      - 54,356
      - 31
      - 15
@@ -387,7 +293,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - E-commerce
    * - H&M
      - Budget
-     - 1,991
+     - 46,757
      - 29,132
      - 15
      - 9
@@ -397,7 +303,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - Fashion
    * - Instacart
      - Menu
-     - 2,000
+     - 50,000
      - 59,649
      - 16
      - 18
@@ -407,7 +313,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - Grocery
    * - REES46
      - Menu
-     - 2,000
+     - 50,000
      - 14,922
      - 7
      - 24
@@ -417,7 +323,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - E-commerce
    * - Taobao
      - Menu
-     - 2,000
+     - 50,000
      - 11,061
      - 5
      - 30
@@ -427,7 +333,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - E-commerce
    * - Taobao BW
      - Menu
-     - 590
+     - 29,519
      - 2,593
      - 4
      - 25
@@ -447,7 +353,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - E-commerce
    * - Tenrec
      - Menu
-     - 2,000
+     - 50,000
      - 12,847
      - 5
      - 24
@@ -457,7 +363,7 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - Video
    * - MIND
      - Menu
-     - 200
+     - 5,000
      - 855
      - 4
      - 86
@@ -476,17 +382,14 @@ Standardized EDA across all 11 validated datasets (measured at N=2,000 users per
      - 100%
      - Classifieds
 
-**Are RP features distinct from baselines?** Yes. The median cross-correlation between RP and baseline features is |r| = 0.10–0.13 on budget datasets and |r| = 0.28 on menu datasets. RP features measure how *consistently* a user decides, not how *much* or how *often* they buy. The few high cross-correlations (e.g. ``n_scc`` ~ ``n_obs`` at r = 0.77) are mechanical — more observations produce more graph nodes — not economic.
-
-**Are there clusters within the RP signal?** Three clusters emerge. First, a *consistency block*: ``ccei``, ``mpi``, ``is_garp``, ``is_harp`` all measure the same thing (rationality) from different angles and correlate at |r| > 0.90. Second, a *utility-recovery block*: ``util_mean/std/range/gini`` and ``lambda_mean/std/cv`` are pairwise r > 0.95 — one underlying signal measured six ways. Third, a set of genuinely *independent structural features*: ``choice_entropy``, ``menu_transitivity``, ``sarp_violation_density``, ``hm_ratio``, and ``vei_mean``. These have low correlation with each other and with baselines. They are the features that survive L1 selection and drive predictive lifts.
-
-**Where does RP signal differ — menu or budget, and which datasets?** Budget datasets (Dunnhumby, Amazon, H&M) have rich histories (T = 15–31 median, repeat rate 28–73%) but RP adds only marginal lift (+0–5%) because RFM baselines already capture spending patterns well. Menu datasets are thinner (T = 4–9, repeat rate 0–6%) and RP signal is noisier. The exceptions are Instacart (57% repeat rate, grocery aisles) and REES46 (19% repeat, session e-commerce) — these are the menu datasets where RP features consistently add signal. The pattern is clear: RP features need *repeated choices from overlapping sets* to build meaningful preference graphs.
-
-**Is the choice data plausible?** Consider what the median user actually experienced. A Dunnhumby median user made 30 weekly grocery trips choosing across 10 commodity groups — entirely realistic for a regular household over 18 months. An Amazon median user made 31 monthly category purchases across 15 categories — plausible for an active online shopper. An H&M median user had 15 monthly fashion purchases across 9 product groups — reasonable for a fashion-engaged customer over two years. On the menu side, the median REES46 user had 7 shopping sessions viewing 3 items each — a light but real browsing pattern. The median MIND user had just 4 news impressions with 86 candidate articles — a single day's news consumption, barely enough to test preferences.
-
-**What about the extremes?** The p5 user in Dunnhumby had roughly 10 trips (the minimum filter) — a sporadic shopper whose preference graph is too thin for reliable RP testing. The p95 user had 44 trips, giving a dense preference graph with real statistical power. On menu datasets the contrast is sharper: the p5 Taobao user had the minimum 5 sessions (a drive-by visitor), while the p75 user had only 6. There is almost no variation — everyone is data-poor. This is why RP features add less signal on thin-history menu platforms: there simply is not enough repeated choice behavior to distinguish rational from irrational users.
+Budget datasets have rich histories (T=15–31, repeat rate 28–73%) — ideal for RP testing. Menu datasets are thin (T=4–9, repeat rate 0–6%) because recommendation platforms surface novel items. The exceptions — Instacart (57% repeat) and REES46 (19%) — are where RP features show the most signal. RP needs repeated choices from overlapping sets; most menu platforms don't provide that.
 
 Appendix: Feature Correlation
 -------------------------------
 
-RP features are largely orthogonal to baseline features (median |r| = 0.12). The utility-recovery block (``util_*``, ``lambda_*``) is internally redundant (r > 0.95) and could be reduced to 2–3 components. The consistency scores (``ccei``, ``mpi``) anticorrelate at r = −0.94. The genuinely independent RP features — ``choice_entropy``, ``menu_transitivity``, ``sarp_violation_density``, ``hm_ratio``, ``vei_mean`` — are the ones that survive Lasso selection, appear in LGBM top-10 importance, and carry non-redundant signal across datasets.
+RP features are largely orthogonal to baselines (median |r| = 0.12). The utility-recovery block (``util_*``, ``lambda_*``) is internally redundant (r > 0.95). The genuinely independent RP features — ``choice_entropy``, ``menu_transitivity``, ``sarp_violation_density``, ``hm_ratio``, ``vei_mean`` — are the ones that survive L1 selection and carry non-redundant signal.
+
+Appendix: Null Rates
+---------------------
+
+50/59 RP features are always populated on budget data; 25/27 on menu data. The exceptions are utility-recovery features (``util_mean/std/range/cv/gini``) that require sufficient intersecting choices to solve the Afriat LP. Imputed with train-set medians.
