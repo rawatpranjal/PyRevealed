@@ -1,5 +1,5 @@
-Case Study 2: Predicting Customer Lifetime Values
-=================================================
+Case Study 2: Predicting Customer Spend & Engagement
+=====================================================
 
 **TL;DR.** RP features deliver a modest 0–1% gain on predictive tasks; strong engagement/spend baselines already capture most of the signal.
 
@@ -237,36 +237,14 @@ Both menu datasets yielded an interesting discovery: menu-based aggregation almo
 Findings
 --------
 
-On menu datasets, RP features are competitive with, and sometimes exceed,
-engagement baselines. The Taobao results show that item graph structure
-such as transitivity and density, along with choice entropy, carry signal
-that session counts and menu sizes do not capture.
-
-On budget datasets, RP adds roughly zero marginal lift over strong RFM
-baselines. Measures such as CCEI and MPI correlate with spending history,
-so they contribute little independent predictive power when the baseline
-already encodes that history.
-
-Looking at feature importance, baseline spend features dominate in most
-global models. RP features rise near the top on menu tasks. The menu
-tables below show item graph structure and choice entropy among the most
-informative signals.
+On menu datasets, RP features are competitive with, and sometimes exceed, engagement baselines. The Taobao results show that item graph structure such as transitivity and density, along with choice entropy, carry signal that session counts and menu sizes do not capture. On budget datasets, RP adds roughly zero marginal lift over strong RFM baselines. Measures such as CCEI and MPI correlate with spending history, so they contribute little independent predictive power when the baseline already encodes that history. Looking at feature importance, baseline spend features dominate in most global models. RP features rise near the top on menu tasks. The menu tables below show item graph structure and choice entropy among the most informative signals.
 
 .. _eco-top-features:
 
 Top Features
 ------------
 
-Across all classification tasks, baseline spending features generally dominate in the global models. Features like `total_spend` (total expenditure in the training period), `spend_slope` (spending trend), and `n_obs` (number of observations) consistently account for the majority of predictive power. Core RP scores (`ccei`, `mpi`, `hm_ratio`) unfortunately correlate strongly with these spending baselines, adding no marginal value to a strong RFM baseline. 
-
-What works for budget tracking is somewhat counterintuitive. While static-price GARP produces zero violations acting as completely degenerate markers, other RP structures like the `util_gini` (Gini inequality of recovered Afriat utility values) can add nuanced signals.
-
-However, the true value of Revealed Preference features is in **menu datasets** (like Taobao), where RP features are highly competitive with baselines. Across these domains, four of the top eight most important features are RP-derived. When modeling menu-choice settings:
-- **`menu_transitivity`** (Preference graph transitivity ratio) and **`pref_graph_density`** (Edge density of revealed preference graph) consistently rank in the top 5–10 features. They capture preference graph properties and patterns that simple engagement counts miss completely. 
-- **`choice_entropy_norm`** (Normalized Shannon entropy of choice distribution) and **`menu_util_range`** (Ordinal utility spread) carry useful signal highlighting structured choice behavior that standalone engagement counts miss.
-- **`n_scc`** (Number of strongly connected components) offers graph fragmentation signals that augment baseline statistics like standard sizes and diversity.
-
-Overall, RP graph structure features add novel information that tree models actively depend upon, but the marginal predictive lift over well-engineered baseline metrics is relatively small and rarely significant for basic classification targets. 
+Across all classification tasks, baseline spending features generally dominate in the global models. Features like ``total_spend`` (total expenditure in the training period), ``spend_slope`` (spending trend), and ``n_obs`` (number of observations) consistently account for the majority of predictive power. Core RP scores (``ccei``, ``mpi``, ``hm_ratio``) unfortunately correlate strongly with these spending baselines, adding no marginal value to a strong RFM baseline. What works for budget tracking is somewhat counterintuitive. While static-price GARP produces zero violations acting as completely degenerate markers, other RP structures like the ``util_gini`` (Gini inequality of recovered Afriat utility values) can add nuanced signals. However, the true value of Revealed Preference features is in **menu datasets** (like Taobao), where RP features are highly competitive with baselines. Across these domains, four of the top eight most important features are RP-derived. When modeling menu-choice settings: ``menu_transitivity`` (Preference graph transitivity ratio) and ``pref_graph_density`` (Edge density of revealed preference graph) consistently rank in the top 5–10 features. They capture preference graph properties and patterns that simple engagement counts miss completely. ``choice_entropy_norm`` (Normalized Shannon entropy of choice distribution) and ``menu_util_range`` (Ordinal utility spread) carry useful signal highlighting structured choice behavior that standalone engagement counts miss. ``n_scc`` (Number of strongly connected components) offers graph fragmentation signals that augment baseline statistics like standard sizes and diversity. Overall, RP graph structure features add novel information that tree models actively depend upon, but the marginal predictive lift over well-engineered baseline metrics is relatively small and rarely significant for basic classification targets. 
 
 .. _eco-cost:
 

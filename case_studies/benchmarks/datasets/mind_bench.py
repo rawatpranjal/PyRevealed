@@ -1,4 +1,4 @@
-"""MIND news recommendation benchmark: engagement, loyalty, and novelty prediction.
+"""MIND news recommendation benchmark: engagement, loyalty, novelty, and CTR prediction.
 
 MIND (Wu et al., ACL 2020) contains 1M+ impression logs from Microsoft News.
 Each impression is a natural menu-choice observation: articles shown = menu,
@@ -13,6 +13,11 @@ Targets (computed on test window: last 30% of impressions per user):
                      article-ID entropy as a proxy.
   - High Novelty:    fraction of test choices NOT seen in train choices, top tercile.
                      Measures tendency to explore new articles vs repeat reads.
+  - High CTR:        inverse of mean menu size in test window (1 / mean_menu_size),
+                     top tercile. Since each observation is a 1-click impression,
+                     users with smaller menus have higher effective CTR (1 click out
+                     of fewer candidates). This proxies ad-click-through on news
+                     platforms where smaller, more targeted slates drive higher CTR.
 """
 
 from __future__ import annotations
@@ -83,6 +88,7 @@ def load_and_prepare(data_dir=None, max_users=50000):
     raw_engagement: list[int] = []       # click count in test window
     raw_loyalty_entropy: list[float] = []  # Shannon entropy of article choices in test
     raw_novelty: list[float] = []         # fraction of new choices in test vs train
+    raw_ctr: list[float] = []            # 1 / mean_menu_size in test (effective CTR)
 
     for uid, log in user_logs.items():
         T = len(log.choices)
@@ -130,6 +136,18 @@ def load_and_prepare(data_dir=None, max_users=50000):
             novelty = 0.0
         raw_novelty.append(novelty)
 
+        # --- Target 4: High CTR ---
+        # Each MIND observation is a 1-click impression, so CTR per impression
+        # is 1 / menu_size. The user-level effective CTR is the mean across
+        # test-window impressions: mean(1 / menu_size_t). Users who click from
+        # smaller, more targeted slates have higher effective CTR — this proxies
+        # ad-click-through rate on news platforms.
+        if len(test_log.menus) > 0:
+            ctr = float(np.mean([1.0 / len(m) for m in test_log.menus]))
+        else:
+            ctr = 0.0
+        raw_ctr.append(ctr)
+
     print(f"  Users: {len(user_ids)}")
 
     if len(user_ids) < 30:
@@ -156,6 +174,7 @@ def load_and_prepare(data_dir=None, max_users=50000):
     engagement = np.array(raw_engagement)
     loyalty_entropy = np.array(raw_loyalty_entropy)
     novelty = np.array(raw_novelty)
+    ctr = np.array(raw_ctr)
 
     # Convert to 4-tuple targets: (y_binary, task_type, y_continuous, threshold_pctl)
     # Top tercile = top 33.3% → threshold at 66.67th percentile
@@ -174,6 +193,11 @@ def load_and_prepare(data_dir=None, max_users=50000):
         "High Novelty": (
             (novelty > np.percentile(novelty, 66.67)).astype(int),
             "classification", novelty, 66.67,
+        ),
+        # High CTR: top tercile of effective click-through rate (1/menu_size)
+        "High CTR": (
+            (ctr > np.percentile(ctr, 66.67)).astype(int),
+            "classification", ctr, 66.67,
         ),
     }
 
