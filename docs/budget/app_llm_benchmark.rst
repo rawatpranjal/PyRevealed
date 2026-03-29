@@ -1,6 +1,14 @@
 Case Study 1: Detecting Inconsistency in AI Agents
 ==================================================
 
+.. list-table::
+   :widths: 25 25 25 25
+
+   * - **78,750 API calls**
+     - **5 scenarios × 50 vignettes**
+     - **5 prompt frameworks**
+     - **15 menus per vignette**
+
 Do LLMs have stable action rankings, or does the ranking change when
 different alternatives are shown? We build preference graphs from LLM
 decisions and check for cycles.
