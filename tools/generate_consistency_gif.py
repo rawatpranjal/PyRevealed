@@ -81,6 +81,7 @@ def precompute():
     steps = []
     menus_so_far, choices_so_far = [], []
     prev_removed = set()
+    violation_edges = set()
 
     for idx, (menu, choice) in enumerate(OBSERVATIONS):
         menus_so_far.append(menu)
@@ -98,14 +99,20 @@ def precompute():
         curr_removed = set(hm.removed_observations)
         # Did this observation trigger a NEW violation?
         is_violation = len(curr_removed) > len(prev_removed)
+        if is_violation:
+            # The edge that caused the violation stays red too
+            violation_edges.add(idx)
         prev_removed = curr_removed
+
+        # Red edges = HM-removed edges ∪ violation-causing edges
+        red_edges = curr_removed | violation_edges
 
         steps.append({
             "edge": edge,
             "hm_consistent": len(hm.remaining_observations),
             "hm_total": hm.num_total,
             "hm_ratio": hm.efficiency_index,
-            "removed": curr_removed,
+            "red_edges": red_edges,
             "is_violation": is_violation,
             "obs_idx": idx,
         })
@@ -275,20 +282,16 @@ def generate_gif():
             s = STEPS[ei]
             src, dst = s["edge"]
 
-            # Determine edge colour:
-            # - if this edge's observation is in the "removed" set of the
-            #   *current* step, it's a violation edge → red
-            # - otherwise blue
-            is_removed = ei in step["removed"]
+            # Red if this edge is in the red set (HM-removed ∪ violation-causing)
+            is_red = ei in step["red_edges"]
 
             # Current observation during flash phase
             if ei == obs_i and phase == "flash":
-                # Flash: alternate red/transparent every frame
                 if phase_f % 2 == 0:
                     draw_edge(ax, src, dst, color=COL_RED, lw=3.5, alpha=1.0)
                 else:
                     draw_edge(ax, src, dst, color=COL_RED, lw=2.5, alpha=0.3)
-            elif is_removed:
+            elif is_red:
                 draw_edge(ax, src, dst, color=COL_RED, lw=2.5, alpha=0.85)
             else:
                 draw_edge(ax, src, dst, color=COL_EDGE, lw=2.5, alpha=0.85)
