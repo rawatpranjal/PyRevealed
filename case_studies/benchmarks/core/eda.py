@@ -327,6 +327,128 @@ def print_eda_summary(eda_list: list[dict]) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Feature correlation analysis
+# ---------------------------------------------------------------------------
+
+# Known RP feature prefixes/names (from Engine + extended extraction)
+_RP_PREFIXES = (
+    "garp", "ccei", "mpi", "harp", "hm_ratio", "hm_consistent", "hm_total",
+    "vei", "n_scc", "scc_", "n_violations", "violation_", "pref_graph",
+    "strict_pref", "transitivity", "util_", "lambda_", "mpi_", "cycle_",
+    "sarp_", "warp_", "is_sarp", "is_warp", "is_garp", "is_harp",
+    "menu_transitivity", "menu_pref", "menu_n_", "menu_max_", "menu_util",
+    "choice_entropy", "choice_reversal", "is_congruent", "n_maximality",
+    "max_scc", "n_warp", "n_sarp",
+)
+_RP_EXACT = {
+    "choice_entropy", "choice_entropy_norm",
+    "choice_reversal_count", "choice_reversal_ratio",
+}
+
+
+def _is_rp_feature(name: str) -> bool:
+    if name in _RP_EXACT:
+        return True
+    return any(name.startswith(p) for p in _RP_PREFIXES)
+
+
+def compute_correlation_summary(
+    X_rp, X_base,
+) -> dict:
+    """Compute within-group and cross-group correlation statistics.
+
+    Args:
+        X_rp: DataFrame of RP features (users × features).
+        X_base: DataFrame of baseline features (users × features).
+
+    Returns:
+        Dict with correlation summary: means, top pairs, redundant features.
+    """
+    import pandas as pd
+
+    rp_cols = list(X_rp.columns)
+    base_cols = list(X_base.columns)
+
+    combined = pd.concat([X_base, X_rp], axis=1)
+    combined = combined.loc[:, ~combined.columns.duplicated()]
+
+    def _upper_triangle(corr_matrix):
+        vals = corr_matrix.values[np.triu_indices_from(corr_matrix.values, k=1)]
+        return vals[~np.isnan(vals)]
+
+    result = {
+        "n_rp_features": len(rp_cols),
+        "n_base_features": len(base_cols),
+    }
+
+    # Within-RP
+    if len(rp_cols) >= 2:
+        rp_corr = combined[rp_cols].corr()
+        rp_vals = _upper_triangle(rp_corr)
+        result["within_rp_mean_abs_corr"] = float(np.mean(np.abs(rp_vals)))
+        result["within_rp_median_abs_corr"] = float(np.median(np.abs(rp_vals)))
+
+        # Top RP-RP pairs
+        rp_pairs = []
+        for i, r1 in enumerate(rp_cols):
+            for r2 in rp_cols[i + 1:]:
+                c = combined[r1].corr(combined[r2])
+                if not np.isnan(c):
+                    rp_pairs.append({"f1": r1, "f2": r2, "r": round(float(c), 3)})
+        rp_pairs.sort(key=lambda x: abs(x["r"]), reverse=True)
+        result["top_rp_rp_pairs"] = rp_pairs[:10]
+        result["redundant_rp_pairs"] = [p for p in rp_pairs if abs(p["r"]) > 0.95]
+
+    # Within-Base
+    if len(base_cols) >= 2:
+        base_corr = combined[base_cols].corr()
+        base_vals = _upper_triangle(base_corr)
+        result["within_base_mean_abs_corr"] = float(np.mean(np.abs(base_vals)))
+        result["within_base_median_abs_corr"] = float(np.median(np.abs(base_vals)))
+
+    # Cross-group (RP × Base)
+    cross_pairs = []
+    for rp in rp_cols:
+        for b in base_cols:
+            c = combined[rp].corr(combined[b])
+            if not np.isnan(c):
+                cross_pairs.append({"rp": rp, "base": b, "r": round(float(c), 3)})
+
+    cross_vals = [abs(p["r"]) for p in cross_pairs]
+    if cross_vals:
+        result["cross_mean_abs_corr"] = float(np.mean(cross_vals))
+        result["cross_median_abs_corr"] = float(np.median(cross_vals))
+
+    cross_pairs.sort(key=lambda x: abs(x["r"]), reverse=True)
+    result["top_cross_pairs"] = cross_pairs[:10]
+
+    return result
+
+
+def print_correlation_summary(corr: dict, dataset_name: str) -> None:
+    """Print a compact correlation summary for one dataset."""
+    print(f"\n  {dataset_name}: {corr['n_rp_features']} RP × {corr['n_base_features']} Base features")
+    print(f"    RP-RP   mean |r| = {corr.get('within_rp_mean_abs_corr', 0):.3f}  "
+          f"median |r| = {corr.get('within_rp_median_abs_corr', 0):.3f}")
+    print(f"    Base-Base mean |r| = {corr.get('within_base_mean_abs_corr', 0):.3f}  "
+          f"median |r| = {corr.get('within_base_median_abs_corr', 0):.3f}")
+    print(f"    RP-Base  mean |r| = {corr.get('cross_mean_abs_corr', 0):.3f}  "
+          f"median |r| = {corr.get('cross_median_abs_corr', 0):.3f}")
+
+    redundant = corr.get("redundant_rp_pairs", [])
+    if redundant:
+        print(f"    Redundant RP pairs (|r| > 0.95): {len(redundant)}")
+        for p in redundant[:5]:
+            print(f"      {p['f1']:<30} ~ {p['f2']:<25} r={p['r']:+.3f}")
+
+    top_cross = corr.get("top_cross_pairs", [])
+    if top_cross:
+        print(f"    Top RP-Base correlations:")
+        for p in top_cross[:5]:
+            print(f"      {p['rp']:<30} ~ {p['base']:<25} r={p['r']:+.3f}")
+
+
+# ---------------------------------------------------------------------------
 # Persistence
 # ---------------------------------------------------------------------------
 

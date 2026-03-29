@@ -225,39 +225,78 @@ def main():
     if args.eda_only:
         import importlib as _imp
         from case_studies.benchmarks.core.eda import (
-            compute_budget_eda, compute_menu_eda, print_eda_summary, save_eda,
+            compute_correlation_summary, print_correlation_summary,
+            print_eda_summary, save_eda,
         )
         print("=" * 70)
-        print(" EDA ONLY: Loading datasets and computing summary statistics")
+        print(" EDA ONLY: Loading datasets, computing EDA + feature correlations")
         print("=" * 70)
 
-        BUDGET_DATASETS = {"dunnhumby", "open_ecommerce", "hm"}
         eda_list = []
+        corr_list = []
 
-        for name in (tqdm(dataset_names, desc="EDA", unit="ds") if tqdm else dataset_names):
+        for name in _iter(dataset_names, "EDA"):
             display = DATASET_DISPLAY_NAMES.get(name, name)
             try:
-                # Run load_and_prepare to load data (it also computes features but
-                # we store the EDA attribute). Each bench file stores
-                # load_and_prepare.eda if the EDA call was added, otherwise we
-                # skip and the runner computes from what's available.
-                results = run_dataset(name, args.max_users)
+                # Call load_and_prepare directly (skips ML models)
                 mod_path = AVAILABLE_DATASETS[name]
                 mod = _imp.import_module(mod_path)
+
+                # Build kwargs (same logic as run_dataset)
+                kwargs = {}
+                if name == "dunnhumby":
+                    if args.max_users:
+                        kwargs["n_households"] = args.max_users
+                elif name == "open_ecommerce":
+                    if args.max_users:
+                        kwargs["n_users"] = args.max_users
+                elif name == "mind":
+                    effective = args.max_users or 50000
+                    if args.max_users and args.max_users < 2000:
+                        effective = max(args.max_users * 20, 5000)
+                    kwargs["max_users"] = effective
+                elif name == "kuairec":
+                    if args.max_users:
+                        kwargs["max_users"] = args.max_users
+                elif name == "taobao_buy_window":
+                    kwargs["max_users"] = args.max_users or 50000
+                else:
+                    kwargs["max_users"] = args.max_users or 50000
+
+                raw = mod.load_and_prepare(**kwargs)
+                if len(raw) == 5:
+                    X_rp, X_base, _, targets_dict, user_ids = raw
+                else:
+                    X_rp, X_base, targets_dict, user_ids = raw
+
+                if X_rp is None:
+                    print(f"  [{name}] Too few users, skipping")
+                    continue
+
+                # EDA (stored by load_and_prepare)
                 eda = getattr(mod.load_and_prepare, "eda", None)
                 if eda is not None:
                     eda["dataset"] = display
                     eda_list.append(eda)
-                    print(f"  [{name}] {display}: {eda['n_users']} users, {eda['total_obs']} obs")
-                else:
-                    print(f"  [{name}] {display}: EDA not yet instrumented")
+
+                # Feature correlations
+                corr = compute_correlation_summary(X_rp, X_base)
+                corr["dataset"] = display
+                corr_list.append(corr)
+                print_correlation_summary(corr, display)
+
             except FileNotFoundError as e:
                 print(f"  [SKIP] {name}: {e}")
             except Exception as e:
                 print(f"  [ERROR] {name}: {e}")
+                import traceback
+                traceback.print_exc()
 
         if eda_list:
             print_eda_summary(eda_list)
+            # Save EDA + correlations together
+            for eda, corr in zip(eda_list, corr_list):
+                eda["correlation"] = corr
             save_eda(eda_list, output_dir)
         return
 
