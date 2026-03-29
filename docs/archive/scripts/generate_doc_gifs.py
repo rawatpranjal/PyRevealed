@@ -1663,7 +1663,7 @@ def generate_hm_algorithm():
 # ---------------------------------------------------------------------------
 # Menu Datatypes (Deterministic, Stochastic, Risk)
 # ---------------------------------------------------------------------------
-def _draw_box(ax, x, y, text, w, h, bg, txt_c, lw=1, ec="#95a5a6"):
+def _draw_box(ax, x, y, text, w, h, bg, txt_c, lw=1, ec="#666666"):
     rect = plt.Rectangle((x-w/2, y-h/2), w, h, facecolor=bg, edgecolor=ec, lw=lw, zorder=5)
     ax.add_patch(rect)
     ax.text(x, y, text, ha="center", va="center", color=txt_c, fontweight="bold", zorder=6)
