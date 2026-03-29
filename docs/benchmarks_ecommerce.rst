@@ -1,5 +1,5 @@
-Predicting Customer Lifetime Values
-====================================
+Case Study 2: Predicting Customer Lifetime Values
+=================================================
 
 **TL;DR.** RP features deliver a modest 0–1% gain on predictive tasks; strong engagement/spend baselines already capture most of the signal.
 
@@ -232,6 +232,32 @@ However, the true value of Revealed Preference features is in **menu datasets** 
 - **`n_scc`** (Number of strongly connected components) offers graph fragmentation signals that augment baseline statistics like standard sizes and diversity.
 
 Overall, RP graph structure features add novel information that tree models actively depend upon, but the marginal predictive lift over well-engineered baseline metrics is relatively small and rarely significant for basic classification targets. 
+
+.. _eco-cost:
+
+Computational Cost
+------------------
+
+Measured end-to-end on Apple M-series (11 cores). Load = CSV read + panel construction; Engine = Rust batch scoring (6 metrics: GARP, CCEI, MPI, HARP, HM, VEI); Features = Engine + extended per-user features (VEI distribution, utility recovery, graph structure). All times are wall-clock.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 8 12 14 14 10
+
+   * - Dataset
+     - N
+     - Load
+     - Engine (Rust)
+     - Features
+     - Peak Mem
+   * - Dunnhumby
+     - 442
+     - 3.4 s
+     - 156 s
+     - 172 s
+     - 38 MB
+
+Engine time is dominated by O(T³) metrics (MPI, HARP) on long histories (T ≈ 50–73 after 70 % train split, K = 10 goods). On the same hardware, synthetic data with shorter histories (T = 15, K = 5) scores at ~950 users/sec end-to-end. See :doc:`performance` for scaling characteristics.
 
 .. _eco-replication:
 

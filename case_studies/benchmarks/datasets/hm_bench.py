@@ -77,10 +77,15 @@ def _print_eda(train_tuples, user_ids):
 
 def load_and_prepare(data_dir=None, max_users=50000):
     """Load H&M with temporal split. Returns dual baselines (core10 + full17)."""
+    import time as _time
+    import tracemalloc
+
     from prefgraph.datasets._hm import load_hm
 
     print(f"\n[{DATASET_NAME}] Loading dataset...")
+    _t_load = _time.perf_counter()
     panel = load_hm(data_dir=data_dir, max_users=max_users, min_periods=6)
+    load_and_prepare.load_time_s = _time.perf_counter() - _t_load
 
     user_ids = []
     train_tuples = []
@@ -135,7 +140,18 @@ def load_and_prepare(data_dir=None, max_users=50000):
     X_base_17 = extract_budget_baseline(train_tuples, user_ids, feature_set="full")
 
     print(f"  Extracting RP features via Engine...")
+    tracemalloc.start()
+    _t_feat = _time.perf_counter()
     X_rp = extract_budget_rp(train_tuples, user_ids)
+    load_and_prepare.feature_time_s = _time.perf_counter() - _t_feat
+    _, peak_mem = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    load_and_prepare.peak_memory_mb = peak_mem / (1024 * 1024)
+    load_and_prepare.engine_time_s = getattr(extract_budget_rp, "engine_time_s", 0.0)
+
+    print(f"  Engine scoring: {load_and_prepare.engine_time_s:.1f}s  "
+          f"Feature extraction: {load_and_prepare.feature_time_s:.1f}s  "
+          f"Peak memory: {load_and_prepare.peak_memory_mb:.0f} MB")
 
     # Targets
     # High Spender: initial binarization on all users; run_three_way re-binarizes
@@ -163,6 +179,11 @@ def run_benchmark(data_dir=None, max_users=50000) -> list[BenchmarkResult]:
     if X_rp is None:
         return []
 
+    _load_t = getattr(load_and_prepare, "load_time_s", 0.0)
+    _engine_t = getattr(load_and_prepare, "engine_time_s", 0.0)
+    _feat_t = getattr(load_and_prepare, "feature_time_s", 0.0)
+    _mem = getattr(load_and_prepare, "peak_memory_mb", 0.0)
+
     results = []
     for target_name, (y, task_type, y_continuous, threshold_pctl) in targets_dict.items():
         print(f"  [{DATASET_NAME}] Target: {target_name} ({task_type})")
@@ -179,6 +200,10 @@ def run_benchmark(data_dir=None, max_users=50000) -> list[BenchmarkResult]:
             DATASET_NAME, f"{target_name} (core10)", task_type,
             y_continuous=y_continuous, threshold_pctl=threshold_pctl,
         )
+        result_10.load_time_s = _load_t
+        result_10.engine_time_s = _engine_t
+        result_10.feature_time_s = _feat_t
+        result_10.peak_memory_mb = _mem
         results.append(result_10)
 
         # --- Full 17 baseline ---
@@ -187,6 +212,10 @@ def run_benchmark(data_dir=None, max_users=50000) -> list[BenchmarkResult]:
             DATASET_NAME, f"{target_name} (full17)", task_type,
             y_continuous=y_continuous, threshold_pctl=threshold_pctl,
         )
+        result_17.load_time_s = _load_t
+        result_17.engine_time_s = _engine_t
+        result_17.feature_time_s = _feat_t
+        result_17.peak_memory_mb = _mem
         results.append(result_17)
 
         # Print comparison

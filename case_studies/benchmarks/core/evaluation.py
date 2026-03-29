@@ -59,6 +59,12 @@ class BenchmarkResult:
     top_features: list | None = None
     wall_time_s: float = 0.0
 
+    # Performance metrics (disk-to-scores pipeline)
+    load_time_s: float = 0.0       # Time to load raw data from disk
+    engine_time_s: float = 0.0     # Time for Engine scoring (Rust backend)
+    feature_time_s: float = 0.0    # Time for full feature extraction
+    peak_memory_mb: float = 0.0    # Peak memory during scoring
+
     def to_dict(self) -> dict:
         return asdict(self)
 

@@ -1,5 +1,5 @@
-Detecting Inconsistency in AI Agents
-=====================================
+Case Study 1: Detecting Inconsistency in AI Agents
+==================================================
 
 Do LLMs have stable action rankings, or does the ranking change when
 different alternatives are shown? We build preference graphs from LLM
@@ -10,7 +10,7 @@ struggles with context-dependent framing. Between 74% to 92% of scenarios displa
 perfect logical consistency (SARP) at temperature 0. Decisions are
 highly stable in domains like **Alert Triage** (92% pass rate), where showing
 or hiding intermediate routing options rarely causes it to contradict its core
-logic. In contrast, **Job Screening** is the weakest category (74% pass rate)
+logic. In contrast, the **Jobs Task** is the weakest category (74% pass rate)
 with frequent violations of menu independence (IIA)—for
 example, the LLM might prefer "Interview" over "Reject" natively, but
 introducing "Waitlist" as a third option inexplicably flips its choice to
@@ -181,8 +181,8 @@ tends to out-perform unguided Minimal prompts across most operational domains.
      - 84
 
 Model consistency does not uniformly degrade on harder tasks. Paradoxically, 
-**Content** moderation decisions are less consistent on ostensibly "Clear" cases
-(60%), while **Jobs** screening struggles most on simplified "Binary" rulesets (67%).
+**Content Moderation Task** decisions are less consistent on ostensibly "Clear" cases
+(60%), while the **Jobs Task** struggles most on simplified "Binary" rulesets (67%).
 
 .. _llm-iia:
 
@@ -205,7 +205,7 @@ Model consistency does not uniformly degrade on harder tasks. Paradoxically,
 
 *IIA violation = adding a third option inexplicably reverses the preference between two existing options.*
 
-The **Jobs** and **Content** moderation categories exhibit the highest susceptibility to context-dependent preference reversals, indicating that the mere presence of decoy options can systematically manipulate the LLM's logical alignment.
+The **Jobs Task** and **Content Moderation Task** categories exhibit the highest susceptibility to context-dependent preference reversals, indicating that the mere presence of decoy options can systematically manipulate the LLM's logical alignment.
 
 .. _llm-stoch-results:
 
@@ -258,7 +258,7 @@ Instead of testing single decisions, we ask the model 20 times per menu and conv
      - 63
 
 Stochastic robustness requires tailored instructional frameworks. Decision Tree paths 
-prove remarkably effective for Procurement, whereas **Jobs** pipelines align better with 
+prove remarkably effective for Procurement, whereas **Jobs Task** pipelines align better with 
 Aggressive pacing.
 
 .. list-table:: RUM Pass Rate by Case Difficulty (%)
@@ -296,7 +296,7 @@ Aggressive pacing.
      - 100
      - 100
 
-Stochastic consistency testing reinforces the deterministic findings. Procurement paradoxically performs perfectly under Ambiguous and Adversarial constraints, while seemingly clear-cut **Content** moderation fractures into inconsistent distributions. **Jobs**, conversely, correctly performs best on Clear cases but degrades under complex scenarios. 
+Stochastic consistency testing reinforces the deterministic findings. Procurement paradoxically performs perfectly under Ambiguous and Adversarial constraints, while seemingly clear-cut **Content Moderation Task** fractures into inconsistent distributions. The **Jobs Task**, conversely, correctly performs best on Clear cases but degrades under complex scenarios. 
 (*Results with asterisks are based on partial procurement stage2 coverage.*)
 
 .. _llm-patterns:
@@ -305,8 +305,8 @@ Patterns
 --------
 
 IIA violations are not evenly distributed. Decision-tree is the IIA
-hotspot on **Jobs** screening (accounting for nearly half of the category's violations), while it
-scores 100% SARP on **Procurement**. Conservative leads on **Content**
+hotspot on the **Jobs Task** (accounting for nearly half of the category's violations), while it
+scores 100% SARP on **Procurement**. Conservative leads on the **Content Moderation Task**
 moderation (accounting for nearly half of the category's violations). The same prompt can be the most and least
 consistent depending on the decision domain.
 
@@ -339,7 +339,7 @@ consistent depending on the decision domain.
      - Conservative
      - 2
 
-**Compromise effect (Jobs screening).** In most **Jobs** screening IIA cases
+**Compromise effect (Jobs Task).** In most **Jobs Task** IIA cases
 the mechanism is the same. Adding an extreme option shifts the choice
 toward the middle option. For example, the model prefers
 *phone_screen* over *hold_for_review* in a pair. When shown the triple
@@ -348,7 +348,7 @@ reverse also appears. Adding *fast_track* can move a choice from
 *auto_reject* to *technical_interview*. This is the familiar
 compromise pattern.
 
-**Severity anchor (Content moderation).** Adding a lenient option pushes
+**Severity anchor (Content Moderation Task).** Adding a lenient option pushes
 the choice toward a stricter action, and adding an extreme option pushes
 the choice toward a moderate action. For example, the model prefers
 *remove_and_strike* over *suspend_and_legal* in a pair. When shown the
@@ -356,7 +356,7 @@ triple {approve, remove, suspend}, *suspend* wins. In the opposite
 direction, adding *suspend* can make *remove* preferable to *approve*.
 The model anchors to the extremes of the menu.
 
-**Parse failures as a policy floor.** In severe content cases, all-mild
+**Parse failures as a policy floor.** In severe **Content Moderation Task** cases, all-mild
 menus sometimes return PARSE_FAIL. The model refuses to pick a mild
 action and outputs a severe action instead, even though it is not in the
 menu. This is not random error. It reveals a safety floor that the model
@@ -368,21 +368,21 @@ as a constraint revealed by the model.
 Findings
 --------
 
-**Jobs** screening is the least consistent scenario. The deterministic SARP
+The **Jobs Task** is the least consistent scenario. The deterministic SARP
 pass rate is 74 percent and the stochastic rate is 78 percent. We count
 15 deterministic and 14 stochastic IIA violations. In practice this means
 that adding a third candidate often changes which of two candidates is
 preferred, a hallmark of the compromise pattern.
 
-**Content** moderation shows that clear cases are not always stable. The
+The **Content Moderation Task** shows that clear cases are not always stable. The
 clear tier passes only 47 percent of the time under stochastic sampling
 while ambiguous and adversarial tiers are much higher. Menu dependent
 severity judgments remain even under probabilistic sampling. We still see persistent probability shifts indicating IIA violations, which confirms that context effects remain strong even when we aggregate.
 
 Prompt effects are real and specific to the domain. Decision tree is the
 only prompt to reach 100 percent on a scenario and it does so on
-procurement. The same prompt scores 60 percent on jobs. Conservative
-steadies support at 90 percent but scores 60 percent on content.
+procurement. The same prompt scores 60 percent on the **Jobs Task**. Conservative
+steadies support at 90 percent but scores 60 percent on the **Content Moderation Task**.
 There is no universal best prompt. Alert triage is the most consistent
 scenario at 90 percent under stochastic SARP, likely because the action
 set has a clear ordinal severity ladder. Procurement with the
@@ -395,6 +395,28 @@ Finally, stochastic sampling exhibits strongly peaked distributions. Only
 the language model stays highly confident in its ranking, even when it is
 contradicting itself under different menu contexts. The inconsistency we see
 is structural rather than noise.
+
+.. _llm-cost:
+
+Computational Cost
+------------------
+
+Measured on Apple M-series (11 cores). The analysis runs SARP + HM on each (vignette, prompt) configuration. 5 scenarios × 10 vignettes × 5 prompts = 250 configurations, of which 150 have sufficient data (≥ 5 menu observations each).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 15 15
+
+   * - Stage
+     - Configs
+     - Wall Time
+     - Peak Memory
+   * - SARP + HM analysis
+     - 150
+     - 0.5 s
+     - 19 MB
+
+At 3.3 ms per configuration, the consistency analysis is negligible compared to the LLM API calls that generate the data (~3,750 calls for deterministic, ~75,000 for stochastic).
 
 .. _llm-replication:
 

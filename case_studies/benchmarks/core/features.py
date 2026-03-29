@@ -145,12 +145,19 @@ def extract_budget_rp(
 
     If extended=True, also runs per-user algorithm calls for ~30 additional
     features (distributional, graph, cycle, utility). Slower but richer.
+
+    After execution, ``extract_budget_rp.engine_time_s`` holds the wall-clock
+    time for the Rust Engine batch call (excluding extended per-user features).
     """
+    import time as _time
+
     if metrics is None:
         metrics = ["garp", "ccei", "mpi", "harp", "hm", "vei"]
 
     engine = Engine(metrics=metrics)
+    _t0 = _time.perf_counter()
     results = engine.analyze_arrays(users)
+    extract_budget_rp.engine_time_s = _time.perf_counter() - _t0
     df = results_to_dataframe(results, user_ids=user_ids)
 
     # Derived features
@@ -646,7 +653,12 @@ def extract_menu_rp(
 
     If extended=True, also runs per-user algorithm calls for additional
     features (reversals, preference graph, congruence, ordinal utility).
+
+    After execution, ``extract_menu_rp.engine_time_s`` holds the wall-clock
+    time for the Rust Engine batch call (excluding extended per-user features).
     """
+    import time as _time
+
     user_ids = list(user_logs.keys())
     engine_tuples = []
     for uid in user_ids:
@@ -654,7 +666,9 @@ def extract_menu_rp(
         engine_tuples.append(log.to_engine_tuple())
 
     engine = Engine()
+    _t0 = _time.perf_counter()
     results = engine.analyze_menus(engine_tuples)
+    extract_menu_rp.engine_time_s = _time.perf_counter() - _t0
     df = results_to_dataframe(results, user_ids=user_ids)
 
     df["hm_ratio"] = df["hm_consistent"] / df["hm_total"].replace(0, 1)

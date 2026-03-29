@@ -22,14 +22,22 @@ def load_and_prepare(data_dir=None, n_households=None):
     Returns:
         Tuple of (X_rp, X_base, targets_dict, user_ids)
         where targets_dict maps target_name -> (y_array, task_type)
+
+    After execution, ``load_and_prepare.load_time_s``, ``.engine_time_s``,
+    ``.feature_time_s``, and ``.peak_memory_mb`` hold performance metrics.
     """
+    import time as _time
+    import tracemalloc
+
     from prefgraph.datasets import load_dunnhumby
 
     if data_dir is None:
         data_dir = DEFAULT_DATA_DIR
 
     print(f"\n[{DATASET_NAME}] Loading dataset...")
+    _t_load = _time.perf_counter()
     panel = load_dunnhumby(data_dir=data_dir, n_households=n_households, min_weeks=MIN_OBS_BUDGET)
+    load_and_prepare.load_time_s = _time.perf_counter() - _t_load
 
     user_ids = []
     train_tuples = []
@@ -72,7 +80,18 @@ def load_and_prepare(data_dir=None, n_households=None):
     X_base = extract_budget_baseline(train_tuples, user_ids)
 
     print(f"  Extracting RP features via Engine...")
+    tracemalloc.start()
+    _t_feat = _time.perf_counter()
     X_rp_engine = extract_budget_rp(train_tuples, user_ids)
+    load_and_prepare.feature_time_s = _time.perf_counter() - _t_feat
+    _, peak_mem = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    load_and_prepare.peak_memory_mb = peak_mem / (1024 * 1024)
+    load_and_prepare.engine_time_s = getattr(extract_budget_rp, "engine_time_s", 0.0)
+
+    print(f"  Engine scoring: {load_and_prepare.engine_time_s:.1f}s  "
+          f"Feature extraction: {load_and_prepare.feature_time_s:.1f}s  "
+          f"Peak memory: {load_and_prepare.peak_memory_mb:.0f} MB")
 
     X_rp = X_rp_engine
 
@@ -102,6 +121,12 @@ def run_benchmark(data_dir=None, n_households=None) -> list[BenchmarkResult]:
     """Run all Dunnhumby benchmarks."""
     X_rp, X_base, targets_dict, user_ids = load_and_prepare(data_dir, n_households)
 
+    # Capture pipeline timing from load_and_prepare
+    _load_t = getattr(load_and_prepare, "load_time_s", 0.0)
+    _engine_t = getattr(load_and_prepare, "engine_time_s", 0.0)
+    _feat_t = getattr(load_and_prepare, "feature_time_s", 0.0)
+    _mem = getattr(load_and_prepare, "peak_memory_mb", 0.0)
+
     results = []
     for target_name, (y, task_type, y_cont, pctl) in targets_dict.items():
         print(f"  [{DATASET_NAME}] Target: {target_name} ({task_type})")
@@ -113,6 +138,10 @@ def run_benchmark(data_dir=None, n_households=None) -> list[BenchmarkResult]:
 
         result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type,
                                y_continuous=y_cont, threshold_pctl=pctl)
+        result.load_time_s = _load_t
+        result.engine_time_s = _engine_t
+        result.feature_time_s = _feat_t
+        result.peak_memory_mb = _mem
         results.append(result)
 
         if task_type == "classification":

@@ -18,13 +18,18 @@ DEFAULT_DATA_DIR = str(Path(__file__).resolve().parents[2] / "datasets" / "open_
 
 def load_and_prepare(data_dir=None, n_users=None):
     """Load Open E-Commerce and prepare train/target splits."""
+    import time as _time
+    import tracemalloc
+
     from prefgraph.datasets import load_open_ecommerce
 
     if data_dir is None:
         data_dir = DEFAULT_DATA_DIR
 
     print(f"\n[{DATASET_NAME}] Loading dataset...")
+    _t_load = _time.perf_counter()
     panel = load_open_ecommerce(data_dir=data_dir, n_users=n_users, min_observations=MIN_OBS_BUDGET)
+    load_and_prepare.load_time_s = _time.perf_counter() - _t_load
 
     user_ids = []
     train_tuples = []
@@ -66,7 +71,18 @@ def load_and_prepare(data_dir=None, n_users=None):
     X_base = extract_budget_baseline(train_tuples, user_ids)
 
     print(f"  Extracting RP features via Engine...")
+    tracemalloc.start()
+    _t_feat = _time.perf_counter()
     X_rp = extract_budget_rp(train_tuples, user_ids)
+    load_and_prepare.feature_time_s = _time.perf_counter() - _t_feat
+    _, peak_mem = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    load_and_prepare.peak_memory_mb = peak_mem / (1024 * 1024)
+    load_and_prepare.engine_time_s = getattr(extract_budget_rp, "engine_time_s", 0.0)
+
+    print(f"  Engine scoring: {load_and_prepare.engine_time_s:.1f}s  "
+          f"Feature extraction: {load_and_prepare.feature_time_s:.1f}s  "
+          f"Peak memory: {load_and_prepare.peak_memory_mb:.0f} MB")
 
     # --- Targets ---
     threshold = np.percentile(test_total_spends, 66.67)
@@ -91,6 +107,11 @@ def run_benchmark(data_dir=None, n_users=None) -> list[BenchmarkResult]:
     """Run all Open E-Commerce benchmarks."""
     X_rp, X_base, targets_dict, user_ids = load_and_prepare(data_dir, n_users)
 
+    _load_t = getattr(load_and_prepare, "load_time_s", 0.0)
+    _engine_t = getattr(load_and_prepare, "engine_time_s", 0.0)
+    _feat_t = getattr(load_and_prepare, "feature_time_s", 0.0)
+    _mem = getattr(load_and_prepare, "peak_memory_mb", 0.0)
+
     results = []
     for target_name, (y, task_type) in targets_dict.items():
         print(f"  [{DATASET_NAME}] Target: {target_name} ({task_type})")
@@ -101,6 +122,10 @@ def run_benchmark(data_dir=None, n_users=None) -> list[BenchmarkResult]:
                 continue
 
         result = run_three_way(X_rp, X_base, y, DATASET_NAME, target_name, task_type)
+        result.load_time_s = _load_t
+        result.engine_time_s = _engine_t
+        result.feature_time_s = _feat_t
+        result.peak_memory_mb = _mem
         results.append(result)
 
         if task_type == "classification":
