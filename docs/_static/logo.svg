@@ -9,6 +9,4 @@
   <path d="M 8 12 Q 32 20, 56 52" stroke="url(#curve-gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
   <!-- Preference curve 2 (convex, intersecting) -->
   <path d="M 12 56 Q 28 32, 52 8" stroke="url(#curve-gradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
-  <!-- Choice point (dot at intersection) -->
-  <circle cx="32" cy="32" r="5" fill="url(#curve-gradient)"/>
 </svg>
