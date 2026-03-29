@@ -11,24 +11,19 @@ Preference Graphs
      <div style="flex: 1; min-width: 280px;">
        <p style="font-size: 1.05em; line-height: 1.6;">
          When users make choices, we can represent their decisions as a <strong>preference graph</strong>.
-         If someone chooses A over B, B over C, and then C over A, they have formed a logic cycle.
-         These cycles represent a logical contradiction in their decision making.
+         If someone chooses A over B, B over C, and then C over A, they have formed a cycle.
+         These cycles could represent an inconsistency in their decision making.
          PrefGraph runs high-speed graph algorithms (like Tarjan's SCC) to instantly detect these cycles.
-         By identifying and counting these contradictions, we can rigorously score a user's consistency.
+         By identifying and counting these violations, we can rigorously score a user's consistency.
        </p>
      </div>
      <div style="flex: 1; min-width: 320px;">
-       <img src="_static/intro_graphs.png" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Example of Preference Graphs">
-       <p style="margin-top: 8px; font-size: 0.85em; color: #555;">
-         <strong>Consistency in action:</strong> User A makes logical choices without contradictions.
-         User B creates a cycle by choosing Item C over Item A — PrefGraph catches this reversal
-         and penalizes User B's score.
-       </p>
+       <img src="_static/consistency.gif" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Animated preference graph showing consistency detection">
      </div>
    </div>
 
-Analyse Budgets & Menus
-------------------------
+Budgets & Menu Choices
+----------------------
 
 PrefGraph supports two separate domains of choice data. You can evaluate **Budgets** (purchased quantities constrained by given prices, like retail shopping behavior) and **Menus** (discrete selections chosen from a set of available items, like search engine clicks or AI agent prompting). Furthermore, you can map out three specific behavioral patterns inside menus: strict deterministic limits (``MenuChoiceLog``), probabilistic stochastic distributions (``StochasticChoiceLog``), and risk-based lotteries (``RiskChoiceLog``).
 
