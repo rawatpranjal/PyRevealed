@@ -1,5 +1,3 @@
-:orphan:
-
 Tutorial 7: Revealed Attention
 ===============================
 

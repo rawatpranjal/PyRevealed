@@ -1,5 +1,3 @@
-:orphan:
-
 Tutorial: Stochastic Choice
 ===========================
 
@@ -801,5 +799,3 @@ See Also
 - :doc:`/budget/tutorial` - Budget-based revealed preference
 - :doc:`/papers` - Papers cited in the implementation
 - :doc:`theory_stochastic` - Mathematical foundations (Chapter 13)
-
-:orphan:

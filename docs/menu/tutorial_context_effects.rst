@@ -1,5 +1,3 @@
-:orphan:
-
 Tutorial 9: Context Effects
 ===========================
 
@@ -462,5 +460,3 @@ See Also
 - :doc:`tutorial_stochastic` - Stochastic choice fundamentals (RUM, IIA)
 - :doc:`tutorial_attention` - Limited attention models
 - :doc:`/api` - Full API documentation
-
-:orphan:

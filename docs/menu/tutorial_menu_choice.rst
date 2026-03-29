@@ -1,5 +1,3 @@
-:orphan:
-
 Tutorial 2: Menu-Based Choice
 ==============================
 
@@ -1001,5 +999,3 @@ See Also
 - :doc:`tutorial_stochastic` - Stochastic choice models
 - :doc:`/api` - Full API documentation
 - :doc:`theory_abstract` - Mathematical foundations (Chapters 1-2, 14)
-
-:orphan:
