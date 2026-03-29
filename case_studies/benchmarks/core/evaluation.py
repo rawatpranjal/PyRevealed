@@ -24,6 +24,14 @@ MODEL_PARAMS = {
     "random_state": SEED,
     "verbose": -1,
     "n_jobs": -1,
+    "max_depth": 3,
+    "num_leaves": 8,
+    "min_child_samples": 30,
+    "subsample": 0.7,
+    "colsample_bytree": 0.7,
+    "reg_alpha": 2.0,
+    "reg_lambda": 2.0,
+    "n_estimators": 200,
 }
 
 
