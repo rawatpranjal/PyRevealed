@@ -32,9 +32,40 @@ from these local files rather than paraphrasing from memory. Key papers per modu
 ## Visual Asset Rules
 
 - **Match docs theme.** All visuals (GIFs, graphs, diagrams) use PrefGraph blue (`#2563eb` / `#3b82f6`) on white (`#fafafa`). No dark themes or flashy styles.
-- **Strip all unnecessary text.** No titles, counters, percentages, or captions that the visual already communicates. Keep only the essential metric (e.g. the HM fraction).
+- **Strip all unnecessary text.** No titles, observation counters, percentages, or captions that the visual already communicates. Keep only the essential metric (e.g. the HM fraction).
 - **Visual legends over sentence captions.** Use compact icon + label legends (e.g. mini circle = "option", mini arrow = "prefers") instead of paragraph descriptions.
 - **LinkedIn-quality.** Assets serve double duty on docs and social media. Use 150 DPI minimum, clean typography, drop shadows on nodes.
+- **Use real PrefGraph computations.** Never hardcode metric values — run actual algorithm functions and display the real output.
+
+### GIF Style Spec (reference: `tools/generate_consistency_gif.py`)
+
+**Colors:**
+
+| Role | Hex | Usage |
+|------|-----|-------|
+| Background | `#fafafa` | Figure + axes facecolor |
+| Primary blue | `#2563eb` | Nodes, accents |
+| Light blue | `#3b82f6` | Edges, lines |
+| Violation red | `#e74c3c` | Cycles, errors |
+| Dark text | `#333333` | Labels, headings |
+| Secondary text | `#666666` | Legends, captions |
+| Node labels | `white` | Bold on blue circles |
+| Drop shadow | `#00000026` | 15% black, offset (+0.02, -0.02) |
+
+**Layout:**
+- DPI: 150
+- Figure: 7.5 × 4.5 inches (landscape), margins `subplots_adjust(0, 0, 1, 1)`
+- Nodes: `matplotlib.patches.Circle` r=0.16, white 2.5pt border, drop shadow underneath
+- Edges: `FancyArrowPatch`, `connectionstyle="arc3,rad=0.15"`, `lw=2.5`
+- Metric panel: right side, large monospace fraction
+- Legend: compact icon + label, lower right
+
+**Animation:**
+- Frame interval: 250ms
+- Violation flash: 3 on/off cycles (6 frames), alternating `alpha=1.0` / `alpha=0.3`
+- Final hold: 8 frames (2 seconds) before seamless loop
+- Writer: `"pillow"` (no ffmpeg dependency)
+- Backend: `plt.switch_backend("Agg")`
 
 ## Documentation Rules
 
