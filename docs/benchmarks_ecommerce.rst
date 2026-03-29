@@ -1,166 +1,140 @@
 Case Study 2: Predicting Customer Spend and Engagement
 =======================================================
 
-Across 11 datasets and 27 prediction targets, revealed preference features add between zero and two percent marginal lift on average. Standard spend and engagement baselines already capture most of the signal.
+Across 11 datasets and 32 prediction targets, revealed preference features add near-zero marginal lift on average. Standard spend and engagement baselines already capture most of the signal. The one consistent exception is churn prediction on e-commerce data, where RP features detect declining purchase efficiency before spending drops.
 
 Setup
 -----
 
-We test whether choice-consistency features improve predictions of spend, churn, engagement, and loyalty at the individual user level. Each user's purchase or click history is split in time. The early portion produces features. The later portion defines the prediction target. Two models are trained on a holdout sample and evaluated out of sample.
+We test whether choice-consistency features improve predictions of spend, churn, engagement, and loyalty at the individual user level. Each user's purchase or click history is split in time. The early portion produces features. The later portion defines the prediction target. A regularized LightGBM and an L1-penalized logistic regression are each trained on a holdout sample and evaluated out of sample. All runs use SEED 42.
 
 .. _eco-results:
 
 Results
 -------
 
+The table shows the percentage lift from adding 42 revealed preference features on top of a 13-feature baseline. Positive means RP helped. Negative means RP hurt. Near zero means no difference.
+
 .. list-table::
    :header-rows: 1
-   :widths: 14 7 7 16 8 8 7 7 7
+   :widths: 12 16 7 10 10 10 10
 
    * - Dataset
-     - Type
-     - N
      - Target
-     - Base
-     - With RP
-     - Lift
-     - Lift %
-     - Engine
+     - N
+     - LGBM AUC-ROC
+     - LGBM AUC-PR
+     - Lasso AUC-ROC
+     - Lasso AUC-PR
    * - Dunnhumby
-     - Budget
+     - Spend Drop
      - 2,222
-     - Spend Drop
-     - 0.164
-     - 0.130
-     - 0.034 lower
-     - 20.5 lower
-     - 6m 6s
+     - +1.6%
+     - -20.5%
+     - -2.1%
+     - -2.6%
    * - Dunnhumby
-     -
-     -
      - High Spender
-     - 0.932
-     - 0.929
-     - 0.002 lower
-     - 0.2 lower
-     -
+     - 2,222
+     - -0.1%
+     - -0.2%
+     - -0.1%
+     - -0.1%
    * - Dunnhumby
-     -
-     -
      - Future LTV (R²)
-     - 0.582
-     - 0.587
-     - 0.005 higher
-     - 0.9 higher
+     - 2,222
+     - +0.9%
+     -
+     - -0.0%
      -
    * - Amazon
-     - Budget
-     - 4,668
      - Spend Drop
-     - 0.196
-     - 0.198
-     - 0.002 higher
-     - 1.0 higher
-     - 12m
+     - 4,694
+     - **+0.6%**
+     - **+1.0%**
+     - **+1.1%**
+     - **+2.5%**
    * - Amazon
-     -
-     -
      - High Spender
-     - 0.900
-     - 0.902
-     - 0.002 higher
-     - 0.2 higher
-     -
+     - 4,694
+     - -0.1%
+     - +0.2%
+     - +0.0%
+     - +0.0%
    * - H&M
-     - Budget
+     - High Spender
      - 46,757
-     - Spend Change (R²)
-     - 0.299
-     - 0.302
-     - 0.003 higher
-     - 1.0 higher
-     - 16m
+     - -0.2%
+     - -0.1%
+     - +0.3%
+     - +0.2%
    * - H&M
+     - Spend Change (R²)
+     - 46,757
+     - +0.5%
      -
-     -
-     - High Spender
-     - 0.673
-     - 0.671
-     - 0.002 lower
-     - 0.3 lower
+     - +0.0%
      -
    * - Instacart
-     - Menu
-     - 50,000
      - Low Loyalty
-     - 0.935
-     - 0.937
-     - 0.001 higher
-     - 0.1 higher
-     - 8m
+     - 50,000
+     - +0.1%
+     - +0.1%
+     - +0.1%
+     - +0.2%
    * - REES46
-     - Menu
-     - 50,000
      - Low Loyalty
-     - 0.670
-     - 0.674
-     - 0.004 higher
-     - 0.5 higher
-     - 8m
+     - 8,832
+     - -0.0%
+     - **+0.5%**
+     - **+0.5%**
+     - **+0.9%**
    * - Taobao
-     - Menu
-     - 50,000
      - Engagement
-     - 0.822
-     - 0.822
-     - no change
-     - no change
-     - 3m
+     - 15,806
+     - -0.0%
+     - -0.0%
+     - -0.0%
+     - -0.2%
    * - Taobao BW
-     - Menu
-     - 29,519
-     - Low Loyalty
-     - 0.715
-     - 0.822
-     - 0.107 higher
-     - 15.0 higher
-     - 0.1s
+     - High Entropy
+     - 590
+     - -0.1%
+     - +2.0%
+     - +6.5%
+     - +5.0%
    * - Tenrec
-     - Menu
-     - 50,000
      - Engagement
-     - 0.982
-     - 0.982
-     - no change
-     - no change
-     - 15m
+     - 50,000
+     - -0.0%
+     - -0.0%
+     - -0.0%
+     - -0.0%
    * - MIND
-     - Menu
-     - 5,000
      - High CTR
-     - 0.529
-     - 0.518
-     - 0.011 lower
-     - 2.1 lower
-     - 4m
+     - 5,091
+     - -1.5%
+     - -2.1%
+     - -0.8%
+     - -1.0%
    * - FINN
-     - Menu
-     - 1,869
      - Low Loyalty
-     - 0.772
-     - 0.773
-     - 0.001 higher
-     - 0.1 higher
-     - 13m
+     - 1,869
+     - +0.0%
+     - +0.1%
+     - -0.0%
+     - -0.2%
 
-All values are out-of-sample AUC-PR. One target per dataset is shown. Full results are in ``output/results.json``.
+All values are percentage lift from adding RP features to the baseline. Bold marks targets where all four columns agree on the direction. One representative target per dataset is shown. Full results for all 32 targets are in ``output/results.json`` and ``output/lasso_results.json``.
 
 Findings
 --------
 
-On most targets the lift from adding revealed preference features is within one percent in either direction. The mean lift across all 27 targets is near zero. One outlier is Taobao Buy Window Low Loyalty at 15 percent higher, though this result comes from a small test set of 118 users and should be interpreted with caution.
+Amazon Spend Drop is the one target where both models and both metrics agree that revealed preference features help. The lift ranges from 0.6 to 2.5 percent depending on the model and metric. On this target, per-observation budget efficiency captures declining rationality before spending actually drops.
 
-The model finds revealed preference features informative. Three of the top ten features by importance measure choice consistency rather than volume or frequency. But this importance does not translate into better predictions because the baseline already covers similar ground through simpler measures.
+REES46 Low Loyalty shows a smaller but consistent positive signal across three of four columns. On this target, choice entropy and preference graph structure detect users whose purchasing is becoming more dispersed.
+
+Everywhere else the lift is within plus or minus one percent. The mean lift across all 32 targets is near zero. Revealed preference features are informative to the model but do not improve predictions when strong baselines are present.
 
 .. _eco-features:
 
@@ -306,7 +280,7 @@ Appendix: Dataset Summary
      - Grocery
    * - REES46
      - Menu
-     - 50,000
+     - 8,832
      - 14,922
      - 7
      - 24
@@ -316,7 +290,7 @@ Appendix: Dataset Summary
      - E-commerce
    * - Taobao
      - Menu
-     - 50,000
+     - 15,806
      - 11,061
      - 5
      - 30
@@ -326,7 +300,7 @@ Appendix: Dataset Summary
      - E-commerce
    * - Taobao BW
      - Menu
-     - 29,519
+     - 590
      - 2,593
      - 4
      - 25
@@ -356,7 +330,7 @@ Appendix: Dataset Summary
      - Video
    * - MIND
      - Menu
-     - 5,000
+     - 5,091
      - 855
      - 4
      - 86
@@ -366,7 +340,7 @@ Appendix: Dataset Summary
      - News
    * - FINN
      - Menu
-     - 1,869
+     - 46,858
      - 15,850
      - 9
      - 57
