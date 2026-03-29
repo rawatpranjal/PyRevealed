@@ -295,6 +295,9 @@ def load_and_prepare(
     active_time = np.array(targets["active_time"]).astype(float)
     median_latency = np.array(targets["median_latency"]).astype(float)
 
+    from case_studies.benchmarks.core.eda import compute_menu_eda
+    load_and_prepare.eda = compute_menu_eda(train_logs)
+
     X_base = extract_menu_baseline(train_logs)
 
     tracemalloc.start()

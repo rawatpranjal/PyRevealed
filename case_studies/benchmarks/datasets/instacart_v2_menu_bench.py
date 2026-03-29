@@ -180,6 +180,9 @@ def load_and_prepare(data_dir=None, max_users: int = 50_000):
         print("  Too few users - skipping")
         return None, None, {}, user_ids
 
+    from case_studies.benchmarks.core.eda import compute_menu_eda
+    load_and_prepare.eda = compute_menu_eda(train_logs)
+
     # Feature extraction
     print(f"  Extracting baseline features...")
     X_base = extract_menu_baseline(train_logs)
