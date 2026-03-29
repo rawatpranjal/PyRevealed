@@ -2,9 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
--- when you add text add full sentecnes and in 2-3 lines. do not leave stubs. 
--- Pelase write clearly, what did you run what did yo find. no shorthand.
--- please write heavy code comments in the code as you refine your context and -- imporve your understanding with sources (form papers in the repo).
+## Writing Rules
+
+Write in complete sentences. Do not use em dashes, colons, semicolons, plus signs, equals signs, or brackets in prose. Do not write lists or bullet points in documentation prose. Every paragraph should read as flowing English. Do not overload sentences with multiple ideas. Say one thing per sentence.
+
+Do not repeat what a table already shows. Prose should interpret and explain, not describe or restate. If something is not important enough to call out specifically, cut it. Do not add hedging language or qualifications unless they change the meaning.
+
+Do not use jargon in user-facing documentation. Technical terms belong in code comments and appendices. The case study pages are for practitioners, not developers.
+
+When reporting results, write the number into the sentence naturally. Do not use shorthand like "+1.6%" or "r=0.77" in prose. Write "the lift is 1.6 percent" or "the correlation is 0.77".
+
+Write heavy code comments in the code itself as you refine your understanding, with sources from papers in the repo.
 
 ## Paper References
 
