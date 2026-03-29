@@ -8,6 +8,16 @@ Setup
 
 We test whether choice-consistency features improve predictions of spend, churn, engagement, and loyalty at the individual user level. Each user's purchase or click history is split in time. The early portion produces features. The later portion defines the prediction target. A regularized LightGBM and an L1-penalized logistic regression are each trained on a holdout sample and evaluated out of sample. All runs use SEED 42.
 
+Features
+^^^^^^^^
+
+The baseline consists of 13 features that capture how much a user spends, how often they buy, and how concentrated their purchases are. These include total spend, number of observations, mean basket size, spend trend, category concentration, and recency. The revealed preference features consist of 42 measures that capture how consistently a user makes decisions. These include rationality scores such as CCEI and MPI, graph-structural measures such as transitivity and preference density, choice diversity measures such as entropy and reversal rate, and utility-recovery measures such as Afriat utility dispersion and efficiency trajectories.
+
+Targets
+^^^^^^^
+
+Each dataset produces one or more prediction targets from the held-out future window. Spend Drop flags users whose average spending fell by more than half. High Spender identifies users in the top third of total expenditure. Future LTV and Spend Change predict continuous spend levels. High Engagement identifies the most active users by session count. Low Loyalty flags users whose choices became more dispersed over time. High CTR measures effective click-through rate on news impressions. All classification targets use top-tercile thresholds computed on the training set to prevent leakage.
+
 .. _eco-results:
 
 Results
