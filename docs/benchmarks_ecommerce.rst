@@ -231,7 +231,7 @@ All results are deterministic. Per-dataset JSON files are saved to ``case_studie
 
 .. _eco-appendix:
 
-Appendix: Dataset Summary
+Dataset Summary
 --------------------------
 
 .. list-table::
@@ -361,12 +361,12 @@ Appendix: Dataset Summary
 
 Budget datasets have rich histories with 15 to 31 observations per user and repeat rates between 28 and 73 percent. Menu datasets are thinner with 4 to 9 observations and near-zero repeat rates on most platforms. Revealed preference features work best where users make repeated choices from overlapping sets.
 
-Appendix: Feature Correlation
+Feature Correlation
 -------------------------------
 
 Revealed preference features are largely orthogonal to baseline features with a median cross-correlation of 0.12. The utility-recovery features are internally redundant with pairwise correlations above 0.95. The genuinely independent revealed preference features are choice entropy, menu transitivity, violation density, consistency ratio, and per-observation efficiency.
 
-Appendix: Null Rates
+Null Rates
 ---------------------
 
 50 of 59 revealed preference features are always populated on budget data. 25 of 27 are always populated on menu data. The exceptions are utility-recovery features that require a minimum number of intersecting choices. All missing values are imputed with training-set medians.
