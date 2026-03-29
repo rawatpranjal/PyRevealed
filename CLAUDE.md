@@ -67,6 +67,14 @@ from these local files rather than paraphrasing from memory. Key papers per modu
 - Writer: `"pillow"` (no ffmpeg dependency)
 - Backend: `plt.switch_backend("Agg")`
 
+**Anti-flicker rules:**
+- A GIF should communicate ONE idea. If you need text to explain what's happening, the visual is doing too much.
+- Never change text every frame — the eye can't read it. Text that changes must hold for at least 2 seconds (8 frames at 250ms).
+- Prefer persistent visual elements (edges appearing, colours changing) over swapping text blocks. Text should be static labels, not narration.
+- If an algorithm has multiple phases, show each phase as a slow visual progression, not as a sequence of text slides. Let the graph tell the story.
+- Maximum one line of status text at the bottom. No multi-line annotations, no text bubbles that appear and disappear.
+- When in doubt, remove the text entirely and rely on the visual.
+
 ## Documentation Rules
 
 - **RTD nav tab order:** Loading Data, Budgets, Menus, Case Studies, Algorithms, API, References. API/References are intentionally pushed right so they overflow into "More" on narrow viewports. Case Studies wraps LLM Consistency + E-commerce Predictive + Performance.
@@ -80,6 +88,10 @@ from these local files rather than paraphrasing from memory. Key papers per modu
 ## Data Processing
 
 Use **Polars** (not pandas) for EDA and data transformation. Polars is faster, safer (immutable by default), and provides explicit APIs for common operations.
+
+## Benchmark Validation: RP Features in Predictive Tasks
+
+The case studies validate that revealed preference (RP) features add predictive signal in simple ML models. The standard pipeline is: (1) compute user-level RP features (GARP, CCEI, MPI, HM, etc.) from each user's full choice/budget history; (2) use RP features as columns in a feature matrix alongside baseline features (counts, means, temporal stats); (3) fit simple models (logistic regression, gradient boosting) to predict user-level targets (spend changes, engagement, churn, novelty, etc.); (4) measure lift — does RP reduce test error vs. baselines only? Dataset fitness is determined by choice structure alone; target tasks are secondary. See `case_studies/benchmarks/datasets_issues.md` for which datasets are clean (Dunnhumby, Open E-Commerce, H&M, FINN.no) vs. use-with-caveats (Taobao, REES46, RetailRocket, etc.) vs. exclude (KuaiRec, Yoochoose).
 
 ## Build & Test Commands
 
