@@ -44,30 +44,35 @@ PrefGraph handles two types of choice data: :doc:`Budgets <budget/index>` (price
 
 Load data from Polars, Pandas, Parquet, or raw NumPy arrays. See :doc:`quickstart` for all ingestion methods.
 
-**Budget example** --- score 100 synthetic consumers:
+**Budget example** --- score 5,000 synthetic consumers in under 5 seconds:
 
 .. code-block:: python
 
    from prefgraph.datasets import load_demo
-   from prefgraph.engine import Engine
+   from prefgraph.engine import Engine, results_to_dataframe
 
-   users = load_demo()  # 100 synthetic consumers, no download
+   users = load_demo(n_users=5000)
    engine = Engine(metrics=["garp", "ccei", "mpi", "hm"])
    results = engine.analyze_arrays(users)
-   for r in results[:3]:
-       print(r)
+   df = results_to_dataframe(results)
+   print(df[["is_garp", "n_violations", "ccei", "mpi", "hm_consistent", "hm_total"]].head())
 
 .. code-block:: text
 
-   EngineResult: [+] GARP-consistent  ccei=1.0000  hm=15/15  (307us)
-   EngineResult: [-] 2 violations  ccei=0.9401  mpi=0.0801  hm=14/15  (53090us)
-   EngineResult: [+] GARP-consistent  ccei=1.0000  hm=15/15  (212us)
+   Scored 5,000 users in 4.7s
+
+      is_garp  n_violations   ccei    mpi  hm_consistent  hm_total
+   0     True             0  1.000  0.000             15        15
+   1     True             0  1.000  0.000             15        15
+   2    False             2  0.969  0.134             14        15
+   3    False             2  0.931  0.067             14        15
+   4    False             2  0.998  0.022             14        15
 
 **Menu example** --- check consistency of 3 users picking from small menus:
 
 .. code-block:: python
 
-   from prefgraph.engine import Engine
+   from prefgraph.engine import Engine, results_to_dataframe
 
    menus_data = [
        ([[0,1], [1,2], [0,2], [0,1,2]], [0, 1, 0, 0], 3),  # consistent
@@ -76,14 +81,15 @@ Load data from Polars, Pandas, Parquet, or raw NumPy arrays. See :doc:`quickstar
    ]
    engine = Engine(metrics=["hm"])
    results = engine.analyze_menus(menus_data)
-   for r in results:
-       print(r)
+   df = results_to_dataframe(results)
+   print(df[["is_sarp", "n_sarp_violations", "hm_consistent", "hm_total"]])
 
 .. code-block:: text
 
-   MenuResult: [+] SARP-consistent  hm=3/3  (12us)
-   MenuResult: [-] 3 SARP violations  hm=2/3  (7us)
-   MenuResult: [-] 6 SARP violations  hm=2/4  (7us)
+      is_sarp  n_sarp_violations  hm_consistent  hm_total
+   0     True                  0              3         3
+   1    False                  3              2         3
+   2    False                  6              2         4
 
 Detecting Inconsistency in LLMs
 ---------------------------------
