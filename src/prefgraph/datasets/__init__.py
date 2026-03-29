@@ -70,6 +70,12 @@ def load_mind(*args, **kwargs):
     return _fn(*args, **kwargs)
 
 
+def load_finn_slates(*args, **kwargs):
+    """Lazy wrapper - defers numpy import until called."""
+    from prefgraph.datasets._finn_slates import load_finn_slates as _fn
+    return _fn(*args, **kwargs)
+
+
 def list_datasets() -> list[dict[str, str]]:
     """List available datasets with descriptions.
 
@@ -212,5 +218,6 @@ __all__ = [
     "load_tenrec",
     "load_kuairec",
     "load_mind",
+    "load_finn_slates",
     "list_datasets",
 ]

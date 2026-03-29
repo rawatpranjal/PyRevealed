@@ -51,6 +51,7 @@ AVAILABLE_DATASETS = {
     "yoochoose": "case_studies.benchmarks.datasets.yoochoose_bench",
     "kuairec": "case_studies.benchmarks.datasets.kuairec_bench",
     "mind": "case_studies.benchmarks.datasets.mind_bench",
+    "finn_slates": "case_studies.benchmarks.datasets.finn_slates_bench",
 }
 
 # Map runner name -> display name used in BenchmarkResult.dataset field.
@@ -68,6 +69,7 @@ DATASET_DISPLAY_NAMES = {
     "yoochoose": "Yoochoose",
     "kuairec": "KuaiRec",
     "mind": "MIND",
+    "finn_slates": "FINN.no Slates",
 }
 
 
@@ -91,7 +93,7 @@ def run_dataset(
     elif name == "open_ecommerce":
         if max_users:
             kwargs["n_users"] = max_users
-    elif name in ("instacart_v2_menu", "rees46", "hm", "taobao", "retailrocket", "tenrec", "yoochoose", "mind"):
+    elif name in ("instacart_v2_menu", "rees46", "hm", "taobao", "retailrocket", "tenrec", "yoochoose", "mind", "finn_slates"):
         kwargs["max_users"] = max_users or 50000
     elif name == "kuairec":
         # KuaiRec has only 1411 users; max_users=None means all users

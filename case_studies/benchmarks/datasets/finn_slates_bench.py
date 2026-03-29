@@ -1,7 +1,11 @@
-"""RetailRocket eCommerce benchmark: purchase conversion, preference drift.
+"""FINN.no Recsys Slates benchmark: engagement, loyalty, and novelty prediction.
 
-Source: https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset
-License: CC0 (Public Domain)
+Observed-slate dataset from Norway's largest classifieds marketplace.
+Unlike session-reconstructed menus (Taobao, REES46), the choice set here is
+directly logged by the platform — the strongest WARP/SARP evidence.
+
+Source: Eide et al. (2021). RecSys 2021.
+Dataset: https://github.com/finn-no/recsys_slates_dataset
 """
 
 from __future__ import annotations
@@ -18,7 +22,7 @@ from case_studies.benchmarks.core.features import extract_menu_baseline, extract
 from case_studies.benchmarks.core.evaluation import run_three_way, BenchmarkResult
 
 
-DATASET_NAME = "RetailRocket"
+DATASET_NAME = "FINN.no Slates"
 
 
 def _split_menu_log(log: MenuChoiceLog, fraction: float):
@@ -39,19 +43,19 @@ def _split_menu_log(log: MenuChoiceLog, fraction: float):
     return _remap(log.menus[:split], log.choices[:split]), _remap(log.menus[split:], log.choices[split:])
 
 
-def load_and_prepare(data_dir=None, max_users=50000):
-    """Load RetailRocket and prepare train/target splits.
+def load_and_prepare(data_dir=None, max_users=100_000):
+    """Load FINN.no Slates and prepare train/target splits.
 
     Targets (computed on test window only):
       - High Engagement: top tercile of test session count
       - Low Loyalty: top tercile of choice dispersion (1 - modal concentration)
       - High Novelty: top tercile of novel choice fraction vs train
     """
-    from prefgraph.datasets import load_retailrocket
+    from prefgraph.datasets._finn_slates import load_finn_slates
 
     print(f"\n[{DATASET_NAME}] Loading dataset...")
     _t_load = _time.perf_counter()
-    user_logs = load_retailrocket(
+    user_logs = load_finn_slates(
         data_dir=data_dir,
         min_sessions=MIN_OBS_MENU,
         max_users=max_users,
@@ -145,8 +149,8 @@ def load_and_prepare(data_dir=None, max_users=50000):
     return X_rp, X_base, targets_dict, user_ids
 
 
-def run_benchmark(data_dir=None, max_users=50000) -> list[BenchmarkResult]:
-    """Run all RetailRocket benchmarks with multiple targets."""
+def run_benchmark(data_dir=None, max_users=100_000) -> list[BenchmarkResult]:
+    """Run all FINN.no Slates benchmarks with multiple targets."""
     X_rp, X_base, targets_dict, user_ids = load_and_prepare(data_dir, max_users)
 
     if X_rp is None:
