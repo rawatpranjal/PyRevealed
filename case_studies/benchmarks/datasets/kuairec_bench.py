@@ -5,12 +5,9 @@ KuaiRec (Gao et al., CIKM 2022) is a near-100% dense interaction matrix:
 watched on a given day form the menu, and the video with the highest
 watch_ratio (most rewatched) is the revealed choice.
 
-Targets (computed on the test window: last 30% of days per user):
-  - High Rewatcher:  fraction of interactions with watch_ratio > 1.0, top tercile.
-                     Rewatching signals strong preference — tests whether RP
-                     consistency distinguishes power users who rewatch videos.
-  - High Engagement: mean watch_ratio across all test interactions, top tercile.
-                     Overall depth of engagement beyond just rewatch behavior.
+Targets (computed on the test window: last 20% of days per user):
+  - High Engagement: top tercile of test session count (many active days).
+  - High Novelty:    top tercile of novel choices fraction (new videos vs train).
 """
 
 from __future__ import annotations
@@ -98,8 +95,8 @@ def load_and_prepare(data_dir=None, max_users=None):
     user_ids: list[str] = []
 
     # Raw target primitives — accumulated over the test window
-    raw_rewatcher: list[float] = []    # session count in test window (proxy for rewatch)
-    raw_engagement: list[float] = []   # mean menu size in test window (depth of browsing)
+    raw_engagement: list[float] = []   # test session count (depth of usage)
+    raw_novelty: list[float] = []      # fraction of test choices new vs train
 
     for uid, log in user_logs.items():
         T = len(log.choices)
@@ -114,19 +111,20 @@ def load_and_prepare(data_dir=None, max_users=None):
         train_logs[uid] = train_log
         user_ids.append(uid)
 
-        # Target 1: High Rewatcher
+        # Target 1: High Engagement
         # Number of qualifying test sessions (days with ≥2 videos watched).
-        # Users with more daily sessions tend to be rewatchers (dense dataset).
-        raw_rewatcher.append(float(len(test_log.choices)))
+        raw_engagement.append(float(len(test_log.choices)))
 
-        # Target 2: High Engagement
-        # Mean menu size in test window — measures how many videos the user
-        # watches per day. Higher = more engaged viewer.
-        if len(test_log.menus) > 0:
-            mean_menu = float(np.mean([len(m) for m in test_log.menus]))
+        # Target 2: High Novelty
+        # Fraction of unique test choices not seen in train choices.
+        # KuaiRec's dense coverage makes this a clean signal:
+        # novelty-seekers explore new videos while loyal users rewatch known ones.
+        train_items = set(train_log.choices)
+        test_items = set(test_log.choices)
+        if len(test_items) > 0:
+            raw_novelty.append(len(test_items - train_items) / len(test_items))
         else:
-            mean_menu = 0.0
-        raw_engagement.append(mean_menu)
+            raw_novelty.append(0.0)
 
     print(f"  Users: {len(user_ids)}")
 
@@ -151,21 +149,17 @@ def load_and_prepare(data_dir=None, max_users=None):
           f"Feature extraction: {load_and_prepare.feature_time_s:.1f}s  "
           f"Peak memory: {load_and_prepare.peak_memory_mb:.0f} MB")
 
-    rewatcher = np.array(raw_rewatcher)
     engagement = np.array(raw_engagement)
+    novelty = np.array(raw_novelty)
 
-    # Convert to 4-tuple targets: (y_binary, task_type, y_continuous, threshold_pctl)
-    # Top tercile = top 33.3% → threshold at 66.67th percentile
     targets_dict = {
-        # High Rewatcher: top tercile of test-window session count
-        "High Rewatcher": (
-            (rewatcher > np.percentile(rewatcher, 66.67)).astype(int),
-            "classification", rewatcher, 66.67,
-        ),
-        # High Engagement: top tercile of mean daily menu size in test window
         "High Engagement": (
             (engagement > np.percentile(engagement, 66.67)).astype(int),
             "classification", engagement, 66.67,
+        ),
+        "High Novelty": (
+            (novelty > np.percentile(novelty, 66.67)).astype(int),
+            "classification", novelty, 66.67,
         ),
     }
 
