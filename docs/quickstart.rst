@@ -1,10 +1,55 @@
 Loading Data
 ============
 
-Load your own data
-------------------
+Synthetic data (Rust-parallel generators)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use Polars for I/O and transformation, then hand off NumPy arrays or menu lists to the Engine.
+PrefGraph ships four Rayon-parallel generators that produce data in the exact format the Engine expects. Each accepts a ``rationality`` parameter (0.0 = random, 1.0 = utility-maximizing) and a ``seed`` for reproducibility. Generation runs entirely in Rust with the GIL released, so 100K users take roughly one second.
+
+.. code-block:: python
+
+   from prefgraph import generate_random_budgets, generate_random_menus
+   from prefgraph.engine import Engine, results_to_dataframe
+
+   # Budget data: 100K users, 15 obs x 5 goods, Cobb-Douglas demand
+   budget_data = generate_random_budgets(
+       n_users=100_000, n_obs=15, n_goods=5,
+       functional_form="cobb_douglas",   # also "ces" or "leontief"
+       rationality=0.7, noise_scale=0.3, seed=42,
+   )
+   engine = Engine(metrics=["garp", "ccei", "hm"])
+   df = results_to_dataframe(engine.analyze_arrays(budget_data))
+   print(df[["is_garp", "ccei", "hm_consistent", "hm_total"]].head())
+
+   # Menu data: 100K users, 10 obs, variable menu sizes 2-5
+   menu_data = generate_random_menus(
+       n_users=100_000, n_obs=10, n_items=5,
+       menu_size=(2, 5), choice_model="logit",  # also "fixed_ranking" or "uniform"
+       temperature=1.0, rationality=0.7, seed=42,
+   )
+   engine2 = Engine(metrics=["hm"])
+   df2 = results_to_dataframe(engine2.analyze_menus(menu_data))
+   print(df2[["is_sarp", "n_sarp_violations", "hm_consistent", "hm_total"]].head())
+
+Production and intertemporal generators follow the same pattern:
+
+.. code-block:: python
+
+   from prefgraph import generate_random_production, generate_random_intertemporal
+
+   # Production: 10K firms, 3 inputs + 2 outputs
+   prod_data = generate_random_production(
+       n_users=10_000, n_obs=15, n_inputs=3, n_outputs=2,
+       functional_form="cobb_douglas", rationality=0.7, seed=42,
+   )
+
+   # Intertemporal: 10K agents, 5 time periods, discount factor 0.8-0.99
+   inter_data = generate_random_intertemporal(
+       n_users=10_000, n_obs=10, n_periods=5,
+       discount_factor=(0.8, 0.99), rationality=0.7, seed=42,
+   )
+
+Both ``n_obs`` and ``menu_size`` accept an ``int`` for fixed counts or a ``(min, max)`` tuple for variable counts per user. A pure-NumPy fallback runs automatically if the Rust extension is unavailable.
 
 Budget data from Parquet (wide format)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

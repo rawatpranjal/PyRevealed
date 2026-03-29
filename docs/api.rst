@@ -340,6 +340,17 @@ ProductionLog
 
 .. autofunction:: prefgraph.compute_technical_efficiency
 
+Data Generators
+---------------
+
+.. autofunction:: prefgraph.datasets.generate_random_budgets
+
+.. autofunction:: prefgraph.datasets.generate_random_menus
+
+.. autofunction:: prefgraph.datasets.generate_random_production
+
+.. autofunction:: prefgraph.datasets.generate_random_intertemporal
+
 Dataset Loaders
 ---------------
 

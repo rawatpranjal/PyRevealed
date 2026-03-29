@@ -57,18 +57,13 @@ You can easily feed your data into PrefGraph using Polars DataFrames, Pandas, Pa
 
 .. code-block:: python
 
-   import numpy as np
+   from prefgraph import generate_random_menus
    from prefgraph.engine import Engine, results_to_dataframe
 
-   np.random.seed(42)
-   menus_data = []
-   for _ in range(100_000):
-       menus, choices = [], []
-       for __ in range(10):
-           menu = sorted(np.random.choice(5, np.random.randint(2, 6), replace=False).tolist())
-           menus.append(menu)
-           choices.append(menu[np.random.randint(len(menu))])
-       menus_data.append((menus, choices, 5))
+   menus_data = generate_random_menus(
+       n_users=100_000, n_obs=10, n_items=5,
+       menu_size=(2, 5), choice_model="logit", rationality=0.7, seed=42
+   )
 
    engine = Engine(metrics=["hm"])
    results = engine.analyze_menus(menus_data)
@@ -77,14 +72,14 @@ You can easily feed your data into PrefGraph using Polars DataFrames, Pandas, Pa
 
 .. code-block:: text
 
-   Scored 100,000 users in 1.6s (61,093 users/sec)
+   Generated + scored 100,000 users in 2.6s (38,895 users/sec)
 
       is_sarp  n_sarp_violations  hm_consistent  hm_total
-   0    False                 10              3         5
-   1    False                  6              3         5
-   2    False                 10              3         5
-   3    False                 10              3         5
-   4    False                 10              3         5
+   0    False                  6              3         5
+   1    False                  3              4         5
+   2    False                  6              3         5
+   3    False                  3              4         5
+   4    False                  6              3         5
 
 Case Study 1: Inconsistency in AI Agents
 --------------------------------------------------
