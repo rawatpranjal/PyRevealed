@@ -122,6 +122,9 @@ def load_and_prepare(data_dir=None, max_users=50000):
 
     print(f"  Users after filtering: {len(user_ids)}")
 
+    from case_studies.benchmarks.core.eda import compute_budget_eda
+    load_and_prepare.eda = compute_budget_eda(train_tuples, user_ids)
+
     if len(user_ids) < 30:
         return None, None, None, {}, user_ids
 

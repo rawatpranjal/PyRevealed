@@ -75,6 +75,9 @@ def load_and_prepare(data_dir=None, n_households=None):
 
     print(f"  Users: {len(user_ids)}")
 
+    from case_studies.benchmarks.core.eda import compute_budget_eda
+    load_and_prepare.eda = compute_budget_eda(train_tuples, user_ids)
+
     # Extract features
     print(f"  Extracting baseline features...")
     X_base = extract_budget_baseline(train_tuples, user_ids)
