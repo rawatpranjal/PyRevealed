@@ -35,7 +35,7 @@ EngineResult: [-] 3 violations  ccei=0.8472  mpi=0.0231  hm=12/15  (38us)
 EngineResult: [+] GARP-consistent  ccei=1.0000  hm=15/15  (35us)
 ```
 
-Every score is a feature. Use them for fraud detection, user segmentation, A/B testing, churn prediction, or personalization.
+Every score is a feature you can plug into downstream models. In our benchmarks across 11 e-commerce datasets, revealed preference features rank among the top ten by model importance but add near-zero marginal lift over well-constructed baselines. See the [case studies](https://prefgraph.readthedocs.io/en/latest/benchmarks_ecommerce.html) for details.
 
 ## Your Data
 

@@ -388,6 +388,17 @@ The three top-performing revealed preference features are only moderately correl
 
 In the Lasso model, baseline features have a median standardized coefficient about five times larger than revealed preference features. However, the top revealed preference features reach magnitudes comparable to major baseline features. Choice entropy reaches 3.0 on REES46 Low Loyalty, which is in the same range as session count at 5.4. The number of strongly connected components reaches 3.8 on Instacart. When the Lasso does select a revealed preference feature, it gives it meaningful weight.
 
+Limitations
+---------------------
+
+The validity of revealed preference features depends on how well the observed data approximates true choice sets. Budget datasets in this study use category-level aggregation with median prices across all users, not individual receipt prices. Menu datasets use inferred sessions defined by arbitrary inactivity gaps. If these proxies distort the actual choice environment, the resulting consistency scores may measure data artifacts rather than genuine behavioral patterns.
+
+Spend and frequency baselines capture most of the predictive signal in these tasks. Revealed preference features add measurable lift on only 1 of 32 targets. The three RP features that rank highly by importance are informative to the model but largely redundant with each other and with information the baseline already encodes through different channels.
+
+The 42 revealed preference features are heavily correlated. On budget data, 45 feature pairs exceed 0.80 absolute correlation and cluster into nine groups. The effective dimensionality is far lower than 42, and much of the feature set is redundant by construction.
+
+All results use a single model (regularized LightGBM) with one hyperparameter configuration under 5-fold cross-validation. A different model, tuning scheme, or evaluation metric could shift the picture. We have not tested whether RP features help in ensemble settings, in domains outside e-commerce, or on targets defined differently from ours.
+
 Null Rates
 ---------------------
 

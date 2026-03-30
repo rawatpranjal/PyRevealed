@@ -100,7 +100,9 @@ with 10 vignettes, 5 prompt frameworks, and 15 menus per vignette. The
 deterministic stage collected 3,750 calls at temperature 0; the stochastic stage
 sampled each menu 20 times at temperature 0.7, adding 75,000 calls — roughly
 78,750 API calls in total over 15 hours. We built preference graphs from these
-responses and tested for logical cycles. Full results: :doc:`budget/app_llm_benchmark`.
+responses and tested for logical cycles. All vignettes are synthetic and results
+come from a single model family, so these numbers are a diagnostic demo rather
+than a general benchmark. Full results: :doc:`budget/app_llm_benchmark`.
 
 .. list-table::
    :header-rows: 1
