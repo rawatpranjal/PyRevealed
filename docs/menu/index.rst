@@ -1,16 +1,14 @@
 Menus
 =====
 
-Menu-based analysis evaluates consistency when choices come from finite
-sets of alternatives without prices. Covers classical WARP/SARP,
-limited attention, random utility, and risk preferences.
-
 .. raw:: html
 
    <div style="margin: 2em 0; max-width: 600px; margin-left: auto; margin-right: auto; text-align: center;">
      <img src="../_static/menu_hero.gif" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Menu Choices">
      <p class="gif-caption" style="margin-top: 10px; font-size: 0.9em; color: #555;"><strong>Menu choices.</strong> HM counts how many choices to discard to restore consistency.</p>
    </div>
+
+Menu analysis tests whether choices from finite sets follow a stable ranking. There are no prices or budgets. The input is a sequence of menus paired with whichever option was picked from each one.
 
 .. list-table::
    :widths: 33 34 33
@@ -44,8 +42,6 @@ limited attention, random utility, and risk preferences.
      - ``RiskChoiceLog``
      - lotteries → choices (e.g., gamble A vs gamble B)
 
-Deterministic data feeds directly into ``Engine.analyze_menus()`` for batch Rust processing. Stochastic and Risk data use the per-user Functions API (``fit_luce_model``, ``compute_risk_profile``, etc.) because their inputs do not map to the simple tuple format the batch engine expects. The axioms and scores are identical across paths; only the entry point differs.
-
 .. code-block:: python
 
    from prefgraph import MenuChoiceLog, validate_menu_sarp, compute_menu_efficiency
@@ -72,6 +68,8 @@ Deterministic data feeds directly into ``Engine.analyze_menus()`` for batch Rust
 
    SARP consistent: True
    HM efficiency: 1.00
+
+Deterministic data feeds directly into ``Engine.analyze_menus()`` for batch Rust processing. Stochastic and risk data use the per-user Functions API because their inputs do not map to the tuple format the batch engine expects. The axioms and scores are identical across paths.
 
 Theory
 ------

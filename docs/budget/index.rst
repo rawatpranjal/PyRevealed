@@ -1,8 +1,6 @@
 Budgets
 =======
 
-**Input:** ``BehaviorLog`` - prices × quantities (continuous budget sets)
-
 .. raw:: html
 
    <div style="margin: 2em 0; max-width: 600px; margin-left: auto; margin-right: auto; text-align: center;">
@@ -10,10 +8,9 @@ Budgets
      <p class="gif-caption" style="margin-top: 10px; font-size: 0.9em; color: #555;"><strong>Budget choices.</strong> CCEI measures how much budgets must shrink to remove contradictions.</p>
    </div>
 
-Every purchase at observed prices adds directed edges to the agent's **observation graph** (nodes = shopping trips, edges = revealed preferences). Budget analysis checks whether this graph is acyclic (GARP), scores how close it is (CCEI, MPI), and recovers utility.
-The classical setting of Samuelson (1938), Afriat (1967), and Varian (1982).
+Budget analysis starts with a sequence of shopping trips. Each trip records the prices that were available and the quantities that were bought. From this, PrefGraph builds a directed graph where an edge from trip A to trip B means the bundle from B was affordable at A's prices but was not chosen.
 
-``Engine.analyze_arrays()`` scores thousands of users in one Rust-backed batch call, running GARP, CCEI, MPI, HM, HARP, VEI, and a utility feasibility check. The per-user Functions API adds everything the Engine does not yet batch: recovered utility vectors, welfare measurement (CV/EV), the Slutsky matrix, separability tests, and spatial preference recovery.
+GARP checks whether this graph contains preference cycles. CCEI measures how much budgets must shrink before the cycles disappear. MPI finds the costliest cycle. Houtman-Maks counts the fewest trips to drop to eliminate all cycles. Scores closer to 1 indicate behavior that is more consistent with utility maximization.
 
 .. code-block:: python
 
@@ -36,6 +33,8 @@ The classical setting of Samuelson (1938), Afriat (1967), and Varian (1982).
 
    GARP consistent: False
    CCEI: 0.8750
+
+``Engine.analyze_arrays()`` scores thousands of users in one Rust-backed batch call, running GARP, CCEI, MPI, HM, HARP, VEI, and a utility feasibility check. The per-user Functions API adds everything the Engine does not yet batch, including recovered utility vectors, welfare measurement, the Slutsky matrix, separability tests, and spatial preference recovery.
 
 Theory
 ------
