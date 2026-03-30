@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "prefgraph"
-version = "0.5.15"
+version = "0.5.16"
 description = "Revealed preference analysis - rationality scores, efficiency indices, and utility recovery. Rust engine, Python interface."
 readme = "README.md"
 license = {text = "MIT"}

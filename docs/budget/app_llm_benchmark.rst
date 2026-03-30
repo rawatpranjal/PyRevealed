@@ -1,6 +1,22 @@
 Detecting Inconsistency in AI Agents
 ======================================
 
+.. container:: sd-border-left-thick sd-pl-4 sd-text-muted sd-fs-6
+
+   *A customer has reported frequent service outages that impact their
+   ability to access critical features, significantly affecting their
+   business operations. They have already tried multiple troubleshooting
+   steps from the documentation but the issue persists.*
+
+   **Query.** Route this ticket to the best destination.
+
+   **Menu A.** create_bug_ticket  /  route_account_mgr
+
+   **Menu B.** create_bug_ticket  /  route_account_mgr  /  auto_reply_kb
+
+   Does adding a third option change the choice between the first two?
+   That is the question revealed preference theory answers.
+
 Do LLMs have stable action rankings, or does the ranking change when
 different alternatives are shown? We collected roughly 78,750 GPT-4o-mini
 API calls — 3,750 deterministic (temp=0) and 75,000 stochastic (temp=0.7,

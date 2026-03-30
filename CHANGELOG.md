@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.16] - 2026-03-30
+
+### Fixed
+- MCI (Minimum Cost Index) returned zero on obvious GARP violations due to a sign error and cycle-iteration bug.
+- StochasticChoiceLog now rejects zero-total menus and inconsistent explicit totals at construction time.
+
+### Changed
+- Docs: added concrete vignette example at the top of the LLM consistency case study.
+
 ## [0.5.15] - 2026-03-29
 
 ### Changed
