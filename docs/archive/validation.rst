@@ -125,7 +125,7 @@ The direct revealed preference matrices match exactly:
 Performance Comparison
 ----------------------
 
-PrefGraph is significantly faster due to Numba JIT compilation with parallel execution:
+PrefGraph is faster due to Numba JIT compilation with parallel execution:
 
 .. list-table:: GARP Performance (T observations, N=10 goods)
    :header-rows: 1

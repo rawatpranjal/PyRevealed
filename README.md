@@ -1,6 +1,6 @@
 # PrefGraph
 
-Rationality scores for every user, at scale. Rust engine, Python interface.
+Rationality scores for every user. Rust engine, Python interface.
 
 [![PyPI](https://img.shields.io/pypi/v/prefgraph)](https://pypi.org/project/prefgraph/)
 [![Documentation](https://readthedocs.org/projects/prefgraph/badge/?version=latest)](https://prefgraph.readthedocs.io/)

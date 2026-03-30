@@ -11,7 +11,7 @@ from these responses and checked for cycles.
 **TL;DR.** GPT-4o-mini operates with stable logical rankings for most tasks but
 struggles with context-dependent framing. Between 74% to 92% of scenarios display
 perfect logical consistency (SARP) at temperature 0. Decisions are
-highly stable in domains like **Alert Triage** (92% pass rate), where showing
+stable in domains like **Alert Triage** (92% pass rate), where showing
 or hiding intermediate routing options rarely causes it to contradict its core
 logic. In contrast, the **Jobs Task** is the weakest category (74% pass rate)
 with frequent violations of menu independence (IIA)—for
@@ -138,7 +138,7 @@ First, we measure simple deterministic consistency. Each cell shows the percenta
      - 90
      - 84
 
-Prompt engineering significantly impacts consistency. Structuring decisions with 
+Prompt engineering affects consistency. Structuring decisions with 
 rigid rules (Decision Tree) or directional bias (Conservative/Aggressive) 
 tends to out-perform unguided Minimal prompts across most operational domains.
 
@@ -183,7 +183,7 @@ tends to out-perform unguided Minimal prompts across most operational domains.
      - 80
      - 84
 
-Model consistency does not uniformly degrade on harder tasks. Paradoxically, 
+Model consistency does not uniformly degrade on harder tasks. In some cases,
 **Content Moderation Task** decisions are less consistent on ostensibly "Clear" cases
 (60%), while the **Jobs Task** struggles most on simplified "Binary" rulesets (67%).
 
@@ -261,7 +261,7 @@ Instead of testing single decisions, we ask the model 20 times per menu and conv
      - 63
 
 Stochastic robustness requires tailored instructional frameworks. Decision Tree paths 
-prove remarkably effective for Procurement, whereas **Jobs Task** pipelines align better with 
+are effective for Procurement, whereas **Jobs Task** pipelines align better with 
 Aggressive pacing.
 
 .. list-table:: RUM Pass Rate by Case Difficulty (%)
@@ -299,7 +299,7 @@ Aggressive pacing.
      - 100
      - 100
 
-Stochastic consistency testing reinforces the deterministic findings. Procurement paradoxically performs perfectly under Ambiguous and Adversarial constraints, while seemingly clear-cut **Content Moderation Task** fractures into inconsistent distributions. The **Jobs Task**, conversely, correctly performs best on Clear cases but degrades under complex scenarios. 
+Stochastic consistency testing reinforces the deterministic findings. Procurement reaches 100 percent under Ambiguous and Adversarial constraints, while seemingly clear-cut **Content Moderation Task** fractures into inconsistent distributions. The **Jobs Task**, conversely, correctly performs best on Clear cases but degrades under complex scenarios. 
 (*Results with asterisks are based on partial procurement stage2 coverage.*)
 
 .. _llm-patterns:
@@ -395,7 +395,7 @@ sampling temperature when the prompt emphasizes caution.
 
 Finally, stochastic sampling exhibits strongly peaked distributions. Only
 8 to 12 percent of menus produce mixed responses across 20 repetitions, meaning
-the language model stays highly confident in its ranking, even when it is
+the language model stays confident in its ranking, even when it is
 contradicting itself under different menu contexts. The inconsistency we see
 is structural rather than noise.
 

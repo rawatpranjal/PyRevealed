@@ -1,7 +1,7 @@
 Performance Benchmarks
 ======================
 
-PrefGraph uses a high-performance Rust engine (``rpt-core``) for large-scale longitudinal choice analysis. The design combines Rayon-based parallelism with SCC-optimized graph algorithms and HiGHS-backed linear programming to keep throughput high while bounding memory via streaming.
+PrefGraph uses a Rust engine (``rpt-core``) for large-scale longitudinal choice analysis. The design combines Rayon-based parallelism with SCC-optimized graph algorithms and HiGHS-backed linear programming to keep throughput high while bounding memory via streaming.
 
 .. raw:: html
 

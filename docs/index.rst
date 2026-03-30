@@ -173,7 +173,7 @@ Do RP features improve predictive models? We benchmark GARP, CCEI, MPI, HM, and 
 Performance
 -----------
 
-PrefGraph processes choices using a parallel Rust and Rayon backend paired with smart memory streaming. Because it streams the data sequentially, the memory footprint remains entirely flat. Both menus and budgets scale linearly on standard hardware. In practice, you can load and score 100,000 users end-to-end across five different metrics from a 110 MB Parquet file in under two minutes natively. File I/O adds less than 70 milliseconds of total overhead. You can view our extensive format and size comparisons on the :doc:`Performance Benchmarks <performance>` page.
+PrefGraph processes choices using a parallel Rust and Rayon backend with memory streaming. Because it streams the data sequentially, the memory footprint remains entirely flat. Both menus and budgets scale linearly on standard hardware. In practice, you can load and score 100,000 users end-to-end across five different metrics from a 110 MB Parquet file in under two minutes natively. File I/O adds less than 70 milliseconds of total overhead. You can view our extensive format and size comparisons on the :doc:`Performance Benchmarks <performance>` page.
 
 .. raw:: html
 
