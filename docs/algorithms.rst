@@ -268,7 +268,7 @@ perfect (e=1.0)." This provides much higher diagnostic resolution for identifyin
 *when* behavior became inconsistent.
 
 **Algorithm (Mononen, 2023)**:
-PrefGraph implements the state-of-the-art **Row Generation** algorithm.
+PrefGraph implements the **Row Generation** algorithm from Mononen (2023).
 1. Formulate the problem as a **Weighted Minimum Feedback Arc Set (WFAS)** - find the minimum-cost set of strict revealed preferences to remove so that no directed cycle remains.
 2. Initialize with all 2-cycles (WARP violations).
 3. Solve the MILP with the current constraint set.

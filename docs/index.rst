@@ -13,8 +13,8 @@ Preference Graphs
          When users make choices, we can represent their decisions as a <strong>preference graph</strong>.
          If someone chooses A over B, B over C, and then C over A, they have formed a cycle.
          These cycles could represent an inconsistency in their decision making.
-         PrefGraph runs high-speed graph algorithms (like Tarjan's SCC) to instantly detect these cycles.
-         By identifying and counting these violations, we can rigorously score a user's consistency.
+         PrefGraph uses graph algorithms (like Tarjan's SCC) to detect these cycles.
+         By identifying and counting these violations, we can score a user's consistency.
        </p>
      </div>
      <div style="flex: 1; min-width: 320px;">
@@ -170,8 +170,8 @@ Do RP features improve predictive models? We benchmark GARP, CCEI, MPI, HM, and 
      - +1.8%
      - 0.622
 
-Blazingly Fast
---------------
+Performance
+-----------
 
 PrefGraph processes choices using a parallel Rust and Rayon backend paired with smart memory streaming. Because it streams the data sequentially, the memory footprint remains entirely flat. Both menus and budgets scale linearly on standard hardware. In practice, you can load and score 100,000 users end-to-end across five different metrics from a 110 MB Parquet file in under two minutes natively. File I/O adds less than 70 milliseconds of total overhead. You can view our extensive format and size comparisons on the :doc:`Performance Benchmarks <performance>` page.
 
