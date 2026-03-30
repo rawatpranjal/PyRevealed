@@ -231,7 +231,7 @@ Weight Independent Set** on a conflict graph, or more directly, the **Minimum
 Directed Feedback Vertex Set (DFVS)** on the preference graph.
 
 **Algorithm**:
-1. **Greedy (Default)**: SCC‑aware heuristic per Heufer & Hjertstrand (2015). Decompose by SCC, then iteratively remove the node with highest violation participation; extremely fast and usually within 1–2% of optimal.
+1. **Greedy (Default)**: SCC‑aware heuristic per Heufer & Hjertstrand (2015). Decompose by SCC, then iteratively remove the node with highest violation participation; fast and usually within 1–2% of optimal.
 2. **Exact (ILP)**: Integer program with binary :math:`z_t \in \{0,1\}` indicating whether observation :math:`t` is kept; maximize :math:`\sum z_t` subject to GARP constraints.
 
 NP-hard in general, but practical for :math:`T \leq 500` using SCC decomposition.
@@ -263,7 +263,7 @@ to each observation such that the vector :math:`(e_t)_{t=1}^T` maximizes some
 objective (usually :math:`\sum e_t`) subject to GARP.
 
 **Intuition**: Unlike CCEI, which applies a single "penalty" to every observation,
-VEI allows us to say: "Trip #14 was extremely irrational (e=0.7), but Trip #1 was
+VEI allows us to say: "Trip #14 was irrational (e=0.7), but Trip #1 was
 perfect (e=1.0)." This provides much higher diagnostic resolution for identifying
 *when* behavior became inconsistent.
 

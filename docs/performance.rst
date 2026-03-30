@@ -207,7 +207,7 @@ The preceding benchmarks measure scoring throughput on in-memory arrays. Below w
 
    <div style="margin: 1.5em 0;"></div>
 
-File I/O is negligible—both CSV and Parquet reads complete in under 70 ms for 280 MB. The bottleneck is the Rust scoring engine, which dominates wall time for any metric suite beyond GARP-only. Parquet streaming via ``engine.analyze_parquet()`` avoids the Python transformation step entirely and delivers the best end-to-end throughput (~950 users/sec for the comprehensive suite). Parquet with zstd compression is 2.6× smaller than CSV.
+File I/O is negligible—both CSV and Parquet reads complete in under 70 ms for 280 MB. The bottleneck is the Rust scoring engine, which dominates wall time for any metric suite beyond GARP-only. Parquet streaming via ``engine.analyze_parquet()`` avoids the Python transformation step entirely and delivers the highest end-to-end throughput (~950 users/sec for the comprehensive suite). Parquet with zstd compression is 2.6× smaller than CSV.
 
 Complexity Summary
 ------------------

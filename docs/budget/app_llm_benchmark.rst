@@ -9,14 +9,14 @@ prompt frameworks, and 15 menus per vignette. We built preference graphs
 from these responses and checked for cycles.
 
 **TL;DR.** GPT-4o-mini operates with stable logical rankings for most tasks but
-struggles with context-dependent framing. Between 74% to 92% of scenarios display
+is less consistent with context-dependent framing. Between 74% to 92% of scenarios display
 perfect logical consistency (SARP) at temperature 0. Decisions are
 stable in domains like **Alert Triage** (92% pass rate), where showing
 or hiding intermediate routing options rarely causes it to contradict its core
 logic. In contrast, the **Jobs Task** is the weakest category (74% pass rate)
 with frequent violations of menu independence (IIA)—for
 example, the LLM might prefer "Interview" over "Reject" natively, but
-introducing "Waitlist" as a third option inexplicably flips its choice to
+introducing "Waitlist" as a third option flips its choice to
 "Reject". We test this logical consistency natively, evaluating probabilistic
 choice (temperature > 0) strictly through Random Utility Models (RUM) rather
 than mathematically flawed "majority votes".
@@ -206,7 +206,7 @@ Model consistency does not uniformly degrade on harder tasks. In some cases,
    * - **Procurement**
      - 8
 
-*IIA violation = adding a third option inexplicably reverses the preference between two existing options.*
+*IIA violation = adding a third option reverses the preference between two existing options.*
 
 The **Jobs Task** and **Content Moderation Task** categories exhibit the highest susceptibility to context-dependent preference reversals, indicating that the mere presence of decoy options can systematically manipulate the LLM's logical alignment.
 
@@ -299,7 +299,7 @@ Aggressive pacing.
      - 100
      - 100
 
-Stochastic consistency testing reinforces the deterministic findings. Procurement reaches 100 percent under Ambiguous and Adversarial constraints, while seemingly clear-cut **Content Moderation Task** fractures into inconsistent distributions. The **Jobs Task**, conversely, correctly performs best on Clear cases but degrades under complex scenarios. 
+Stochastic consistency testing reinforces the deterministic findings. Procurement reaches 100 percent under Ambiguous and Adversarial constraints, while seemingly clear-cut **Content Moderation Task** becomes inconsistent. The **Jobs Task**, conversely, correctly performs best on Clear cases but degrades under complex scenarios. 
 (*Results with asterisks are based on partial procurement stage2 coverage.*)
 
 .. _llm-patterns:

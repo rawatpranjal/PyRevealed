@@ -375,7 +375,7 @@ Dataset Summary
      - 100
      - Classifieds
 
-Budget datasets have rich histories with 15 to 31 observations per user and repeat rates between 28 and 73 percent. Menu datasets are thinner with 4 to 9 observations and near-zero repeat rates on most platforms. Revealed preference features work best where users make repeated choices from overlapping sets.
+Budget datasets have longer histories with 15 to 31 observations per user and repeat rates between 28 and 73 percent. Menu datasets are thinner with 4 to 9 observations and near-zero repeat rates on most platforms. Revealed preference features work best where users make repeated choices from overlapping sets.
 
 Feature Correlation
 -------------------------------
@@ -423,4 +423,4 @@ Dataset Descriptions
    * - MIND
      - News impression logs from 5,091 users on Microsoft News. Each impression is a directly logged slate of candidate articles. Only impressions with exactly one click are retained so the choice is unambiguous. The menu is the full set of articles shown. Targets are High Engagement, Low Loyalty, High Novelty, and High CTR.
    * - FINN
-     - Directly logged recommendation slates from 46,858 users on Norway's largest classifieds marketplace. Each slate of up to 25 items is recorded by the platform along with which item was clicked. This is the strongest menu dataset because the choice set is observed rather than reconstructed. Targets are High Engagement, Low Loyalty, and High Search Ratio.
+     - Directly logged recommendation slates from 46,858 users on Norway's largest classifieds marketplace. Each slate of up to 25 items is recorded by the platform along with which item was clicked. This is the cleanest menu dataset because the choice set is observed rather than reconstructed. Targets are High Engagement, Low Loyalty, and High Search Ratio.
