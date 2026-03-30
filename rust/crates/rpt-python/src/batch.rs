@@ -581,6 +581,11 @@ pub fn build_preference_graph<'py>(
 
     let mut graph = PreferenceGraph::new(t);
     graph.parse_budget(&p_flat, &q_flat, t, k, tolerance);
+    // Must use garp_check_with_closure (Varian 1982, O(T³) Floyd-Warshall)
+    // rather than garp_check (Talla Nobibon et al. 2015 JOTA, O(T²) SCC-only)
+    // because this function returns r_star to Python for violation cycle
+    // extraction. The O(T²) algorithm correctly determines is_consistent
+    // but does not populate r_star, leaving it all-zeros.
     let garp = garp_check_with_closure(&mut graph);
     graph.ensure_weights();
 

@@ -67,7 +67,10 @@ def check_garp(
     """
     start_time = time.perf_counter()
 
-    # Try Rust backend for the heavy computation (Floyd-Warshall + SCC)
+    # Rust backend uses garp_check_with_closure (Varian 1982, O(T³)
+    # Floyd-Warshall) because we need R* for violation cycle extraction.
+    # The O(T²) SCC-only test (Talla Nobibon et al. 2015 JOTA) correctly
+    # determines is_consistent but does not populate R*.
     from prefgraph._rust_backend import HAS_RUST, _rust_build_preference_graph
     if HAS_RUST:
         try:
