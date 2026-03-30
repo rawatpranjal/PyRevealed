@@ -140,6 +140,8 @@ All values are 5-fold cross-validated means from a regularized LightGBM. Standar
 Findings
 --------
 
+The standard deviations across folds are small relative to the means on most targets. This means the results are stable and not driven by a lucky train-test split. Earlier experiments with a single 80/20 holdout showed larger apparent lifts of 1 to 20 percent on some targets, but these did not replicate under cross-validation. The in-sample AUC on the holdout was 1.000 for most targets, confirming that the single-split estimates were inflated by overfitting.
+
 Amazon Spend Drop is the only target where revealed preference features produce a lift that exceeds the fold-to-fold variation. The AUC-ROC improves from 0.776 to 0.789 and the AUC-PR from 0.226 to 0.248. On this target, per-observation budget efficiency detects declining rationality before spending drops. REES46 Low Loyalty shows a smaller positive on AUC-PR from 0.709 to 0.715. Everything else is within the noise.
 
 Revealed preference features consistently rank among the most important features in the model. Menu transitivity appears in the top ten for 18 of 19 menu targets. Choice entropy appears in 17 of 19. These features describe how consistently a user makes decisions, which is different from what volume and frequency baselines measure.
@@ -223,6 +225,8 @@ Feature Importance
      - Base
      - 0.064
      - 11 of 13
+
+Feature importances are computed from the full-scale single-holdout LGBM run across all datasets. The rankings are consistent with the cross-validated results above because gain-based importance aggregates across all trees and is less sensitive to a single split than prediction accuracy.
 
 The three revealed preference features that appear in the top ten are:
 
