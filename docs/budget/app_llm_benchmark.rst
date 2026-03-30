@@ -8,18 +8,12 @@ API calls — 3,750 deterministic (temp=0) and 75,000 stochastic (temp=0.7,
 prompt frameworks, and 15 menus per vignette. We built preference graphs
 from these responses and checked for cycles.
 
-**TL;DR.** GPT-4o-mini operates with stable logical rankings for most tasks but
-is less consistent with context-dependent framing. Between 74% to 92% of scenarios display
-perfect logical consistency (SARP) at temperature 0. Decisions are
-stable in domains like **Alert Triage** (92% pass rate), where showing
-or hiding intermediate routing options rarely causes it to contradict its core
-logic. In contrast, the **Jobs Task** is the weakest category (74% pass rate)
-with frequent violations of menu independence (IIA)—for
-example, the LLM might prefer "Interview" over "Reject" natively, but
-introducing "Waitlist" as a third option flips its choice to
-"Reject". We test this logical consistency natively, evaluating probabilistic
-choice (temperature > 0) strictly through Random Utility Models (RUM) rather
-than mathematically flawed "majority votes".
+**TL;DR.** At temperature 0, between 74 and 92 percent of scenario
+configurations pass SARP. Alert Triage is the most consistent domain
+(92 percent). Jobs Task is the least (74 percent), with frequent IIA
+violations where adding a third option reverses the preference between
+two existing ones. At temperature 0.7, we evaluate consistency through
+Random Utility Models rather than majority votes.
 
 .. _llm-setup:
 

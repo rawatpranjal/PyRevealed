@@ -25,9 +25,9 @@ Preference Graphs
 Budgets & Menu Choices
 ----------------------
 
-PrefGraph supports two separate domains of choice data. You can evaluate **Budgets** (purchased quantities constrained by given prices, like retail shopping behavior) and **Menus** (discrete selections chosen from a set of available items, like search engine clicks or AI agent prompting). Furthermore, you can map out three specific behavioral patterns inside menus: strict deterministic limits (``MenuChoiceLog``), probabilistic stochastic distributions (``StochasticChoiceLog``), and risk-based lotteries (``RiskChoiceLog``).
+PrefGraph handles two types of choice data. **Budgets** are purchased quantities at given prices, like retail shopping. **Menus** are discrete selections from a set of available items, like search clicks or AI agent prompting. Menus come in three flavors: deterministic (``MenuChoiceLog``), stochastic (``StochasticChoiceLog``), and risk-based lotteries (``RiskChoiceLog``).
 
-You can easily feed your data into PrefGraph using Polars DataFrames, Pandas, Parquet files, or raw NumPy arrays. See the :doc:`Loading Data <quickstart>` guide for straightforward code examples spanning each loading technique.
+PrefGraph accepts Polars DataFrames, Pandas, Parquet files, or raw NumPy arrays. See the :doc:`Loading Data <quickstart>` guide for examples.
 
 **Budget-choice example**
 
@@ -125,8 +125,8 @@ responses and tested for logical cycles. Full results: :doc:`budget/app_llm_benc
      - 84
      - 61
 
-Case Study 2: Predicting Customer LTV
--------------------------------------------------
+Case Study 2: Predicting Customer Spend and Engagement
+-------------------------------------------------------
 
 Do RP features improve predictive models? We benchmark GARP, CCEI, MPI, HM, and VEI features against spend/engagement baselines. Full results: :doc:`benchmarks_ecommerce`.
 
@@ -173,7 +173,7 @@ Do RP features improve predictive models? We benchmark GARP, CCEI, MPI, HM, and 
 Performance
 -----------
 
-PrefGraph processes choices using a parallel Rust and Rayon backend with memory streaming. Because it streams the data sequentially, the memory footprint remains entirely flat. Both menus and budgets scale linearly on standard hardware. In practice, you can load and score 100,000 users end-to-end across five different metrics from a 110 MB Parquet file in under two minutes natively. File I/O adds less than 70 milliseconds of total overhead. You can view our extensive format and size comparisons on the :doc:`Performance Benchmarks <performance>` page.
+The Rust engine processes users in parallel via Rayon and streams them in fixed-size chunks, so memory stays flat regardless of population size. On a 10-core laptop, scoring 100,000 users across five metrics from a 110 MB Parquet file takes under two minutes. See the :doc:`Performance Benchmarks <performance>` page for details.
 
 .. raw:: html
 

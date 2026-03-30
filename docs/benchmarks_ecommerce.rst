@@ -1,7 +1,7 @@
 Predicting Customer Spend and Engagement
 =========================================
 
-**TL;DR.** We added 42 revealed preference features to standard spend and engagement baselines across 11 real-world datasets and 32 prediction targets. Under 5-fold cross-validation, the median predictive lift is zero. The one exception is Amazon churn prediction, where budget efficiency features improve AUC-PR from 0.226 to 0.248. Despite adding no predictive lift elsewhere, three revealed preference features rank in the top ten by model importance, meaning they capture real signal about decision-making consistency that baselines miss. Lasso coefficient directions suggest that users who explore broadly are more engaged but less loyal, users with contradictory preferences spend more, and users whose purchase efficiency is declining are about to churn.
+Across 11 datasets and 32 prediction targets, revealed preference features add near-zero marginal lift on average. Standard spend and engagement baselines already capture most of the signal.
 
 Setup
 -----
@@ -140,7 +140,7 @@ All values are 5-fold cross-validated means from a regularized LightGBM. Standar
 Findings
 --------
 
-Under 5-fold cross-validation the results are stable and the earlier single-holdout lifts of 1 to 20 percent do not replicate. Amazon Spend Drop is the only target where revealed preference features produce a lift that clearly exceeds the fold-to-fold noise. Despite near-zero predictive lift, three revealed preference features rank in the top ten by model importance across all datasets, meaning the model finds them informative even though they do not improve accuracy over well-constructed baselines. The Lasso directions below suggest these features capture interpretable patterns in decision-making behavior that standard volume and frequency features do not.
+Under 5-fold cross-validation the results are stable and the earlier single-holdout lifts of 1 to 20 percent do not replicate. Amazon Spend Drop is the only target where the lift clearly exceeds the fold-to-fold noise. Three revealed preference features rank in the top ten by model importance across all datasets, but they do not improve accuracy over well-constructed baselines.
 
 Suggestive Directions
 ---------------------

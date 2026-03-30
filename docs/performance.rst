@@ -1,7 +1,7 @@
 Performance Benchmarks
 ======================
 
-PrefGraph uses a Rust engine (``rpt-core``) for large-scale longitudinal choice analysis. The design combines Rayon-based parallelism with SCC-optimized graph algorithms and HiGHS-backed linear programming to keep throughput high while bounding memory via streaming.
+PrefGraph uses a Rust engine (``rpt-core``) for batch choice analysis. It combines Rayon parallelism with graph algorithms and HiGHS linear programming, streaming users in chunks to keep memory bounded.
 
 .. raw:: html
 
@@ -19,7 +19,7 @@ PrefGraph uses a Rust engine (``rpt-core``) for large-scale longitudinal choice 
 Scalability and Throughput
 --------------------------
 
-Throughput scales roughly linearly with the number of agents since each user is independent and processed in parallel. On a modern 10–12 core CPU, GARP-only processing reaches on the order of ~49k agents/sec; adding CCEI yields ~2.4k/sec; the comprehensive suite (GARP, CCEI, MPI, HARP) sustains ~2.0k/sec.
+Throughput scales roughly linearly with core count since each user is independent. On a 10-12 core CPU, GARP-only processing reaches about 49k agents/sec. Adding CCEI yields about 2.4k/sec. The full suite (GARP, CCEI, MPI, HARP) sustains about 2.0k/sec.
 
 .. raw:: html
 
@@ -33,7 +33,7 @@ Throughput scales roughly linearly with the number of agents since each user is 
 
    <div style="margin: 1.5em 0;"></div>
 
-Latency follows suit: GARP-only averages around ~20 microseconds per agent, the GARP+CCEI configuration around ~420 microseconds, and the full four-metric suite around ~500 microseconds. These figures are indicative and scale with available cores and clock speeds.
+Per-agent latency is about 20 microseconds for GARP-only, 420 microseconds for GARP+CCEI, and 500 microseconds for the full four-metric suite. These figures vary with core count and clock speed.
 
 .. raw:: html
 
@@ -60,7 +60,7 @@ Latency follows suit: GARP-only averages around ~20 microseconds per agent, the 
 Computational Complexity by Metric
 ----------------------------------
 
-Metrics vary in throughput corresponding to their graph complexity. (See :doc:`Algorithms <algorithms>` for derivations.)
+Throughput varies by algorithm complexity. See :doc:`Algorithms <algorithms>` for details.
 
 .. raw:: html
 
@@ -91,7 +91,7 @@ The engine maintains a flat memory profile by streaming users in fixed-size chun
 
    <div style="margin: 1.5em 0;"></div>
 
-At the default chunk size, peak memory typically falls in the 100–200 MB range. This keeps million-user analyses feasible on commodity hardware and allows scale-up by adjusting only the chunk size.
+At the default chunk size, peak memory is 100-200 MB. Million-user runs work on a laptop. Adjust chunk size to trade memory for throughput.
 
 .. raw:: html
 
@@ -102,7 +102,7 @@ Large-Scale Benchmarks
 
 For budgets with T=20–100 and K=5, GARP alone completes 10k, 100k, and 1M agents in roughly 0.1s, 2.0s, and ~20s. Adding CCEI yields about 4.2s, 39.5s, and ~6.6 minutes. Running the full suite (GARP, CCEI, MPI, HARP) takes around 6.8s, 67.1s, and ~11 minutes for the same scales.
 
-On discrete menus (50 items, 20–100 sessions), the SARP+WARP+HM bundle completes ~0.3s at 10k agents, ~5.2s at 100k, and ~85.6s at 1M. These timings were measured on Apple M‑series hardware and scale down proportionally with core counts.
+On discrete menus (50 items, 20–100 sessions), the SARP+WARP+HM bundle completes ~0.3s at 10k agents, ~5.2s at 100k, and ~85.6s at 1M. Measured on Apple M-series hardware. Timings scale with core count.
 
 .. raw:: html
 
@@ -151,7 +151,7 @@ On discrete menus (50 items, 20–100 sessions), the SARP+WARP+HM bundle complet
 End-to-End from Disk
 --------------------
 
-The preceding benchmarks measure scoring throughput on in-memory arrays. Below we verify the full disk-to-scores pipeline, including file I/O and data transformation, on 100,000 synthetic consumers (T=15, K=5, full 5-metric suite).
+The benchmarks above measure in-memory scoring. Below is the full disk-to-scores pipeline on 100,000 synthetic consumers (T=15, K=5, full 5-metric suite).
 
 .. raw:: html
 
@@ -207,12 +207,12 @@ The preceding benchmarks measure scoring throughput on in-memory arrays. Below w
 
    <div style="margin: 1.5em 0;"></div>
 
-File I/O is negligible—both CSV and Parquet reads complete in under 70 ms for 280 MB. The bottleneck is the Rust scoring engine, which dominates wall time for any metric suite beyond GARP-only. Parquet streaming via ``engine.analyze_parquet()`` avoids the Python transformation step entirely and delivers the highest end-to-end throughput (~950 users/sec for the comprehensive suite). Parquet with zstd compression is 2.6× smaller than CSV.
+File I/O adds under 70 ms for 280 MB. The Rust scoring step dominates wall time for anything beyond GARP-only. Parquet streaming via ``engine.analyze_parquet()`` skips the Python transformation step and reaches about 950 users/sec for the full suite. Parquet with zstd is 2.6x smaller than CSV.
 
 Complexity Summary
 ------------------
 
-In practice, GARP runs in O(T²), CCEI in O(T² log T), and MPI and HARP in O(T³). Houtman–Maks combines greedy FVS with exact ILP for small T, while utility recovery solves an LP with O(T²) scale. VEI computes observation-specific efficiencies via LP and tracks close to O(T²).
+GARP runs in O(T²), CCEI in O(T² log T), MPI and HARP in O(T³). Houtman-Maks uses greedy FVS with exact ILP for small T. Utility recovery and VEI each solve LPs at O(T²) scale.
 
 .. raw:: html
 
@@ -251,4 +251,4 @@ In practice, GARP runs in O(T²), CCEI in O(T² log T), and MPI and HARP in O(T�
 Hardware Configuration
 ----------------------
 
-All results here are from an Apple M‑series machine (11 cores). Performance scales near-linearly with cores; on 64‑core servers, end‑to‑end throughput typically improves by ~5× relative to a 10–12 core laptop.
+All results are from an Apple M-series machine (11 cores). On a 64-core server, throughput is roughly 5x higher.
