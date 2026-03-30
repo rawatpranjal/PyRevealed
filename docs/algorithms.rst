@@ -344,62 +344,42 @@ PrefGraph implements maximum likelihood estimation for:
 Practical Usage: Code Examples
 ------------------------------
 
-The following examples demonstrate how to call the primary algorithms using the
-Python API.
+The examples below use built-in data generators so every snippet runs as-is.
 
-**GARP and CCEI (Budget Data)**
-
-.. code-block:: python
-
-   from prefgraph import BehaviorLog, validate_consistency, compute_integrity_score
-
-   # 1. Create a log (Prices p and Quantities x)
-   log = BehaviorLog(cost_vectors=p, action_vectors=x)
-
-   # 2. Test GARP (O(T²))
-   result = validate_consistency(log)
-   print(f"Consistent: {result.is_consistent}")
-
-   # 3. Compute CCEI (O(T² log T))
-   ccei = compute_integrity_score(log)
-   print(f"CCEI: {ccei.efficiency_index:.4f}")
-
-**SARP and WARP (Menu Data)**
+**Budget analysis (GARP, CCEI, MPI)**
 
 .. code-block:: python
 
-   from prefgraph import MenuChoiceLog, validate_menu_sarp
+   from prefgraph import load_demo, Engine
 
-   # 1. Create a log (Menus and chosen item indices)
-   log = MenuChoiceLog(menus=menus, choices=choices)
+   users = load_demo(n_users=100)  # 40% rational, 40% noisy, 20% irrational
+   results = Engine(metrics=["garp", "ccei", "mpi"]).analyze_arrays(users)
 
-   # 2. Test SARP (O(T²))
-   result = validate_menu_sarp(log)
-   print(f"SARP Consistent: {result.is_consistent}")
+   n_consistent = sum(r.is_garp for r in results)
+   mean_ccei    = sum(r.ccei    for r in results) / len(results)
+   mean_mpi     = sum(r.mpi     for r in results) / len(results)
 
-**Money Pump Index (MPI)**
+   print(f"GARP-consistent: {n_consistent}/100")   # GARP-consistent: 96/100
+   print(f"Mean CCEI:       {mean_ccei:.4f}")       # Mean CCEI:       0.9976
+   print(f"Mean MPI:        {mean_mpi:.4f}")        # Mean MPI:        0.0026
 
-.. code-block:: python
-
-   from prefgraph import compute_confusion_metric
-
-   # Calculate the max average savings per cycle (O(T³))
-   mpi = compute_confusion_metric(log)
-   print(f"Money Pump Index: {mpi.mpi_value:.4f}")
-
-**Stochastic Choice (RUM)**
+**Menu analysis (SARP, WARP, Houtman-Maks)**
 
 .. code-block:: python
 
-   from prefgraph import StochasticChoiceLog, fit_random_utility_model
+   from prefgraph import generate_random_menus, Engine
 
-   # 1. Create a log (Menus and choice frequencies)
-   log = StochasticChoiceLog(menus=menus, choice_frequencies=choice_frequencies)
+   users = generate_random_menus(n_users=100)
+   results = Engine().analyze_menus(users)
 
-   # 2. Fit Logit model
-   result = fit_random_utility_model(log, model_type="logit")
-   print(f"Log-Likelihood: {result.log_likelihood:.2f}")
-   print(f"Satisfies IIA: {result.satisfies_iia}")
+   n_sarp  = sum(r.is_sarp for r in results)
+   n_warp  = sum(r.is_warp for r in results)
+   mean_hm = sum(r.hm_consistent / r.hm_total
+                 for r in results if r.hm_total > 0) / len(results)
+
+   print(f"SARP-consistent: {n_sarp}/100")          # SARP-consistent: 7/100
+   print(f"WARP-consistent: {n_warp}/100")          # WARP-consistent: 7/100
+   print(f"Mean HM ratio:   {mean_hm:.4f}")         # Mean HM ratio:   0.7020
 
 
 Solver Stack
