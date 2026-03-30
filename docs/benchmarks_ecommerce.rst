@@ -1,7 +1,7 @@
 Predicting Customer Spend and Engagement
 =========================================
 
-Across 11 datasets and 32 prediction targets, revealed preference features add near-zero marginal lift on average. Standard spend and engagement baselines already capture most of the signal.
+**TL;DR.** We added 42 revealed preference features to standard spend and engagement baselines across 11 real-world datasets and 32 prediction targets. Under 5-fold cross-validation, the median predictive lift is zero. The one exception is Amazon churn prediction, where budget efficiency features improve AUC-PR from 0.226 to 0.248. Despite adding no predictive lift elsewhere, three revealed preference features rank in the top ten by model importance, meaning they capture real signal about decision-making consistency that baselines miss. Lasso coefficient directions suggest that users who explore broadly are more engaged but less loyal, users with contradictory preferences spend more, and users whose purchase efficiency is declining are about to churn.
 
 Setup
 -----
