@@ -14,6 +14,18 @@ When reporting results, write the number into the sentence naturally. Do not use
 
 Write heavy code comments in the code itself as you refine your understanding, with sources from papers in the repo.
 
+## Benchmarking and Case Studies
+
+When running ML benchmarks across datasets, use 5-fold cross-validation as the definitive estimate. Single holdout splits overfit at small N and produce inflated lifts. Always report in-sample versus out-of-sample metrics so overfitting is visible. When a result does not replicate under CV, say so honestly.
+
+Start with 250 users to verify the pipeline works end to end. Then scale to 2000 for quick results. Only run full scale after the code is stable. Save results per dataset in JSON files so runs can be resumed and nothing is lost.
+
+When the numbers say the lift is zero, say the lift is zero. Do not dress up a null result. A null result with interpretable feature directions is still a real finding.
+
+Use regularized models at small N. Default LightGBM and CatBoost overfit severely at N below 5000. Set max_depth 3, num_leaves 8, min_child_samples 30 as a starting point. Lasso with fixed conservative regularization is more trustworthy for feature selection and coefficient interpretation at any sample size.
+
+When estimating how long a run will take, divide elapsed time by completed items, multiply by remaining items, and add a buffer for larger items. Do not round down.
+
 ## Paper References
 
 Academic papers cited in code comments live in two places:
