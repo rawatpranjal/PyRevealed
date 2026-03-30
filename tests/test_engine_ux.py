@@ -4,7 +4,12 @@ import numpy as np
 import pytest
 
 from prefgraph.engine import Engine, EngineResult, MenuResult, results_to_dataframe
-from prefgraph.core.exceptions import DataValidationError, DimensionError
+from prefgraph.core.exceptions import (
+    DataValidationError,
+    DimensionError,
+    NaNInfError,
+    ValueRangeError,
+)
 
 
 # =============================================================================
@@ -64,6 +69,48 @@ class TestBudgetValidation:
         with pytest.raises(DimensionError, match="!="):
             e.analyze_arrays([(np.ones((3, 2)), np.ones((3, 5)))])
 
+    def test_nan_prices_rejected(self):
+        e = Engine()
+        p = np.array([[np.nan, 1.0], [2.0, 1.0]])
+        q = np.array([[1.0, 2.0], [2.0, 1.0]])
+        with pytest.raises(NaNInfError, match="prices contain NaN"):
+            e.analyze_arrays([(p, q)])
+
+    def test_inf_quantities_rejected(self):
+        e = Engine()
+        p = np.array([[1.0, 2.0], [2.0, 1.0]])
+        q = np.array([[1.0, np.inf], [2.0, 1.0]])
+        with pytest.raises(NaNInfError, match="quantities contain NaN"):
+            e.analyze_arrays([(p, q)])
+
+    def test_negative_prices_rejected(self):
+        e = Engine()
+        p = np.array([[-1.0, 2.0], [2.0, 1.0]])
+        q = np.array([[1.0, 2.0], [2.0, 1.0]])
+        with pytest.raises(ValueRangeError, match="strictly positive"):
+            e.analyze_arrays([(p, q)])
+
+    def test_zero_prices_rejected(self):
+        e = Engine()
+        p = np.array([[0.0, 2.0], [2.0, 1.0]])
+        q = np.array([[1.0, 2.0], [2.0, 1.0]])
+        with pytest.raises(ValueRangeError, match="strictly positive"):
+            e.analyze_arrays([(p, q)])
+
+    def test_negative_quantities_rejected(self):
+        e = Engine()
+        p = np.array([[1.0, 2.0], [2.0, 1.0]])
+        q = np.array([[-1.0, 2.0], [2.0, 1.0]])
+        with pytest.raises(ValueRangeError, match="non-negative"):
+            e.analyze_arrays([(p, q)])
+
+    def test_zero_quantities_accepted(self):
+        e = Engine(metrics=["garp"])
+        p = np.array([[1.0, 2.0], [2.0, 1.0]])
+        q = np.array([[0.0, 2.0], [2.0, 0.0]])
+        results = e.analyze_arrays([(p, q)])
+        assert len(results) == 1
+
     def test_valid_input_passes(self):
         e = Engine(metrics=["garp"])
         p = np.array([[1.0, 2.0], [3.0, 4.0]])
@@ -107,6 +154,21 @@ class TestMenuValidation:
         e = Engine()
         with pytest.raises(DataValidationError, match="positive integer"):
             e.analyze_menus([([[0, 1]], [0], 0)])
+
+    def test_duplicate_items_in_menu_rejected(self):
+        e = Engine()
+        with pytest.raises(DataValidationError, match="duplicate items"):
+            e.analyze_menus([([[0, 1, 1], [1, 2]], [0, 1], 3)])
+
+    def test_item_id_out_of_range_rejected(self):
+        e = Engine()
+        with pytest.raises(DataValidationError, match="out of range"):
+            e.analyze_menus([([[0, 5], [1, 2]], [0, 1], 3)])
+
+    def test_negative_item_id_in_menu_rejected(self):
+        e = Engine()
+        with pytest.raises(DataValidationError, match="out of range"):
+            e.analyze_menus([([[0, -1], [1, 2]], [0, 1], 3)])
 
     def test_valid_menu_input(self):
         e = Engine()
