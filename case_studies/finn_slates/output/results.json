@@ -1,5 +1,5 @@
 {
-  "load_time_s": 13.682676208991325,
+  "load_time_s": 13.598947833001148,
   "section_1": {
     "n_users": 69752,
     "obs_per_user_mean": 11.096212294987957,
@@ -19,7 +19,7 @@
     "mean_sarp_violations": 11.992760064227548,
     "mean_warp_violations": 4.490408877164812,
     "mean_max_scc": 4.521848835875674,
-    "engine_time_s": 2.0532862909894902,
+    "engine_time_s": 2.001174875011202,
     "random_sarp_rate": 0.0792
   },
   "section_3": {
@@ -28,10 +28,10 @@
     "fraction_qualifying": 0.04963298543410942,
     "mean_repeated_menus": 0.7277210689299232,
     "median_repeated_menus": 0.0,
-    "rum_pass_rate": 0.06296938186019642,
+    "rum_pass_rate": 0.06383593298671288,
     "regularity_pass_rate": 0.7559214326978625,
     "n_rum_tested": 3462,
-    "rum_batch_time_s": 12.137564897537231
+    "rum_batch_time_s": 16.09183692932129
   },
   "section_4": {
     "n_search_heavy": 34871,
@@ -125,5 +125,19 @@
         "count": 22
       }
     ]
+  },
+  "section_6": {
+    "n_users": 93858,
+    "sarp_pass_rate": 0.4153401947623005,
+    "warp_pass_rate": 0.4195486799207313,
+    "hm_ratio_mean": 0.979743901054128,
+    "hm_ratio_median": 0.9905660377358491,
+    "item_overlap_mean": 0.25657118318751104,
+    "items_per_user_mean": 90.2970977433996,
+    "engine_time_s": 23.88540270802332,
+    "dense_n_users": 16708,
+    "dense_sarp_pass_rate": 0.135982762748384,
+    "dense_hm_mean": 0.8190849966450734,
+    "dense_hm_median": 0.8333333333333334
   }
 }

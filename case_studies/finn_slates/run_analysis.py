@@ -616,6 +616,128 @@ def section_5_violations(user_logs, per_user, group_labels):
 
 
 # =========================================================================
+# Section 6: Item-Level Comparison
+# =========================================================================
+
+def section_6_item_level(data_dir, max_users):
+    """Run SARP/WARP/HM at the individual item level for comparison."""
+    print("\n" + "=" * 60)
+    print("SECTION 6: Item-Level Comparison")
+    print("=" * 60)
+
+    from prefgraph.datasets._finn_slates import load_finn_slates
+
+    print(f"  Loading item-level MenuChoiceLogs...")
+    t0 = time.perf_counter()
+    item_logs = load_finn_slates(data_dir=data_dir, max_users=max_users, min_sessions=5)
+    load_time = time.perf_counter() - t0
+    print(f"  Loaded {len(item_logs):,} users in {load_time:.1f}s")
+
+    if not item_logs:
+        return {"error": "no users"}
+
+    # Item overlap per user
+    overlap_ratios = []
+    items_per_user = []
+    for log in item_logs.values():
+        item_counts: Counter = Counter()
+        for menu in log.menus:
+            for item in menu:
+                item_counts[item] += 1
+        if item_counts:
+            overlap = sum(1 for c in item_counts.values() if c >= 2) / len(item_counts)
+            overlap_ratios.append(overlap)
+        items_per_user.append(len(log.all_items))
+
+    # Engine batch
+    uids = list(item_logs.keys())
+    engine_tuples = [item_logs[uid].to_engine_tuple() for uid in uids]
+    engine = Engine()
+    print(f"  Running Engine.analyze_menus() on {len(engine_tuples):,} item-level users...")
+    t0 = time.perf_counter()
+    results = engine.analyze_menus(engine_tuples)
+    elapsed = time.perf_counter() - t0
+    print(f"  Done in {elapsed:.1f}s")
+
+    sarp_pass = [r.is_sarp for r in results]
+    warp_pass = [r.is_warp for r in results]
+    hm_ratios = [r.hm_consistent / r.hm_total if r.hm_total > 0 else 1.0 for r in results]
+
+    summary = {
+        "n_users": len(item_logs),
+        "sarp_pass_rate": float(np.mean(sarp_pass)),
+        "warp_pass_rate": float(np.mean(warp_pass)),
+        "hm_ratio_mean": float(np.mean(hm_ratios)),
+        "hm_ratio_median": float(np.median(hm_ratios)),
+        "item_overlap_mean": float(np.mean(overlap_ratios)) if overlap_ratios else 0,
+        "items_per_user_mean": float(np.mean(items_per_user)),
+        "engine_time_s": elapsed,
+    }
+
+    print(f"  Item overlap: {summary['item_overlap_mean']:.1%}")
+    print(f"  Items per user: {summary['items_per_user_mean']:.0f}")
+    print(f"  SARP pass rate: {summary['sarp_pass_rate']:.1%}")
+    print(f"  WARP pass rate: {summary['warp_pass_rate']:.1%}")
+    print(f"  HM ratio: mean={summary['hm_ratio_mean']:.3f}, median={summary['hm_ratio_median']:.3f}")
+
+    # --- Dense subset: top users (most obs) with only top items (most frequent) ---
+    print("\n  Dense subset: top 20% users by observation count, top 50 items per user...")
+
+    # Rank users by observation count, take top 20%
+    user_obs = [(uid, len(log.choices)) for uid, log in item_logs.items()]
+    user_obs.sort(key=lambda x: -x[1])
+    top_n = max(1, len(user_obs) // 5)
+    top_uids = [uid for uid, _ in user_obs[:top_n]]
+
+    # For each top user, keep only the 50 most frequently chosen items
+    dense_logs: dict[str, object] = {}
+    from prefgraph.core.session import MenuChoiceLog as MCL
+    for uid in top_uids:
+        log = item_logs[uid]
+        # Find top 50 items by choice frequency
+        choice_freq: Counter = Counter(log.choices)
+        top_items = set(item for item, _ in choice_freq.most_common(50))
+
+        # Filter menus and choices to only include top items
+        filtered_menus = []
+        filtered_choices = []
+        for menu, choice in zip(log.menus, log.choices):
+            if choice not in top_items:
+                continue
+            filtered_menu = frozenset(i for i in menu if i in top_items)
+            if len(filtered_menu) >= 2 and choice in filtered_menu:
+                filtered_menus.append(filtered_menu)
+                filtered_choices.append(choice)
+
+        if len(filtered_choices) >= 5:
+            # Remap to compact 0..N-1
+            all_items_set = sorted(set().union(*filtered_menus))
+            imap = {item: idx for idx, item in enumerate(all_items_set)}
+            dense_logs[uid] = MCL(
+                menus=[frozenset(imap[i] for i in m) for m in filtered_menus],
+                choices=[imap[c] for c in filtered_choices],
+            )
+
+    if dense_logs:
+        dense_tuples = [dense_logs[uid].to_engine_tuple() for uid in dense_logs]
+        dense_results = engine.analyze_menus(dense_tuples)
+
+        dense_sarp = float(np.mean([r.is_sarp for r in dense_results]))
+        dense_hm = [r.hm_consistent / r.hm_total if r.hm_total > 0 else 1.0 for r in dense_results]
+
+        summary["dense_n_users"] = len(dense_logs)
+        summary["dense_sarp_pass_rate"] = dense_sarp
+        summary["dense_hm_mean"] = float(np.mean(dense_hm))
+        summary["dense_hm_median"] = float(np.median(dense_hm))
+
+        print(f"  Dense subset: {len(dense_logs):,} users")
+        print(f"  SARP pass rate: {dense_sarp:.1%}")
+        print(f"  HM ratio: mean={np.mean(dense_hm):.3f}, median={np.median(dense_hm):.3f}")
+
+    return summary
+
+
+# =========================================================================
 # Main
 # =========================================================================
 
@@ -655,6 +777,21 @@ def main():
     all_results["section_3"] = section_3_stochastic(user_logs)
     all_results["section_4"] = section_4_search_vs_reco(user_logs, per_user, stats)
     all_results["section_5"] = section_5_violations(user_logs, per_user, group_labels)
+    all_results["section_6"] = section_6_item_level(args.data_dir, args.max_users)
+
+    # Print comparison
+    s2 = all_results["section_2"]
+    s6 = all_results["section_6"]
+    if "error" not in s6:
+        print("\n" + "=" * 60)
+        print("COMPARISON: Group-Level vs Item-Level")
+        print("=" * 60)
+        print(f"  {'Metric':<25} {'Group (290)':<15} {'Item (unique)':<15}")
+        print(f"  {'─' * 55}")
+        print(f"  {'SARP pass rate':<25} {s2['sarp_pass_rate']:.1%}{'':<10} {s6['sarp_pass_rate']:.1%}")
+        print(f"  {'HM ratio (mean)':<25} {s2['hm_ratio_mean']:.3f}{'':<10} {s6['hm_ratio_mean']:.3f}")
+        print(f"  {'HM ratio (median)':<25} {s2['hm_ratio_median']:.3f}{'':<10} {s6['hm_ratio_median']:.3f}")
+        print(f"  {'Item overlap':<25} {'62.7%':<15} {s6['item_overlap_mean']:.1%}")
 
     # Save all results
     results_path = OUTPUT_DIR / "results.json"
