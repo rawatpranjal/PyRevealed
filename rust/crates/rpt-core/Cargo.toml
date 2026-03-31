@@ -10,4 +10,5 @@ gurobi = ["grb"]
 
 [dependencies]
 highs = "1"  # HiGHS LP/MILP solver (MIT license)
+rand = "0.8"  # Random permutations for RUM column generation
 grb = { version = "3", optional = true }  # Gurobi (requires license + shared lib)

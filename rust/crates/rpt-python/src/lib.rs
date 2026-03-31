@@ -11,6 +11,7 @@ mod parquet_reader;
 fn _rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(batch::analyze_batch, m)?)?;
     m.add_function(wrap_pyfunction!(batch::analyze_menu_batch, m)?)?;
+    m.add_function(wrap_pyfunction!(batch::rum_consistency_batch, m)?)?;
     m.add_function(wrap_pyfunction!(batch::build_preference_graph, m)?)?;
     m.add_function(wrap_pyfunction!(generators::generate_random_budgets, m)?)?;
     m.add_function(wrap_pyfunction!(generators::generate_random_menus, m)?)?;

@@ -561,6 +561,79 @@ pub fn analyze_menu_batch<'py>(
     Ok(py_results)
 }
 
+/// Batch RUM consistency test for stochastic choice data.
+///
+/// Tests whether each user's choice frequencies over menus can be
+/// rationalized by a Random Utility Model (probability distribution
+/// over preference orderings). Uses HiGHS LP with exact enumeration
+/// for K <= 6 items and column generation for K > 6.
+///
+/// Also runs regularity check (necessary condition for RUM).
+#[pyfunction]
+pub fn rum_consistency_batch<'py>(
+    py: Python<'py>,
+    menus_list: Vec<Vec<Vec<usize>>>,           // per-user menus
+    frequencies_list: Vec<Vec<Vec<(usize, f64)>>>, // per-user (item, freq) per menu
+    n_items_list: Vec<usize>,                    // n_items per user
+) -> PyResult<Vec<Bound<'py, PyDict>>> {
+    use rpt_core::stochastic::{rum_consistency_check, regularity_check};
+
+    let n_users = menus_list.len();
+
+    struct RumOut {
+        is_consistent: bool,
+        is_regular: bool,
+        distance: f64,
+        n_orderings: usize,
+        n_violations: u32,
+        n_iterations: u32,
+        time_us: u64,
+    }
+
+    let users: Vec<(&Vec<Vec<usize>>, &Vec<Vec<(usize, f64)>>, usize)> = (0..n_users)
+        .map(|i| (&menus_list[i], &frequencies_list[i], n_items_list[i]))
+        .collect();
+
+    let results: Vec<RumOut> = users
+        .par_iter()
+        .map(|(menus, freqs, n_items)| {
+            let start = Instant::now();
+
+            let rum = rum_consistency_check(menus, freqs, *n_items);
+            let reg = regularity_check(menus, freqs);
+
+            let time_us = start.elapsed().as_micros() as u64;
+
+            RumOut {
+                is_consistent: rum.is_consistent,
+                is_regular: reg.is_regular,
+                distance: rum.distance,
+                n_orderings: rum.n_orderings,
+                n_violations: reg.n_violations,
+                n_iterations: rum.n_iterations,
+                time_us,
+            }
+        })
+        .collect();
+
+    let py_results: Vec<Bound<'py, PyDict>> = results
+        .into_iter()
+        .map(|r| {
+            let dict = PyDict::new_bound(py);
+            dict.set_item("is_consistent", r.is_consistent).unwrap();
+            dict.set_item("is_regular", r.is_regular).unwrap();
+            dict.set_item("distance", r.distance).unwrap();
+            dict.set_item("n_orderings", r.n_orderings).unwrap();
+            dict.set_item("n_violations", r.n_violations).unwrap();
+            dict.set_item("n_iterations", r.n_iterations).unwrap();
+            dict.set_item("compute_time_us", r.time_us).unwrap();
+            dict
+        })
+        .collect();
+
+    Ok(py_results)
+}
+
 /// Build an observation graph from budget data and return it as numpy arrays.
 ///
 /// Tier 2 entry point: Python modules can consume the Rust-computed graph.
