@@ -98,7 +98,6 @@ Applications
    :maxdepth: 1
 
    app_recsys
-   app_finn_slates
 
 Examples
 --------
